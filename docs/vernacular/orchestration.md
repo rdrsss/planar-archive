@@ -62,10 +62,15 @@ Operator authorization, 2026-10-24. After an `approve` review and the
 current-candidate check, the coordinator commits the round on
 `dev/planar-v2-vernacular`: explicit paths only (never `git add -A`),
 `git commit -s`, no Claude co-author trailer, and a subject naming the round (for
-example `V5-02-X06-A4: profile preparation architecture`). The first commit is a
-one-time baseline of the whole uncommitted rewrite tree, made by the operator's
-coordinator after inspection. Never commit unreviewed or `request-changes`
-candidates. Pushing, merging and installing remain unauthorized.
+example `V5-02-X06-A4: profile preparation architecture`). The baseline commit
+(`aa3f95d1`) holds everything through X06-A4+C01.
+
+Evidence folders (`tests/native/*-evidence/`) are gitignored. Commit only each
+folder's `REPORT.md`/`README.md` and top-level `.md`/`.json` manifests of 100 KB or
+less, staged by explicit path with `git add -f`; bulky artifacts stay local and
+the committed manifests record their hashes. Support folders and frozen snapshots
+are committed normally. Never commit unreviewed or `request-changes` candidates.
+Pushing, merging and installing remain unauthorized.
 
 ## Status records
 
