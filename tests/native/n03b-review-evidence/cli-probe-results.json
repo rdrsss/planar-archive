@@ -1,0 +1,143 @@
+{
+  "checks": 180,
+  "processes": 23,
+  "records": [
+    {
+      "label": "usage",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-1",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":8,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-2",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":18,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-3",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":8,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-4",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":18,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-5",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":4,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-6",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":14,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-7",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":6,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-8",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-9",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-10",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":11,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-11",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-12",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":11,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-13",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-14",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":11,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-15",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-16",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":11,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-17",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-18",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":11,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-19",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":1,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "invalid-20",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{\"offset\":11,\"reason\":\"JSON codec refused input\"},\"field\":\"$\",\"file\":\"input.json\",\"message\":\"JSON codec refused input\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "control diagnostic",
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"details\":{},\"field\":\"registry.x\\n\\t\\r\\b\\f\\u001F\",\"file\":\"input.json\",\"message\":\"Unknown field\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "label": "closed stdout",
+      "returncode": 4,
+      "stderr": "{\"error\":{\"code\":\"io\",\"details\":{\"operation\":\"stdout\"},\"field\":\"\",\"message\":\"Cannot write stdout\"},\"kind\":\"error\",\"version\":1}\n"
+    }
+  ]
+}

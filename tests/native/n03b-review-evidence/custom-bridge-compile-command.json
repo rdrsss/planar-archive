@@ -1,0 +1,22 @@
+{
+  "cwd": "<repo>/build/rewrite-debug",
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang++",
+    "-stdlib=libc++",
+    "-nostdinc++",
+    "-isystem",
+    "/opt/homebrew/opt/llvm/include/c++/v1",
+    "-g",
+    "-std=c++26",
+    "-arch",
+    "arm64",
+    "@src/engine/CMakeFiles/planar_runtime_tests.dir/runtime/runtime.t.cpp.o.modmap",
+    "-fmodule-file=planar.engine.review_source=<repo>/tests/native/n03b-review-evidence/custom-source.pcm",
+    "-fmodule-file=planar.engine.json_codec=src/engine/CMakeFiles/planar_json_codec.dir/planar.engine.json_codec.pcm",
+    "-I<repo>/vendor/lua/0b10/src",
+    "-c",
+    "<repo>/tests/native/n03b-review-evidence/runtime-copy.cpp",
+    "-o",
+    "<repo>/tests/native/n03b-review-evidence/runtime-copy.o"
+  ]
+}

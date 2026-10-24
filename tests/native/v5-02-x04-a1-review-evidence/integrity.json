@@ -1,0 +1,25 @@
+{
+  "candidate-manifest.json": {
+    "actual": "0ac575d8d962a97733807a439d43cac866af5be1fb1c9d736a8fbf9e85d48094",
+    "expected": "0ac575d8d962a97733807a439d43cac866af5be1fb1c9d736a8fbf9e85d48094"
+  },
+  "owned.diff": {
+    "actual": "97362f82d1e2205cdd157ee7b29c909e923a07ff66bfff0d731e396f9d7c3b85",
+    "expected": "97362f82d1e2205cdd157ee7b29c909e923a07ff66bfff0d731e396f9d7c3b85"
+  },
+  "artifact-manifest.json": {
+    "actual": "30e81d989a21d124f030ed83954c6de663d89526a3566f16b0df22c5583a9b1d",
+    "expected": "30e81d989a21d124f030ed83954c6de663d89526a3566f16b0df22c5583a9b1d"
+  },
+  "candidate_files": 11,
+  "artifact_files": 115,
+  "pass_files": 34,
+  "current_binaries": {
+    "build/rewrite-debug/bin/planar": "14f099c722e957ddf64af5ef45ca67e672c4f8d91f462e38e4941b0c6d0e7b82",
+    "build/rewrite-debug/src/engine/CMakeFiles/planar_capture_admission.dir/capture/admission.cpp.o": "6d4fcb16b884c842978d70de9ef08366bdbd70c887f33b477d086046c139b748",
+    "build/rewrite-debug/src/engine/libplanar_admission_syscalls.dylib": "09813d6d7382970399d38068f0e770c5cdf0ce35e6fda8a8ec30fef43bf1efe5",
+    "build/rewrite-debug/src/engine/planar_capture_admission_tests": "207abdb450320adc5d8a270f0e0139ab67fd9b9b77c0700d51e47ffd89fbd027"
+  },
+  "final_protected_differences": [],
+  "sensitivity_hashes_verified": true
+}

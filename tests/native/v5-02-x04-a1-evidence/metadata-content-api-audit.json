@@ -1,0 +1,5 @@
+{
+  "no_undefined_content_or_enumeration_apis": true,
+  "object_sha256": "6d4fcb16b884c842978d70de9ef08366bdbd70c887f33b477d086046c139b748",
+  "scope": "Compiled-object audit complements positive-controlled dynamic read/pread/readv/mmap observation; not universal syscall tracing."
+}

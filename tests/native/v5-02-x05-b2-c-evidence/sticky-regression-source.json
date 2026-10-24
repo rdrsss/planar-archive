@@ -1,0 +1,7 @@
+{
+  "unfixed_runtime_sha256": "db543420203aef0b900dc805296304a7e74035b33634b47b81bee32d15ffd713",
+  "matches_superseded_gate_freeze": true,
+  "red_tests_sha256": "6f93366cc78522b0674bf2152291ac8e125f3f165f49620c2ef83039e78ce41a",
+  "red_exit": 42,
+  "inverse_source_exact": true
+}

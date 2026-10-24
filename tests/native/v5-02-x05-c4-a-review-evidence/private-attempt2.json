@@ -1,0 +1,8 @@
+{
+  "phase": "dependency copy before compilation",
+  "exit": 1,
+  "failure": "PermissionError replacing previous mode0444 copied libc++abi target",
+  "product_mutated": false,
+  "compilation_started": false,
+  "correction": "unlink existing owned copy before copy2; preserve failed script and baseline"
+}

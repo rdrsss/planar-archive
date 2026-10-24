@@ -1,0 +1,65 @@
+[
+  {
+    "file": "allocations.py",
+    "original_sha256": "4b44b1a4e9ba5f13e51613171c4fd3f216a4ea8f43af2102ee3cbc8cf9eaaabd",
+    "adapted_sha256": "cf0c674e572452819cc28b03e3d67eb9c082f3f57feae78f7d8712fe0eaa0c17",
+    "diff": "--- \n+++ \n@@ -4,7 +4,7 @@\n \"\"\"\n from pathlib import Path\n import hashlib,json,os,shlex,subprocess,sys,time\n-R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];O.mkdir(exist_ok=False);rows=[]\n+R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];O.mkdir(exist_ok=False);rows=[]\n def run(label,args,mode=None):\n  env=os.environ.copy()\n  if mode:env['C03_MODE']=mode\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "budget.py",
+    "original_sha256": "ea978fbf7338f663c6f1664cf1ed04988ccfcafa32618b7a4720a28e3edc91ff",
+    "adapted_sha256": "d786f4ea2a4191dd1658929924f899db49112c4a67bb334a5ed6c7d4e4834703",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Private remaining-budget probe of real cumulative final reservations, no host exhaustion.\"\"\"\n from pathlib import Path\n import hashlib,json,shlex,subprocess,sys,os,time\n-R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];O.mkdir(exist_ok=False);records=[]\n+R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];O.mkdir(exist_ok=False);records=[]\n def run(label,args,remaining=None,high=False):\n  env=os.environ.copy()\n  if remaining is not None:env['C01_REMAINING']=str(remaining)\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "fields.py",
+    "original_sha256": "f7b57bfc416f3c27f7a25aa3610edcd0d8f9546430d8b42d8e5659a06ba7ed75",
+    "adapted_sha256": "2904a58821251808a6db42472b78b9a153383295e34191c75cd2c467f2a23376",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Reversible diagnostic class probe: removed allocation windows and actual outer new refusal.\"\"\"\n from pathlib import Path\n import hashlib,json,os,shlex,subprocess,sys,time\n-R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];O.mkdir(exist_ok=False);rows=[]\n+R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];O.mkdir(exist_ok=False);rows=[]\n def run(label,args,mode=None,kind=2,index=10):\n  env=os.environ.copy();env.update(C04_MODE=mode or '',C04_KIND=str(kind),C04_INDEX=str(index))\n  t=time.monotonic();p=subprocess.run(list(map(str,args)),cwd=B,env=env,text=True,capture_output=True);(O/(label+'.log')).write_text(p.stdout+p.stderr);rows.append(dict(label=label,argv=list(map(str,args)),mode=mode,kind=kind,index=index,exit_code=p.returncode,seconds=time.monotonic()-t));(O/'commands.json').write_text(json.dumps(rows,indent=2)+'\\n');print(label,p.returncode,flush=True);assert p.returncode==0,(label,p.returncode,p.stdout+p.stderr)\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "locations.py",
+    "original_sha256": "073ad94527fb83d1cb8d9405a57eb966c89ec94a8c7602bed95cfbbf7da3f6ae",
+    "adapted_sha256": "e05fc1078696a19b8fee3d4619fdb673b6d6cb4a0ca935d04a0eaf47ac2e6479",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Controlled actual pre-root guard, partial freezer and union failures; not natural exhaustion.\"\"\"\n from pathlib import Path\n import json,os,shlex,subprocess,sys,time,hashlib\n-R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];O.mkdir(exist_ok=False);commands=[]\n+R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];O.mkdir(exist_ok=False);commands=[]\n def run(label,args,mode=None):\n  env=os.environ.copy()\n  if mode:env['C02_LOCATION']=mode\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "probe.py",
+    "original_sha256": "b6c4fb5349082903b7d8f6eeedc991d0c6a06cf7ded150ee575a91780692a0c0",
+    "adapted_sha256": "a6e3331280f858eab8028a83014b41fd412ede7d14ab3953b2e10ea10a0ff4cf",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Reversible production-copy retained callable, lifetime and resource probes.\"\"\"\n from pathlib import Path\n import json,os,shlex,subprocess,sys,time,hashlib\n-root=Path.cwd();build=root/'build/rewrite-debug';out=root/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];out.mkdir(exist_ok=False)\n+root=Path.cwd();build=root/'build/rewrite-debug';out=root/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];out.mkdir(exist_ok=False)\n entries=json.loads((build/'compile_commands.json').read_text());commands=[]\n def run(label,args,mode=None,expect=0):\n  start=time.monotonic();env=os.environ.copy()\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "reachable.py",
+    "original_sha256": "200bc9d3963832d1a7e5dd41ee3a3682d8350040e2d7efd7364e0450031415b0",
+    "adapted_sha256": "156f2c09865eb4879d8e0ccc62c848ecd55ae9f36197bd7e95cacc5aed51808c",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Reversible production-copy retained callable, lifetime and resource probes.\"\"\"\n from pathlib import Path\n import json,os,shlex,subprocess,sys,time,hashlib\n-root=Path.cwd();build=root/'build/rewrite-debug';out=root/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];out.mkdir(exist_ok=False)\n+root=Path.cwd();build=root/'build/rewrite-debug';out=root/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];out.mkdir(exist_ok=False)\n entries=json.loads((build/'compile_commands.json').read_text());commands=[]\n def run(label,args,mode=None,expect=0):\n  start=time.monotonic();env=os.environ.copy()\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "regressions.py",
+    "original_sha256": "9e77f9c9cf326a0cf21068de3533e875ed6728461bdfdaacc468961f786398f1",
+    "adapted_sha256": "792a24f408e5c270f8dfba276c7be763046e6132d422c8c972f9572fd90c4f85",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Recompile preserved R1/R2 detectors; controlled bad_alloc is not host exhaustion.\"\"\"\n from pathlib import Path\n import json,subprocess,sys,time,hashlib\n-R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];O.mkdir(exist_ok=False);records=[]\n+R=Path.cwd();B=R/'build/rewrite-debug';O=R/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];O.mkdir(exist_ok=False);records=[]\n def run(group,label,argv,expected=0):\n  t=time.monotonic();p=subprocess.run(argv,cwd=B,capture_output=True,text=True);(O/group/(label+'.log')).write_text(p.stdout+p.stderr);records.append(dict(group=group,label=label,argv=argv,exit_code=p.returncode,expected_exit=expected,seconds=time.monotonic()-t));(O/'commands.json').write_text(json.dumps(records,indent=2)+'\\n');assert p.returncode==expected,(group,label,p.returncode,expected,p.stdout+p.stderr)\n for group in ['adversarial','allocation-mapping','resource-mapping']:\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "repeat.py",
+    "original_sha256": "eff4ceecd7371a8b3110192e7919450c719a23eaadc1491518ca899ba5d64de1",
+    "adapted_sha256": "4c67502e85e0dcc92c106adee66a1dae7e17d6cf350d6c69ef83a28db57a63f7",
+    "diff": "--- \n+++ \n@@ -1,7 +1,7 @@\n \"\"\"Reversible private production seam probes; no public runtime interface changes.\"\"\"\n from pathlib import Path\n import json,os,shlex,subprocess,sys,time,hashlib\n-root=Path.cwd();build=root/'build/rewrite-debug';out=root/'tests/native/v5-02-x05-a3-c04-evidence'/sys.argv[1];out.mkdir(exist_ok=False)\n+root=Path.cwd();build=root/'build/rewrite-debug';out=root/'tests/native/v5-02-x05-a3-c05-evidence'/sys.argv[1];out.mkdir(exist_ok=False)\n entries=json.loads((build/'compile_commands.json').read_text());commands=[]\n def sha(s):return hashlib.sha256(s.encode()).hexdigest()\n def run(label,args,mode=None,expect=0):\n",
+    "historical_source_unchanged": true
+  },
+  {
+    "file": "verify.py",
+    "original_sha256": "8d803dfcd6c2a28eac16059477dad504cd4e6df66167f80f651604f1128d4504",
+    "adapted_sha256": "f975060e0a7dc01b9f5c4466311866552ec00fb9e77c81288f26b13e13bca6f4",
+    "diff": "--- \n+++ \n@@ -2,7 +2,7 @@\n from pathlib import Path\n import datetime,hashlib,json,os,shutil,stat,subprocess,sys,re,difflib\n import xml.etree.ElementTree as ET\n-ROOT=Path(__file__).resolve().parents[3];OUT=ROOT/'tests/native/v5-02-x05-a3-c04-evidence';SUP=ROOT/'tests/native/v5-02-x05-a3-c04-support';BUILD=ROOT/'build/rewrite-debug'\n+ROOT=Path(__file__).resolve().parents[3];OUT=ROOT/'tests/native/v5-02-x05-a3-c05-evidence';SUP=ROOT/'tests/native/v5-02-x05-a3-c05-support';BUILD=ROOT/'build/rewrite-debug'\n def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\n def write(p,v):p.write_text(json.dumps(v,indent=2,sort_keys=True)+'\\n')\n def tree():\n@@ -17,7 +17,7 @@\n attempt=OUT/sys.argv[1];attempt.mkdir(exist_ok=False);frozen=tree();write(attempt/'source-freeze.json',frozen)\n base=json.loads((OUT/'baseline.json').read_text());changed=sorted(k for k in base.keys()|frozen.keys() if base.get(k)!=frozen.get(k))\n allowed=['docs/vernacular/rounds/V5-02-X05-A3-C04.md','src/engine/runtime/runtime.cpp','src/engine/runtime/external_registration.t.cpp','CLAUDE.md','docs/architecture.md','docs/testing.md','docs/vernacular/implementation.md','docs/vernacular/roadmap.md','docs/vernacular/external-profile-implementation.md']\n-assert all(k in allowed or k.startswith('tests/native/v5-02-x05-a3-c04-support/') for k in changed),changed\n+assert all(k in allowed or k.startswith('tests/native/v5-02-x05-a3-c05-support/') for k in changed),changed\n write(attempt/'scope-audit.json',dict(changed=changed,allowed=allowed,shipped_lua_unchanged=all(base[k]==frozen[k] for k in base if k.startswith('src/stdlib/')),historical_unchanged=True,symlink=os.readlink(ROOT/'AGENTS.md')))\n diff=[]\n for name in changed:\n",
+    "historical_source_unchanged": true
+  }
+]

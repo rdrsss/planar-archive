@@ -1,0 +1,18 @@
+{
+  "agents_symlink_preserved": true,
+  "assigned_only": true,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-capture-evidence.md",
+    "src/engine/capture/profile.t.cpp",
+    "tests/native/v5-02-x04-a3-support/verify.py"
+  ],
+  "coordinator_round_unchanged": true,
+  "protected_entries_unchanged": 15978
+}

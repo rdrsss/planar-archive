@@ -1,0 +1,17 @@
+{
+  "disposition": "approve",
+  "finding_D6_R1": "closed",
+  "fresh_cases": 59,
+  "fresh_load_cases": 11,
+  "failures": 0,
+  "skips": 0,
+  "inventory": 391,
+  "baseline_names": 390,
+  "baseline_names_preserved": true,
+  "build_before_no_work": true,
+  "build_after_no_work": true,
+  "serialized_commands": true,
+  "debug_released_idle": true,
+  "release_untouched": true,
+  "limits": "macOS ARM64 debug only; native provider completion is simulated; D7 owns real transaction/replay/CLI/transport; no full R14 or Linux/release claim"
+}

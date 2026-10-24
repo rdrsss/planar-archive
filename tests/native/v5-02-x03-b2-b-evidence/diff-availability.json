@@ -1,0 +1,31 @@
+{
+  "exact_baseline_or_new_diff": [
+    "CLAUDE.md",
+    "tests/native/r14-d8-support/acceptance_fault.t.cpp",
+    "tests/native/r14c3b2-support/atomic.t.cpp",
+    "tests/native/r14c3b2-support/generate.py",
+    "tests/native/r14c3b2-support/digest.cppm",
+    "tests/native/v5-02-x03-b2-b-support/run.py",
+    "tests/native/v5-02-x03-b2-b-support/freeze.py",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/history_verification.t.cpp",
+    "src/engine/ledger/acceptance.t.cpp",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/acceptance/prepared.cppm",
+    "src/engine/acceptance/prepared.cpp",
+    "src/engine/acceptance/prepared.t.cpp"
+  ],
+  "baseline_hash_only": [
+    "docs/vernacular/rounds/V5-02-X03-B2-B.md"
+  ],
+  "note": "No baseline reconstructed after editing. Frozen final snapshots remain authoritative candidate identity."
+}

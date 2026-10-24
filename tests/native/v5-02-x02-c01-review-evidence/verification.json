@@ -1,0 +1,32 @@
+{
+  "method": "Independent docs/link/hash checks and byte arithmetic; no builds, tests, runtime or schema execution",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "identities": {
+    "candidate.json": "be85178f268816d082df3d9c1ecee09398a74e1b60cb6a7c7a059a79a9e9155f",
+    "owned.diff": "abe6c97cb57c6c1721f896e22b8b32813eedc9d425aa5c008329ac672bc410d7",
+    "evidence-sha256.json": "17fff9ffdd99e8ed0201e41c2994fe81a16be5ee4dacb3d68359c54c4c64487d"
+  },
+  "candidate_entries": 2,
+  "author_evidence_entries": 18,
+  "original_x02_evidence_entries": 18,
+  "baseline_entries": 14740,
+  "changed": {
+    "docs/vernacular/external-profile-contract.md": {
+      "before": "de7a74e175aaf47c633776116dc3afc97b85335dabbddd88eb2f922c96e342a8",
+      "after": "93a2202ab841502a1753fb3484d66b9e7c0afb7822bda5289fddaa6a4d213ef6"
+    },
+    "docs/vernacular/external-profile-implementation.md": {
+      "before": "37f7d4d8872a9c6356097aee7f96e93435df6d9668aae46552fde6fa2ba4b2c8",
+      "after": "06a8063502a514c3823d40f447149253b48a451226f9c31222d27696d7460083"
+    }
+  },
+  "additions": [],
+  "unexpected_changes": [],
+  "unexpected_additions": [],
+  "links": 31,
+  "agents_symlink": "CLAUDE.md",
+  "frozen_candidate_copies_match": true,
+  "regenerated_diff_matches": true,
+  "source_basis_entries_verified": 5
+}

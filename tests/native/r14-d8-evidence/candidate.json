@@ -1,0 +1,19 @@
+{
+  "path_base": "repository",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "files": {
+    "tests/acceptance/bootstrap_load.py": "132ba916a3528ce5057f7a08e83d42de733f90df63e9be03a3de6af6e11345b3",
+    "src/engine/CMakeLists.txt": "3f5e873a7a71645a8d8951ab3a10bc5c61a154dd8ac83cbfdf28089fbe981fee",
+    "docs/testing.md": "525bbd671d6ad31886d32c2540dd786760b454c1d4c885accd7af081b5db64fd",
+    "docs/vernacular/acceptance-matrix.md": "cc8d30c38d5d35d1b80223fdd02b8bafb3881cf6e51bb6e7f9b4e514d25dabe7",
+    "docs/vernacular/implementation.md": "8b23b59815e1677781b1d274153e188dce13b9f0e92d243e136c263af3ce15bc",
+    "docs/vernacular/roadmap.md": "cc6b80780a6d4845b9e029f6b8a68e6b8d57a6b51c03d78588567547c27bda6b",
+    "docs/vernacular/v5-alignment.md": "66925105b4857b29836285b3339a9f1fea4c7723ae4e7345e87db8838c766f7d",
+    "docs/vernacular/r14-acceptance-evidence.md": "0d9e9a28079cbae1fbb8039b90ef4b27f2439671f05f3d38fd490644eb06b865",
+    "tests/native/r14-d8-support/acceptance_fault.t.cpp": "8a9f2832cf6a50f460fc17c280de3c33cba2e9b6e3fba2c707c0e248eb45935f",
+    "tests/native/r14-d8-support/freeze.py": "785eb5c7a115303617ffc7882da93b1f8ddd08429a35bf64d785c95d170ea7ad",
+    "tests/native/r14-d8-support/gate.py": "517ddbadcee1e3885585dc751cf07f4bbd3cccae7a64155ba948a57efa30d327",
+    "tests/native/r14-d8-support/run.py": "fa56908a3f3661542748fb4f8bdde20414e967c945664bd542f02576fdbed01a"
+  },
+  "owned_diff_sha256": "92810148c8b3ad6b6f3db15dcabb2d79705f973b9cc9782a637cfce76aaf8a61"
+}

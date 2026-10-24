@@ -1,0 +1,17 @@
+{
+  "path_base": "repository root; snapshots under tests/native/r14-d7-a-evidence/candidate",
+  "files": {
+    "docs/architecture.md": "c5646154cb76554a592bdc960345f678ee20f396e96e1ba3f1851ef2ba947697",
+    "docs/testing.md": "bb057bb55667d8cb3045aff7ee40fd57f39334375d8e7f8ea09992bea3026d75",
+    "src/engine/CMakeLists.txt": "191ea3454d005d7fa6fcd461367b2531e5f2fa7fe5da43cbcef680a8da8eb419",
+    "src/engine/ledger/acceptance.t.cpp": "026f3473f19b40a7d6e002a67c4793bddc34ca1023d60a3118cf67840f230a0a",
+    "src/engine/ledger/format.cpp": "3bc386f87320de2c7ccaa121fb0d974360af49883b77a5ad2722ef8bc3f5ccf9",
+    "src/engine/ledger/format.cppm": "08e68f104c7257ea0ce39094f652f3d906dc7a6553b6cb708798cd25bbae7811",
+    "src/engine/ledger/reliability.t.cpp": "9fdb39d17aa67ef9ed79b8588e600eb30d94efcd5cb782cbcad2e7556f2b9bc5",
+    "src/engine/ledger/sqlite.cpp": "63283dad5a0f30ee2885b1b6cc9d4e0bcfae36423c4bf679928e3fae5817780f",
+    "src/engine/ledger/sqlite.cppm": "8f6ce91bccac1beb1f12895be24c4a13b9eb990ae82d765e4db64ad9bcbb0b55",
+    "src/engine/ledger/sqlite.t.cpp": "c2cb751d7bdd45114b1b10269478d86c4f3694645be7a9c6492cc9124451e97a",
+    "tests/native/r14-d7-a-support/freeze.py": "63640224b29a2b48697418c2ac90784c7aeef8379c156aa8072e263652751844",
+    "tests/native/r14-d7-a-support/run.py": "0646bd249913a8bfe791f5c4640a7b1419340bb3892f67cbe1c7ebf6100afbdd"
+  }
+}

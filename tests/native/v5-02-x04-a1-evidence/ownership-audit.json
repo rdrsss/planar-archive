@@ -1,0 +1,26 @@
+{
+  "added": [
+    "src/engine/capture/admission.cpp",
+    "src/engine/capture/admission.cppm",
+    "src/engine/capture/admission.t.cpp",
+    "tests/native/v5-02-x04-a1-support/sensitivity.py",
+    "tests/native/v5-02-x04-a1-support/syscalls.cpp",
+    "tests/native/v5-02-x04-a1-support/verify.py"
+  ],
+  "baseline_records": 15635,
+  "changed": [
+    "docs/architecture.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/capture/native.cpp",
+    "src/engine/capture/native.cppm"
+  ],
+  "changes_outside_owned": [],
+  "final_records": 15641,
+  "removed": [],
+  "source_unchanged_during_verification": true,
+  "symlinks": {
+    "AGENTS.md": "CLAUDE.md",
+    "compile_commands.json": "<repo>/build/install-release/compile_commands.json"
+  },
+  "symlinks_unchanged": true
+}

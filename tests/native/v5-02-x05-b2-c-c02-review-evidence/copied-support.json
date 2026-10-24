@@ -1,0 +1,22 @@
+{
+  "probes.py": {
+    "source_sha256": "b9261a0358f40df127ef52c55cbea14ff2d8077d42a5d1b2b90827e872993969",
+    "review_copy_sha256": "0e8f1e13d382fd8b4893ad3a7dd2c1526b3cc6f6e74818bfa2c187ed8891d3e3",
+    "changes": "owned output directory; probes use owned allocation suite"
+  },
+  "registry.py": {
+    "source_sha256": "ed4b3e7f09f1f2eba0875d06ed03f47e844d028bc0983e1d2dc7fae64e9e9585",
+    "review_copy_sha256": "9743f151557465aac36dc89c51f9617ef0eb503fe0660ffc2aa1906fb855e607",
+    "changes": "owned output directory; probes use owned allocation suite"
+  },
+  "partial_snapshot.py": {
+    "source_sha256": "46986e3890fa6e20f87145ebb034491f6eae608ff3a3b481bfb7cfbad32c4d79",
+    "review_copy_sha256": "59db1232d614e2e9a5c870c9b0ca21eca90408d2a2eaf15384b753b094483d92",
+    "changes": "owned output directory; probes use owned allocation suite"
+  },
+  "exact_green.py": {
+    "source_sha256": "90760cd5cb524833d33d8f36b49178094cd8acb72834afd733662e423b16b325",
+    "review_copy_sha256": "470a5f32955fab51334989b25c07d7f20f4b7245aed7ccf1e79e02f645e50d08",
+    "changes": "owned output directory; probes use owned allocation suite"
+  }
+}

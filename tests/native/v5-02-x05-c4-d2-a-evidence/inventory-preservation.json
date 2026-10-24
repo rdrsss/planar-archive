@@ -1,0 +1,22 @@
+{
+  "added": [
+    "replacement.D2 A changed retained file refuses every later content path",
+    "replacement.D2 A native late poison is visible in profile snapshot without refresh",
+    "replacement.D2 A native retained read uses same selection on cache and acceptance",
+    "replacement.D2 A native retained receipt survives original profile destruction",
+    "replacement.D2 A owned cache refuses different original state or selection",
+    "replacement.D2 A owned caches reject borrowed authority through both overloads",
+    "replacement.D2 A profile forwards retained supplied reads after owner move",
+    "replacement.D2 A profile retained read failures are terminal and publish no file",
+    "replacement.D2 A retained file survives admission wrapper destruction until sealing",
+    "replacement.D2 A retained receipt refuses every non supplied file slot",
+    "replacement.D2 A retained receipt rejects different actual opened file",
+    "replacement.D2 A retained receipt survives original wrapper moves and destruction",
+    "replacement.D2 A retained receipt uses stable append only selection and shared poison",
+    "replacement.D2 A unbound caches cannot be upgraded to retained authority"
+  ],
+  "baseline": 812,
+  "current": 826,
+  "focused": 159,
+  "preserved": 812
+}

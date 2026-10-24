@@ -1,0 +1,29 @@
+{
+  "source_freeze_sha256": "d0a2dfa9d471ddceb85dd9f16ba3ca21f333139dcedbdada1529d6c1ee9428d9",
+  "report_sha256": "43be76faa6caa67c07d2d2256ea390f22ec5d9e1a4f258c86f90561793566ef5",
+  "artifact_manifest_sha256": "2a6687f9354e35d900c9d95fad97fe36bffce74d42b73494e63488ab9ec963aa",
+  "baseline_entries": 18751,
+  "frozen_entries": 18754,
+  "symlinks": [
+    "AGENTS.md",
+    "compile_commands.json"
+  ],
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "tests/native/v5-02-x05-a0-c01-support/fault-probe.py",
+    "tests/native/v5-02-x05-a0-c01-support/probe.py",
+    "tests/native/v5-02-x05-a0-c01-support/verify.py",
+    "tests/native/v5-02-x05-a0-support/audit.cpp",
+    "tests/native/v5-02-x05-a0-support/audit.cppm",
+    "tests/native/v5-02-x05-a0-support/audit.t.cpp",
+    "tests/native/v5-02-x05-a0-support/generate.py"
+  ],
+  "source_mismatches": [],
+  "artifact_count": 189,
+  "artifact_mismatches": [],
+  "unexpected_added_paths": [],
+  "build_identity_count": 742,
+  "build_mismatches": []
+}

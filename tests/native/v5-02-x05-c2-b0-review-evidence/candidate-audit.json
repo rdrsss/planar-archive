@@ -1,0 +1,15 @@
+{
+  "author_manifest_sha256": "cabab27a6298b0eeb8ce38898bd20167b5ee60c97dcee2efd292d1bc30a1f408",
+  "frozen_support_sha256": "83907021ad6e9ddb84498f81fa28dc77d3d5d9709984e2bee55af4f453da78f2",
+  "artifacts": 79,
+  "support": 3,
+  "copies": {
+    "attempt-1": 888,
+    "attempt-2": 888,
+    "attempt-3": 888,
+    "attempt-4": 888,
+    "final": 888,
+    "final-corrected": 888,
+    "final-expanded": 888
+  }
+}

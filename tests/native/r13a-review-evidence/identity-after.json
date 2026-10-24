@@ -1,0 +1,17 @@
+{
+  "candidate-sha256.json": {
+    "sha256": "64215ea0423fa4ff1a3de29e644095b1a17ca6e82820f515405f098b0be5fa3d",
+    "checked": 12
+  },
+  "evidence-sha256.json": {
+    "sha256": "5d3958e545ebb726685a893bf29984d5130608557a565a7c4ec26b3e3b28eb34",
+    "checked": 40
+  },
+  "baseline-sha256.json": {
+    "sha256": "2390d9e816fb193051aeb3b129eeec0bba02971e10144bc1ba0840de3a6d76d1",
+    "checked": 6
+  },
+  "protected_files": 20,
+  "encoder_implementation_and_function_unchanged": true,
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a"
+}

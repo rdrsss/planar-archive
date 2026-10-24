@@ -1,0 +1,20 @@
+{
+  "candidate_manifest_sha256": "b4bbbe38d6d6d20bb361ca895ac2bee7771da46899647217d58acde0f60e85b6",
+  "fresh_independent_review_required": true,
+  "no_remaining_build_or_test_process": true,
+  "released": [
+    "src/engine/capture/admission.cppm",
+    "src/engine/capture/admission.cpp",
+    "src/engine/capture/admission.t.cpp",
+    "src/engine/capture/profile.t.cpp",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "tests/native/v5-02-x05-c3-b1-support/",
+    "tests/native/v5-02-x05-c3-b1-evidence/",
+    "build/rewrite-debug (exclusive serialized build/test ownership)"
+  ],
+  "round": "V5-02-X05-C3-B1",
+  "schema": "planar.round.ownership-release.v1",
+  "self_approved": false,
+  "utc": "2026-10-23T23:17:31.580793+00:00"
+}

@@ -1,0 +1,232 @@
+[
+  {
+    "source": "README.md",
+    "target": "docs/toolchain-parity.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "docs/cli-reference.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "docs/declarations.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "docs/architecture.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "docs/testing.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "INSTALL.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "fixtures/render/quota/README.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "fixtures/render/quota/native/README.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "docs/vernacular/implementation.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "docs/vernacular/roadmap.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "CONTRIBUTING.md",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "LICENSE",
+    "exists": true
+  },
+  {
+    "source": "README.md",
+    "target": "THIRD_PARTY_NOTICES.md",
+    "exists": true
+  },
+  {
+    "source": "INSTALL.md",
+    "target": "README.md",
+    "exists": true
+  },
+  {
+    "source": "INSTALL.md",
+    "target": "docs/toolchain-parity.md",
+    "exists": true
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "target": "CLAUDE.md",
+    "exists": true
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "target": "docs/vernacular/implementation.md",
+    "exists": true
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "target": "docs/vernacular/roadmap.md",
+    "exists": true
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "target": "docs/testing.md",
+    "exists": true
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "target": "LICENSE",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/implementation.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/roadmap.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/rounds/",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/Planar%20design%20spec%20-%20v4.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/repository-map.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/architecture.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/testing.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/toolchain-parity.md",
+    "exists": true
+  },
+  {
+    "source": "THIRD_PARTY_NOTICES.md",
+    "target": "LICENSE",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "../stdlib/planar/README.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "declarations.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "cli-reference.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "testing.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "vernacular/implementation.md",
+    "exists": true
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "target": "vernacular/render-contract.md#capture-boundary",
+    "exists": true
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "target": "vernacular/render-contract.md",
+    "exists": true
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "target": "vernacular/declarations.md",
+    "exists": true
+  },
+  {
+    "source": "docs/declarations.md",
+    "target": "vernacular/declarations.md",
+    "exists": true
+  },
+  {
+    "source": "docs/declarations.md",
+    "target": "vernacular/render-contract.md",
+    "exists": true
+  },
+  {
+    "source": "docs/declarations.md",
+    "target": "../fixtures/render/quota/workspace/workspace.lua",
+    "exists": true
+  },
+  {
+    "source": "docs/declarations.md",
+    "target": "../fixtures/render/quota/workspace/spec.lua",
+    "exists": true
+  },
+  {
+    "source": "docs/declarations.md",
+    "target": "../fixtures/render/quota/README.md",
+    "exists": true
+  },
+  {
+    "source": "docs/declarations.md",
+    "target": "../fixtures/render/quota/native/README.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "toolchain-parity.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "vernacular/rounds/R09.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "../tests/vectors/README.md",
+    "exists": true
+  }
+]

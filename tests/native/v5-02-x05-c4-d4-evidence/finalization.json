@@ -1,0 +1,12 @@
+{
+  "artifact_entries": 153,
+  "artifact_manifest_sha256": "8c046afeb672623c2e03b0fde3994c1aadad005dc8c29410a3300905f03f8bd0",
+  "candidate_entries": 20,
+  "candidate_sha256": "875be93d599299846396174e059bdc1f543ad5fb029bb341d23b1ca4648bfed0",
+  "d3_original_baseline_sha256": "5b810e19da5235b44a26080c36fd519ea72623585089c95ed6a959e5ceb0a5eb",
+  "debug_and_owned_files_released": true,
+  "exact_round_exemption": "docs/vernacular/rounds/V5-02-X05-C4-D4.md",
+  "independent_review_pending": true,
+  "protection_entries": 76163,
+  "report_sha256": "6e1deed30d1990dd0c7df4f9ef48bc94b2764ecb868756db551d186f7854b482"
+}

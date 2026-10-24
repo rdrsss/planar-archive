@@ -1,0 +1,10 @@
+{
+  "entries": "relative evidence path -> mode plus directory=true, link target, or size+sha256",
+  "exclusions": [
+    "artifact-manifest.json",
+    "finalization.json"
+  ],
+  "hash": "SHA256 over exact bytes",
+  "schema": "planar.rewrite.evidence-artifacts.v1",
+  "self_binding": "finalization.json binds manifest; manifest binds report and all other evidence artifacts"
+}

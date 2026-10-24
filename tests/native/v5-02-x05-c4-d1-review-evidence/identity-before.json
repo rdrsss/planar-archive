@@ -1,0 +1,9 @@
+{
+  "artifact_entries": 204,
+  "artifact_manifest_sha256": "7e81db9e6f06fb43355679ac1710d486d2bd00d5c7c30e2892da70e378868af7",
+  "artifact_membership_exact": true,
+  "candidate_entries": 25,
+  "candidate_sha256": "f4f12835698522e869fcaa81ad2b0596e30420a50ffba69e367b1e2634e73746",
+  "exact_current_candidate": true,
+  "finalization_sha256": "607288fb24cfb8df11a3507aa029a9eededbe706c55e7e24e9e0e0df3cb03905"
+}

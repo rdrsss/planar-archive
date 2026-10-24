@@ -1,0 +1,14 @@
+{
+  "protected_files": 1998,
+  "protected_changes": [],
+  "cli11_head_files": 321,
+  "cli11_mismatches": [],
+  "cli11_extra_files": [],
+  "render_body_whitespace_equivalent": true,
+  "capture_helpers_whitespace_equivalent": true,
+  "root_install_excludes_cli11": {
+    "debug": true,
+    "release": true
+  },
+  "newly_deleted_paths": []
+}

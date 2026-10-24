@@ -1,0 +1,19 @@
+{
+  "baseline_files": 44749,
+  "unchanged": 44738,
+  "changed": {
+    "build/rewrite-debug/.ninja_deps": "debug-build",
+    "build/rewrite-debug/.ninja_log": "debug-build",
+    "build/rewrite-debug/CMakeFiles/TargetDirectories.txt": "debug-build",
+    "build/rewrite-debug/CMakeFiles/rules.ninja": "debug-build",
+    "build/rewrite-debug/Testing/Temporary/CTestCostData.txt": "debug-build",
+    "build/rewrite-debug/Testing/Temporary/LastTest.log": "debug-build",
+    "build/rewrite-debug/Testing/Temporary/LastTestsFailed.log": "debug-build",
+    "build/rewrite-debug/build.ninja": "debug-build",
+    "build/rewrite-debug/compile_commands.json": "debug-build",
+    "build/rewrite-debug/src/engine/CTestTestfile.cmake": "debug-build",
+    "src/engine/CMakeLists.txt": "owned"
+  },
+  "missing": [],
+  "unexpected": []
+}

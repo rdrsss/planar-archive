@@ -1,0 +1,24 @@
+{
+  "protected_unchanged": 4992,
+  "symlink_preserved": true,
+  "variants": {
+    "r12c2": {
+      "exact_generated": true,
+      "reverse_identical": true
+    },
+    "r13b1": {
+      "exact_generated": true,
+      "reverse_identical": true
+    },
+    "r14c3b2": {
+      "exact_generated": true,
+      "reverse_identical": true
+    },
+    "r14f1": {
+      "exact_generated": true,
+      "reverse_identical": true
+    }
+  },
+  "prior_tests_retained": 317,
+  "current_test_count": 327
+}

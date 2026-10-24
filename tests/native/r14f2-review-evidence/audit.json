@@ -1,0 +1,35 @@
+{
+  "candidate-files.json": {
+    "sha256": "153f9831b3a30b3df6f41095aafb0447b7bafdddb5c1ece285391ea1d1b31bf5",
+    "verified_members": 16
+  },
+  "evidence-sha256.json": {
+    "sha256": "558a48e001aa15e11aaa327cefc564dc15c0832b686076102dca0a4cd611b118",
+    "verified_members": 38
+  },
+  "protected_files": 5046,
+  "usage_expectation_reversal": true,
+  "variants": {
+    "r12c2": "fresh exact generation and reversal",
+    "r13b1": "fresh exact generation and reversal",
+    "r14c3b2": "fresh exact generation and reversal",
+    "r14f1": "fresh exact generation and reversal",
+    "r14f2": "fresh exact generation and reversal"
+  },
+  "tests": {
+    "current": 331,
+    "previous_retained": 327,
+    "new": [
+      "replacement.export adapters redact refusals and validate generated stage tokens",
+      "replacement.export binds strict explicit options before native access",
+      "replacement.export postpublication encoding refusal returns prebuilt uncertainty",
+      "replacement.export_cli"
+    ]
+  },
+  "post_gate_delta": {
+    "tests/acceptance/bootstrap_export.py": {
+      "gate": "99c8a444bb49fd06863dd80ab46d0ccdf058c89fb0838d61bcc0ae945b420660",
+      "final": "90e083a346a497d72081ca803d65324bfdd4a336917efd13ec170015e50b5196"
+    }
+  }
+}

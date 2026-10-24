@@ -1,0 +1,8 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "protected_entries": 12021,
+  "v5_sha256": "c3d37e0e28407a9066eb51c515982ef6c93d82795eb56f97dea4a780b66fe08e",
+  "agents_symlink": "CLAUDE.md",
+  "scope": "new proposal and tests/native/v5-02-evidence only; shared intentional rewrite preserved"
+}

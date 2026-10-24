@@ -1,0 +1,15 @@
+{
+  "artifact_manifest_sha256": "d4ed84e91568631ffe50d5b85f39b6b5adda0c240cba34918d885ba1040b8ec7",
+  "artifact_mismatches": [],
+  "author_artifacts": 400,
+  "build_entries": 931,
+  "build_manifest_sha256": "944529f5a3ee3fcc147a4795f41764931247d73aeb82626298fc54f64744b325",
+  "build_mismatches": [],
+  "owned_diff_sha256": "de4a3c0111d428548b88efa81dd0df23976b977121cab68b0587aba7a3ee5260",
+  "report_sha256": "23f61287f88369a1c2efff84ea1e97ee539e318ee7d0a3398371703bcf1f15ef",
+  "source_entries": 23267,
+  "source_expected": 23267,
+  "source_mismatches": [],
+  "source_sha256": "452c5c5875966054441dd01451fa688e084a3181a66a42b520f436b9c4507eb4",
+  "symlink": "CLAUDE.md"
+}

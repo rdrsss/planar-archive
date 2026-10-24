@@ -1,0 +1,7 @@
+{
+  "evidence": "tests/native/v5-02-x04-a2-evidence",
+  "root_only": [
+    ".git",
+    "build"
+  ]
+}

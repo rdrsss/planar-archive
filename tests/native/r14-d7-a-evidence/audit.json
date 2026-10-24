@@ -1,0 +1,43 @@
+{
+  "protection_basis": "historical C01 baseline plus approved frozen candidate; no full-tree contemporaneous D7-A baseline exists",
+  "contemporaneous_owned_snapshots": 10,
+  "historical_protected_paths": 14145,
+  "changed_outside_owned_or_coordinator": [],
+  "coordinator_exceptions_changed": [
+    "docs/vernacular/rounds/R14-D6-C01.md"
+  ],
+  "new_paths_audit": "not claimed: no contemporaneous full-tree D7-A inventory",
+  "inherited_evidence": {
+    "d6": {
+      "frozen_candidate_files": 17,
+      "artifacts": 67
+    },
+    "c01": {
+      "frozen_candidate_files": 13,
+      "artifacts": 67
+    }
+  },
+  "contract_body_sha256": "a842901180c15691cda24a0ddafcc708dcb88add85717b0080b2a1313e6f4ab8",
+  "symlink_preserved": true,
+  "baseline_names": 391,
+  "current_names": 396,
+  "preserved_names": true,
+  "new_names": [
+    "replacement.atomic identity bound receipt busy commit proves rollback and preserves proposed saved bytes",
+    "replacement.atomic identity bound receipt capture and unavailable candidate refusals retain noncompletion",
+    "replacement.atomic identity bound receipt late replay owns bytes before stale CAS and unusable candidate",
+    "replacement.atomic identity bound receipt refuses replacement before exact replay",
+    "replacement.ledger sqlite commit evidence distinguishes success inactive and deferred rollback"
+  ],
+  "focused_cases": 188,
+  "cli_suites": 6,
+  "failures": 0,
+  "skips": 0,
+  "build_test_serialized": true,
+  "limitations": [
+    "macOS ARM64 debug only",
+    "no deterministic C++ allocator-failure injection",
+    "no full R14/debug-release milestone",
+    "public provider/CLI/transport remain D7-B"
+  ]
+}

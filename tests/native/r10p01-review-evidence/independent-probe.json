@@ -1,0 +1,12 @@
+{
+  "binary_sha256": "db5dfc5e3bb112cc41c061f3a331e812babfafe1b5f148b6b8a385c037e744ea",
+  "invocations": 5,
+  "dynamic_fences_and_structural_headings": "pass",
+  "exact_argument_and_environment_roundtrip": "pass",
+  "controls_display_escaped": "pass",
+  "complete_source_binary_delete_modes": "pass",
+  "section_accounting_exact": "pass",
+  "exact_full_and_mandatory_budget_edges": "pass",
+  "mandatory_bytes": 7611,
+  "inputs_and_home_unchanged": true
+}

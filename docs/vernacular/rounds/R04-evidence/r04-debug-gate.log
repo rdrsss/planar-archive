@@ -1,0 +1,278 @@
+cmake --preset debug
+-- Configuring done (0.4s)
+CMake Warning (experimental) in src/cmd/planar/CMakeLists.txt:
+  CMake's support for `import std;` in C++23 and newer is experimental.  It
+  is meant only for experimentation and feedback to CMake developers.
+This warning is for project developers.  Use -Wno-author or -Wno-experimental
+to suppress it.
+
+-- Generating done (0.0s)
+-- Build files have been written to: <repo>/build/rewrite-debug
+python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug
++ cmake --build <repo>/build/rewrite-debug --target all planar_tests
+[1/233] Scanning <repo>/vendor/catch2/c601/src/catch2/generators/catch_generator_exception.cpp for CXX dependencies
+[2/233] Scanning <repo>/vendor/catch2/c601/src/catch2/benchmark/detail/catch_benchmark_function.cpp for CXX dependencies
+[3/233] Scanning <repo>/vendor/catch2/c601/src/catch2/benchmark/catch_chronometer.cpp for CXX dependencies
+[4/233] Scanning <repo>/vendor/catch2/c601/src/catch2/benchmark/detail/catch_run_for_at_least.cpp for CXX dependencies
+[5/233] Scanning <repo>/vendor/catch2/c601/src/catch2/benchmark/detail/catch_analyse.cpp for CXX dependencies
+[6/233] Scanning <repo>/vendor/catch2/c601/src/catch2/generators/catch_generators_throw.cpp for CXX dependencies
+[7/233] Scanning <repo>/vendor/catch2/c601/src/catch2/generators/catch_generators.cpp for CXX dependencies
+[8/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_automake.cpp for CXX dependencies
+[9/233] Scanning <repo>/vendor/catch2/c601/src/catch2/generators/catch_generators_random.cpp for CXX dependencies
+[10/233] Scanning <repo>/vendor/catch2/c601/src/catch2/benchmark/detail/catch_stats.cpp for CXX dependencies
+[11/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_common_base.cpp for CXX dependencies
+[12/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_registrars.cpp for CXX dependencies
+[13/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_compact.cpp for CXX dependencies
+[14/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_cumulative_base.cpp for CXX dependencies
+[15/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_event_listener.cpp for CXX dependencies
+[16/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_json.cpp for CXX dependencies
+[17/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_helpers.cpp for CXX dependencies
+[18/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_junit.cpp for CXX dependencies
+[19/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_multi.cpp for CXX dependencies
+[20/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_console.cpp for CXX dependencies
+[21/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_sonarqube.cpp for CXX dependencies
+[22/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_streaming_base.cpp for CXX dependencies
+[23/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_capture.cpp for CXX dependencies
+[24/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_tap.cpp for CXX dependencies
+[25/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_xml.cpp for CXX dependencies
+[26/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_exception.cpp for CXX dependencies
+[27/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_registry_hub.cpp for CXX dependencies
+[28/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_config.cpp for CXX dependencies
+[29/233] Scanning <repo>/vendor/catch2/c601/src/catch2/reporters/catch_reporter_teamcity.cpp for CXX dependencies
+[30/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_generatortracker.cpp for CXX dependencies
+[31/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_reporter.cpp for CXX dependencies
+[32/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_reporter_factory.cpp for CXX dependencies
+[33/233] Scanning <repo>/vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_testcase.cpp for CXX dependencies
+[34/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_config.cpp for CXX dependencies
+[35/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_assertion_result.cpp for CXX dependencies
+[36/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_tag_alias_autoregistrar.cpp for CXX dependencies
+[37/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_registry_hub.cpp for CXX dependencies
+[38/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_get_random_seed.cpp for CXX dependencies
+[39/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_approx.cpp for CXX dependencies
+[40/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_message.cpp for CXX dependencies
+[41/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_session.cpp for CXX dependencies
+[42/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_totals.cpp for CXX dependencies
+[43/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_test_case_info.cpp for CXX dependencies
+[44/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_translate_exception.cpp for CXX dependencies
+[45/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_version.cpp for CXX dependencies
+[46/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_timer.cpp for CXX dependencies
+[47/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_case_insensitive_comparisons.cpp for CXX dependencies
+[48/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_test_spec.cpp for CXX dependencies
+[49/233] Scanning <repo>/vendor/catch2/c601/src/catch2/catch_tostring.cpp for CXX dependencies
+[50/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_clara.cpp for CXX dependencies
+[51/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_context.cpp for CXX dependencies
+[52/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_commandline.cpp for CXX dependencies
+[53/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_assertion_handler.cpp for CXX dependencies
+[54/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_console_colour.cpp for CXX dependencies
+[55/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_errno_guard.cpp for CXX dependencies
+[56/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_debug_console.cpp for CXX dependencies
+[57/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_decomposer.cpp for CXX dependencies
+[58/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_debugger.cpp for CXX dependencies
+[59/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_enum_info.cpp for CXX dependencies
+[60/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_enforce.cpp for CXX dependencies
+[61/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_floating_point_helpers.cpp for CXX dependencies
+[62/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_exception_translator_registry.cpp for CXX dependencies
+[63/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_getenv.cpp for CXX dependencies
+[64/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_fatal_condition_handler.cpp for CXX dependencies
+[65/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_leak_detector.cpp for CXX dependencies
+[66/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_message_info.cpp for CXX dependencies
+[67/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_polyfills.cpp for CXX dependencies
+[68/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_output_redirect.cpp for CXX dependencies
+[69/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_istream.cpp for CXX dependencies
+[70/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_jsonwriter.cpp for CXX dependencies
+[71/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_parse_numbers.cpp for CXX dependencies
+[72/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_list.cpp for CXX dependencies
+[73/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_random_number_generator.cpp for CXX dependencies
+[74/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_lazy_expr.cpp for CXX dependencies
+[75/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_random_seed_generation.cpp for CXX dependencies
+[76/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_singletons.cpp for CXX dependencies
+[77/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_reusable_string_stream.cpp for CXX dependencies
+[78/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_section.cpp for CXX dependencies
+[79/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_stdstreams.cpp for CXX dependencies
+[80/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_reporter_registry.cpp for CXX dependencies
+[81/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_startup_exception_registry.cpp for CXX dependencies
+[82/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_source_line_info.cpp for CXX dependencies
+[83/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_run_context.cpp for CXX dependencies
+[84/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_reporter_spec_parser.cpp for CXX dependencies
+[85/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_test_case_info_hasher.cpp for CXX dependencies
+[86/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_stringref.cpp for CXX dependencies
+[87/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_string_manip.cpp for CXX dependencies
+[88/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_tag_alias_registry.cpp for CXX dependencies
+[89/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_test_spec_parser.cpp for CXX dependencies
+[90/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_test_registry.cpp for CXX dependencies
+[91/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_test_case_registry_impl.cpp for CXX dependencies
+[92/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_textflow.cpp for CXX dependencies
+[93/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_test_failure_exception.cpp for CXX dependencies
+[94/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_test_case_tracker.cpp for CXX dependencies
+[95/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_uncaught_exceptions.cpp for CXX dependencies
+[96/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_xmlwriter.cpp for CXX dependencies
+[97/233] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_wildcard_pattern.cpp for CXX dependencies
+[98/233] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers.cpp for CXX dependencies
+[99/233] Generating CXX dyndep file 'src/cmd/planar/CMakeFiles/@cmake_cxx_std.dir/CXX.dd'
+[100/230] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_container_properties.cpp for CXX dependencies
+[101/230] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_predicate.cpp for CXX dependencies
+[102/230] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_exception.cpp for CXX dependencies
+[103/230] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_string.cpp for CXX dependencies
+[104/230] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_floating_point.cpp for CXX dependencies
+[105/230] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command.dir/CXX.dd
+[106/227] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_templated.cpp for CXX dependencies
+[107/227] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/catch_matchers_quantifiers.cpp for CXX dependencies
+[108/227] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar.dir/CXX.dd
+[109/225] Scanning <repo>/vendor/catch2/c601/src/catch2/matchers/internal/catch_matchers_impl.cpp for CXX dependencies
+[110/225] Scanning <repo>/vendor/catch2/c601/src/catch2/internal/catch_main.cpp for CXX dependencies
+[111/225] Generating CXX dyndep file vendor/catch2/src/CMakeFiles/Catch2WithMain.dir/CXX.dd
+[112/225] Generating CXX dyndep file vendor/catch2/src/CMakeFiles/Catch2.dir/CXX.dd
+[113/225] Scanning <repo>/src/cmd/planar/bootstrap.t.cpp for CXX dependencies
+[114/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/generators/catch_generator_exception.cpp.o
+[115/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/benchmark/detail/catch_stats.cpp.o
+[116/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/generators/catch_generators_throw.cpp.o
+[117/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/benchmark/catch_chronometer.cpp.o
+[118/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/benchmark/detail/catch_benchmark_function.cpp.o
+[119/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/benchmark/detail/catch_analyse.cpp.o
+[120/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/benchmark/detail/catch_run_for_at_least.cpp.o
+[121/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/generators/catch_generators.cpp.o
+[122/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/generators/catch_generators_random.cpp.o
+[123/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2WithMain.dir/catch2/internal/catch_main.cpp.o
+[124/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_automake.cpp.o
+[125/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_registrars.cpp.o
+[126/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_common_base.cpp.o
+[127/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_event_listener.cpp.o
+[128/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_compact.cpp.o
+[129/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_console.cpp.o
+[130/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_cumulative_base.cpp.o
+[131/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_helpers.cpp.o
+[132/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_multi.cpp.o
+[133/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_json.cpp.o
+[134/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_junit.cpp.o
+[135/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_streaming_base.cpp.o
+[136/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_exception.cpp.o
+[137/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_registry_hub.cpp.o
+[138/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_sonarqube.cpp.o
+[139/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_capture.cpp.o
+[140/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_reporter_factory.cpp.o
+[141/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_teamcity.cpp.o
+[142/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_testcase.cpp.o
+[143/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_tap.cpp.o
+[144/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/reporters/catch_reporter_xml.cpp.o
+[145/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_config.cpp.o
+[146/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_tag_alias_autoregistrar.cpp.o
+[147/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_generatortracker.cpp.o
+[148/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_assertion_result.cpp.o
+[149/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_approx.cpp.o
+[150/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/interfaces/catch_interfaces_reporter.cpp.o
+[151/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_totals.cpp.o
+[152/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_get_random_seed.cpp.o
+[153/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_registry_hub.cpp.o
+[154/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_message.cpp.o
+[155/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_config.cpp.o
+[156/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_translate_exception.cpp.o
+[157/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_timer.cpp.o
+[158/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_test_case_info.cpp.o
+[159/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_context.cpp.o
+[160/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_case_insensitive_comparisons.cpp.o
+[161/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_version.cpp.o
+[162/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_test_spec.cpp.o
+[163/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_tostring.cpp.o
+[164/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/catch_session.cpp.o
+[165/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_assertion_handler.cpp.o
+[166/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_errno_guard.cpp.o
+[167/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_debug_console.cpp.o
+[168/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_enum_info.cpp.o
+[169/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_floating_point_helpers.cpp.o
+[170/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_debugger.cpp.o
+[171/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_getenv.cpp.o
+[172/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_console_colour.cpp.o
+[173/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_enforce.cpp.o
+[174/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_leak_detector.cpp.o
+[175/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_decomposer.cpp.o
+[176/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_message_info.cpp.o
+[177/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_clara.cpp.o
+[178/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_polyfills.cpp.o
+[179/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_random_number_generator.cpp.o
+[180/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_exception_translator_registry.cpp.o
+[181/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_fatal_condition_handler.cpp.o
+[182/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_parse_numbers.cpp.o
+[183/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_jsonwriter.cpp.o
+[184/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_istream.cpp.o
+[185/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_lazy_expr.cpp.o
+[186/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_commandline.cpp.o
+[187/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_section.cpp.o
+[188/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_output_redirect.cpp.o
+[189/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_singletons.cpp.o
+[190/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_list.cpp.o
+[191/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_startup_exception_registry.cpp.o
+[192/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_random_seed_generation.cpp.o
+[193/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_reusable_string_stream.cpp.o
+[194/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_source_line_info.cpp.o
+[195/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_reporter_spec_parser.cpp.o
+[196/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_test_case_info_hasher.cpp.o
+[197/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_stdstreams.cpp.o
+[198/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_reporter_registry.cpp.o
+[199/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_string_manip.cpp.o
+[200/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_stringref.cpp.o
+[201/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_uncaught_exceptions.cpp.o
+[202/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_run_context.cpp.o
+[203/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_test_registry.cpp.o
+[204/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_tag_alias_registry.cpp.o
+[205/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_test_spec_parser.cpp.o
+[206/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_test_failure_exception.cpp.o
+[207/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_test_case_tracker.cpp.o
+[208/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_wildcard_pattern.cpp.o
+[209/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_textflow.cpp.o
+[210/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_test_case_registry_impl.cpp.o
+[211/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/internal/catch_xmlwriter.cpp.o
+[212/225] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command_tests.dir/CXX.dd
+[213/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers.cpp.o
+[214/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_exception.cpp.o
+[215/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_container_properties.cpp.o
+[216/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_predicate.cpp.o
+[217/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_floating_point.cpp.o
+[218/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_quantifiers.cpp.o
+[219/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_templated.cpp.o
+[220/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/internal/catch_matchers_impl.cpp.o
+[221/225] Building CXX object src/cmd/planar/CMakeFiles/planar_command_tests.dir/bootstrap.t.cpp.o
+[222/225] Building CXX object vendor/catch2/src/CMakeFiles/Catch2.dir/catch2/matchers/catch_matchers_string.cpp.o
+[223/225] Linking CXX static library vendor/catch2/src/libCatch2d.a
+[224/225] Linking CXX static library vendor/catch2/src/libCatch2Maind.a
+[225/225] Linking CXX executable src/cmd/planar/planar_command_tests
++ ctest --test-dir <repo>/build/rewrite-debug --show-only=json-v1
++ ctest --test-dir <repo>/build/rewrite-debug --output-on-failure --output-junit /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-ctest-elp_cezn/tests.xml
+Test project <repo>/build/rewrite-debug
+    Start 1: replacement.cli
+1/4 Test #1: replacement.cli ..................................................   Passed    0.53 sec
+    Start 2: replacement.help is explicit and buffered
+2/4 Test #2: replacement.help is explicit and buffered ........................   Passed    0.02 sec
+    Start 3: replacement.legacy commands and implicit discovery are refused
+3/4 Test #3: replacement.legacy commands and implicit discovery are refused ...   Passed    0.02 sec
+    Start 4: replacement.render cannot claim success before implementation
+4/4 Test #4: replacement.render cannot claim success before implementation ....   Passed    0.02 sec
+
+100% tests passed out of 4
+
+Label Time Summary:
+acceptance    =   0.53 sec*proc (1 test)
+unit          =   0.05 sec*proc (3 tests)
+
+Total Test time (real) =   0.58 sec
+Executed 4 registered tests; zero skips
++ /opt/homebrew/opt/llvm/bin/clang-format --dry-run --Werror <repo>/src/cmd/planar/bootstrap.cpp <repo>/src/cmd/planar/bootstrap.cppm <repo>/src/cmd/planar/bootstrap.t.cpp <repo>/src/cmd/planar/main.cpp
++ bash <repo>/scripts/cpp-lint-doxygen.sh /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-doxygen-jkzpo52m/Doxyfile
+warning: No output formats selected! Set at least one of the main GENERATE_* options to YES.
+<repo>/src/cmd/planar/bootstrap.cppm:13: error: parameters of member planar::cmd::invoke are not documented
+<repo>/src/cmd/planar/bootstrap.cppm:13: error: return type of member planar::cmd::invoke is not documented
+<repo>/src/cmd/planar/main.cpp:6: error: Member main(int argc, char **argv) (function) of file main.cpp is not documented.
+Traceback (most recent call last):
+  File "<repo>/scripts/rewrite-check.py", line 64, in <module>
+    lint(build)
+    ~~~~^^^^^^^
+  File "<repo>/scripts/rewrite-check.py", line 38, in lint
+    run(["bash", ROOT / "scripts/cpp-lint-doxygen.sh", config])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/scripts/rewrite-check.py", line 14, in run
+    return subprocess.run(list(map(str, command)), cwd=ROOT, check=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/subprocess.py", line 692, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['bash', '<repo>/scripts/cpp-lint-doxygen.sh', '/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-doxygen-jkzpo52m/Doxyfile']' returned non-zero exit status 1.
+make: *** [test-all] Error 1

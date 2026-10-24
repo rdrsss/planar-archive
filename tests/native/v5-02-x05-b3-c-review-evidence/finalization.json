@@ -1,0 +1,23 @@
+{
+  "disposition": "approve",
+  "report": "docs/vernacular/rounds/V5-02-X05-B3-C-review.md",
+  "report_sha256": "80cb31231c5635c0d66a65134feee4c34034cfcbb201a083d2793f527b2505d3",
+  "artifact_manifest_sha256": "f669f86f3035bd5cfbf7d9880d5968659763adc2aefa1f5843400373f7b67a7b",
+  "artifact_entries": 143,
+  "candidate": {
+    "candidate-manifest.json": "5bd96ff593119c05bb9683ed159b97ff091e270dcdd4ed953a5ef35ece8ff427",
+    "candidate.diff": "26f03ff16e78320538305d9cc8031888395953d3a3bbf54eaca702cfe504bb15",
+    "artifact-manifest.json": "f6ba8a1700fb1a866c2ab52fa586e41d73d4ea4191746e6319655707be34d3af",
+    "REPORT.md": "07a42d3153f8b8d13b5fe2ce7827183af3ac58260c932361226e144ae03477e9",
+    "candidate-manifest.json-entries": 25,
+    "artifact-manifest.json-entries": 391,
+    "frozen-entries": 164
+  },
+  "protected_entries": 5682,
+  "protected_membership_and_hashes_unchanged": true,
+  "debug_ownership_released": true,
+  "release_artifacts_unchanged": true,
+  "no_product_fixes": true,
+  "no_full_milestone_release_or_linux_gate": true,
+  "no_further_reviewer_edits": true
+}

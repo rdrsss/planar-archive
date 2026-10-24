@@ -1,0 +1,13 @@
+{
+  "changed": [
+    "tests/native/v5-02-x05-c4-b1-evidence/REPORT.md",
+    "tests/native/v5-02-x05-c4-b1-support/cleanup.py",
+    "tests/native/v5-02-x05-c4-b1-support/finalize-cleanup.py"
+  ],
+  "owned_product_test_reference_entries_unchanged": 8,
+  "schema": 1,
+  "tested_candidate": {
+    "mode": 420,
+    "sha256": "05940660e44677400b57cc7c350969d3ba60012fee9e5d2a0ae3f9a40e24328e"
+  }
+}

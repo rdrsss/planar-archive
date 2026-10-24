@@ -1,0 +1,22 @@
+{
+  "author_entries": 188,
+  "identities": {
+    "REPORT.md": {
+      "mode": 420,
+      "sha256": "f35d01a7f02e2466d2cb3cc47071f07c23c81e0e554b5fb32318fce99d58af72"
+    },
+    "artifact-manifest.json": {
+      "mode": 420,
+      "sha256": "1126d8104d1e2b32044800d41d92bb6ef77d1c476b30ca429a69369df5e8cb8f"
+    },
+    "finalization.json": {
+      "mode": 420,
+      "sha256": "537294d41a6ea61b34ac2d79da3fe3fca0bdfbc2480fbd20b2929fb9fdebabc7"
+    },
+    "frozen-candidate.json": {
+      "mode": 420,
+      "sha256": "99ce8983f9d28d475ddd49f05fc906d1915353de5072707fc1bff54493fc31bc"
+    }
+  },
+  "protected_entries": 72338
+}

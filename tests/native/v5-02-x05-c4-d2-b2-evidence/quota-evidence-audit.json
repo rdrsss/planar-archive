@@ -1,0 +1,11 @@
+{
+  "after_exact_except_same_controlled_counter": true,
+  "after_passed_cases": 2,
+  "before_exact_except_controlled_counter": true,
+  "before_failed_cases": 1,
+  "before_passing_cases": 1,
+  "original_reuse_still_charges_handle_and_index": true,
+  "source_after_sha256": "a1039eacc2838a73ebc584ada9d823ca158b15a889c5910e9958b63e0da5365b",
+  "source_before_sha256": "51b9898084791835e25d0fde3b988c3fa419f6df13fbacbf3f160ba06a3a1292",
+  "supplied_file_quota_not_rss": true
+}

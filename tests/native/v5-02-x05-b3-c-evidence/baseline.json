@@ -1,0 +1,13 @@
+{
+  "src/stdlib/planar/selection.lua": "45557f3aa3b5f31a11f4e13f68f6abb0f059d583e46b125d820aa07a7dab313e",
+  "src/stdlib/planar/bootstrap.lua": "65c2031f856f64643471283bd1561899a2a12d5008c30fc268de385a42f2146e",
+  "src/engine/runtime/runtime.cppm": "b6c00b2f89a217aacf6733bca8169860dada448493b2b2763e532685d543265b",
+  "src/engine/runtime/runtime.cpp": "ef932b2a4946e586dcd3c3f9503a63cbbdec0bc33a98b066002ead6489629fc0",
+  "src/engine/runtime/external_registration.t.cpp": "1c4659d235a50a8bbd7896bdb41d0fa9325ecb949cd3880ce18dff4f1838c229",
+  "CLAUDE.md": "5cb4d69e7d588102c2d89f8e2f079b5017f2da8f6106a54c6c6a4e53b5495991",
+  "docs/architecture.md": "9725a598dc565f2f7aa634dc5ff16393254455fc92c85870fd75ea9d3e3c23b0",
+  "docs/testing.md": "8e5299e0af80ba88d6131cae2fda773d046ac2169546e445bf09d7bba8837938",
+  "docs/vernacular/implementation.md": "6ee0b5118a5607c34b28627e9033528bcdd62abb15ef6c02c0cd1c0e181b686d",
+  "docs/vernacular/roadmap.md": "0c68e9046b048b7f0860fdfca6f978dbecb0daa329f9bf8132cc412a25a0edda",
+  "docs/vernacular/external-profile-implementation.md": "3a6ac000f59a0acf4e676c43d15cf8d9a3550ed11c63e1532e1ccefb99a918b0"
+}

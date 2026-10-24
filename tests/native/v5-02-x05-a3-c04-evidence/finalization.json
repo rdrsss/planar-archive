@@ -1,0 +1,22 @@
+{
+  "artifact_entries": 1171,
+  "artifact_manifest_sha256": "299be645df52fdd07d84ee2f2a0e3a1eae6eb342802bacb1909f0b8286b8fca5",
+  "build_entries": 931,
+  "build_identities_sha256": "c0a988b1abef0383059ca40e76e5e045eadb0e5ec2dc5a71af0fb07d41818613",
+  "class_scenarios": 69,
+  "disabled": 0,
+  "errors": 0,
+  "failures": 0,
+  "final_scope_commands": 23,
+  "focused": 207,
+  "inventory": 580,
+  "owned_diff_sha256": "8c104bd45f9b32c9851fb1ff39cf452b753f4cb96cc3ba400bd2d850a1305462",
+  "preserved_inventory": 578,
+  "report_sha256": "56e600476d1166ed58bc2f11019f1c20bcfc1a9ba52b5643fa03dcbee66baa42",
+  "skips": 0,
+  "source_entries": 21700,
+  "source_freeze_sha256": "4c011b6f9582daf395fc5435c06e37f286da3c6a6c4aadad76ec5be3935a117e",
+  "source_release_sha256": "4c011b6f9582daf395fc5435c06e37f286da3c6a6c4aadad76ec5be3935a117e",
+  "status": "candidate, independent review pending; serialized build ownership released",
+  "timestamp": "2026-10-23T04:45:45.955442+00:00"
+}

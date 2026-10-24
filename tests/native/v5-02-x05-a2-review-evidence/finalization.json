@@ -1,0 +1,19 @@
+{
+  "artifact_manifest_sha256": "8004965a739bc6810b5746889d744adccae8e0af25345de59b18997a41aadf9b",
+  "artifacts": 64,
+  "author_artifacts": 259,
+  "build_identities": 747,
+  "build_ownership_released": true,
+  "disposition": "approve",
+  "finalized_utc": "2026-10-23T02:19:39.238856+00:00",
+  "focused_executed": 140,
+  "independent_adversarial_scenarios": 4,
+  "no_further_reviewer_edits": true,
+  "prior_registered": 552,
+  "production_scenarios": 10,
+  "red_controls": 1,
+  "registered": 555,
+  "report_sha256": "05aae497edaf936e974922e1e3e1d17f6c6585a69bbe08a44193cdb15a018b8c",
+  "source_entries": 19331,
+  "zero_failures_errors_skips_disabled": true
+}

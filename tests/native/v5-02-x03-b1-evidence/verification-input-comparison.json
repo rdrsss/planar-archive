@@ -1,0 +1,10 @@
+{
+  "path_base": "repository root",
+  "changed": [
+    "tests/native/v5-02-x03-b1-support/old-binary.py"
+  ],
+  "allowed_support_extension": [
+    "tests/native/v5-02-x03-b1-support/old-binary.py"
+  ],
+  "explanation": "Only old-binary support expanded after focused suite; final-old-binary rerun verifies all8 cases. Product/native suite inputs unchanged."
+}

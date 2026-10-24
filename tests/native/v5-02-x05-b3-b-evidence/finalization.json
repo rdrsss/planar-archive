@@ -1,0 +1,11 @@
+{
+  "status": "incomplete prerequisite checkpoint",
+  "debug_ownership_released": true,
+  "no_further_edits": true,
+  "source_snapshot_entries": 414,
+  "source_rehash_equal": true,
+  "candidate_manifest_sha256": "c626acc345f9331e21f92ba6a868a2663ea5620121bb62402822fce5babf3c87",
+  "candidate_diff_sha256": "6cd56c2800c110638fc2f41cda859204bd9190fd2dceee9de8f437bebafe0c2e",
+  "artifact_manifest_sha256": "9ee0a6827299ba1315b72fb427df40e3e42bf53944ba3d0f738671f9f013271f",
+  "report_sha256": "85eec08f081459e65b64b4b7acb10ef761149b148048099bee67ac76f24e0207"
+}

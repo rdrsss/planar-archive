@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "tests/native/v5-02-x03-b2-b-c01-support/fixture.cppm",
+    "tests/native/v5-02-x03-b2-b-c01-support/metadata.t.cpp",
+    "tests/native/r14-d8-support/acceptance_fault.t.cpp",
+    "tests/native/r14c3b2-support/atomic.t.cpp",
+    "tests/native/r13b1-support/collision.t.cpp"
+  ],
+  "cwd": "<repo>",
+  "start": 1792703598.926389,
+  "end": 1792703599.1799748,
+  "exit_code": 0
+}

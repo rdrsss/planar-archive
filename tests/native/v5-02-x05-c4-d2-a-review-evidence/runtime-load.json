@@ -1,0 +1,9 @@
+{
+  "executable_load_commands": "private/load-chain.log",
+  "observed": [
+    "dyld[90254]: <5013C0F8-84A9-3B56-9FEB-C353816A750F> /usr/lib/libc++.1.dylib",
+    "dyld[90254]: <E482D257-E5A0-3816-BD97-7B39342958DA> /usr/lib/libc++abi.dylib"
+  ],
+  "copied_runtime_execution": false,
+  "platform_runtime_execution": true
+}

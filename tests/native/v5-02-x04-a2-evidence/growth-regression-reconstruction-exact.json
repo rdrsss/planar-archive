@@ -1,0 +1,6 @@
+{
+  "expected_before_sha256": "a9ba94381f7002eb62ba4fb4df6401131a286158c0991a109ffd2be817b87682",
+  "reconstructed_before_sha256": "a9ba94381f7002eb62ba4fb4df6401131a286158c0991a109ffd2be817b87682",
+  "exact_match": true,
+  "method": "Reverse bounded-receipt flag, reread cap, cached upgrade and multiline returned initializer; pinned formatting. Initial reconstruction retained as mismatched exploratory evidence."
+}

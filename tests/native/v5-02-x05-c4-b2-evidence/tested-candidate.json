@@ -1,0 +1,86 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "8bd21cb24facd10f03004e07aba5818d97e8cf6c48023fac824c83cf2a68949b"
+  },
+  "CMakeLists.txt": {
+    "mode": 420,
+    "sha256": "a855bcb3fb2858587c7dee5de43385590707b166f83997cdc3b1b7757a93197b"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "d61863db4759f7d2e72e4b638eff55c4ba5d4c1f8976679e5a2791a7e23782e6"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "2c3fd783a37aee660682f04bf0af0d96a68bc99fdc03abe7c7042eabbb113d35"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "3ec3d1e0eb61bce664dbddccb3575d1d9e8c9cdd28c1ad36223be6bb7aeb5384"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "ac09d0509f146c0bb3b5ec80435318be61cc05886c411058d691d1be3dad62aa"
+  },
+  "src/cmd/planar/CMakeLists.txt": {
+    "mode": 420,
+    "sha256": "caebfdb9e45c2dd94b8c15b8164d524a5658b8964f63830ed9bd21139a07802e"
+  },
+  "src/engine/CMakeLists.txt": {
+    "mode": 420,
+    "sha256": "a23d2d79fbd1489e8eea45de5c2bd7b1eaf9103314b39f41b62bc2142935e72a"
+  },
+  "src/engine/ledger/format.cpp": {
+    "mode": 420,
+    "sha256": "a4d2c058175cda3c100b18a882f2b34b6bc20907d02bbba99bfeac50cd5f5a68"
+  },
+  "src/engine/ledger/format.cppm": {
+    "mode": 420,
+    "sha256": "37c45942304ced319030710b75e87181a2e0576d21363f902ea59f8d89fd9b29"
+  },
+  "src/engine/ledger/format.t.cpp": {
+    "mode": 420,
+    "sha256": "b692062e89c93dcae543ed5b01959b4a02f4073420f714c3eb71b63213453cdc"
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "mode": 420,
+    "sha256": "fda52bbb16aa1e864f30a1ce785e237d593524c682e0defb9544a8e6f58ff4aa"
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "mode": 420,
+    "sha256": "7a08d0aa2742eff604a91e3d64a130e72311d03134088bcedf222a778a044f5e"
+  },
+  "src/engine/runtime/runtime.t.cpp": {
+    "mode": 420,
+    "sha256": "ed3cdb951325e7b7e9d4d1c9006bf43f6327c12e5f7100f0620e72d86eb065f8"
+  },
+  "tests/native/v5-02-x05-c4-b2-evidence/REPORT.md": {
+    "mode": 420,
+    "sha256": "662a595c2cc002904fb0615e38ac4a21cf8ebab5c68ab7ee61aa9230ee9e9fdf"
+  },
+  "tests/native/v5-02-x05-c4-b2-support/audit.py": {
+    "mode": 420,
+    "sha256": "aace5aba8de1c018cc1d0884045b0507e81c6f0317bbf06bb720fb1859bd7b39"
+  },
+  "tests/native/v5-02-x05-c4-b2-support/freeze.py": {
+    "mode": 420,
+    "sha256": "5226d1cc217cc7e387f693120d64763bf2491ea9e9872520576554dd5ad7528f"
+  },
+  "tests/native/v5-02-x05-c4-b2-support/gate.py": {
+    "mode": 420,
+    "sha256": "e87c80e537852171b2de2c8ee7567cc9b67a2232832ab531279fd96952606b46"
+  },
+  "tests/native/v5-02-x05-c4-b2-support/observer.inc": {
+    "mode": 420,
+    "sha256": "5b5cbbb296924dd8d2d2bc26301fab33257e7bcb765d836e4a09db77e9b6f6a0"
+  },
+  "tests/native/v5-02-x05-c4-b2-support/private-probe.cpp": {
+    "mode": 420,
+    "sha256": "f4e3395a5185dc23342d98e54f16fd19bef2a00134aac76bba75d6fc325b429a"
+  },
+  "tests/native/v5-02-x05-c4-b2-support/private.py": {
+    "mode": 420,
+    "sha256": "e2c2bb51b548dd4986104dacd56bfcbf8fc1097fc9f304414936a99dd8d73649"
+  }
+}

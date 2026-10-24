@@ -1,0 +1,25 @@
+{
+  "added": [
+    "docs/vernacular/x03-format-evidence.md"
+  ],
+  "artifact_path_base": "<repo>/tests/native/v5-02-x03-b3-evidence",
+  "baseline_regular_files": 15424,
+  "candidate_path_base": "<repo>",
+  "changed_existing": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md"
+  ],
+  "executable_source_unchanged": true,
+  "final_regular_files": 15425,
+  "status_prose_finalized_after_both_gates": true,
+  "symlinks": {
+    "AGENTS.md": "CLAUDE.md",
+    "compile_commands.json": "<repo>/build/install-release/compile_commands.json"
+  }
+}

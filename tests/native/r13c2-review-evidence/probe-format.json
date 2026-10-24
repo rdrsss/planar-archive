@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "tests/native/r13c2-review-evidence/adversarial.cpp"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.03706717491149902
+}

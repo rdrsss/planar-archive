@@ -1,0 +1,20 @@
+{
+  "assertion_statement_evaluations": 410,
+  "real_processes": 99,
+  "usage_cases_per_normal_bundle": 14,
+  "compiled_drift_skips_init_missing_required_case": 1,
+  "accounting": {
+    "product_root_help": 2,
+    "six_variant_root_help_and_equality": 18,
+    "usage_matrix": 332,
+    "three_catalog_defects_with_no_publication_and_redaction": 18,
+    "altered_semantic_refusal": 6,
+    "ordinary_product_same_tokens": 3,
+    "native_error_poisoning": 5,
+    "three_postpublication_modes": 24,
+    "unchanged_ledger_and_no_stages": 2
+  },
+  "method": "Static accounting of executed Python assert statements on the passing deterministic path; compound expressions are one assert. Native Catch2 counts are separate in raw logs.",
+  "fixture_helper_subprocesses": 1,
+  "total_subprocesses": 100
+}

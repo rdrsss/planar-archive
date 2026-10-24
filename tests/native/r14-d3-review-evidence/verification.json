@@ -1,0 +1,17 @@
+{
+  "scope": "Independent documentation identity/link/protection checks only; no runtime test or build claims",
+  "author_manifest_hashes": {
+    "candidate.json": "ffe90a6e6db40b5d47ba72697bf85d7705bb08a41a67e85a51b93a70d12edb38",
+    "owned.diff": "37508941e36017d8f9727d20aa9ce25822c19dba1e66e486cf15c6e749af1c7f",
+    "artifacts.json": "42f78b71fd4bf328cf64cb7fbffaa0c53f9dd26bdf178b3f6e1797b8ee2afd1f"
+  },
+  "candidate_documents": 9,
+  "evidence_artifacts": 30,
+  "baseline_documents": 8,
+  "local_links_and_anchors": 212,
+  "protected_ordinary_files": 6124,
+  "symlink": "AGENTS.md -> CLAUDE.md",
+  "v5_sha256": "c3d37e0e28407a9066eb51c515982ef6c93d82795eb56f97dea4a780b66fe08e",
+  "diff_reproduction": "exact",
+  "failures": []
+}

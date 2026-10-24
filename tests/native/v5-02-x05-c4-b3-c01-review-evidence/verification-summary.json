@@ -1,0 +1,58 @@
+{
+  "author_artifacts_preserved": true,
+  "candidate_entries": 26,
+  "full_release_linux_claim": false,
+  "private": {
+    "baseline-red": {
+      "cases": 1,
+      "failed_assertions": 0,
+      "failed_cases": 0,
+      "skips": 0
+    },
+    "baseline-reviewer": {
+      "cases": 5,
+      "failed_assertions": 5,
+      "failed_cases": 2,
+      "skips": 0
+    },
+    "fresh-reviewer": {
+      "cases": 3,
+      "failed_assertions": 0,
+      "failed_cases": 0,
+      "skips": 0
+    },
+    "green-private": {
+      "cases": 7,
+      "failed_assertions": 0,
+      "failed_cases": 0,
+      "skips": 0
+    },
+    "green-red": {
+      "cases": 1,
+      "failed_assertions": 0,
+      "failed_cases": 0,
+      "skips": 0
+    },
+    "reviewer-private": {
+      "cases": 5,
+      "failed_assertions": 0,
+      "failed_cases": 0,
+      "skips": 0
+    }
+  },
+  "private_green_cases": 16,
+  "production": {
+    "baseline": 786,
+    "cli": 7,
+    "counts": {
+      "planar_history_read_tests": 3,
+      "planar_ledger_format_tests": 82,
+      "planar_ledger_sqlite_tests": 33,
+      "planar_runtime_tests": 304
+    },
+    "current": 790,
+    "focused": 429,
+    "preserved_all": true
+  },
+  "source_candidates_current": true
+}

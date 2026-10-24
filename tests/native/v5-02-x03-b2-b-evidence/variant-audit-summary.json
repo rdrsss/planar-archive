@@ -1,0 +1,11 @@
+{
+  "copied_generation_reports": [
+    "r12c2-generated",
+    "r13b1-generated",
+    "r14c3b2-generated",
+    "r14f1-generated"
+  ],
+  "atomic_reader_writer_reversible": true,
+  "codec1_digest_sites": 2,
+  "codec2_digest_sites": 2
+}

@@ -1,0 +1,17 @@
+{
+  "docs/vernacular/v5-alignment.md": null,
+  "docs/vernacular/acceptance-matrix.md": null,
+  "docs/vernacular/implementation.md": "c13249b8c9881d94d4285358a0605308f96f380c476118944021ea29b10551f4",
+  "docs/vernacular/roadmap.md": "12094f502a93ec48118a90c5ea3ddc6b5115a4ce0dc6d7dffeb6bf0324b618dd",
+  "docs/vernacular/declarations.md": "f36b8acce8acbcc1ef32573b863841c689d3d2cab94ff5a253c92888a2bae9fe",
+  "docs/vernacular/render-contract.md": "c867cba2f319d9685ee29c657c4933a4260bd4a62d39856ffd14317c1f349b61",
+  "docs/vernacular/ledger-contract.md": "7a3828b3ba75bd1320e1cbfc8cd1cc2ea9b2947eebaca9266f9cdd8d20f655fa",
+  "CLAUDE.md": "3a7971f22c8d7867fdb53404c38d7f6c8277e4c05f1cdeccf84acd5a15bee734",
+  "README.md": "beb9c8b564870d02b3fdf5cc920daf470cfcbeaf93c032c2cc050473b9257181",
+  "CONTRIBUTING.md": "b987bab0b7566d5c818410929c596a41e7b5d4a87d1a7f649c37564d8bde0dd1",
+  "INSTALL.md": "1387974919b962fa8ea8a57feaf0e2fb37ef740c742e56be6eb151420bdf4145",
+  "docs/architecture.md": "6ae8191c493053c43f95ddb3b0ebc000d3b52b755f1c483ecd30d588ebc80065",
+  "docs/cli-reference.md": "f95cb98741d26a1a38ff06d0e59229d210d757f34f9d67363a227300af3549ee",
+  "docs/declarations.md": "72900b9ec37445598565ab5308720f9deadab4c6cf478b8e5fa325eed73faf78",
+  "docs/testing.md": "c8aab7e3027d7f0317c4a6683797ef9c557689e917b001876b6232565747c106"
+}

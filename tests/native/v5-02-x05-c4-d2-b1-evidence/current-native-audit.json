@@ -1,0 +1,10 @@
+{
+  "actual_fd_before_content": true,
+  "immutable_selection": true,
+  "no_cache_authority_replacement": true,
+  "no_filesystem_terminal_observer": true,
+  "private_profile_forwarding": true,
+  "shared_original_state": true,
+  "stored_authority_on_rereads": true,
+  "supplied_files_only": true
+}

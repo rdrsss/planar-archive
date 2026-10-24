@@ -1,0 +1,48 @@
+{
+  "candidate_manifest_sha256": "e567b706a8ccbafe5a53dcde3d8d06d36052cb93fc3ef14d3f9cb33a67454a56",
+  "round_diff_sha256": "b56ab60283c8a95cc4aae7492e9ecab30fcb8855bde219b1bc8c36ab4f4815f4",
+  "generation_manifest_sha256": "170ed48a857c385ed29a3f71ae8125a7d78b53a793b672f1a7d7dd7ac3384bed",
+  "debug_gate": {
+    "passed": 170,
+    "native": 169,
+    "acceptance": 1,
+    "skipped": 0,
+    "no_work": true,
+    "exit_code": 0
+  },
+  "release_gate": {
+    "passed": 170,
+    "native": 169,
+    "acceptance": 1,
+    "skipped": 0,
+    "no_work": true,
+    "exit_code": 0
+  },
+  "focused_debug": {
+    "passed": 46,
+    "skipped": 0
+  },
+  "focused_release": {
+    "passed": 46,
+    "skipped": 0
+  },
+  "cli_acceptance": {
+    "processes": 247,
+    "goldens": 6,
+    "host_path_checks": 60,
+    "skipped": 0
+  },
+  "fault_positions": {
+    "journal_write": 4,
+    "journal_sync": 2,
+    "main_write": 2,
+    "main_sync": 1
+  },
+  "platform": "macOS 26.5.2 arm64",
+  "linux_executed": false,
+  "product_findings": [],
+  "build_directories_released": [
+    "build/rewrite-debug",
+    "build/rewrite-release"
+  ]
+}

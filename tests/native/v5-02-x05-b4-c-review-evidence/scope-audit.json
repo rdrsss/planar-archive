@@ -1,0 +1,24 @@
+{
+  "approved_B4_B_C01_entries_match_tested_freeze": 210,
+  "checked_owned_relative_links": 462,
+  "broken_links": [],
+  "exact_named_production_examples": [
+    "X05 B1 all mandatory jobs validate before any selected callback",
+    "X05 B1 accepted dependency base cycles precede every custom callback",
+    "X05 B2 A final shape definition matches independent canonical hash construction",
+    "X05 B2 C actual retained shape preserves identity aliases immutable input and writable scratch",
+    "X05 B3 B actual profile phases bind same-call final definition and preserve immutable inputs",
+    "X05 B4 B C01 complete native render bound covers original oversized schema refusal"
+  ],
+  "changed_paths": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x05-shape-evidence.md"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "cmake",
+    "--build",
+    "build/rewrite-debug",
+    "--target",
+    "all",
+    "planar_tests"
+  ],
+  "exit": 0,
+  "seconds": 0.08295079227536917
+}

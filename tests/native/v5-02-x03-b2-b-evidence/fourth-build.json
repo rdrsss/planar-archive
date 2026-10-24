@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "build/rewrite-debug",
+    "--target",
+    "all",
+    "planar_tests"
+  ],
+  "cwd": "<repo>",
+  "start": 1792701862.886635,
+  "end": 1792701879.239007,
+  "exit_code": 0
+}

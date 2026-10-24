@@ -1,0 +1,4 @@
+{
+  "exit": 1,
+  "expectation": "Additive typed-read tests cannot compile against the prior API; feature absence, not a prior defect."
+}

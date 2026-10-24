@@ -1,0 +1,12 @@
+{
+  "author_artifact_manifest_sha256": "e9544b10fa33ecf96d01166844d33cb6ed60fe72a9ada002b94fc37543831b9d",
+  "build_directories_released": true,
+  "candidate_manifest_sha256": "90ef44013b3031783bd8f54681c16e6a670673bdf8f155a18359917eb999871d",
+  "disposition": "approve",
+  "future_writes": "none",
+  "ownership_released": true,
+  "report_sha256": "e6f73eb52cf2c641498b104bdecc83dbab3be99c6d40d370b13339bd50a2eba3",
+  "review_final_audit_sha256": "4498e352b1f8116a961499d7fa135804055413c84cce5fbfcc26256c94967b2f",
+  "scope": "integrated native X04-A only",
+  "utc": "2026-10-22T22:58:41.035441+00:00"
+}

@@ -1,0 +1,84 @@
+Filters: [review]
+Randomness seeded to: 2884582622
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+review is a Catch2 v3.15.3 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+review normalization matches render contract text identity
+-------------------------------------------------------------------------------
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:424
+...............................................................................
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:428: FAILED:
+  CHECK( inline_text->fields.at("kind")->string=="text" )
+with expansion:
+  "md" == "text"
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:430: FAILED:
+  CHECK( file_text->fields.at("kind")->string=="text" )
+with expansion:
+  "file" == "text"
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:431: FAILED:
+  CHECK( file_text->fields.contains("file") )
+with expansion:
+  false
+
+-------------------------------------------------------------------------------
+review JSON exact container depth boundary
+-------------------------------------------------------------------------------
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:414
+...............................................................................
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:66: FAILED:
+  REQUIRE( result->fields.contains("error") )
+with expansion:
+  false
+
+-------------------------------------------------------------------------------
+review resolved job paths stay within portable limit
+-------------------------------------------------------------------------------
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:452
+...............................................................................
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:464: FAILED:
+  CHECK( error->fields.at("file")->string.size()<=1024 )
+with expansion:
+  1031 (0x407) <= 1024 (0x400)
+with message:
+  1031
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:465: FAILED:
+  CHECK( error->fields.at("code")->string=="path_denied" )
+with expansion:
+  "reference" == "path_denied"
+with message:
+  1031
+
+-------------------------------------------------------------------------------
+review ID-keyed collections normalize by ID
+-------------------------------------------------------------------------------
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:440
+...............................................................................
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:445: FAILED:
+  CHECK( work->items[0]->fields.at("id")->string=="command" )
+with expansion:
+  "library" == "command"
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:446: FAILED:
+  CHECK( work->items[1]->fields.at("id")->string=="library" )
+with expansion:
+  "command" == "library"
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1-review-j4n_r83f/review.cpp:450: FAILED:
+  CHECK( second->fields.at("spec")->fields.at("work")->items[0]->fields.at("id")->string==work->items[0]->fields.at("id")->string )
+with expansion:
+  "command" == "library"
+
+===============================================================================
+test cases:   5 |   1 passed | 4 failed
+assertions: 128 | 119 passed | 9 failed
+

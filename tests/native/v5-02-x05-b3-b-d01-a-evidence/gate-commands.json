@@ -1,0 +1,42 @@
+[
+  {
+    "label": "codec-baseline",
+    "argv": [
+      "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-b3-b-d01-a-evidence/codec-baseline.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 2.704826831817627
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--preset",
+      "debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.0780940055847168
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.2354140281677246
+  }
+]

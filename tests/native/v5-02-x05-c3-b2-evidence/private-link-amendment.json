@@ -1,0 +1,8 @@
+{
+  "changed": [
+    "tests/native/v5-02-x05-c3-b2-support/private.py"
+  ],
+  "old_failed_link_preserved": "private-attempt1",
+  "product_test_and_prose_unchanged": true,
+  "reason": "syscall harness is a shared target, not static archive; link its already-copied original object"
+}

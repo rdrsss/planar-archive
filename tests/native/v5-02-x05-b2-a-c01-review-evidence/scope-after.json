@@ -1,0 +1,29 @@
+{
+  "candidate_files": 10,
+  "artifacts": {
+    "v5-02-x05-b2-a-c01-evidence": 104,
+    "v5-02-x05-b2-a-evidence": 76,
+    "v5-02-x05-b2-a-review-evidence": 57
+  },
+  "current_frozen": 381,
+  "prior_frozen": 378,
+  "changed_existing": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/runtime.cpp"
+  ],
+  "added": [
+    "tests/native/v5-02-x05-b2-a-c01-support/boundary.cpp",
+    "tests/native/v5-02-x05-b2-a-c01-support/gate.py",
+    "tests/native/v5-02-x05-b2-a-c01-support/probes.py"
+  ],
+  "owned_diff_reconstructed": true,
+  "AGENTS_symlink": "CLAUDE.md",
+  "whole_tree_freeze": false,
+  "candidate_sha256": "aacb5f86af9d6742d7c87fd796799b23ed879e0a58866ed8072fb6990d9eb6d6",
+  "author_report_sha256": "3988be82461351b803857b6038db5324c1ef5f0ef7752c7adda809f0dcbc56a2"
+}

@@ -1,0 +1,241 @@
+[
+  {
+    "acceptance_count": 2,
+    "after_markdown_bytes": 12496,
+    "after_sha256": "963b91210dbacd437e0fe3f5c3b23ad1e42435e43da19438569dcea8de019d59",
+    "applicable_check_count": 2,
+    "baseline_regression_reproduced": "global digests visible and labeled per-check policy absent",
+    "before_markdown_bytes": 13405,
+    "before_sha256": "1139ee6fac441e57244b806f51e236eb4833acda1ca2bdf8c418768410bdc48c",
+    "check_policy_fields_per_check": [
+      8
+    ],
+    "contract_count": 1,
+    "effective_check_ids_by_work": [
+      {
+        "checks": [
+          "contract",
+          "integration"
+        ],
+        "work": "command"
+      },
+      {
+        "checks": [
+          "contract"
+        ],
+        "work": "library"
+      }
+    ],
+    "explicit_dependency_count": 2,
+    "facet_count": 1,
+    "manifest_changed_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "omitted": [],
+    "packet": "combined-builder",
+    "requirement_count": 3,
+    "section_count": 12,
+    "target_count": 0,
+    "toolchain_count": 1,
+    "toolchain_fields_per_toolchain": 4,
+    "work_output_base_observation_files_assertions_prerequisites_exactly_unchanged": true
+  },
+  {
+    "acceptance_count": 2,
+    "after_markdown_bytes": 13311,
+    "after_sha256": "dc967b5651c2ad57a04a296be7d26c246394ca9486226d883dae64be2a65d075",
+    "applicable_check_count": 2,
+    "baseline_regression_reproduced": "global digests visible and labeled per-check policy absent",
+    "before_markdown_bytes": 14415,
+    "before_sha256": "9201b6087a8ddcb7e440da270e31c1030718718c439defd4f9f59dfde2f0615b",
+    "check_policy_fields_per_check": [
+      8
+    ],
+    "contract_count": 1,
+    "effective_check_ids_by_work": [
+      {
+        "checks": [
+          "contract",
+          "integration"
+        ],
+        "work": "command"
+      },
+      {
+        "checks": [
+          "contract"
+        ],
+        "work": "library"
+      }
+    ],
+    "explicit_dependency_count": 2,
+    "facet_count": 1,
+    "manifest_changed_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "omitted": [],
+    "packet": "combined-reviewer",
+    "requirement_count": 3,
+    "section_count": 12,
+    "target_count": 2,
+    "toolchain_count": 1,
+    "toolchain_fields_per_toolchain": 4,
+    "work_output_base_observation_files_assertions_prerequisites_exactly_unchanged": true
+  },
+  {
+    "acceptance_count": 1,
+    "after_markdown_bytes": 11121,
+    "after_sha256": "085dc686dd142e1587858b3594df1a7ff0b5088ad2092cd1d2e541c4edbfbdb9",
+    "applicable_check_count": 2,
+    "baseline_regression_reproduced": "global digests visible and labeled per-check policy absent",
+    "before_markdown_bytes": 11961,
+    "before_sha256": "09879f2d44ff2f9b9706af5d1ddf62c1726e0b08fc5c767aa5c95eb3294cca49",
+    "check_policy_fields_per_check": [
+      8
+    ],
+    "contract_count": 1,
+    "effective_check_ids_by_work": [
+      {
+        "checks": [
+          "contract",
+          "integration"
+        ],
+        "work": "command"
+      }
+    ],
+    "explicit_dependency_count": 2,
+    "facet_count": 1,
+    "manifest_changed_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "omitted": [],
+    "packet": "split-cli_worker-recovery",
+    "requirement_count": 2,
+    "section_count": 13,
+    "target_count": 0,
+    "toolchain_count": 1,
+    "toolchain_fields_per_toolchain": 4,
+    "work_output_base_observation_files_assertions_prerequisites_exactly_unchanged": true
+  },
+  {
+    "acceptance_count": 1,
+    "after_markdown_bytes": 10543,
+    "after_sha256": "53e8650de5b588c4564d631bcd59bbc2871dface2ae48017d2eef1681beea60d",
+    "applicable_check_count": 2,
+    "baseline_regression_reproduced": "global digests visible and labeled per-check policy absent",
+    "before_markdown_bytes": 11350,
+    "before_sha256": "85e12c73a6cfcc572602fd182ee1e479f2b8d50be0c565b05fee3d24f0049937",
+    "check_policy_fields_per_check": [
+      8
+    ],
+    "contract_count": 1,
+    "effective_check_ids_by_work": [
+      {
+        "checks": [
+          "contract",
+          "integration"
+        ],
+        "work": "command"
+      }
+    ],
+    "explicit_dependency_count": 2,
+    "facet_count": 1,
+    "manifest_changed_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "omitted": [],
+    "packet": "split-cli_worker",
+    "requirement_count": 2,
+    "section_count": 12,
+    "target_count": 0,
+    "toolchain_count": 1,
+    "toolchain_fields_per_toolchain": 4,
+    "work_output_base_observation_files_assertions_prerequisites_exactly_unchanged": true
+  },
+  {
+    "acceptance_count": 1,
+    "after_markdown_bytes": 7542,
+    "after_sha256": "a8149d30a6fb403fe4f8fa435cfc8428e962c2664e9fa5e77f1afaf3857f4a34",
+    "applicable_check_count": 1,
+    "baseline_regression_reproduced": "global digests visible and labeled per-check policy absent",
+    "before_markdown_bytes": 7578,
+    "before_sha256": "5776dfc2f7aa7ea4e55efa5699f937486e1a01c1dc370fa52d6da16203ed26de",
+    "check_policy_fields_per_check": [
+      8
+    ],
+    "contract_count": 1,
+    "effective_check_ids_by_work": [
+      {
+        "checks": [
+          "contract"
+        ],
+        "work": "library"
+      }
+    ],
+    "explicit_dependency_count": 0,
+    "facet_count": 0,
+    "manifest_changed_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "omitted": [],
+    "packet": "split-library_worker",
+    "requirement_count": 2,
+    "section_count": 12,
+    "target_count": 0,
+    "toolchain_count": 1,
+    "toolchain_fields_per_toolchain": 4,
+    "work_output_base_observation_files_assertions_prerequisites_exactly_unchanged": true
+  },
+  {
+    "acceptance_count": 2,
+    "after_markdown_bytes": 13332,
+    "after_sha256": "25373e03f4f30112424012fb4d90f7955da1db6ddd907e9c5799e6cd3fca7476",
+    "applicable_check_count": 2,
+    "baseline_regression_reproduced": "global digests visible and labeled per-check policy absent",
+    "before_markdown_bytes": 14436,
+    "before_sha256": "c1d03ba6035c5d4e724c34f6f1a46a152dcbc7fbb1254a095a88f512bf45dc41",
+    "check_policy_fields_per_check": [
+      8
+    ],
+    "contract_count": 1,
+    "effective_check_ids_by_work": [
+      {
+        "checks": [
+          "contract",
+          "integration"
+        ],
+        "work": "command"
+      },
+      {
+        "checks": [
+          "contract"
+        ],
+        "work": "library"
+      }
+    ],
+    "explicit_dependency_count": 2,
+    "facet_count": 1,
+    "manifest_changed_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "omitted": [],
+    "packet": "split-reviewer",
+    "requirement_count": 3,
+    "section_count": 12,
+    "target_count": 2,
+    "toolchain_count": 1,
+    "toolchain_fields_per_toolchain": 4,
+    "work_output_base_observation_files_assertions_prerequisites_exactly_unchanged": true
+  }
+]

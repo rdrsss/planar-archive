@@ -1,0 +1,18 @@
+[
+  "CLAUDE.md",
+  "docs/architecture.md",
+  "docs/vernacular/acceptance-matrix.md",
+  "docs/vernacular/external-profile-implementation.md",
+  "docs/vernacular/implementation.md",
+  "docs/vernacular/roadmap.md",
+  "docs/vernacular/v5-alignment.md",
+  "src/engine/CMakeLists.txt",
+  "src/engine/ledger/format.cpp",
+  "src/engine/ledger/format.cppm",
+  "src/engine/ledger/format.t.cpp",
+  "src/engine/ledger/types.cppm",
+  "tests/native/v5-02-x03-b1-support/fixture.cpp",
+  "tests/native/v5-02-x03-b1-support/old-binary.py",
+  "tests/native/v5-02-x03-b1-support/publication.t.cpp",
+  "tests/native/v5-02-x03-b1-support/run.py"
+]

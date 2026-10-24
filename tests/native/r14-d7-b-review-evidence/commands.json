@@ -1,0 +1,182 @@
+[
+  {
+    "name": "debug-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:29:59.786168+00:00",
+    "end": "2026-10-22T18:29:59.977534+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(load |command load |atomic (identity bound receipt|final native receipt refusal|variant final receipt mutation)|retained_cli$|workspace_selector_cli$|load_cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d7-b-review-evidence/debug-focused.xml"
+    ],
+    "start": "2026-10-22T18:30:06.356936+00:00",
+    "end": "2026-10-22T18:30:28.198528+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-historical",
+    "argv": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-b-review-evidence/debug-historical.json"
+    ],
+    "start": "2026-10-22T18:30:55.778624+00:00",
+    "end": "2026-10-22T18:30:56.136299+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-d6",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-b-review-evidence/debug-d6.json"
+    ],
+    "start": "2026-10-22T18:30:56.136524+00:00",
+    "end": "2026-10-22T18:30:56.349062+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-c01",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-b-review-evidence/debug-c01.json"
+    ],
+    "start": "2026-10-22T18:30:56.349266+00:00",
+    "end": "2026-10-22T18:30:56.486962+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-d7b",
+    "argv": [
+      "python3",
+      "tests/native/r14-d7-b-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-b-review-evidence/debug-d7b.json"
+    ],
+    "start": "2026-10-22T18:30:56.487250+00:00",
+    "end": "2026-10-22T18:30:56.602972+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "start": "2026-10-22T18:30:56.603185+00:00",
+    "end": "2026-10-22T18:30:56.634759+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:30:56.634977+00:00",
+    "end": "2026-10-22T18:30:56.746180+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "-R",
+      "replacement\\.(load |command load |atomic (identity bound receipt|final native receipt refusal|variant final receipt mutation)|retained_cli$|workspace_selector_cli$|load_cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d7-b-review-evidence/release-focused.xml"
+    ],
+    "start": "2026-10-22T18:31:03.799533+00:00",
+    "end": "2026-10-22T18:31:16.714420+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-historical",
+    "argv": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d7-b-review-evidence/release-historical.json"
+    ],
+    "start": "2026-10-22T18:31:46.776326+00:00",
+    "end": "2026-10-22T18:31:47.119076+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-d6",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d7-b-review-evidence/release-d6.json"
+    ],
+    "start": "2026-10-22T18:31:47.119377+00:00",
+    "end": "2026-10-22T18:31:47.328541+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-c01",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d7-b-review-evidence/release-c01.json"
+    ],
+    "start": "2026-10-22T18:31:47.328747+00:00",
+    "end": "2026-10-22T18:31:47.463246+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-d7b",
+    "argv": [
+      "python3",
+      "tests/native/r14-d7-b-support/audit.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d7-b-review-evidence/release-d7b.json"
+    ],
+    "start": "2026-10-22T18:31:47.463453+00:00",
+    "end": "2026-10-22T18:31:47.571830+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "--show-only=json-v1"
+    ],
+    "start": "2026-10-22T18:31:47.572068+00:00",
+    "end": "2026-10-22T18:31:47.605392+00:00",
+    "exit": 0
+  }
+]

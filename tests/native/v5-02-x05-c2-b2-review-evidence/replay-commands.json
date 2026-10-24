@@ -1,0 +1,82 @@
+[
+  {
+    "label": "raw-observer",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b2-evidence/final-probes/observer",
+      "[c2-b2-observer]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-c2-b2-review-evidence/raw-observer.xml"
+    ],
+    "cwd": "<repo>",
+    "mode": "",
+    "binary_sha256": "666895042f1dc0d427838e3cd555764f10b9ba17b972f1b361171cc3db56db18",
+    "exit": 0,
+    "seconds": 0.1783609390258789
+  },
+  {
+    "label": "allocation",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b2-evidence/final-probes/observer",
+      "[c2-b2-alloc]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-c2-b2-review-evidence/allocation.xml"
+    ],
+    "cwd": "<repo>",
+    "mode": "",
+    "binary_sha256": "666895042f1dc0d427838e3cd555764f10b9ba17b972f1b361171cc3db56db18",
+    "exit": 0,
+    "seconds": 1.906606912612915
+  },
+  {
+    "label": "partial",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b2-evidence/final-probes/observer",
+      "[c2-b2-quota]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-c2-b2-review-evidence/partial.xml"
+    ],
+    "cwd": "<repo>",
+    "mode": "partial",
+    "binary_sha256": "666895042f1dc0d427838e3cd555764f10b9ba17b972f1b361171cc3db56db18",
+    "exit": 0,
+    "seconds": 0.0504758358001709
+  },
+  {
+    "label": "memory-completed",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b2-evidence/callback-memory/observer",
+      "[c2-b2-callback-memory]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-c2-b2-review-evidence/memory-completed.xml"
+    ],
+    "cwd": "<repo>",
+    "mode": "completed",
+    "binary_sha256": "05809a756312f0f14d98bb5d5afc4a3b60eaca949b9a17b456e09a87034c0c61",
+    "exit": 0,
+    "seconds": 0.04812192916870117
+  },
+  {
+    "label": "memory-retry",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b2-evidence/callback-memory/observer",
+      "[c2-b2-callback-memory]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-c2-b2-review-evidence/memory-retry.xml"
+    ],
+    "cwd": "<repo>",
+    "mode": "retry",
+    "binary_sha256": "05809a756312f0f14d98bb5d5afc4a3b60eaca949b9a17b456e09a87034c0c61",
+    "exit": 0,
+    "seconds": 0.10424494743347168
+  }
+]

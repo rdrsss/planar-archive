@@ -1,0 +1,165 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-23T00:00:46.546729+00:00",
+    "exit_code": 0,
+    "label": "build",
+    "start": "2026-10-23T00:00:46.295702+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-23T00:00:50.555312+00:00",
+    "exit_code": 0,
+    "label": "inventory",
+    "start": "2026-10-23T00:00:50.477446+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement.replacement.effective provenance",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/effective.xml"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-23T00:00:56.648181+00:00",
+    "exit_code": 0,
+    "label": "effective-cases",
+    "start": "2026-10-23T00:00:54.827028+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-DPLANAR_EFFECTIVE_VECTORS=\"<repo>/tests/vectors/effective-provenance\"",
+      "-isystem",
+      "<repo>/vendor/xxhash/0.8.3",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_history_effective_provenance_tests.dir/history/effective_provenance.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/probes.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/probes.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "end": "2026-10-23T00:01:01.572198+00:00",
+    "exit_code": 0,
+    "label": "probe-compile",
+    "start": "2026-10-23T00:01:00.667125+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-arch",
+      "arm64",
+      "-Wl,-search_paths_first",
+      "-Wl,-headerpad_max_install_names",
+      "-stdlib=libc++",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/probes.o",
+      "-o",
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/probes",
+      "src/engine/libplanar_history_effective_provenance.a",
+      "vendor/catch2/src/libCatch2Maind.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_history_provenance_codec.a",
+      "src/engine/libplanar_history_tree_core.a",
+      "src/engine/libplanar_ledger_types.a",
+      "src/engine/libplanar_history_request_v2.a",
+      "src/engine/libplanar_history_record.a",
+      "libplanar_xxhash.a",
+      "src/engine/libplanar_capture_profile_codec.a",
+      "src/engine/libplanar_history_effective_catalog.a",
+      "src/engine/libplanar_canonical.a",
+      "src/engine/libplanar_value.a",
+      "vendor/catch2/src/libCatch2d.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "end": "2026-10-23T00:01:06.481744+00:00",
+    "exit_code": 0,
+    "label": "probe-link",
+    "start": "2026-10-23T00:01:06.295339+00:00"
+  },
+  {
+    "argv": [
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/probes",
+      "reviewer.*",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x04-b3-review-evidence/probes.xml"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-23T00:01:11.038344+00:00",
+    "exit_code": 0,
+    "label": "reviewer-probes",
+    "start": "2026-10-23T00:01:10.466394+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-23T00:01:16.181224+00:00",
+    "exit_code": 0,
+    "label": "independent-vectors",
+    "start": "2026-10-23T00:01:15.273365+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-23T00:01:20.462184+00:00",
+    "exit_code": 0,
+    "label": "no-work",
+    "start": "2026-10-23T00:01:20.207770+00:00"
+  }
+]

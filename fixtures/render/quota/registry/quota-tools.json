@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "id": "quota_tools",
+  "revision": "v1",
+  "toolchains": [
+    {
+      "id": "python",
+      "description": "Driver-resolved Python 3.9+; PATH /usr/bin:/bin is a fixture assumption, not a portable pin. Driver must supply a reviewed registry for other hosts.",
+      "command": [
+        "python3",
+        "-B"
+      ],
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "/usr/bin:/bin"
+        },
+        {
+          "name": "PYTHONDONTWRITEBYTECODE",
+          "value": "1"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "contract",
+      "toolchain": "python",
+      "argv": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_contract.py",
+        "-v"
+      ],
+      "coverage": "Selected API and consumer argument examples in owned test directories; run from source root. Own-output staging may include only the selected unit tests. Does not prove all behavior or authenticate interface review.",
+      "inputs": [
+        "expected_contracts",
+        "own_output"
+      ],
+      "timeout_ms": 10000,
+      "max_output_bytes": 65536,
+      "selection": "nonempty"
+    },
+    {
+      "id": "integration",
+      "toolchain": "python",
+      "argv": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/cli",
+        "-p",
+        "test_integration.py",
+        "-v"
+      ],
+      "coverage": "Three subprocess scenarios in one matched test against actual command and library output; run from source root with exact command/library output vector. Does not prove all concurrency or platform behavior.",
+      "inputs": [
+        "own_output",
+        "output_vector"
+      ],
+      "timeout_ms": 10000,
+      "max_output_bytes": 65536,
+      "selection": "nonempty"
+    }
+  ]
+}

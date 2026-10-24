@@ -1,0 +1,37 @@
+[
+  {
+    "name": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "snapshot",
+    "argv": [
+      "build/rewrite-debug/src/engine/planar_ledger_format_tests",
+      "[snapshot]"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r13b1c01-review-evidence/focused.xml"
+    ],
+    "exit": 0
+  }
+]

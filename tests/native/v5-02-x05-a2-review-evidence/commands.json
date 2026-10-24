@@ -1,0 +1,76 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "label": "build",
+    "seconds": 0.3151237079873681
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "label": "inventory",
+    "seconds": 0.0868155425414443
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement.(X05 A[012]|command |runtime |interpretation |load |acceptance |cli|.*_cli|CLI11|help |invocation |workspace )",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-a2-review-evidence/focused.xml"
+    ],
+    "exit_code": 0,
+    "label": "focused",
+    "seconds": 105.9212687080726
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a2-review-evidence/probe.py",
+      "production-probes"
+    ],
+    "exit_code": 0,
+    "label": "production-probes",
+    "seconds": 4.61597662512213
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "label": "pinned-product-lint",
+    "seconds": 1.3832544591277838
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "label": "no-work",
+    "seconds": 0.2516041249036789
+  }
+]

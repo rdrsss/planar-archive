@@ -1,0 +1,7 @@
+{
+  "build_ownership": "released after final artifact manifest; zero further author edits",
+  "candidate_manifest_sha256": "19160aa0c14307b9db56979534bb10e57043b7a6e6275e4b810d837b10423d4b",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "owned_diff_sha256": "8fe36e59720778b6bd061a83b1f91752ae92ba198df2793ec3ffc51c5a07a97a",
+  "status": "candidate awaiting independent review"
+}

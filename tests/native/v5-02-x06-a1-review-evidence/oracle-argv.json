@@ -1,0 +1,9 @@
+[
+  "cc",
+  "-shared",
+  "-fPIC",
+  "-O2",
+  "<repo>/vendor/xxhash/0.8.3/xxhash.c",
+  "-o",
+  "<repo>/tests/native/v5-02-x06-a1-review-evidence/private-xxhash.dylib"
+]

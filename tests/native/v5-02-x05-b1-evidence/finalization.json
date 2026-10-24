@@ -1,0 +1,9 @@
+{
+  "owned_diff_sha256": "03a2c7e4bfaeff1e51cb1050ba1cc4d6cc28d1ba11451120fdcb681ec428cec8",
+  "candidate_manifest_sha256": "478ae83bbee58a87134736b424bd383be1180379cd148e40cd162f8993d9e7f8",
+  "artifact_manifest_sha256": "5990985ec8f23f9eaaa5a698c0811e5c0fb66d68360381126c71775ed90fe1ac",
+  "owned_files": 13,
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "build_ownership_released": true,
+  "source_edits_after_freeze": false
+}

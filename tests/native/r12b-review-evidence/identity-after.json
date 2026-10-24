@@ -1,0 +1,12 @@
+{
+  "candidate-manifest.json": {
+    "sha256": "0180eea28ea3d0efd991290b4a6d3c358a40aca5556f8068cd29cfcbf114039d",
+    "count": 7,
+    "matches": true
+  },
+  "evidence-manifest.json": {
+    "sha256": "fe1a8995cf44a6dba60ff31c4bb62f6bcd0c73d688f21241d5a068a4dd524122",
+    "count": 24,
+    "matches": true
+  }
+}

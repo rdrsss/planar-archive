@@ -1,0 +1,43 @@
+{
+  "candidate": {
+    "manifest_sha256": "e567b706a8ccbafe5a53dcde3d8d06d36052cb93fc3ef14d3f9cb33a67454a56",
+    "entries": 7,
+    "all_match": true
+  },
+  "snapshots": {
+    "manifest_sha256": "e567b706a8ccbafe5a53dcde3d8d06d36052cb93fc3ef14d3f9cb33a67454a56",
+    "entries": 7,
+    "all_match": true
+  },
+  "evidence": {
+    "manifest_sha256": "5d14c88e75c216f3eaed3afee2fa166cae91f1a45c8611370fb756943d8ba473",
+    "entries": 42,
+    "all_match": true
+  },
+  "prior_c1": {
+    "manifest_sha256": "2a90623073df705d33b4c4db0cd37cd933f31e8bae48e9456e0cec5bba81202f",
+    "product_ledger_files_unchanged": 6
+  },
+  "baseline": {
+    "entries": 11401,
+    "changed": [
+      "docs/testing.md",
+      "docs/vernacular/rounds/R12-C2.md",
+      "docs/vernacular/rounds/R12.md",
+      "src/engine/CMakeLists.txt"
+    ],
+    "missing": []
+  },
+  "git": {
+    "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+    "branch": "dev/planar-v2-vernacular"
+  },
+  "generation_debug": {
+    "matching_source_and_generated_hashes": true,
+    "reverse_exact": true
+  },
+  "generation_release": {
+    "matching_source_and_generated_hashes": true,
+    "reverse_exact": true
+  }
+}

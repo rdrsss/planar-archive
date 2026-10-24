@@ -1,0 +1,13 @@
+{
+  "support_v1_v2_change_only_gate_omission": [
+    "tests/native/v5-02-x05-c5-support/gate.py"
+  ],
+  "old_driver_freeze_exact": true,
+  "support_v2_current_exact": true,
+  "old_broad_delimiter_failure_reproduced_by_read": true,
+  "all_original_invariants_retained_in_precise_body": true,
+  "generic_guard_assertion_same": true,
+  "initial_cache_change_only_identity_cache": "checked diff; original baseline retained",
+  "finalizer_changes": "URL-decode existing link and exactly four scheduled outputs, final actual existence assertion retained",
+  "product_full_test_repeats": false
+}

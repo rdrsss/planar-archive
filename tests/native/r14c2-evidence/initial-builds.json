@@ -1,0 +1,28 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "build-first.txt"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "build-second.txt"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "agents_symlink": "CLAUDE.md",
+  "baseline_files": 14642,
+  "baseline_manifest_base": "repository root; build and .git excluded",
+  "bootstrap_prior_bytes_retained": true,
+  "changed_preexisting": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/cmd/planar/bootstrap.t.cpp"
+  ],
+  "coordinator_round_excluded_from_owned_candidate": true,
+  "missing": [],
+  "unexpected_changes": []
+}

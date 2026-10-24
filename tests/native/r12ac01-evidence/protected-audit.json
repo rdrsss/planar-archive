@@ -1,0 +1,9 @@
+{
+  "checked": 3246,
+  "changed": [],
+  "authorized_reference_edits": [
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "note": "Reference edits are explicitly owned affected primitive documentation; before snapshots preserved."
+}

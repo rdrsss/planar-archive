@@ -1,0 +1,11 @@
+{
+  "reconstructed_snapshot_is_historical_proof": false,
+  "comment_diff_has_only_implementation_struct_documentation": true,
+  "reconstructed_and_final_tokens_equal": true,
+  "completed_xml_cases": 123,
+  "completed_xml_failures": 0,
+  "completed_xml_skips": 0,
+  "copied_passing_xml_byte_equal": true,
+  "copied_passing_lasttest_byte_equal": true,
+  "fresh_current_bytes_rerun": "independent focused.xml: 123 passed, zero failures/skips"
+}

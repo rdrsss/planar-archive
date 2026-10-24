@@ -1,0 +1,9 @@
+{
+  "baseline_manifest_sha256": "008c72e4d52ec899b79a6025ce664149ac5db85172f8db4e06009edd1b2829fd",
+  "regular_files": 15424,
+  "symlinks": {
+    "AGENTS.md": "CLAUDE.md",
+    "compile_commands.json": "<repo>/build/install-release/compile_commands.json"
+  },
+  "unchanged": true
+}

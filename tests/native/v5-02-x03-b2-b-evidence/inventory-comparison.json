@@ -1,0 +1,13 @@
+{
+  "baseline_count": 421,
+  "candidate_count": 427,
+  "missing": [],
+  "added": [
+    "replacement.acceptance request v2 owns exact normalized embedded and profile selectors",
+    "replacement.atomic codec2 forced request collision rolls back and redacts private digest",
+    "replacement.atomic forced request digests separate codec buckets and preserve version body conflict",
+    "replacement.atomic format request mismatch and profile refusal precede CAS and unusable candidate",
+    "replacement.atomic native format2 acceptance history export and backup restore survive removed inputs",
+    "replacement.ledger format2 native write transaction opens after complete typed integration"
+  ]
+}

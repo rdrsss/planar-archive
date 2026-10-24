@@ -1,0 +1,66 @@
+{
+  "format.cppm": {
+    "source_sha256": "3550fad0db3e1c9b2698778405d950b4d43b7a4e4012f9f8431b01a566569de6",
+    "generated_sha256": "31c0cb020599f119ba13fcb3537ac307c46be073222867f806c52c2a749b723e",
+    "reverse_identical": true,
+    "substitutions": [
+      {
+        "before": "planar.engine.ledger.format;",
+        "after": "planar.test.atomic_format;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::engine::ledger {",
+        "after": "namespace planar::engine::atomic_test {",
+        "count": 1
+      },
+      {
+        "before": "struct format_state;",
+        "after": "/// @brief Invoke the unchanged private allocator boundary in the isolated test variant.\n/// @param maximum Exact currently allocated signed-64 maximum.\n/// @return Next ID or the production exhaustion refusal.\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum);\nstruct format_state;",
+        "count": 1
+      }
+    ]
+  },
+  "format.cpp": {
+    "source_sha256": "94589cfed70ae8145fd032667b0870ab7fac1a6f44792700b014807d576faa73",
+    "generated_sha256": "91d4bda4999712ddcd6eedb9ef9182aac8dce427536d51cb444332e9e5ed4e75",
+    "reverse_identical": true,
+    "substitutions": [
+      {
+        "before": "planar.engine.ledger.format;",
+        "after": "planar.test.atomic_format;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::engine::ledger {",
+        "after": "namespace planar::engine::atomic_test {",
+        "count": 1
+      },
+      {
+        "before": "import planar.engine.ledger.sqlite;",
+        "after": "import planar.engine.ledger.sqlite;\nimport planar.test.atomic_digest;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::engine::atomic_test {",
+        "after": "namespace planar::engine::atomic_test {\nusing namespace planar::engine::ledger;",
+        "count": 1
+      },
+      {
+        "before": "digest_record(",
+        "after": "planar::test::atomic_digest::digest(",
+        "count": 2
+      },
+      {
+        "before": "\n#undef LEDGER_TRY",
+        "after": "\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum) {\n  return next_identifier(maximum);\n}\n#undef LEDGER_TRY",
+        "count": 1
+      },
+      {
+        "before": "if (!candidate.verify())",
+        "after": "if (false)",
+        "count": 1
+      }
+    ]
+  }
+}

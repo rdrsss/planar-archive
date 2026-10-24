@@ -1,0 +1,27 @@
+{
+  "artifact_entries": 153,
+  "candidate_entries": 20,
+  "changed": [],
+  "identities": {
+    "REPORT.md": {
+      "bytes": 9776,
+      "mode": 420,
+      "sha256": "6e1deed30d1990dd0c7df4f9ef48bc94b2764ecb868756db551d186f7854b482"
+    },
+    "artifact-manifest.json": {
+      "bytes": 24780,
+      "mode": 420,
+      "sha256": "8c046afeb672623c2e03b0fde3994c1aadad005dc8c29410a3300905f03f8bd0"
+    },
+    "finalization.json": {
+      "bytes": 616,
+      "mode": 420,
+      "sha256": "9fb54366fa5f3c8e337df3fad95b2e2ed01a576481a4a313bbc314028a5bd9c1"
+    },
+    "frozen-candidate.json": {
+      "bytes": 2957,
+      "mode": 420,
+      "sha256": "875be93d599299846396174e059bdc1f543ad5fb029bb341d23b1ca4648bfed0"
+    }
+  }
+}

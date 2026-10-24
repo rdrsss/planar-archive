@@ -1,0 +1,29 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/ledger/format.cppm": {
+      "source": "tests/native/r13b2-evidence/candidate/src/engine/ledger/format.cppm",
+      "sha256": "41fed577a1155d1c358e261121f000af8a7bb8241e0fe10a7b21f7dcacf8705d"
+    },
+    "src/engine/history/tree.cppm": {
+      "source": "tests/native/r13c1-evidence/candidate/src/engine/history/tree.cppm",
+      "sha256": "bd07cd6c6ea9d6e3ecd621d99ab438c2e404b0d07ca33395a9f95dbc9171b8cb"
+    },
+    "src/engine/history/tree.cpp": {
+      "source": "tests/native/r13c1-evidence/candidate/src/engine/history/tree.cpp",
+      "sha256": "8003332794268bcfa5ab5a14d13a17d0f78030931d24b00fb9d1eefc9346bad2"
+    },
+    "src/engine/CMakeLists.txt": {
+      "source": "tests/native/r13c2-evidence/candidate/src/engine/CMakeLists.txt",
+      "sha256": "63a8339d1d8876c87f38c5c7fce4153c6f7170682ec918e77b597aee8174f87e"
+    },
+    "docs/architecture.md": {
+      "source": "tests/native/r13c2-evidence/candidate/docs/architecture.md",
+      "sha256": "6fc0c8f96275505165c135c931a362ba4ac6e3a1be95365893e6a7ade57dbebb"
+    },
+    "docs/testing.md": {
+      "source": "tests/native/r13c2-evidence/candidate/docs/testing.md",
+      "sha256": "efa6f15ec461b5c6bd79896ccad62f1e7842cb05bec75d18fd30edac88e94819"
+    }
+  }
+}

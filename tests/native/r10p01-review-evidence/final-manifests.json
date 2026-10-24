@@ -1,0 +1,17 @@
+[
+  {
+    "manifest": "tests/native/r10p01-evidence/candidate.sha256",
+    "sha256": "1780d0070543754fe4afee9e503cd47099b1fb0772018f029d8c8691165ddaa8",
+    "entries": 21
+  },
+  {
+    "manifest": "tests/native/r10p01-evidence/evidence.sha256",
+    "sha256": "53e173c8af9aefd8db69fb3dca51ebfc8fb609be2c4cd5c54c2d69b11bddb392",
+    "entries": 192
+  },
+  {
+    "manifest": "tests/native/r10p01-evidence/protected-source.sha256",
+    "sha256": "a26fe2ad56316e0eb8d9e5f3539c9296c67317f0229aa84b48390beb5628722c",
+    "entries": 3032
+  }
+]

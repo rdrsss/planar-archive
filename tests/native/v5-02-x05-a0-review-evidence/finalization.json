@@ -1,0 +1,14 @@
+{
+  "disposition": "request-changes",
+  "blocking_findings": [
+    "A0-R1"
+  ],
+  "candidate_source_freeze_sha256": "fb30a7afb6727652498b8e4cefb41d21e983dc6a75d161427f7122b777e23cf8",
+  "report_sha256": "91dfbb5f25d853955401951e9d67eba23cf83522451b32673760af1be2c456c2",
+  "source_and_author_artifacts_unchanged": true,
+  "independent_tests": 12,
+  "full_suite_release_linux_not_run": true,
+  "review_complete_utc": "2026-10-23T00:51:52.996185+00:00",
+  "released_no_further_edits": true,
+  "lua_compile_commands_checked": 26
+}

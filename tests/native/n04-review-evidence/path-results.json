@@ -1,0 +1,190 @@
+{
+  "processes": 24,
+  "all_passed": true,
+  "cases": [
+    {
+      "preset": "debug",
+      "workspace": "render",
+      "registry": "../render",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26192
+    },
+    {
+      "preset": "debug",
+      "workspace": "-h",
+      "registry": "../-h",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26188
+    },
+    {
+      "preset": "debug",
+      "workspace": "-",
+      "registry": "../-",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26187
+    },
+    {
+      "preset": "debug",
+      "workspace": "[]",
+      "registry": "../[]",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "{}",
+      "registry": "../{}",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "x=y",
+      "registry": "../x=y",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "a b",
+      "registry": "../a b",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "\u00e9",
+      "registry": "../\u00e9",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "'quoted'",
+      "registry": "../'quoted'",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "\"quoted\"",
+      "registry": "../\"quoted\"",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "debug",
+      "workspace": "./--literal",
+      "registry": "../--literal",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26195
+    },
+    {
+      "preset": "debug",
+      "root_equals_status": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "render",
+      "registry": "../render",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26192
+    },
+    {
+      "preset": "release",
+      "workspace": "-h",
+      "registry": "../-h",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26188
+    },
+    {
+      "preset": "release",
+      "workspace": "-",
+      "registry": "../-",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26187
+    },
+    {
+      "preset": "release",
+      "workspace": "[]",
+      "registry": "../[]",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "{}",
+      "registry": "../{}",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "x=y",
+      "registry": "../x=y",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "a b",
+      "registry": "../a b",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "\u00e9",
+      "registry": "../\u00e9",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "'quoted'",
+      "registry": "../'quoted'",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "\"quoted\"",
+      "registry": "../\"quoted\"",
+      "status": 3,
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Invalid portable file path\"},\"kind\":\"error\",\"version\":1}\n",
+      "stdout_bytes": 0
+    },
+    {
+      "preset": "release",
+      "workspace": "./--literal",
+      "registry": "../--literal",
+      "status": 0,
+      "stderr": "",
+      "stdout_bytes": 26195
+    },
+    {
+      "preset": "release",
+      "root_equals_status": 0
+    }
+  ]
+}

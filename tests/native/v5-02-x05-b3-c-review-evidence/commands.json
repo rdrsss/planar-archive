@@ -1,0 +1,267 @@
+[
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.13280630111694336
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--preset",
+      "debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.07970213890075684
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b3-c-support/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 190.79367804527283
+  },
+  {
+    "label": "history-codec",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b3-c-support/history-codec-selected.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/history-codec.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.26328229904174805
+  },
+  {
+    "label": "production-selection",
+    "argv": [
+      "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+      "[profile-selection]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/production-selection.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 1.307171106338501
+  },
+  {
+    "label": "production-semantics",
+    "argv": [
+      "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+      "[profile-semantic]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/production-semantics.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 1.9243168830871582
+  },
+  {
+    "label": "codec",
+    "argv": [
+      "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/codec.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 2.7297298908233643
+  },
+  {
+    "label": "new-selection",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b3-c-support/vector.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.7641868591308594
+  },
+  {
+    "label": "shape-definition",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6687891483306885
+  },
+  {
+    "label": "canonical",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6520211696624756
+  },
+  {
+    "label": "record-v1",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6626241207122803
+  },
+  {
+    "label": "request-v2",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6611959934234619
+  },
+  {
+    "label": "effective-provenance",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6904048919677734
+  },
+  {
+    "label": "historical-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/historical-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.39924097061157227
+  },
+  {
+    "label": "d6-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/d6-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.23809814453125
+  },
+  {
+    "label": "d6-c01-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/d6-c01-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.15263104438781738
+  },
+  {
+    "label": "d7-b-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/d7-b-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.11859583854675293
+  },
+  {
+    "label": "b1-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/b1-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.048658132553100586
+  },
+  {
+    "label": "b2-a-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b2-a-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b3-c-review-evidence/b2-a-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.029230117797851562
+  },
+  {
+    "label": "pinned-lint",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 1.5080831050872803
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.13109421730041504
+  }
+]

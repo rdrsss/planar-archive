@@ -1,0 +1,64 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "candidate_sha256": "439abd02ca0ee1c7532e8a7b9a43982dde3762fdb10663031106fcd17b6bd0e8",
+  "candidate_files": 12,
+  "owned_diff_sha256": "92810148c8b3ad6b6f3db15dcabb2d79705f973b9cc9782a637cfce76aaf8a61",
+  "baseline_count": 6806,
+  "baseline_copies_verified": [
+    "docs/testing.md",
+    "src/engine/CMakeLists.txt",
+    "src/cmd/planar/CMakeLists.txt",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "tests/acceptance/bootstrap_load.py"
+  ],
+  "changed": [
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/R14-D8.md",
+    "docs/vernacular/v5-alignment.md",
+    "tests/acceptance/bootstrap_load.py",
+    "docs/testing.md",
+    "src/engine/CMakeLists.txt"
+  ],
+  "unexpected": [],
+  "manifests": {
+    "artifacts.json": {
+      "path_base": "repository",
+      "count": 10,
+      "sha256": "fc1abc7e69b01e45d323b0f1e4b9cdad2ab80f99b2e9ac30f2443276087ba9d3"
+    },
+    "evidence-sha256.json": {
+      "path_base": "tests/native/r14-d8-evidence",
+      "count": 97,
+      "sha256": "4a42ce5ddb9a0a5640cc236ef87f47f3d725a041febb035dff961becee0c8011"
+    }
+  },
+  "symlink": "AGENTS.md -> CLAUDE.md",
+  "unchanged_d3_contract_body_sha256": "9360af4d6d38983f36e01e0019fd723c7ac01b0a23f6e8d3db1a5cfb4eea2634",
+  "full_results": {
+    "debug": {
+      "full": 402,
+      "skips": 0,
+      "prior_preserved": 400,
+      "added": [
+        "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+        "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic"
+      ],
+      "lasttest_passed": 402
+    },
+    "release": {
+      "full": 402,
+      "skips": 0,
+      "prior_preserved": 400,
+      "added": [
+        "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+        "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic"
+      ],
+      "lasttest_passed": 402
+    }
+  }
+}

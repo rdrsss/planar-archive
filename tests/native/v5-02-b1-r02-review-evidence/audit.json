@@ -1,0 +1,19 @@
+{
+  "agents_symlink_preserved": true,
+  "artifact_manifest_sha256": "1e2073dd2ad40bd641618dfefb4bcbc90be754f2f01f753877e74bcd268d542f",
+  "candidate_files_verified": 11,
+  "candidate_manifest_sha256": "91ea6874381d3d37570eacd0243e812e1fa2526a3888ef049097770daf6f03aa",
+  "candidate_snapshots_verified": 11,
+  "independent_builds_executed": 0,
+  "independent_runtime_tests_executed": 0,
+  "owned_diff_sha256": "295a89f4ff4c4952a2875634fc91e8710fc0780a3768be6b5a278cb7c4078f7a",
+  "protected_baseline_files_verified": 5643,
+  "retained_artifacts_verified": 77,
+  "retained_baseline_tests": 337,
+  "retained_candidate_tests": 354,
+  "retained_junit_failures": 0,
+  "retained_junit_skips": 0,
+  "retained_junit_tests": 83,
+  "retained_new_tests": 17,
+  "scope": "Read-only byte hashing, source inspection and retained evidence parsing; no build or test execution."
+}

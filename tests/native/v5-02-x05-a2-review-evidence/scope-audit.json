@@ -1,0 +1,20 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/closure_guard/closure_guard.cpp",
+    "src/engine/runtime/closure_guard/closure_guard.cppm",
+    "src/engine/runtime/closure_guard/closure_guard.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "tests/native/v5-02-x05-a2-support/probe.py",
+    "tests/native/v5-02-x05-a2-support/verify.py"
+  ],
+  "invocation_only_poison_check": true,
+  "old_tests_stdlib_vendor_historical_unchanged": true,
+  "owned_diff_rederived": true,
+  "public_runtime_identical": true
+}

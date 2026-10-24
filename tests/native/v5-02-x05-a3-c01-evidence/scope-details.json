@@ -1,0 +1,6 @@
+{
+  "existing_a3_registration_tests_exact_prefix": true,
+  "existing_public_constructor_and_invocation_tail_identical": true,
+  "original_runtime_sha256": "753ccb275d6db204dd28755477fb26e31e68b551a765e2c1e75d2f4407fe9165",
+  "candidate_runtime_sha256": "4781d3cee9639583e92c788bf21e0396a4e4e4028ee3fdbeb689010d05052346"
+}

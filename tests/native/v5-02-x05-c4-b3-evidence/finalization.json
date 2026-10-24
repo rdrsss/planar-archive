@@ -1,0 +1,93 @@
+{
+  "artifact_manifest": {
+    "directories": 7,
+    "entries": 166,
+    "files": 159,
+    "path": "artifact-manifest.json",
+    "sha256": "8cd9069f84100de6afd887214c05bd601afc9409890e1da331bc552298e9b8af",
+    "symlinks": 0
+  },
+  "candidate": {
+    "exact_current_sources_support_prose_verified": true,
+    "path": "frozen-candidate.json",
+    "sha256": "65c517516840505ee603ece2f28899830f19a0c036864aa37a852c126973eb7d"
+  },
+  "cleanup": {
+    "dependency_copy_absent": true,
+    "path": "cleanup.json",
+    "removed_dependency_copy_members": 888,
+    "sha256": "747eaac8c4e05020c4a89a40397be6de2b4e72db8069eefd0e96c3b04042aa4f"
+  },
+  "constraints": {
+    "builds_or_tests_run": false,
+    "product_test_support_prose_report_changes": false,
+    "self_approval": false
+  },
+  "purpose": "Same-round evidence-only finalization before independent review; no implementation or approval.",
+  "report": {
+    "path": "REPORT.md",
+    "sha256": "e42cf175003dbdc28a2afea1f06cb11b970fe77ccc7e1974c96ce1a3145c8507"
+  },
+  "retained_private_compiler_products": {
+    "disposition": "Retained deliberately as owned final review artifacts; source, commands, manifests and XML retained alongside. Intermediate attempt directories contain no compiler products. Shared build/rewrite-debug remains available; release directories untouched.",
+    "products": {
+      "private/baseline": {
+        "bytes": 16395080,
+        "kind": "file",
+        "mode": "0o755",
+        "sha256": "3c3de11a14fd52f437f1baf22aff24b6cbcd4e1acec60a78789a6bdc36980fad"
+      },
+      "private/green": {
+        "bytes": 16540504,
+        "kind": "file",
+        "mode": "0o755",
+        "sha256": "6ea9a16c8c7c9dc13bd73b80f911b1f7651c2085bcc6f2e316f169826adb4fae"
+      },
+      "private/interface.o": {
+        "bytes": 74584,
+        "kind": "file",
+        "mode": "0o644",
+        "sha256": "5508b88444a8f89359a352200a3fefaaadf66bad670dd43a5bcb0d4e8b064ecd"
+      },
+      "private/probe.o": {
+        "bytes": 1189016,
+        "kind": "file",
+        "mode": "0o644",
+        "sha256": "8a75b0f3941a736b3ff6fe9678b5a568abb0af1972d11ad8542c81fdf5aecd61"
+      },
+      "private/runtime.o": {
+        "bytes": 6689344,
+        "kind": "file",
+        "mode": "0o644",
+        "sha256": "f421968f1f4b3798178d22a1b064453afeacb82cad9c45e4eb969b7c29800875"
+      },
+      "private/runtime.pcm": {
+        "bytes": 744360,
+        "kind": "file",
+        "mode": "0o644",
+        "sha256": "95fe626c9f3db5981e0d52995a350ec3c63ebe1b7b56ca68fc6283b296aee1b0"
+      }
+    }
+  },
+  "schema": 1,
+  "verification_summary": {
+    "counts": {
+      "baseline_red_failures": 1,
+      "cli_cases": 7,
+      "current_inventory": 786,
+      "focused_cases": {
+        "planar_history_read_tests": 3,
+        "planar_ledger_format_tests": 82,
+        "planar_ledger_sqlite_tests": 33,
+        "planar_runtime_tests": 300
+      },
+      "original_inventory": 773,
+      "preserved_all": true,
+      "private_green_cases": 7,
+      "skips": 0,
+      "total": 425
+    },
+    "path": "verification-summary.json",
+    "sha256": "f492d1228d9065827b4841bb63106eb88ad90f14aabc2076538c9031b7ca535e"
+  }
+}

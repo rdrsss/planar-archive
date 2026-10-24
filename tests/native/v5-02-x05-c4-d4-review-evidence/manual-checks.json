@@ -1,0 +1,33 @@
+{
+  "cleanup": {
+    "copied_dependency_files": 888,
+    "copied_membership_modes_bytes_verified": true,
+    "only_coder_owned_disposable_inputs_and_products_removed": true,
+    "removed_bytes": 1460668876,
+    "removed_files": 893,
+    "shared_inputs_unchanged": true
+  },
+  "cleanup_command": [
+    "python3",
+    "-B",
+    "tests/native/v5-02-x05-c4-d4-review-evidence/cleanup.py"
+  ],
+  "debug_released": true,
+  "files_released": true,
+  "no_work_command": [
+    "cmake",
+    "--build",
+    "build/rewrite-debug",
+    "--target",
+    "all",
+    "planar_tests"
+  ],
+  "no_work_exit": 0,
+  "protection_command": [
+    "python3",
+    "-B",
+    "tests/native/v5-02-x05-c4-d4-review-evidence/review.py",
+    "final"
+  ],
+  "protection_exit": 0
+}

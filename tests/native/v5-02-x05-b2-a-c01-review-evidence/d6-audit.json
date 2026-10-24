@@ -1,0 +1,133 @@
+{
+  "path_base": "build directory",
+  "variants": {
+    "0": {
+      "files": {
+        "runtime_0.cpp": "0e541cf33c3b9c3b757ffdc20dad82b46d6723cded17d2931392a6fd8bead4bf",
+        "runtime_0.cppm": "74f43814099dad46f8a78ce5fe3944b055ec19679edb6711eb14968a435cb992",
+        "commands_0.lua": "4e816d9f6eb7168c365f26984760dd2b10ab5331b9ae42edd6382c9c6c8bcd36"
+      },
+      "logical_originals": [
+        "planar/json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "3800ca4d4cf956d53a9a6a0bac1ddbf6829b2669de53b30ba2922b3b8d3ff60c",
+      "embedded_module_sha256": "709948cbe3ebffdba9871173f90801cdfc8425264f25b0067613dc818d13a7c5"
+    },
+    "1": {
+      "files": {
+        "runtime_1.cpp": "afa0866b39c6127084c83cd86c28c24f6aabcc79de868853e28fcfec8de4e90f",
+        "runtime_1.cppm": "85e6b2213e7d05b4c4879e561f5c69ffce9cce408d3f28a4a1c859fadd723ac1",
+        "commands_1.lua": "15227b8269d699b58ce5412b1f46f95bebe21b2d0bee5c0032c147fe317845db"
+      },
+      "logical_originals": [
+        "planar/json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "a41be8322db25d2f277ba35ccc6296e10c692c196dae3bbf90b6c60f0122c6dd",
+      "embedded_module_sha256": "3ecb75b09f5ad587717b566f379b3a5fcfeebf24079b3cd59c87f0c8c9071c7a"
+    },
+    "2": {
+      "files": {
+        "runtime_2.cpp": "d6ab23d8324f57e95cddb4b7f70af88df520f717d4ad53ba9c2b7be8abf916b5",
+        "runtime_2.cppm": "014dc4a91b90012fa0967d2d93903d4ba64e6794ec5c103b33f79e473174eba8",
+        "commands_2.lua": "2f574b2ffc376e464897ae7e7ea8d8fa2da4d93c8648b2f588547ae6c76a2985"
+      },
+      "logical_originals": [
+        "planar/json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "2f26b7b02cb2eeb22f470fdd32a976382aadcb8ef0f75ed60c7e214c6a36735a",
+      "embedded_module_sha256": "ce7b5e8fa6402832c4efaaa53e08d0381225154eb988ce9d1a0a18387e27206d"
+    },
+    "3": {
+      "files": {
+        "runtime_3.cpp": "6209ca8410875ef2272304a4c064fd68ba1467407a8b0f9abc8756fceb835c71",
+        "runtime_3.cppm": "9a64066e6107e71e690a81513cc0e0c4a3c4b4126582e5f8da63477bc5434eb1",
+        "commands_3.lua": "6da7dbab095106a69658ee2c97f19d0c62292b153a57e6eae2d7b4033d3b5b05"
+      },
+      "logical_originals": [
+        "planar/json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "c25ee1396c3e6b47e50d128e7aaf38d9c30a3c95c79d4b8874a13cb0bc515871",
+      "embedded_module_sha256": "e7fe0258964fdb58df93c750cade2816b4e9ced202b4265a20c264785b20843d"
+    },
+    "4": {
+      "files": {
+        "runtime_4.cpp": "0a372459f39ca79a819b33682b7c5b2ab73bc9208e2e7754985f4d62f95a461e",
+        "runtime_4.cppm": "467e8f0dc2cc4d123636474fa3fcdbc98e0c831977df3886fc0a8d47cff6ff37",
+        "commands_4.lua": "f240aef6e5e213ef0aee932ecee9b75b5dfef99157adb0271814fcfb90f8e26f"
+      },
+      "logical_originals": [
+        "planar/json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "9531dc1e15f5ee197e9c8149e1f2d0718dfb9970a9d6725a34c85e67f8bd28cd",
+      "embedded_module_sha256": "a1f7eb404e415aa9cfcef94648396510e3e4e27023c3b82b028fc7ee4fd11b8a"
+    },
+    "5": {
+      "files": {
+        "runtime_5.cpp": "1d4461820365dcaa194f61e8d63fb75a6b38739388569b25c363a861e2256070",
+        "runtime_5.cppm": "41704cef7b787307ee10782816e36d1f6647102c46c759ccc2bb57191efc23fc",
+        "commands_5.lua": "5363002a494371c28467a9e4d1c7f21c980cb3748691a4a1ffbf30a27b2989c7"
+      },
+      "logical_originals": [
+        "planar/json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "8d12c8d37df34acba7ed130bfbd4f066eb41bb36db1561905fa2b20e8c37177f",
+      "embedded_module_sha256": "fe78896853cf5012a3394777670859583281a65176879bd526e3f64ca9dc29f0"
+    }
+  },
+  "production_admission": 5,
+  "private_admission": 5
+}

@@ -1,0 +1,41 @@
+{
+  "method": "Independent UTF-8 byte arithmetic on documented strings; no product/Lua invocation",
+  "lengths": {
+    "base": 11,
+    "a": 37,
+    "b": 37,
+    "notice_after_b": 44,
+    "notice_after_b_a": 47,
+    "initial": 87,
+    "after_b": 94,
+    "after_b_a": 59
+  },
+  "budget": 60,
+  "omitted": [
+    "b",
+    "a"
+  ],
+  "final_text": "## base\n\nB\n\n## omissions\n\nOptional sections omitted: b, a.\n",
+  "sections": [
+    {
+      "id": "base",
+      "bytes": 11,
+      "included": true
+    },
+    {
+      "id": "a",
+      "bytes": 37,
+      "included": false
+    },
+    {
+      "id": "b",
+      "bytes": 37,
+      "included": false
+    },
+    {
+      "id": "omissions",
+      "bytes": 48,
+      "included": true
+    }
+  ]
+}

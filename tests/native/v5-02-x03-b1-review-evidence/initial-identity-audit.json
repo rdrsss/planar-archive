@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-10-22T20:12:46.424216+00:00",
+  "hashes": {
+    "candidate-manifest.json": "470b63c257154091e71a121f4a223676c7985a894c68cec0465f5c1b9617b165",
+    "owned.diff": "47b06d068a1e2a397ffbab461ffa947308ea76e2d43eae27ed662fdd2a131760",
+    "artifact-manifest.json": "2b96c283867328337f66a4bdfbb41b5e5284ec45e0998e636cc3bca63f1fce53",
+    "README.md": "918b2b3ceffa0052e619537556ad3d2d79178300daf2f920a429d512bd4809de",
+    "identity.json": "e0a67610cde0dc83e9d119d2175f7af72d428ed46b2f583f4d1d5bf4c41f286b"
+  },
+  "candidate_mismatches": [],
+  "artifact_mismatches": [],
+  "baseline_provenance": "Full current inventory reconstructed with exact frozen owned pre-edit snapshots; no unrelated editing concurrent per coordinator."
+}

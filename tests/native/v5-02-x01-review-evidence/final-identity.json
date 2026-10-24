@@ -1,0 +1,18 @@
+{
+  "candidate.json": {
+    "manifest_sha256": "60d8c3c02171da96654458d13f06d36304b756564a90dc5eb3f7c861c83cd8f9",
+    "entries": 7,
+    "mismatches": []
+  },
+  "artifacts.json": {
+    "manifest_sha256": "a8b0247f79960d791fc749b9c9ae34644ad7052870b3fedaf2208d4c80693ad3",
+    "entries": 13,
+    "mismatches": []
+  },
+  "evidence-sha256.json": {
+    "manifest_sha256": "975210c41656e881b3c4526a80d106d9cf7f3631892529c90426cfc824cc88fe",
+    "entries": 46,
+    "mismatches": []
+  },
+  "owned.diff_sha256": "fd081d7888b4ee2b366b063783713161c2bfec9527077e288ce7ec47faf09c41"
+}

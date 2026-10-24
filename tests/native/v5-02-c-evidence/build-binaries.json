@@ -1,0 +1,17 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "build/rewrite-debug/bin/planar": "e050c229a286b45717a04d8e1551d1cf3e678e96b56316e3f5ec97ee2e68dceb",
+    "build/rewrite-debug/src/engine/planar_capture_host_path_tests": "a6bb5761ca99bb69e1f25af924ea75932af8336b106a12f224c50b9fda48d66b",
+    "build/rewrite-debug/src/engine/planar_acceptance_prepared_tests": "e60e4794c7a5f22202cdb2141e10e8f07f470d68b2939c9432d1da0167098955",
+    "build/rewrite-debug/src/cmd/planar/planar_command_tests": "d6f64f9dddc6c198813df7d7924b02098d37a04fbf2250e970e7690528eedc63",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_1": "a11d5e443c9483fa6a6facb0fa44730d80edace73b92137cf489e6b43a0e6615",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_2": "4bf080b8b7ab6074c72b8e48d5838d8968bf4e1cfe2c3167eb4f1455e3117d60",
+    "build/rewrite-release/bin/planar": "d5f9d38070036c18d5e2d2b65935955efe4ea8d872ceae2025fa7b84c9b68e2c",
+    "build/rewrite-release/src/engine/planar_capture_host_path_tests": "7684ab20c5bf5d6b6edc804f00c1eb53f4b6b2dc591d15bba2693d7258200b89",
+    "build/rewrite-release/src/engine/planar_acceptance_prepared_tests": "1e81a5cf2c7cb5a75f2f639d76f0a89ecce2067afe561abb065c36216450a3d2",
+    "build/rewrite-release/src/cmd/planar/planar_command_tests": "e96c738e8aca21fa8f6f66d26d3997d283ce48d85efb0fda85af8f08859169f5",
+    "build/rewrite-release/src/cmd/planar/planar_cli_variant_1": "5ef9c1d28eb36728132bcc8d600dbcf08ad94db57e97f6b8d4878aeb5c7f713b",
+    "build/rewrite-release/src/cmd/planar/planar_cli_variant_2": "33a37b2c60179ed01597f7a2e22d02b0ecc6f6c5fb9c3753d1c7eb8647034840"
+  }
+}

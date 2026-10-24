@@ -1,0 +1,10 @@
+{
+  "verdict": "approve",
+  "blocking_findings": [],
+  "candidate_manifest_sha256": "07018d004209eb2042ebb7229427995f447aaec7acc1e65130d029cf889f2f7f",
+  "report": {
+    "path": "docs/vernacular/rounds/V5-01-review.md",
+    "sha256": "6bcb3824afa25200270d1e9d10c7b5489ebd426f678d417649a0b130cb2bb411"
+  },
+  "verification": "independent documentation, manifest, protection, local-link and exact-diff audit; no product builds/tests"
+}

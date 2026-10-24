@@ -1,0 +1,21 @@
+{
+  "debug-LastTest.log": "9aa54d1e9bd4c3c1ba2998bd9050cd6c5ab29d9a2177f0c331970b5ca2f6be93",
+  "debug-focused.log": "b4aa696ddc41f27ad1d8514d910fe4eedb908f3f31dabf532bec621000400f5c",
+  "debug-focused.xml": "e12c4ec5601eab7baafbb901beb716442dcbb229a72f0b9f9eb305438899c030",
+  "debug-inventory.json": "ba02a0bab3acf1d27db2b533522bc08b56599e92e0c119d69d82c9b82c7c52ef",
+  "debug-no-work.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+  "debug-variants.json": "a04ec1bab08c7e5c483b8637e63a23eb94bc9a88c24885ce67aeb33c5f6ac26b",
+  "focused-summary.json": "50b7b309847689dab4f9eb8d8f41a1f2e02c5a01d702968af52744d19f5ef249",
+  "input-audit.json": "9fee1bcf6d78f45b16b3b3533e3d173d6e381df6d07abeb58d809cc50c5f42ce",
+  "preservation-audit.json": "713283debc7b8465d8d58518a62e960e05123139d2c9782153c587fedddb1062",
+  "publication-red-green.diff": "849118f746131b9734c02ee05063d448cc250cea80309b953dc29418db492e2c",
+  "release-LastTest.log": "ecd776df02059133e1ae6421c575fa461dc98848cab1b8b7e1801e6c7a48b7c3",
+  "release-focused.log": "88e43b122b22c44c0b4474f6718d1479054ea9866b21b80e4ce1daa228e7fbe1",
+  "release-focused.xml": "157889df1b989dc52a631a091486043daee8500b22a3d6f9e95f3440fd73c59b",
+  "release-inventory.json": "39454e6fa3f6302fbff6b3d1b4442a2eb6f5cf1474945e6a4071c53cf5f7e372",
+  "release-no-work.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+  "release-variants.json": "a04ec1bab08c7e5c483b8637e63a23eb94bc9a88c24885ce67aeb33c5f6ac26b",
+  "variant-comparison.json": "2f80506adfbd14602d4bc22b277caa6549486d616f1dafb35a2a4549c2b48fee",
+  "vectors.log": "6642b7c9c2a89bec52b0555a60c260cbfa95a547923c6102848e093ed7192eba",
+  "verification-summary.json": "2174f01cf3f8b907a922252c385d6d2408eb4673570cbcbfd5985e9f9e1e5919"
+}

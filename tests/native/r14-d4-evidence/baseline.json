@@ -1,0 +1,22 @@
+{
+  "path_base": "repository",
+  "files": {
+    "src/engine/ledger/types.cppm": "cf5e1003ebad48b09756a8120ea8a7487c4cfc65afb8370f603050a4d1089c76",
+    "src/engine/ledger/format.cpp": "94589cfed70ae8145fd032667b0870ab7fac1a6f44792700b014807d576faa73",
+    "src/engine/ledger/format.t.cpp": "2deebc9f440b89d734b91dd7b6def884e485219c58980eb4352f12439fc704ef",
+    "src/engine/ledger/acceptance.t.cpp": "36d11eb701730ae85663e8addb1553084fc36585c7ca61f40258007fab2a9615",
+    "src/cmd/planar/response.cpp": "97b857d5e4ad703cdef2f8432b1833cac8f9058a980cb9ee1fbf6dc96588bc15",
+    "src/cmd/planar/response.cppm": "e16989cd76a4490a38e710bceb8b6464a680d5eaf577813fa10d96ce8283df56",
+    "src/cmd/planar/bootstrap.t.cpp": "c5ee0a1d4a853cf073bc35d2e90d6ca592541556669783403aaca3666e5e1d5c",
+    "tests/native/r13b1-support/collision.t.cpp": "441aa703225479d4c685923458e75913728a05a4c2d0a483ef42dd265b8693ef",
+    "docs/architecture.md": "be7e48e6d8dbd01fc747106047253577f0d2f487b0f6b26428723b78b94bdac5",
+    "docs/testing.md": "faee5e7fdfc6f74a939cc2ff66bd9254cd6207c0ce7ecc154f42a00673a15179",
+    "CLAUDE.md": "8bee653b17c68783e59225a3b6c82e583ed009e10f55909963bf0c81a9fc21c3",
+    "docs/vernacular/implementation.md": "d3c863b7def630f4f5531d7632564ced4ffdc24d24bbb6df52603e2041be4553",
+    "docs/vernacular/roadmap.md": "ab81847ab5012c7ac1808708fe5f83e5abc11cb03231084dab7ad7a2fb577142",
+    "docs/vernacular/v5-alignment.md": "45dfceb842366fce8fdb0c866e76ddd9abfdee346d05d71ce1c404b2ef4fc972",
+    "docs/vernacular/acceptance-matrix.md": "fba4ecf4607b9158515f941acde166eeea2844511bdf3675285a89922d61311a",
+    "docs/vernacular/load-command-contract.md": "381a7ecbcf6f71f1b1e75c0010082f201275b1dd070218279ec67d35458957eb",
+    "tests/native/r14c3b2-support/atomic.t.cpp": "e6f812ef6fab5fc89073c629861a41efabfb66f8401a3789cd85f08edd0807e8"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "after_both_full_and_private_gates": true,
+  "baseline": {
+    "bytes": 16029480,
+    "mode": 420,
+    "sha256": "bdd42946bf4306d5baac5eb009cd8eb93bba1bc306845e2d98b04e65e6f1b648"
+  },
+  "source_stability": {
+    "coordinator_round_exemption": "docs/vernacular/rounds/V5-02-X05-C5.md",
+    "entries": 76510,
+    "product_test_vendor_tooling_unchanged": true,
+    "unauthorized_changes": []
+  },
+  "tested_source_manifest": {
+    "bytes": 109685,
+    "mode": 420,
+    "sha256": "4ed5447f7a09be3ad7737a6346a23e638dd91cb0cdf01eb98749bc9f727600e7"
+  }
+}

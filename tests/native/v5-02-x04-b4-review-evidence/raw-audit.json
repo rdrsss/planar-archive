@@ -1,0 +1,63 @@
+{
+  "commands_serialized": true,
+  "configurations": {
+    "debug": {
+      "cases": 520,
+      "command_count": 14,
+      "cost_names": 520,
+      "disabled": 0,
+      "errors": 0,
+      "failures": 0,
+      "full_log_passes": 520,
+      "lasttest_passes": 520,
+      "raw_junit_attributes": {
+        "disabled": "0",
+        "failures": "0",
+        "hostname": "",
+        "name": "(empty)",
+        "skipped": "0",
+        "tests": "520",
+        "time": "234",
+        "timestamp": "2026-10-22T20:06:46"
+      },
+      "skips": 0,
+      "storage_export_families": [
+        "r12c2-generated",
+        "r13b1-generated",
+        "r14c3b2-generated",
+        "r14f1-generated",
+        "v5-02-x03-b2-b-c01-generated"
+      ]
+    },
+    "release": {
+      "cases": 520,
+      "command_count": 14,
+      "cost_names": 520,
+      "disabled": 0,
+      "errors": 0,
+      "failures": 0,
+      "full_log_passes": 520,
+      "lasttest_passes": 520,
+      "raw_junit_attributes": {
+        "disabled": "0",
+        "failures": "0",
+        "hostname": "",
+        "name": "(empty)",
+        "skipped": "0",
+        "tests": "520",
+        "time": "115",
+        "timestamp": "2026-10-22T20:12:59"
+      },
+      "skips": 0,
+      "storage_export_families": [
+        "r12c2-generated",
+        "r13b1-generated",
+        "r14c3b2-generated",
+        "r14f1-generated",
+        "v5-02-x03-b2-b-c01-generated"
+      ]
+    }
+  },
+  "prior_names_preserved": 520,
+  "pure_composition_names": 31
+}

@@ -1,0 +1,207 @@
+[
+  {
+    "log": "build.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "capture.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.capture",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c3a-review-evidence/capture.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "cli.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r14c3a-review-evidence/cli.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "probe-compile.txt",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/lua/0b10/src",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_capture_tests.dir/capture/capture.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r14c3a-review-evidence/probe.o",
+      "-c",
+      "<repo>/tests/native/r14c3a-review-evidence/probe.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "probe-link.txt",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/r14c3a-review-evidence/probe.o",
+      "-o",
+      "<repo>/tests/native/r14c3a-review-evidence/probe",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_capture.a",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_capture_native.a",
+      "<repo>/build/rewrite-debug/src/engine/lib@cmake_cxx_std.a",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_lua_loader.a",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_value.a",
+      "<repo>/build/rewrite-debug/libplanar_lua.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "probe.txt",
+    "argv": [
+      "<repo>/tests/native/r14c3a-review-evidence/probe"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "unchecked-receipt.txt",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/lua/0b10/src",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_capture_tests.dir/capture/capture.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r14c3a-review-evidence/unchecked-receipt.o",
+      "-c",
+      "<repo>/tests/native/r14c3a-review-evidence/unchecked-receipt.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "log": "private-state.txt",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/lua/0b10/src",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_capture_tests.dir/capture/capture.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r14c3a-review-evidence/private-state.o",
+      "-c",
+      "<repo>/tests/native/r14c3a-review-evidence/private-state.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "log": "lint.txt",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "log": "no-work.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "expected": 0
+  }
+]

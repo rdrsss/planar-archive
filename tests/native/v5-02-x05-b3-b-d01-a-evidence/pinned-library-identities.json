@@ -1,0 +1,52 @@
+{
+  "/opt/homebrew/opt/llvm/include/c++/v1/string": {
+    "sha256": "8600f250ef1f8e089c1b28ef1694785275a97cc6fa741e4702d62ba00360f0d9",
+    "bytes": 184767,
+    "mode": 420
+  },
+  "/opt/homebrew/opt/llvm/include/c++/v1/vector": {
+    "sha256": "8e5ac7de6c7f8124671f291e4a914f23a360ea7ae432af5a7bf1c22f29c3b54a",
+    "bytes": 14609,
+    "mode": 420
+  },
+  "/opt/homebrew/opt/llvm/include/c++/v1/__tree": {
+    "sha256": "6df12cea3bbdd2b4010d9c50c662123d516860367eb7b4a3ad4b5f436354b066",
+    "bytes": 108772,
+    "mode": 420
+  },
+  "/opt/homebrew/opt/llvm/include/c++/v1/__memory/shared_ptr.h": {
+    "sha256": "f10a4e190682db855622b4964e87409444cf183f9b6d02fb0a5bcfbcf5ca5aff",
+    "bytes": 56805,
+    "mode": 420
+  },
+  "/opt/homebrew/opt/llvm/include/c++/v1/__memory/allocator.h": {
+    "sha256": "6076ad6fc5dc3d22eb599028dd016a24080fbc3c2608ea1788a50f0f65ade9f2",
+    "bytes": 5557,
+    "mode": 420
+  },
+  "<repo>/vendor/glaze/a4a7/include/glaze/json/read.hpp": {
+    "sha256": "85bbde40cbfa1cc24cc777ef966d3ebd0d7d378b541a79668091f9e1ba2cc75e",
+    "bytes": 218193,
+    "mode": 420
+  },
+  "<repo>/vendor/glaze/a4a7/include/glaze/json/skip.hpp": {
+    "sha256": "5204b96bf6415cf059cae10e18240459796c438133e6ac27f5e03d03fec28f7d",
+    "bytes": 14305,
+    "mode": 420
+  },
+  "<repo>/vendor/glaze/a4a7/include/glaze/core/read.hpp": {
+    "sha256": "643b0463fadad196c74dee6d8440d3b411ea32325dda3f4d84dc920821589ce2",
+    "bytes": 18415,
+    "mode": 420
+  },
+  "<repo>/vendor/glaze/a4a7/include/glaze/core/context.hpp": {
+    "sha256": "75d6e8f7e3d227be648525d304b31594b7f9591d7db2dbf917e1895d9b9752bf",
+    "bytes": 12698,
+    "mode": 420
+  },
+  "<repo>/vendor/glaze/a4a7/include/glaze/util/parse.hpp": {
+    "sha256": "24d0dc6ac7215058d2ab3513b401f4d8b907b89460d1e34b1a48ba079e32efed",
+    "bytes": 65525,
+    "mode": 420
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "added": 14,
+  "audits": 7,
+  "baseline_inventory": 812,
+  "current_inventory": 826,
+  "disabled": 0,
+  "errors": 0,
+  "failures": 0,
+  "focused": 159,
+  "full_gate": false,
+  "preserved_all": true,
+  "private": 3,
+  "release_gate": false,
+  "skips": 0,
+  "vectors": 6
+}

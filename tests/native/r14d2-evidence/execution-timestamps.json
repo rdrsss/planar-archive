@@ -1,0 +1,50 @@
+{
+  "capture.xml": {
+    "birth_epoch": 1792587567.4787085,
+    "modified_epoch": 1792587567.4794776,
+    "birth_local": "2026-10-21T08:59:27.478709-04:00",
+    "modified_local": "2026-10-21T08:59:27.479478-04:00"
+  },
+  "capture.log": {
+    "birth_epoch": 1792587528.256537,
+    "modified_epoch": 1792587567.4786546,
+    "birth_local": "2026-10-21T08:58:48.256537-04:00",
+    "modified_local": "2026-10-21T08:59:27.478655-04:00"
+  },
+  "full-debug.log": {
+    "birth_epoch": 1792587562.3732092,
+    "modified_epoch": 1792587703.1443706,
+    "birth_local": "2026-10-21T08:59:22.373209-04:00",
+    "modified_local": "2026-10-21T09:01:43.144371-04:00"
+  },
+  "full-debug-LastTest.log": {
+    "birth_epoch": 1792587708.5349724,
+    "modified_epoch": 1792587708.5359066,
+    "birth_local": "2026-10-21T09:01:48.534972-04:00",
+    "modified_local": "2026-10-21T09:01:48.535907-04:00"
+  },
+  "dependent.xml": {
+    "birth_epoch": 1792587730.3353095,
+    "modified_epoch": 1792587730.3355942,
+    "birth_local": "2026-10-21T09:02:10.335310-04:00",
+    "modified_local": "2026-10-21T09:02:10.335594-04:00"
+  },
+  "dependent.log": {
+    "birth_epoch": 1792587708.5367715,
+    "modified_epoch": 1792587730.3352635,
+    "birth_local": "2026-10-21T09:01:48.536772-04:00",
+    "modified_local": "2026-10-21T09:02:10.335263-04:00"
+  },
+  "no-work.log": {
+    "birth_epoch": 1792587745.892677,
+    "modified_epoch": 1792587746.0414758,
+    "birth_local": "2026-10-21T09:02:25.892677-04:00",
+    "modified_local": "2026-10-21T09:02:26.041476-04:00"
+  },
+  "audit-final.log": {
+    "birth_epoch": 1792587604.7195935,
+    "modified_epoch": 1792587748.5236754,
+    "birth_local": "2026-10-21T09:00:04.719594-04:00",
+    "modified_local": "2026-10-21T09:02:28.523675-04:00"
+  }
+}

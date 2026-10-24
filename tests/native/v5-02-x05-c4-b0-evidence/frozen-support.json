@@ -1,0 +1,18 @@
+{
+  "tests/native/v5-02-x05-c4-b0-support/build.py": {
+    "mode": 420,
+    "sha256": "0dff68bc4d9e4802db469cc6bd0e46193597dcf6370f329c3ea483b497823e8b"
+  },
+  "tests/native/v5-02-x05-c4-b0-support/finalize.py": {
+    "mode": 420,
+    "sha256": "c0113702a69d28db9adf5bab96f6dc633314085c21ea5815ebc517eba8b038d2"
+  },
+  "tests/native/v5-02-x05-c4-b0-support/probe.cpp": {
+    "mode": 420,
+    "sha256": "196b47d96c1af5cc7bcdab2bb8228ab657d2b8145e60f8a7017331a2e4819852"
+  },
+  "tests/native/v5-02-x05-c4-b0-support/protect.py": {
+    "mode": 420,
+    "sha256": "e4e2f3304875a817952f31c2fd836c722d19c63d8bc32246d9e84128a07883f2"
+  }
+}

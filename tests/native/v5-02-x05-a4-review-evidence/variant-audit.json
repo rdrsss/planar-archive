@@ -1,0 +1,24 @@
+{
+  "debug": {
+    "a0_runtime_interface_files": 4,
+    "shipped_commands_exact": true,
+    "storage_export": {
+      "r12c2-generated": 2,
+      "r13b1-generated": 2,
+      "r14c3b2-generated": 2,
+      "r14f1-generated": 2,
+      "v5-02-x03-b2-b-c01-generated": 2
+    }
+  },
+  "release": {
+    "a0_runtime_interface_files": 4,
+    "shipped_commands_exact": true,
+    "storage_export": {
+      "r12c2-generated": 2,
+      "r13b1-generated": 2,
+      "r14c3b2-generated": 2,
+      "r14f1-generated": 2,
+      "v5-02-x03-b2-b-c01-generated": 2
+    }
+  }
+}

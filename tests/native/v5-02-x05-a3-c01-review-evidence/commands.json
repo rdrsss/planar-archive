@@ -1,0 +1,124 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "end": "2026-10-23T03:26:24.179057+00:00",
+    "exit_code": 0,
+    "label": "build",
+    "seconds": 0.256492,
+    "start": "2026-10-23T03:26:23.922565+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "end": "2026-10-23T03:26:24.260740+00:00",
+    "exit_code": 0,
+    "label": "inventory",
+    "seconds": 0.081191,
+    "start": "2026-10-23T03:26:24.179549+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement.(X05 A[0123]|command |runtime |interpretation |load |acceptance |cli|.*_cli|CLI11|help |invocation |workspace |profile |effective )",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/focused.xml"
+    ],
+    "end": "2026-10-23T03:27:53.886638+00:00",
+    "exit_code": 0,
+    "label": "focused",
+    "seconds": 89.62184,
+    "start": "2026-10-23T03:26:24.264798+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/probe.py",
+      "production-probes"
+    ],
+    "end": "2026-10-23T03:27:58.320199+00:00",
+    "exit_code": 0,
+    "label": "production",
+    "seconds": 4.429398,
+    "start": "2026-10-23T03:27:53.890801+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/reachable.py",
+      "reachable-probes"
+    ],
+    "end": "2026-10-23T03:28:02.614922+00:00",
+    "exit_code": 0,
+    "label": "reachable",
+    "seconds": 4.294167,
+    "start": "2026-10-23T03:27:58.320755+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/regressions.py",
+      "regressions-probes"
+    ],
+    "end": "2026-10-23T03:28:08.594165+00:00",
+    "exit_code": 0,
+    "label": "regressions",
+    "seconds": 5.978731,
+    "start": "2026-10-23T03:28:02.615434+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/budget.py",
+      "budget-probes"
+    ],
+    "end": "2026-10-23T03:28:11.139839+00:00",
+    "exit_code": 0,
+    "label": "budget",
+    "seconds": 2.545083,
+    "start": "2026-10-23T03:28:08.594756+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "end": "2026-10-23T03:28:12.546416+00:00",
+    "exit_code": 0,
+    "label": "lint",
+    "seconds": 1.40607,
+    "start": "2026-10-23T03:28:11.140346+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "end": "2026-10-23T03:28:12.783305+00:00",
+    "exit_code": 0,
+    "label": "no-work",
+    "seconds": 0.23631,
+    "start": "2026-10-23T03:28:12.546995+00:00"
+  }
+]

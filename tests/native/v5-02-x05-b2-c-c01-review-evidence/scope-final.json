@@ -1,0 +1,23 @@
+{
+  "candidate-manifest.json": {
+    "entries": 15,
+    "mismatches": [],
+    "sha256": "1f907aad8583fb4f1bcb0680659d8c7e37dcbdf7d5768ade54c2f069a4702130"
+  },
+  "artifact-manifest.json": {
+    "entries": 137,
+    "mismatches": [],
+    "sha256": "236919076118e249fb916f9dac3d96499787144df79bc4d2da2ba3d289cf9217"
+  },
+  "final-gate/source-freeze.json": {
+    "entries": 399,
+    "mismatches": [],
+    "sha256": "81cf3e27929f2cb123e0393bc624862a2442c318f6072a4d1e580e733acae68d"
+  },
+  "candidate.diff": {
+    "sha256": "eda0f0c996b61fe795f76bd448fdedb91660b964f0af8d65122198f3f2def150"
+  },
+  "REPORT.md": {
+    "sha256": "34c3edc31d9be5761f97ad84701de04a0b81ec80f7c0a147a0827619fc30684c"
+  }
+}

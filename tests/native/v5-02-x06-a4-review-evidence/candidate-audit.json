@@ -1,0 +1,41 @@
+{
+  "URI_decoded_links": true,
+  "author_baseline_members": 94187,
+  "author_changed_files": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/profile-preparation-architecture.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x06-implementation.md"
+  ],
+  "author_directory_metadata_changes": [
+    "docs/vernacular"
+  ],
+  "author_final_members": 94188,
+  "candidate_files": 10,
+  "diff_reconstructed_byte_exact": true,
+  "evidence_files": 17,
+  "exact_membership": true,
+  "historical_bodies_exact": 9,
+  "identities": {
+    "REPORT.md": "e9e98b2c295817feb211fecf7c7baf1106cae6d151cd60f76b74d801aaf0a664",
+    "artifact-manifest.json": "10be3227d35e8d9a4ebc2692ab32c73b75c1804210c17ac409740a6d34fce17d",
+    "candidate.diff": "fcc7366fa05d666c7874ca55dbd3ef852838f190509f18a86c16b4b609921fb7",
+    "candidate.json": "eec7fe7ff64bcdc46f52993491e3ddfcaaa82938be52b71fecff108a3121deb5"
+  },
+  "local_links": 535,
+  "preedit_matches_original_baseline": true,
+  "review_additional_author_artifact_entries": 26,
+  "review_baseline_matches_author_final": true,
+  "review_baseline_members": 94214,
+  "review_directory_metadata_changes": [
+    "tests/native"
+  ],
+  "support_files": 3,
+  "symlinks_preserved": true
+}

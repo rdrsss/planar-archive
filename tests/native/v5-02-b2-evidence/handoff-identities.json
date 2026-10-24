@@ -1,0 +1,8 @@
+{
+  "baseline.json": "64163efd85b7a8ccb64468dea6072f29daad020ac3cfc1f9beed7029f1408d9b",
+  "candidate.json": "35628357435d2708761f1a77bcc40e5a0614d7fb16092804d2ad00be24b4743f",
+  "owned.diff": "59d8e8f3210f5cac827b6efb71eb6abd76a38063700d21a25e6349d54757be65",
+  "artifacts.json": "ba9d890ad206af6656756af788c3bc9b6195b9ec8c8e84710709048744fd4ea5",
+  "candidate_files": 29,
+  "artifacts": 122
+}

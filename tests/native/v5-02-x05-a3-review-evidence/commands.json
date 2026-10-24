@@ -1,0 +1,93 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "label": "build",
+    "seconds": 0.303129,
+    "start": "2026-10-23T02:56:31.337068+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "label": "inventory",
+    "seconds": 0.074874,
+    "start": "2026-10-23T02:56:31.640585+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement.(X05 A[0123]|command |runtime |interpretation |load |acceptance |cli|.*_cli|CLI11|help |invocation |workspace |profile |effective )",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-a3-review-evidence/focused.xml"
+    ],
+    "exit_code": 0,
+    "label": "focused",
+    "seconds": 82.54306,
+    "start": "2026-10-23T02:56:31.718844+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-review-evidence/production-probes.py",
+      "production-probes"
+    ],
+    "exit_code": 0,
+    "label": "production-probes",
+    "seconds": 4.543186,
+    "start": "2026-10-23T02:57:54.266117+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-review-evidence/reachable-native.py",
+      "reachable-native"
+    ],
+    "exit_code": 0,
+    "label": "reachable-native",
+    "seconds": 4.322644,
+    "start": "2026-10-23T02:57:58.810276+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "label": "lint",
+    "seconds": 1.345653,
+    "start": "2026-10-23T02:58:03.133297+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "label": "no-work",
+    "seconds": 0.212751,
+    "start": "2026-10-23T02:58:04.479322+00:00"
+  }
+]

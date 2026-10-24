@@ -1,0 +1,53 @@
+{
+  "all_checks_pass": true,
+  "artifacts": 363,
+  "candidate_entries": 232,
+  "global_reserved_set": [
+    "acceptance",
+    "authority",
+    "boundary",
+    "checkpoint",
+    "checks",
+    "contracts",
+    "dependencies",
+    "goal",
+    "job_notes",
+    "observations",
+    "omissions",
+    "outputs",
+    "preferences",
+    "rationale",
+    "recorded_history",
+    "requirements",
+    "shape_policy",
+    "workspace_notes"
+  ],
+  "inventory": 698,
+  "nested_private": [
+    {
+      "differences_from_final_shared_inputs": 168,
+      "entries": 888,
+      "manifest": "tests/native/v5-02-x05-c2-b1-evidence/development-probes/copied-compiled.json"
+    },
+    {
+      "differences_from_final_shared_inputs": 0,
+      "entries": 888,
+      "manifest": "tests/native/v5-02-x05-c2-b1-evidence/development-probes-2/copied-compiled.json"
+    },
+    {
+      "differences_from_final_shared_inputs": 0,
+      "entries": 888,
+      "manifest": "tests/native/v5-02-x05-c2-b1-evidence/final-probes/copied-compiled.json"
+    }
+  ],
+  "old_codec_lines_preserved": true,
+  "preserved_names": 691,
+  "shared_compiled_entries": 888,
+  "xml_counts": {
+    "codec-targeted": 25,
+    "focused": 432,
+    "history-codec": 11,
+    "production-render": 46,
+    "projection-identity": 9
+  }
+}

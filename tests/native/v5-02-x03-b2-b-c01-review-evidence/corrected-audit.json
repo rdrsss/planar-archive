@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python3",
+    "tests/native/v5-02-x03-b2-b-c01-review-evidence/audit.py",
+    "corrected-audit-summary"
+  ],
+  "cwd": "<repo>",
+  "start": 1792703557.183737,
+  "end": 1792703561.1543229,
+  "exit_code": 1
+}

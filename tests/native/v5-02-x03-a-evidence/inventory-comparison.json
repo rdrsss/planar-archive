@@ -1,0 +1,13 @@
+{
+  "baseline_path": "tests/native/v5-02-x01-evidence/inventory.log",
+  "path_base": "repository root",
+  "baseline_count": 405,
+  "candidate_count": 409,
+  "removed": [],
+  "added": [
+    "replacement.request v2 complete 64 MiB frame ceiling includes selector and suffix",
+    "replacement.request v2 independent complete frame and digest vectors",
+    "replacement.request v2 inherits text head bounds and requires normalized absolute profile",
+    "replacement.request v2 refuses malformed framing tags versions and oversized claims"
+  ]
+}

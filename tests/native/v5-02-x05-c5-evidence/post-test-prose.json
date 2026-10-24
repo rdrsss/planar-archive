@@ -1,0 +1,20 @@
+{
+  "changed_paths": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x05-projection-evidence.md"
+  ],
+  "prose_finalized_after_tests": true,
+  "tested_source_manifest": {
+    "bytes": 109685,
+    "mode": 420,
+    "sha256": "4ed5447f7a09be3ad7737a6346a23e638dd91cb0cdf01eb98749bc9f727600e7"
+  },
+  "tested_source_unchanged": true
+}

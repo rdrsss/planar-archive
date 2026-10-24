@@ -1,0 +1,6 @@
+{
+  "path_base": "repository root",
+  "source": "tests/native/v5-02-c-support/cli.py",
+  "static_assert_statements": 17,
+  "note": "Static authored assertion statements; dynamic process count is retained in raw CTest output. Not an assertion execution count."
+}

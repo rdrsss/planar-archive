@@ -1,0 +1,12 @@
+{
+  "base": "repository root",
+  "files": {
+    "CLAUDE.md": "63093ac6cf965cf338107bb3750c758fa185cb6d7b7f6e504d375581e7319ae1",
+    "docs/vernacular/acceptance-matrix.md": "1743819815b3234287ff1faa2e58294bc6c4911a0dcf08539ff7fdb91e91cfa0",
+    "docs/vernacular/external-envelope-spike.md": "dfa71d07acbadf3be398c0ba3dab5840ed101977de0c547fc56f4f95ff30811b",
+    "docs/vernacular/implementation.md": "d5fc3a60171ec61f5a9439855939b9b0be648c1a2b51188782d0425ded209409",
+    "docs/vernacular/roadmap.md": "7909bd590caa64dc1eefbc29651e4146b0897d2bba81ab49886bee209cfb25d6",
+    "docs/vernacular/v5-alignment.md": "10056da06d1bf7d7c2663f714b97e5344f664b024d7c9fbac601185330d11c0f",
+    "src/cmd/planar/bootstrap.t.cpp": "65f4cb9bb5ad7af8e7cc3926598e90d7d5f354afb26d655ce6a682d94516cab0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "artifact_manifest_sha256": "868a6c6153f7ef533da726d7923bbe76252499f0cf2e41c6d8c1dd7e962f5b4a",
+  "artifacts": 293,
+  "build": "ec0e697b2d8ddcdc42cb759e2bdd70a30b260c7b4a1d278322bb8013ef3812e3",
+  "combined_review": "pending",
+  "diff": "efa84f690b7c4f1392ac629fc4894b703ef9e4f537a8a6c2399b313afd2341ab",
+  "disabled": 0,
+  "errors": 0,
+  "failures": 0,
+  "focused": 200,
+  "inventory": 573,
+  "release": "b0c54d9e17b121747aaa17e19ad03f4c46e1e48fd05ec17da80c0f3caf838049",
+  "report_sha256": "343514d3e0dcb5ef984821fcbfe4cbca0fa0469b79e5febbb77f7ccd3f47a14e",
+  "serialized_build_ownership": "released; no subsequent coder edits",
+  "skips": 0,
+  "source": "b0c54d9e17b121747aaa17e19ad03f4c46e1e48fd05ec17da80c0f3caf838049",
+  "source_entries": 19961
+}

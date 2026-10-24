@@ -1,0 +1,102 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "81bae2d53a92b06c69bc9a3a7ad7ebfd1b71bd17d9e0c0912f5749d13bf07d1a"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "2d4b1874be00b838d550b15f305a9b93d6960fff6151e7985119e4ac38f76a76"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "a70c2bfeb9bda3cb1265c4aa9407eaf28a11ef501d7b0f7a56eb4a6c630d31d1"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "ec628553af37c46dd22ea87f1822db4aeaba6082f7f5226098a6a9b227eec110"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "d6e9e9d8280e0668e1de019c408d3b055956b9e2930dbe27bbbb257fbb87afa5"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "61661cf4a0668f4abb040d09b98c628b86cf2d2f5c630afde2765e86dcac8bb0"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "c2099cce034c9b39ddcf954ef83e0855e3c7ae1f329bf90a5fe8c7d2fe1eb41a"
+  },
+  "src/engine/capture/admission.cpp": {
+    "mode": 420,
+    "sha256": "5aafcc097698adbfae2031c7bacdcc09105cbd1b98943bd8aeaa90ae3bd3fb06"
+  },
+  "src/engine/capture/admission.cppm": {
+    "mode": 420,
+    "sha256": "a306fec05c19fe1e89459b68fc48a3825d92ab745f041dfe97eeb8447369d0be"
+  },
+  "src/engine/capture/admission.t.cpp": {
+    "mode": 420,
+    "sha256": "98e60badb48eae944c5417acb4d79ef81c61aaf4ab64525c86fbb5a4a5f1f2a0"
+  },
+  "src/engine/capture/native.cpp": {
+    "mode": 420,
+    "sha256": "8f6878503033ff49bc322ec49041078c63ee0c68a15580a517095156739e66ee"
+  },
+  "src/engine/capture/native.cppm": {
+    "mode": 420,
+    "sha256": "d3c33a083522f89cc10293c7074ba5397a0c39b07d847e7955c144312c73a53d"
+  },
+  "src/engine/capture/native.t.cpp": {
+    "mode": 420,
+    "sha256": "6bb56fbfdd69f2a4bf768e73b78600a3f10ac1253946b3c83fa247b3c293af36"
+  },
+  "src/engine/capture/profile.cpp": {
+    "mode": 420,
+    "sha256": "c902cbb3450d2c0fe3eb3ef12602735627c224903df714eb2741e2420c1b8645"
+  },
+  "src/engine/capture/profile.cppm": {
+    "mode": 420,
+    "sha256": "911e0ccc4a2972ada8015757e8ac01315188c0319c187ca2c61306c438d56e9b"
+  },
+  "src/engine/capture/profile.t.cpp": {
+    "mode": 420,
+    "sha256": "38c47a9bc0ec5e7245fb6a235e30b2c453c329d99d06cd1f028d2d583a439d3d"
+  },
+  "tests/native/v5-02-x05-c4-d1-evidence/REPORT.md": {
+    "mode": 420,
+    "sha256": "aa669fc1726317e4f36bfd8cb0c4f849988610a2f0d7f21e72c4c66baed7820e"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/audit.py": {
+    "mode": 420,
+    "sha256": "6ff0708eb474c00f17e8396f3618ee7ebd87705ba5f6fabe8813c81a1e0c705b"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/cleanup.py": {
+    "mode": 420,
+    "sha256": "7f45667b856f04e29e26f7909c512206a798a6386f7110861e195b9b03731516"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/finalize.py": {
+    "mode": 420,
+    "sha256": "d81bd7bf0674878e3d00416ca4faa6238cce15330403671e9905d8b0ce27f5a3"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/freeze.py": {
+    "mode": 420,
+    "sha256": "55a4a5a11197ebcf9ea390531bf4b94b11e0d37a34cd831d06da2febbc688981"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/gate.py": {
+    "mode": 420,
+    "sha256": "74bcaa267f70d638c6a3e3950fe8f2594e181e1edb305e036a2c75c81e6a5a9e"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/private-probe.cpp": {
+    "mode": 420,
+    "sha256": "da1acd19182e9f5eacedd65f07884491899ee2d8b260055ab56c32cc37fc649f"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/private.py": {
+    "mode": 420,
+    "sha256": "886f46860e209b70ba3c89656ddac25578976fd501b8e45ed56496a509a08f57"
+  },
+  "tests/native/v5-02-x05-c4-d1-support/syscalls.cpp": {
+    "mode": 420,
+    "sha256": "fd24da9c144cef896da5c1845d2537e0c230855eb560f76ec88771f14f849ef6"
+  }
+}

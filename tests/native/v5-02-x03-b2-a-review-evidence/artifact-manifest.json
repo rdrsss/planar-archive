@@ -1,0 +1,136 @@
+{
+  "path_base": "<repo>/tests/native/v5-02-x03-b2-a-review-evidence",
+  "self_excluded": "artifact-manifest.json",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "3ef7322a19f7ceb84f617d422efe108362f9d1d9c51a71524da82c8f4c30e876",
+      "size": 2961
+    },
+    {
+      "path": "baseline-audit.json",
+      "sha256": "f5d6427b24deab19b0a981987aaaf8cd88c27c663cacc6e3fd17b29764dc018c",
+      "size": 1452
+    },
+    {
+      "path": "baseline-omission-audit.json",
+      "sha256": "1243ad4540dca59c37782e890022bd29e674dd04eee254be7c27771ed664cf9b",
+      "size": 2301
+    },
+    {
+      "path": "build-corrected-result.json",
+      "sha256": "d34a7da7c9bd6907b42100b1ac014c9ebba9ffc24d173b050e1fb332c852292f",
+      "size": 293
+    },
+    {
+      "path": "build-corrected.log",
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "size": 63
+    },
+    {
+      "path": "build-result.json",
+      "sha256": "6dc93e65ca98d128dc46dfac4029e9fc08c3886b81ca8d306036d4419425e6f2",
+      "size": 303
+    },
+    {
+      "path": "build.log",
+      "sha256": "50b49147221263c7742576445e666f2808a5131f6f6dd247dc519c1a515611af",
+      "size": 142
+    },
+    {
+      "path": "final-source-snapshot-audit.json",
+      "sha256": "191150c6a49104f1d36c6ad6495bc553c83d1e9d9636749f07b8b0c13cf2de5e",
+      "size": 244
+    },
+    {
+      "path": "focused-LastTest.log",
+      "sha256": "975fb0d2c2a2a038e5c54dd97355857f5eeb7634f233ef4e69a16fe6c9155af5",
+      "size": 259164
+    },
+    {
+      "path": "focused-result.json",
+      "sha256": "4e34e50958ae547f94becca538ff210a72ef214241df1e3655f56e87c2284635",
+      "size": 487
+    },
+    {
+      "path": "focused.log",
+      "sha256": "a1306f0ce51670ceee1764d3f0741f2c3a8a321f1f2d62defb0a15f4500d6c33",
+      "size": 51926
+    },
+    {
+      "path": "focused.xml",
+      "sha256": "7b1b195a45627561179fbccdd83fa7c8c5c18f9eaca9a7ebac0d0a6afcc974b4",
+      "size": 118202
+    },
+    {
+      "path": "identity-after.json",
+      "sha256": "0b592ac77112b4754f5f8b0090d9a92c229a9effd49120aaf0a4a1317e43f31e",
+      "size": 593
+    },
+    {
+      "path": "identity-before.json",
+      "sha256": "d580db1997072c66846bdf5d57701aab58884ddd65912e2343c90a8576dc60fe",
+      "size": 467
+    },
+    {
+      "path": "inventory-preservation.json",
+      "sha256": "10af7a353d6065121ced613e0ded59cc532f215a0e8a7e4a2885483071aa78b4",
+      "size": 729
+    },
+    {
+      "path": "inventory-result.json",
+      "sha256": "6c6c185234bc7e4ca209875c71e1e898f20153d34e2443b5b061358be48f250c",
+      "size": 276
+    },
+    {
+      "path": "inventory.log",
+      "sha256": "47b82577ec9e9e39d9a696c1231e4e97fe5b8ee1a659c59d419553e3cb2c98e7",
+      "size": 342194
+    },
+    {
+      "path": "lint-result.json",
+      "sha256": "dc56b2f748fa63074ff447a06ed882b330237bf960140d1ec307bc0b67af44f7",
+      "size": 296
+    },
+    {
+      "path": "lint.log",
+      "sha256": "191273764c79272fff8d24abd34b3dd142850b7121c4dc165860899e8332492d",
+      "size": 7541
+    },
+    {
+      "path": "no-work-result.json",
+      "sha256": "b51a59010dd1f25867f9b5142cde4de3288744911012a0dec08d1545c73b6f63",
+      "size": 293
+    },
+    {
+      "path": "no-work.log",
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "size": 63
+    },
+    {
+      "path": "record-vectors-result.json",
+      "sha256": "824f7a2e64f16123c897909adc5e46cee205140d99968b57bfe5504049da95e6",
+      "size": 262
+    },
+    {
+      "path": "record-vectors.log",
+      "sha256": "b112fdde37b314e23ae46c1c190b65a7575877f687ca9085627427d91d195801",
+      "size": 39
+    },
+    {
+      "path": "request-vectors-result.json",
+      "sha256": "a7cce63d006466f4b862c6b39f195d080c4eedf1fddce4b899ef1844fe36a719",
+      "size": 273
+    },
+    {
+      "path": "request-vectors.log",
+      "sha256": "8452da8a1f5e4fdfcd78674828e1e59a0e847a545d4f71ecfdcc76b3c35c73fa",
+      "size": 42
+    },
+    {
+      "path": "test-summary.json",
+      "sha256": "40ac3c4d6d82c2294dd25d1146ee854337c09d43b772613b8db9eded8461ce9c",
+      "size": 18354
+    }
+  ]
+}

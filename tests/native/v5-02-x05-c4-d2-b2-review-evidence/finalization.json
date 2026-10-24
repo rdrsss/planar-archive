@@ -1,0 +1,18 @@
+{
+  "artifact_entries": 88,
+  "artifact_manifest_sha256": "e57a643b9f563a52f89627a5adc465b7bd304caf748eb9e311e23167450958c3",
+  "candidate_entries": 33,
+  "candidate_sha256": "f549d60c3936256264c77f291f216dcb4cf07941cb469c047998cff1635cc431",
+  "copied_dependencies_removed": true,
+  "copied_runtime_execution_claimed": false,
+  "debug_released": true,
+  "disposition": "request-changes",
+  "finding": "B2-R1",
+  "full_gate_claimed": false,
+  "owned_files_released": true,
+  "protection_changes": 0,
+  "protection_entries": 75393,
+  "release_gate_claimed": false,
+  "report_sha256": "2c8b07892c9b4c8e55cea1326bd8637da9dd30d3141ddd578d1c7a8596c858e7",
+  "schema": 1
+}

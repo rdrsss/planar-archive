@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "lua.xml": 1,
+    "conversion.xml": 1,
+    "semantic.xml": 1,
+    "parser.xml": 1,
+    "hash-adversaries.xml": 1,
+    "instructions.xml": 1,
+    "snapshot.xml": 1,
+    "error-string.xml": 1,
+    "execution.xml": 1,
+    "native.xml": 1,
+    "hash-remaining.xml": 1,
+    "selection-nodes.xml": 1,
+    "error.xml": 1,
+    "selection-native.xml": 1,
+    "error-map.xml": 1,
+    "error-node.xml": 1,
+    "success.xml": 1,
+    "wrapper.xml": 1,
+    "nodes.xml": 1,
+    "error-node-exact.xml": 1
+  },
+  "product_and_prose_unchanged_entries": 150,
+  "unchanged": true,
+  "explanation": "Separate hash-adversaries test now returns bool and requires success; prior assertion-free observer executed but JUnit omitted that case."
+}

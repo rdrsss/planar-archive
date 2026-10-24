@@ -1,0 +1,12 @@
+{
+  "artifact_entries": 235,
+  "author_identities": {
+    "REPORT.md": "d07b4e4da7fcf15bcda385cecd743d67754eece18e42315196cdbf3416d8702c",
+    "artifact-manifest.json": "fe8f191b3752724f0d914595e5e0c5c0cad5780adfcea82afc6e686c2981bec2",
+    "candidate.diff": "1f1a493f0e3a41a4c1cdadb4e1a052301399803bd0d36a876588573ef0a0b309",
+    "finalization.json": "bb7672a41ec04c7fca1a07b344be90d114e6b39651f8d803a5bd95c8449e614d",
+    "frozen-candidate.json": "3e11f8a9e9e15792e0d975ddb0689f8b69fc0a0aff47a1d5af729f179c9b847b"
+  },
+  "candidate_entries": 231,
+  "protected_entries": 71303
+}

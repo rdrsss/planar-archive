@@ -1,0 +1,17 @@
+{
+  "catalog_cases": 11,
+  "errors": 0,
+  "failures": 0,
+  "independent_probes": 7,
+  "names": [
+    "reviewer.shipped original manifest count boundary",
+    "reviewer.explicit reordered source ownership",
+    "reviewer.every external required option type is structural",
+    "reviewer.grammar boundary values",
+    "reviewer.host option capability matrix",
+    "reviewer.null descendants and unused scalar payloads",
+    "reviewer.decoder owns bytes and manifests are borrowed only during call"
+  ],
+  "skips": 0,
+  "source_unchanged": true
+}

@@ -1,0 +1,26 @@
+UpdateCTestConfiguration  from :<repo>/build/rewrite-debug/DartConfiguration.tcl
+Test project <repo>/build/rewrite-debug
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: replacement.cli
+
+1: Test command: /opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15 "<repo>/tests/acceptance/bootstrap_cli.py" "<repo>/build/rewrite-debug/bin/planar"
+1: Working Directory: <repo>/build/rewrite-debug
+1: Test timeout computed to be: 30
+1: 22 CLI scenarios passed; no implicit state/config access
+1/1 Test #1: replacement.cli ..................   Passed    0.31 sec
+
+The following tests passed:
+	replacement.cli
+
+100% tests passed out of 1
+
+Label Time Summary:
+acceptance    =   0.31 sec*proc (1 test)
+
+Total Test time (real) =   0.32 sec

@@ -1,0 +1,196 @@
+{
+  "preserved_product_files": 448,
+  "changed": [],
+  "approved_manifests": {
+    "r08ac01": [
+      {
+        "path": "stdlib/planar/observations.lua",
+        "matches": true
+      },
+      {
+        "path": "src/kernel/runtime/schema.t.cpp",
+        "matches": true
+      },
+      {
+        "path": "stdlib/planar/README.md",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/README.md",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/ctest.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/ctest.xml",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/diff-check.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/final-build.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/final-focused.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/final-focused.xml",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/final-regressions.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/final-regressions.xml",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/green-build.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/green.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/green.xml",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/lint.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/no-change-build.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/red-build.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/red.log",
+        "matches": true
+      },
+      {
+        "path": "tests/native/r08ac01-evidence/red.xml",
+        "matches": true
+      }
+    ],
+    "r08b": [
+      {
+        "path": "fixtures/render/quota/README.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/README.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/combined-builder.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/combined-builder.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/combined-reviewer.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/combined-reviewer.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/reviewer-resolved.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-cli_worker-recovery.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-cli_worker-recovery.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-cli_worker.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-cli_worker.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-library_worker.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-library_worker.md",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-reviewer.json",
+        "matches": true
+      },
+      {
+        "path": "fixtures/render/quota/native/split-reviewer.md",
+        "matches": true
+      },
+      {
+        "path": "src/cmd/planar/CMakeLists.txt",
+        "matches": true
+      },
+      {
+        "path": "src/cmd/planar/bootstrap.cppm",
+        "matches": true
+      },
+      {
+        "path": "src/cmd/planar/bootstrap.t.cpp",
+        "matches": true
+      },
+      {
+        "path": "src/cmd/planar/main.cpp",
+        "matches": true
+      },
+      {
+        "path": "src/kernel/CMakeLists.txt",
+        "matches": true
+      },
+      {
+        "path": "src/kernel/json/json.cpp",
+        "matches": true
+      },
+      {
+        "path": "src/kernel/json/json.cppm",
+        "matches": true
+      },
+      {
+        "path": "src/kernel/json/json.t.cpp",
+        "matches": true
+      }
+    ],
+    "r08bc01": [
+      {
+        "path": "src/cmd/planar/bootstrap.cpp",
+        "matches": true
+      },
+      {
+        "path": "tests/acceptance/bootstrap_cli.py",
+        "matches": true
+      },
+      {
+        "path": "tests/acceptance/bootstrap_paths.py",
+        "matches": true
+      }
+    ]
+  }
+}

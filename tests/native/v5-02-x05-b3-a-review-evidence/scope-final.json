@@ -1,0 +1,21 @@
+{
+  "candidate_counts": {
+    "candidate-manifest.json": 15,
+    "artifact-manifest.json": 168
+  },
+  "frozen_entries": 411,
+  "source_membership_and_bytes_and_modes_exact": true,
+  "restored_module_identities_unchanged": true,
+  "shared_compiled_entries": 748,
+  "probes": {
+    "adversarial": {
+      "cases": 4,
+      "assertions": 305
+    },
+    "identity": {
+      "cases": 1,
+      "assertions": 54
+    }
+  },
+  "symlink": "CLAUDE.md"
+}

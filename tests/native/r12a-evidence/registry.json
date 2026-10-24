@@ -1,0 +1,14 @@
+{
+  "registered_tests": 133,
+  "focused_tests": [
+    "replacement.ledger sqlite authorizer prevents manual transaction bypass",
+    "replacement.ledger sqlite binding failures and preparation errors abandon writes",
+    "replacement.ledger sqlite bounded busy refusal releases for retry",
+    "replacement.ledger sqlite extended constraints rollback and permit retry",
+    "replacement.ledger sqlite failed deferred commit rolls back and releases writer",
+    "replacement.ledger sqlite owns binary text blob empty and null values",
+    "replacement.ledger sqlite readonly existing mode never creates missing files",
+    "replacement.ledger sqlite statements retain moved and destroyed connections",
+    "replacement.ledger sqlite transactions commit abandon and survive wrapper destruction"
+  ]
+}

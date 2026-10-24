@@ -1,0 +1,13 @@
+{
+  "artifact_manifest_sha256": "ca79b698e7b8a2a6023f11166078289a6653abfe6a3ff11857525b0d9d6e6e52",
+  "artifact_mismatches": [],
+  "author_artifacts": 244,
+  "build_identities": {
+    "debug": 935,
+    "release": 932
+  },
+  "build_mismatches": [],
+  "source_entries": 24022,
+  "source_manifest_sha256": "070c6eefb5f036dda7278b25174bf5bb3e78cf913082cfd250fe8b37979aa76b",
+  "source_mismatches": []
+}

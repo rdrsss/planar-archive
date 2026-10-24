@@ -1,0 +1,22 @@
+{
+  "r12c2-generated": {
+    "format.cpp": "e61f7d7f1ab9529f262959099ebbea403e89e512bffbbbbab6eba14193bd9aa9",
+    "format.cppm": "720183915187f65e16aab11600174379301a94f137c3c6379470224ec336c57b"
+  },
+  "r13b1-generated": {
+    "format.cpp": "fecadadae0eb7355288113e0580c8c566a700f611e78ba0b1437c0e7f4d08cbf",
+    "format.cppm": "46f27c7e86a7ea13748f2c6e22979396847243084f88394eb0680ae18f39b619"
+  },
+  "r14c3b2-generated": {
+    "format.cpp": "090b92f46e18d8bcae2a48e2c74ce16fb1b9d5046444bcdf8360db6fc3c93cd3",
+    "format.cppm": "b10c52a385b6ea3048285cb22169b3bf41dbe5c28678782c9a1257dcf1d03265"
+  },
+  "r14f1-generated": {
+    "source_export.cpp": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d",
+    "source_export.cppm": "349810626e88df24e03acfa85538615b54b385fd871129d125406d70a5dca335"
+  },
+  "v5-02-x03-b2-b-c01-generated": {
+    "format.cpp": "f07f45464294b2a9c8cb10922c9c264c025040b0a4858d753afe5ce8fde78b99",
+    "format.cppm": "b798b7fc39e1ac66cc8d244347d8af38a40e2646c375a12c7f2c75de8aaf4f0e"
+  }
+}

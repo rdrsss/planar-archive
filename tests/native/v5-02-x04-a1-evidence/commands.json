@@ -1,0 +1,175 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "label": "debug-build",
+    "seconds": 7.526686,
+    "start": "2026-10-22T21:53:39.644563+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "label": "debug-inventory",
+    "seconds": 0.050281,
+    "start": "2026-10-22T21:53:47.173650+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "replacement.*(capture|path|acceptance)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-a1-evidence/debug-focused.xml"
+    ],
+    "exit_code": 0,
+    "label": "debug-focused",
+    "seconds": 58.108596,
+    "start": "2026-10-22T21:53:47.229701+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "label": "vectors",
+    "seconds": 0.825303,
+    "start": "2026-10-22T21:54:45.340599+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "label": "record-vectors",
+    "seconds": 0.713091,
+    "start": "2026-10-22T21:54:46.166939+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "label": "request-v2-vectors",
+    "seconds": 0.7165,
+    "start": "2026-10-22T21:54:46.881285+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a1-evidence/historical-audit-report.json"
+    ],
+    "exit_code": 0,
+    "label": "historical-audit",
+    "seconds": 0.479171,
+    "start": "2026-10-22T21:54:47.599091+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a1-evidence/d6-audit-report.json"
+    ],
+    "exit_code": 0,
+    "label": "d6-audit",
+    "seconds": 0.233856,
+    "start": "2026-10-22T21:54:48.079134+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a1-evidence/d6-c01-audit-report.json"
+    ],
+    "exit_code": 0,
+    "label": "d6-c01-audit",
+    "seconds": 0.172136,
+    "start": "2026-10-22T21:54:48.313914+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a1-evidence/d7-b-audit-report.json"
+    ],
+    "exit_code": 0,
+    "label": "d7-b-audit",
+    "seconds": 0.128695,
+    "start": "2026-10-22T21:54:48.487027+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "label": "pinned-lint",
+    "seconds": 1.321671,
+    "start": "2026-10-22T21:54:48.624471+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--dry-run",
+      "--Werror",
+      "<repo>/tests/native/v5-02-x04-a1-support/syscalls.cpp"
+    ],
+    "exit_code": 0,
+    "label": "support-format",
+    "seconds": 0.037535,
+    "start": "2026-10-22T21:54:49.947177+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "label": "debug-no-work",
+    "seconds": 0.132378,
+    "start": "2026-10-22T21:54:49.985758+00:00"
+  },
+  {
+    "argv": [
+      "nm",
+      "-u",
+      "<repo>/build/rewrite-debug/src/engine/CMakeFiles/planar_capture_admission.dir/capture/admission.cpp.o"
+    ],
+    "exit_code": 0,
+    "label": "admission-undefined-symbols",
+    "seconds": 0.016978,
+    "start": "2026-10-22T21:54:50.119127+00:00"
+  }
+]

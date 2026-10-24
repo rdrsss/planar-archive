@@ -1,0 +1,15 @@
+{
+  "artifact_entries": 252,
+  "artifact_manifest_sha256": "aab8cc4d783adc25b40aaf3e7cbfc104b3ef634453f95345559c322e783b9eaf",
+  "candidate_entries": 33,
+  "candidate_sha256": "f549d60c3936256264c77f291f216dcb4cf07941cb469c047998cff1635cc431",
+  "coordinator_round_exclusion_checked": "docs/vernacular/rounds/V5-02-X05-C4-D2-B2.md",
+  "copied_runtime_link_load_selection_proved": false,
+  "debug_released": true,
+  "full_gate_claimed": false,
+  "release_gate_claimed": false,
+  "report_sha256": "629d369ffd3c4f065910c4f398d7621dc352273dea0bc9e0d9e32d8d50813d79",
+  "review": "pending",
+  "schema": 1,
+  "tested_vs_final_identity": "bookkeeping-identity.json"
+}

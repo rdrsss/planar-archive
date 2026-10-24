@@ -1,0 +1,20 @@
+{
+  "README.md": "a0db56a5cab6fbc2c10d7f5f56592d02b0d148d90420d1c82f232ba63998e93c",
+  "baseline-head.txt": "dcd8613a29222f79706a2648d356a869f1392f7c6f159940b34824d17ebec2c2",
+  "baseline-owned/CLAUDE.md": "63093ac6cf965cf338107bb3750c758fa185cb6d7b7f6e504d375581e7319ae1",
+  "baseline-owned/docs/vernacular/acceptance-matrix.md": "1743819815b3234287ff1faa2e58294bc6c4911a0dcf08539ff7fdb91e91cfa0",
+  "baseline-owned/docs/vernacular/command-contract.md": "3ebc3371e7475153399f38a5bbba569bada18d46c3246b3dc310a33b82568b10",
+  "baseline-owned/docs/vernacular/implementation.md": "d5fc3a60171ec61f5a9439855939b9b0be648c1a2b51188782d0425ded209409",
+  "baseline-owned/docs/vernacular/roadmap.md": "7909bd590caa64dc1eefbc29651e4146b0897d2bba81ab49886bee209cfb25d6",
+  "baseline-owned/docs/vernacular/v5-alignment.md": "10056da06d1bf7d7c2663f714b97e5344f664b024d7c9fbac601185330d11c0f",
+  "baseline-status.txt": "289da8da5a6887b085441ac2c7fa36b01d3bcde5bbc972bd75e70f1e60be385d",
+  "baseline.diff": "f0ba0cf38b08c72146539810dd1b9175d4446a5c620beeeae958e19410b25200",
+  "baseline.json": "5525cd252c797e2b04117aa81256ca628b185aee210d14e6ac790717e75700f2",
+  "candidate.json": "67e3a6fa174d3f7a526e52d1717cb21f617655ebad65b8788d19b2ca264867bf",
+  "check.py": "1e227fa2d207133989927c612ca2a48063d479ca14b570d987179900ba881f3b",
+  "links.json": "0bfa4d08baa25ee3d5f3277b4590a57da7ca4211ede74307f070f9ceb6c16790",
+  "owned.diff": "400139e1f9686a00109cfea78c8530ce2639a36883e8e9461f567dc697e29f9b",
+  "protection.json": "ecaa43dc1f11dfd5af952f851e32d384ee2d28a89ec1025c66f24c4939ab0151",
+  "report.json": "ee7eeb396bdfb33385139489756e455ba5c992657b8e2930a499bfc6f615040f",
+  "schema-coverage.json": "b258a406fef54269acee869cb77e305bae320eac61ba8348223171e4c7c90ecb"
+}

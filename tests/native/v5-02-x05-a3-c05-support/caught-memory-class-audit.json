@@ -1,0 +1,31 @@
+{
+  "policy": "Actual allocator null alone is recoverable. Only LUA_ERRMEM returned by a completed protected operation sets lua_memory_failed; never reset within the owner.",
+  "allocator": "allocate keeps quota exhausted distinct and unchanged; actual realloc null does not set terminal state, allowing emergency GC retry.",
+  "restricted_pcall": "Common native protected_call persists LUA_ERRMEM before testing exhaustion and rethrowing. All enclosing restricted wrappers include lua_memory_failed and cannot return to user code.",
+  "callback_reference_ownership": "register_external keeps descriptor/function references in native vector ownership before allocating Lua calls, selects trivial original-entry token before references, and checks exhausted before selecting or clearing tokens. No callback/selector change required.",
+  "host_calls": [
+    {
+      "site": "convert anchor",
+      "policy": "Protected native tag operations; any nonzero status throws existing resource diagnostic through native exception adapters. No Lua caller resumes; no independent status injection."
+    },
+    {
+      "site": "evaluate setup",
+      "policy": "Preserves instruction priority; existing memory resource adapter additionally recognizes the sticky bit after nested wrappers rethrow as ordinary Lua error."
+    },
+    {
+      "site": "register_profile call",
+      "policy": "exhausted includes sticky bit; resource check precedes bridge/protocol checks; catch renders retained entry outside Lua. No later collection/sealing occurs."
+    },
+    {
+      "site": "command_vm::create setup_commands / remember_engine_callbacks / seal_environment",
+      "policy": "All host calls check exhausted or direct LUA_ERRMEM before nonmemory statuses; existing diagnostics and priorities retained."
+    },
+    {
+      "site": "command_vm::invoke execute_command",
+      "policy": "Existing native-error precedence preserved; exhausted/direct memory follows; profile-owner invocation still refuses before services."
+    }
+  ],
+  "first_failure": "The one actual failing projection2 reference leaves its token. Nested wrapper immediately rethrows; enclosing wrappers preserve sticky bit; host reports resource before protocol or later error. Token is never cleared on this path.",
+  "no_new_quota_or_public_api": true,
+  "controls": "Actual allocation refusal and successful retry tested separately from retained quota and throwing-allocator probes. Descriptor reference grows; function-reference-only fixture has zero growth and is source/control coverage only."
+}

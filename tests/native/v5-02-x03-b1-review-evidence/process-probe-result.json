@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "tests/native/v5-02-x03-b1-review-evidence/process-probe.py"
+  ],
+  "cwd": "<repo>",
+  "started_at": "2026-10-22T20:14:07.301282+00:00",
+  "ended_at": "2026-10-22T20:14:07.712981+00:00",
+  "exit_code": 0
+}

@@ -1,0 +1,8 @@
+{
+  "src/engine/ledger/format.cpp": "717518cbf3591c7c9f00d905a5d5c509f37833dcab8a25cbc148496c6a6e9059",
+  "src/engine/ledger/format.cppm": "b7be18221fd9a2c8f8372ea420b915784ec65cb6974929ca3b823847ab9d68a7",
+  "src/engine/ledger/types.cppm": "697e735d77b192d7705c66873a909879934493774ccceade0fca430d5bba8535",
+  "src/engine/CMakeLists.txt": "a226aff7449c15e6e9522e8f9aa70f1a158e2eccbdd5ea623e36c46d08ad8cba",
+  "docs/architecture.md": "25bb00b51791be92863b45662b1c427eac59ecf77c1928e5f99617492b5df365",
+  "docs/testing.md": "2925854927857c723bd7c3e7e8b6bd8ae72d91b11d356fcc53b766a4647a8c9d"
+}

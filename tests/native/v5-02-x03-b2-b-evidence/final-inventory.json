@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "--show-only=json-v1"
+  ],
+  "cwd": "<repo>",
+  "start": 1792702102.326549,
+  "end": 1792702102.3588538,
+  "exit_code": 0
+}

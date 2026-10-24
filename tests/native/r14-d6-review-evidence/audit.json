@@ -1,0 +1,20 @@
+{
+  "candidate_files": 17,
+  "artifacts": 67,
+  "contemporaneous_protected": 4687,
+  "additional_historical_protected": 9366,
+  "candidate_current_and_snapshot_equal": true,
+  "diff_reproduced": true,
+  "contract_body_sha256": "a842901180c15691cda24a0ddafcc708dcb88add85717b0080b2a1313e6f4ab8",
+  "symlink_preserved": true,
+  "coder_cases": 133,
+  "coder_cli": 6,
+  "baseline_names": 380,
+  "current_names": 390,
+  "historical_is_not_contemporaneous": true,
+  "identities": {
+    "candidate.json": "d037d95c7b5c060cde3de8d8e5a2965287be9a376c69932cb7b450078f293721",
+    "owned.diff": "3190a4bca0dc74f2ac2db488dd7ea92fbf202c3c9896911dbd519d5d2ca0049f",
+    "artifacts.json": "94c6e1d6825752fc47aa7eeb804a07cab060945e6ea327fc342519f808d04c6d"
+  }
+}

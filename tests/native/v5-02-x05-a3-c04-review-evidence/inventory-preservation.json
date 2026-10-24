@@ -1,0 +1,9 @@
+{
+  "added": [
+    "replacement.X05 A3 C04 original descriptor errors survive canonical remap at two digit indices",
+    "replacement.X05 A3 C04 successful callbacks leave module boundary and first refusal sticky"
+  ],
+  "current": 580,
+  "missing": [],
+  "previous": 578
+}

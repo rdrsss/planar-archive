@@ -1,0 +1,22 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "tests/native/v5-02-c-evidence/baseline.json": "931ec01834c1c014f8bba3fdc5b8773eed338e6e23f14c3b60281e08dd069ba4",
+    "tests/native/v5-02-c-evidence/candidate.json": "ce208885657cf57697259de2b64cda250020121a5151e49ba980c8678df06fb0",
+    "tests/native/v5-02-c-evidence/owned.diff": "ad338ce56d68719d65d065a3f7911b04bb490fb56d9a9933e7fd39a8db7bb708",
+    "tests/native/v5-02-c-evidence/artifacts.json": "d07dba43bca93f06eb64a5230129cab31730fa429e7b3645fb36ec6ce0248802",
+    "tests/native/v5-02-c-evidence/protected.json": "9c114c2110839c16894f62bedaadf792efdff35e3fa2dd2fa92b29d920fc49ea",
+    "tests/native/v5-02-c-evidence/protection-audit.json": "fc9488b079e76495666d60fd3aa2b4faaccf934f0ed15d32442f7de8943420f1",
+    "tests/native/v5-02-c-evidence/coder-report.md": "21d43b4ac890b01133c7be901e25bdda865c5efb804a8c7fef26a06fc9f678a6"
+  },
+  "counts": {
+    "baseline_inputs": 19,
+    "candidate_inputs": 23,
+    "evidence_artifacts": 105,
+    "protected_inputs": 3948
+  },
+  "build_directories_released": [
+    "build/rewrite-debug",
+    "build/rewrite-release"
+  ]
+}

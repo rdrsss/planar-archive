@@ -1,0 +1,258 @@
+[
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar",
+      "planar_runtime_tests",
+      "planar_ledger_format_tests",
+      "planar_ledger_sqlite_tests",
+      "planar_history_read_tests",
+      "planar_history_fixture",
+      "planar_load_cli_probe",
+      "planar_cli_variant_0",
+      "planar_cli_variant_1",
+      "planar_cli_variant_2",
+      "planar_cli_variant_3",
+      "planar_cli_variant_4",
+      "planar_cli_variant_5",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.22568604070693254
+  },
+  {
+    "label": "inventory-before",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.08839995879679918
+  },
+  {
+    "label": "focused-ctest",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/focused-ctest.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 170.18812283314764
+  },
+  {
+    "label": "selection-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b3-c-support/vector.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.7840298749506474
+  },
+  {
+    "label": "shape-definition-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6589713329449296
+  },
+  {
+    "label": "canonical-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6325984997674823
+  },
+  {
+    "label": "record-v1-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6451857918873429
+  },
+  {
+    "label": "request-v2-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6978040002286434
+  },
+  {
+    "label": "effective-provenance-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6574557917192578
+  },
+  {
+    "label": "historical-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/historical-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.3876527491956949
+  },
+  {
+    "label": "d6-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/d6-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.2523767910897732
+  },
+  {
+    "label": "d6-c01-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/d6-c01-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.1488733747974038
+  },
+  {
+    "label": "d7-b-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/d7-b-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.12352999951690435
+  },
+  {
+    "label": "b1-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/b1-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.051771875470876694
+  },
+  {
+    "label": "current-native-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-c4-b2-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-b2-review-evidence/current-native-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.03171820752322674
+  },
+  {
+    "label": "lint",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 1.7628128323704004
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar",
+      "planar_runtime_tests",
+      "planar_ledger_format_tests",
+      "planar_ledger_sqlite_tests",
+      "planar_history_read_tests",
+      "planar_history_fixture",
+      "planar_load_cli_probe",
+      "planar_cli_variant_0",
+      "planar_cli_variant_1",
+      "planar_cli_variant_2",
+      "planar_cli_variant_3",
+      "planar_cli_variant_4",
+      "planar_cli_variant_5",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.19631287455558777
+  },
+  {
+    "label": "inventory-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.05024866759777069
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "focused_cases": 88,
+  "focused_zero_failures_errors_skips": true,
+  "private_cases": 4,
+  "private_assertions": 122,
+  "private_zero_failures_errors_skips": true,
+  "current_inventory": 892,
+  "previous_names_preserved": 876,
+  "new_cases": 16,
+  "native_symbols_no_Lua_or_SQLite": true,
+  "no_work": true,
+  "candidate_document_links_resolved": 509
+}

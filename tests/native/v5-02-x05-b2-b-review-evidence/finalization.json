@@ -1,0 +1,27 @@
+{
+  "disposition": "request-changes",
+  "finding": "B2B-R1",
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-X05-B2-B-review.md",
+    "sha256": "118ec0000b4646bc59a995edc386f1f56ca69b780463dd797fd108acdbad6967"
+  },
+  "review_artifacts": {
+    "entries": 74,
+    "sha256": "316c1b8987b0452e0f2dbceac0ae3d6160def19fde9d122a03934246e1191aa8"
+  },
+  "author": {
+    "candidate-manifest.json": {
+      "entries": 12,
+      "sha256": "48e1fceb881ce55fcdd655b0f64a5d2b42b01dc419c21d0413f1e19dc081c91e"
+    },
+    "artifact-manifest.json": {
+      "entries": 90,
+      "sha256": "2f3991abd0d0ab2ee852c35fce355ddd1a7592ee20b8b316807a402389ceb394"
+    },
+    "scoped_entries": 384,
+    "scoped_source_equal": true,
+    "whole_tree_claim": false
+  },
+  "debug_build_ownership_released": true,
+  "no_edits_after_release": true
+}

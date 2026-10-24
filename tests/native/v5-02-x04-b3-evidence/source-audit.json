@@ -1,0 +1,60 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/history/effective_provenance.cpp",
+    "src/engine/history/effective_provenance.cppm",
+    "src/engine/history/effective_provenance.t.cpp",
+    "tests/native/v5-02-x04-b3-support/audit.py",
+    "tests/native/v5-02-x04-b3-support/final_gate.py",
+    "tests/native/v5-02-x04-b3-support/finalize.py",
+    "tests/native/v5-02-x04-b3-support/verify.py",
+    "tests/vectors/effective-provenance/catalog.bin",
+    "tests/vectors/effective-provenance/description.json",
+    "tests/vectors/effective-provenance/digest.txt",
+    "tests/vectors/effective-provenance/files.tsv",
+    "tests/vectors/effective-provenance/generate.py",
+    "tests/vectors/effective-provenance/manifest.bin"
+  ],
+  "coverage": {
+    "distinct": 98,
+    "inherited_passing": 86,
+    "new_passing": 12,
+    "notes": "Composed focused evidence only: attempt02 inherited cases and attempt05 exact new target. No full520-suite or release/Linux result.",
+    "single_full_selection_pass": false
+  },
+  "implementation_unchanged_since_attempt01": true,
+  "pure_imports": [
+    "std",
+    "planar.engine.capture.profile_codec",
+    "planar.engine.history.effective_catalog",
+    "planar.engine.canonical"
+  ],
+  "root_only_exclusions": [
+    ".git",
+    "build"
+  ],
+  "symlink_preserved": true,
+  "unchanged_component_sources": {
+    "src/engine/capture/profile_codec.cpp": "089cbefbb47e9de3465179fef6351d9224711d3be47f220aa1b9733bd84714af",
+    "src/engine/capture/profile_codec.cppm": "6ba9151a6b01678957ff2f4c97a1fdee359983bc1d053b5b3e1a48dc8490908d",
+    "src/engine/history/effective_catalog.cpp": "b9e34665b546e9a04139d273ebdfd3c3635930f6063e872809f5afa7dd2d24c1",
+    "src/engine/history/effective_catalog.cppm": "7a9870d4f70f24d443d6c951f8ea6b99110dbd88d286c5f5617b45bedecabb02",
+    "src/engine/history/provenance_codec.cpp": "b662a2584362b5da853ea2581d678934b9d0974c0c789ad83974d7c399f7532c",
+    "src/engine/history/provenance_codec.cppm": "96c933ccbfb4263073aaf72305d096a2c9dc94b04b85ed30f7c673a0b09ced58",
+    "src/engine/history/record.cpp": "466d89f3b7dea435df1e00a2aa79c0447a39f5de1e13b85f4224c84a95ffd97c",
+    "src/engine/history/record.cppm": "9a98729430ce08b3ec0f65918849b9454601f04174c0b04267f52e140bd89239",
+    "src/engine/history/tree_core.cpp": "03bbfcece0b1b33b2d16eb6e57f39cf86a3e90bcc670bf77dc5a0bc2846ab51b",
+    "src/engine/history/tree_core.cppm": "a7e12fd702306b561b9dfb3a9ee96cc2513374a249fe48f68d68fb694316ace9",
+    "src/engine/runtime/runtime.cpp": "7629ca86e465c23f22dcd0d4b53e881ba99d8d406630015234e01372067ea0f5",
+    "src/engine/runtime/runtime.cppm": "602bf5c761a36abc7b94dfa13a5a0cc3e1dee0c7ba2de6613ebefc9d5920e000",
+    "src/stdlib/planar/commands.lua": "cf663703ceed18bf2c8204eda5e69dfa3aa7f76e4b7fe5ae84fb2274cc725da4"
+  },
+  "unowned_changes": []
+}

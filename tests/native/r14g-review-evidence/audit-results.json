@@ -1,0 +1,45 @@
+{
+  "candidate-docs.json": {
+    "matched": true,
+    "members": 8,
+    "sha256": "86064e01c0e1e9f2babbc7694155a72d2db5dac9e43ec98bb32291e85d3a6f68"
+  },
+  "composition-inputs.json": {
+    "matched": true,
+    "members": 1862,
+    "sha256": "b8a1f3461ff1559b4c1facec95e8284bb9d02e9670e7ccc3833e4c2c6975caef"
+  },
+  "composition_set_complete": true,
+  "debug_inventory": 331,
+  "evidence-sha256.json": {
+    "matched": true,
+    "members": 23,
+    "sha256": "c46a6adfd54636be5b3cc10c455026cac05c66c3aad3da50c7af66b95f078742"
+  },
+  "focused_raw_cli": {
+    "cases": 4,
+    "export": 55,
+    "history": 115,
+    "init": 60,
+    "render": 247
+  },
+  "links_and_whitespace": {
+    "documents": 8,
+    "local_links": 43
+  },
+  "protected": {
+    "files": 11581,
+    "symlink": "AGENTS.md -> CLAUDE.md"
+  },
+  "release_inventory": 331,
+  "release_raw_gate": {
+    "lint_sources": 86,
+    "no_work": true,
+    "passed": 331,
+    "skips": 0
+  },
+  "reused_debug": {
+    "records": 6,
+    "unchanged_f2_non_doc_members": 13
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "files": [
+    "src/engine/capture/host_path.cppm",
+    "src/engine/capture/host_path.cpp",
+    "src/engine/capture/host_path.t.cpp"
+  ],
+  "preedit_matches_original_protected_baseline": true,
+  "reason": "authorized pure validation extraction; no allocation before text/size preflight; preserve helper normalization/join order"
+}

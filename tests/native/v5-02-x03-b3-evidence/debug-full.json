@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "<repo>/build/rewrite-debug",
+    "--output-on-failure",
+    "--output-junit",
+    "<repo>/tests/native/v5-02-x03-b3-evidence/debug-full.xml"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:24:09.226485+00:00",
+  "exit_code": 0,
+  "seconds": 223.06367301940918,
+  "start_utc": "2026-10-22T21:20:26.162885+00:00"
+}

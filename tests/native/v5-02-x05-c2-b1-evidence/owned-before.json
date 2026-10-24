@@ -1,0 +1,42 @@
+{
+  "src/engine/json_codec/codec.cppm": {
+    "mode": 420,
+    "sha256": "3579663057fe2b7c15c06e6f18e41d7ef087da6dc016a43c4cab102f276ebda4"
+  },
+  "src/engine/json_codec/codec.cpp": {
+    "mode": 420,
+    "sha256": "4ef01f8d61106306e72d7a45bde7a4361ccb303823be081eb4831bbe5c7d8f73"
+  },
+  "src/engine/json_codec/codec.t.cpp": {
+    "mode": 420,
+    "sha256": "eb43c1b3f0b262fd0acd8e685aee975bedde4032e8d728e624b4dec82fba648d"
+  },
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "bbbe585f2de01bc6bd5e52daa010cd8cec50cc1b4fbef6f5728a2ffb50d0c348"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "92455d840c01be2b077741fbd7d2378b066f055e040f234231905d41811f4b1a"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "f14a9a0ff31fad332b41530e79d54d324cf8cc7fa4ca898eac12bc76350ae297"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "ab58aba0fc49784f77a7ab6007cc211a841f68e3c59b2cdf5dab7e743910ba55"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "30db187f294cbed08fd1af93a2860fb7e60b3490b8e9e470c471016b2a1b1b31"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "fe2a47c9d49637802a43355132769dcfd6122c815b23dc33d8adb06e4fa65e1e"
+  },
+  "docs/vernacular/external-profile-contract.md": {
+    "mode": 420,
+    "sha256": "3436fcc45580bc5f8b470c118807a8c106570aaa9c508d4fa0a90680850bf1a7"
+  }
+}

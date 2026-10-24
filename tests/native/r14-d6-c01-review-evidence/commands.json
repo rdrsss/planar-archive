@@ -1,0 +1,92 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start_utc": "2026-10-21T19:19:58.708004+00:00",
+    "log": "build.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:19:58.819838+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(command |runtime |load capture )",
+      "--output-on-failure",
+      "--output-junit",
+      "tests/native/r14-d6-c01-review-evidence/focused.xml"
+    ],
+    "start_utc": "2026-10-21T19:20:01.694767+00:00",
+    "log": "focused.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:20:40.990037+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "start_utc": "2026-10-21T19:20:59.424062+00:00",
+    "log": "inventory.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:20:59.454551+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-debug",
+      "tests/native/r14-d6-c01-review-evidence/private-d6.json"
+    ],
+    "start_utc": "2026-10-21T19:20:59.581341+00:00",
+    "log": "private-d6.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:20:59.790055+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "build/rewrite-debug",
+      "tests/native/r14-d6-c01-review-evidence/private-c01.json"
+    ],
+    "start_utc": "2026-10-21T19:20:59.917266+00:00",
+    "log": "private-c01.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:21:00.053567+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-review-evidence/audit.py"
+    ],
+    "start_utc": "2026-10-21T19:21:00.193044+00:00",
+    "log": "audit.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:21:01.646476+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start_utc": "2026-10-21T19:21:08.185630+00:00",
+    "log": "no-work.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:21:08.291821+00:00"
+  }
+]

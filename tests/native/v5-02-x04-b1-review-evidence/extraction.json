@@ -1,0 +1,11 @@
+{
+  "adapters_byte_identical": true,
+  "before_module_selection": true,
+  "decoder_body_byte_identical_after_rename": true,
+  "imports": [
+    "std",
+    "std",
+    "planar.engine.value"
+  ],
+  "private_helpers_and_error_type_byte_identical": true
+}

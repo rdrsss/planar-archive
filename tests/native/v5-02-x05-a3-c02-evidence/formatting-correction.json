@@ -1,0 +1,13 @@
+{
+  "before_sha256": "3356ac46d48655631c530c2681bd93e1ea11699a64e7bd0383c4eeffe5843ec0",
+  "after_sha256": "9c8d1cf98c8510059f4d6a1c64d41d887e4a10ed0e6629e9b4e2346c587e1cb7",
+  "only_leading_indentation_changed": true,
+  "exact_line_contents_after_lstrip_equal": true,
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "<repo>/src/engine/runtime/external_registration.t.cpp"
+  ],
+  "exit_code": 0
+}

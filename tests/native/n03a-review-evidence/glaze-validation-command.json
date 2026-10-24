@@ -1,0 +1,15 @@
+[
+  "/opt/homebrew/opt/llvm/bin/clang++",
+  "-std=c++26",
+  "-stdlib=libc++",
+  "-nostdinc++",
+  "-isystem",
+  "/opt/homebrew/opt/llvm/include/c++/v1",
+  "-isystem",
+  "<repo>/vendor/glaze/a4a7/include",
+  "<repo>/tests/native/n03a-review-evidence/glaze-validation.cpp",
+  "-L/opt/homebrew/opt/llvm/lib/c++",
+  "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+  "-o",
+  "<repo>/tests/native/n03a-review-evidence/glaze-validation"
+]

@@ -1,0 +1,234 @@
+[
+  {
+    "log": "build-first.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "build-tests.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "build-fault.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "build-final.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "build-restored.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "baseline-api-absent.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "planar_ledger_format_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 1,
+    "note": "Baseline format API with additive candidate tests: expected missing-member compile failure; finally restored candidate."
+  },
+  {
+    "log": "typed-first.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.ledger typed",
+      "--output-on-failure",
+      "--output-junit",
+      "tests/native/r14c1-evidence/typed-first.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "typed-initial-fixture-failed.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.ledger typed",
+      "--output-on-failure",
+      "--output-junit",
+      "tests/native/r14c1-evidence/typed-final.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 8,
+    "note": "Initialized fixture needed canonical temporary root; corrected before complete final gate."
+  },
+  {
+    "log": "focused-first-overlap.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c1-evidence/focused-final.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "note": "Preliminary overlap with CLI; replaced by serialized final repeats."
+  },
+  {
+    "log": "cli-first-overlap.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r14c1-evidence/cli.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "note": "Preliminary overlap with focused; replaced by serialized final repeats."
+  },
+  {
+    "log": "cli.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r14c1-evidence/cli.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "focused-final.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c1-evidence/focused-final.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "vectors.txt",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "record-vectors.txt",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "lint.txt",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "no-work.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "audit-final.txt",
+    "argv": [
+      "python3",
+      "tests/native/r14c1-evidence/audit.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  }
+]

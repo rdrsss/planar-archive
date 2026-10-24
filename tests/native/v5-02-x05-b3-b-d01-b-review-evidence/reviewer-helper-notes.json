@@ -1,0 +1,4 @@
+{
+  "baseline-red-initial-expectation": "Reviewer expected exit42; recorded exit0 is correct because the saved baseline test asserts CHECK(escaped). Corrected rerun passes both escape assertions. No product failure.",
+  "results-helper-initial-error": "AttributeError: 'NoneType' object has no attribute 'get' at suite.get('tests'); CTest root is testsuite, whereas Catch2 root is testsuites. Original source preserved as check-results-attempt01.py. Corrected helper passes. No product failure."
+}

@@ -1,0 +1,30 @@
+{
+  "results": {
+    "focused": {
+      "cases": 401,
+      "assertions": null
+    },
+    "supplemental": {
+      "cases": 11,
+      "assertions": null
+    },
+    "production": {
+      "cases": 12,
+      "assertions": 824
+    },
+    "independent": {
+      "cases": 2,
+      "assertions": 159
+    },
+    "correspondence": {
+      "cases": 2,
+      "assertions": 491
+    },
+    "frozen_old": {
+      "cases": 15,
+      "assertions": 1467
+    }
+  },
+  "artifacts": 85,
+  "finalization": "de4eac89ba2391173e1b03f82b76742629a7d1a1e4af2bc737b3a3d4fbfbb53a"
+}

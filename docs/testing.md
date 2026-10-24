@@ -1,885 +1,1634 @@
-# Testing
+# Build and verification
 
-How Planar's test suite is layered, what each gate proves, and the rules for
-adding to it. The build and toolchain are covered in
-[toolchain-parity.md](toolchain-parity.md); the state machines the scenarios
-walk are in [lifecycles.md](lifecycles.md).
+Current rewrite status is the [roadmap opening](vernacular/roadmap.md#current-status).
+Superseded status checkpoints that formerly opened this file are preserved in
+[history](vernacular/history.md#former-opening-of-testingmd).
 
-## Gates
+Use CMake 4.3/4.4, Ninja, LLVM 23+ with modules-enabled libc++, Python 3 and
+Doxygen. See [toolchain details](toolchain-parity.md). Committed CLI11, Catch2, Lua, Glaze, SQLite and
+xxHash sources configure offline; missing sources are a hard error.
 
-| Command | What it proves |
-|---------|----------------|
-| `make test` | Builds the `debug` preset including the `planar_tests` aggregate (test binaries are not in `all`), then runs every Catch2 case under `ctest` in parallel. `TEST_JOBS=1` runs them serially. |
-| `make test-cpp-report` | The same suite, plus its skip tally. The expected tally is zero. |
-| `make ctest-registry-check` | ctest runs exactly the cases the test binaries contain. Needs `build/debug` built. |
-| `make coverage` | The `(verb, subcommand)` leaf-coverage ratio has not dropped below `scripts/coverage-baseline.txt`. |
-| `make cli-usage-check` | Authored surfaces (`agents/`, `skills/`, `docs/`) and the `docs.examples` the binaries publish in `schema` only use commands and flags the five binaries expose, and pass the semantic surface lint, including the host-queue rule (`surface-queue-command`, [architecture.md](architecture.md#authored-surface-validation)), and `scripts/check-md-anchors.py` fails on a broken in-page anchor in `docs/cli-reference.md` and `INSTALL.md`. |
-| `make surface-check` | Each binary's live schema and help surface matches `scripts/surface-baseline.txt`. |
-| `make exit-code-contract` | The exit codes documented in [cli-reference.md](cli-reference.md) are the ones the binaries return. |
-| `make eval-contracts` | The provider-free eval lanes. |
-| `make eval-queue-observation-integration` | A live scratch-database detached ticket observed through native wait and the older-queue compatibility path. Needs the debug binaries built first. |
-| `make cpp-lint-gate` | `clang-format --Werror` and the Doxygen doc-comment pass. |
-| `make test-all` | All of the above, composed. This is the gate to run before a pull request. |
-| `make cpp-lint` | `cpp-lint-gate` plus `clang-tidy`. Not part of `test-all`. |
-| `make linux-gate` | The `debug` build, whole ctest suite and queue observer Python checks on Debian trixie in Docker (native arm64). Not part of `test-all`. See [The Linux gate](#the-linux-gate). |
-
-## How the skill tree is tested
-
-The `planar` skill (`skills/planar/`) and the agents (`agents/planar-*.md`) are
-authored files that install unchanged, so there is no render step to test;
-the checks are on the source.
-
-- **Format.** `make surface-lint` applies the Agent Skills rules to every
-  `skills/<name>/SKILL.md` (frontmatter, name, description length, allowed
-  keys, body of at most 500 lines, links that resolve, references one level
-  deep) and prints one line per rule that holds. Link checks verify file
-  existence only.
-- **Budget.** `skills/planar/SKILL.md` has a tighter limit than the format's:
-  150 lines of body. A Catch2 case in the surface-lint test binary enforces it.
-- **Commands.** `make cli-usage-check` runs `cli_usage_lint` over `agents/`,
-  `skills/`, `docs/` and `CLAUDE.md`, so every command and flag a reference
-  or agent names must exist in a binary's `schema` catalog; its catalog mode
-  checks the `docs.examples` the binaries publish the same way.
-- **Contract.** The eval contract tier (`make eval-contracts`) asserts, through
-  `evals/orchestrator/cases/skill-planar.json`, that `SKILL.md` states each of
-  the thirteen invariants, names the five binaries and cites the feedback
-  contract.
-
-The orchestrator lifecycle fixture's final repository test uses a detached
-queue ticket in its isolated arena. The harness records the ticket and log
-path, then takes one 20-second observation slice. Native `queue wait --json`
-is preferred; an installed queue without `wait` uses bounded `queue status
---json` observations. Only recorded `ended`/`exited`/exit-code-zero proves
-the fixture test passed. A slice that expires retains the ticket under
-`fixture-test-ticket.json`; resume its observation and grading with
-`python3 evals/orchestrator/harness.py --resume-queue-ticket <artifact-dir>`.
-This command never resubmits the fixture test. The fixture arena has its own
-`PLANAR_DB` and queue logs; the outer host queue still serializes the eval
-gate itself.
-
-`make eval-queue-observation-integration` is the focused check for a live
-ticket. It submits one scratch-database command per observer mode, lets a
-short observation slice expire while the command is still active, and then
-observes the original ticket through completion. It is part of
-`make test-all`, which builds the debug binaries first. The full Linux CI
-tier runs both `make eval-orchestrator-unit` and this integration check in its
-pinned toolchain container. `make linux-gate` runs the same two Python checks
-after ctest and exports their logs with the gate result.
-
-## Task and milestone cadence
-
-Task cycles run focused acceptance and affected-behavior tests, together with
-relevant static/type, formatting, build, artifact parity, and policy checks.
-For methodology or workflow-surface edits, the focused checks are
-`make cli-usage-check`, `make surface-lint` and `make eval-contracts`. Derive other task commands from
-the changed subsystem's guidance; check that filtered tests actually match.
-
-Run `make test-all` and any other required full regression or end-to-end checks
-at the milestone barrier on the exact accumulated candidate after task fan-in,
-including before a pull request. A standalone task's final delivery boundary
-serves as its barrier. Task completion and fan-in use focused evidence and the
-selected review disposition; they do not establish a full pass or final closeout.
-A scheduled barrier gate is not missing task evidence. Failed task checks block
-the task; a failed barrier blocks milestone promotion and final closeout.
-
-After barrier failures, corrective tasks run focused checks. Rerun the full
-milestone profile when re-entering the barrier with the final candidate, rather
-than after each fix. Preserve every run's failures, exact commands, exit status,
-logs, revision, and dirty/diff identity. Default repeat is 1; explicit stability
-requirements remain binding, and retrying until green is not validation.
-Review cadence remains independent, including deferred review at its boundary.
-
-### The task profile in this repository
-
-Every task runs these, in this order, and reports each exit status:
-
-1. **Build everything, incrementally.**
-   `cmake --build build/debug --target all planar_tests`. It catches a compile
-   break in any module, including ones the task never touched, for the cost of
-   an incremental build. Only the full test run moves to the milestone.
-2. **Run the tests for each module the task touched.** The ctest label is the
-   name in the directory's `planar_module(<name> …)` call, or `cmd_<binary>`
-   under `src/cmd/<binary>/`. For example, `src/engine/hostqueue/` is
-   `engine_hostqueue` and `src/lib/cliapp/` is `cliapp`:
-
-   ```sh
-   ctest --test-dir build/debug -L '^engine_hostqueue$' --output-on-failure
-   ```
-
-   Anchor the label with `^…$`, since `-L` is a regular expression. Report the
-   matched count from ctest's summary line. A filter that matches nothing also
-   exits 0, so zero matched tests is a failure, not a pass.
-3. **Narrow `cmd_planar`.** That label holds about a quarter of the suite.
-   A task that changes one verb family adds a name filter, because each test
-   name starts `planar.cmd_planar.` followed by its Catch2 case name:
-
-   ```sh
-   ctest --test-dir build/debug -L '^cmd_planar$' -R 'task update' --output-on-failure
-   ```
-
-4. **Run the new or changed tests by name** if steps 2 and 3 did not already
-   select them, and confirm they appear in the matched set.
-5. **Run the cheap cross-cutting checks the change can break.** Most failures a
-   milestone run used to find were stale pins, not logic errors.
-   - C++ changed: `make cpp-lint-gate`.
-   - Help text, flags or the catalog changed: `make surface-check`, and the
-     whole-catalog pin,
-     `ctest --test-dir build/debug -L '^cmd_planar$' -R 'catalog is pinned'`.
-     A deliberate change recaptures the baseline with
-     `scripts/surface-snapshot.sh capture` in its own commit.
-   - Authored docs, the skill or an agent changed: `make surface-lint`,
-     `make cli-usage-check` and `make eval-contracts`.
-   - `install.sh` or its scripts changed: `make test-install-stage`. Its health
-     scenarios need the debug `planar` from step 1, and they report SKIPPED
-     without it.
-   - A migration changed: `ctest --test-dir build/debug -L '^db$'`, which
-     includes the up, down, up round trip.
-
-### The milestone profile in this repository
-
-Once per milestone, on the merged candidate, before the milestone closes and
-before any pull request:
-
-- `make test-all`: the whole ctest suite, the registry check that proves the
-  whole suite ran, and the coverage, surface, exit-code, eval and lint gates in
-  the table above.
-- `make cpp-lint` when the milestone changed C++, for the advisory `clang-tidy`
-  pass.
-
-A milestone that changes platform-sensitive code also runs `make linux-gate`.
-Both profiles go through the host queue, below.
-
-## Continuous integration
-
-CI is deliberately small (two tiers for ordinary changes plus the release
-workflow), because agents merge often and a per-merge gate
-would run constantly. `make test-all` through the host queue (below) is still
-the gate to run before a pull request; CI is the independent backstop.
-
-| Workflow | Runs | What |
-|---|---|---|
-| `ci.yml` (fast tier) | Pull requests into `master`, and pushes to `master` | `make fmt-check`, the installer fixtures, and the planning eval harness unit tests. It does not build the C++ tree. A newer push cancels the older run. |
-| `full.yml` (full tier) | Nightly, on manual dispatch, on `v*` tags, and on a pull request labelled `ci:full` | The `debug` build, the whole ctest suite, the orchestrator eval harness unit tests and the scratch queue observer integration test, on Linux in the same pinned toolchain image as `make linux-gate`. Builds from cold. |
-| `release.yml` (release) | A pushed stable `vX.Y.Z` tag only; never a branch, a pull request or a pre-release tag | One job per platform builds the release bundle from the tag commit and runs that platform's portable and clean-host gates before uploading; the final job runs the publisher, the only step that calls `gh release`, and a failed or missing platform publishes nothing. It reuses the scripts and evidence files of `make release-cut`. See [Release Gate Evidence and Cutting a release](operations.md#6-release-gate-evidence). Under decision 1337 releases are cut locally with `make release-cut` until hosted CI returns. |
-
-The fast tier does nothing for a change that touches only `agents/`, `skills/`,
-`docs/`, `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md`, or a
-top-level `*.md` or `LICENSE` file. The `checks` job still starts and reports
-success with its steps skipped, so a required `checks` status is satisfied
-(a workflow-level `paths:` filter would never start the job, and a required
-check that never reports blocks the merge). Any other path counts as code, as
-does a run that cannot be classified. Because those files feed pinned
-projections and doc gates, the nightly full tier still checks them: run
-`make test-all` before a pull request that edits `agents/` or `skills/`.
-
-Pull requests into any other branch run none of the workflows. Agents integrate
-into `dev/integration` and open a pull request from it to `master` when a
-batch is ready, so CI runs once per batch, not once per merge. Add the
-`ci:full` label to a `master`-bound pull request that touches C++ or CMake and
-should be built on Linux before it merges.
-
-## Builds and tests go through the host queue
-
-On a machine shared by several agents and projects, a build or test is not
-started directly. It is submitted to the host-wide queue, so two builds do
-not run at once and one agent's `make test` does not starve another's. The
-queue is `planar-agent queue`; see [the queue verbs](cli-reference.md#queue-verbs)
-for the full contract and [operations.md](operations.md#5-the-host-build-and-test-queue)
-for running it. `planar-agent queue rule` prints the rule agents follow.
-
-Every gate above has a queued form: the gate's own command after the argument
-terminator, run from the directory it needs.
-
-```bash
-# Short gate, in the foreground: the command's output and exit status come straight back.
-planar-agent queue run --vendor <vendor> --role <role> -- make fmt-check     # cli-lint-ignore: `--` is the argument terminator
-planar-agent queue run --vendor <vendor> --role <role> -- make cli-usage-check     # cli-lint-ignore: `--` is the argument terminator
-
-# Long gate, detached: prints a sequence number and a log path, then returns at once.
-planar-agent queue run --detach --timeout 2h --vendor <vendor> --role <role> --claim <token> -- make test     # cli-lint-ignore: `--` is the argument terminator
-planar-agent queue wait <seq> --timeout 3h --json
-```
-
-`make test-all`, `make cpp-lint` and `make linux-gate` run long enough to
-reach the queue's default run limit of 30 minutes, at which the command is
-stopped and its entry ends as `timeout`. Pass `--timeout <duration>` for a
-gate that legitimately takes longer (for example `--timeout 2h`), and
-`--claim <token>` when the caller holds a task claim, so the queue renews it
-while the command waits and runs. Omit `--claim` only when there is no claim or
-the claim is renewed separately. The observer's `--timeout` is independent:
-allow for expected queue backlog plus runtime, as the three-hour wait above
-does for an expected hour of backlog and a two-hour run limit. A submitted
-`--wait-timeout` separately limits how long an entry may wait for its turn.
-
-A detached gate builds when its turn comes, not when it is submitted. Submit
-it only once the tree is final for that gate, and do not edit the tree until
-its ticket has ended. Read `queue wait`'s `wait_reason` and authoritative
-`status.outcome` together; a child can itself exit 124 or 125, and a wait
-deadline or interruption is no gate verdict. An empty log or missing active
-entry is no gate verdict either. A probe rebuild and a gate
-write the same build directory, so submit both through the queue and never
-run one beside the other.
-
-For a short agent turn, `queue wait <seq> --timeout 10m --json` returns control
-within a finite slice. If it reports `timed_out` or `interrupted`, do other
-work or hand off the same sequence number for another finite wait. Neither
-result stops the queued command, and neither calls for a second submission.
-Do not hide an unbounded retry loop around finite slices. A `stalled`,
-`history_unavailable` or `error` result needs inspection; a queue refusal
-never authorizes a direct build. `queue wait` only reads state and never
-renews a claim. See [the wait contract](cli-reference.md#waiting-for-a-logical-ticket-queue-wait)
-and [operations](operations.md#5-the-host-build-and-test-queue).
-
-The queue is for builds and tests that would otherwise run side by side. It
-does not replace the gates: a queued `make test` is the same `make test`.
-The test suite's own black-box cases never touch the real queue, because
-`run_pinned` gives each one its own `PLANAR_DB`, and the queue lives in that
-file.
-
-`clang-tidy` is advisory. The recipe runs it without `--warnings-as-errors`
-and `.clang-tidy` declares no `WarningsAsErrors` key, so its warnings never
-fail a run. It enables one check, `readability-identifier-naming`.
-
-## The Linux gate
-
-`make linux-gate` builds the `debug` preset, runs the whole ctest suite and
-the queue observer Python checks in
-a `debian:trixie-slim` container, so code with a Linux-only branch
-(`close_range` and `/proc/self/fd` in `src/lib/process`, `pipe2` in the
-runner, `/proc/<pid>/fd` in the queue tests) is compiled and run somewhere
-other than macOS. It is the Linux lane; CI is not relied on for it.
-
-```bash
-make linux-gate                                  # full build + suite
-make linux-gate LINUX_GATE_CTEST_ARGS="-L process"   # a subset
-make linux-gate LINUX_GATE_JOBS=8                # build and ctest parallelism (default 4)
-make linux-gate-prune                            # docker builder prune -f
-```
-
-`docker/linux-gate.Dockerfile` installs apt.llvm.org's LLVM 23 (clang,
-libc++ with its modules manifest, libc++abi), Kitware CMake pinned by version
-and SHA-256, ninja, git, python3, GNU `wget` (the `bootstrap.release` test), `sqlite3` and `libssl-dev` (vendored libcurl's TLS on Linux). The image
-build never fails on a red suite. It records `configure.log`, `build.log`,
-`ctest.log`, `eval-unit.log`, `eval-queue-observation.log` and `status.txt`,
-and the Makefile exports them to
-`build/linux-gate/`, prints the gate verdict and exits nonzero unless
-`status=0`. Read `ctest.log` there rather than the build output: BuildKit
-clips a step's log at 2 MiB.
-
-The image also builds bash 3.2.57 from the GNU source archive (a `bash32`
-stage, copied to `/opt/bash-3.2`) for the `install.bash32_*` tests' two-shell comparison;
-see [The two-shell comparison](#the-two-shell-comparison).
-
-Every dependency is committed under `vendor/`, so the gate needs no token, no
-network fetch during configure, and no extra build context.
-
-The build tree lives in a BuildKit cache mount, so a second run is
-incremental, and it costs disk while it stays. Run `make linux-gate-prune`
-when done; a past unpruned run of this kind filled the machine's disk.
-Docker is a developer tool and not one of the installer's `BUILD_DEPS`.
-The container builds as root for compatibility with its build cache, then runs
-ctest as the unprivileged `planar-test` user. File-permission regressions must
-exercise SQLite's access failures rather than root's permission bypass.
-
-**Disk cost.** One full `make linux-gate` run grew Docker's virtual disk by
-about 16 GB, and the cache mount is kept after the run. Have at least 25 GB
-free before starting, and run `make linux-gate-prune` afterwards, every time.
-Do not run the gate on a machine that is short of disk. Through the queue
-it is submitted detached with a longer run limit, and it holds the queue's
-slot for its whole run:
-
-```bash
-planar-agent queue run --detach --timeout 2h --vendor <vendor> --role <role> -- make linux-gate     # cli-lint-ignore: `--` is the argument terminator
-```
-
-### Platform-specific tests
-
-The macOS ctest list and the Linux gate's list differ by exactly three
-tests (measured 2026-10-08 on the M5 tree: 4486 listed on macOS, 4483 in
-`make linux-gate`, compared by name). Each is a `TEST_CASE` inside
-`#if defined(__APPLE__)` with a reason comment above the guard. Nothing
-enforces the table: add a row when you add a platform guard, and compare
-`ctest -N` names on both hosts when a count looks off (sort both lists with
-`LC_ALL=C sort`; duplicate names such as `engine_planning` otherwise produce
-false differences).
-
-| Test | Absent on | Reason |
-|------|-----------|--------|
-| `group_only_zombies: a group whose only member is an exited leader nobody reaped is all zombies, and a signal to it is either accepted or refused as not permitted` (`src/lib/process/identity.t.cpp`) | Linux | macOS answers `kill(-pgid)` with EPERM for a zombie-only group and the probe reads `sysctl(KERN_PROC_PGRP)`; no other kernel does either, and Linux `group_only_zombies` always answers false. |
-| `group_only_zombies: a zombie leader does not make a group with a live member all zombies` (same file) | Linux | Same macOS-only probe. |
-| `terminate: on macOS a real group whose leader exited unreaped is never reported as a failed signal` (`src/engine/hostqueue/terminate.t.cpp`) | Linux | Pins the macOS EPERM refusal; Linux has none. The fake-probe cases in the same file run everywhere. |
-
-Tests that are registered on both platforms but vacuous on a host with no
-release bundle: `update_leaves.t.cpp` has six end-to-end cases that return
-early with `SUCCEED("no release bundle exists for this host...")` where
-`release_platform` finds none, which includes the linux-aarch64 gate:
-
-- `update: a shadowing planar on PATH is named once by the bootstrap and by update, and a symlink to the install is not one`
-- `update: the exec'd installer is the lock owner and the verb opens no database`
-- `update: a KILLed update leaves nothing the next update cannot reclaim`
-- `update: SIGINT during a slowed download removes the download directory and releases the lock`
-- `update: SIGTERM during a slowed download removes the download directory and releases the lock`
-- `update: a failed installer exec removes the download directory and releases the lock`
-
-SIGINT and SIGTERM share the `interrupt_a_download` helper, which holds the
-early return. They count on both platforms and pass without exercising the
-updater there. The exec'd-installer, KILL and failed-exec cases name an
-in-process case that covers the same behaviour on every host; the shadow,
-SIGINT and SIGTERM cases have no in-process counterpart, so on such a host
-nothing exercises those behaviours. The bootstrap end-to-end update
-(`update: the binary updates a bootstrap install end to end through the real
-installer`) is not vacuous: with no bundle it asserts exit 1 and an
-`unsupported platform` error. Making the six run needs a Linux aarch64
-bundle, which is not a shipping platform.
-
-## When every build is a full rebuild
-
-A build with no source change should run zero steps. If it recompiles
-thousands of objects, ninja's dependency log, `build/<preset>/.ninja_deps`,
-is probably damaged. Two builds running in the same build directory at once
-can interleave their records. Ninja then stops reading at the first bad
-record on every run and discards everything recorded after it. The only sign
-is one line in the build output:
-
-```
-ninja: warning: premature end of file; recovering
-```
-
-`scripts/ninja-deps-check.py <build-dir>` reports a damaged log, and
-`--repair` removes it. The Makefile runs the repair before each debug build.
-The build that follows recompiles everything once. To see why ninja
-considers an object stale, run `ninja -C build/debug -d explain`.
-
-The Makefile configures the debug tree only when it has never been
-configured. Ninja re-runs CMake itself when a CMake input or a globbed
-directory changes. After changing a preset or a `-D` option, run `cmake
---preset debug` by hand.
-
-## Two tiers
-
-Planar uses two kinds of test. Both are needed, and they are not
-interchangeable.
-
-**Unit tests** are Catch2 `TEST_CASE`s in `*.t.cpp` files colocated with the
-module under test throughout `src/lib/`, `src/engine/` and `src/cmd/`. They
-call the module directly, with an in-memory or per-test-tmpdir SQLite
-database when they need one. They catch logic and SQL regressions.
-
-**Black-box tests** run the built binary: argv in, and stdout, stderr, exit
-code and on-disk state out. They grade the shipped contract, so an internal
-refactor cannot silently change what an operator sees. They are Catch2 cases
-too, and run under the same `ctest`.
-
-Multi-command lifecycle scenarios that dispatch in-process live in
-`src/cmd/integration_tests/`; see its
-[README](../src/cmd/integration_tests/README.md) for the fixture rules.
-
-## A green ctest run is not proof the suite ran
-
-`catch_discover_tests` writes one `<target>-<hash>_tests.cmake` file per
-target, and ctest runs exactly what those files list. Nothing checks that the
-list still matches the binaries, and it drifts in both directions while ctest
-reports "100% tests passed":
-
-- A truncated discovery file silently drops cases. One run executed 3,685 of
-  4,984 registered tests and reported a clean pass.
-- A discovery file appended to rather than replaced, for a target that was
-  not rebuilt, registers every name twice. Fifteen targets were once measured
-  at exactly double, inflating the reported total from 3,553 to 4,871.
-
-`make ctest-registry-check` compares each binary's own `--list-tests` count
-against the `add_test` lines registered for it. It needs no baseline and
-fails on a mismatch in either direction. It also fails for a
-`scripts/install-*-test.sh` that no registered ctest case names, and prints each
-script it found registered. Do not quote a ctest total as a
-count of distinct tests without it.
-
-Two related traps:
-
-- A `ctest -R <pattern>` that matches nothing produces a green run. Check the
-  matched count.
-- ctest passes the case name as an argv token, so a `TEST_CASE` name must not
-  start with `-`.
-
-## What "parity" means
-
-The word survives in file names (`src/cmd/*/parity.t.cpp`) and test tags. It
-no longer means a comparison against a second implementation. Those cases pin
-bytes that were transcribed from the earlier Zig and Go implementations
-before they were deleted, and assert them against the current binary alone.
-They remain the strongest grading on help text, exit codes, error wording and
-the `schema` catalog, and they cannot be re-derived. A comment that says "the
-oracle declares X" records where a pinned byte came from; do not add new
-ones. `scripts/parity-data/parity-triage.md` holds the rationale for the
-pins.
-
-## Exit codes
-
-The Exit Codes table in [cli-reference.md](cli-reference.md) is a contract
-that skills and scripts branch on. The authoritative source is
-`src/cmd/planar/exit.cppm`. `make exit-code-contract` runs representative
-refusals on `planar`, `planar-agent`, `planar-watch` and `planar-ext`, and
-also fails when the table omits a code that a checked case returns.
-
-A parse failure exits `2` on `planar` and `1` on the other three. Exit `64`
-means not implemented. When the table and a binary disagree, fix the table.
-
-## Black-box harness
-
-The harness is `src/cmd/parity_harness.hpp`. It is a header, included rather
-than linked, because a `cmd_*` target may not depend on another `cmd_*`
-target.
-
-- `make_arena("<tag>")` builds a scratch environment under a temp root with
-  its own `PLANAR_DB`, `HOME` and `PLANAR_WORKBENCH_ROOT`.
-- `run_pinned(bin, argv, root, tag)` runs a binary inside that environment
-  and captures stdout, stderr and the exit code.
-- `launch_pinned_detached` and `await_sentinel` cover the few cases that need
-  a live process, such as `planar-watch feed --follow`.
-
-Both halves of the arena matter. `PLANAR_HOME` alone does not redirect the
-database: without a scratch `PLANAR_DB` the runtime falls back to
-`~/.planar/planar.db` and applies pending migrations to it. The
-host queue lives in the same `planar.db` (and its detached-run logs in
-`queue-logs/` beside it), so pinning `PLANAR_DB` pins the queue too: there is
-no second database to redirect. `run_pinned` also removes an inherited
-`PLANAR_QUEUE_SLOT`, so a suite run under `queue run` does not make every
-arena submitter look like a nested run. Never run a from-source binary outside
-`run_pinned`.
-
-Two case styles coexist:
-
-- **Focused per-leaf tests**
-  (`src/cmd/planar/handlers/<family>/*_leaves.t.cpp`, `*_leaf.t.cpp`) pin one
-  verb's contract: flags, JSON shape, exit code, error wording. Most call the
-  binary's own `dispatch(fx, {"verb", "sub"})` in-process. They use
-  `run_pinned` when the property under test belongs to the process, such as
-  an exit code or a file the process creates.
-- **Cross-process scenario tests** (`src/cmd/planar/cross_process.t.cpp`,
-  `src/cmd/*/parity.t.cpp`) walk an operator workflow through many verbs and
-  several binaries. They catch a verb that works alone and breaks in the
-  flow.
-
-## Conventions
-
-- Name a scenario for the workflow, not the verb.
-- Seed fixture state through the CLI, never by raw SQL inside a test.
-- After every mutating step, assert on the post-state with `<entity> show
-  --json` or `list --json`. Exit code 0 is not sufficient, because a verb
-  that silently does nothing also exits 0.
-- To compare a field across two steps, snapshot the JSON between them rather
-  than deriving the expectation from a constant.
-- Scenarios may cross verb boundaries on purpose: add a question, link it to
-  a plan, advance the plan, then assert the question still appears in `plan
-  show`.
-- Test files open with plain `//` comments. A `///` header on a `*.t.cpp`
-  makes the Doxygen pass demand a doc comment on every `TEST_CASE`.
-
-## Contribution policy
-
-- A change that adds a top-level verb, subcommand or flag also adds or
-  extends a test that exercises it in a realistic operator workflow. A test
-  that only shows the verb exists and emits JSON does not count.
-- A change to a verb's JSON shape, exit-code mapping or status-transition
-  rules updates the corresponding focused test in the same change.
-- A change that adds an external-plane adapter or a migration adds a case
-  that walks the new path end to end. HTTP adapters use the in-process
-  fixture server, `src/lib/http/fixture_server.hpp`.
-- `make coverage` extracts leaves from `dispatch(fx, {...})` and
-  `run_pinned(cpp_bin(), ...)` call sites. `scripts/coverage-extract.py`
-  documents two cases it must not count: table-driven loops, and a leaf name
-  that appears only inside a pinned `schema` catalog string.
-
-## Bug fixes are red, then green
-
-When work surfaces a real bug, first add a test that asserts the documented
-contract and fails. Commit it alone, with a subject that starts "Red test:".
-Land the fix in the next commit, and the same test goes green.
-
-Do not edit a test to assert only the subset that works. If the bug is out of
-scope for the cycle, file it as a task on the anchor plan and mark the test
-with `TODO(plan:<id>, task:<id>)`; the red test still goes in first.
-
-## Helpers fail loudly
-
-A helper that cannot honour its contract fails the case. It never returns a
-plausible-looking value. `run_pinned` returns a `capture` that the caller
-asserts on, and helpers built on it use `REQUIRE` with the diagnostic
-attached through `INFO`.
-
-A case that needs to inspect a non-zero exit asserts on `capture::code`
-directly.
-
-## Running a from-source binary by hand
-
-`planar` resolves `$PLANAR_DB`, not `$PLANAR_HOME`, falls back to
-`~/.planar/planar.db`, and applies pending migrations on first use. One bare
-run of a binary built from a branch that carries a new migration moves the
-live database past the schema version every installed binary supports. Every
-other agent on the machine then fails with `SchemaVersionAhead`, and the
-migration has to be rolled back by hand.
-
-- `make smoke ARGS="<verb>"` runs the debug build against a throwaway
-  `planar.db` under `build/debug/.smoke/`, as `PLANAR_DB`. `make smoke-reset`
-  deletes it.
-- `make run` runs against the real database.
-- By hand: `PLANAR_DB=<scratch-path> build/debug/bin/planar <verb>`, with a
-  scratch `HOME` as well whenever the verb touches `~/.planar` for anything
-  other than the database.
-
-The gate scripts that run a built binary (`scripts/exit-code-contract.sh`,
-`scripts/surface-snapshot.sh`, `scripts/coverage-check.sh`) pin
-`PLANAR_DB` under their own scratch directory, and `src/cmd/planar/arena_pins.t.cpp`
-runs each of them and `make smoke` with a recording wrapper in place of the
-binary to keep it that way.
-
-To check a migration as raw SQL:
-
-```bash
-sqlite3 /tmp/cp-smoke.db < migrations/00001_foundation.up.sql
-```
-
-## Release bundles and installer script tests
-
-`make dist` configures and builds the `dist` preset (`PLANAR_PORTABLE=ON`,
-version metadata, a macOS 26.0 deployment target), runs the portable-binary
-checks on the five staged binaries, and assembles
-`dist/planar-<platform>.tar.gz` with `SHA256SUMS`, `VERSION`, a standalone
-`get-planar.sh` and the archive's `.gates.json` evidence (`scripts/dist.sh`).
-`make linux-dist` does the same for Linux x86_64 in Docker on Debian bookworm.
-Both are release builds and not part of `make test` or `make test-all`; the
-gates they feed are in [operations.md § 6](operations.md#6-release-gate-evidence)
-and [toolchain-parity.md](toolchain-parity.md#portable-distribution-builds).
-Run them through the host queue and never with a validation tag in the real
-repository.
-
-The scripts they ship and the installer have script tests. Each is a ctest case
-registered with ctest (in `CMakeLists.txt`, `src/cmd/CMakeLists.txt` for the two
-that need built binaries, `src/cmd/planar/CMakeLists.txt` and
-`src/tools/CMakeLists.txt`), so `make test` runs them. The make targets
-`test-install-manifest`, `test-install-stage` and `test-install-deps` run
-`scripts/install-manifest-test.sh`, `install-stage-test.sh` and
-`install-deps-test.sh` directly, for a focused run, and are not prerequisites
-of `make test`: ctest runs the same scripts as `install.manifest`,
-the `install.stage_*` tests and `install.deps`. `install-manifest-test.sh` also pins
-INSTALL.md § Prerequisites. `make ctest-registry-check` fails when any
-`scripts/install-*-test.sh` is named by no registered ctest case. **No installer
-test may run longer than five minutes** (measured on a loaded host); a script
-that grows past that is split into groups, one ctest case each, selected by an
-environment variable the script reads (`INSTALL_ORDER_GROUP`,
-`INSTALL_UNINSTALL_GROUP`, `INSTALL_STAGE_GROUP`, `INSTALL_BASH32_GROUP`; unset
-runs every group, an unknown name is a usage error that exits 2 in all four).
-Below a group, one named scenario runs on its own and the scenarios of a run go in parallel
-(`INSTALL_TEST_SCENARIO`, `INSTALL_TEST_JOBS`; see [Installer test speed](#installer-test-speed)).
-`ctest -L '^install_'` covers all of them. They use scratch `HOME`,
-`TMPDIR` and database paths and fake bundles, and touch nothing real. Select one
-by label, and check the matched count:
+Run commands from the repository root, serially per build directory:
 
 ```sh
-ctest --test-dir build/debug -L '^dist_layout$' --output-on-failure
+make build
+make test
+make test-all
+make test-all PRESET=release
 ```
 
-| ctest case | Label | Entry point | Covers |
-|------------|-------|-------------|--------|
-| `dist.identity` | `dist_identity` | `scripts/dist-identity.test.py` | Assembler identity and schema refusals. See [Bundle assembler identity checks](#bundle-assembler-identity-checks). |
-| `dist.layout` | `dist_layout` | `scripts/dist-test.sh` | The real assembler over fake binaries: entries, bytes, `release.json`, checksums. |
-| `release.publish` | `release_publish` | `scripts/release-publish-test.sh` | `release-gates.sh`, `release-publish.sh` and `make release-cut` against a scratch annotated tag, fake bundles and a fake `gh`, `docker` and `uname`: every refusal runs no `gh`. |
-| `release.workflow` | `release_workflow` | `scripts/release-workflow.test.py` | A lint of `.github/workflows/release.yml` (trigger, `needs`, gate-before-upload, permissions) and its publisher steps run against fakes. Nothing runs on GitHub. |
-| `bootstrap.release` | `bootstrap` | `scripts/get-planar-test.sh` | `get-planar.sh` end to end. See [The release bootstrap test](#the-release-bootstrap-test). |
-| `install.bash32_static`, `install.bash32_flag`, `install.bash32_home`, `install.bash32_vendors` | `install_bash32` (all four), `install_bash32_<group>` | `scripts/install-bash32-test.sh` (`INSTALL_BASH32_GROUP`) | A lint for bash-4-only constructs and unguarded empty-array expansions, and a prebuilt install and uninstall under bash 3.2 whose end state (file and directory modes, symlink targets, checksums) is compared with a newer bash's run, with no live mutation-lock owner after the uninstall. See [The two-shell comparison](#the-two-shell-comparison). |
-| `install.manifest` | `install_manifest` | `scripts/install-manifest-test.sh` | Manifest ownership and atomicity fixtures; INSTALL.md § Prerequisites. |
-| `install.stage_staging`, `install.stage_vendors`, `install.stage_placement`, `install.stage_modes`, `install.stage_uninstall` | `install_stage` (all five), `install_stage_<group>` | `scripts/install-stage-test.sh` (`INSTALL_STAGE_GROUP`) | Staging and the six vendors' surfaces. `staging`: the staged trees, a malformed agent, the staged recorder, a foreign destination, the `--vendors` filter, quoting, the nine target rows, the upgrade from the older top-level agent layout, the conflicting-flag refusals, the managed lists. `vendors`: each vendor's presence markers, link against copy, a re-install replacing a prior manifest's paths, and health after a link install. `placement`: transactional placement, a failure and a crash mid-way. `modes`: mode switches, `planar health` against the install (the built `planar`, `PLANAR_BIN`), retiring the previous projections. `uninstall`: `--uninstall`. |
-| `install.deps` | `install_deps` | `scripts/install-deps-test.sh` | The compiler preflight. |
-| `install.prefix_guard` | `install_prefix_guard` | `scripts/install-prefix-guard-test.sh` | The install-root guard for `install.sh` and `--uninstall`. |
-| `install.prereq` | `install_prereq` | `scripts/install-prereq-test.sh` | Every program `planar update` and `get-planar.sh` run is in `install.sh` `RUN_DEPS`/`BASE_DEPS` and INSTALL.md § Prerequisites; `wget` is a test-only prerequisite on the Homebrew line. `scripts/install-prereq-scan.py` pins every spawn call site of the update sources by count (a new `run_inherited`, `runner::start`, `execve` or `capture` fails until reviewed) and reads the word in every command position of `get-planar.sh`. |
-| `install.data_paths` | `install_data_paths` | `scripts/install-data-paths-test.sh` | Data paths are never removed, and INSTALL.md's preserved-paths list matches `scripts/install-lib/data-paths.sh`. |
-| `install.prebuilt` | `install_prebuilt` | `scripts/install-prebuilt-test.sh` | `install.sh --prebuilt`: an incomplete bundle, `--link`, and the move-aside of the old queue database. |
-| `install.retired_targets` | `install_retired_targets` | `scripts/install-retired-targets-test.sh` | The retired `make install` targets are gone, and no install doc carries a `make install` recipe. |
-| `install.managed` | `install_managed` | `scripts/install-managed-test.sh` | Managed subtrees, retired paths, link and copy mode, the missing-only `templates/` rule, and a source resume refusing the other mode or a dirty checkout. |
-| `install.lock` | `install_lock` | `scripts/install-lock-test.sh` | The mutation lock with real processes: killed and pid-reused owners, host renames and other hosts, simultaneous reclaims, the update handoff (an older updater's included), install roots whose path says `exists`. |
-| `install.scenarios` | `install_scenarios` | `scripts/install-scenarios-test.sh` | The scenario filter and the parallel dispatch of the installer scripts: a stand-in script for the runner, and the usage paths of the four real scripts. See [Installer test speed](#installer-test-speed). |
-| `install.uninstall_removal`, `install.uninstall_manifest`, `install.uninstall_interrupted` | `install_uninstall` (all three), `install_uninstall_<group>` | `scripts/install-uninstall-test.sh` (`INSTALL_UNINSTALL_GROUP`) | `scripts/uninstall.sh`. `removal`: unknown entries, the removal and its data-path rules, `--purge`, link-mode. `manifest`: escaped and truncated manifest lines, `~/.local/bin`, a missing manifest, a relocated database, the held lock. `interrupted`: the interrupted-uninstall retry and an interrupted upgrade. |
-| `install.queue_probe` | `install_queue_probe` | `scripts/install-lib/queue_probe.test.py` | The installer's database probe with no `python3`, against the real built binaries. |
-| `install.order_db`, `install.order_swap`, `install.order_recover`, `install.order_concurrent`, `install.order_handoff` | `install_order` (all five), `install_order_<group>` | `scripts/install-order-test.sh` (`INSTALL_ORDER_GROUP`) | The order of an install end to end, against bundles of the real built binaries. `db`: databases fresh, behind, ahead and faulty, the queue warning. `swap`: kill-and-resume at every swap point. `recover`: recovery before restaging and a journaled restore. `concurrent`: concurrent owners, a first-install kill, a host rename, the read-only parent, refused attempts. `handoff`: the updater handoff, `--cleanup`, uninstall over a pending install, the inert fault hook. |
-| `queue_retire_reader` | `queue;scripts` | `scripts/install-lib/queue_retire.test.py` | The reader the installer runs to judge the retired queue store's entries, including its `/proc` cases. |
-| `codex_agents_render` | `scripts` | `scripts/render_codex_agents_test.py` | The Codex custom-agent TOML renderer. |
+Debug builds use `build/rewrite-debug`; release (`RelWithDebInfo`) uses
+`build/rewrite-release`. Product output is `bin/planar` inside each build tree.
+`make build` builds `all`, excluding test executables and Catch2. `make test`
+builds `all planar_tests`, then runs every registered CTest case. `make test-all`
+also checks pinned `clang-format --dry-run --Werror` and Doxygen warnings over
+active first-party compilation sources, then requires the second build to say
+`ninja: no work to do.` Zero selected tests, count mismatches and skipped tests
+fail the gate. `make cpp-lint` runs the active formatting/documentation checks;
+clang-tidy is advisory. No queue or installed binary is involved.
 
-`portable.binaries` and `portable.inspector` (label `portable`) exist only in a
-configuration with `PLANAR_PORTABLE=ON`; see
-[toolchain-parity.md](toolchain-parity.md#portable-distribution-builds).
-`planar update` itself is covered by Catch2 cases under
-`src/cmd/planar/handlers/update/` (label `cmd_planar`).
-
-`scripts/release-workflow-crosscheck.py` is a manual check outside ctest. It
-compares the workflow reader's result with PyYAML and runs `actionlint`, and it
-fails when either tool is missing. Run it by hand after editing
-`.github/workflows/release.yml`.
-
-### Installer test speed
-
-The four long installer scripts (`install-order-test.sh`, `install-uninstall-test.sh`,
-`install-stage-test.sh`, `install-bash32-test.sh`) run their scenarios on their own and in
-parallel. Three environment variables, read by all four, work below the existing
-`INSTALL_<TOOL>_GROUP` filters:
-
-| Variable | Meaning |
-|----------|---------|
-| `INSTALL_TEST_SCENARIO=<name>` | Run only that scenario and report it, inside or outside its group (the group variable is then not consulted). An unknown name exits 2 and lists the known ones, as an unknown group does. |
-| `INSTALL_TEST_JOBS=<n>` | How many scenarios run at once when a run selects more than one. Default 4; `1` runs them in one process in file order. A leading zero is decimal (`08` is 8); anything but a positive integer exits 2. |
-| `INSTALL_TEST_SHARED` | Internal. The dispatching run sets it for its children; do not set it by hand. |
+Direct equivalents for the complete debug gate:
 
 ```sh
-INSTALL_TEST_SCENARIO=reinstall bash scripts/install-uninstall-test.sh
-INSTALL_TEST_JOBS=2 INSTALL_STAGE_GROUP=modes bash scripts/install-stage-test.sh
+cmake --preset debug
+python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug
 ```
 
-How it works (`scripts/fixtures/scenario-runner.sh`, sourced by the four scripts; bash 3.2 safe,
-so no `wait -n`, associative arrays or `mapfile`):
+`cmake/rewrite.cmake` explicitly registers colocated Catch2 `*.t.cpp` sources.
+The Python acceptance suites invoke the source-built binary in temporary roots;
+they never substitute an installed command. The gate derives active C++ files
+from `compile_commands.json`. Doxygen's bounded wrapper retries only signal
+crashes without a diagnostic; actual findings fail immediately.
 
-- **A scenario is a block that touches only homes it makes.** Each script wraps its blocks in
-  `if scen <name>; then ... fi`. Numbered or looped scenarios that share a home stay one name
-  (stage `all-vendors` is scenarios 8, 9, 12, 13, 23 and 24); looped scenarios whose iterations
-  make homes of their own are one name per iteration (order `swap-<point>`, uninstall
-  `purgecfg-keys`/`-spellings`/`-outside`, stage `no-change-copy`/`-link` and
-  `uninstall-copy`/`-link`).
-- **Parallel runs are processes.** The dispatching run re-runs the script once per selected
-  scenario (`INSTALL_TEST_SCENARIO=<name>`), at most `INSTALL_TEST_JOBS` at a time, each in
-  its own `mktemp` scratch directory. Every `HOME`, install root, mutation lock, `PLANAR_DB`,
-  fault directory and `$TMP/out` and `$TMP/err` are under that directory, so scenarios share
-  nothing. Output is collected per scenario and printed as `=== scenario <name>: ok|FAILED`
-  followed by its log.
-- **Skips are declared.** A scenario that cannot run on the host (order `renamed` without a
-  machine identity; the stage health scenarios 22 to 25 without a built `planar`) calls
-  `scen_skip "<reason>"`. A run whose only outcome is a declared skip passes and the dispatcher
-  prints `=== scenario <name>: skipped (<reason>)`; the "ran no check" guards still fail a
-  scenario that asserts nothing and declares nothing.
-- **A dead child is a failure.** A child whose wrapper dies before it writes its status is
-  reported as `scenario <name> exited without a status` instead of waited on, and an interrupted
-  dispatcher stops each child's process group (no `pkill`, which slim images lack).
-- **Failures keep their name.** A failing scenario prints its own message, then
-  `<script>: FAIL: scenario <name> exited <n>`; the run finishes the other scenarios, prints
-  `<script>: FAIL: <k> of <n> scenarios failed: <names>` and exits 1.
-- **Serial scenarios.** Scenarios that hold the mutation lock from a second process while
-  another run is refused, or that pause an installer or uninstaller and poll for it, test the
-  serialization of decision 1328 and run alone, one at a time, after the parallel batch. They
-  are order `concurrent-refused`, `renamed` and `uninstall-refused`, and uninstall `held` and
-  `paused`. Stage and bash32 have none.
-- **One staged fixture.** The dispatching run stages the fake bundles (order: three bundles
-  of the built binaries, the second and third copied from the first; uninstall: two fake
-  bundles; bash32: its one fake bundle; stage: the scratch checkout) once and passes the directory to its children, which use
-  it read-only. The dispatcher checksums the shared tree before and after and fails the run if a
-  scenario changed it; a scenario that must change one makes its own copy (stage `BAD`,
-  `QUOTE`, `MUT`). A single scenario, or `INSTALL_TEST_JOBS=1`, stages its own, as before.
-- **Assertions are unchanged.** The refactor only wrapped, moved and split blocks;
-  `git diff -U0 <base>.. -- scripts/install-*-test.sh | grep '^-'` shows no `fail` line removed.
-- `install.scenarios` (`scripts/install-scenarios-test.sh`, label `install_scenarios`) tests the
-  runner with a five-scenario stand-in script (one scenario alone inside and outside its group,
-  unknown names and job counts, the job bound, the serial scenario alone, per-scenario scratch,
-  a named failure, a changed shared fixture, a declared skip, a child that dies without a status,
-  an interrupted dispatcher, `INSTALL_TEST_JOBS=08`) and the usage paths of the four real scripts.
+## Coverage and limits
 
-Measured wall times, `ctest --test-dir build/debug -L '^install_<family>$'` through the host queue,
-2026-10-09, macOS arm64 (8 cores), a debug build, `INSTALL_TEST_JOBS` at its default of 4.
-The host also ran other sessions' queued work: its load average was 5 to 10 during all
-runs, before and after, so single numbers move by 10 to 20 percent between runs (the bash32
-family measured 132.8, 128.7 and 154.1 seconds with the same scripts). The "after" times are
-the last run of the final scripts, and the "before" times are the scripts at the cycle base.
+Native cases cover restricted Lua capabilities, immutable constructors, text/
+integer/structural validation, protected C++ lifetimes and resource exhaustion;
+confined captured bytes/topology, aliases, links, membership and deterministic
+mutation refusals; exact canonical/hash vectors; trusted bridge isolation and
+limits; schema/graph/materiality, selection, budget and Markdown projections;
+canonical JSON boundaries; and invocation/output handling.
 
-| ctest case | Before (s) | After (s) |
-|------------|-----------:|----------:|
-| `install.order_db` | 193.81 | 66.92 |
-| `install.order_swap` | 191.64 | 85.78 |
-| `install.order_recover` | 154.23 | 105.92 |
-| `install.order_concurrent` | 131.65 | 114.15 |
-| `install.order_handoff` | 132.85 | 105.26 |
-| **`install_order`, five cases** | **804.20** | **478.07** |
-| `install.uninstall_removal` | 178.50 | 66.39 |
-| `install.uninstall_manifest` | 302.41 | 145.82 |
-| `install.uninstall_interrupted` | 202.40 | 77.45 |
-| **`install_uninstall`, three cases** | **683.34** | **289.69** |
-| `install.stage_staging` | 182.13 | 72.97 |
-| `install.stage_vendors` | 153.49 | 113.76 |
-| `install.stage_placement` | 154.74 | 57.45 |
-| `install.stage_modes` | 146.53 | 88.42 |
-| `install.stage_uninstall` | 122.94 | 73.95 |
-| **`install_stage`, five cases** | **759.86** | **406.59** |
-| `install.bash32_static` | 0.40 | 0.39 |
-| `install.bash32_flag` | 38.15 | 43.39 |
-| `install.bash32_home` | 36.96 | 42.86 |
-| `install.bash32_vendors` | 57.21 | 67.44 |
-| **`install_bash32`, four cases** | **132.76** | **154.11** |
+Native Catch2 cases and the Python CLI acceptance suites are registered through
+CTest; inspect the configured inventory with `ctest --test-dir build/rewrite-debug
+-N`, and use gate logs for exact run totals. Render acceptance covers context-only
+and captured renders, six computed quota goldens,
+fresh-process byte stability, scoped material/optional/output edits, assertions,
+root routing/refusals and unchanged sentinel state. The render suite runs 247
+real CLI invocations, including a 60-check host-path submatrix. Separate init,
+history and export suites run 60, 115 and 55 actual CLI processes respectively.
+Native cases additionally cover verified ledger history, retained capture receipts,
+prepared acceptance, atomic transactions, bounded recorded reads and exact source
+export. No load service or CLI is exposed; load membership is declaration-closure-only,
+and load integration/full R14 acceptance remain pending. Exact counts and host results
+for the earlier 113-test gate are in [R09](vernacular/rounds/R09.md) and its raw evidence under
+`tests/native/r09-evidence/`. Prior round evidence remains preserved separately.
 
-The bash32 cases did not get faster: each group is one scenario, so there is nothing to run in
-parallel inside it, and the measured difference is the host's load. They are unchanged apart
-from the filter. `install.stage_vendors` is bounded by its one chain of scenarios that share
-homes (`all-vendors`, 137 s of a run).
+The native serializer tests establish the exact 16 MiB payload boundary (LF
+excluded). Large-source CLI probes reach the trusted instruction ceiling first,
+so they do not establish an end-to-end 16 MiB envelope-boundary success. Capture
+is cooperative, not an atomic snapshot or a hostile race guarantee.
 
-The unfiltered script, with no group and no scenario, runs every scenario in one parallel run.
-Before, that was the groups one after another in one process (the sum of the group times
-above, as the file order ran them); after, one run of the same script:
-
-| Script, no filter | Before (s, derived: the sum of the group runs above, not measured) | After (s, measured) |
-|-------------------|--------------------------:|----------:|
-| `install-order-test.sh` (26 scenarios) | 804 | 333 |
-| `install-uninstall-test.sh` (24 scenarios) | 683 | 281 |
-| `install-stage-test.sh` (25 scenarios) | 760 | 263 |
-| `install-bash32-test.sh` (4 scenarios) | 133 | 79 |
-
-To measure again, run each family's label through the queue on a quiet host and compare with the
-table; do not compare a run against numbers taken under a different load.
-
-### The installer test limit
-
-No installer test runs longer than five minutes (the release-bundles test spec). An installer
-test is every ctest case named `install.*`: the `install.order_*`, `install.stage_*`,
-`install.uninstall_*` and `install.bash32_*` group cases, `install.manifest`, `install.deps`,
-`install.prefix_guard`, `install.data_paths`, `install.prereq`, `install.prebuilt`,
-`install.retired_targets`, `install.managed`, `install.lock`, `install.scenarios` and
-`install.queue_probe`. `bootstrap.release`, `dist.*` and `release.*` are not installer tests:
-they test `get-planar.sh`, the bundle assembler and the publisher, which the spec's limit does
-not name, so they keep their own `TIMEOUT` values.
-
-The limit is two CMake cache variables in the top `CMakeLists.txt`:
-
-| Variable | Default | Meaning |
-|----------|--------:|---------|
-| `PLANAR_INSTALLER_TEST_LIMIT` | 300 | Seconds an installer test may take. |
-| `PLANAR_INSTALLER_TEST_MARGIN` | 60 | Slack for a loaded host, on top of the limit. |
-
-Every `install.*` case sets `TIMEOUT` to their sum, 360 s, so a test that runs past
-five minutes plus the margin fails under ctest as `***Timeout`, naming the case. The margin
-exists because the host queue's machine runs other sessions' work and single runs move by 10 to 20
-percent; it is not room to grow into. A test that nears 300 s on a quiet host is split or sped
-up, not given a larger limit. The configure step fails if any `install.*` case carries another
-`TIMEOUT` in any directory, so a new installer test cannot register without the limit, and it
-rejects a limit that is not a positive integer or a margin that is not a non-negative one (a
-`TIMEOUT` of 0 means no timeout to ctest). To try the limit,
-`cmake --preset debug -DPLANAR_INSTALLER_TEST_LIMIT=5 -DPLANAR_INSTALLER_TEST_MARGIN=0` and run one
-case; put the defaults back afterwards (`-DPLANAR_INSTALLER_TEST_LIMIT=300
--DPLANAR_INSTALLER_TEST_MARGIN=60`).
-
-Measured times per case are in [Installer test speed](#installer-test-speed). The longest
-installer case on 2026-10-09 (macOS arm64, a loaded host, `ctest -L` through the host queue) was
-`install.prefix_guard` at 211 s, then `install.prebuilt` and `install.managed` at 163 and 162 s,
-`install.data_paths` at 143 s, `install.uninstall_manifest` at 125 s, and the rest below 120 s;
-all 28 ran inside the limit. `bootstrap.release`, outside the limit, took 143 s.
-
-### The two-shell comparison
-
-The `install.bash32_*` tests install and uninstall a fake bundle under bash 3.2 and under
-a newer bash and compares the two end states tree for tree: each file's mode and
-checksum, each directory's mode and each symlink's target (BSD `stat -f %Lp` and
-GNU `stat -c %a` are both handled; the HOME path is normalised, the lock records
-are left out). It also asks the mutation lock library (`_pl_owner_state`) after
-every uninstall and fails unless the lock is free or released. Its self-tests
-plant a mode change, a symlink retarget, a live lock holder and a killed one,
-and a planted mode or symlink-target change in the newer shell's run must fail the
-comparison.
-
-- **The Linux gate is the host that must run it.** `docker/linux-gate.Dockerfile`
-  builds bash 3.2.57 (SHA-256 pinned; fetched from ftp.gnu.org, falling back to two GNU mirrors) at `/opt/bash-3.2/bin/bash` and sets
-  `PLANAR_BASH32_OLD` to it and `PLANAR_BASH32_REQUIRE_COMPARE=1`. With the
-  variable set, the test fails if the old shell is not bash 3.x or no newer bash
-  exists, so the comparison cannot pass by comparing nothing.
-- **Elsewhere it runs when it can.** A developer macOS host has bash 3.2 as
-  `/bin/bash` and compares against a newer bash found at
-  `/opt/homebrew/bin/bash`, `/usr/local/bin/bash`, on `PATH` or named by
-  `PLANAR_BASH32_NEW`. With none, it prints `TWO-SHELL COMPARISON NOT RUN` and the
-  reason, and still checks the end state against explicit expectations and a
-  second run of the same shell. It is a note and not a ctest skip: the expected
-  skip tally is zero.
-
-## Bundle assembler identity checks
-
-The `dist.identity` ctest (label `dist_identity`) runs nine focused controlled
-fixture tests for stable tag/HEAD/dirty identity, git-free snapshot inputs and Docker wrapper propagation,
-metadata init/health/schema refusals, zero or failed portable checks, and schema
-field type preservation and external scratch cwd/cleanup. The fixtures substitute external
-build commands and binaries to reach refusal paths; they do not establish real
-binary portability. Comprehensive layout/checksum coverage belongs to the
-separate bundle layout test.
-
-Fake-product assembly fixtures select Linux x86_64 through a scratch `uname`
-command, independently of the host running ctest (including Linux arm64).
-Layout expectations use that declared fixture target. This controls only tests
-of assembly with Python-script executables; it establishes no native binary
-portability or additional shipping platform. A separate refusal case gives the
-actual assembler Linux aarch64 and requires rejection before configure with no
-archive emitted. Production bundles still support only macOS arm64 and Linux
-x86_64, and the Linux gate keeps its existing platform.
-
-The `dist.layout` ctest (label `dist_layout`, entry point
-`scripts/dist-test.sh`) runs five layout scenarios against the actual
-`scripts/dist.sh` assembly path in disposable source copies. Configure, build,
-portable inspection and install commands are controlled fixtures that stage
-exactly five tiny fake executables. The real assembler copies the current
-authored assets, renders Codex agents, collects metadata and emits the archive.
-The test unpacks it and checks exact entries, executable and authored bytes,
-one rendered file per authored agent, flat metadata with the current migration
-maximum, sorted entries with fixed owners, and tagged repeat cuts. It verifies
-the emitted checksum record with both `sha256sum -c` and `shasum -a 256 -c`
-when available, and requires at least one checker.
-
-The root `uninstall.sh` is always shipped, a byte copy of `scripts/uninstall.sh`;
-assembly stops when that file is missing. The root `get-planar.sh` is likewise
-always shipped, a byte copy of `scripts/get-planar.sh`, and the same bytes are
-emitted as the standalone `dist/get-planar.sh` with their own `SHA256SUMS`
-record (checked by the same two checkers); assembly stops when the source is
-missing. Deliberate mutations prove
-that wrong entry counts, installer, uninstaller and bootstrap bytes and metadata fail; appending a byte
-to the archive must make the shell entry point's checksum assertion fail and
-name the asset. To check a retained fixture manually, use
-`scripts/dist-test.sh --check-checksums <directory> <asset-basename>` through
-the host queue. All fixture tags, output and scratch trees are isolated from
-the checkout's tags and retained `dist/` artifacts. Fake executables establish
-layout and checksum behavior; the real native/Linux portability and smoke
-evidence remains a separate gate.
-
-Task validation also runs real `make dist` and `make linux-dist` through the host
-queue. Assembly requires exactly two portable tests, then inspects the staged
-products. Retain the archive and its checksum-bound `.gates.json`, plus
-`build/dist-evidence/` init, health and portability logs. Tagged tests use a
-disposable checkout; never create validation release tags in the real repository.
-The milestone barrier runs the full suite on the merged candidate separately.
-
-## The release bootstrap test
-
-The `bootstrap.release` ctest (label `bootstrap`, entry point
-`scripts/get-planar-test.sh`) runs `scripts/get-planar.sh` end to end against a
-loopback release server, in a scratch `HOME` with its own `TMPDIR`; nothing in
-the real `~/.planar` is read or written. About forty cases run in two to three
-minutes under a 900 second timeout.
-
-- **Server.** `python3 -m http.server 0 --bind 127.0.0.1` serves a release
-  directory laid out as the GitHub release base is (`latest/download/VERSION`,
-  `download/<tag>/{SHA256SUMS,planar-<platform>.tar.gz}`). It binds port 0 and
-  the test reads the port back from the server's first line, so there is no
-  port race, and an EXIT trap kills it. The server log is the evidence for
-  where each asset came from. Bundles are the shared fake bundles published by
-  `src/cmd/planar/handlers/update/release_fixture.sh`.
-- **Test-only dependencies.** `python3` (the server) and GNU `wget` (the
-  fallback case) are dependencies of this test, never of an operator path
-  (decision 1333). The bootstrap itself runs with a PATH that holds no python3.
-  A missing `python3` or `wget`, or a `wget` that is not GNU Wget, fails the
-  test at the start with a message naming it; the test never skips, because
-  the expected skip tally is zero.
-- **Host shims.** `uname`, `sw_vers` and `ldd` are shimmed, so one host reaches
-  the unsupported-platform, old-macOS and glibc refusals. Installs run on the
-  host's own platform. A `curl` wrapper fires a hook at a chosen request (publish
-  a newer release after `VERSION` is read, signal the bootstrap during the
-  tarball download, rewrite the recovery journal after the download); curl is
-  absent from `PATH` in the wget cases.
-- **Per case.** Each asserts the exit status, the refusal's fixed opening text,
-  that a refusal left `HOME` byte for byte as it was, and that no
-  `planar-get.*` temporary directory remained. Each case prints `PASS <name>`
-  or `FAIL <name>: <reason>`; the run ends with the counts and exits non-zero
-  on any failure.
-- **Fault injection.** The interrupted-install cases use the installer's
-  `PLANAR_INSTALL_TEST_FAULT=kill@after-mutating` test fault, armed with
-  `PLANAR_INSTALL_TEST_FAULT_ARMED=test-only`.
-
-Run it through the host queue:
+The independently encoded hash oracle and published vectors live in
+[tests/vectors](../tests/vectors/README.md). Check without modifying vectors:
 
 ```sh
-ctest --test-dir build/debug -L '^bootstrap$' --output-on-failure
+python3 tests/vectors/generate.py --check
 ```
+
+Focused native checks can use `ctest --test-dir build/rewrite-debug -R
+'replacement.(loader|capture)' --output-on-failure` after building `planar_tests`.
+Always verify a nonzero matched count and zero skips. Full gate evidence is from
+macOS Apple Silicon; the replacement Linux gate has not been validated. Legacy
+CI/Docker workflows were removed rather than presented as replacement evidence.
+
+`make install`, `make release`, `make dist` and `make run` refuse. No installer,
+release or migration belongs to this work. Storage tests use explicit temporary paths. Never run a
+historical legacy binary against operator data to validate this candidate.
+
+The sections below retain round-specific coverage and limits at each historical
+checkpoint. The current composition checkpoint is recorded at the end; later
+results supersede earlier pending release-gate statements without changing their
+raw evidence.
+
+N03-B exercises the trusted Glaze callbacks, ordinary typed refusals, declaration
+capability denial, strict malformed-object regressions, and checkpoint accounting
+at 8,192/8,193 bytes using actual library output. The independent Python wire
+oracle uses standard-library JSON strings with Glaze hexadecimal casing. Frozen
+R10 evidence retains its original bytes; current evaluation belongs under
+`tests/native/n03b-evidence/`.
+
+N04 restores CLI11 2.7.2 from its exact committed vendor tree and tests direct
+handler registration separately from dispatch. The real-process parser matrix
+covers every binding's duplicate, missing, empty and equals forms, required
+options, flags, unknown verbs/options, help placement, positional terminators,
+budget syntax/range, root mappings and capture/base pairing. Reordered valid
+invocations preserve the same packet; the six native goldens remain unchanged.
+See `tests/native/n04-evidence/` for the final debug/release gates, parser
+regression traces and source/vendor identity audits.
+
+R10-P01 adds three projection cases for complete readable check/argument/environment
+policy, stable worker fragments under unrelated output edits, exact ordered
+review targets, and dependency/facet/pipeline/question fields. Original R03
+prose/source expectations remain checked. The 247-process CLI acceptance compares
+the current six `projection_v2` goldens; policy arrays and coverage descriptions
+are checked separately rather than requiring obsolete aggregate JSON formatting.
+New evaluation evidence belongs under `tests/native/r10p01-evidence/`; historical
+R10/N03/N04 evidence remains frozen.
+
+R12-A with correction R12-A-C01 adds thirteen standalone SQLite cases under `replacement.ledger`, each using
+its own canonical temporary root. They cover exact owned text/BLOB bytes (NUL,
+non-UTF-8, empty and NULL), retained/moved connection and statement lifetimes,
+commit/abandon rollback, typed UNIQUE and deferred FOREIGN KEY failures,
+failed-commit rollback and writer release, bounded two-connection contention,
+read-only noncreation, no-follow refusal, and authorizer-enforced transaction
+ownership. Focused command after building `all planar_tests`:
+
+```sh
+ctest --test-dir build/rewrite-debug -R 'replacement.ledger' --output-on-failure
+```
+
+The tests use the new internal primitive only, never legacy or installed Planar
+or operator data. R12-A evidence is under `tests/native/r12a-evidence/`. These
+cases do not verify ledger schema/format, initialization/publication, backup,
+process termination, disk-full/VFS faults, record/tree semantics or acceptance;
+those belong to later bounded rounds. Full integrated debug/release gates follow
+R12-C. SQLite's no-follow mode also rejects symlinked ancestor paths; macOS test
+roots canonicalize `/tmp` before opening.
+
+R12-A-C01 adds native filename persistence for bare `:memory:`, explicit relative
+and absolute spellings, literal URI-looking names, existing-mode noncreation,
+empty/NUL refusal, missing-parent/no-follow checks and typed unavailable-cwd
+failure. Its red/green evidence is under `tests/native/r12ac01-evidence/`.
+The preserved initial probe demonstrates SQLite collapsing `missing/../db`;
+the correction checks original parent traversal before opening. Regressions
+refuse missing and symlink ancestors followed by `..`, while an existing ordinary
+directory followed by `..` succeeds. These checks do not certify hostile race safety.
+
+
+R12-B adds thirteen native format cases to the same focused ledger selection
+(26 ledger cases including R12-A/C01). Scratch-only coverage checks metadata,
+seven STRICT tables, explicit index and thirteen triggers, typed Glaze event
+payload and current state; read-only/writable reopen; byte-and-directory snapshots
+across foreign/empty/truncated/old/future/wrong-application/schema/index/trigger,
+malformed-btree, FK/projection/event/metadata refusals; explicit unsupported
+populated state; all thirteen immutable trigger mutations; no-replace targets,
+original-component traversal, no-follow paths, literal `:memory:` filenames and
+sidecar recovery refusal. An abandoned schema/data transaction verifies rollback
+without changing the initialized database. No product API exposes generic SQL;
+raw trusted bindings create test corruptions and inspect SQLite metadata only.
+
+Raw R12-B debug configure/build/focused CTest, formatting/Doxygen and no-work
+logs, candidate/evidence manifests and protection audit are under
+`tests/native/r12b-evidence/`. A focused pass is not the full R12 milestone:
+backup/restore, VFS/disk-full injection, process death, audited hot-journal
+recovery and integrated debug/release gates remain R12-C. Full record/history
+semantic validation remains R13/R14. macOS is the executed platform; Linux
+portability is implemented but not established by this evidence.
+
+R12-B-C01 adds two format cases (28 focused ledger cases): initialization refuses
+all journal/WAL/SHM suffixes with regular, symlink and directory entries, preserving
+the complete sibling snapshot; all three metadata TEXT fields reject embedded-NUL
+suffixes and multibyte values beyond their encoded byte limits without mutation.
+Schema and metadata guards use SQLite `octet_length` before owned native text copies.
+`tests/native/r12bc01-evidence/` retains the nine-case sidecar RED and a standalone
+1 MiB C++ allocation-budget probe: the original opener requests over 2 MiB for each
+NUL-suffixed metadata value; the correction refuses all six fixtures with no C++
+request larger than 768 bytes on the tested macOS debug build. This bounds the
+observed native copy path, not SQLite's own C allocations or total process memory.
+The publication-time sidecar recheck is verified by inspection; deterministic
+filesystem fault injection and integrated gates remain R12-C.
+
+
+R12-C1 adds seven focused native cases (35 ledger cases total). They exercise
+SQLite online backup with a pinned source snapshot and invalid-owner/transaction
+refusals; new-target backup/restore with exact metadata and supported state;
+existing regular/link/directory targets and sidecars; and invalid source refusal
+before target creation. A forked child syncs a real SQLite rollback journal and
+flushes dirty database pages, signals readiness through a pipe, then is killed
+with SIGKILL. Ordinary opening refuses the pair unchanged; explicit quiescent
+recovery restores initialized state. A second fixture retains that genuine journal
+with reconstructed prior main bytes to cover redundant rollback; it models rather
+than directly intercepts the before-first-main-write crash boundary.
+
+The recovery refusal matrix checks wrong schema despite matching application and
+version, future/foreign headers, unsupported populated state, malformed/truncated
+journal headers and dimensions, corrupt recovered event pages, unsafe journal
+entries and competing WAL/SHM. Refusals compare exact main/sidecar/directory bytes.
+The initial corruption fixture damaged a journal-covered main page; successful
+SQLite rollback correctly repaired it. Its raw failing test log is retained, and
+the corrected fixture damages an unrelated event page that remains corrupt after
+rollback. These tests do not authenticate arbitrary malicious journal changes.
+Raw commands/logs, snapshots and manifests are under `tests/native/r12c1-evidence/`.
+R12-C1-C01 adds one super-journal footer refusal case (36 ledger cases total).
+Its existing regression variants verify typed refusal and unchanged main,
+journal and external entries, including malformed footer fields. The fixed
+eight-byte footer guard runs before scratch or SQLite recovery. The pre-fix
+failure and corrected focused checks are under `tests/native/r12c1c01-evidence/`.
+C2 retains the broader injected syscall/VFS I/O, actual full storage, concurrency,
+transaction-boundary termination matrix and integrated debug/release gates.
+
+
+R12-C2 adds ten focused cases (46 ledger cases total) for storage reliability.
+`reliability.t.cpp` uses a scoped test-process SQLite VFS over the native default
+VFS; it restores the original default after each case. The matrix injects
+`SQLITE_IOERR_WRITE` and `SQLITE_IOERR_FSYNC` on main and rollback-journal paths,
+checks typed commit/backup failure, complete old state on the same connection
+and fresh reopen, and a subsequent complete committed state. A real
+`SQLITE_FULL` from `max_page_count` checks retained rows and rollback; it is
+configured SQLite capacity exhaustion, not physical host-disk exhaustion.
+
+Pipe barriers bracket commit before invocation, inside actual journal and main
+`xSync` callbacks, and after successful return. Separate processes receive
+SIGKILL at each boundary; exact wait statuses and complete old/new symbolic
+storage rows are recorded. These rows test storage atomicity, not R14 history
+semantics. A separate writer process produces a bounded busy refusal, then
+rolls back and exits normally before retry. A separate reader makes commit busy;
+rollback and subsequent retry preserve complete state. Barriers and child cleanup
+are bounded; the tests use only canonical temporary roots.
+
+`publication_fault.t.cpp` runs an isolated generated format module for
+initialization, backup and restore. The generator reads the current production
+source, changes only module/namespace identity, the SQLite namespace import,
+the test-shim import and three POSIX call targets (`fsync`, `linkat`, `unlinkat`),
+and proves byte-identical reverse substitution. It records source/generated
+hashes and replacement counts. Product binaries link the original module only;
+both original-module cases and the generated variant run in the focused suite.
+Faults before publication leave no target. Parent sync and staging unlink/rmdir
+failures after publication return explicit uncertainty and retain a complete
+verified target. A sidecar appearing before the late recheck is preserved and
+refused; a target arriving at `linkat` is preserved byte-for-byte.
+
+SQLite SQL `ROLLBACK` does not propagate every underlying rollback I/O error:
+the pinned `sqlite3RollbackAll` discards the Btree rollback return code. The
+observed main rollback write fault returns SQL success, recovers complete old
+state on the same owner and fresh reopen, and permits a normal committed retry.
+This case verifies those safety properties; it does not claim coverage of the
+wrapper's poison branch, which requires a failure reported by SQLite. Exploratory
+journal-read/poison expectations and their failed logs are explicitly labeled in
+`tests/native/r12c2-evidence/README.md`; they are not product defect evidence.
+Likewise `sqlite3_backup_finish` returns the stored step result (DONE maps to OK)
+in this pinned implementation, so destination faults exercise step failure plus
+mandatory finish cleanup, not an independent finish-after-DONE failure.
+
+R12-C2 raw focused fault traces, child statuses, complete debug/release gates,
+mechanical-generation manifest and source/protection audits are retained under
+`tests/native/r12c2-evidence/`. macOS is the executed platform; Linux execution,
+persistent/repeated device failure and physical disk exhaustion are not claimed.
+
+R13-A adds three canonical decoding cases and nine record codec cases. Focused
+selection after building `all planar_tests` is:
+
+```sh
+ctest --test-dir build/rewrite-debug -R 'replacement.(canonical|hash|record)' --output-on-failure
+python3 tests/vectors/records/generate.py --check
+```
+
+The selection contains 19 native cases (seven canonical, three hash and nine
+record). Ten independent standard-library-framed record fixtures check exact
+stored bytes and portable raw XXH3-128 digests against a separately compiled
+pinned upstream reference. Canonical fixtures cover binary strings, signed-32
+extremes, empty containers, UTF-8 key ordering, strict malformed/truncated input
+and depth/node/byte limits. Record tests cover binary/CRLF/executable files,
+child-ID storage versus portable hashes, local metadata/name/alias/ID validation,
+unknown payload codecs, exact request arguments, malformed lengths/counts, all
+proper truncations of the fixed vectors, exact 16 MiB file/value limits and the
+64 MiB whole-record boundary. Large claimed lengths are refused without creating
+the claimed buffers. Tests establish framing and local validation; graph integrity,
+collision-safe storage and accepted history remain later R13/R14 scopes.
+
+`tests/native/r13a-evidence/` retains raw focused checks, renderer CLI acceptance,
+formatting/Doxygen, no-work evidence and exact source snapshots/manifests. The
+initial two test failures are preserved as fixture-offset mistakes, corrected
+without changing the corresponding codec behavior. Full integrated debug/release
+gates remain the R13 milestone; the focused host evidence is macOS only.
+
+
+R13-B1 adds typed record storage coverage under the same ledger selection:
+all four kinds, binary/CRLF/mode payloads, exact reuse, ordered directory edges,
+owned snapshot reads, missing/invalid IDs, independent readers, lock-blocked
+commit rollback, invalid-operation and abandoned-prefix rollback, signed-ID
+exhaustion, malformed record and graph refusal without mutation, unvalidated
+revision refusal, and record-only backup/restore plus genuine killed-process
+hot-journal recovery. The exact schema and earlier foundation refusal tests stay
+active; the old malformed raw record now returns `corrupt` rather than an
+unsupported-history placeholder.
+
+`tests/native/r13b1-support/` mechanically generates a separate format module
+that replaces digest calls with a kind-specific constant while importing the
+original record types/encoder. It exercises file, directory, value and request
+collisions, exact local directory child-ID equality, prefix rollback and ambiguous
+buckets containing both exact and unequal members. Its manifest records every
+substitution and proves reversibility. A separate verification mutation removes
+only the interning exact-byte comparison; failing collision regressions establish
+test sensitivity. The mutation is never applied to product source. Both the
+protected generated variant and the ordinary product run green afterward.
+
+R13-B1 raw checks, mutation evidence, generation audits, protected-file hashes and
+exact candidate snapshots live in `tests/native/r13b1-evidence/`. Run focused
+`ctest --test-dir build/rewrite-debug -R 'replacement.(ledger|canonical|hash|record)'
+--output-on-failure`, both vector generators with `--check`, active formatting/
+Doxygen and supplementary helper lint, then a no-change build. Complete tree
+construction/reconstruction remains R13-B2; acceptance remains R14. This focused
+host evidence is macOS only; full integrated debug/release gates follow R13.
+
+R13-B1-C01 adds a permanent real SQLite VFS read-fault regression in
+`src/engine/ledger/snapshot.t.cpp`. It requires an actual `SQLITE_IOERR_READ`,
+the original typed `io` failure, and an independent successful writer commit
+while the failed reader stays alive. That reader refuses old and new records
+after moves; cached metadata survives, and an explicit fresh reader sees the
+new record. The paired fault case verifies writer prefix rollback. Ordinary
+invalid-ID/not-found failures also invalidate future reads through move assignment
+without losing cached metadata. The focused selection now contains 79 cases
+with zero skips. RED/GREEN logs, audits and corrected candidate snapshots are in
+`tests/native/r13b1c01-evidence/`; previous B1 and review evidence is preserved.
+
+R13-B2 adds complete-tree construction and owned reconstruction checks under
+`replacement.tree`, plus explicit idempotent writer abort under
+`replacement.ledger`. Focused verification includes the existing record,
+canonical, hash, storage and forced-collision cases:
+
+```sh
+ctest --test-dir build/rewrite-debug -R 'replacement.(ledger|canonical|hash|record|tree)' --output-on-failure
+```
+
+Tree cases cover binary/CRLF/empty/executable bytes, portable digests despite
+local ID displacement, sorted topology, immutable older trees, rename/delete/
+same-length edits, composition, explicit abort, abandonment and refusal after
+prior pending inserts. They exercise exact and excessive payload/file/path/depth/
+source-directory bounds, independent provenance directory bounds, and shared
+subtree expansion (including 258,049 directory occurrences at the provenance
+maximum). Typed storage propagation seeds a valid record one below signed-64 exhaustion,
+allows a new file at the maximum ID, then refuses its directory and verifies
+rollback of that file,
+without a product hash override. Malformed root kinds/digests/references,
+non-tree children, aliases and empty non-root directories refuse. Captured views
+contain no timestamps, host metadata or filesystem capabilities. Evidence lives
+under `tests/native/r13b2-evidence/`; release/Linux and full integrated R13 gates
+remain milestone work.
+
+R13-C1 adds six provenance cases to the focused
+`replacement.(ledger|canonical|hash|record|tree|provenance)` selection. Generated
+original names/bytes are compared against all eight authored stdlib files, and
+the exact pre-change ordered concatenation plus LF after each part is compared
+to `source()`. Tests cover binary registry bytes/modes, canonical historical
+verification without Lua, original/order/separator/boundary identities, reserved
+aliases, topology/mode/manifest refusals and whole-set synthetic-inclusive count
+and byte limits. Existing tree success helpers compare pure digests to interned
+roots, including displaced database-local IDs; all B2 boundary/rollback cases
+remain active. C1 raw logs, exact candidate/protection and generation manifests
+live under `tests/native/r13c1-evidence/`. This focused macOS debug gate is not
+the integrated R13 debug/release milestone or Linux validation.
+
+R13-C2 adds `replacement.interpretation` cases for the complete stored
+`interpretation_v1` envelope. Reviewed full JSON and byte-exact canonical
+fixtures under `tests/native/r13c2-fixtures/` pin both quota job groupings,
+referenced text, complete registry, semantic dependencies/assignments/effective
+checks/graphs and the exact versions map. Tests independently compare all
+existing normalization and validation fields, reverse routing/capture order,
+preserve absent optional notes, and check internal stdlib provenance. The
+provenance inventory now contains nine original Lua files plus two synthetics;
+this deliberate addition changes code identity without changing render output.
+
+Historical checks cover malformed/extra/missing/wrong-type envelopes and version
+fields, unknown recorded versions, digest spelling and an older differing valid
+digest, container kinds, paired sorted jobs, canonical byte stability, signed-32
+limits and the inclusive 16 MiB interpretation boundary. The real record-storage
+roundtrip loads saved canonical fixtures, stores/reopens them and decodes without
+any Lua/capture call. Typed live schema/ownership/unsupported diagnostics retain
+logical locations; native runtime/resource refusals remain separate.
+
+Focused commands select
+`replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)`, plus
+CLI acceptance, both vector generators, source formatting/Doxygen and exact
+generated-variant audits. Complete frozen-candidate debug/release commands are
+`make test-all` followed serially by `make test-all PRESET=release`, requiring
+nonzero counts, zero skips and zero-step no-change builds. C2 raw logs, reviewed
+fixtures, exact candidate/protection/generation identities and milestone results
+live in `tests/native/r13c2-evidence/`. These are host macOS checks; Linux execution
+remains unverified. No acceptance/history/export CLI behavior is claimed.
+
+
+R14-A1 adds four pure `replacement.tree core` cases in a separate tree-core test
+executable. In-memory callbacks verify exact binary/mode reconstruction and
+portable digest parity, input refusal before interning, original typed callback
+errors, exception propagation, root identity and empty-directory refusal. The
+core target has no format/SQLite/runtime/embedded-Lua link dependency. Existing
+owner-backed tree, storage-prefix rollback, reader-invalidation and allocation
+abort probes remain applicable to the same shared algorithms. The focused
+selection contains all 109 prior cases plus these four cases. Round-local raw
+checks, exact generator audits, module link graph and candidate hashes live in
+`tests/native/r14a1-evidence/`. This is macOS debug validation; the integrated
+R14 milestone retains the full debug/release gate and Linux remains unverified.
+No accepted-history support is enabled by this refactor.
+
+
+R14-A2 extracts pure `history.provenance_codec` and `history.interpretation_codec`
+modules beneath the existing wrappers. Their direct test executables import no
+format, SQLite, runtime, embedded-source or Lua modules. Five provenance codec
+cases repeat the exact registry/mode, assembly/order, path, historical-manifest
+and whole-set bounds under that isolated link. Four interpretation codec cases
+load saved canonical fixtures directly, exercise fixed envelope/version/container/
+ordering/correspondence refusals and historical policy retention, preserve signed-32 and
+16 MiB limits, and require pure assembly to reproduce both saved canonical files
+byte for byte. A differing historical digest remains data. Existing live-wrapper,
+storage and CLI tests retain their original names and behavior.
+
+The focused selection remains
+`replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)`, which
+includes both codec prefixes: all 113 previous cases plus nine isolated codec
+cases. Round-local algorithm and envelope-composition audits, protected original
+Lua/fixture hashes, exact reversible C2/B1 generation, direct codec link commands,
+247-process CLI acceptance, both vector checks, lint and zero-work evidence live
+in `tests/native/r14a2-evidence/`. This is macOS debug verification; release/Linux
+and the integrated R14 milestone remain outstanding. No accepted-history support
+or schema/refusal behavior changes in this extraction.
+
+
+R14-B1 adds pure `replacement.ledger` history codec cases. Independent exact
+JSON vectors cover initialization (matching the existing format payload), initial
+acceptance, changes, no-op, restoration as a newer revision, maximum signed-64
+IDs and the existing revision parent returned by no-op. Typed round trips and
+refusals cover fixed key sets/types, enum/state relationships, decimal spelling,
+ledger/request grammar, duplicate keys, noncanonical bytes, versions and the
+one-MiB ceiling. Fixed v1 fields cannot form a valid payload near that ceiling;
+exact-limit malformed and over-limit resource inputs check the boundary without
+inventing padding fields. The isolated test link excludes SQLite, format, runtime
+and Lua. B1 does not enable accepted history or alter schema/refusal behavior.
+Raw checks and exact candidate/protection/generation hashes are under
+`tests/native/r14b1-evidence/`. This is macOS debug evidence; the integrated R14
+debug/release gate and Linux execution remain outstanding.
+
+R14-B2 adds ten native accepted-history verification cases to the focused ledger
+selection (143 focused cases, including all 133 prior cases with one negative
+case renamed from blanket-history refusal to orphan-revision corruption). The
+scratch fixture publishes initial/change/no-op/revert history at revisions 1,3,8,
+with backwards clocks, original quota source/registry, exact embedded stdlib and
+stored interpretation. It checks successful read/RW reopen, record precommit,
+backup/restore and real hot rollback recovery. Mutations cover parents, actors,
+timestamps, event/request/result/body/projection links, duplicate equivalent
+record IDs, invalid roots, registry naming, stdlib assembly/digest, separate
+versions, workspace, malformed interpretation and fixed expanded tree limits.
+Well-shaped unsupported interpretation remains readable as raw records only
+after metadata checks; unknown event/result payload and event-row versions refuse
+as unsupported state. Oversized metadata and corrupt-history open/RW/write/backup
+refusals preserve exact file bytes and directory entries.
+
+Run the same focused selection and both vector checks documented above, plus
+`ctest --test-dir build/rewrite-debug -R '^replacement.cli$' -V`, active formatting
+and Doxygen, reversible generated-variant audits, protected-file comparison and
+an all-plus-tests no-change build. Exact raw logs, prior-format feature-refusal
+evidence, fixture provenance and frozen candidate identity live under
+`tests/native/r14b2-evidence/`. Verification is macOS debug; release/Linux remains
+an integrated-gate obligation. No public acceptance writer or history CLI is
+introduced here.
+
+R14-C1 adds eight native typed-read cases while preserving all 143 prior focused
+cases. They reuse the B2 valid accepted-history fixture and check exact saved
+initial/change/no-op/revert event, request and result bytes; revision metadata;
+state-at-event composition; optional misses; malformed keys/IDs/page arguments;
+sticky failure across all old and new methods; moves and owned result lifetimes;
+115-event ascending exclusive pagination; initialized ledgers; and raw history
+with unsupported interpretation. A scoped test VFS injects a real SQLite
+`IOERR_READ` while copying a large private request body, then verifies that all
+reads remain unavailable and a fresh owner can reopen the unchanged history.
+A test-only writer proves a DELETE snapshot blocks commit, retains the old event
+page, and releases the commit before a fresh reader sees the later event.
+
+Use the same focused selection, CLI247, vector, formatting/Doxygen, reversible
+variant and no-change gates above. Exact candidate and raw evidence live in
+`tests/native/r14c1-evidence/`. This is macOS debug verification; release/Linux
+execution and the integrated acceptance writer/CLI remain outstanding.
+
+R14-C2 adds five native capture acceptance cases alongside all sixteen existing
+capture cases. Postseal mutations cover retained bytes, normalized executable
+mode, file identity, added/removed files and empty directories, directory identity,
+links, special files and replaced roots. Separate registry tests cover file
+bytes/mode/identity/link and parent replacement while accepting unrelated parent
+membership changes. Exclusion and normalized-mode tests retain render semantics.
+Repeated checks preserve the precise original snapshot/topology on success and
+failure. Move/session lifetime tests verify safe refusals and release the sealing
+callback; descriptor counts by root identity verify transfer, move assignment,
+repeated success/failure checks, failed sealing and destruction without leaks.
+
+Run `ctest --test-dir build/rewrite-debug -R 'replacement.capture'
+--output-on-failure` after building `all planar_tests`. Round-local raw evidence
+and exact candidate/protection identities live in `tests/native/r14c2-evidence/`.
+The prior 151 ledger/history focused cases, CLI247, vectors, active/helper lint,
+reversible generation and a zero-work rebuild remain required. This focused gate
+covers the macOS host; Linux and the full R14 milestone gates remain outstanding.
+
+R14-C3-A adds four `replacement.capture native` cases importing only
+`planar.engine.capture.native`. They construct real workspace and standalone
+registry receipts, verify full sealing and repeated comparisons, preserve sealed
+values after changes, refuse parent replacement, and exercise ownership after
+session destruction and moves. The native test executable links only native
+capture, values and Catch2; all 21 existing facade capture cases remain unchanged.
+The capture selection now contains 25 cases. Exact extraction/load-body audits,
+pure link commands, protected source hashes and raw checks live under
+`tests/native/r14c3a-evidence/`. The unchanged 151 history-focused cases, CLI247,
+vectors, lint, generated-variant audits and zero-work rebuild remain the focused
+gate. Evidence covers macOS debug; Linux and integrated R14 release gates remain
+outstanding.
+
+R14-C3-B1 adds native-only `replacement.acceptance` cases for immutable prepared
+inputs and explicit request intent. Tests construct actual native captures and a
+small test stdlib, load historical canonical fixtures, and prepare only from the
+sealed snapshot. Coverage includes selective workspace binding, exact binary
+bytes/modes despite later disk changes, absent/malformed registry roots, invalid/
+duplicate/missing selections, exact/excess source-directory bounds, forged stdlib
+assembly/manifest/digest/modes/aliases, canonical and version correspondence,
+workspace structure, owned lifetimes/moves, final native change detection, and
+request grammar, normalization and signed-64 heads. Selection and encoded-input
+bounds refuse before payload ownership. Native capture already prevents malformed
+captured modes and case aliases; shared tree validation remains active here.
+
+Run `ctest --test-dir build/rewrite-debug -R 'replacement.acceptance'
+--output-on-failure` after the serialized `all planar_tests` build. The original
+151 history-focused cases, 25 capture cases, CLI247, both vector checks, active
+formatting/Doxygen, helper lint, exact generated variants and no-work rebuild
+remain required. Round-local frozen candidate, native-only actual link and raw
+checks are in `tests/native/r14c3b1-evidence/`. This unit does not enable acceptance
+writes or CLI behavior. Evidence covers macOS debug; Linux and the integrated
+R14 release gate remain outstanding.
+
+
+R14-C3-B2 adds `replacement.atomic` cases for the complete native acceptance
+transaction. They cover initial/no-op/changed/restored content, exact parent and
+timestamp relationships, replay after later heads and missing/moved captures,
+body conflicts, stale CAS before candidate inspection, workspace mismatch, final
+receipt refusal, and finite same/different-request thread races. Real SQLite trace
+interrupts exercise each mutating table and pending-state verification; a real
+commit hook refuses commit. Every failure compares the original database bytes,
+fully reopens it, and retries successfully. These are transaction rollback tests,
+not process-termination or power-loss claims.
+
+Maximum-record and sparse later maximum-revision fixtures pass the full opener;
+no-op at the maximum revision remains legal while changed allocation refuses.
+An actual gap-free maximum event history is impractical, so a precisely reversible
+test-only format variant exports the exact shared private allocator boundary.
+The same variant forces only one digest kind at a time to reach file, directory,
+interpretation and request collisions while retaining real hashes for other kinds
+and all provenance/history checks. Removing the final native receipt condition in
+an isolated generated mutation must make its receipt regression fail.
+
+After serialized `all planar_tests`, run the complete debug gate as above. Raw
+commands/results, generated manifests, protected source hashes and frozen candidate
+identity live in `tests/native/r14c3b2-evidence/`. Include the prior 151 history
+cases, 25 capture cases, 12 prepared cases, CLI247, both vector checks, active and
+helper lint, product dependency audit and a zero-work rebuild. This round covers
+the macOS debug host; Linux, power-loss and integrated R14 release verification
+remain outstanding. No installed binary or operator data is involved.
+
+R14-D1 adds native host-path tests for unchanged physical traversal, root/file
+link refusals, malformed trailing file spellings, missing/special/loop inputs and
+redacted exact diagnostics. Pure intent-path cases use nonexistent absolute cwd
+values and cover lexical equivalence, Unicode, invalid UTF-8/NUL, cwd shape and
+64 MiB bounds without filesystem dependence. The host-path target links only
+value plus the test harness; Lua and ledger are absent. Existing CLI host-path
+cases additionally pin complete failure envelopes with no new processes: the
+acceptance suite remains 247 processes and 60 host-path checks. Evidence and the
+exact extraction/protection audit are under `tests/native/r14d1-evidence/`.
+
+R14-E1 registers `replacement.init_cli`, a separate actual-binary acceptance suite
+with explicit scratch targets, HOME and PLANAR_DB sentinels. It checks exact
+committed init envelopes against read-only SQLite metadata, empty ledger contents,
+relative and absolute targets, original parent traversal, existing file/directory/
+link refusal, invalid arguments, strict CLI11 grammar, redacted complete diagnostics
+and unchanged refused targets. Existing `replacement.cli` retains all 247 processes.
+Bootstrap tests additionally pin all typed storage error mappings, ledger I/O
+operation details and publication/recovery guidance. Native publication-fault
+coverage remains in the existing ledger suite; the CLI tests do not inject fake
+publication results. Raw commands, protection/generation checks and the frozen
+candidate are under `tests/native/r14e1-evidence/`. This round verifies macOS debug;
+Linux and the integrated R14 release gate remain separate obligations.
+
+
+R14-E2 adds native `history_read` projection cases and an actual-binary
+`replacement.history_cli` suite. A test-only native helper creates scratch ledgers
+through initialize_new and complete_acceptance, covering initial/no-op/change/revert
+history. It adds a large historical extension to establish real CLI output-limit
+refusal with empty stdout. Unsupported interpretation fixtures narrowly replace
+only the two value records with real encodings/digests, restore immutable triggers
+and pass the complete production opener; ordinary fixtures use no SQL publication.
+The suite checks all selectors, nested shapes, exact string IDs, cursor bounds,
+strict syntax, misses, private intent redaction and unchanged database/directory
+contents after every read/refusal. Unit metadata covers IDs above int32 through
+signed-64 maximum. Existing render and init suites remain unchanged. Raw debug
+logs, protected-file/generator audits and candidate hashes live under
+`tests/native/r14e2-evidence/`; release/Linux remain integrated R14 obligations.
+
+R14-F1 adds native exact source export checks, with no CLI export registration.
+After building `all planar_tests`, select its ten cases with:
+
+```sh
+ctest --test-dir build/rewrite-debug -R 'replacement.source export' --output-on-failure
+```
+
+The scratch accepted-ledger matrix covers binary/NUL/non-UTF-8, CRLF and empty
+bytes, executable/nonexecutable and directory modes under umask 0077, source-only
+membership, byte-unchanged ledger, old/change/revert revisions, relative targets,
+existing files/directories/links, unsafe parent spellings and typed misses. An
+existing unchanged fixture supplies unsupported historical interpretation. A
+narrow scratch-only record adaptation restores exact schema triggers and verifies
+the opener before exercising a valid empty source root. Breadth reaches 4096
+files/8191 directories, and depth reaches 64; exports execute with a 128-descriptor
+process ceiling. Existing tree tests retain independent malformed/bound coverage.
+
+The new `tests/native/r14f1-support/` generator proves exact reversible source
+transformation and compiles a separate test-only module/namespace. Only native
+syscall boundaries and the private pre-rename boundary are redirected; production
+exports no fault callback. Tests cover mkdir/open/write/zero/short/EINTR/chmod/
+file-sync/directory-sync/close/rename/unavailable-capability/allocation failures,
+cleanup errors and replacement of file/directory/stage identities, plus unowned
+entries. A target arrival immediately before the real platform rename must
+survive unchanged. Failures after publication preserve the complete target and
+report uncertainty. Subprocess exits immediately before rename and at parent sync
+prove absent-or-complete target behavior and that later export leaves crash
+stages alone. Evidence records actual host results under
+`tests/native/r14f1-evidence/`; Linux runtime and hardware power loss are not tested.
+
+R14-F2 adds actual export CLI acceptance using the unchanged native history
+fixture. It checks canonical exact envelopes, recorded source identities against
+a read-only SQLite oracle, original/changed/reverted revisions, unknown
+interpretation, exact source-only bytes and normalized modes under umask 0077,
+unchanged ledger bytes and sibling membership, path traversal refusals, all
+existing target kinds, strict CLI11 invocation failures and root help.
+
+The stdout checks close the pipe read end before child launch. A successful
+export must publish a complete tree and then return status 4 with inspect-target
+guidance and operation `stdout`; an unknown revision retains its original refusal
+with no publication context. Init and history keep their existing stdout error,
+and the existing render acceptance pins render output failures.
+
+`tests/native/r14f2-support/` generates an exact reversible command-only variant.
+It uses real native publication, then restricts result encoding to one byte or
+throws `std::bad_alloc` immediately after native success. Both return the prebuilt
+uncertainty buffer with empty stdout, operation `export`, preserved complete target
+and unchanged ledger. This is controlled boundary evidence, not real allocator
+exhaustion, hardware power loss or Linux runtime coverage. Direct adapter tests
+cover redacted native categories and malformed cleanup-token refusal; they do not
+claim actual CLI fault injection for unreachable native I/O categories. Raw logs,
+protected-file audits, generated manifests and candidate hashes are under
+`tests/native/r14f2-evidence/`.
+
+## Current command composition checkpoint — R14-G
+
+The approved composition builds one binary with `render`, `init`, `history` and
+`export`. Native acceptance preparation and atomic transactions are implemented;
+load membership is declaration-closure-only; load service/CLI and the full R14
+acceptance matrix remain pending. This checkpoint does not close R14 or claim accepted-revision rendering,
+execution workflows, installation or distribution support.
+
+On macOS 26.5.2 ARM64, `make test-all PRESET=release` configured RelWithDebInfo,
+built `all planar_tests`, passed all 331 registered tests with zero skips, checked
+formatting/Doxygen over 86 active C++ sources, and finished with a zero-work
+rebuild. The four actual CLI suites cover 247 render, 60 init, 115 history and 55
+export/output processes. The approved F2 debug331 full gate and subsequent
+focused strengthened-export evidence are reused with unchanged product/build/test
+inputs; R14-G retains the same 331-name debug inventory and a new zero-work build.
+
+Raw release logs, retained focused CLI JUnit/LastTest output, toolchain details,
+protected-input audit and exact documentation/composition manifests are under
+`tests/native/r14g-evidence/`. The full-gate helper removes its temporary JUnit;
+a later inventory query replaced its LastTest log before archival. A focused
+four-suite rerun retains both outputs and actual process counts. Historical raw
+evidence remains unchanged. Linux compilation/execution and hardware power loss
+remain unverified; no load integration or end-to-end R14 completion is inferred.
+
+R14-D2 adds selected-file ancestor identity regressions to the existing native
+capture target. A retained file inode hardlinked into a replacement parent must
+refuse both sealing paths and repeated acceptance verification. Nested-chain
+replacement during discovery, removal and symlink replacement, shared/repeated
+reads, immutable topology, normalized modes, aliases and moved capabilities are
+covered. Unrelated sibling edits, rename/removal, additions, large files,
+unreadable files, symlinks and FIFOs remain outside selected closure receipts.
+Whole-tree membership and render packet/identity goldens remain independently
+covered by the existing capture and actual CLI suites. Frozen pre-fix failing
+source/logs and final debug evidence live in `tests/native/r14d2-evidence/`.
+This prerequisite introduces no load service or CLI; release composition and
+Linux execution remain later gates.
+
+
+## V5 traceability and current verification checkpoint
+
+The [acceptance map](vernacular/acceptance-matrix.md) maps every v5 A01–A34 row
+and locally assigned authoring A35/A36 to current evidence and remaining work.
+Native storage/capture tests do not establish dispatch, run reconciliation,
+checks, approval or the complete recorded execution trajectory. Full cut-2
+acceptance requires all applicable Render/Execution obligations, conditional A24
+assertion/refusal policy and minimal A34 execution provenance; A21 composition and
+controlled A34 experiments remain deferred. [Alignment](vernacular/v5-alignment.md)
+records the interpretation and pending V5-02/RA01 gates.
+
+[Approved D2](vernacular/rounds/R14-D2-review.md) retains 337 debug passes with zero
+skips on macOS ARM64, LLVM 23.1.4 and CMake 4.4.4. Its reviewer independently reran
+31 capture cases and 28 dependent cases serially and reused the hash-verified
+full debug gate. [G](vernacular/rounds/R14-G.md) remains the earlier 331 release
+checkpoint on the prior compiler; it does not prove D2 release coverage. Linux
+runtime, hardware power loss and full load integration remain unverified.
+V5-01 changes prose only and runs document/protection checks, with no product
+build or test rerun. Future implementation must run its scoped checks and integrated
+gates on the actual candidate; historical counts are evidence, not a current target.
+
+V5-02-B1 adds internal retained-command tests with finite native fake providers;
+these do not establish CLI integration. Exact-source runtime/interface variants
+under `tests/native/v5-02-b1-support/` alter only captured test bundles and module
+identities. They cover complete catalog admission, callable ownership and retained
+binding, read-only globals/libraries, typed selectors and 64-bit decimal strings,
+ordered opaque path handles, native failure poisoning, terminal caught budgets,
+real render equivalence and export postpublication failure state. Production
+creation accepts only the actual build-embedded bundle, never caller Lua source.
+The new command module changes embedded provenance; interpretation tests derive
+the expected tree digest independently from authored originals and exact assembly,
+then compare every other reviewed field against immutable historical fixtures.
+B1 evidence is under `tests/native/v5-02-b1-evidence/`; B2 owns actual retained-VM
+CLI composition and its full debug/release gate.
+
+V5-02-B1-C01 adds bounded captured-state regressions: direct/new/nested/transitive
+closure and table-key mutations refuse, shared/cyclic table and callable-key
+identity and reads survive sealing, captured next/rawget/pairs/ipairs aliases and
+length remain usable, and invocation-local scratch stays mutable. A captured
+module table can cross the native result converter without losing its contents.
+Small 256/257-depth graphs test acceptance and typed resource refusal without a
+stress run. New red/final evidence is retained separately under
+`tests/native/v5-02-b1-c01-evidence/`; prior B1 evidence and goldens remain intact.
+
+V5-02-B2 composes the retained command VM with real CLI11 parsing and native
+capture/init/history/export adapters. Six exact-source real-process CLI variants
+exercise changed Lua policy, malformed registration, caught registration resource
+exhaustion, compiled option-signature drift, native error poisoning and post-export
+Lua/projection/caught-budget failures. A dedicated native regression injects an
+allocation failure between native publication and service-facts construction;
+its red/green evidence preserves the missing-publication-bit failure. Existing
+response encoding/allocation and actual CLI goldens remain checked. A render
+mapping mismatch must retain its typed reference refusal before reading missing
+spec/registry/source inputs. The direct B2 gates retain raw JUnit and LastTest
+before later inventory, compare all 358 prior test names, audit every generated
+variant family and require formatting/Doxygen, vectors and zero-work rebuilds.
+Evidence is under `tests/native/v5-02-b2-evidence/`. B2 is independently approved; the C workspace-name implementation remains a
+candidate pending independent review. Load/full R14 and Linux execution remain
+pending.
+
+The B2 candidate's full debug and fresh RelWithDebInfo gates each pass 361 tests,
+zero skips, preserving all 358 prior test names. Both gates check 89 active C++
+sources and finish with zero-work rebuilds on macOS26.5.2 ARM64, Clang23.1.4 and
+CMake4.4.4. The added real CLI suite executes 99 CLI processes plus one fixture
+helper; its deterministic passing path evaluates 410 explicit Python assertions.
+Raw full JUnit/LastTest, exact variant audits, vector checks and candidate hashes
+are retained in B2 evidence. These B2 results are independently approved, with no Linux result inferred.
+
+
+V5-02-C adds pure/native workspace selector and invocation preparation tests.
+The selector classifies names independently of existence, ignores the environment
+for explicit files, and checks UTF-8/NUL, 64-byte grammar and checked 64 MiB path
+joins. The native path pair retains physical render spelling separately from
+lexical future request intent; link/parent traversal selects distinct real files
+in the regression. Deterministic injected readers count one cwd/environment read
+when required and zero for absolute/explicit inputs, and pin redacted failures.
+A borrowed oversized environment view refuses before snapshot ownership or cwd;
+invalid text wins over the same excessive size. Cwd acquisition uses the standard
+filesystem library's owning result, then validation and checked joins precede
+derived path concatenation. Pure `request_intent` tests compare name/explicit equality and changed environment
+inequality without any public load or replay service.
+
+`replacement.workspace_selector_cli` uses the actual candidate and two unchanged
+exact-source registration variants. Scratch workspace copies establish exact
+name/explicit render equality, environment refusal/ignoring, selector grammar,
+missing input and leaf/root/captured alias refusals, source-mapping error
+precedence and physical intermediate-link/parent traversal. Processes launched
+from a deleted cwd prove absolute explicit and name-expanded inputs need no cwd,
+while relative input reports redacted io. The existing 60-check host-path suite
+changes only its workspace-directory input from bare `workspace` to
+`./workspace`, preserving the regular-file error and process count. The separate
+name-with-unset-env case pins its new selector meaning.
+
+C is an implementation candidate pending independent review. Names are supported
+by render only; pure intent tests do not deliver load/replay. Raw regressions,
+focused results, full checkpoint JUnit/LastTest, variant/protection audits and
+frozen baseline/candidate identities are retained under
+`tests/native/v5-02-c-evidence/`. No historical evidence, fixture or golden is
+regenerated. Linux runtime, hardware power loss and remaining R14 load integration
+are outside this checkpoint.
+
+The final C checkpoint gates each pass 370 registered CTest entries (364 unit,
+six actual CLI acceptance suites), zero failures/skips, preserving all 361 prior
+names. Debug and RelWithDebInfo both check 89 active C++ sources with the pinned
+formatter/Doxygen and finish with zero-work rebuilds. The new selector suite runs
+41 actual CLI processes per gate; these are separate from CTest entry counts.
+Both exact variant audits match across configurations; the unchanged vectors
+pass 12 hand byte, 20 upstream hash and 41 canonical/domain checks. An earlier
+369-entry debug checkpoint is retained as superseded evidence before the final
+environment ownership-bound regression. Evidence applies to macOS26.5.2 ARM64,
+Clang23.1.4, CMake4.4.4 and Ninja1.13.2, pending independent candidate review.
+
+R14-D4 adds typed native diagnostic regressions without exposing load. The
+locked-CAS case copies expected/actual heads after rollback, advances the ledger,
+and checks the original values remain intact. Existing forced-collision cases
+now inspect owned details for file, directory, value and request, both through
+record writers and through complete acceptance/tree callbacks; existing prefix
+rollback and unchanged-database assertions remain. Request collisions retain no
+digest. Shared response tests pin canonical complete error envelopes, empty
+stdout, LF and exit status, all existing generic ledger mappings, and malformed
+category/head/kind/digest rejection with the fixed redacted internal response.
+
+The D4 candidate's focused debug selection covers 153 CTest entries: 147 native
+and command-unit cases plus all six current CLI suites. It preserves the 370
+prior names and adds three cases. The selection is:
+
+```sh
+ctest --test-dir build/rewrite-debug -R 'replacement\.(atomic |ledger |command |runtime |.*cli$)' --output-on-failure
+```
+
+Evidence under `tests/native/r14-d4-evidence/` retains the old API's two failing
+missing-detail assertions, final JUnit/LastTest before inventory, direct incremental
+builds, pinned formatter/Doxygen, unchanged vectors, exact seven generated variant
+families plus fixed runtime harness, protection audit and candidate identities.
+D4 remains pending independent review. This bounded macOS ARM64 debug check reuses
+the approved 370-case debug/release baseline; it is not a full milestone rerun,
+a release/Linux result, load integration or hardware power-loss verification.
+
+R14-D5's internal load-capture candidate adds seven native workflow cases. The
+harness uses actual embedded `route_workspace` and `interpret_bundle` with every
+job, including invalid unselected jobs, wrong constructors/headers and duplicate
+job/work/role IDs. It checks logical Lua diagnostics, exact six-file declaration
+and reference closure, sorted source membership, registry bytes/mode and all
+embedded original/synthetic provenance. Native checks cover route shape/order,
+B/M membership/header/reference-byte disagreement, sealing and later receipt
+changes, selected modes/ancestors/root/links/registry, unrelated sibling tolerance,
+missing/oversized inputs, owner moves/consumption/terminal failure and corrupt or
+excessive explicit provenance. Fixtures contain no source/base checkout.
+
+The focused debug selection includes capture, acceptance preparation, load,
+interpretation, atomic acceptance, command/runtime cases and all six current CLI
+suites. Raw JUnit/LastTest, executed commands/exits, pinned format/Doxygen, unchanged
+vectors, exact generated variants, no-work build and frozen baseline/candidate
+identities are under `tests/native/r14-d5-evidence/`. Same-VM handler/provenance
+binding is D6 work; public load is D7 and full R14 is D8. This candidate's bounded
+macOS ARM64 debug verification is not a full release/Linux milestone.
+
+
+R14-D6's retained-load candidate adds ten command tests using private generated
+five-entry runtimes; production and all six current CLI suites retain the four
+public commands. The real D5 owner captures every job and prepares B/M supplied by
+route_workspace and interpret_bundle in the actual retained VM. An altered
+callable changes interpreted goal text and asserts its own commands.lua bytes and
+digest. Completion outputs are finite test-provider results, not ledger commits.
+Tests cover exact service order, opaque-slot forgery, cross-family calls, duplicate
+and skipped services, poisoned native errors, malformed capture/B/M/returns,
+changed saved success, provider exceptions, caught allocation/instruction and
+cumulative native transfer exhaustion before/after completion, validated typed
+intent, missing/duplicate/wrong-capability/wrong-signature private catalogs and
+retained committed/replayed/uncertain receipts. Existing registration/execution
+cumulative-budget tests remain in the focused selection.
+
+Raw attempts, focused JUnit/LastTest, preserved inventory, pinned lint, vectors,
+all seven historical variant families plus fixed harness and six D6 exact runtime
+variants, no-work output, protected-input audit and frozen candidate identities
+are under tests/native/r14-d6-evidence/. Verification is scoped macOS ARM64 debug;
+D7 owns public load/transaction/transport integration and D8 full R14 acceptance.
+No release/Linux or full milestone result is inferred from these tests.
+
+
+R14-D6-C01 adds a private exact-source regression with unchanged D6 load code and
+assembly bytes. Its sole original-metadata defect changes non-command
+`planar/json.lua` to `../json.lua`, rejected by provenance tree validation. The
+command logical slot and registration line ownership are intact. Before the fix,
+both sections fail VM creation. With deferred preparation, registration and an
+ordinary init invocation succeed; fresh load performs real D5 open/capture and
+then refuses before the native accept provider, with no completion. Existing
+normal/altered D6 successful binding tests remain required. New support audits
+native/interface identities, the exact logical-path change, every original byte,
+separator and assembly; historical generators/evidence are preserved. Raw red,
+focused debug JUnit/LastTest, audits and candidate identities are retained under
+`tests/native/r14-d6-c01-evidence/`. This is a correction candidate pending
+independent review; public replay/CLI and real completion remain D7 work.
+
+
+R14-D7-A adds identity-bound native acceptance receipts without exposing load.
+Tests retain real accepted/noop saved bytes, refuse a replacement ledger even when
+it contains an equal request, and replay before stale CAS or moved/missing capture.
+Concurrent identical requests, different request bodies and competing heads retain
+one committed row set and authoritative per-call phases. Existing prefix mutation,
+verification and commit-hook faults now inspect receipts. A separate reader forces
+a real busy COMMIT: explicit rollback produces `not_completed` with owned proposed
+bytes and permits retry. Commit-hook automatic rollback conservatively retains
+`commit_uncertain`, because autocommit alone after failure proves no outcome.
+SQLite primitive tests preserve deferred-constraint diagnostics across confirmed
+rollback, check inactive/success observations, and record write/sync VFS evidence.
+
+Raw direct build/focused debug JUnit/LastTest, inventory, pinned lint, unchanged
+vectors and exact historical/D6/C01 variants are retained under
+`tests/native/r14-d7-a-evidence/`. This private feature slice has no baseline API to
+run as a failing runtime regression. Allocation-failure behavior follows ownership
+and no-throw phase/move ordering; no deterministic C++ allocator-failure seam is
+claimed. This candidate requires independent review. Public load, transport faults,
+full debug/release R14 acceptance, Linux and hardware power loss remain later work.
+
+
+R14-D7-B adds `replacement.load_cli` and three command-unit tests. The scratch-only
+public suite covers all six required text bindings, native saved-byte transport,
+noop/advanced-head/deleted-input replay, exact intent conflicts, name/environment
+mapping, all-job and missing-reference refusal, concurrent equal/conflicting
+requests and CAS. Concurrent first attempts can conservatively refuse while a
+writer owns a sidecar; the CLI suite uses finite same-intent retries only for the
+exact existing busy/recovery diagnostics, logs every transient and still requires
+exact final request/event/revision counts and conflict/CAS outcomes. An independently embedded exact-source CLI probe supplies finite
+file barriers for deterministic early-miss/late-replay and prepared-capture races,
+postcommit provider/transport synthetic `std::bad_alloc`, real bounded Lua memory
+and instruction exhaustion, codec refusal, malformed/changed returns and closed
+stdout. Synthetic C++ throws do not establish actual C++ allocator exhaustion.
+Generated probe identities and each small native substitution are reversible and
+audited against current source, including exact embedded originals/assembly.
+Historical frozen evidence and fixture goldens stay unchanged. D8 owns full R14
+acceptance; these macOS checks do not establish Linux or hardware power-loss safety.
+Raw attempts, final debug/release JUnit and LastTest, vectors, lint, variant audits,
+no-work builds and baseline/candidate identities are retained under
+`tests/native/r14-d7-b-evidence/`. Independent review remains required.
+
+The D7-B final path regression preserves ledger parent spelling while normalizing
+only workspace/registry targets. Its pre-fix unit run failed on
+`/missing/../ledger.db` becoming `/ledger.db`; the final unit and CLI checks require
+preserved spelling and refusal of a missing ledger parent before replay. The first
+399-case debug pass predates this correction and is retained separately; final
+debug/release evidence is identified explicitly.
+
+A final direct `cmd::execute` regression uses two valid absolute lexical 32 MiB
+paths plus request framing. The aggregate native request bound must return the
+exact redacted `resource_limit` envelope before touching a nonexistent ledger.
+The pre-fix run returned `schema`; the narrowly corrected branch preserves the
+native preparation category. Completed 399-case debug/release passes precede this
+mapping correction. Final affected command/runtime/load/CLI checks, lint, exact
+variant audits and no-work builds run on both corrected configurations; no claim
+is made that those older full passes executed the changed source or the new
+400th registered case. This focused retest disposition was coordinator-directed.
+
+## R14-D8 acceptance verification candidate
+
+`replacement.load_cli` now exercises initial/noop/comment/prose/semantic/restore
+chronology through the public command, exact saved responses and historical
+revision/event/request reads and source export after input removal using both the
+public binary and a changed-policy test binary. Two additional native tests in
+`tests/native/r14-d8-support/acceptance_fault.t.cpp` enumerate SQLITE_FULL write
+failures during actual `complete_acceptance` and kill isolated children before
+journal/database writes/syncs or after returned completion. Non-hot journal
+remnants preserve the original main bytes and refuse open, recovery and retry;
+recognized hot journals use explicit recovery and same-key retry. These native
+faults do not establish public CLI VFS failure or hardware power-loss coverage.
+See the [R14 evidence candidate](vernacular/r14-acceptance-evidence.md) for precise
+row scope and the recovery limitation; independent review remains required.
+
+
+## X03-B2-B native format2 acceptance candidate
+
+The candidate parameterizes all 14 existing native acceptance cases and both D8
+VFS fault cases across formats1/2, retaining their CTest names. Actual native
+`initialize_new_v2` and `complete_acceptance` exercise acceptance/noop/restoration,
+replay before stale CAS or unavailable capture, concurrent requests, final native
+receipts, commit rollback, all journal/database SQLITE_FULL write ordinals and
+all five process-death boundaries. Non-hot remnants still refuse unchanged;
+hot journals require explicit recovery before same-key retry. These checks
+retain the D8 cooperative-filesystem and power-loss limits.
+
+Additional native tests cover codec/version mismatch ordering, fresh profile
+refusal, accepted format2 history/export/backup/restored targets after inputs
+are removed, and reversible production-interner variants for private codec2
+collisions and cross-codec bucket separation. SQL reader fixtures remain reader
+fixtures. Debug focused results and exact fault counts live under
+`tests/native/v5-02-x03-b2-b-evidence/`; independent review and the subsequent
+integrated verification round remain required. No release, Linux, public
+format2 init or profile acceptance is established by this candidate.
+
+
+## X03-B3 integrated native verification candidate
+
+The combined B2-B+C01 native implementation is independently approved; C01 closes
+the selected-format metadata finding. Subsequent B3 full debug and RelWithDebInfo
+gates each pass **430/430**, with zero failures/errors/skips, pinned format/Doxygen
+across 98 active sources, formatting of 15 compiled native support files, exact
+current/inherited source-variant audits, 10+2 byte/hash vectors and no-work builds.
+All 430 current names and all 405 X01 baseline names remain. The [X03 evidence map](vernacular/x03-format-evidence.md)
+cites actual tests, both per-format full/crash matrices, old-binary retained proof,
+source/binary identities and the complete baseline/final filesystem distinction.
+
+This is a verification candidate pending independent review, not self-approval
+or completion of the mandatory external-profile gate. Public init still creates
+format1; native format2 fresh acceptance requires embedded request-v2 intent.
+Profile acceptance/history, X04/X06/public cutover, Linux and execution remain
+open. C01's alternate verified-metadata fixtures prove comparison/rollback plumbing,
+not an external format-change reproduction. Source/test/configuration bytes were
+unchanged through both full gates; these status documents were finalized afterward.
+Raw logs, JUnit, immediate LastTest copies and exact manifests are under
+`tests/native/v5-02-x03-b3-evidence/`.
+
+The [combined X05-A0+C01 independent review](vernacular/rounds/V5-02-X05-A0-C01-review.md) approves bounded
+test-only lexical sealing feasibility and closes A0-R1. The
+[X05-A1 production foundation](../tests/native/v5-02-x05-a1-evidence/REPORT.md)
+is independently approved in the X05-A1 review. The embedded five-command VM audits
+original global/callable roots together before alias-preserving table freezing.
+The isolated `runtime/closure_guard` module reads pinned Lua compiler metadata,
+rejects retained upvalue writers and unknown reachable native identities, and
+permits invocation-local scratch. Exact strong native identity capture precedes
+module evaluation; the five native engine callbacks enroll immediately after
+native installation, without intervening module execution. Proxy natives are
+created only after this audit and are not claimed to pass a later raw audit.
+
+The protected sealing frame reserves 2048 slots before root pushes/native RAII;
+inspection entry and every traversal push use nonallocating active-frame checks.
+A shared identity/prototype memo preserves existing graph depth256 semantics;
+prototype entries include the inherited sealed-cell mask. PMR allocation requests
+charge the existing checked cumulative 512 MiB native conversion accounting before
+allocation, with no refund or root reset. Static metadata inspection has checked
+reported counters and is not charged as Lua instructions or converted nodes.
+The finite compiled input remains bounded by the registration Lua heap; no fresh
+4 MiB audit arena or public scan quota is introduced. Existing embedded invocation
+instruction reset remains unchanged.
+
+A1 does not execute external modules or admit public profile flags. Later X05-A
+rounds retain source-owner/ordered module admission, the three descriptor APIs,
+module-end audit/seal before later chunks, frozen global/API state, persistent
+frozen-identity memo, add-time snapshot versus retained mutation semantics, and
+whole-registration cumulative gates. The mandatory external-profile gate, public
+cutover, storage/profile history dispatch, execution/RA01 and Linux remain open;
+public init creates format1. No full milestone or release gate is claimed for A1.
+
+A1 adds colocated production guard regressions under `src/engine/runtime/closure_guard/`.
+The focused Debug gate includes all A0 compatibility tests, command VM tests,
+runtime/interpretation/load checks and affected CLI tests. Reversible production
+probes compile the frozen candidate directly and retain compile/link commands,
+source transformations, native allocation/stack refusal logs and baseline writer
+acceptance. Evidence is under `tests/native/v5-02-x05-a1-evidence/`; historical
+A0/C01 fixtures remain immutable. This focused gate preserves all 535 prior test
+names; its registry count is an inventory, not a claim of full-suite execution.
+
+
+The [X05-A2 repeatable sealing foundation](../tests/native/v5-02-x05-a2-evidence/REPORT.md)
+is independently approved by the X05-A2 review. A private protected root-argument seam
+seals new retained roots after the initial embedded environment boundary. Its
+strong native-owned successful-identity set is distinct from each boundary's DFS
+memo: the guard treats prior sealed tables/Lua closures as immutable atoms and
+the freezer preserves their proxy backing and aliases. New identities publish
+only after complete audit/freeze success; any failure leaves the owner terminal,
+including partial freezing or publication failure. Direct native callable roots
+and unknown reachable native closures still refuse. `pairs` returns the exact
+stable global `next` closure captured before module execution; native snapshot
+never traverses C upvalues. Repeated sealing never writes frozen globals.
+
+The production public runtime interface and old invocation tail remain unchanged
+except that a failed sealing owner cannot invoke. Synthetic root bookkeeping adds
+no graph depth; every boundary shares existing cumulative native charges and
+inspection totals, without resets. Real private production probes exercise three
+successive boundaries, fresh retained roots, prior proxies/aliases, exact iterator
+identity across GC, scratch, writer/native refusal, resource failures and same-owner
+failed retry. A3 still owns captured ordered modules, owner frames, three exact
+registration descriptors and final catalog; final D is validated/copied at module
+end before sealing D/F. No external execution, public profile flags, profile
+storage/history acceptance or full registration gate is delivered by A2. The latest
+full gate candidate is A4 (582 per configuration); the mandatory external-profile gate,
+public cutover, execution/RA01 and Linux remain open. Public init creates format1.
+
+
+The [X05-A3 captured registration](../tests/native/v5-02-x05-a3-evidence/REPORT.md) adds native
+`command_vm::create(profile_snapshot)` with structurally checked, privately copied
+captured bytes and module order. Source-only zero-result chunks execute in one
+bounded VM with native owner ordinals. Three exact descriptor APIs retain D/F;
+final descriptors validate and seal with their callables at each module boundary.
+Catalog-v2 and exact effective provenance bind to the original captured bytes/modes.
+Selected-profile errors retain redacted native logical fields separately from
+existing embedded diagnostics. External `_ENV` is natively created before shipped
+evaluation with constructor-only engine, self `_G`, shared pure libraries and
+three exact registration functions; original globals and this environment freeze
+together before external execution. Embedded handlers retain their original engine.
+
+A3 is registration-only and independently approved with C01–C05 by the
+[C05 review](vernacular/rounds/V5-02-X05-A3-C05-review.md). Profile-owner invocation
+refuses before any provider action; retained alternate callable execution is
+verification through private reversible production copies. Shipped shape/projection
+IDs remain reserved; real adapters and semantics belong to B/C. No shipped Lua,
+public CLI admission, profile history/storage interpretation or acceptance changes
+are delivered. Native conversion/audit charges and explicit conservative pure-helper
+capacity reservations remain cumulative; these are not process RSS accounting.
+The mandatory external-profile gate, public cutover, execution/RA01 and Linux
+remain open. Public init creates format1; the latest full approved gate is A4
+(582 per build).
+
+
+The [X05-A3-C01 corrective](../tests/native/v5-02-x05-a3-c01-evidence/REPORT.md)
+preserves original entry fields before command-name/shape/projection sorting and
+propagates initial provenance preparation's typed resource refusal. Its final
+logical reservation enumerates six canonical/payload buffers with separate record
+framing/digest room, independently derived embedded metadata encoding/payload and
+graph passes, and unchanged eleven embedded/three external source payload passes.
+The existing cumulative 512 MiB charged native metric remains; this is not RSS
+accounting. A valid catalog near the 1 MiB ceiling and controlled remaining-budget
+probes exercise these reservations. Combined A3 through C05 is independently
+approved; A4 records the latest full approved gate. Profile CLI, B/C/X06, public
+cutover, execution/RA01 and Linux remain open; public init creates format1.
+
+
+The [X05-A3-C02 location correction](../tests/native/v5-02-x05-a3-c02-evidence/REPORT.md)
+retains the selected original root through the guard's single shared audit and
+maps module D/F pairs to one-based original catalog fields. Actual root freezing
+uses the same mapping; failures before root selection and during identity-set
+union use the active `profile.modules[N]` boundary. The existing enum-only guard
+API delegates to the detailed result. Initial embedded/environment sealing and
+private repeated-root sealing do not acquire external entry locations. Terminal
+module retries preserve the first location; the public constructor discards failed
+owners rather than retrying. Original C01 fixes and cumulative budgets remain.
+Controlled probes exercise actual pre-root, partial-freeze and union refusal,
+terminal state and cleanup; they do not claim natural resource exhaustion.
+Combined A3 through C05 is independently approved. A4 records the latest
+full gate candidate; public profile CLI, B/C/X06, mandatory external-profile
+gate, cutover, execution/RA01 and Linux remain open. Public init creates format1.
+
+
+The [X05-A3-C03 allocation-safe location](../tests/native/v5-02-x05-a3-c03-evidence/REPORT.md)
+selects seal locations with a trivial kind/index token. Root audit/freezing no
+longer formats fields. Every protected seal failure adapter renders the token
+outside Lua; a rendering allocation refusal returns the existing external resource
+diagnostic with the preinstalled active module field. Two independent module-field
+strings per module are staged before processing, charged cumulatively, and swapped
+without allocation after descriptor collection. Staging failure identifies profile;
+first-failure terminal retries retain their token. The shared audit, freeze order,
+depth, publication and embedded paths remain unchanged.
+Ordinary index10/64 and mixed-module controls, actual native allocation refusal,
+controlled Lua allocation/stack/status and throwing-allocator adapters verify these
+boundaries with cleanup. The throwing allocator is a controlled adapter probe,
+not a claim that realloc throws C++ exceptions or natural host exhaustion occurred.
+Combined A3 through C05 is independently approved. A4 records the latest
+full gate candidate; public profile CLI, B/C/X06, mandatory external
+profile gate, cutover, execution/RA01 and Linux remain open. Public init creates
+format1.
+
+
+The [X05-A3-C04 registration attribution](../tests/native/v5-02-x05-a3-c04-evidence/REPORT.md)
+extends the nonallocating original-location token across callback admission,
+reference retention, final descriptor collection and pure catalog error remapping.
+Successful callbacks clear their token; caught failures retain the first token,
+and catalog prevalidation clears completed entry ownership. Error adaptation
+renders only outside protected Lua calls. Rendering refusal retains the owned
+module fallback; unmatched canonical entries retain the truthful caller boundary.
+Pure global error fields move their owned storage. A separately charged/staged
+catalog fallback installs by swap before final provenance work as preventative
+consistency; no allocation failure at the previous short assignment is claimed.
+C03 module staging/sealing, shared audit and cumulative budgets remain intact.
+Controlled actual allocation probes distinguish removed zero-request operations,
+remaining projection rendering refusal, sticky callback failures and module/global
+phase work. Raw-reference status and unmatched pure errors use explicit controlled
+adapters. No new quota or public interface is added. Combined A3 through C05 is
+independently approved. A4 records the latest full approved gate; public profile
+CLI, B/C/X06, mandatory external-profile gate, cutover, execution/RA01 and Linux remain open. Public init creates
+format1.
+
+
+The [X05-A3-C05 caught-memory](../tests/native/v5-02-x05-a3-c05-evidence/REPORT.md) makes a completed
+restricted `lua_pcall` memory failure sticky in native state. The bit is set
+only after `LUA_ERRMEM`, preserving a successful emergency allocation retry;
+logical quota refusal remains separate. Outer restricted calls rethrow and host
+adapters retain the existing resource diagnostic and original entry token.
+Actual descriptor-reference allocation probes cover normal/later-error tails,
+three nested catches, direct host failure and successful retry after one null
+return. The function-reference-only control has zero actual growth requests;
+no function-reference allocation failure or natural host exhaustion is claimed.
+Ordinary caught Lua errors remain recoverable. Shared accounting, protected
+ownership and existing diagnostic priority are retained. The [C05 review](vernacular/rounds/V5-02-X05-A3-C05-review.md)
+independently approves combined A3 through C05 and closes R1–R7. A4 records the
+latest full approved gate; public profile CLI, B/C/X06, mandatory external
+profile gate, cutover, execution/RA01 and Linux remain open. Public init creates
+format1.
+
+
+The [X05-A4 integrated registration gate](vernacular/x05-registration-evidence.md)
+is independently approved by the X05-A4 review. Full Debug and
+release-preset RelWithDebInfo each pass 582/582, with zero failures/errors/skips/
+disabled cases, preserving all current 582 and prior 520 names. Pinned formatting/
+Doxygen checks 117 active C++ sources; common source vectors, per-configuration
+runtime/CLI and reversible variant audits, and no-work builds pass. Product/test
+bytes remain identical across both gates; only current status documentation is
+finalized afterward. Earlier private retained-callable/fault probes remain
+approved Debug evidence and are not claimed as release reruns. Profile-owner
+invocation refuses before provider effects. B/C semantics/adapters, X06 recorded
+history/interpretation/acceptance and receipt/whole-invocation orchestration,
+X07 public cutover, X08 mandatory external-profile acceptance, execution/RA01
+and Linux remain open. Public init creates format1.
+
+
+The [X05-B1 pure shape foundation](../tests/native/v5-02-x05-b1-evidence/REPORT.md) is independently approved by the X05-B1 review. An optional trusted internal context selects profile-only shape IDs and
+stages policy while retaining declaration version1 and the embedded default.
+Every job's mandatory policy and base phase cycles finish before custom shape
+callbacks; bounded additive unit obligations then join the original full graph.
+A distinct test-only exact-runtime adapter exercises the actual product Lua
+helpers. Its internal `shape_results` sidecar is not final selected-shape identity.
+B1 does not prove retained native F dispatch, immutable F input, exact source
+identity, the complete return's 16 MiB boundary, or whole-invocation accounting.
+B2–B4 retain those native/identity/W/render duties. Public profile admission,
+X06 history/acceptance, X08 mandatory acceptance, execution/RA01 and Linux remain
+open; public init still creates format1. Focused verification is not a full B gate.
+
+
+The [X05-B2-A native shape-definition foundation](../tests/native/v5-02-x05-b2-a-evidence/REPORT.md)
+received a request-changes review for early error adaptation; the combined
+B2-A+C01 correction is independently approved by the X05-B2-A-C01 review. The internal selected-profile VM
+resolves registered external shape IDs to owned ID, final revision and exact
+`shape_definition_v1` digest. Identity includes the final descriptor, native
+external logical module path and lowercase hex of that selected module's original
+captured bytes; module ordinal and unrelated modules do not enter this identity.
+Each lookup recomputes with cumulative checked native charges, without executing
+Lua or starting/resetting invocation budgets. Resource failures remain terminal.
+Generic profile invocation stays closed. Independently approved B2-B codec accounting precedes B2-C retained
+F dispatch/immutable input/complete-return transport, B3 selected identity/W and
+B4 rendering remain open, as do X06–X08, execution/RA01 and Linux. This focused
+foundation does not close B2 or the B milestone; public init creates format1.
+
+The [X05-B2-A-C01 error-boundary correction](../tests/native/v5-02-x05-b2-a-c01-evidence/REPORT.md)
+includes embedded, moved-from and already-exhausted lookup refusal construction
+inside the typed boundary. An actual one-shot native allocation refusal returns
+`resource_limit` at `catalog.shapes`; existing sticky conversion diagnostics keep
+their first message, limit and maximum. Profile owners remain terminal. Ordinary
+embedded/moved-from refusals retain protocol-first behavior on retry; a moved-to
+owner remains independent. This covers controlled one-shot failures, without a
+persistent exhausted-heap guarantee. Identity, cumulative reservation policy and
+public admission remain unchanged. The combined candidate is independently approved by the X05-B2-A-C01 review;
+B2-C and the mandatory external-profile gate remain open.
+
+
+The [X05-B2-B codec reservation candidate](../tests/native/v5-02-x05-b2-b-evidence/REPORT.md)
+adds optional native `codec_encode_reserved` without changing ordinary callers.
+One shared validator derives checked logical graph, string, workspace and fixed
+Glaze output capacity before the synchronous native charge hook. Successful
+validation uses a bounded active path without heap allocation; each copied
+container reserves its exact entry count. Input stability through the hook is a
+trusted C++ precondition. The moved output buffer is counted once; conservative
+workspace slots are not independent heap allocations or an RSS guarantee.
+Focused Debug evidence and independent allocation phase probes accompany the
+candidate; combined B2-B+C01 is independently approved by the X05-B2-B-C01 review. B2-C retains raw-return conversion
+charges, retained F execution, immutable input and invocation integration. B2/B,
+X06–X08, execution/RA01 and Linux remain open; public init creates format1.
+
+
+The [X05-B2-B-C01 encode diagnostic correction](../tests/native/v5-02-x05-b2-b-c01-evidence/REPORT.md)
+is independently approved by the combined X05-B2-B-C01 review. A shared outer
+allocation boundary protects the existing encode handlers' diagnostic construction,
+including validation refusals and callback exception adaptation. Controlled one-shot
+native diagnostic allocation refusal returns the existing `resource_limit` /
+`output_bytes` diagnostic; normal precedence and moved typed callback refusals
+remain unchanged. This is not a persistent exhausted-heap guarantee. Encoding,
+reservation math, decode and limits are unchanged. B2-C retained F dispatch and
+invocation integration, B3/B4, X06–X08, execution/RA01 and Linux remain open;
+public init creates format1. Focused correction evidence does not close B2/B.
+
+
+The [X05-B2-C retained shape bridge](../tests/native/v5-02-x05-b2-c-evidence/REPORT.md) is independently approved with C01/C02; their reviews close B2C-R1 and B2C-R2.
+Internal `command_vm::invoke_shape` binds owned final definition metadata before
+calling the actual retained F in its original selected-profile VM. Exact normalized
+five-field inputs preserve nested aliases and freeze transient proxies without
+publishing permanent sealed identities. Exact pre-invocation tag/backing membership
+survives cleanup after raw response conversion, including returned input aliases;
+invocation scratch/result tags are released. One actual JSON-compatible return
+passes separately charged raw conversion and reserved Glaze encoding with the
+complete 16 MiB ceiling. Padding transport fixtures do not prove shape semantics.
+Registration transitions once to cumulative invocation instructions; native/node
+charges never reset. Admission protocol errors are nonconsuming; execution/resource
+failures retain the first terminal original shape location. B1 Lua still owns shape
+success/refusal/obligation semantics. B3 selected identity/W and B4 rendering,
+X06–X08, public profile admission, execution/RA01 and Linux remain open. Generic
+profile command invocation stays closed; public init creates format1. This focused
+Debug slice is not a full B or release gate.
+
+The [X05-B2-C-C01 correction candidate](../tests/native/v5-02-x05-b2-c-c01-evidence/REPORT.md) stores transient
+snapshots under private immutable address keys, separate from every integer
+`luaL_ref`. Retained shipped F and external D/F bindings survive first/repeated
+shape calls, GC and failure cleanup in the owned reversible observer. The original
+reviewer regression is retained and reproduced. This correction preserves existing
+cleanup, cumulative budgets and public boundaries; the combined C02 review independently approves the bridge. No full milestone or release gate is claimed.
+
+The [X05-B2-C-C02 terminal diagnostic correction candidate](../tests/native/v5-02-x05-b2-c-c02-evidence/REPORT.md) shares the profile owner's first terminal error across definition lookup and shape invocation.
+A resource failure owns its original code, message, limit, maximum and field before
+fallible response copying; later ID/input guards and allocation adaptation preserve
+that error. Natural cumulative lookup exhaustion reproduces the prior masking and
+location change, then verifies missing/wrong-kind/valid IDs, invalid inputs and
+retries. Controlled one-shot native allocation probes cover ownership and copies;
+no persistent host-memory guarantee is claimed. C01 private registry keys remain.
+The combined independent B2-C+C01+C02 review approves this scope. The focused Debug gate adds
+one regression (620 registered names, 354 focused plus 11 supplemental); no full
+milestone or release gate, public profile admission, B3/B4, X06–X08, execution/RA01
+or Linux acceptance is claimed. Public init creates format1.
+
+
+The [X05-B3-A pure phase candidate](../tests/native/v5-02-x05-b3-a-evidence/REPORT.md) factors existing trusted validation into structural prepare/check-one/finish exports.
+Every mandatory/base-cycle check precedes custom requests; checked responses retain
+B1 exact obligations, guidance and count policy. Finish retains original graph edges
+and forms selected_shape only from explicitly supplied trusted request-corresponding
+definition metadata. The old embedded validator and B1 shape_results adapter remain.
+The [phase ABI](../tests/native/v5-02-x05-b3-a-support/phase-abi.md) records handoff requirements.
+The X05-B3-A review independently approves this pure slice. It does not prove native metadata
+authenticity, immutable F input, same-VM dispatch or cumulative phase conversion;
+B3-B owns those. B3-C W, B4 rendering, X06–X08, public profile admission/cutover,
+mandatory external-profile acceptance, execution/RA01 and Linux remain open.
+Public init creates format1; latest full approved gate remains A4 582/configuration.
+
+
+The original X05-B3-B incomplete prerequisite checkpoint is preserved in
+`tests/native/v5-02-x05-b3-b-evidence/REPORT.md`, including its actual request423
+regression and scoped sticky correction. The R01 integration candidate below
+supersedes that checkpoint's remaining accounting/lifetime status.
+
+
+The [X05-B3-B-D01-A test-only decode feasibility](../tests/native/v5-02-x05-b3-b-d01-a-evidence/REPORT.md) demonstrates
+request-local allocation interception with pinned Glaze readers, including variant
+rewind, duplicate-check storage, malformed partial cleanup and typed refusal
+adaptation. Independent D01-A review approves the test-only boundary. No product, vendor, codec API or runtime
+bytes change. Production conversion reservation is now the separate D01-B candidate; B3-B accounting/request423 and its final gate remain open. The
+637-name product inventory includes WIP; last approved inventory remains 627.
+No full milestone, release or Linux gate is claimed; public init creates format1.
+
+
+The [X05-B3-B-D01-B production reserved decode candidate](../tests/native/v5-02-x05-b3-b-d01-b-evidence/REPORT.md) adds optional
+`codec_decode_reserved`: every actual parser/duplicate-check request charges before
+allocation, followed by one checked allocation-free immutable-conversion sizing
+pass and reservation before persistent ownership. Request-local Glaze wrappers
+retain original grammar/error ordering; returned values use ordinary allocators.
+Exact pinned control-block/tree-node/list/string recipes and the actual bounded
+workspace determine capacity. Typed supplied errors move unchanged, and outer
+allocation protection covers early/catch diagnostic construction in both decode
+entry points. Ordinary decode API/defaults and approved encoding remain unchanged.
+
+Independent D01-B review approves the reserved decoder prerequisite. The
+X05-B3-B-R01 native integration candidate consumes both decoder hooks only while
+profile semantic composition is active. Actual parser/checker allocation requests
+and immutable conversion capacity charge the existing cumulative native budget
+before allocation, without refunds. The inherited node and graph/transport charges
+remain deliberately conservative overlapping accounting. Embedded decode keeps
+its ordinary path. Semantic error-data staging also charges concrete pinned
+control blocks, map nodes and copied string buffers before allocation; successful
+encoded text separately charges its native wrapper while moving the already
+reserved output buffer. Direct in-place construction avoids initializer-list
+copies. Two narrowly scoped global-fragment libc++ headers expose only the pinned
+allocation type identities; product operations retain `import std`. Reserved
+encoding and first typed terminal diagnostics remain.
+
+The combined original B3-B plus R01 candidate retains audited private phase roots
+and native-owned request/result/definition values across sequential protected
+same-VM prepare/F/check/finish calls. Production coverage includes recoverable JSON
+refusal followed by healthy calls. Private reversible observers cover exact tag/
+backing key-value membership and all16 retained references in a mixed fixture
+(five shipped, three phases, four external descriptor/callable pairs), stable live
+Lua heap after warmup/GC, partial baseline setup and terminal cleanup. Controlled
+parser/conversion/node/Lua refusals prove no F dispatch; repeated real operations
+exercise cumulative instruction/native limits. Near-budget staging controls
+verify exact native error-graph requests and deny node/map/string/wrapper storage
+before allocation, retaining ordinary healthy schema diagnostics. These probes supplement actual
+production F and semantic execution.
+
+The frozen candidate gate targets642 registered names (all641 prior names
+preserved),376 focused Debug cases and11 supplemental history cases, production
+semantics, actual allocation sampling, request423 checkpoint/current controls,
+vectors, six exact source audits, pinned formatting/Doxygen and no-work builds.
+See `tests/native/v5-02-x05-b3-b-r01-evidence/REPORT.md` for executed results and
+limitations. The independent combined B3-B/R01 review approves this integration. No full B,
+release or Linux gate is claimed; latest full approval remains A4's582/config.
+B3-C W, B4 render, X06–X08, public profile admission/cutover, mandatory external
+profile acceptance, execution/RA01 and Linux remain open. Public init creates
+format1. Codec and original checkpoint artifacts remain unchanged.
+
+
+The independently approved X05-B3-C selection adds internal native `select_profile` over original
+bundle/capture/files/job/role intent. Its semantic phases run once, then a fourth
+privately retained trusted phase selects from that exact finalized same-call model.
+All four phase roots join the original pre-module audit/freeze; phase transport,
+codec work and repeated operations share cumulative accounting and cleanup. No
+caller model, shape definition or export selector is admitted. Generic profile
+invocation remains closed.
+
+Embedded `select_role` retains its original normalization and whole-bundle
+validation. Shipped selection remains exact with profiles. Custom W preserves old
+fields, appends `shape_selection_v1` and shape definition/revision plus synthetic-ID
+sorted unit obligations where selected work is either endpoint, and hashes
+`work_external_shape_v1`. Guidance is excluded. Selected source comments/revisions
+change every custom-job role; separate unselected/projection modules affect only
+provenance. Same-module visual source changes conservatively affect definition/W.
+The independently authored minimal-fixture W and complete canonical preimage live
+under `tests/native/v5-02-x05-b3-c-support/`; the candidate verification report is
+`tests/native/v5-02-x05-b3-c-evidence/REPORT.md`; the B3-C review independently approves this selection scope.
+This is selection infrastructure: B4 presentation, X06 history/acceptance, X07
+public cutover, X08 mandatory external-profile acceptance, execution/RA01 and Linux
+remain open. Public init creates format1; no full B/release gate is inferred.
+
+Selected-profile hash work additionally reserves conservative pinned-library
+cumulative string growth, owned source/domain copies, encoder scratch and digest
+storage before allocation. These byte charges do not add converted-node counts.
+Actual allocation probes retain typed first resource refusal; embedded digest
+behavior remains unchanged. The derivation and private aggregate measurements are
+recorded in `tests/native/v5-02-x05-b3-c-support/hash-accounting.md` and the C report.
+
+The X05-B4-A candidate factors the shared trusted render body and adds the private
+`render_profile_material({request,model,selected})` helper. Its caller must supply
+authentic finalized semantic and selection results; logical job/role/shape identity
+checks do not authenticate arbitrary tables. The helper normalizes render intent,
+reads retained observations, and renders without validation, selection, F dispatch
+or mutation of model/selection. Custom shapes add exact three-field identity,
+full scoped unverified prerequisites and mandatory `shape_policy` after dependencies;
+shipped shapes preserve the old envelope and presentation. B4-A verifies pure helper
+composition only. Native same-call retention, immutable transport, cumulative full
+render accounting and lifecycle proof are delivered by the B4-B candidate below; the full Debug/release B gate
+remains B4-C. Public profile CLI, X06–X08, execution/RA01 and Linux remain open;
+public init creates format1. Candidate evidence is
+`tests/native/v5-02-x05-b4-a-evidence/REPORT.md`; independent B4-A review requested
+the correspondence correction recorded below.
+
+
+The X05-B4-A-C01 corrective candidate requires complete positional one-to-one
+bundle/semantic job correspondence before reading any selected shape. Both arrays
+must have equal lengths, each row must carry a valid matching job ID, and IDs
+must be unique across the complete mapping. Reordered, missing, extra, duplicate,
+ambiguous and malformed identities refuse with the existing schema diagnostic at
+`render.selected`; there is no ID lookup fallback, revalidation or input mutation.
+Two new production cases reproduce same-shape/different-guidance substitution and
+exercise selected/unselected rows and malformed containers. The actual pre-edit
+baseline and red regression are retained in
+`tests/native/v5-02-x05-b4-a-c01-evidence/REPORT.md`. B4-A's independent review
+requested this correction (B4A-R1); the combined B4-A+C01 review independently approves the correction and closes B4A-R1.
+Pure helper correspondence does not establish native same-call authenticity;
+Combined B4-B+C01 native composition is independently approved; B4-C integrated evidence awaits independent review. Public init
+still creates format1; X06–X08, public cutover, execution/RA01 and Linux remain open.
+
+
+The X05-B4-B candidate adds internal native `render_profile` over original
+bundle/capture/files/job/role intent and optional budget. A trusted normalization-only
+preflight preserves full render schema then budget-stripped selection schema
+precedence before any semantics or F call. Six fixed trusted roots seal before
+external modules. Native-owned normalized intents, same-call finalized model and
+selection flow through sequential protected calls to the approved renderer; each
+custom job's F runs once. Existing selection behavior and public generic profile
+refusal remain. All phases, observation/presentation codecs, hashes and a final
+reserved complete-response encoding share cumulative limits; final output is
+bounded by the existing 16 MiB codec ceiling and lower role/render budget.
+
+B3-C and combined B4-A+C01 are independently approved. combined B4-B+C01 is independently approved; B4-C records the complete Debug/RelWithDebInfo gate candidate. Focused Debug
+coverage, exact root/reference and frozen-membership GC observations, preflight
+zero-F and valid once-per-job dispatch, actual native allocation refusals and
+controlled transport failures are recorded in
+`tests/native/v5-02-x05-b4-b-evidence/REPORT.md`; allocation derivation is in
+`tests/native/v5-02-x05-b4-b-support/transport-accounting.md`. This candidate adds
+no provider or public profile CLI, projection dispatch or storage interpretation.
+X06–X08, mandatory external-profile acceptance, public cutover, execution/RA01 and
+Linux remain open; public init creates format1. Latest full approved gate remains
+A4's 582 per configuration.
+
+
+The X05-B4-B-C01 correction candidate routes every ordinary native render
+response, including normalization, preparation, shape-check, finalization and
+selection errors, through the same existing reserved complete-response encoder.
+The unchanged 16 MiB output ceiling and cumulative native charges apply before
+returning the original native response pointer. Validation-only/selection-only
+transport and native unexpected failures retain their prior paths. The genuine
+oversized original unknown-key schema regression now returns terminal typed
+`output_bytes`/16777216; small ordinary errors retain their bytes and recovery.
+Production phase/lifetime controls and reversible exact writer/phase/F observers
+supplement focused Debug verification. The combined B4-B+C01 review independently approves this correction and closes
+B4B-R1. B4-C records the separate integrated macOS gate; Linux remains open.
+Public profile admission, X06–X08, mandatory external-profile acceptance,
+execution/RA01 and Linux remain open. Public init creates format1; latest full
+approved gate remains A4's582 cases per configuration.
+
+
+The [X05-C1 focused Debug candidate](../tests/native/v5-02-x05-c1-evidence/REPORT.md)
+checks pure section assembly through the private trusted export, including the
+87→94→59 byte vector, exact metadata/notice joins, omission priority, mandatory
+refusal, UTF-8 byte counts, supplied trailing LFs and input immutability. Private
+reversible adapters compare the complete current response with the actual archived
+pre-edit renderer and exercise the existing native freezer. These algorithm
+fixtures do not replace required packet sections or establish native F-response
+admission. Focused checks are distinct from the later full C integration gate;
+no release or private historical fault-probe rerun is claimed. Review is pending.
+
+
+The X05-C2-A candidate adds internal native projection-definition identity lookup
+without executing the retained projection callable. It hashes the exact final
+five-string descriptor, logical external owner without ordinal, and original
+privately captured selected module bytes under `projection_definition_v1`.
+Owned ID/revision/digest results survive VM destruction. Unknown IDs refuse
+nonterminally; resource failures retain the shared first owner error across shape,
+projection, validation, selection, render and moves. Prospective graph, string
+copies, cumulative canonical growth and encoder scratch charge existing native
+limits before allocation; no invocation starts or budget resets.
+Focused Debug evidence is in `tests/native/v5-02-x05-c2-a-evidence/REPORT.md`;
+fresh independent review is pending. Retained projection execution/native result
+admission remains C2-B. Read services, capability/receipt orchestration, public
+profile admission, X06–X08, execution/RA01 and Linux remain open. No full C or
+release gate is claimed; public init creates format1.
+
+
+The X05-C2-B1 candidate adds only a native exact projection JSON size prerequisite
+in `engine/json_codec`: stable borrowed section views, complete input preflight,
+one synchronous charge for fixed 6,325,248-byte scratch and actual fixed writer
+workspace, and pinned Glaze serialization without an AST copy or retained output.
+Encoded overflow is sticky and nonthrowing; bounded writing completes before
+refusal. Native invalid input, encoded ceiling, resource and scratch/internal
+failures remain distinct typed outcomes. Callback diagnostics move unchanged;
+independent nested/concurrent owners share no routing state. The operator's global
+18-name built-in reservation is now explicit in X-PROJ for both input kinds;
+semantic reserved-name admission remains the later native scanner's duty.
+Evidence is `tests/native/v5-02-x05-c2-b1-evidence/REPORT.md`; fresh independent
+review is pending. This prerequisite does not execute F, scan/root Lua results,
+open profile invocation or implement read services, public CLI, X06–X08,
+whole-invocation orchestration, execution/RA01 or Linux. Public init creates
+format1; no full or release gate is claimed.
+
+
+C2-B2 adds the internal typed retained-projection bridge and native raw-result
+admission candidate. Descriptor kind and immutable structural transport are checked
+before one retained F call; callers own authenticated selected-role/history data.
+The protected scanner enforces exact version1 section schema, the shared GLOBAL18
+reserved union and raw limits before borrowed-view exact encoded counting and
+native result copying. Original projection indices and shared first terminal errors
+survive retries and moves. This candidate awaits fresh independent review; native
+read services, rendering composition, CLI/provider/receipt integration and the
+mandatory external-profile gate remain open. See
+[the C2-B2 evidence](../tests/native/v5-02-x05-c2-b2-evidence/REPORT.md).
+
+
+The independently approved X05-C3-A adds `command_vm::prepare_extension_invocation` for an
+actual retained sealed external command. Borrowed parsed records use names without
+`--`; omitted records mean absent, explicit absent records have no token, present
+flags have no token, and present scalars have exactly one token. Native owned
+variants preserve every descriptor option and presence, exact history-ID strings,
+INT32 scalars and effective history query defaults. Capability-bound host options
+contain typed indices into a separate native-only pending-selector list; absent
+optional host options retain an empty index. Descriptor canonical order determines
+option and supplied-host order. Pending selectors have no filesystem normalization,
+admission, handle or receipt. Capability-free same-spelled text remains ordinary
+data under the approved X04-B2 contract.
+
+Preparation is reusable without starting/resetting invocation. Usage and protocol
+refusals leave a healthy owner usable; resource refusal preserves the shared first
+terminal diagnostic across APIs and moves. Embedded, moved, failed or consumed
+owners and unknown external commands refuse. Prospective vector storage and all
+owned string copies charge cumulative native accounting before allocation.
+No handler, provider, Lua invocation graph or argv parser is introduced. Native
+typed-result tests do not prove the future Lua string/presence ABI. C3-A itself adds no receipt-backed
+host admission, read services, capability/order/once-only/poisoning enforcement or
+response correspondence; the bounded C3-B2 admission candidate below leaves read
+services, handler dispatch, public CLI and X06–X08 open. Generic profile
+invocation stays closed; public init creates format1. Approved C3-A evidence is
+`tests/native/v5-02-x05-c3-a-evidence/REPORT.md`; its independent review is recorded
+in `docs/vernacular/rounds/V5-02-X05-C3-A-review.md`.
+No full milestone, release or Linux gate is claimed.
+
+
+X05-C3-B1 adds bounded metadata-only physical parent traversal to
+`capture/admission`. Each component is opened without following links before a
+parent component can exit it. Missing directories and non-directory components
+therefore cannot cancel away. Every visited name and upward edge retains its
+original descriptor receipt; only the final active ancestry determines physical
+containment. Replacing an exited directory still refuses verification. Existing
+file-role, alias, absent-target and original profile-owner policies remain.
+Focused native admission/profile/host-path/capture checks, regression red evidence
+and exact candidate identities are recorded in
+[the C3-B1 report](../tests/native/v5-02-x05-c3-b1-evidence/REPORT.md).
+This prerequisite introduces no runtime orchestration, read service, public profile
+CLI or dispatch. No full suite, release or Linux execution is claimed.
+
+
+X05-C3-B2 adds a bounded internal `extension_invocation` owner in the runtime
+module. Creation consumes the original `profile_capture` and constructs the VM
+from that capture's snapshot; no independently created VM or mutable C3-A result
+can enter admission. The sealed catalog is borrowed only while healthy. The owner
+retains final prepared scalars, mapping IDs and absolute host spelling/intent
+privately. Its single admission attempt prepares the actual sealed command,
+normalizes all supplied host slots before metadata checks, admits workspace root
+and selected file, source/base directories and registry/observation/ledger files,
+then verifies original profile/module and late-slot receipts. Every failure is
+terminal and retains its original typed diagnostic; moves transfer this state.
+Verification is available only after successful admission and authorizes no service
+or output by itself. Generic profile invocation remains closed.
+
+Relative paths use only the supplied cwd snapshot. Bare workspace names use the
+approved C lexical normalization of the supplied workspace-directory snapshot,
+then append the name and `workspace.lua`; explicit workspace paths and expanded
+results retain physical traversal spelling through `prepare_host_path.spelling`.
+First-equals mapping RHS normalization preserves later equals and parent steps.
+No ambient cwd/environment lookup, recapture, late-input content read, Lua handler,
+provider, userdata or read-service implementation is added. Capture subsystems keep
+their separate bounded metrics; whole-invocation shared capture/VM accounting stays
+open for X06. New wrapper/path staging charges the existing cumulative VM native
+metric before allocation, using pinned libc++ component/string bounds documented
+in [the accounting proof](../tests/native/v5-02-x05-c3-b2-support/accounting.md).
+This conservative metric is not process RSS accounting.
+
+Seventeen colocated C3-B2 cases exercise real scratch captures for pure, role and
+history commands, optional unused hosts, explicit snapshots, workspace expansion,
+physical parent traversal, overlap/alias and native path refusals, original receipt
+mutation, moves, poisoning and actual cumulative native reservation refusal.
+Three host-path preflight cases preserve text/size and lexical-cwd/join precedence.
+Controlled private allocation and inode-read probes use copied production objects;
+[the evidence report](../tests/native/v5-02-x05-c3-b2-evidence/REPORT.md) records
+commands, failed attempts, exact identities and limits. Focused Debug evidence does
+not establish later Lua ABI, services/dispatch, complete shared budgets, public
+profile admission, a full/release/Linux gate or mandatory X08 acceptance.
+
+## X05-C4-B1 gated SQLite prerequisite
+
+Eleven colocated SQLite cases exercise the distinct read-only `open_gated`
+primitive: first-header refusal before actual reads, typed verifier/exception and
+HAS_MOVED failures, null-handle resource refusal, retained statement/transaction
+ownership and moves, independent owners, sticky failures, bound-only ATTACH
+refusal, partial base-open cleanup, versioned/null optional callbacks, actual path
+replacement and non-null mmap controls, and exact file bytes/mode preservation.
+Existing ungated SQLite, format and history-read suites remain the regression gate.
+
+Private reversible copies add direct production callback checks for unchanged
+read buffers and null fetch output on refusal, journal/WAL/shm denial and temporary
+I/O after terminal main refusal, actual WAL refusal with an ungated positive
+control, original profile/ancestor/held-descriptor receipt tests, and actual native
+and SQLite allocation failures. A reconstructed original backup demonstrates a
+real C++ diagnostic-allocation exception leaving SQLite BUSY; the RAII candidate
+finishes and permits subsequent backup and actual close. The raw failed attempts,
+exact copied dependency membership and source identities are retained in the
+[C4-B1 evidence](../tests/native/v5-02-x05-c4-b1-evidence/REPORT.md).
+
+Only focused Debug checks are claimed. The generic primitive has no capture or
+runtime dependency, and supplies neither a production profile adapter/raw-header
+binding nor a history service or public handler. There is no full, release or
+Linux execution claim; Linux is assessed for source portability only. C4-B1
+awaits independent review; C4-A and test-only C4-B0 are independently approved.

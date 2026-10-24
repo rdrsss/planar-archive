@@ -1,0 +1,13 @@
+{
+  "path_base": "tests/native/r14d01-evidence",
+  "files": {
+    "README.md": "2bcd9c17c557e751e56323e08a6e88f11407afa6e7c09630ed9f4a3a866cf48a",
+    "candidate.diff": "fd3598139dcfaa0b0d5685025a43872f6a0119119e6921aff44b6ca796bac2f2",
+    "candidate.json": "640d91b58b89bb4fc3e063bfae9f8e98f93841f2b712227e2bed521971f65ef6",
+    "capture.py": "05be9a746aead75732b16b50cf35c429a4401535a995384c6adba696fa8fde72",
+    "docs-testing.after.md": "840f5431ba82ff74b3057cd44349cade1d07fdb7960af823c1c25f8f7c0cf33d",
+    "docs-testing.before.md": "9f9b42dc81ebee3ea0d0044175d49153e9e49d5be67e23fd38f63678e4f872b7",
+    "protected.json": "e8b3bf8e3381d1115d71010f9e8733683fdab4c24bcd763b1f05c0f74f789a35",
+    "verification.json": "5bb0d12e3cbebd757ad4dc55a053bbd02d0d07f534432027148f93f6c83c85e1"
+  }
+}

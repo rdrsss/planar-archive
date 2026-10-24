@@ -1,0 +1,14 @@
+{
+  "CLAUDE.md": "53e76fbc944dfe414c99702119f92730999062338620e9d820637f49c3b4eab3",
+  "docs/architecture.md": "40d789ce34c203d1a3766c0ba30f0e0d4d93aa63682b586d8c8d67b5fb38cc1e",
+  "docs/vernacular/acceptance-matrix.md": "81dd83798c5d89b11a9e1e645fca7b1804b19d820137eda7f06a1b8895ebf90c",
+  "docs/vernacular/external-profile-implementation.md": "adf6ecb1497b0dc66c2c2ed666588f97410eb7c8f1a19b0b01ae93040587f374",
+  "docs/vernacular/implementation.md": "3ae31c59469a7eb569443a7992514f9787e55d17d36c19da3323d4f5a26ea23e",
+  "docs/vernacular/roadmap.md": "1b622f6da532b3238a4a2fb5db169e362f9e2ae08aedcca24f58dc2f88563f61",
+  "docs/vernacular/v5-alignment.md": "3331e01ccd40d3c6b7d8e8378802447c7725a9d6f277b07d78c6e8e33389762e",
+  "src/engine/CMakeLists.txt": "220af1f8a23a958d629334c5ac133e57b526640fec26ec88b1f2f22f49d35aae",
+  "src/engine/ledger/format.cpp": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+  "tests/native/v5-02-x03-b2-b-c01-support/fixture.cppm": "741fed3d10de5f70b3a620d5f688004a8960b2d7199a5b7a063264280af96090",
+  "tests/native/v5-02-x03-b2-b-c01-support/generate.py": "b53b305538446cdb8bb7916709eaff7a7e4f49d3f738249c938d879ae39dcb5e",
+  "tests/native/v5-02-x03-b2-b-c01-support/metadata.t.cpp": "ca5f6f02dd2e9dbf1bd82c38b0745ebe089ca0c79aa3cd8937cc2111f26cd4fa"
+}

@@ -1,0 +1,16 @@
+{
+  "candidate-manifest.json": 15,
+  "artifact-manifest.json": 85,
+  "frozen-source.json": 15,
+  "protected-start.json": 23116,
+  "identities": {
+    "candidate-manifest.json": "c2079360e46668aa3b4bda634bcbeaeca895ced1893fac63340cd91026feaff0",
+    "candidate.diff": "34e6442a62a2e742b92a42216b89cdee69deb751c3df7e2c4d8db96b3ee2a048",
+    "artifact-manifest.json": "08afead3b8f159862013c393485e5b6ca0e511012be6c416f37394662863ef1b",
+    "REPORT.md": "ef9d076b9c15a983639f0db7d49e9ea9b503c35e6510b4044e7ce358e341c784"
+  },
+  "incremental_diff_reconstructed": true,
+  "baseline_files": 8,
+  "baseline_product_matches_original_B4_A": true,
+  "AGENTS": "CLAUDE.md symlink"
+}

@@ -1,0 +1,26 @@
+{
+  "debug": {
+    "command": "make test-all",
+    "exit_code": 0,
+    "registered": 121,
+    "passed": 121,
+    "native_cases": 120,
+    "acceptance_cases": 1,
+    "cli_processes": 247,
+    "skipped": 0,
+    "lint_sources": 29,
+    "no_change_build": "ninja: no work to do."
+  },
+  "release": {
+    "command": "make test-all PRESET=release",
+    "exit_code": 0,
+    "registered": 121,
+    "passed": 121,
+    "native_cases": 120,
+    "acceptance_cases": 1,
+    "cli_processes": 247,
+    "skipped": 0,
+    "lint_sources": 29,
+    "no_change_build": "ninja: no work to do."
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "compared_files": 80,
+  "identical_nonprovenance_files": 79,
+  "expected_provenance_differences": [
+    "provenance.json"
+  ]
+}

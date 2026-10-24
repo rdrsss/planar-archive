@@ -1,0 +1,78 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "basis": {
+    "candidate": "repository-relative flat SHA256 map",
+    "author_evidence": "evidence-relative flat SHA256 map",
+    "baseline": "repository-relative files excluding .git/build/author evidence"
+  },
+  "identities": {
+    "candidate.json": {
+      "expected": "67e3a6fa174d3f7a526e52d1717cb21f617655ebad65b8788d19b2ca264867bf",
+      "actual": "67e3a6fa174d3f7a526e52d1717cb21f617655ebad65b8788d19b2ca264867bf"
+    },
+    "owned.diff": {
+      "expected": "400139e1f9686a00109cfea78c8530ce2639a36883e8e9461f567dc697e29f9b",
+      "actual": "400139e1f9686a00109cfea78c8530ce2639a36883e8e9461f567dc697e29f9b"
+    },
+    "evidence-sha256.json": {
+      "expected": "6444e7ff1fbcb02ba80a0682af6fca573d5a52d9d5d0bf67e524743c5fa7aabd",
+      "actual": "6444e7ff1fbcb02ba80a0682af6fca573d5a52d9d5d0bf67e524743c5fa7aabd"
+    }
+  },
+  "candidate_entries": 8,
+  "candidate_mismatches": {},
+  "author_evidence_entries": 18,
+  "author_evidence_mismatches": {},
+  "baseline_entries": 14714,
+  "changed": {
+    "AGENTS.md": {
+      "before": "63093ac6cf965cf338107bb3750c758fa185cb6d7b7f6e504d375581e7319ae1",
+      "after": "247c649175718489442b40a1a4e4595e1b77054b6b7bd0ba04096088ee5699ba"
+    },
+    "CLAUDE.md": {
+      "before": "63093ac6cf965cf338107bb3750c758fa185cb6d7b7f6e504d375581e7319ae1",
+      "after": "247c649175718489442b40a1a4e4595e1b77054b6b7bd0ba04096088ee5699ba"
+    },
+    "docs/vernacular/acceptance-matrix.md": {
+      "before": "1743819815b3234287ff1faa2e58294bc6c4911a0dcf08539ff7fdb91e91cfa0",
+      "after": "ee521e23c674ee4d789c71dd340458e852ba3a0260754bd04c0fd9918bf0448e"
+    },
+    "docs/vernacular/command-contract.md": {
+      "before": "3ebc3371e7475153399f38a5bbba569bada18d46c3246b3dc310a33b82568b10",
+      "after": "7da71848e7ed1b337dc21ac8ffe7936bb7caca29ecd0d4ab89b588afb2b51259"
+    },
+    "docs/vernacular/implementation.md": {
+      "before": "d5fc3a60171ec61f5a9439855939b9b0be648c1a2b51188782d0425ded209409",
+      "after": "1853b34b27fb1557a699ff6527f5cfa226d9093d222c38010e6b536669b24be0"
+    },
+    "docs/vernacular/roadmap.md": {
+      "before": "7909bd590caa64dc1eefbc29651e4146b0897d2bba81ab49886bee209cfb25d6",
+      "after": "dec395cc576976063bddbd0e710e62b04f8b9a5748919df42dfa390625bfa29d"
+    },
+    "docs/vernacular/rounds/V5-02-X02.md": {
+      "before": "302be76fb4285adb938c50bc8b326520209cd9ead0129a93643249205d22b3ff",
+      "after": "d920afff7a61f2f959d6de58b490227d8b997e7a244910dd50b79ee2806bd21d"
+    },
+    "docs/vernacular/v5-alignment.md": {
+      "before": "10056da06d1bf7d7c2663f714b97e5344f664b024d7c9fbac601185330d11c0f",
+      "after": "b12cee82f01314e63b515ddfa013a72b325948995182a64f17d1360cf11000c1"
+    }
+  },
+  "additions": [
+    "docs/vernacular/external-profile-contract.md",
+    "docs/vernacular/external-profile-implementation.md"
+  ],
+  "unexpected_changes": [],
+  "unexpected_additions": [],
+  "command_exact_body_equal": true,
+  "agents_symlink": "CLAUDE.md",
+  "links_checked": 27,
+  "links_valid": true,
+  "limits": "Read-only textual/source/hash verification; no product builds/tests or schema execution.",
+  "final_candidate_entries_match": true,
+  "review_report_links_valid": [
+    "../external-profile-contract.md#x-reg--registration-and-immutable-ownership",
+    "../command-contract.md#invocation-values-and-finite-native-service-protocol"
+  ]
+}

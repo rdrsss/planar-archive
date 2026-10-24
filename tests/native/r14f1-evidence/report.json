@@ -1,0 +1,44 @@
+{
+  "candidate_sha256": "f287ddaa8809b93d65b87fd066253a2fed1819bdc27d43b2a35c089eaa4dd12d",
+  "fullgate_candidate_sha256": "fe05589afae59ec4dd480fcfdcb26cd0c920196fa9663dee3d6c6ddad0886ca6",
+  "test_only_changes_after_gate": [
+    "src/engine/export/source_export.t.cpp",
+    "tests/native/r14f1-support/posix.cpp"
+  ],
+  "full_debug": {
+    "registered": 327,
+    "passed": 327,
+    "skipped": 0
+  },
+  "focused_final": {
+    "registered": 10,
+    "passed": 10,
+    "skipped": 0
+  },
+  "prior_names_retained": 317,
+  "protected_files_unchanged": 4992,
+  "cli_processes": {
+    "render": 247,
+    "init": 60,
+    "history": 115
+  },
+  "source_profile_test": {
+    "files": 4096,
+    "directories": 8191,
+    "depth_separate_case": 64,
+    "descriptor_ceiling": 128
+  },
+  "mutation": {
+    "original_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d",
+    "mutant_sha256": "0c122d92506d2ee12dca5a200eabb5f5c1371099de4ab5edfe319212a665ccd3",
+    "test_exit": 42,
+    "restored_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d"
+  },
+  "limitations": [
+    "macOS ARM64 only; Linux branch not compiled or executed",
+    "No hardware power-loss or hostile directory-owner guarantee",
+    "Injected bad_alloc, not physical allocator exhaustion",
+    "F1 native API only; no export CLI/stdout behavior",
+    "Full 327 gate preceded only final race test strengthening; ten native cases and lint rerun final"
+  ]
+}

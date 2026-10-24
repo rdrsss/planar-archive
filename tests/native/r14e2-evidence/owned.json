@@ -1,0 +1,19 @@
+[
+  "CMakeLists.txt",
+  "src/engine/CMakeLists.txt",
+  "src/cmd/planar/CMakeLists.txt",
+  "src/cmd/planar/bootstrap.cpp",
+  "src/cmd/planar/bootstrap.t.cpp",
+  "src/cmd/planar/response.cpp",
+  "src/cmd/planar/response.cppm",
+  "docs/cli-reference.md",
+  "docs/architecture.md",
+  "docs/testing.md",
+  "src/engine/history/read.cppm",
+  "src/engine/history/read.cpp",
+  "src/engine/history/read.t.cpp",
+  "src/cmd/planar/handlers/history/command.cppm",
+  "src/cmd/planar/handlers/history/command.cpp",
+  "tests/acceptance/bootstrap_history.py",
+  "tests/native/r14e2-support/fixture.cpp"
+]

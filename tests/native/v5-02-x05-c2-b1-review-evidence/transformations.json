@@ -1,0 +1,7 @@
+{
+  "controlled_adapter": true,
+  "replacement_after": "state.buffer.storage.resize(512);",
+  "replacement_before": "state.buffer.storage.resize(planar_codec_detail::projection_scratch_bytes);",
+  "source": "src/engine/json_codec/codec.cpp",
+  "source_sha256": "80e4fe7fb29d99c0127d7a4ed22f8bb1b3b331ef27d1f7de06e62edd40347597"
+}

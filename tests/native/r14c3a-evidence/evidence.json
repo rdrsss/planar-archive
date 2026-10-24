@@ -1,0 +1,18 @@
+{
+  "candidate_identity": "3ee4ca19f3748affc81a441f9376ba33b350fb67839b98311a219a53dd34922b",
+  "capture_cases": 25,
+  "prior_capture_cases": 21,
+  "new_native_cases": 4,
+  "history_focused_cases": 151,
+  "cli_processes": 247,
+  "skips": 0,
+  "active_lint_sources": 67,
+  "helper_lint_sources": 4,
+  "build": "macOS debug",
+  "no_work": true,
+  "review_status": "awaiting independent review",
+  "limitations": [
+    "Linux unverified",
+    "release/full R14 milestone gate outstanding"
+  ]
+}

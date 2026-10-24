@@ -1,0 +1,11 @@
+{
+  "snapshot": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+  "source": "candidate.sha256 frozen retained files only; no existing cache, build, bin or ignored files copied",
+  "command": [
+    "cmake",
+    "--preset",
+    "debug"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.0868810415267944
+}

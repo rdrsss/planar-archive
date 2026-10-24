@@ -1,0 +1,20 @@
+{
+  "upvalue": {
+    "returncode": 0,
+    "stdout": "created\ninvoke result {\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"changed-after-seal\"},\"ok\":false}\n",
+    "stderr": ""
+  },
+  "deep": {
+    "returncode": 0,
+    "timed_out": false,
+    "stdout": "created\ninvoke error internal \n",
+    "stderr": ""
+  },
+  "deep_large": {
+    "returncode": null,
+    "timed_out": true,
+    "timeout_seconds": 15,
+    "stdout": "",
+    "stderr": ""
+  }
+}

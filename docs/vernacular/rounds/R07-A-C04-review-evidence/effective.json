@@ -1,0 +1,14 @@
+{
+  "cmake/embed_lua.cmake": "666e9ae92fc87313095ff8e9bd1ade65dbae5bd67060733f3bbb7bde6eb0cd3d",
+  "cmake/rewrite.cmake": "8ec5cf1d0f3589ae3f8529dbde02e155e99dc836d53854d723cec0bba2422526",
+  "src/kernel/CMakeLists.txt": "f8ec6fea5225d51b83500bd39a827c251641e59fbdcff6a1282ca33e6053bbdd",
+  "src/kernel/runtime/runtime.cppm": "a87fbd8b7598270e28b6edba53dd1bbd0522a3c281f961bc64ada6773c142185",
+  "src/kernel/runtime/runtime.cpp": "cb6b41544d3fca2e62e2a1ff75566281f74c6a6167b2d494a5b61ae798af41d8",
+  "src/kernel/runtime/runtime.t.cpp": "1a9efbdac786a7b14b9e353b301eb9f5149c9da50f166e2b5a24a48ae4d3d83a",
+  "stdlib/planar/bootstrap.lua": "4d84a194597198224d4eef3e015cf7c73a7afe71eb84f28490b39959ffae77c0",
+  "stdlib/planar/README.md": "b7c9f7cb14a09181a5b3aa4cf068b7057ea94c09ceaff585fcb056a0ebeabb9d",
+  "tests/stdlib/harness.cppm": "7decac9fa158c5bffb829a1097f0ecea9f9d045a4aa27579c0647d567108d6df",
+  "tests/stdlib/bridge.lua": "8b4a2c9c25c1ba9ce1d561acd40a413778f3e2728d100daf7c029468e4167d10",
+  "docs/architecture.md": "f89bfead0876951ac6eb71b7509d523f3485f1902a968f1372a7b851e14597dd",
+  "docs/testing.md": "ca6c80a8c6b3bd78b0c0584c7351cc73f4f0a46affaa3fb030507a455e360cd6"
+}

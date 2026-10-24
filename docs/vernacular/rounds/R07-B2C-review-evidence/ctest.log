@@ -1,0 +1,128 @@
+Test project <repo>/build/rewrite-debug
+      Start 32: replacement.runtime bounds Lua execution allocation and native amplification
+ 1/60 Test #32: replacement.runtime bounds Lua execution allocation and native amplification ................................   Passed    1.03 sec
+      Start 33: replacement.runtime enforces immaterial text payloads on both boundaries
+ 2/60 Test #33: replacement.runtime enforces immaterial text payloads on both boundaries ....................................   Passed    0.03 sec
+      Start 34: replacement.runtime exposes only the selected bounded table helpers
+ 3/60 Test #34: replacement.runtime exposes only the selected bounded table helpers .........................................   Passed    0.02 sec
+      Start 35: replacement.runtime identifies the diagnostic actually escaping Lua
+ 4/60 Test #35: replacement.runtime identifies the diagnostic actually escaping Lua .........................................   Passed    2.84 sec
+      Start 36: replacement.runtime makes caught quota terminal before protected calls return
+ 5/60 Test #36: replacement.runtime makes caught quota terminal before protected calls return ...............................   Passed    1.88 sec
+      Start 37: replacement.runtime mutations cannot affect captured native input
+ 6/60 Test #37: replacement.runtime mutations cannot affect captured native input ...........................................   Passed    0.02 sec
+      Start 38: replacement.runtime native hash primitives match direct canonical identities
+ 7/60 Test #38: replacement.runtime native hash primitives match direct canonical identities ................................   Passed    0.03 sec
+      Start 39: replacement.runtime preserves ordinary protected call arity errors and nesting
+ 8/60 Test #39: replacement.runtime preserves ordinary protected call arity errors and nesting ..............................   Passed    0.02 sec
+      Start 40: replacement.runtime preserves private declaration tags and raw captured bytes
+ 9/60 Test #40: replacement.runtime preserves private declaration tags and raw captured bytes ...............................   Passed    0.03 sec
+      Start 41: replacement.runtime prevents finalizers from bypassing instruction limits
+10/60 Test #41: replacement.runtime prevents finalizers from bypassing instruction limits ...................................   Passed    0.03 sec
+      Start 42: replacement.runtime refuses native count paths within a subprocess bound
+11/60 Test #42: replacement.runtime refuses native count paths within a subprocess bound ....................................   Passed    0.06 sec
+      Start 43: replacement.runtime refuses native sparse table range helpers
+12/60 Test #43: replacement.runtime refuses native sparse table range helpers ...............................................   Passed    0.02 sec
+      Start 44: replacement.runtime refuses native string pattern paths within a subprocess bound
+13/60 Test #44: replacement.runtime refuses native string pattern paths within a subprocess bound ...........................   Passed    0.12 sec
+      Start 45: replacement.runtime refuses unsupported trusted returns and malformed native inputs
+14/60 Test #45: replacement.runtime refuses unsupported trusted returns and malformed native inputs .........................   Passed    0.03 sec
+      Start 46: replacement.runtime repairs traversal state after caught conversion failures
+15/60 Test #46: replacement.runtime repairs traversal state after caught conversion failures ................................   Passed    0.05 sec
+      Start 47: replacement.runtime retains deterministic nonpattern string operations
+16/60 Test #47: replacement.runtime retains deterministic nonpattern string operations ......................................   Passed    0.02 sec
+      Start 48: replacement.runtime retains rich stdlib diagnostics as structural data
+17/60 Test #48: replacement.runtime retains rich stdlib diagnostics as structural data ......................................   Passed    0.02 sec
+      Start 49: replacement.runtime states are fresh deterministic and separated from declarations
+18/60 Test #49: replacement.runtime states are fresh deterministic and separated from declarations ..........................   Passed    0.03 sec
+      Start 50: replacement.schema ID record normalization sorts collections and preserves ordered lists
+19/60 Test #50: replacement.schema ID record normalization sorts collections and preserves ordered lists ....................   Passed    0.16 sec
+      Start 51: replacement.schema JSON counts container entries for empty and nonempty terminals
+20/60 Test #51: replacement.schema JSON counts container entries for empty and nonempty terminals ...........................   Passed    0.08 sec
+      Start 52: replacement.schema JSON node limit and request envelopes refuse deterministically
+21/60 Test #52: replacement.schema JSON node limit and request envelopes refuse deterministically ...........................   Passed    0.44 sec
+      Start 53: replacement.schema diagnostics choose logical file field code deterministically
+22/60 Test #53: replacement.schema diagnostics choose logical file field code deterministically .............................   Passed    0.06 sec
+      Start 54: replacement.schema enforces job intrinsic policy budgets preferences and sorted sets
+23/60 Test #54: replacement.schema enforces job intrinsic policy budgets preferences and sorted sets ........................   Passed    0.09 sec
+      Start 55: replacement.schema enforces registry descriptor types bounds enums and uniqueness
+24/60 Test #55: replacement.schema enforces registry descriptor types bounds enums and uniqueness ...........................   Passed    0.09 sec
+      Start 56: replacement.schema enforces workspace intrinsic constraints and declaration constructors
+25/60 Test #56: replacement.schema enforces workspace intrinsic constraints and declaration constructors ....................   Passed    0.06 sec
+      Start 57: replacement.schema final text uses exact text identity and wrapped provenance
+26/60 Test #57: replacement.schema final text uses exact text identity and wrapped provenance ...............................   Passed    0.04 sec
+      Start 58: replacement.schema production exports normalize every quota job and defaults
+27/60 Test #58: replacement.schema production exports normalize every quota job and defaults ................................   Passed    0.03 sec
+      Start 59: replacement.schema refuses malformed constructors fields lists wrappers and versions
+28/60 Test #59: replacement.schema refuses malformed constructors fields lists wrappers and versions ........................   Passed    0.08 sec
+      Start 60: replacement.schema resolves retained text from declaring directory with exact bytes
+29/60 Test #60: replacement.schema resolves retained text from declaring directory with exact bytes .........................   Passed    0.06 sec
+      Start 61: replacement.schema resolves text in every job relative to that job declaration
+30/60 Test #61: replacement.schema resolves text in every job relative to that job declaration ..............................   Passed    0.03 sec
+      Start 62: replacement.schema sorted records retain declaration indexes for intrinsic diagnostics
+31/60 Test #62: replacement.schema sorted records retain declaration indexes for intrinsic diagnostics ......................   Passed    0.04 sec
+      Start 63: replacement.schema strict JSON preserves container Unicode and integer identities
+32/60 Test #63: replacement.schema strict JSON preserves container Unicode and integer identities ...........................   Passed    0.02 sec
+      Start 64: replacement.schema strict JSON refuses malformed syntax text duplicates and bounds
+33/60 Test #64: replacement.schema strict JSON refuses malformed syntax text duplicates and bounds ..........................   Passed    0.10 sec
+      Start 65: replacement.schema validates joined declaration and text paths before diagnostics
+34/60 Test #65: replacement.schema validates joined declaration and text paths before diagnostics ...........................   Passed    0.13 sec
+      Start 66: replacement.schema validates unselected jobs registry and exact workspace routes
+35/60 Test #66: replacement.schema validates unselected jobs registry and exact workspace routes ............................   Passed    0.06 sec
+      Start 67: replacement.selection distinguishes capture absence empty outputs and missing facet paths
+36/60 Test #67: replacement.selection distinguishes capture absence empty outputs and missing facet paths ...................   Passed    0.10 sec
+      Start 68: replacement.selection enforces aggregate byte file limits and normalized executable modes
+37/60 Test #68: replacement.selection enforces aggregate byte file limits and normalized executable modes ...................   Passed    0.53 sec
+      Start 69: replacement.selection independently resolves every quota symbolic work manifest
+38/60 Test #69: replacement.selection independently resolves every quota symbolic work manifest .............................   Passed    0.71 sec
+      Start 70: replacement.selection optional observations provenance syntax and set order remain immaterial
+39/60 Test #70: replacement.selection optional observations provenance syntax and set order remain immaterial ...............   Passed    0.32 sec
+      Start 71: replacement.selection pipeline derives obligations before scope and records remapped producers
+40/60 Test #71: replacement.selection pipeline derives obligations before scope and records remapped producers ..............   Passed    0.20 sec
+      Start 72: replacement.selection refuses inconsistent malformed and excessive retained byte records
+41/60 Test #72: replacement.selection refuses inconsistent malformed and excessive retained byte records ....................   Passed    0.14 sec
+      Start 73: replacement.selection retains check applicability registry definitions and pipeline assignment scope
+42/60 Test #73: replacement.selection retains check applicability registry definitions and pipeline assignment scope ........   Passed    0.25 sec
+      Start 74: replacement.selection scopes requirements and excludes optional policy and own bytes
+43/60 Test #74: replacement.selection scopes requirements and excludes optional policy and own bytes ........................   Passed    0.77 sec
+      Start 75: replacement.selection start facets are external exact content and completion is never inferred
+44/60 Test #75: replacement.selection start facets are external exact content and completion is never inferred ..............   Passed    0.37 sec
+      Start 76: replacement.semantic additions retain per-unit applicability even when definition unions match
+45/60 Test #76: replacement.semantic additions retain per-unit applicability even when definition unions match ..............   Passed    0.08 sec
+      Start 77: replacement.semantic captured file ancestors cannot satisfy file facets
+46/60 Test #77: replacement.semantic captured file ancestors cannot satisfy file facets .....................................   Passed    0.04 sec
+      Start 78: replacement.semantic checks trusted allowed definitions conformance and per-unit additions
+47/60 Test #78: replacement.semantic checks trusted allowed definitions conformance and per-unit additions ..................   Passed    0.10 sec
+      Start 79: replacement.semantic consumes sealed real quota topology after source trees are removed
+48/60 Test #79: replacement.semantic consumes sealed real quota topology after source trees are removed .....................   Passed    0.04 sec
+      Start 80: replacement.semantic contract complete dependencies allow only availability and still need start contract
+49/60 Test #80: replacement.semantic contract complete dependencies allow only availability and still need start contract ...   Passed    0.06 sec
+      Start 81: replacement.semantic distinguishes captured empty directories and current base boundary topology
+50/60 Test #81: replacement.semantic distinguishes captured empty directories and current base boundary topology ............   Passed    0.13 sec
+      Start 82: replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier
+51/60 Test #82: replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier ......   Passed    0.10 sec
+      Start 83: replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries
+52/60 Test #83: replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries ...........   Passed    0.10 sec
+      Start 84: replacement.semantic phase cycles report actual deterministic closed traces
+53/60 Test #84: replacement.semantic phase cycles report actual deterministic closed traces .................................   Passed    0.04 sec
+      Start 85: replacement.semantic pipeline derives adjacent cross products and validates every stage
+54/60 Test #85: replacement.semantic pipeline derives adjacent cross products and validates every stage .....................   Passed    0.08 sec
+      Start 86: replacement.semantic pipeline expands full adjacent stage work cross products before scope
+55/60 Test #86: replacement.semantic pipeline expands full adjacent stage work cross products before scope ..................   Passed    0.05 sec
+      Start 87: replacement.semantic production validates both quota jobs and preserves grouped unit obligations
+56/60 Test #87: replacement.semantic production validates both quota jobs and preserves grouped unit obligations ............   Passed    0.03 sec
+      Start 88: replacement.semantic refuses all union boundary overlaps and segment aliases
+57/60 Test #88: replacement.semantic refuses all union boundary overlaps and segment aliases ................................   Passed    0.19 sec
+      Start 89: replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs
+58/60 Test #89: replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs ..........   Passed    0.10 sec
+      Start 90: replacement.semantic schema refusal precedes policy and diagnostics retain author indexes
+59/60 Test #90: replacement.semantic schema refusal precedes policy and diagnostics retain author indexes ...................   Passed    0.05 sec
+      Start 91: replacement.semantic validates references and namespaces before selecting any job
+60/60 Test #91: replacement.semantic validates references and namespaces before selecting any job ...........................   Passed    0.13 sec
+
+100% tests passed out of 60
+
+Label Time Summary:
+unit    =  12.52 sec*proc (60 tests)
+
+Total Test time (real) =  12.55 sec

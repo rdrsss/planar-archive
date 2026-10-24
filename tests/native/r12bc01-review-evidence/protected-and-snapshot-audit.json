@@ -1,0 +1,18 @@
+{
+  "primitive-identity.json": {
+    "entries": 3,
+    "mismatches": []
+  },
+  "historical-evidence-identity.json": {
+    "entries": 52,
+    "mismatches": []
+  },
+  "before-candidate": {
+    "entries": 7,
+    "mismatches": []
+  },
+  "candidate": {
+    "entries": 7,
+    "mismatches": []
+  }
+}

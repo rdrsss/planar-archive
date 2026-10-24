@@ -1,0 +1,281 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar",
+      "planar_runtime_tests",
+      "planar_ledger_format_tests",
+      "planar_ledger_sqlite_tests",
+      "planar_history_read_tests",
+      "planar_history_fixture",
+      "planar_load_cli_probe",
+      "planar_cli_variant_0",
+      "planar_cli_variant_1",
+      "planar_cli_variant_2",
+      "planar_cli_variant_3",
+      "planar_cli_variant_4",
+      "planar_cli_variant_5",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "final-build",
+    "seconds": 61.6279731253162
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "inventory-selected",
+    "seconds": 0.05608250014483929
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/focused-ctest.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "focused-ctest",
+    "seconds": 124.2970080403611
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b3-c-support/vector.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "selection-vectors",
+    "seconds": 0.6455459175631404
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "shape-definition-vectors",
+    "seconds": 0.6655594585463405
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "canonical-vectors",
+    "seconds": 0.6637553749606013
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "record-v1-vectors",
+    "seconds": 0.659066166728735
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "request-v2-vectors",
+    "seconds": 0.6664954582229257
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "effective-provenance-vectors",
+    "seconds": 0.6629808340221643
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/historical-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "historical-audit",
+    "seconds": 0.3698297096416354
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/d6-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "d6-audit",
+    "seconds": 0.23619208298623562
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/d6-c01-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "d6-c01-audit",
+    "seconds": 0.14166283328086138
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/d7-b-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "d7-b-audit",
+    "seconds": 0.114590416662395
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/b1-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "b1-audit",
+    "seconds": 0.04703116696327925
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-b2-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-b2-evidence/current-native-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "current-native-audit",
+    "seconds": 0.03007120918482542
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "final-lint",
+    "seconds": 1.7132386667653918
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-b2-support/private.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "private-final",
+    "seconds": 12.237943083047867
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar",
+      "planar_runtime_tests",
+      "planar_ledger_format_tests",
+      "planar_ledger_sqlite_tests",
+      "planar_history_read_tests",
+      "planar_history_fixture",
+      "planar_load_cli_probe",
+      "planar_cli_variant_0",
+      "planar_cli_variant_1",
+      "planar_cli_variant_2",
+      "planar_cli_variant_3",
+      "planar_cli_variant_4",
+      "planar_cli_variant_5",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "no-work",
+    "seconds": 0.13920387532562017
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "inventory-final",
+    "seconds": 0.04936695843935013
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-b2-support/freeze.py",
+      "protect"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "protection",
+    "seconds": 41.12978533376008
+  }
+]

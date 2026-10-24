@@ -1,0 +1,11 @@
+{
+  "cwd": "<repo>/build/rewrite-debug",
+  "argv": [
+    "cmake",
+    "--build",
+    "<repo>/build/rewrite-debug",
+    "--target",
+    "all",
+    "planar_tests"
+  ]
+}

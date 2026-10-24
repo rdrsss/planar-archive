@@ -1,0 +1,11 @@
+{
+  "src/engine/runtime/runtime.cppm": "f395645379ac977a30a8f37dd0acc06e54a1e69bbd82c73248982f3388dbeac6",
+  "src/engine/runtime/runtime.cpp": "5463fdcfebcf7ad1c76b68999196a5d9e9541832fd91e445612010ce2322a7f9",
+  "src/engine/runtime/external_registration.t.cpp": "1fca8237c333de37e71cf4047151b51381a62b7582f35389a5a547fce53a26ff",
+  "CLAUDE.md": "01331f44df50364f155a1370908031296d0ae44dc88c9ef31252ddd32a798f1c",
+  "docs/architecture.md": "2ccb1b21b99b8a2d05d5c1a396feff0c0ce64700145df98edd3112919b40cc13",
+  "docs/testing.md": "acea86f2a791d42852216da8c39b59d3e7973c253e5493f0a6d88d2ea98af280",
+  "docs/vernacular/implementation.md": "9c7bb166cc5d045f3dd98cc1eab8c0bae332192299014007618f2c3fda7490cf",
+  "docs/vernacular/roadmap.md": "aeb0f54dd9faf8e2297256618abb7ddddd2e4aad397f976a1ad04158db3ccb28",
+  "docs/vernacular/external-profile-implementation.md": "ccf0983359cf4490a458ef6f511360c65fabbab4a0ca89e7fb12421783f599b2"
+}

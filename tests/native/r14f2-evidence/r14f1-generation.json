@@ -1,0 +1,81 @@
+{
+  "source_export.cppm": {
+    "source_sha256": "b5106b48b69383097b5d1443d2e03845b595dfcb9e5adfd7c3410407e06fd7d4",
+    "generated_sha256": "349810626e88df24e03acfa85538615b54b385fd871129d125406d70a5dca335",
+    "reverse_identical": true,
+    "substitutions": [
+      {
+        "before": "planar.engine.source_export;",
+        "after": "planar.test.source_export;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::engine::source_export {",
+        "after": "namespace planar::engine::source_export_fault {",
+        "count": 1
+      }
+    ]
+  },
+  "source_export.cpp": {
+    "source_sha256": "f0a79bfd69559b9aac348c11fa0b5a79080d170c4b56d44a761e5ed0fa85623c",
+    "generated_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d",
+    "reverse_identical": true,
+    "substitutions": [
+      {
+        "before": "planar.engine.source_export;",
+        "after": "planar.test.source_export;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::engine::source_export {",
+        "after": "namespace planar::engine::source_export_fault {",
+        "count": 1
+      },
+      {
+        "before": "import planar.engine.ledger.format;",
+        "after": "import planar.engine.ledger.format;\nimport planar.test.export_posix;",
+        "count": 1
+      },
+      {
+        "before": "::mkdirat(",
+        "after": "planar::test::export_posix::mkdirat(",
+        "count": 2
+      },
+      {
+        "before": "::openat(",
+        "after": "planar::test::export_posix::openat(",
+        "count": 7
+      },
+      {
+        "before": "::write(",
+        "after": "planar::test::export_posix::write(",
+        "count": 1
+      },
+      {
+        "before": "::fchmod(",
+        "after": "planar::test::export_posix::fchmod(",
+        "count": 4
+      },
+      {
+        "before": "::fsync(",
+        "after": "planar::test::export_posix::fsync(",
+        "count": 3
+      },
+      {
+        "before": "::close(",
+        "after": "planar::test::export_posix::close(",
+        "count": 3
+      },
+      {
+        "before": "::unlinkat(",
+        "after": "planar::test::export_posix::unlinkat(",
+        "count": 2
+      },
+      {
+        "before": "int publish(int parent, const char* stage, const char* target) noexcept {",
+        "after": "int publish(int parent, const char* stage, const char* target) {\n  if (auto result = planar::test::export_posix::before_publish(parent, stage, target)) return *result;",
+        "count": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "all_identities_match": true,
+  "archive_entries": 465,
+  "artifacts": 567,
+  "build_entries": {
+    "debug": 943,
+    "release": 940
+  },
+  "candidate_entries": 475,
+  "owned_diff_reconstructed": true,
+  "post_gate_changes": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x05-shape-evidence.md"
+  ],
+  "source_entries": 29307,
+  "symlink": "AGENTS.md -> CLAUDE.md",
+  "tested_entries": 29306,
+  "utc": "2026-10-23T19:28:51.327197+00:00"
+}

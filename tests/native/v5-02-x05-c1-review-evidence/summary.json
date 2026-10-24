@@ -1,0 +1,13 @@
+{
+  "assembly_and_independent": 9,
+  "errors": 0,
+  "failures": 0,
+  "frozen_assembly_and_independent": 9,
+  "inventory": 682,
+  "no_full_suite": true,
+  "no_release_invocation": true,
+  "no_work": true,
+  "render": 46,
+  "shared_compiled_entries": 888,
+  "skips": 0
+}

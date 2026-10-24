@@ -1,0 +1,15 @@
+{
+  "changed": [],
+  "entries": 72661,
+  "identity": {
+    "artifact_entries": 221,
+    "candidate_entries": 23,
+    "hashes": {
+      "REPORT.md": "61ea33a4366733eb5f332003c24d88d75b22f8d5b39ff584de6942f3accc99b3",
+      "artifact-manifest.json": "93ead0bc5ab4645b8c6594c7947092389858fb719a8a92777e8f8d82ed331c19",
+      "frozen-candidate.json": "b2569f339ad872b5a8dc9ac92aa881b976c75e0fee30e09878676b3361ffc2ba"
+    },
+    "verified": true
+  },
+  "release_absent": true
+}

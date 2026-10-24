@@ -1,0 +1,8 @@
+{
+  "utc": "2026-10-23T19:48:26.060931+00:00",
+  "approved_manifest": "tests/native/v5-02-x05-b4-c-evidence/attempt01/release/build-identities.json",
+  "approved_manifest_sha256": "40a3814ff3c68e9db1af0e018a7138108f3e651161571e97550629a0bc25a743",
+  "identities": 940,
+  "entire_membership_and_hashes_identical": true,
+  "scope": "Executables, object/PCM/archives/dylibs, CMakeCache, compile_commands and build.ninja match independently approved B4-C release identities"
+}

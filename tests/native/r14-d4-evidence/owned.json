@@ -1,0 +1,19 @@
+[
+  "src/engine/ledger/types.cppm",
+  "src/engine/ledger/format.cpp",
+  "src/engine/ledger/format.t.cpp",
+  "src/engine/ledger/acceptance.t.cpp",
+  "src/cmd/planar/response.cpp",
+  "src/cmd/planar/response.cppm",
+  "src/cmd/planar/bootstrap.t.cpp",
+  "tests/native/r13b1-support/collision.t.cpp",
+  "docs/architecture.md",
+  "docs/testing.md",
+  "CLAUDE.md",
+  "docs/vernacular/implementation.md",
+  "docs/vernacular/roadmap.md",
+  "docs/vernacular/v5-alignment.md",
+  "docs/vernacular/acceptance-matrix.md",
+  "docs/vernacular/load-command-contract.md",
+  "tests/native/r14c3b2-support/atomic.t.cpp"
+]

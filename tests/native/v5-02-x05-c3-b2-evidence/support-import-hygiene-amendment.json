@@ -1,0 +1,8 @@
+{
+  "changed": [
+    "tests/native/v5-02-x05-c3-b2-support/private.py",
+    "tests/native/v5-02-x05-c3-b2-support/resume.py"
+  ],
+  "no_product_test_prose_change": true,
+  "preserved_failed_attempt": "resume-attempt1"
+}

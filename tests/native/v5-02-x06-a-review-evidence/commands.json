@@ -1,0 +1,13 @@
+{
+  "executed": [
+    "python3 tests/native/v5-02-x06-a-review-evidence/audit.py baseline",
+    "python3 tests/native/v5-02-x06-a-review-evidence/audit.py candidate",
+    "initial inline source/report-link audit (expected output artifact not yet published; failure preserved)",
+    "python3 tests/native/v5-02-x06-a-review-evidence/audit.py final",
+    "python3 tests/native/v5-02-x06-a-review-evidence/source_audit.py",
+    "python3 tests/native/v5-02-x06-a-review-evidence/audit.py candidate",
+    "python3 tests/native/v5-02-x06-a-review-evidence/source_audit.py (report finalized)"
+  ],
+  "scope": "documentation/identity/protection only; no product builds/tests or build ownership",
+  "all_final_checks": "pass"
+}

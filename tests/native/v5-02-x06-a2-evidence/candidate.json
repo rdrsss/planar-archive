@@ -1,0 +1,19 @@
+{
+  "diff_sha256": "89aaa6f1118c854c0efe6b94370b736d0a9132edd925ac0d51caf198910a0771",
+  "files": {
+    "CLAUDE.md": "936f20222801a0eb7704da5cf0a5b626fcdc3280a3125c3bdb06fcf5305e131e",
+    "docs/architecture.md": "cd83ec252759376fe951762c49daa553ab68c1305f8e36a7cf81415bf9045f33",
+    "docs/testing.md": "59539e26762bbe5e770fe6c32c7e0666a8e662ae679e55292ae585af24e0208f",
+    "docs/vernacular/acceptance-matrix.md": "0f2dac2f3502746e095cb0628d1abe046ce247f07d5d345fe8d2f31fc88ad882",
+    "docs/vernacular/external-profile-implementation.md": "aa36c4ffd2d63cbcad5c303a2a29b44b643a0dc9a5791d2363b04b1aac9bd345",
+    "docs/vernacular/implementation.md": "8ba134925391426e2dca6dc99cb98ebc4e6fa404c634cc2b25d9a27d3714e809",
+    "docs/vernacular/roadmap.md": "de54dcf143e61b3ac3e6c0ddff7f227e17186248b833695bed829665b535747b",
+    "docs/vernacular/v5-alignment.md": "e206b22035aee109daf941e8361f239f3e9f3ab1208a1b37e19bb6684186d718",
+    "docs/vernacular/x06-implementation.md": "eef4dc04a3c0450368160da9f95b172cd201f0efb17d989b726f33fedc8456cf",
+    "src/engine/CMakeLists.txt": "767de4b14a3680431a7622222872b27fb396d3accc2d747dbb3b7341310f9d5d",
+    "src/engine/history/interpretation_codec.cpp": "7477cd418e73a96b1f176c62977116d23a38b0b513078e5cfa87347d4499df54",
+    "src/engine/history/recorded_interpretation.cpp": "7e93c062213888a6536743ab8e03539c94f16310314ba610434b166f6b8ddfff",
+    "src/engine/history/recorded_interpretation.cppm": "318befcdde8d100295dc86bc8c304b6d2d729348acbcbb55d7f6ecaf2813f499",
+    "src/engine/history/recorded_interpretation.t.cpp": "137ddb896fbba2e748b91c3bcb79315af6d8858a28b5967d1414da4f9104fe36"
+  }
+}

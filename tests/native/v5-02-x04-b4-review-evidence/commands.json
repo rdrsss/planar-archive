@@ -1,0 +1,98 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "end_utc": "2026-10-23T00:20:51.483838+00:00",
+    "exit_code": 0,
+    "label": "debug-no-work",
+    "start_utc": "2026-10-23T00:20:51.105256+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "end_utc": "2026-10-23T00:21:01.482623+00:00",
+    "exit_code": 0,
+    "label": "debug-inventory",
+    "start_utc": "2026-10-23T00:21:01.155393+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "end_utc": "2026-10-23T00:21:10.485771+00:00",
+    "exit_code": 0,
+    "label": "release-no-work",
+    "start_utc": "2026-10-23T00:21:10.149713+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-release",
+      "--show-only=json-v1"
+    ],
+    "end_utc": "2026-10-23T00:21:17.669041+00:00",
+    "exit_code": 0,
+    "label": "release-inventory",
+    "start_utc": "2026-10-23T00:21:17.610589+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "end_utc": "2026-10-23T00:21:24.800774+00:00",
+    "exit_code": 0,
+    "label": "canonical-vectors",
+    "start_utc": "2026-10-23T00:21:24.126966+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "end_utc": "2026-10-23T00:21:31.899528+00:00",
+    "exit_code": 0,
+    "label": "record-vectors",
+    "start_utc": "2026-10-23T00:21:31.248547+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "end_utc": "2026-10-23T00:21:39.772280+00:00",
+    "exit_code": 0,
+    "label": "request-vectors",
+    "start_utc": "2026-10-23T00:21:39.053181+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "end_utc": "2026-10-23T00:21:47.069293+00:00",
+    "exit_code": 0,
+    "label": "effective-vectors",
+    "start_utc": "2026-10-23T00:21:46.421665+00:00"
+  }
+]

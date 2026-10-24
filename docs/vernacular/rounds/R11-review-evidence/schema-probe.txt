@@ -1,0 +1,7 @@
+PASS 1: initialization has no circular FK dependency
+PASS 2: child-first record, directory edge, revision, event, request and projection insert without deferred constraints
+PASS 3: no-op can append request/event while retaining revision
+PASS 4: immutable content may be reused with fresh revision chronology
+PASS 5: all 13 specified immutability triggers reject matching mutations
+PASS 6: injected refusal rolls back event and projection; final FK/integrity checks pass
+LIMIT: host Python SQLite 3.54.1; symbolic record/event payloads test SQL insertion order only. No native codecs, invariant checker, actual hashes, process crash, disk-full, concurrency or filesystem durability tested.

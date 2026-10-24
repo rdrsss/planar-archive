@@ -1,0 +1,22 @@
+{
+  "v5-02-x05-b2-c-evidence": {
+    "members": 153,
+    "mismatches": [],
+    "manifest_sha256": "2bb7859199f905f212ec1e2eefb931da9134c5dda55d58c2e93a0b48f55a2ac9"
+  },
+  "v5-02-x05-b2-c-review-evidence": {
+    "members": 36,
+    "mismatches": [],
+    "manifest_sha256": "612ac3e1796a7b35487c28132f1949742a9e1320d816a08730d20a80b8482408"
+  },
+  "v5-02-x05-b2-c-c01-evidence": {
+    "members": 137,
+    "mismatches": [],
+    "manifest_sha256": "236919076118e249fb916f9dac3d96499787144df79bc4d2da2ba3d289cf9217"
+  },
+  "v5-02-x05-b2-c-c01-review-evidence": {
+    "members": 145,
+    "mismatches": [],
+    "manifest_sha256": "1645e95a876367100d07d1a5564e9ea3e6af02cb440cd3e8a60120aab343e8dd"
+  }
+}

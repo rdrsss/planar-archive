@@ -1,0 +1,16 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "initial_inventory_helper_error": "build/rewrite-debug/bin/planar_runtime_tests: no such file or directory; empty runtime-inventory.json retained",
+  "inventory_command": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "--show-only=json-v1"
+  ],
+  "inventory_count": 756,
+  "python_bytecode_disabled": true,
+  "release_gate_runs": 0,
+  "rewrite_release_absent": true,
+  "schema": "planar-c4-b0-baseline-v1",
+  "shared_builds": 0
+}

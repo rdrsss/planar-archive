@@ -1,0 +1,13 @@
+{
+  "docs/architecture.md": "aa0d1a94425d107340470fd23042f4b384e60ad2a3f37fe726337c7d19b1262b",
+  "docs/testing.md": "2b093f7499a964598733762a1693d7a0701d6d7f16365c4b06f99911dad00485",
+  "src/engine/CMakeLists.txt": "dcb9ab9fafc10a4f5f48cdb953ead36b8728704b7fe0cba1e96bedc698399a0a",
+  "src/engine/history/interpretation.t.cpp": "a7d3857d6e7dd7fbfbc17e7991bf74dfea431bfcec7b11f746c93fbe33080c92",
+  "src/engine/history/provenance.t.cpp": "86e1779a360d91cc7410d4f60e214048d50d2e4081ed6204723ad26e7560b853",
+  "src/engine/runtime/commands.t.cpp": "eacf7a8f440fc71841b05e0ab0ff503617c5773179219755457e2c0125dd439c",
+  "src/engine/runtime/runtime.cpp": "83d100a36d258313511a0224f56be4b3521b3ef632a89650d3dda43f1fde24b3",
+  "src/engine/runtime/runtime.cppm": "1d01e2181007f4ec8b39cc0330581209ddf2e9f46d5be18dbe6a7cb9d53a6df2",
+  "src/stdlib/planar/commands.lua": "764934cd6b32d153671df524b588f5203b4a2c0be463af63cf5562e3749ab773",
+  "tests/native/v5-02-b1-support/altered.lua": "bdf00fc89f81577404a8e5b43fb59d05ca9bcad22448940250485eba226d9de8",
+  "tests/native/v5-02-b1-support/generate.py": "a5c777b8abe5a95ae8c210326981537442538534f5f881ea46789bd475f99752"
+}

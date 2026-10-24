@@ -1,0 +1,81 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "build-verified-final.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(capture |acceptance prepared |prepared |load capture |interpretation |atomic |command |runtime |.*cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d5-evidence/focused-final.xml"
+    ],
+    "exit": 0,
+    "log": "focused-final.log",
+    "evidence_basis": "Completed123-case run before private Doxygen comments; comment-only-proof.json certifies identical lexical tokens. Coordinator explicitly declined redundant rerun."
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "exit": 0,
+    "log": "lint.log"
+  },
+  {
+    "command": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "exit": 0,
+    "log": "vectors.log"
+  },
+  {
+    "command": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d5-evidence/debug-variants.json"
+    ],
+    "exit": 0,
+    "log": "debug-variants.log"
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "no-work.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "log": "final-inventory.json"
+  }
+]

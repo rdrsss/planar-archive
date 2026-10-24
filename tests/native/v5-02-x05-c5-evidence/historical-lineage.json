@@ -1,0 +1,19 @@
+{
+  "historical_B4_C_676_names_directly_preserved": true,
+  "current_D4_876_names_exact_in_both_configurations": true,
+  "later_intermediate_approved_rename_records": [
+    {
+      "record": "tests/native/v5-02-x05-c4-d3-evidence/inventory-preservation.json",
+      "renames": {
+        "replacement.C4 C2 general decimal maximum remains Lua integer and history projection is lazy while role stays closed": "replacement.C4 general decimal maximum remains Lua integer and history projection is lazy"
+      }
+    },
+    {
+      "record": "tests/native/v5-02-x05-c4-d4-evidence/inventory-preservation.json",
+      "renames": {
+        "replacement.C4 A capabilities refuse before instruction entry and closed context exposes no service": "replacement.C4 A closed context exposes no service"
+      }
+    }
+  ],
+  "no_claim_all_intermediate_names_unchanged": true
+}

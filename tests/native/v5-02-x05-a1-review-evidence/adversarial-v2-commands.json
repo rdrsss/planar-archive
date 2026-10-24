@@ -1,0 +1,64 @@
+[
+  {
+    "label": "compile-adversarial-v2",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/lua/0b10/src",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_closure_guard_tests.dir/runtime/closure_guard/closure_guard.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/adversarial-v2.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/adversarial-v2.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit_code": 0,
+    "seconds": 0.35215258225798607
+  },
+  {
+    "label": "link-adversarial-v2",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/adversarial-v2.o",
+      "src/engine/libplanar_closure_guard.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_lua_trusted_libs.a",
+      "libplanar_lua.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/adversarial-v2"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit_code": 0,
+    "seconds": 0.10163141693919897
+  },
+  {
+    "label": "run-adversarial-v2",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/adversarial-v2"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit_code": 0,
+    "seconds": 0.21646866668015718
+  }
+]

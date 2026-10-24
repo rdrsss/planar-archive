@@ -1,0 +1,14 @@
+{
+  "artifact_entries": 514,
+  "artifact_mismatches": [],
+  "author_manifest_sha256": "124c42fed44f8c2a80aa9cb091787d8694bb265e593a47ba468ce7c69d267ed0",
+  "author_report_sha256": "774c02a56360314259ba2a1515dc96cb5b359985cd41fa7a5892577af0cf3114",
+  "build_entries": 931,
+  "build_manifest_sha256": "8fb391b2dd86317d7e80a801962334126752f9d098479ab47c5400950766da8c",
+  "build_mismatches": [],
+  "expected_source_entries": 20440,
+  "owned_diff_sha256": "a749522841f12e0e5eb90b99023807eefe18ebcc3055dba47d5f5615033cbece",
+  "source_entries": 20440,
+  "source_manifest_sha256": "8beb5181756f4fc31f603c3eceda489f835b736c91b076abbc6ffd6bebfeac46",
+  "source_mismatches": []
+}

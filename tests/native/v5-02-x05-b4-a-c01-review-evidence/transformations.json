@@ -1,0 +1,27 @@
+{
+  "original": "523692fd0945ea2e94e14032106362e26c41be13c830e69b419b7374ec071b1a",
+  "copy": "1f9f73a55831b0475093f1b4d3b916b46258a4d97b546e5899c1fba64183908b",
+  "reverse_identical": true,
+  "substitutions": [
+    {
+      "before": "int setup(lua_State* l) {\n  setup_environment(l);",
+      "after": "extern \"C\" const char* review_source(std::size_t*);\nvoid review_read_setup(lua_State*);\nvoid review_freeze(lua_State*);\nint setup(lua_State* l) {\n  setup_environment(l);\n  review_read_setup(l);"
+    },
+    {
+      "before": "  auto source = embedded::source();\n  if (luaL_loadbufferx(l, source.data(), source.size(), \"trusted\", \"t\"))",
+      "after": "  std::size_t size; auto bytes=review_source(&size); auto source=std::string_view(bytes,size);\n  if (luaL_loadbufferx(l, source.data(), source.size(), \"trusted\", \"t\"))"
+    },
+    {
+      "before": "  push(l, context(l).input.get());\n  lua_call(l, 1, LUA_MULTRET);",
+      "after": "  push(l, context(l).input.get());\n  if(context(l).entry==\"render_profile_material\")review_freeze(l);\n  lua_call(l, 1, LUA_MULTRET);"
+    },
+    {
+      "before": "    if (s.command) {\n      lua_rawgeti(l, LUA_REGISTRYINDEX, backing_index);",
+      "after": "    if (true) {\n      lua_rawgeti(l, LUA_REGISTRYINDEX, backing_index);"
+    },
+    {
+      "before": "// Module sealing maps root pairs to the same original registration token used",
+      "after": "\nvoid review_read_setup(lua_State* l) {\n  lua_newtable(l);lua_pushvalue(l,-1);lua_rawseti(l,LUA_REGISTRYINDEX,backing_index);\n  for(auto item:{std::pair{\"rawget\",frozen_rawget},{\"next\",frozen_next}}){lua_pushvalue(l,-1);lua_pushcclosure(l,item.second,1);lua_setglobal(l,item.first);}\n  lua_pop(l,1);lua_getglobal(l,\"next\");lua_pushcclosure(l,frozen_pairs,1);lua_setglobal(l,\"pairs\");\n}\nint review_write_control(lua_State* l) {lua_pushboolean(l,true);lua_setfield(l,1,\"id\");return 0;}\nvoid review_freeze(lua_State* l) {\n int top=lua_gettop(l),input=top;\n lua_newtable(l);int memo=lua_gettop(l);lua_rawgeti(l,LUA_REGISTRYINDEX,backing_index);int backings=lua_gettop(l);lua_newtable(l);int sealed=lua_gettop(l);\n for(auto field:{\"model\",\"selected\"}){lua_getfield(l,input,field);freeze_graph(l,lua_gettop(l),memo,backings,sealed);lua_pushcfunction(l,review_write_control);lua_pushvalue(l,-2);int status=lua_pcall(l,1,0,0);if(status!=LUA_ERRRUN)luaL_error(l,\"frozen_control_failed\");lua_pop(l,2);}\n lua_settop(l,top);\n}\n\n// Module sealing maps root pairs to the same original registration token used"
+    }
+  ]
+}

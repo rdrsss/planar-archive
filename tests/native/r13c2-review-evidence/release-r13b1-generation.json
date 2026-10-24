@@ -1,0 +1,54 @@
+{
+  "verification_mutation": false,
+  "files": {
+    "format.cppm": {
+      "source_sha256": "41fed577a1155d1c358e261121f000af8a7bb8241e0fe10a7b21f7dcacf8705d",
+      "generated_sha256": "217c5e9bcd6c738c8d7cae8c2c9946635a1922bf525d1461065bc731c088c10d",
+      "substitutions": [
+        {
+          "before": "planar.engine.ledger.format;",
+          "after": "planar.test.record_format;",
+          "count": 1
+        },
+        {
+          "before": "namespace planar::engine::ledger {",
+          "after": "namespace planar::engine::record_test {",
+          "count": 1
+        }
+      ],
+      "reverse_identical": true
+    },
+    "format.cpp": {
+      "source_sha256": "2fac3706afa400a1fd01ec15b1920ef15965c513338c961e2aea74a70e854d98",
+      "generated_sha256": "ff0d58ba40b5f90dfc3769208b2e711c75a6b05d1efdc36adeab0e1f536c28bf",
+      "substitutions": [
+        {
+          "before": "planar.engine.ledger.format;",
+          "after": "planar.test.record_format;",
+          "count": 1
+        },
+        {
+          "before": "namespace planar::engine::ledger {",
+          "after": "namespace planar::engine::record_test {",
+          "count": 1
+        },
+        {
+          "before": "import planar.engine.ledger.sqlite;",
+          "after": "import planar.engine.ledger.sqlite;\nimport planar.test.record_digest;",
+          "count": 1
+        },
+        {
+          "before": "namespace planar::engine::record_test {",
+          "after": "namespace planar::engine::record_test {\nusing namespace planar::engine::ledger;",
+          "count": 1
+        },
+        {
+          "before": "digest_record(",
+          "after": "planar::test::forced_digest(",
+          "count": 2
+        }
+      ],
+      "reverse_identical": true
+    }
+  }
+}

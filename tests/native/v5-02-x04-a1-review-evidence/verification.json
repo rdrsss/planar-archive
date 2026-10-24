@@ -1,0 +1,32 @@
+{
+  "inventory": 451,
+  "preserved": 430,
+  "added": [
+    "replacement.capture admission all selected file roles have zero observed metadata phase data reads",
+    "replacement.capture admission ancestor replacement preserving selected inode refuses",
+    "replacement.capture admission bound standalone profile and module reads retain original identity",
+    "replacement.capture admission charges a host component before its temporary copy",
+    "replacement.capture admission descriptor binding refuses a different live file and unknown slots",
+    "replacement.capture admission descriptor binding rejects replacement before native content read",
+    "replacement.capture admission export target selected file aliases use overlap refusal",
+    "replacement.capture admission export targets retain absence and reject trusted overlap",
+    "replacement.capture admission final supplied symlinks and absent target replacements refuse",
+    "replacement.capture admission host and private receipt key bounds reject before path opening",
+    "replacement.capture admission move failed and bounded states refuse safely",
+    "replacement.capture admission retained modes and file metadata reject changes",
+    "replacement.capture admission root relocation and late addition retain original receipts",
+    "replacement.capture admission roots reject equality and both ancestry directions",
+    "replacement.capture admission selected ancestors above trusted root retain modes",
+    "replacement.capture admission selected hard links refuse every supplied file role",
+    "replacement.capture admission selected inputs perform zero observed data reads before binding",
+    "replacement.capture admission staged trusted selections check earlier supplied aliases",
+    "replacement.capture admission standalone roles preserve registry colocation policy",
+    "replacement.capture admission symlinks refuse root intermediate and final components",
+    "replacement.capture admission unrelated siblings and their modes do not invalidate selections"
+  ],
+  "tests": 120,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "candidate_unchanged": true
+}

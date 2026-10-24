@@ -1,0 +1,12 @@
+{
+  "owned_files": 15,
+  "unchanged_v1_codec": true,
+  "old_contract_runtime_and_Lua_unchanged": true,
+  "CMake_append_only": true,
+  "historical_status_bodies_unchanged": 8,
+  "mandatory_rawtree_both_APIs": true,
+  "pure_imports": true,
+  "AGENTS_symlink": "CLAUDE.md",
+  "previous_names_preserved": 876,
+  "new_cases": 16
+}

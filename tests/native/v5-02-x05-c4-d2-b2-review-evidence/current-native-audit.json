@@ -1,0 +1,19 @@
+{
+  "actual_fd_before_content": true,
+  "bounded_private_ordinal_keys": true,
+  "capture_wrapper_no_profile_import": true,
+  "charged_index": true,
+  "explicit_file_selection_precedence": true,
+  "final_membership_before_rereads": true,
+  "immutable_selection": true,
+  "no_cache_authority_replacement": true,
+  "no_filesystem_terminal_observer": true,
+  "no_final_discovery": true,
+  "portable_descriptor_discovery": true,
+  "private_profile_forwarding": true,
+  "root_checks_before_reads_and_enumeration": true,
+  "root_original_state": true,
+  "shared_original_state": true,
+  "stored_authority_on_rereads": true,
+  "supplied_files_only": true
+}

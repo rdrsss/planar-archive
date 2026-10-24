@@ -1,0 +1,18 @@
+{
+  "disposition": "approve",
+  "closes": "B4A-R1 and combined B4-A+C01 pure-helper scope",
+  "report": "2457abdfe6002061c1f75a91957f17f3bd7ade02d8222d18517b17eece2bbb08",
+  "artifact_manifest": "e795e70f834e7a6b09d8c61523ddfb71b8f05d7c9464fcb13a75ea263e39526d",
+  "artifact_entries": 76,
+  "candidate_manifest": "c2079360e46668aa3b4bda634bcbeaeca895ced1893fac63340cd91026feaff0",
+  "candidate_diff": "34e6442a62a2e742b92a42216b89cdee69deb751c3df7e2c4d8db96b3ee2a048",
+  "author_artifact_manifest": "08afead3b8f159862013c393485e5b6ca0e511012be6c416f37394662863ef1b",
+  "protected_entries_unchanged": 23116,
+  "frozen_entries_unchanged": 15,
+  "author_artifact_entries_unchanged": 85,
+  "release_membership_hashes_unchanged": 3463,
+  "AGENTS": "CLAUDE.md symlink preserved",
+  "debug_released": true,
+  "no_later_reviewer_edits": true,
+  "remaining": "B4-B native composition and B4-C integrated Debug/RelWithDebInfo; no full milestone or release gate"
+}

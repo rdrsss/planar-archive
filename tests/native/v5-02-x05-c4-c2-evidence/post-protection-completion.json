@@ -1,0 +1,9 @@
+{
+  "all_behavioral_static_vector_private_adapter_cleanup_no_work_checks_passed": true,
+  "original_final_gate_exit": 1,
+  "original_final_gate_failure": "incorrect coordinator round exclusion in protection helper only",
+  "corrected_protection_exit": 0,
+  "final_source_identity": "final-source-identity.json",
+  "finalization_review": "pending",
+  "debug_released_at_handoff": true
+}

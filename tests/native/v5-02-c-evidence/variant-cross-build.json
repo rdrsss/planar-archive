@@ -1,0 +1,23 @@
+{
+  "all_families_equal": true,
+  "families": [
+    "r12c2",
+    "r13b1",
+    "r14c3b2",
+    "r14f1",
+    "r14f2",
+    "v5-02-b1",
+    "v5-02-b2",
+    "fixed-export-harness"
+  ],
+  "file_counts": {
+    "r12c2": 3,
+    "r13b1": 3,
+    "r14c3b2": 3,
+    "r14f1": 3,
+    "r14f2": 3,
+    "v5-02-b1": 63,
+    "v5-02-b2": 97,
+    "fixed-export-harness": null
+  }
+}

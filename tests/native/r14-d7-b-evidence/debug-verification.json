@@ -1,0 +1,13 @@
+{
+  "registered": 399,
+  "executed": 399,
+  "failures": [],
+  "skips": [],
+  "prior_names_preserved": 396,
+  "new_names": [
+    "replacement.load handler attaches six required text bindings",
+    "replacement.load invocation snapshots one cwd and environment with lexical targets",
+    "replacement.load_cli"
+  ],
+  "final_gate_source_unchanged": true
+}

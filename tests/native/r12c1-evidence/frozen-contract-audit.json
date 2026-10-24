@@ -1,0 +1,17 @@
+{
+  "schema_sql": {
+    "unchanged": true,
+    "baseline_sha256": "bac256c148e037fa1dc0ad745e4c03ce54cb23f4a209f11a2fa5ab82dad0eb4e",
+    "candidate_sha256": "bac256c148e037fa1dc0ad745e4c03ce54cb23f4a209f11a2fa5ab82dad0eb4e"
+  },
+  "schema_and_state_verifier": {
+    "unchanged": true,
+    "baseline_sha256": "2a18878def7c444bdc68f0845b4c20be7bd6331a52da50a258a2065b45e40d50",
+    "candidate_sha256": "2a18878def7c444bdc68f0845b4c20be7bd6331a52da50a258a2065b45e40d50"
+  },
+  "ordinary_opener": {
+    "unchanged": true,
+    "baseline_sha256": "1f2f0efaafb4b3cf55d0d6577a13325af9c17f254e0a5194e72f94b43969f961",
+    "candidate_sha256": "1f2f0efaafb4b3cf55d0d6577a13325af9c17f254e0a5194e72f94b43969f961"
+  }
+}

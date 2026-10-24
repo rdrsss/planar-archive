@@ -1,0 +1,80 @@
+{
+  "actual_red": {
+    "failed_assertions": 4,
+    "failed_case": 1,
+    "ordinary_input_root_read_seal_revived": true
+  },
+  "allocation_refusals": {
+    "new_populated_bind": 3,
+    "replayed_D2A_cache": 2,
+    "replayed_D2A_initial_read": 5,
+    "replayed_bind": 3,
+    "replayed_initial_plain_read": 6,
+    "replayed_unread_seal": 4
+  },
+  "author_focused": {
+    "cases": 171,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "author_gate_commands": 21,
+  "author_private": {
+    "cases": 7,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "author_unbound_baseline": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 1,
+    "skips": 0
+  },
+  "bookkeeping_only_report": true,
+  "copied_runtime_load_proved": false,
+  "first_attempt_focused": {
+    "cases": 170,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "first_attempt_private": {
+    "cases": 7,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "identity": {
+    "artifact_entries": 202,
+    "candidate_entries": 23,
+    "identities": {
+      "REPORT.md": "59cffe4fe4a4babb913e13a82f0d459db818460389436223d7845e2c8898fcdb",
+      "artifact-manifest.json": "4d660f00e4c194e64a54aa8da4ed5baf7b721fc95b9d9fccd8c90a38f4176e21",
+      "finalization.json": "35ccfd7e46aa9acc8fdc31519f5a42eb7ac798bdc9a5de25e08006898158c64c",
+      "frozen-candidate.json": "91778d33a7f1790c7334c9e207d471a9f37960235c79ac3fe72994eec1a4824d"
+    },
+    "verified": true
+  },
+  "protection_exclusion_exact": true,
+  "reviewer_assertions": 671,
+  "reviewer_focused": {
+    "cases": 171,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "reviewer_new_cases": [
+    "Reviewer B1 unrelated original selection mutation refuses pending cache and unread seal before bytes",
+    "Reviewer B1 seal preserves exited physical binding spelling",
+    "Reviewer B1 failed direct registration closes populated session and all original owners",
+    "Reviewer B1 populated binding allocation refusal cannot revive either original session authority"
+  ],
+  "reviewer_private": {
+    "cases": 11,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "source_copies_and_actual_preedit_diff": 13
+}

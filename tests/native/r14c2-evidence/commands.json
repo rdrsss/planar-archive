@@ -1,0 +1,107 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "log": "build-final.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.capture",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c2-evidence/capture-final.xml"
+    ],
+    "log": "capture-final.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c2-evidence/focused-final.xml"
+    ],
+    "log": "focused-final.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r14c2-evidence/cli.xml"
+    ],
+    "log": "cli.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "log": "vectors.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "log": "record-vectors.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "log": "lint.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "log": "no-work.txt",
+    "exit": 0,
+    "cwd": "<repo>"
+  }
+]

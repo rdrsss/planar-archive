@@ -1,0 +1,11 @@
+{
+  "docs/architecture.md": "d4e2ccf9a93e4f3b254f036f87a6bc03d716179865144fd69db20f360f6b55ba",
+  "docs/testing.md": "b586e1d3bdd16b26dfdd276692c61ec32f95b7db9444bf66a730f12d05e22a11",
+  "src/engine/CMakeLists.txt": "31d988029ee2e10dc3c7ae3a1ce7a15918f9ebd5cd4e3824c7bdbd7febc2e425",
+  "src/engine/export/source_export.cpp": "f0a79bfd69559b9aac348c11fa0b5a79080d170c4b56d44a761e5ed0fa85623c",
+  "src/engine/export/source_export.cppm": "b5106b48b69383097b5d1443d2e03845b595dfcb9e5adfd7c3410407e06fd7d4",
+  "src/engine/export/source_export.t.cpp": "b867507a8eb104126aad97fa6b58fae0c11897323d922d3f8d6575b2e6c250b8",
+  "tests/native/r14f1-support/generate.py": "b772120585da9f07865ffdc77c447ce4b7461d445a26ae1c0d4894b037f0fcac",
+  "tests/native/r14f1-support/posix.cpp": "39b0dccf4e4d8075a9180d3c95870d4deb2272e20adde1e3e5ac4b34d708ecfc",
+  "tests/native/r14f1-support/posix.cppm": "b062e38ae230d3a31bf894ceb772334211f8b0973f88ea9c95562ac0f9b085aa"
+}

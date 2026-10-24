@@ -1,0 +1,46 @@
+{
+  "author_identities": {
+    "candidate-manifest.json": "6497c9c720369653b60f38b180dae32465ab7468ccdab3685ac10827522490a6",
+    "final-source-manifest.json": "717ddb977f5c07563c674d6397d6023bf66b7a65caf6c4be0fe0b80866b2747f",
+    "available-baseline.diff": "0277ce09ca89d41206998615e752d13950c070b64034e510417c65f6580b7f04",
+    "artifact-manifest.json": "3f30f8f69b3c3782dd739bacd064ab620b92b2990c7fba803c1795c84a121d40"
+  },
+  "candidate_members": 12,
+  "author_artifacts": 90,
+  "baseline_files": 15285,
+  "source_files": 15288,
+  "symlinks": {
+    "compile_commands.json": "<repo>/build/install-release/compile_commands.json",
+    "AGENTS.md": "CLAUDE.md"
+  },
+  "changed_existing": 9,
+  "new_files": 3,
+  "exact_diff_reconstructed": true,
+  "minimal_product_delta": true,
+  "red_support_identical": true,
+  "red_product_matches_baseline": true,
+  "variants": {
+    "r12c2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r14f1-generated": [
+      "source_export.cppm",
+      "source_export.cpp"
+    ],
+    "r14c3b2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r13b1-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "v5-02-x03-b2-b-c01-generated": [
+      "format.cppm",
+      "format.cpp"
+    ]
+  },
+  "red_forward_reverse_exact": true,
+  "prior_author_artifacts": 119
+}

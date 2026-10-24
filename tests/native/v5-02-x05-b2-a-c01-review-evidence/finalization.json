@@ -1,0 +1,18 @@
+{
+  "disposition": "approve",
+  "closes": [
+    "B2A-R1"
+  ],
+  "report_sha256": "bfb87d1de0e1fb2ab6cbda80f0a87bd611cdd88c167727fdf97b0cf7deecb70a",
+  "artifact_manifest_sha256": "3b6f9c3fdf905af4fd77b3ab66c42e1b54105b73fe1144ce7a0a9cac3fb5075d",
+  "artifact_files": 61,
+  "candidate_manifest_sha256": "aacb5f86af9d6742d7c87fd796799b23ed879e0a58866ed8072fb6990d9eb6d6",
+  "owned_diff_sha256": "e9a54290d506cc3b0ebab8696c0e0fd7cbcdb3856c4a76dac51674fb9605cdee",
+  "author_artifact_manifest_sha256": "9a3924201089542da140f5d522ec976aa88de46f473ede6c1dcfd03dada52a57",
+  "scoped_source_entries": 381,
+  "final_scoped_source_equal": true,
+  "candidate_and_historical_evidence_verified": true,
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "build_ownership_released": true,
+  "reviewer_edits_after_release": false
+}

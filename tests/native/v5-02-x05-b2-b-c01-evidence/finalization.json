@@ -1,0 +1,42 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "single_frozen_source_entries": 387,
+  "source_unchanged": true,
+  "exact_review_probe_source": true,
+  "checks": {
+    "focused": {
+      "cases": 346,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "disabled": 0
+    },
+    "history-codec": {
+      "cases": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "disabled": 0
+    },
+    "phase": {
+      "cases": 2,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "adversarial": {
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "controls": {
+      "cases": 2,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  },
+  "candidate_manifest_sha256": "4231de550042932b7ae98d249f845708a795b4bf59c99294351cc972249c22b8",
+  "candidate_diff_sha256": "0394161beab7a0a780adf1a4129cf1bd35f849d91d97b21a015a4cf7a925fe1c"
+}

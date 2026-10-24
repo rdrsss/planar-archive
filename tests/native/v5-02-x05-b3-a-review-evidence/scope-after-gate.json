@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "candidate-manifest.json": 15,
+    "artifact-manifest.json": 168,
+    "final-gate/source-freeze.json": 411
+  },
+  "identities": {
+    "candidate-manifest.json": "0f2fc02dfb28b51e9b6002c4a7063724350b9c3fd2221502f466bae6e0ff4ff1",
+    "candidate.diff": "a8c11635befbecafd8dd922968c16aaeeb37ab49ef55dd7bcad34bf557f92e91",
+    "artifact-manifest.json": "f66e53a09a1b2b82df196bc4c3a30c985e30b8eb681f232ef1ffdd4109d9e0fe",
+    "REPORT.md": "7194b5b2b77c74729dd1cf43193cacb45a34d93db263bf481a06a406b0ecf7ca"
+  },
+  "symlink": "CLAUDE.md"
+}

@@ -1,0 +1,15 @@
+{
+  "cases": 123,
+  "failures": 0,
+  "skips": 0,
+  "cli_suites": 6,
+  "new_load_cases": 7,
+  "baseline_count": 373,
+  "inventory_count": 380,
+  "missing_baseline_names": [],
+  "build_no_work": true,
+  "final_build_no_work": true,
+  "debug": "independent scoped run complete; released idle",
+  "release": "untouched; remains idle",
+  "scope": "macOS ARM64 debug only; no full milestone, release, Linux or same-VM load proof"
+}

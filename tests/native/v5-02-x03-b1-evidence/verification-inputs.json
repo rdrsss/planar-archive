@@ -1,0 +1,21 @@
+{
+  "path_base": "repository root",
+  "sha256": {
+    "CLAUDE.md": "edabaf7eba2e8dd7c7ee49c618619ce6e54daa99ab29cc257e561cc7884e2a6e",
+    "docs/architecture.md": "c52cc4097279c8c08008ebe5e1317a1b8e08b6ed0ee1a4ffc765e43bdcfdae94",
+    "docs/vernacular/acceptance-matrix.md": "6ba4560a2e79aae62f79a1ebe9fe87bf6fea81f7eef4a2b71ccdde29d6d9e0e4",
+    "docs/vernacular/external-profile-implementation.md": "3dfa962cb8109e611aecd7824e228d786a1b9388b12758bdebe69d4b7bb263d2",
+    "docs/vernacular/implementation.md": "f6584aa8a66672d1d08c752009f9f936df9811388efcda567792b81e23c93f1e",
+    "docs/vernacular/roadmap.md": "95fec568567631820470746b57a7f14ae311c0ce965f90e910982d500bf185ee",
+    "docs/vernacular/v5-alignment.md": "291687293eaf5eff239eb71c8e7c7605c91719a0971c18129ee1fe285ceae515",
+    "src/engine/CMakeLists.txt": "cdc0b258a6e73b245ffef4cbf99ce4cb7d1ed4291f76960ae2b34e34794342e2",
+    "src/engine/ledger/format.cpp": "e6921db6de05aee5e409a25a0844149ccb56aca47b36ec7a0f69965e47045fcc",
+    "src/engine/ledger/format.cppm": "d90a54f6c85448497e08541c7ccf7a6da3581daedaa020e794c4e7cd03e51e67",
+    "src/engine/ledger/format.t.cpp": "4203711692ede195dc538d98987d576f484c48ebbabb36b625dd337e5ac1a752",
+    "src/engine/ledger/types.cppm": "0ee244e123e2e4a33db48e1b1741f3422115897868262c1e631f8a0fee1ceabb",
+    "tests/native/v5-02-x03-b1-support/fixture.cpp": "4ff66802577ed9d6d2857c86b1abcd1c2b916dfda0bcc139099a1f137b8ca4aa",
+    "tests/native/v5-02-x03-b1-support/old-binary.py": "3b6b5bcc2647fa30eebe8bb97d9a0b141ce50145d029088bee7ed23d95144286",
+    "tests/native/v5-02-x03-b1-support/publication.t.cpp": "bf5feaa4ee6ebe94a7268daf0d58a0825ae0875b7d57f0d5942658feec1072fe",
+    "tests/native/v5-02-x03-b1-support/run.py": "dfd00a6815596c2a3efb2947d81f915100dfbc09e70c3287b79ae82a910c11e4"
+  }
+}

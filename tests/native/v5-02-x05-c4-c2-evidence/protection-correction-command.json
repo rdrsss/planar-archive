@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "tests/native/v5-02-x05-c4-c2-support/freeze.py",
+    "protect"
+  ],
+  "cwd": "<repo>",
+  "exit": 0,
+  "seconds": 40.0086741251871
+}

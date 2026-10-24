@@ -1,0 +1,12 @@
+{
+  "CLAUDE.md": "b5bd57ba969e072f0d5466d5f55e37875d9536d40e8d18d58dc6104a64842499",
+  "docs/architecture.md": "4838fe25061dd2e5c39d0aff5c133f15d27d65f6dd23649845ca508292a92497",
+  "docs/vernacular/acceptance-matrix.md": "aa091744ae81fdde7a7397df73d6f587bb7c12a9fd148e6b4da478aac374a5f6",
+  "docs/vernacular/external-profile-implementation.md": "0f9b971f6f3f20ef4a016924dcacc5a9745e400ad03ae8dbfc7edbb4a73d5496",
+  "docs/vernacular/implementation.md": "97c92f81b853dc41226ea1c65d81ed615273c31dccafd96f9febadca8163a12f",
+  "docs/vernacular/roadmap.md": "fe49dcd4605c603e91f41978b058cf6713f1a1631410991fce4392a2f0fb768a",
+  "docs/vernacular/v5-alignment.md": "bccbfe04c7586fdd1bf43ea02277d5928bf5d1449710b898dbcafb88a35d6cfc",
+  "docs/vernacular/x04-capture-evidence.md": "84e0144129f6305aca27fc845e1eb25c9bb72fd9e44fb1cd6193370d246fbc43",
+  "src/engine/capture/profile.t.cpp": "22fa4806bd5c05b4db4a9ce4a716a75974c132629d65813831d12ba70932ec52",
+  "tests/native/v5-02-x04-a3-support/verify.py": "956fb6eba3810759469bebaa26cc2b1671a993b9caff1605f7a2e538559a8109"
+}

@@ -1,0 +1,64 @@
+{
+  "CLAUDE.md": {
+    "B4-B awaits independent\nreview; B4-C remains the future complete Debug/RelWithDebInfo gate.": 1,
+    "B4-B native composition awaits review; B4-C full integrated gates remain open.": 1,
+    "Combined independent B2-C+C01+C02 review is pending.": 1,
+    "Fresh independent combined B3-B/R01 review is pending.": 1,
+    "Fresh independent review is pending. This pure slice does not prove native metadata": 1,
+    "This correction is a candidate requiring\nfresh independent combined B4-B+C01 review, not B4-C or a release/Linux gate.": 1,
+    "combined approval remains\npending C02 review.": 1,
+    "received request-changes for B2C-R1; C01 closes B2C-R1 locally; combined review requires C02 for B2C-R2.": 1
+  },
+  "docs/architecture.md": {
+    "B4-B awaits independent\nreview; B4-C remains the future complete Debug/RelWithDebInfo gate.": 1,
+    "B4-B native composition awaits review; B4-C full integrated gates remain open.": 1,
+    "Combined independent B2-C+C01+C02 review is pending.": 1,
+    "Fresh independent combined B3-B/R01 review is pending.": 1,
+    "Fresh independent review is pending. This pure slice does not prove native metadata": 1,
+    "This correction is a candidate requiring\nfresh independent combined B4-B+C01 review, not B4-C or a release/Linux gate.": 1,
+    "combined approval remains\npending C02 review.": 1,
+    "received request-changes for B2C-R1; C01 closes B2C-R1 locally; combined review requires C02 for B2C-R2.": 1
+  },
+  "docs/testing.md": {
+    "B4-B awaits independent\nreview; B4-C remains the future complete Debug/RelWithDebInfo gate.": 1,
+    "B4-B native composition awaits review; B4-C full integrated gates remain open.": 1,
+    "Combined independent B2-C+C01+C02 review is pending.": 1,
+    "Fresh independent combined B3-B/R01 review is pending.": 1,
+    "Fresh independent review is pending. This pure slice does not prove native metadata": 1,
+    "This correction is a candidate requiring\nfresh independent combined B4-B+C01 review, not B4-C or a release/Linux gate.": 1,
+    "combined approval remains\npending C02 review.": 1,
+    "received request-changes for B2C-R1; C01 closes B2C-R1 locally; combined review requires C02 for B2C-R2.": 1
+  },
+  "docs/vernacular/acceptance-matrix.md": {},
+  "docs/vernacular/external-profile-implementation.md": {
+    "B4-B awaits independent\nreview; B4-C remains the future complete Debug/RelWithDebInfo gate.": 1,
+    "B4-B native composition awaits review; B4-C full integrated gates remain open.": 1,
+    "Combined independent B2-C+C01+C02 review is pending.": 1,
+    "Fresh independent combined B3-B/R01 review is pending.": 1,
+    "Fresh independent review is pending. This pure slice does not prove native metadata": 1,
+    "This correction is a candidate requiring\nfresh independent combined B4-B+C01 review, not B4-C or a release/Linux gate.": 1,
+    "combined approval remains\npending C02 review.": 1,
+    "received request-changes for B2C-R1; C01 closes B2C-R1 locally; combined review requires C02 for B2C-R2.": 1
+  },
+  "docs/vernacular/implementation.md": {
+    "B4-B awaits independent\nreview; B4-C remains the future complete Debug/RelWithDebInfo gate.": 1,
+    "B4-B native composition awaits review; B4-C full integrated gates remain open.": 1,
+    "Combined independent B2-C+C01+C02 review is pending.": 1,
+    "Fresh independent combined B3-B/R01 review is pending.": 1,
+    "Fresh independent review is pending. This pure slice does not prove native metadata": 1,
+    "This correction is a candidate requiring\nfresh independent combined B4-B+C01 review, not B4-C or a release/Linux gate.": 1,
+    "combined approval remains\npending C02 review.": 1,
+    "received request-changes for B2C-R1; C01 closes B2C-R1 locally; combined review requires C02 for B2C-R2.": 1
+  },
+  "docs/vernacular/roadmap.md": {
+    "B4-B awaits independent\nreview; B4-C remains the future complete Debug/RelWithDebInfo gate.": 1,
+    "B4-B native composition awaits review; B4-C full integrated gates remain open.": 1,
+    "Combined independent B2-C+C01+C02 review is pending.": 1,
+    "Fresh independent combined B3-B/R01 review is pending.": 1,
+    "Fresh independent review is pending. This pure slice does not prove native metadata": 1,
+    "This correction is a candidate requiring\nfresh independent combined B4-B+C01 review, not B4-C or a release/Linux gate.": 1,
+    "combined approval remains\npending C02 review.": 1,
+    "received request-changes for B2C-R1; C01 closes B2C-R1 locally; combined review requires C02 for B2C-R2.": 1
+  },
+  "docs/vernacular/v5-alignment.md": {}
+}

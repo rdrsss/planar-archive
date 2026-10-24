@@ -1,0 +1,134 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "025d74c99694ef60b6a830e0c5621bcf1a6cc176c1144d2e4c55b3987c968a6d"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "3fe4afecc6b5d36f7f0228566d153ee6cba63e5bb89fd1b9ee98bfbaa15d1f34"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "4ec17bf97127444f5f45d31eed1d64c4438728e9e99201abb814869dea9d9010"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "40516b1fe1a617316edd7124f48e0b8b90696038539a8b66750029cab08c5226"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "4e1f304a4aaa533b5722126cd1e1fc8a0061a9b5ecbfa9ec1b83d475dd479bb0"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "1bc95f7536e85714a1d7097bfb4efb71b4deed1ec953216308572eb64dc7a3ea"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "0614bc0c190aab7df7e607c5da384d9a150200d6f3dadb70fb074e964a482bd8"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "a18b95ffed41a2b61102005d9bbcd098da830740f5a62cda590abfe240adb6ef"
+  },
+  "src/engine/capture/admission.cpp": {
+    "mode": 420,
+    "sha256": "f5eab09a1dcb4e4dcb6c55290d574bb304c16bea0446d50911bbfddbf1f9bdc6"
+  },
+  "src/engine/capture/admission.cppm": {
+    "mode": 420,
+    "sha256": "172f206bd43294be5c6f21ca366b3887fae833b1cd7b601acb070be4ec23bea7"
+  },
+  "src/engine/capture/admission.t.cpp": {
+    "mode": 420,
+    "sha256": "8b1008069a9059ef43f5d57f690a47adf05365f66700df3808b7ba6507aa4282"
+  },
+  "src/engine/capture/capture.cpp": {
+    "mode": 420,
+    "sha256": "f1028f2c05f60ff6f629a9df606902b951fa11d3e177e365d6dd57a1d8592e9f"
+  },
+  "src/engine/capture/capture.cppm": {
+    "mode": 420,
+    "sha256": "2ab9a2abdcfa28e3ee8653d197cdf9a4ab7e627ce61405f1e5405ed95d4cd5ec"
+  },
+  "src/engine/capture/capture.t.cpp": {
+    "mode": 420,
+    "sha256": "c946431f615c4fadf99b61447203f746d603100f6c61691391fec08732bbb93e"
+  },
+  "src/engine/capture/native.cpp": {
+    "mode": 420,
+    "sha256": "73a95f7233b7978f7b8572f6175e267ff9656f76daddabdf314e1a2459da752b"
+  },
+  "src/engine/capture/native.cppm": {
+    "mode": 420,
+    "sha256": "cbba854e6c865aa1c627f01a6d3833d613f397400d646bfb49463ba7f9e7aace"
+  },
+  "src/engine/capture/native.t.cpp": {
+    "mode": 420,
+    "sha256": "40e364f9ec6c36e2e0c681eecb66b23a32e59c1ad442ba08553cbb0ccfdf6e98"
+  },
+  "src/engine/capture/profile.cpp": {
+    "mode": 420,
+    "sha256": "eba6cfd7691243c51f8712dbfc35f61263f3a904897abe63380b80e4fd6ee49b"
+  },
+  "src/engine/capture/profile.cppm": {
+    "mode": 420,
+    "sha256": "61ca8e3d6f69d36df1d9f6456ed5698c9660ca0cf9cd3ad6c7c13dcd2bc4690c"
+  },
+  "src/engine/capture/profile.t.cpp": {
+    "mode": 420,
+    "sha256": "10052a79e53c5311babc94241dff9df0fa847e5280a798d83b8dae7626254698"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-evidence/REPORT.md": {
+    "mode": 420,
+    "sha256": "629d369ffd3c4f065910c4f398d7621dc352273dea0bc9e0d9e32d8d50813d79"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/audit.py": {
+    "mode": 420,
+    "sha256": "a5ff062b00c6dbb5a2e778b255f39d31467f06dda39cb52faed9412cb3469996"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/cleanup.py": {
+    "mode": 420,
+    "sha256": "8bfc91a669bbd8036c33dd89d9cdeb1a5524b11a1308e02a9f67e28950497fe0"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/finalize.py": {
+    "mode": 420,
+    "sha256": "61252ecc9664975433b01dfbd8e94aba214cf79d459969e4a2d8ce215bd8d3b0"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/freeze.py": {
+    "mode": 420,
+    "sha256": "d9b6747e1d2463ada61dc65381b3ddc1379645f2fa9bd2ac7118f096189f7452"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/gate.py": {
+    "mode": 420,
+    "sha256": "d76ee4d1d548d87eaae0728e1fa1be61f9a4b1b98d685325c0a94b15f0cda51e"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/private-probe.cpp": {
+    "mode": 420,
+    "sha256": "52ef944ef4a564992f57e13abab7bcdd3e379d7e778d09630447aa8d96b2337e"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/private.py": {
+    "mode": 420,
+    "sha256": "d5b23fe9eaa4e6365066f07e124026ddea54a10a18c7a3a99e111f4537132c92"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/quota-cleanup.py": {
+    "mode": 420,
+    "sha256": "046096b28a2bccf96d3a5f3d8ba3f71182e93d41b53ec8d409229a16fa34b8ef"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/quota-green.py": {
+    "mode": 420,
+    "sha256": "c66d14306e5dc234e9410488ff980358686ed406170c2fccf216eb601fdec0fc"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/quota-probe.cpp": {
+    "mode": 420,
+    "sha256": "cc7778c6890c3f148962b8d175acbf8a369dc3dec6cba3d4ed64928be94a5902"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/quota.py": {
+    "mode": 420,
+    "sha256": "081cc7eabc66cf5fd5d1c4261ec355d9059bce7657dec76f1a1ab798057952d7"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-support/syscalls.cpp": {
+    "mode": 420,
+    "sha256": "d2886042871701aa0206bdff8ba1040e85a9a200b1737f70343beaf34419a71d"
+  }
+}

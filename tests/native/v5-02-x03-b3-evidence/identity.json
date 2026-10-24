@@ -1,0 +1,9 @@
+{
+  "baseline_complete_filesystem_sha256": "008c72e4d52ec899b79a6025ce664149ac5db85172f8db4e06009edd1b2829fd",
+  "candidate_manifest_sha256": "81f93dfb3a0179092df56e9ded03edf781d2f26ea467881e566c6103e9421ade",
+  "final_complete_filesystem_sha256": "3ee8b2ce4e7869ab72cc1c727b0a87fd60f1007e05a732b4e66fb88977eec654",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "owned_diff_sha256": "de9f90f8b3aebbd9d6a7e093bba4513ecf585ebb19130c8887ffe9387181500d",
+  "repository": "<repo>",
+  "source_binaries_unchanged_after_verification": true
+}

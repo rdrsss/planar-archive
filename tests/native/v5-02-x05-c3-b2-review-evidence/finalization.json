@@ -1,0 +1,22 @@
+{
+  "all_files_and_debug_released": true,
+  "candidate_diff_sha256": "1467b53c526a0ed58b9b32f77ff0cf633db7fb0fee5eaabe17a289ec088ed92f",
+  "candidate_sha256": "a0ce3d520a4dc5992bd2f1a04355a0ba7400bca9a4f7818cc0bda35d84b78c8e",
+  "compiled_dependencies_unchanged": 888,
+  "disposable_compiled_copies_removed": true,
+  "disposition": "approve",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "independent_focused": 87,
+  "independent_private": 7,
+  "inventory": 743,
+  "lint_sources": 118,
+  "live_build_test_private_processes": 0,
+  "no_further_edits_planned": true,
+  "no_work": true,
+  "prior_names_preserved": 723,
+  "protected_entries_unchanged": 71689,
+  "report_sha256": "7b35e3e2085be5f429740beb6c43cea374aa178be6e9a5312f1b090246d2329e",
+  "review_artifact_entries": 32,
+  "review_artifact_manifest_sha256": "6a902bb8a3530ba4e31c8eec4a5a4e7d72e2fdec64e02d14e6a800d8769f7d28",
+  "reviewer_authored_private": 3
+}

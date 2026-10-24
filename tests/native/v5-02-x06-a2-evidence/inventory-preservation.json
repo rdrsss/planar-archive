@@ -1,0 +1,26 @@
+{
+  "prior": 892,
+  "current": 910,
+  "added": [
+    "replacement.recorded canonical inputs preflight both byte limits and bounded depth before family hints",
+    "replacement.recorded direct old decoder keeps embedded versions allocation refusal typed",
+    "replacement.recorded dispatch maps every one-shot allocation refusal to typed resource",
+    "replacement.recorded dispatch preserves original v1 decoder supported future and malformed precedence",
+    "replacement.recorded dispatch supports both fixed families with recomputed tree workspace and owned bytes",
+    "replacement.recorded embedded valid provenance reaches4096 file ceiling with owned supported decode",
+    "replacement.recorded family markers are presence hints and numeric future version stays embedded",
+    "replacement.recorded future fields and malformed manifest markers never become unsupported semantics",
+    "replacement.recorded marker mismatches cannot grant effective provenance authority",
+    "replacement.recorded original embedded manifest keeps typed future manifest refusal",
+    "replacement.recorded paired failures follow canonical topology provenance decoder correspondence order",
+    "replacement.recorded raw tree fixed byte ceilings distinguish embedded16 and effective32 MiB",
+    "replacement.recorded raw tree fixed count ceilings bound admission before provenance",
+    "replacement.recorded unknown effective manifest differs from unknown interpretation and malformed manifest",
+    "replacement.recorded unknown semantics still require workspace and raw tree digest correspondence",
+    "replacement.recorded unsupported interpretation refuses malformed structure and separate versions mismatch",
+    "replacement.recorded unsupported v2 cannot skip changed actual raw provenance",
+    "replacement.recorded valid embedded provenance reaches exact16MiB aggregate ceiling"
+  ],
+  "missing": [],
+  "focused": 106
+}

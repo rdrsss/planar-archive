@@ -1,0 +1,10 @@
+{
+  "added": [
+    "replacement.X05 A3 C01 handler and option controls retain original command",
+    "replacement.X05 A3 C01 high catalog bytes remain valid",
+    "replacement.X05 A3 C01 malformed sort keys retain original fields"
+  ],
+  "current": 573,
+  "missing": [],
+  "previous": 570
+}

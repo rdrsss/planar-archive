@@ -1,0 +1,24 @@
+{
+  "base": "repository root; author evidence entries relative to tests/native/v5-02-x01-evidence",
+  "handoff_manifest_mismatches": [],
+  "candidate_mismatches": [],
+  "artifact_mismatches": [],
+  "author_evidence_mismatches": [],
+  "candidate.json_entries": 7,
+  "artifacts.json_entries": 13,
+  "evidence-sha256.json_entries": 46,
+  "baseline_files": 14642,
+  "baseline_changed": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/V5-02-X01.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/cmd/planar/bootstrap.t.cpp"
+  ],
+  "unexpected_baseline_changes": [],
+  "agents_symlink": "CLAUDE.md",
+  "bootstrap_original_prefix_preserved": true
+}

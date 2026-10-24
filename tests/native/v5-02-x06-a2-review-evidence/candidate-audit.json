@@ -1,0 +1,31 @@
+{
+  "all_candidate_and_artifact_hashes_verified": true,
+  "approved_A1_runtime_shippedLua_readers_acceptance_storage_CLI_unchanged": true,
+  "artifact_manifest_sha256": "356dfeb6ea54223b6baf580972f044b818d4322050e78e6395975b751dd2d17d",
+  "author_final_members": 93962,
+  "author_protection_verified": true,
+  "candidate_files": 14,
+  "candidate_sha256": "831d831bdcf93f64a023648451358b0500c3845f82f54522e4387df9bb82a5a1",
+  "diff_reconstructed_exact": true,
+  "diff_sha256": "89aaa6f1118c854c0efe6b94370b736d0a9132edd925ac0d51caf198910a0771",
+  "evidence_files": 52,
+  "old_v1_exact_single_adapter": true,
+  "original_preedit_hashes_verified": true,
+  "preserved_red": {
+    "diagnostic-tests.xml": {
+      "failure_elements": 1,
+      "suite": {}
+    },
+    "direct-red-tests.xml": {
+      "failure_elements": 1,
+      "suite": {}
+    },
+    "first-tests.xml": {
+      "failure_elements": 1,
+      "suite": {}
+    }
+  },
+  "review_baseline_members": 94026,
+  "root_symlinks_preserved": true,
+  "support_files": 3
+}

@@ -1,0 +1,186 @@
+{
+  "after-tests.json": {
+    "mode": 420,
+    "sha256": "9927535e000cc2418a41f0c0184bc8c827d01c1bf18b1b0dc3baabac67393ea9"
+  },
+  "before-tests.json": {
+    "mode": 420,
+    "sha256": "9927535e000cc2418a41f0c0184bc8c827d01c1bf18b1b0dc3baabac67393ea9"
+  },
+  "compile-deep-probe.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compile-failure-probe.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compile-failure-runtime.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compile-green-every-operation-audit.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compile-red-exact-audit.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compile-red-runtime.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compile-shipped-probe.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "deep-probe.cpp": {
+    "mode": 420,
+    "sha256": "8357245814b393108950ec3870c82063c169f1067623b0dfe7511d9b554e93d7"
+  },
+  "deep-probe.o": {
+    "mode": 420,
+    "sha256": "1a2bb3e6e6aa76cc9ae452bd9d34d2cc701a160f466513bc02bb803126ad6b37"
+  },
+  "failure-probe.cpp": {
+    "mode": 420,
+    "sha256": "51bd3a18aa81b5cca373d33d4b66b55643ef6bcfe817c0775ddc24037f70c6b0"
+  },
+  "failure-probe.o": {
+    "mode": 420,
+    "sha256": "b86b7fd16c8fa15542e9f52dc3af754ce0b091c3e4e682dce5784f3846f5c9a1"
+  },
+  "failure-runtime.cpp": {
+    "mode": 420,
+    "sha256": "a333d2c55db232a83e4eeb7333eb95fe3f17bb262f497afd60061a0dd35ce6e9"
+  },
+  "failure-runtime.o": {
+    "mode": 420,
+    "sha256": "ddab05888080429d5e7e6faffcb95ea0144f1c6a752030ba91f89325f823f1f1"
+  },
+  "final-candidate.json": {
+    "mode": 420,
+    "sha256": "9927535e000cc2418a41f0c0184bc8c827d01c1bf18b1b0dc3baabac67393ea9"
+  },
+  "finalization.json": {
+    "mode": 420,
+    "sha256": "f16aa5f919bd334bf0ac98ad124f9bfcfe098719429e955836b1044b11f6df31"
+  },
+  "green-deep": {
+    "mode": 493,
+    "sha256": "32906ea54779d628645d0c7b79ca2942a9843b66ab2c0285cac6ba866e472a15"
+  },
+  "green-deep.log": {
+    "mode": 420,
+    "sha256": "37bd57757c52603a249a2603a7b99ab6cc0524f4920d98893c62620487bb566e"
+  },
+  "green-every-operation-audit.cpp": {
+    "mode": 420,
+    "sha256": "8406933e8c93a37e553ddbe04e45c01b1f9adc4d3ae1802e9934ea02a3bbf8c1"
+  },
+  "green-every-operation-audit.o": {
+    "mode": 420,
+    "sha256": "344ab06e4480a05e2fdf14eccda0b818f1f038e41011700f0723788591625f07"
+  },
+  "green-shipped": {
+    "mode": 493,
+    "sha256": "296d6e8a36f66b6dc9cf03d7d731758b921171d1ebedf036db7070e1ee9cf393"
+  },
+  "green-shipped.log": {
+    "mode": 420,
+    "sha256": "c99f55dbfebf396e430a9f4e61c7966b9eb7dfb731665b09a9632f744f38924a"
+  },
+  "independent-tests.log": {
+    "mode": 420,
+    "sha256": "ff03ede9fced30653b986d07a3ddd643018c44152572aead94fe862cf0cd07cd"
+  },
+  "independent.xml": {
+    "mode": 420,
+    "sha256": "6e4cfab8fba2e648dfbc04cb93d9e183d08b7b6e9903a241f650f9faf68b312e"
+  },
+  "link-green-deep.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "link-green-shipped.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "link-red-exact.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "link-reservation-failure.log": {
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "no-work.log": {
+    "mode": 420,
+    "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "probe-commands.json": {
+    "mode": 420,
+    "sha256": "a55a6d3c19762e7f1afd0328fe8fd4416932cb1a26d57d20226669859759055a"
+  },
+  "probe-driver.log": {
+    "mode": 420,
+    "sha256": "1014f07cff4a57a287c6ba2d4df2467c85448f083f12050165878851a605b41c"
+  },
+  "red-exact": {
+    "mode": 493,
+    "sha256": "3e806eb77464968db8f1c2343513f4b7da3cf47f2d1c246c26143128362cf944"
+  },
+  "red-exact-audit.cpp": {
+    "mode": 420,
+    "sha256": "a6f91757360c8e017822a0973e56afa8744daa656bb83a6922d6b51dc55f95a2"
+  },
+  "red-exact-audit.o": {
+    "mode": 420,
+    "sha256": "0e37b4927c44684e3bc6cb2fd1adb922f8d34503fccdd64182eb3e51c74569ca"
+  },
+  "red-exact.log": {
+    "mode": 420,
+    "sha256": "2738e46aa83ac07b4d532a42272ed33f67d2363831f1c1773cdf2f0ae8ea2a91"
+  },
+  "red-runtime.cpp": {
+    "mode": 420,
+    "sha256": "dd78a1427afaa078544c095b09191ab6f3875be84299ba39d99ed646f5037cfd"
+  },
+  "red-runtime.o": {
+    "mode": 420,
+    "sha256": "ae70dd36a5e9884fdf8c3446ef27e0720d4bdef80f9e338e3f4347aa5a15e1df"
+  },
+  "reservation-failure": {
+    "mode": 493,
+    "sha256": "0f27dc73e2e0c873407717ea47f216c1b849db011968f1999398063d5e04f9e6"
+  },
+  "reservation-failure.log": {
+    "mode": 420,
+    "sha256": "7572d3f0c31e723d35652fefc98a4eafd00f1fbe6f757a26e20a998b26221b1b"
+  },
+  "run-probes.py": {
+    "mode": 420,
+    "sha256": "a0e5b120194aa44258b8829a825b26a410f431071a4e13c5af35d556550372c8"
+  },
+  "shipped-probe.cpp": {
+    "mode": 420,
+    "sha256": "9de95961726d1fa4f0744ac59379fbc32382d13ebd7893d6df6a5c6698d47c62"
+  },
+  "shipped-probe.o": {
+    "mode": 420,
+    "sha256": "55d3cad10f7492b3ab7bc1cd5102a21b01122e0f367f98476ed9503ff1dace33"
+  },
+  "source-variant-audit.json": {
+    "mode": 420,
+    "sha256": "976425fed532ecd3a7f85540f41a7b37347189e739ed2abff05f1a0e8e210cfd"
+  },
+  "test-summary.json": {
+    "mode": 420,
+    "sha256": "c914724361620e68e3dd2073ed076a7dc09b3f29a443b4ee68e2b978c88f2309"
+  },
+  "verify-candidate.py": {
+    "mode": 420,
+    "sha256": "2769c187f0a7458203ae67cf0c36bf78a308a169d7ee4d4557e0d056dc7d48d6"
+  }
+}

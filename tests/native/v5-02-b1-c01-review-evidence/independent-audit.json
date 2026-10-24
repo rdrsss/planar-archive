@@ -1,0 +1,26 @@
+{
+  "candidate_files": 6,
+  "artifact_files": 53,
+  "protected_files_unchanged": 13487,
+  "authorized_coordinator_exception": {
+    "docs/vernacular/rounds/V5-02-B1-C01.md": "bcce825e17d48bb9706138951b16b798bd6877b33f439ed5533343dbc97029d8"
+  },
+  "red_runtime_equals_baseline": true,
+  "red_cases_failed": 3,
+  "retained_final_passes": 87,
+  "previous_names_preserved": 354,
+  "inventory": 358,
+  "variant0_existing_generation_only_absence_adjustment": true,
+  "native_variants_audited": 21,
+  "fixed_export_variant_audited": true,
+  "reviewer_focused_passes": 87,
+  "reviewer_failures": 0,
+  "reviewer_skips": 0,
+  "symlink_preserved": true,
+  "new_tests": [
+    "replacement.command captured direct nested transitive and table key state refuses writes",
+    "replacement.command frozen returned module table converts private backing without changing its tag",
+    "replacement.command frozen shared cyclic and callable keys preserve reads and local scratch",
+    "replacement.command native sealing accepts depth boundary and refuses next node with typed resource"
+  ]
+}

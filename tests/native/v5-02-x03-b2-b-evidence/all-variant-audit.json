@@ -1,0 +1,30 @@
+{
+  "r12c2-generated": {
+    "files": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "exact_forward_and_reverse": true
+  },
+  "r14f1-generated": {
+    "files": [
+      "source_export.cppm",
+      "source_export.cpp"
+    ],
+    "exact_forward_and_reverse": true
+  },
+  "r14c3b2-generated": {
+    "files": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "exact_forward_and_reverse": true
+  },
+  "r13b1-generated": {
+    "files": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "exact_forward_and_reverse": true
+  }
+}

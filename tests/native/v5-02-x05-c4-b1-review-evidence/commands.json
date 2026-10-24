@@ -1,0 +1,57 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_sqlite_tests",
+      "planar_ledger_format_tests",
+      "planar_history_read_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "label": "no-work",
+    "seconds": 0.15320233348757029
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-b1-review-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-b1-review-evidence/focused-ctest.xml"
+    ],
+    "exit": 0,
+    "label": "focused-ctest",
+    "seconds": 55.176895583979785
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "exit": 0,
+    "label": "lint",
+    "seconds": 1.7618650831282139
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "label": "inventory-final",
+    "seconds": 0.050191874615848064
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.15/bin/python3.15",
+    "tests/vectors/records/generate.py",
+    "--check"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:21:01.231539+00:00",
+  "exit_code": 0,
+  "seconds": 0.6735150814056396,
+  "start_utc": "2026-10-22T21:21:00.557822+00:00"
+}

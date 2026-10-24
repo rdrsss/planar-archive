@@ -1,0 +1,12 @@
+{
+  "baseline_files": 4,
+  "builds_or_product_tests_executed": 0,
+  "command": "python3 tests/native/v5-02-x05-c4-d4-c01-evidence/verify.py verify",
+  "diff_files": 4,
+  "protected_entries": 76457,
+  "red_cases": 4,
+  "red_failures": 2,
+  "result": "pass",
+  "unauthorized_changes": 0,
+  "unchanged_product_test_files": 4
+}

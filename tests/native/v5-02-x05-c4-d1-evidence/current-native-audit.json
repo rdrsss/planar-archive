@@ -1,0 +1,8 @@
+{
+  "binding_before_overlap_publication": true,
+  "global_receipts_first": true,
+  "metadata_only_source_boundary": true,
+  "original_private_profile_admission": true,
+  "original_supplied_root_only": true,
+  "physical_parent_mode_narrow": true
+}

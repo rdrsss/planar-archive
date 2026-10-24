@@ -1,0 +1,21 @@
+{
+  "exclusions": [
+    "artifact-manifest.json",
+    "release.json"
+  ],
+  "files": {
+    "baseline-audit.json": "481a100a53fac5c90478729219ebfab45d0397a748f7aa57890c69c605f51d10",
+    "commands.json": "095b4c326129bd23075be085cdc6d9c73ceeefc1dd7257fd9aa812f659afe044",
+    "debug-build.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+    "debug-focused.log": "384890002fe2fa5103aebf6b429e7c446d9d07e31882ce75eb260efc9554f374",
+    "debug-focused.xml": "702a48a0959e493d2b4b4505d2ba641cd434d6557f86ec49fe61b95ff38e5ac5",
+    "debug-inventory.log": "a6e1110577191ea631a4a02b7ab7702f94e32087c0b6c980d44280dac9611f85",
+    "debug-no-work.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+    "final-audit.log": "e752eee4e88344edbc6466a1af1a6527ac220a08d5d05b599166c1ee026a6679",
+    "final-audit.py": "6f6ed51244dffe553852229b39748466d19ff4855c028bc1ddf35908e3971823",
+    "final-protection.json": "e752eee4e88344edbc6466a1af1a6527ac220a08d5d05b599166c1ee026a6679",
+    "integrity.json": "6144fec3a0ecd273881a2cbb87f74a89a2f46f4dab6980a0f7a5a5f7779f0d5f",
+    "pinned-lint.log": "7db413f8989f1df885d73c7e3adef2c56877a63ed91e82f94cb8eeaddd5d3a3e",
+    "verification.json": "4ec441ef26997395077e7f70113928d0b96f3213bddfcf0ba30cbf77993b1ecb"
+  }
+}

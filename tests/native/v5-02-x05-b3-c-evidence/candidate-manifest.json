@@ -1,0 +1,102 @@
+{
+  "src/stdlib/planar/selection.lua": {
+    "sha256": "097fa32f4ed530b634309b520db6063f0e38729c39148a0662c943d8a620cbf0",
+    "bytes": 15204
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "sha256": "0c1b65f5e0bc61f668dbcd9cf03416904cbcbc77e9716ace1b74c517c8aae5a7",
+    "bytes": 1431
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "sha256": "35d987a759f4e3220884ef661f941183ecd9e0b2ec72ed38b92fdcb80510cac2",
+    "bytes": 15612
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "sha256": "523692fd0945ea2e94e14032106362e26c41be13c830e69b419b7374ec071b1a",
+    "bytes": 135999
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "9bfdf788af420e4bf903d12955ea85b175a10b8741a091913cccad786c823efd",
+    "bytes": 74479
+  },
+  "CLAUDE.md": {
+    "sha256": "a3418be01b738393c779c07b068f7790948808f6e6a37338fa356b652ccbbd74",
+    "bytes": 45465
+  },
+  "docs/architecture.md": {
+    "sha256": "ff6f224b8513a9fcc7e27e89028d3ec2280b93f61fb247bdce6e653895fae61a",
+    "bytes": 89571
+  },
+  "docs/testing.md": {
+    "sha256": "e1a30916cd16e66870683ac344bf0fc7a477573764995797beb88af067d2d6b8",
+    "bytes": 94612
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "587ad9a6585463708e4fbd4e42b06ffb9cc90524f26071b42b575cfa90bfdb7c",
+    "bytes": 55018
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "d3f0a403479f5ab9fa7e1684bb35b9331fa6e74bd5198572584fade44e434542",
+    "bytes": 61414
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "cbbdd10c9168166680dd2dc1030882474a6faf1eeaeee39ec5f9a9f39767c5fe",
+    "bytes": 52112
+  },
+  "tests/native/v5-02-x05-b3-c-support/allocation.cpp": {
+    "sha256": "ab7932e39a63484b9c505aa341279b38eefa19a1bb2a91dcf3fdf43dbb74b37c",
+    "bytes": 2554
+  },
+  "tests/native/v5-02-x05-b3-c-support/allocation.py": {
+    "sha256": "015983721d20c482bad1ef166c6b319ffe6307ae07a96b297bd72169e70a2645",
+    "bytes": 2630
+  },
+  "tests/native/v5-02-x05-b3-c-support/expected-library-worker.json": {
+    "sha256": "246dca6c8c457d1fadf24774124429e8d91c448deb39e624351996df0b34425a",
+    "bytes": 3851
+  },
+  "tests/native/v5-02-x05-b3-c-support/expected-library-worker.preimage.hex": {
+    "sha256": "b1f143aabdcbbf20473860a3ae3fcf056fd69ff346bff25037d97dcf445d4e3f",
+    "bytes": 7383
+  },
+  "tests/native/v5-02-x05-b3-c-support/finalize.py": {
+    "sha256": "45667d3a876324ea0453ca9635285a98c8c555d936656b9cbac109a5c1a8eba8",
+    "bytes": 2693
+  },
+  "tests/native/v5-02-x05-b3-c-support/freeze.py": {
+    "sha256": "adba5ab295195005dfca80dcc50ebc9d121ae1b70ab8ef760ca268fccd14c646",
+    "bytes": 819
+  },
+  "tests/native/v5-02-x05-b3-c-support/gate.py": {
+    "sha256": "4bc574649d03f3107a946d2552e69d38ef5eade903795b5247751e47c67be5be",
+    "bytes": 4186
+  },
+  "tests/native/v5-02-x05-b3-c-support/hash-accounting.md": {
+    "sha256": "19005cef19b792277e11e80ec86581b488744bb80c8c6e81b41e8ab464088023",
+    "bytes": 3001
+  },
+  "tests/native/v5-02-x05-b3-c-support/history-codec-selected.txt": {
+    "sha256": "d7e9e120d11cd26cd32e084330a68a14c82d72e3e697bff1d7341b046e5e1652",
+    "bytes": 981
+  },
+  "tests/native/v5-02-x05-b3-c-support/probes.py": {
+    "sha256": "a43d173b61786869eb681bf6b63f0ac9605f3fbef271fdaab5766c9d378b911e",
+    "bytes": 12393
+  },
+  "tests/native/v5-02-x05-b3-c-support/selected-tests.txt": {
+    "sha256": "1a5cb71399b67b08c49b96e39d0fd362c4563d7aad3b7320653eca2f8928206f",
+    "bytes": 32894
+  },
+  "tests/native/v5-02-x05-b3-c-support/semantic.cpp": {
+    "sha256": "cfaea6e8ae51ac35e847bd08edd489f167c73f1ee436ff219bfa85e73f4821e6",
+    "bytes": 10580
+  },
+  "tests/native/v5-02-x05-b3-c-support/shape.lua": {
+    "sha256": "44fe6be92adffc2a4298ae46a2522897e5b4226259799c8a8dea3a90b8234966",
+    "bytes": 480
+  },
+  "tests/native/v5-02-x05-b3-c-support/vector.py": {
+    "sha256": "9ff6bfcdc624299fe5e23579bb7c5fab41b9d39e780095cda6b5cf01651e4e56",
+    "bytes": 3338
+  }
+}

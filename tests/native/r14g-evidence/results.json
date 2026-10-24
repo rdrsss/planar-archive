@@ -1,0 +1,26 @@
+{
+  "release_gate": {
+    "exit": 0,
+    "tests": 331,
+    "skips": 0,
+    "lint_sources": 86,
+    "no_work": true
+  },
+  "focused_cli": {
+    "matched": 4,
+    "passed": 4,
+    "skips": 0,
+    "actual_processes": {
+      "render": 247,
+      "init": 60,
+      "history": 115,
+      "export": 55
+    }
+  },
+  "debug": "reused approved F2 full331 and strengthened export/review; current inventory331 and new no-work build",
+  "limits": [
+    "macOS ARM64 only",
+    "load membership unresolved",
+    "load service/CLI and full R14 acceptance pending"
+  ]
+}

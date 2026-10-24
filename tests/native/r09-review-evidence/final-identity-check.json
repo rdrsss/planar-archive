@@ -1,0 +1,14 @@
+[
+  {
+    "manifest": "candidate.sha256",
+    "sha256": "bb915f01a4231a28acbaa44489f02a3d72d558ba13873f98c13a2d4f5f958d67",
+    "files": 1296,
+    "mismatches": []
+  },
+  {
+    "manifest": "evidence.sha256",
+    "sha256": "fc1f6b23e8490e69f2698763e230983a6d01da3f84034109f09f9c7d3d19d9b3",
+    "files": 33,
+    "mismatches": []
+  }
+]

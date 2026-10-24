@@ -1,0 +1,5 @@
+{
+  "docs/vernacular/rounds/V5-02-review.md": "821bae6f7a9ebd11e7d4e40159417d4655b76a2e3e874dea7eb16b54854372ca",
+  "tests/native/v5-02-review-evidence/verification.json": "00e548d5220c200c919f69d1d2448070ffea508eaf9734f2def4aaf8b1945a06",
+  "tests/native/v5-02-review-evidence/verify.py": "55299e1120726b15ce5999a894d08785e001ff51ce8235996896399c1c413fa7"
+}

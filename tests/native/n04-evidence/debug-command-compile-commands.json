@@ -1,0 +1,62 @@
+[
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 @vendor/cli11/src/CMakeFiles/CLI11.dir/Precompile.cpp.o.modmap -o vendor/cli11/src/CMakeFiles/CLI11.dir/Precompile.cpp.o -c <repo>/vendor/cli11/9d6a/src/Precompile.cpp",
+    "file": "<repo>/vendor/cli11/9d6a/src/Precompile.cpp",
+    "output": "<repo>/build/rewrite-debug/vendor/cli11/src/CMakeFiles/CLI11.dir/Precompile.cpp.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 @vendor/cli11/src/modules/CMakeFiles/CLI11_Module.dir/CLI11.cppm.o.modmap -o vendor/cli11/src/modules/CMakeFiles/CLI11_Module.dir/CLI11.cppm.o -c <repo>/vendor/cli11/9d6a/src/modules/CLI11.cppm",
+    "file": "<repo>/vendor/cli11/9d6a/src/modules/CLI11.cppm",
+    "output": "<repo>/build/rewrite-debug/vendor/cli11/src/modules/CMakeFiles/CLI11_Module.dir/CLI11.cppm.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -isystem <repo>/vendor/glaze/a4a7/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_command_response.dir/response.cpp.o.modmap -o src/cmd/planar/CMakeFiles/planar_command_response.dir/response.cpp.o -c <repo>/src/cmd/planar/response.cpp",
+    "file": "<repo>/src/cmd/planar/response.cpp",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_command_response.dir/response.cpp.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -isystem <repo>/vendor/glaze/a4a7/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_command_response.dir/response.cppm.o.modmap -o src/cmd/planar/CMakeFiles/planar_command_response.dir/response.cppm.o -c <repo>/src/cmd/planar/response.cppm",
+    "file": "<repo>/src/cmd/planar/response.cppm",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_command_response.dir/response.cppm.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/glaze/a4a7/include -isystem <repo>/vendor/lua/0b10/src -isystem <repo>/vendor/xxhash/0.8.3 -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_render_command.dir/handlers/render/command.cpp.o.modmap -o src/cmd/planar/CMakeFiles/planar_render_command.dir/handlers/render/command.cpp.o -c <repo>/src/cmd/planar/handlers/render/command.cpp",
+    "file": "<repo>/src/cmd/planar/handlers/render/command.cpp",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_render_command.dir/handlers/render/command.cpp.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/glaze/a4a7/include -isystem <repo>/vendor/lua/0b10/src -isystem <repo>/vendor/xxhash/0.8.3 -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_render_command.dir/handlers/render/command.cppm.o.modmap -o src/cmd/planar/CMakeFiles/planar_render_command.dir/handlers/render/command.cppm.o -c <repo>/src/cmd/planar/handlers/render/command.cppm",
+    "file": "<repo>/src/cmd/planar/handlers/render/command.cppm",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_render_command.dir/handlers/render/command.cppm.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/glaze/a4a7/include -isystem <repo>/vendor/lua/0b10/src -isystem <repo>/vendor/xxhash/0.8.3 -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cpp.o.modmap -o src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cpp.o -c <repo>/src/cmd/planar/bootstrap.cpp",
+    "file": "<repo>/src/cmd/planar/bootstrap.cpp",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cpp.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/glaze/a4a7/include -isystem <repo>/vendor/lua/0b10/src -isystem <repo>/vendor/xxhash/0.8.3 -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cppm.o.modmap -o src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cppm.o -c <repo>/src/cmd/planar/bootstrap.cppm",
+    "file": "<repo>/src/cmd/planar/bootstrap.cppm",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cppm.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/glaze/a4a7/include -isystem <repo>/vendor/lua/0b10/src -isystem <repo>/vendor/xxhash/0.8.3 -isystem <repo>/vendor/cli11/9d6a/include -isystem <repo>/vendor/catch2/c601/src/catch2/.. -isystem <repo>/build/rewrite-debug/vendor/catch2/generated-includes -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar_command_tests.dir/bootstrap.t.cpp.o.modmap -o src/cmd/planar/CMakeFiles/planar_command_tests.dir/bootstrap.t.cpp.o -c <repo>/src/cmd/planar/bootstrap.t.cpp",
+    "file": "<repo>/src/cmd/planar/bootstrap.t.cpp",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar_command_tests.dir/bootstrap.t.cpp.o"
+  },
+  {
+    "directory": "<repo>/build/rewrite-debug",
+    "command": "/opt/homebrew/opt/llvm/bin/clang++ -DCLI11_COMPILE -isystem <repo>/vendor/glaze/a4a7/include -isystem <repo>/vendor/lua/0b10/src -isystem <repo>/vendor/xxhash/0.8.3 -isystem <repo>/vendor/cli11/9d6a/include -stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1 -g -std=c++26 -arch arm64 -Wall -Wextra -Wpedantic -Werror @src/cmd/planar/CMakeFiles/planar.dir/main.cpp.o.modmap -o src/cmd/planar/CMakeFiles/planar.dir/main.cpp.o -c <repo>/src/cmd/planar/main.cpp",
+    "file": "<repo>/src/cmd/planar/main.cpp",
+    "output": "<repo>/build/rewrite-debug/src/cmd/planar/CMakeFiles/planar.dir/main.cpp.o"
+  }
+]

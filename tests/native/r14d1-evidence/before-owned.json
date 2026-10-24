@@ -1,0 +1,11 @@
+{
+  "src/engine/capture/host_path.cppm": null,
+  "src/engine/capture/host_path.cpp": null,
+  "src/engine/capture/host_path.t.cpp": null,
+  "src/engine/CMakeLists.txt": "355dbc7675ed5dfab155ceb4a10ead4b1cbf2d8f8a43cf4097a59895d90c4e20",
+  "src/cmd/planar/handlers/render/command.cpp": "6428e6709203557532ae2996363573c0ad631f61dd07d8f9b1099aaed7c4c1ea",
+  "src/cmd/planar/CMakeLists.txt": "12c17d977ee497c877b16b8964f1d0741a7fc91902bfad81b1fe9db37a3d360d",
+  "tests/acceptance/bootstrap_paths.py": "c0cb26100eb6ccd7091e7fdfa985e1caa7834663b3f2bb78db339f83e6211727",
+  "docs/architecture.md": "911faa3c74e67f4dd23c53e6939f8f8a3a58ac8af2017e2f61de6aa8dea9d070",
+  "docs/testing.md": "22bcdd258d35f96f934a671e5b0f5a0d44571d8188f6f219d910ca6b939d30bc"
+}

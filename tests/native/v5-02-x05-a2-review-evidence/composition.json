@@ -1,0 +1,25 @@
+{
+  "exact_reused_logs": true,
+  "junit_sha256": "dcc4f67679e594366a1d7e9e60a8fb7859e88540bf71fdd31a169908234ddac2",
+  "only_changed_support": [
+    "tests/native/v5-02-x05-a2-support/probe.py",
+    "tests/native/v5-02-x05-a2-support/verify.py"
+  ],
+  "original_command": {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement.(X05 A[012]|command |runtime |interpretation |load |acceptance |cli|.*_cli|CLI11|help |invocation |workspace )",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-a2-evidence/attempt01/focused.xml"
+    ],
+    "end_utc": "2026-10-23T02:06:04.394042+00:00",
+    "exit_code": 0,
+    "label": "focused",
+    "seconds": 84.788999,
+    "start_utc": "2026-10-23T02:04:39.605043+00:00"
+  }
+}

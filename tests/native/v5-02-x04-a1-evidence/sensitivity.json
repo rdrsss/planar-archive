@@ -1,0 +1,26 @@
+{
+  "purpose": "Reversible omissions prove syscall tests detect reads and an absent pre-read binding.\nThese are controlled negative controls, not claims about an older production bug.\nRun only under exclusive source/build ownership. Restore exact source in finally.\n",
+  "exact_restoration": true,
+  "variants": [
+    {
+      "label": "missing-binding",
+      "path": "src/engine/capture/native.cpp",
+      "before": "    if (admission) {",
+      "after": "    if (false && admission) {",
+      "original_sha256": "bfead8eabedfe90e225c3f5ce35f3b0dafdf99fb979976c021f61866d59deb6c",
+      "variant_sha256": "583687c019c2f8907855eb9a02f5cb1217617c104da552688c5e3184be64e3fd",
+      "test": "replacement.capture admission selected inputs perform zero observed data reads before binding",
+      "expected_failure_exit": 8
+    },
+    {
+      "label": "metadata-read-attempt",
+      "path": "src/engine/capture/admission.cpp",
+      "before": "      auto metadata = status(fd.fd);",
+      "after": "      auto metadata = status(fd.fd);\n      if (!is_directory) { char byte; (void)::read(fd.fd, &byte, 1); }",
+      "original_sha256": "d46ef3738a6a42ba8264ef3038c0a8d2a137aa3720ffe0a023d96bc5260d7ed7",
+      "variant_sha256": "d703868617d86b2bece5faf0da282328b64421bf4872b524b16fa03bdf7e8171",
+      "test": "replacement.capture admission all selected file roles have zero observed metadata phase data reads",
+      "expected_failure_exit": 8
+    }
+  ]
+}

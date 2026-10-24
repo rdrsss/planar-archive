@@ -1,0 +1,26 @@
+[
+  {
+    "manifest": "tests/native/v5-02-x05-b2-b-c01-evidence/candidate-manifest.json",
+    "sha256": "4231de550042932b7ae98d249f845708a795b4bf59c99294351cc972249c22b8",
+    "entries": 14,
+    "mismatches": []
+  },
+  {
+    "manifest": "tests/native/v5-02-x05-b2-b-c01-evidence/artifact-manifest.json",
+    "sha256": "2425f942948717e711e16234c705c01b892bbb82da7a2f1889689da3316e483b",
+    "entries": 126,
+    "mismatches": []
+  },
+  {
+    "manifest": "tests/native/v5-02-x05-b2-b-evidence/artifact-manifest.json",
+    "sha256": "2f3991abd0d0ab2ee852c35fce355ddd1a7592ee20b8b316807a402389ceb394",
+    "entries": 90,
+    "mismatches": []
+  },
+  {
+    "manifest": "tests/native/v5-02-x05-b2-b-review-evidence/artifact-manifest.json",
+    "sha256": "316c1b8987b0452e0f2dbceac0ae3d6160def19fde9d122a03934246e1191aa8",
+    "entries": 74,
+    "mismatches": []
+  }
+]

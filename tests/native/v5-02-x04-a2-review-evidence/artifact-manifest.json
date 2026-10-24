@@ -1,0 +1,22 @@
+{
+  "docs/vernacular/rounds/V5-02-X04-A2-review.md": "71da393750215dad9f788354ee18453f6410a833bf08a794159ed410b42f5da7",
+  "tests/native/v5-02-x04-a2-review-evidence/README.md": "79f2e5938396d5782f6094f75bd46ddcd1667903fe0b2522bf4551e172a0c3ea",
+  "tests/native/v5-02-x04-a2-review-evidence/commands.json": "6afcd05d97166775886db52fc01fe889746c4c96c28d9d49e0a16cc520e1084c",
+  "tests/native/v5-02-x04-a2-review-evidence/debug-build.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+  "tests/native/v5-02-x04-a2-review-evidence/debug-focused.log": "6e1dff2fd76ff7c32bd8881d977edf5b1aa1fe3136aa2d9de1e5ef6a525195ca",
+  "tests/native/v5-02-x04-a2-review-evidence/debug-focused.xml": "75a5fbacfd6a62076936e6cb6bcbd68275215bfa84f6bf104597bbef12a19f6f",
+  "tests/native/v5-02-x04-a2-review-evidence/debug-inventory.log": "375e3a10d4003ab17c473d8f506e07f45b29cfdb9058e2ff66ba5f292a594a63",
+  "tests/native/v5-02-x04-a2-review-evidence/debug-no-work.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+  "tests/native/v5-02-x04-a2-review-evidence/final-protection.json": "4719527d158a86641d3edd434c49ed95f2cecde7553401cd62045e9637fe7d92",
+  "tests/native/v5-02-x04-a2-review-evidence/finalize.py": "cb1080ede9ff5da7e97899d3ed7bde1b4306daf1e6f6a40b05739708309daf78",
+  "tests/native/v5-02-x04-a2-review-evidence/focused-results.json": "232ac6eeed3c403aaaabb78194847750ecd260ad19c8e48aefc67d3099e5b75b",
+  "tests/native/v5-02-x04-a2-review-evidence/initial-runner-failure.txt": "bf115614c80a7e7c2cb67ecdb804524e9a5550765bfa3a2b4d705f60d1a4fa84",
+  "tests/native/v5-02-x04-a2-review-evidence/integrity.json": "9ca1ab7eeeccef035696309ec2b2cec3f00cba1421b264029df637b945e9655a",
+  "tests/native/v5-02-x04-a2-review-evidence/inventory.json": "6a4dd6388984be0915dba2f82c4ec3528ebc30dbd60ef8b7f5511a95b577c63a",
+  "tests/native/v5-02-x04-a2-review-evidence/pinned-lint.log": "6989f97d90857ff2972b560d0d8bef116ea098fafb6c8340cbd2a4e13705bcbc",
+  "tests/native/v5-02-x04-a2-review-evidence/source-stability.json": "1b98d710142710e201fb8f7ee5865438f073641eac9b17e18c4b7e961d01068d",
+  "tests/native/v5-02-x04-a2-review-evidence/verify-initial.py": "0b9bafa8f6914cf45f58a6913ae65cd82fefcc59d952999bd76bbf8641868f74",
+  "tests/native/v5-02-x04-a2-review-evidence/verify-second.py": "0b208d91e086dbeae33a2a2e70a8d591b7ec3fabd477dbb110cacf2b4ce19c7a",
+  "tests/native/v5-02-x04-a2-review-evidence/verify-third.py": "54be1f22d9b0a1a623033126b90089d74ee2473fb465ba2e80b82ef337c1833f",
+  "tests/native/v5-02-x04-a2-review-evidence/verify.py": "8caf1677f74f25d3d3b20cd5684ddf7608c562b08480e8b17f4e56fdeb2cd0e3"
+}

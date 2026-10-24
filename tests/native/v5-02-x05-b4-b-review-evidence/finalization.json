@@ -1,0 +1,12 @@
+{
+  "disposition": "request-changes",
+  "finding": "B4B-R1",
+  "report_sha256": "ed5b60c94d65a9ee4d681ef44688d7fc62887c64c66c355af0c1b6f87a213818",
+  "artifact_manifest_sha256": "173d6798801db406fbef9b92ac5e837b85489aed506d78e2f5f236ad24bac875",
+  "artifact_entries": 159,
+  "candidate_unchanged": true,
+  "protected_unchanged": true,
+  "release_unchanged": true,
+  "debug_and_edits_released": true,
+  "no_later_reviewer_edits": true
+}

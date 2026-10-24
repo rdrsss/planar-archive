@@ -1,0 +1,17 @@
+{
+  "disposition": "request-changes",
+  "finding": "B4A-R1",
+  "report_sha256": "f2c9d27501f972983a56d0c503db4413a2c3761ac43af143ce1f90270f3750c8",
+  "artifact_manifest_sha256": "fda8a2ec25ba0a01f21125706901ce43b9153ba51a41e3f40837b26f7715329c",
+  "artifact_count": 77,
+  "scope_final_sha256": "facc4260d95c40f077ce6b4930816a824a75347e10c2a3a55122337ea11663c8",
+  "author_identities": {
+    "candidate-manifest.json": "86f2ee5a919d3f2a6f14cf8b71dfe4ad66adbc1ed194ae29fe72e6ea0bd633a7",
+    "candidate.diff": "753408bc7641c721f4019a71c22e82940f38b8ef141bd3b3a8cba03f1ed07588",
+    "artifact-manifest.json": "125d42a25234407f7e923f66f0a40f93153f684dc6d0d90e8c84588719671adb",
+    "REPORT.md": "c98c6324003afd2d60feb82a50eef152d2376b66e75e19b3088fcc04d567977d"
+  },
+  "protected_unchanged": true,
+  "debug_released": true,
+  "no_later_reviewer_edits": true
+}

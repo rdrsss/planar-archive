@@ -1,0 +1,20 @@
+{
+  "status": "completed passing gate, superseded by verification-only phase predicate correction",
+  "reason": "C03 copied probe flag now resets from protected-call phase before every call, so later module execution/collection cannot inherit seal-only allocator targeting",
+  "changed": [
+    "tests/native/v5-02-x05-a3-c04-support/allocations.py",
+    "tests/native/v5-02-x05-a3-c04-support/adaptations.json"
+  ],
+  "product_and_reference_sha256": {
+    "src/engine/runtime/runtime.cpp": "87f35dbd6f7b250064e292ed4c9a89261682804480ba8055dbbfa2cda17cc020",
+    "src/engine/runtime/external_registration.t.cpp": "aa806853a282eb1e0a3ec0e728662cfc793f73ecae0a63a9ad59ff4779a81fab",
+    "CLAUDE.md": "e7f805bfe51d4ea25351ee03151c5531e2836aec442c0a70bad434b1dc944635",
+    "docs/architecture.md": "ffccea062bf4c22940198c72c188dbeb8400f9f6421de6b9be0b380927b9396f",
+    "docs/testing.md": "84e786f7f7f5ef50334f02a1d24ee9bdd006e68e4de8b9b1d97c091483e7fc71",
+    "docs/vernacular/implementation.md": "44620a834267a2ff98c01ce932f9accc2f97b836fff96ad0e6d9b7c39ba39ea8",
+    "docs/vernacular/roadmap.md": "b8abcfe8921f7fc370c0cd814d956971d0c998d0fbc7aa8e16ff99d824f5b117",
+    "docs/vernacular/external-profile-implementation.md": "a12a7b40c8a045d41823310b7d0b6cc94f68aefe24a14a15fc25005a1706d46f"
+  },
+  "product_and_reference_bytes_unchanged": true,
+  "historical_runner_unchanged": true
+}

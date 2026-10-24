@@ -1,0 +1,52 @@
+{
+  "artifact_manifest": {
+    "entries": 74,
+    "path": "artifact-manifest.json",
+    "sha256": "12b907dc93dfbf916efd6ab7be2cc34f8116daf895b9ca085c761c126dc20441"
+  },
+  "author_identity": {
+    "artifact_entries": 166,
+    "candidate_entries": 18,
+    "exact_membership_modes_bytes": true,
+    "hashes": {
+      "REPORT.md": "e42cf175003dbdc28a2afea1f06cb11b970fe77ccc7e1974c96ce1a3145c8507",
+      "artifact-manifest.json": "8cd9069f84100de6afd887214c05bd601afc9409890e1da331bc552298e9b8af",
+      "finalization.json": "215ce1baac3b992e9aa6f5ac9ffcbc367c41066322450c9c91f15f16c2dc820b",
+      "frozen-candidate.json": "65c517516840505ee603ece2f28899830f19a0c036864aa37a852c126973eb7d"
+    }
+  },
+  "cleanup": {
+    "copied_dependency_files": 888,
+    "copied_membership_modes_bytes_verified": true,
+    "only_reviewer_owned_disposable_inputs_and_products_removed": true,
+    "path": "cleanup.json",
+    "removed_bytes": 1384334740,
+    "removed_files": 894,
+    "sha256": "d6d401ec858f96659fdfea9c4afae5b41e1a469a9c7dd2b4900e82fce0fab3b3",
+    "shared_inputs_unchanged": true
+  },
+  "disposition": "request-changes",
+  "open_findings": [
+    "C4B3-R1"
+  ],
+  "protection": {
+    "changes": 0,
+    "entries": 80646,
+    "path": "protection-after.json",
+    "sha256": "7780d795a7a011878be992fe0e1762b4105c0ce29a62ae9b87147adf3257ddb7"
+  },
+  "release": {
+    "exclusive_debug": true,
+    "no_further_edits_builds_tests": true,
+    "reviewer_owned_paths": true
+  },
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-X05-C4-B3-review.md",
+    "sha256": "8c02d02c8b8c3159f8e193e0fbb274498b52664ffd3ed458666d231d72fe406e"
+  },
+  "schema": 1,
+  "verification": {
+    "path": "verification-summary.json",
+    "sha256": "fa3a46b90bea3d1bbf9e83bfbfad7ca682627c98e688da459a862fcb3bb0523e"
+  }
+}

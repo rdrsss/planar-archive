@@ -1,0 +1,10 @@
+{
+  "src/engine/json_codec/codec.cpp": "a58c162d62999fa92ae4a7e58370b9d297319dadc341a51a7436f447534822cd",
+  "src/engine/json_codec/codec.t.cpp": "c6b5208667a494e4dcf6261c471ebea5fd620ddb672b8dd39686d341cb2679b7",
+  "CLAUDE.md": "83163d570430690b411e8bd81449ff8763b4a0c8d16c2c4ef9b120e9dc4cde52",
+  "docs/architecture.md": "0333818d252a95745a9f054cec19a794ce1434287acabc11e7f0d951f17c8a22",
+  "docs/testing.md": "a0110ffed69ecc2512e164bc380c777b5ed0cfdd8ac9a389ab42e1ff44530b92",
+  "docs/vernacular/implementation.md": "02d57245302a172aa6de758a1f6dcc54d3ffc62eddb7bf11b5f1fcdd4e60d94c",
+  "docs/vernacular/roadmap.md": "de31745ba447ecb9cd7a0594a85aa1ef326cebc99a2f08f604d377f3acc94df0",
+  "docs/vernacular/external-profile-implementation.md": "71bb1be19b85bfc3102d4d7cd275b8ea71de90a3f8387e07e67b9a5cfd986edf"
+}

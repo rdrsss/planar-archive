@@ -1,0 +1,260 @@
+[
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:48.362830+00:00",
+    "exit_code": 0,
+    "label": "debug-inventory",
+    "seconds": 0.101515,
+    "start_utc": "2026-10-23T19:29:48.261315+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/debug-historical.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:48.779063+00:00",
+    "exit_code": 0,
+    "label": "debug-historical",
+    "seconds": 0.411984,
+    "start_utc": "2026-10-23T19:29:48.367079+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/debug-d6.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:49.031643+00:00",
+    "exit_code": 0,
+    "label": "debug-d6",
+    "seconds": 0.252088,
+    "start_utc": "2026-10-23T19:29:48.779555+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/debug-d6-c01.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:49.190806+00:00",
+    "exit_code": 0,
+    "label": "debug-d6-c01",
+    "seconds": 0.158697,
+    "start_utc": "2026-10-23T19:29:49.032109+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/debug-d7-b.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:49.318839+00:00",
+    "exit_code": 0,
+    "label": "debug-d7-b",
+    "seconds": 0.127579,
+    "start_utc": "2026-10-23T19:29:49.191260+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/debug-b1.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:49.371575+00:00",
+    "exit_code": 0,
+    "label": "debug-b1",
+    "seconds": 0.052294,
+    "start_utc": "2026-10-23T19:29:49.319281+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-a-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/debug-b2-a.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:49.403075+00:00",
+    "exit_code": 0,
+    "label": "debug-b2-a",
+    "seconds": 0.031107,
+    "start_utc": "2026-10-23T19:29:49.371968+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:51.068272+00:00",
+    "exit_code": 0,
+    "label": "debug-lint",
+    "seconds": 1.652939,
+    "start_utc": "2026-10-23T19:29:49.415333+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:51.330509+00:00",
+    "exit_code": 0,
+    "label": "debug-no-work",
+    "seconds": 0.261601,
+    "start_utc": "2026-10-23T19:29:51.068908+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-release",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:51.391567+00:00",
+    "exit_code": 0,
+    "label": "release-inventory",
+    "seconds": 0.060582,
+    "start_utc": "2026-10-23T19:29:51.330985+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/release-historical.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:51.792793+00:00",
+    "exit_code": 0,
+    "label": "release-historical",
+    "seconds": 0.396501,
+    "start_utc": "2026-10-23T19:29:51.396292+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/release-d6.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:52.046976+00:00",
+    "exit_code": 0,
+    "label": "release-d6",
+    "seconds": 0.253645,
+    "start_utc": "2026-10-23T19:29:51.793331+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/release-d6-c01.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:52.212431+00:00",
+    "exit_code": 0,
+    "label": "release-d6-c01",
+    "seconds": 0.164861,
+    "start_utc": "2026-10-23T19:29:52.047570+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/release-d7-b.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:52.343330+00:00",
+    "exit_code": 0,
+    "label": "release-d7-b",
+    "seconds": 0.130267,
+    "start_utc": "2026-10-23T19:29:52.213063+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/release-b1.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:52.396803+00:00",
+    "exit_code": 0,
+    "label": "release-b1",
+    "seconds": 0.052806,
+    "start_utc": "2026-10-23T19:29:52.343997+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-a-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-b4-c-review-evidence/release-b2-a.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:52.430778+00:00",
+    "exit_code": 0,
+    "label": "release-b2-a",
+    "seconds": 0.033296,
+    "start_utc": "2026-10-23T19:29:52.397482+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-release"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:54.028901+00:00",
+    "exit_code": 0,
+    "label": "release-lint",
+    "seconds": 1.585839,
+    "start_utc": "2026-10-23T19:29:52.443062+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-23T19:29:54.270974+00:00",
+    "exit_code": 0,
+    "label": "release-no-work",
+    "seconds": 0.241319,
+    "start_utc": "2026-10-23T19:29:54.029655+00:00"
+  }
+]

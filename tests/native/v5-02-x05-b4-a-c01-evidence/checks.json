@@ -1,0 +1,34 @@
+{
+  "results": {
+    "focused": {
+      "cases": 401,
+      "assertions": null
+    },
+    "supplemental": {
+      "cases": 11,
+      "assertions": null
+    },
+    "production": {
+      "cases": 12,
+      "assertions": 824
+    },
+    "independent": {
+      "cases": 2,
+      "assertions": 159
+    },
+    "correspondence": {
+      "cases": 2,
+      "assertions": 491
+    },
+    "frozen_old": {
+      "cases": 15,
+      "assertions": 1467
+    }
+  },
+  "inventory": 667,
+  "baseline_names_preserved": 665,
+  "frozen_members": 15,
+  "protected_members": 23116,
+  "AGENTS": "symlink to CLAUDE.md",
+  "no_full_milestone_or_release_gate": true
+}

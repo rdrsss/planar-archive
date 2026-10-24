@@ -1,0 +1,12 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/history/provenance.cppm": "de6bf81bcdd812a274b1ce85bfc8570c2af705cc0e998ccbcb6295535798e711",
+    "src/engine/history/provenance.cpp": "1c053761c48f5a20295885115f0e0eaf56a974d5a677b1ec03e9d222e792a631",
+    "src/engine/history/interpretation.cppm": "4b1056a91dab53602057f18dc072fba3879c632fe3d878d011eed847834323ad",
+    "src/engine/history/interpretation.cpp": "2ee8f97e42b6011a46e8d618dcefc7fec942853dba872bd3ac5d9f701899475d",
+    "src/engine/CMakeLists.txt": "9aa048629457049a826758a3387d7cfcd05c5344581302cfaa6920d768a1bce7",
+    "docs/architecture.md": "55658c4d14f58532646c4929ccc001110fbe86e390d851671d7c218642a39ff2",
+    "docs/testing.md": "840f5431ba82ff74b3057cd44349cade1d07fdb7960af823c1c25f8f7c0cf33d"
+  }
+}

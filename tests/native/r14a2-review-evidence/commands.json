@@ -1,0 +1,104 @@
+[
+  {
+    "name": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.165
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "../../tests/native/r14a2-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 35.766
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "python3",
+      "tests/acceptance/bootstrap_cli.py",
+      "build/rewrite-debug/bin/planar"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 9.574
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.694
+  },
+  {
+    "name": "record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.656
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.794
+  },
+  {
+    "name": "helper-lint",
+    "argv": [
+      "python3",
+      "tests/native/r13b1c01-evidence/helper-lint.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.104
+  },
+  {
+    "name": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.148
+  }
+]

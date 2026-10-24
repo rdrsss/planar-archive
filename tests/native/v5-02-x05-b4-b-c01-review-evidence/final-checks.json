@@ -1,0 +1,299 @@
+{
+  "candidate-manifest.json": {
+    "entries": 210,
+    "sha256": "7f9ee160363fba3af1d652f328ffab596a2cad38cf6b5b98062f20c8c46e55a4",
+    "mismatches": []
+  },
+  "artifact-manifest.json": {
+    "entries": 276,
+    "sha256": "471a1c7a3044b0e22f3817394e7198e9f566ef3792c1e0f7e95bdcc92a3d481d",
+    "mismatches": []
+  },
+  "frozen-source.json": {
+    "entries": 210,
+    "sha256": "ed8b2b6ae2fbf88bd57ac6163d7f777e08c6788cfe41549a0d1ec9ee2d51c237",
+    "mismatches": []
+  },
+  "protected-start.json": {
+    "entries": 22385,
+    "sha256": "41c91163a12ec441e2a2eea47cde8275dc8b20b8a00c3bc26dc9b932f175f52e",
+    "mismatches": []
+  },
+  "protected-unowned.json": {
+    "entries": 203,
+    "sha256": "2fc680891b0111841321dfd944a015a7c5b810fec2a897fd24db7f1e36cd62cc",
+    "mismatches": []
+  },
+  "incremental": {
+    "exact_reconstruction": true,
+    "sha256": "5c0671642ddbec600eebd587c10c9c3e9e3a5739d7ba99f620380bd93611ea0c"
+  },
+  "combined": {
+    "exact_reconstruction": true,
+    "sha256": "f74a729e8af032465b453358d9b1495013c81a0eaefe0a8178d6d1c21aae5746"
+  },
+  "reviewer_protected": {
+    "entries": 22592,
+    "complete_membership_unchanged": true,
+    "mismatches": []
+  },
+  "release": {
+    "entries": 3463,
+    "complete_membership_and_hashes_unchanged": true
+  },
+  "agents_symlink_preserved": true,
+  "public-controls": {
+    "commands": 9,
+    "cwd": "<repo>/build/rewrite-debug",
+    "all_expected_exits": true
+  },
+  "lifetime-boundaries": {
+    "commands": 29,
+    "cwd": "<repo>/build/rewrite-debug",
+    "all_expected_exits": true
+  },
+  "allocation-controls": {
+    "commands": 3,
+    "cwd": "<repo>/build/rewrite-debug",
+    "all_expected_exits": true
+  },
+  "private_compile_membership_entries": 888,
+  "catch_summaries": {
+    "gate/production-render.xml": {
+      "cases": 21,
+      "assertions": 1256,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "public-controls/ceiling.xml": {
+      "cases": 1,
+      "assertions": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "public-controls/adversarial.xml": {
+      "cases": 2,
+      "assertions": 741,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "public-controls/escaped.xml": {
+      "cases": 1,
+      "assertions": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "public-controls/baseline-ceiling.xml": {
+      "cases": 1,
+      "assertions": 13,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "public-controls/near.xml": {
+      "cases": 1,
+      "assertions": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/render-codec.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/lua.xml": {
+      "cases": 1,
+      "assertions": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/boundary-phases.xml": {
+      "cases": 1,
+      "assertions": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/conversion.xml": {
+      "cases": 1,
+      "assertions": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/semantic.xml": {
+      "cases": 1,
+      "assertions": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/parser.xml": {
+      "cases": 1,
+      "assertions": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/instructions.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/snapshot.xml": {
+      "cases": 1,
+      "assertions": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/error-string.xml": {
+      "cases": 1,
+      "assertions": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/execution.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/native.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/hash-remaining.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/selection-nodes.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/render-native.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/preflight-red.xml": {
+      "cases": 1,
+      "assertions": 32,
+      "failures": 10,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/error.xml": {
+      "cases": 1,
+      "assertions": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/selection-native.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/error-map.xml": {
+      "cases": 1,
+      "assertions": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/error-node.xml": {
+      "cases": 1,
+      "assertions": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/success.xml": {
+      "cases": 1,
+      "assertions": 69,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/wrapper.xml": {
+      "cases": 1,
+      "assertions": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/boundary-refusal.xml": {
+      "cases": 1,
+      "assertions": 249,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/preflight.xml": {
+      "cases": 1,
+      "assertions": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/nodes.xml": {
+      "cases": 1,
+      "assertions": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/render-nodes.xml": {
+      "cases": 1,
+      "assertions": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lifetime-boundaries/error-node-exact.xml": {
+      "cases": 1,
+      "assertions": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "allocation-controls/allocation.xml": {
+      "cases": 2,
+      "assertions": 4104,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "debug_released": true,
+  "all_reviewer_edits_released": true,
+  "disposition": "approve",
+  "closed_finding": "B4B-R1",
+  "full_b4_c_gate_claimed": false
+}

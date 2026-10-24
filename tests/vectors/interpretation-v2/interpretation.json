@@ -1,0 +1,517 @@
+{
+  "bundle": {
+    "jobs": [
+      {
+        "file": "a_custom.lua",
+        "value": {
+          "id": "a_custom",
+          "roles": [
+            {
+              "id": "worker"
+            },
+            {
+              "id": "other"
+            },
+            {
+              "id": "reviewer"
+            }
+          ],
+          "shape": "custom",
+          "version": 1
+        }
+      },
+      {
+        "file": "b_shipped.lua",
+        "value": {
+          "id": "b_shipped",
+          "roles": [
+            {
+              "id": "worker"
+            },
+            {
+              "id": "other"
+            },
+            {
+              "id": "reviewer"
+            }
+          ],
+          "shape": "fanout_review",
+          "version": 1
+        }
+      },
+      {
+        "file": "c_pipeline.lua",
+        "value": {
+          "id": "c_pipeline",
+          "roles": [
+            {
+              "id": "worker"
+            },
+            {
+              "id": "other"
+            },
+            {
+              "id": "reviewer"
+            }
+          ],
+          "shape": "pipeline",
+          "version": 1
+        }
+      }
+    ],
+    "registry": {
+      "checks": [],
+      "id": "registry",
+      "revision": "vone",
+      "toolchains": [],
+      "version": 1
+    },
+    "registry_file": "input.json",
+    "spec": {
+      "constraints": [],
+      "contracts": [],
+      "dependencies": [],
+      "facets": [],
+      "frozen": [],
+      "goal": {},
+      "id": "spec",
+      "milestones": [],
+      "prescriptions": [],
+      "questions": [],
+      "version": 1,
+      "work": [
+        {
+          "id": "alpha"
+        },
+        {
+          "id": "beta"
+        }
+      ]
+    },
+    "spec_file": "spec.lua",
+    "workspace": {
+      "checks": [],
+      "id": "workspace",
+      "jobs": [],
+      "registry": {},
+      "root": {},
+      "spec": "spec.lua",
+      "toolchains": [],
+      "version": 1
+    },
+    "workspace_file": "workspace.lua"
+  },
+  "extensions": {
+    "catalog": {
+      "commands": [
+        {
+          "descriptor": {
+            "capabilities": [
+              "export_source_v1"
+            ],
+            "family": "export",
+            "handler_id": "shipped.export.v1",
+            "help": "help",
+            "name": "export",
+            "options": [
+              {
+                "help": "option",
+                "name": "--ledger",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--revision",
+                "required": true,
+                "type": "decimal"
+              },
+              {
+                "help": "option",
+                "name": "--target",
+                "required": true,
+                "type": "text"
+              }
+            ],
+            "response_kind": "export_v1"
+          },
+          "owner": {
+            "module": "shipped/planar/commands.lua",
+            "ordinal": 2,
+            "tier": "shipped"
+          }
+        },
+        {
+          "descriptor": {
+            "capabilities": [
+              "read_history_v1"
+            ],
+            "family": "history",
+            "handler_id": "shipped.history.v1",
+            "help": "help",
+            "name": "history",
+            "options": [
+              {
+                "help": "option",
+                "name": "--after-event",
+                "required": false,
+                "type": "decimal"
+              },
+              {
+                "help": "option",
+                "name": "--at-event",
+                "required": false,
+                "type": "decimal"
+              },
+              {
+                "help": "option",
+                "name": "--ledger",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--limit",
+                "required": false,
+                "type": "decimal"
+              },
+              {
+                "help": "option",
+                "name": "--request-id",
+                "required": false,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--revision",
+                "required": false,
+                "type": "decimal"
+              }
+            ],
+            "response_kind": "history_v1"
+          },
+          "owner": {
+            "module": "shipped/planar/commands.lua",
+            "ordinal": 2,
+            "tier": "shipped"
+          }
+        },
+        {
+          "descriptor": {
+            "capabilities": [
+              "initialize_ledger_v1"
+            ],
+            "family": "init",
+            "handler_id": "shipped.init.v1",
+            "help": "help",
+            "name": "init",
+            "options": [
+              {
+                "help": "option",
+                "name": "--ledger",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--workspace-id",
+                "required": true,
+                "type": "text"
+              }
+            ],
+            "response_kind": "init_v1"
+          },
+          "owner": {
+            "module": "shipped/planar/commands.lua",
+            "ordinal": 2,
+            "tier": "shipped"
+          }
+        },
+        {
+          "descriptor": {
+            "capabilities": [
+              "accept_load_v1"
+            ],
+            "family": "load",
+            "handler_id": "shipped.load.v1",
+            "help": "help",
+            "name": "load",
+            "options": [
+              {
+                "help": "option",
+                "name": "--actor",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--expect-revision",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--ledger",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--registry",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--request-id",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--workspace",
+                "required": true,
+                "type": "text"
+              }
+            ],
+            "response_kind": "load_v1"
+          },
+          "owner": {
+            "module": "shipped/planar/commands.lua",
+            "ordinal": 2,
+            "tier": "shipped"
+          }
+        },
+        {
+          "descriptor": {
+            "capabilities": [
+              "render_capture_v1"
+            ],
+            "family": "render",
+            "handler_id": "shipped.render.v1",
+            "help": "help",
+            "name": "render",
+            "options": [
+              {
+                "help": "option",
+                "name": "--base-root",
+                "required": false,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--budget-bytes",
+                "required": false,
+                "type": "decimal"
+              },
+              {
+                "help": "option",
+                "name": "--capture-outputs",
+                "required": false,
+                "type": "flag"
+              },
+              {
+                "help": "option",
+                "name": "--job",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--observations",
+                "required": false,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--registry",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--role",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--root",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "help": "option",
+                "name": "--workspace",
+                "required": true,
+                "type": "text"
+              }
+            ],
+            "response_kind": "render_v1"
+          },
+          "owner": {
+            "module": "shipped/planar/commands.lua",
+            "ordinal": 2,
+            "tier": "shipped"
+          }
+        }
+      ],
+      "projections": [],
+      "shapes": [
+        {
+          "descriptor": {
+            "abi": "shape_v1",
+            "help": "historical",
+            "id": "custom",
+            "revision": "vone",
+            "stages": "forbidden"
+          },
+          "owner": {
+            "module": "external/ext/z.lua",
+            "ordinal": 1,
+            "tier": "external"
+          }
+        },
+        {
+          "descriptor": {
+            "abi": "shape_v1",
+            "help": "historical",
+            "id": "fanout_review",
+            "revision": "vone",
+            "stages": "forbidden"
+          },
+          "owner": {
+            "module": "shipped/planar/z.lua",
+            "ordinal": 1,
+            "tier": "shipped"
+          }
+        },
+        {
+          "descriptor": {
+            "abi": "shape_v1",
+            "help": "historical",
+            "id": "pipeline",
+            "revision": "vone",
+            "stages": "forbidden"
+          },
+          "owner": {
+            "module": "shipped/planar/z.lua",
+            "ordinal": 1,
+            "tier": "shipped"
+          }
+        }
+      ],
+      "version": 2
+    },
+    "registration": "external_registration_v1",
+    "selected_shapes": [
+      {
+        "definition": "xxh3_128:c9b7d6ed255fee638188a9b42f12b5cb",
+        "id": "custom",
+        "job": "a_custom",
+        "revision": "vone"
+      }
+    ]
+  },
+  "semantic": {
+    "dependencies": [],
+    "jobs": [
+      {
+        "assignments": [
+          {
+            "role": "worker",
+            "work": "alpha"
+          },
+          {
+            "role": "other",
+            "work": "beta"
+          }
+        ],
+        "effective_checks": [],
+        "file": "a_custom.lua",
+        "graph": {
+          "edges": [],
+          "vertices": []
+        },
+        "id": "a_custom",
+        "pipeline_predecessors": [],
+        "reviewer": "reviewer",
+        "selected_shape": {
+          "definition": "xxh3_128:c9b7d6ed255fee638188a9b42f12b5cb",
+          "guidance": "Historical guidance.\n",
+          "id": "custom",
+          "obligations": [
+            {
+              "consumer": "beta",
+              "consumer_role": "other",
+              "id": "shape:custom:edge",
+              "phase": "start",
+              "producer": "alpha",
+              "producer_role": "worker",
+              "quality": "done",
+              "source": "shape"
+            }
+          ],
+          "revision": "vone"
+        }
+      },
+      {
+        "assignments": [
+          {
+            "role": "worker",
+            "work": "alpha"
+          },
+          {
+            "role": "other",
+            "work": "beta"
+          }
+        ],
+        "effective_checks": [],
+        "file": "b_shipped.lua",
+        "graph": {
+          "edges": [],
+          "vertices": []
+        },
+        "id": "b_shipped",
+        "pipeline_predecessors": [],
+        "reviewer": "reviewer"
+      },
+      {
+        "assignments": [
+          {
+            "role": "worker",
+            "work": "alpha"
+          },
+          {
+            "role": "other",
+            "work": "beta"
+          }
+        ],
+        "effective_checks": [],
+        "file": "c_pipeline.lua",
+        "graph": {
+          "edges": [],
+          "vertices": []
+        },
+        "id": "c_pipeline",
+        "pipeline_predecessors": [],
+        "reviewer": "reviewer"
+      }
+    ]
+  },
+  "version": 2,
+  "versions": {
+    "canonical": "canonical_v1",
+    "declarations": "declarations_shapes_v1",
+    "hash": "xxh3_128_v1",
+    "interpretation": "interpretation_v2",
+    "normalization": "normalization_shapes_v1",
+    "normalizer": "exact_bytes_v1",
+    "projection": "projection_v2",
+    "provenance": "effective_stdlib_v1",
+    "registration": "external_registration_v1",
+    "selection": "selection_shapes_v1",
+    "semantics": "dependencies_shapes_v1",
+    "stdlib_digest": "39558178a34025ed85a6198d70b2db93"
+  }
+}

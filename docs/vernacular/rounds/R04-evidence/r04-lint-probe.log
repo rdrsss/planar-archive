@@ -1,0 +1,3 @@
++ /opt/homebrew/opt/llvm/bin/clang-format --dry-run --Werror <repo>/src/cmd/planar/bootstrap.cpp <repo>/src/cmd/planar/bootstrap.cppm <repo>/src/cmd/planar/bootstrap.t.cpp <repo>/src/cmd/planar/main.cpp
++ bash <repo>/scripts/cpp-lint-doxygen.sh /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-doxygen-yd4z0m6f/Doxyfile
+Formatting and Doxygen checked 4 active source files

@@ -1,0 +1,46 @@
+{
+  "command.cppm": {
+    "source_sha256": "49632fc4018f77d9237cd95e15ab95496022f19738cf2c04916ca773e7f8f4d0",
+    "generated_sha256": "df9fa22d4c9282d24e0f681df24dda926e60d616c01b606f7ae5d66c1eef3f8b",
+    "reverse_identical": true,
+    "substitutions": [
+      {
+        "before": "planar.cmd.planar.handlers.source_export;",
+        "after": "planar.test.export_command;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::cmd::handlers {",
+        "after": "namespace planar::cmd::handlers_fault {",
+        "count": 1
+      }
+    ]
+  },
+  "command.cpp": {
+    "source_sha256": "443f00e80e6ae93d0aedcd2e6c78a7bc43e10313865f497037cd4c604cd73ad6",
+    "generated_sha256": "9fefd77d5ca3df4c6b790ea7f4f273c48927408252296c7774696dae6ed3ed0a",
+    "reverse_identical": true,
+    "substitutions": [
+      {
+        "before": "planar.cmd.planar.handlers.source_export;",
+        "after": "planar.test.export_command;",
+        "count": 1
+      },
+      {
+        "before": "namespace planar::cmd::handlers {",
+        "after": "namespace planar::cmd::handlers_fault {",
+        "count": 1
+      },
+      {
+        "before": "published    = true;",
+        "after": "published    = true;\n    if (o.target.ends_with(\"allocation\")) throw std::bad_alloc();",
+        "count": 1
+      },
+      {
+        "before": "text(std::to_string(result->source))}}));",
+        "after": "text(std::to_string(result->source))}}), {1, 256, 4000000});",
+        "count": 1
+      }
+    ]
+  }
+}

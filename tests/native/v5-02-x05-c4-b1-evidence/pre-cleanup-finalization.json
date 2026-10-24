@@ -1,0 +1,17 @@
+{
+  "artifact_entries": 1777,
+  "candidate": {
+    "mode": 420,
+    "sha256": "05940660e44677400b57cc7c350969d3ba60012fee9e5d2a0ae3f9a40e24328e"
+  },
+  "candidate_entries": 14,
+  "manifest": {
+    "mode": 420,
+    "sha256": "07fc8d916d8145f346dd8dd583b7d71a6703cbf16cf51d752bd947cb59e219ec"
+  },
+  "report": {
+    "mode": 420,
+    "sha256": "688e14c227b4e1c1423d23427e577e86d1070d2ab2d7d732b8226d98df20bbaa"
+  },
+  "schema": 1
+}

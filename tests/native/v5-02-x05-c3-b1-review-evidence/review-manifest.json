@@ -1,0 +1,170 @@
+{
+  "entries": {
+    "docs/vernacular/rounds/V5-02-X05-C3-B1-review.md": {
+      "mode": 420,
+      "sha256": "0e2b5a06caf559ba68a9c43d21b666d02acc536e949450862c26c39492a6c3fb",
+      "size": 9126
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/adversarial-initial-invalid-standalone-path.cpp": {
+      "mode": 420,
+      "sha256": "4ea5744ef44609b0d2c5507fd46406517945dc339a7c0cb5626bd85d1ec4fd32",
+      "size": 4360
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/adversarial-initial-invalid-standalone-path.xml": {
+      "mode": 420,
+      "sha256": "395c55da8f90cf06741f2f2824ccde1bbf3acb179155bf94bd3ac8f7c7f31ef2",
+      "size": 1353
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/adversarial.cpp": {
+      "mode": 420,
+      "sha256": "b58b66dfc792159296ae1bf7fba563489116a45cacbb0227e0fbf45fc155d2fe",
+      "size": 4361
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/adversarial.xml": {
+      "mode": 420,
+      "sha256": "3c12703e0bffc483e55757788fd35b5e7ea0c0084418b563dcac80a0da7e3bbf",
+      "size": 1011
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/build.log": {
+      "mode": 420,
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "size": 63
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/copied-compiled.json": {
+      "mode": 420,
+      "sha256": "3c1d5a082cab6bbd6d67156e0b13505fee65abacf44844115e02bbb627de2f99",
+      "size": 182569
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/expanded-module-map.json": {
+      "mode": 420,
+      "sha256": "c5060d626428a04a333a0eab425d3620142b8b76fa80ae7e8397b12fdf9a9f3b",
+      "size": 40520
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/focused-command-record.json": {
+      "mode": 420,
+      "sha256": "a881a28e018b77568f6ad63e4490c95f79480ab0d96467ac7c7f84edc6b63968",
+      "size": 1375
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/focused-summary.json": {
+      "mode": 420,
+      "sha256": "8fabb28112a386a273fa0ab7196b2184cf02b52e16926fe0890b381f34918b2d",
+      "size": 136
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/focused.log": {
+      "mode": 420,
+      "sha256": "13aa74c95d92ae0b9545f85142200e1f4696d03ee20df72764ea6bed18a14192",
+      "size": 27761
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/focused.xml": {
+      "mode": 420,
+      "sha256": "7e033cc02e56a71d25e1028eb395c923d5bc234f2ffec78b3269cf35683066ed",
+      "size": 66529
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/identities-after-focused.json": {
+      "mode": 420,
+      "sha256": "3b36cd94c6def26a6c2b0b7222256fad841ccf91053cbed8df7aa09da6aa4d96",
+      "size": 435
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/identities-after-private.json": {
+      "mode": 420,
+      "sha256": "3b36cd94c6def26a6c2b0b7222256fad841ccf91053cbed8df7aa09da6aa4d96",
+      "size": 435
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/identities-before.json": {
+      "mode": 420,
+      "sha256": "3b36cd94c6def26a6c2b0b7222256fad841ccf91053cbed8df7aa09da6aa4d96",
+      "size": 435
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/inventory.json": {
+      "mode": 420,
+      "sha256": "0bef3ad0ef7d0cffd1a1c2a19f7f63aa7f3d89ed8e09f29a950930cc30a80fa4",
+      "size": 560040
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/inventory.log": {
+      "mode": 420,
+      "sha256": "4755378f1effc6e8a22b3da2aee8552078506b3cabdc7f1892c8ccd49b579d3c",
+      "size": 586128
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/lint.log": {
+      "mode": 420,
+      "sha256": "5d592ab54d102467c700826b572267957064e486c51d3a61040aaf16ee1ddbc3",
+      "size": 9150
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/no-work.log": {
+      "mode": 420,
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "size": 63
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-cleanup.json": {
+      "mode": 420,
+      "sha256": "20606ced0d9b72922690a440004786ee2cf21dec47595b0b9fb64388d240e200",
+      "size": 192
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-commands.json": {
+      "mode": 420,
+      "sha256": "6597dc381dd481ed9451f1081ef5cd6fcd75e93d4673528cb61d233332fc8a95",
+      "size": 46582
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-compile.log": {
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-dependency-verification.json": {
+      "mode": 420,
+      "sha256": "fbfafeaa9688e998f03dbaffa2b68941c2ebeee75a4b854845a00b9e4086d79a",
+      "size": 214
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-initial-invalid-standalone-path-commands.json": {
+      "mode": 420,
+      "sha256": "4a0a8128eecf887773e038236d14f38752ca4e4b7a7579ec125964c3d5c92dd4",
+      "size": 46583
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-initial-unused-cache-flag-command.json": {
+      "mode": 420,
+      "sha256": "e6e79fe912cdcb529444961cfad07eb7d79fc36d10b3196c94e890540c919bbb",
+      "size": 44383
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-initial-unused-cache-flag.log": {
+      "mode": 420,
+      "sha256": "a3a4694dbe33f92af3418439eb8696965c18c44d8395e0127f37d9ef5b1e5935",
+      "size": 221
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-link.log": {
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private-probes.log": {
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/private_probe.py": {
+      "mode": 420,
+      "sha256": "a8a57bcb68916429839f07f34451fd560d4e5ec9f102de1077ce47e07d841111",
+      "size": 3552
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/review.py": {
+      "mode": 420,
+      "sha256": "e4e51f7632945be0d68fe229337e0666fa29c65d7074640a76c3761e3b5d289c",
+      "size": 5025
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/selected-tests.txt": {
+      "mode": 420,
+      "sha256": "5151543383d229f336cc9b07ef6389deeaa4fc4f7dc08eb3474817871ccec394",
+      "size": 9256
+    },
+    "tests/native/v5-02-x05-c3-b1-review-evidence/shared-compiled-before.json": {
+      "mode": 420,
+      "sha256": "3c1d5a082cab6bbd6d67156e0b13505fee65abacf44844115e02bbb627de2f99",
+      "size": 182569
+    }
+  },
+  "excludes": [
+    "review-manifest.json (self)",
+    "review-final.json (binds manifest)"
+  ],
+  "round": "V5-02-X05-C3-B1",
+  "schema": "planar.round.review-artifacts.v1"
+}

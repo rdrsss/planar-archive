@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python3",
+    "tests/vectors/records/generate-request-v2.py",
+    "--check"
+  ],
+  "cwd": "<repo>",
+  "start": 1792703598.962921,
+  "end": 1792703600.036353,
+  "exit_code": 0
+}

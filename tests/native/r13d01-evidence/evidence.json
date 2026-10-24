@@ -1,0 +1,10 @@
+{
+  "README.md": "1e55a8d6ac541d62b882e6117e55c396a7f6f00eb590c6126f62187ef5a3d092",
+  "candidate.after.json": "8afddbe7859f046e1d32ad3154718c10821213323858ff14bbec6e7a6cbfa807",
+  "candidate.before.json": "20c8e91f43e7723d4c0b26b4c7c31404c116db00987445aa383d877f4d30123a",
+  "documentation.diff": "1aee34812510a32202dc33219560db119617b7abe2bf7e8afa8aa9850f55bd12",
+  "protected-prior-evidence.json": "c5fcde2c4d205a8e8c0e169416bc83944217fa5f8377f0c0846fc65f8f73cb07",
+  "testing.after.md": "21291bfe17530c471189a2b597313bd36505c34e12c9e34ec50e324fc78ebf0d",
+  "testing.before.md": "efa6f15ec461b5c6bd79896ccad62f1e7842cb05bec75d18fd30edac88e94819",
+  "verification.json": "d58dd5c174fb9ef8451eed3aff7f50a056a5782a50058d49693ecc2a8dcf1f06"
+}

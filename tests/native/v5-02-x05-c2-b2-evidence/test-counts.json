@@ -1,0 +1,32 @@
+{
+  "codec-targeted": {
+    "cases": 25,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "focused": {
+    "cases": 440,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "history-codec": {
+    "cases": 11,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "production-render": {
+    "cases": 46,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "projection-identity": {
+    "cases": 9,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  }
+}

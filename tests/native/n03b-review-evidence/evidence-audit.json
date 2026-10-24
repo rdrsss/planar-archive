@@ -1,0 +1,27 @@
+{
+  "debug": {
+    "current_packets_compared_to_frozen_R10": 19,
+    "all_parsed_equal": true,
+    "input_modes_and_sha256_verified": 20,
+    "full_gate_119_zero_skips": true,
+    "format_doxygen_25": true,
+    "final_gate_no_work": true,
+    "native_assertion_counts_found": 118,
+    "native_assertion_sum": 48229
+  },
+  "release": {
+    "current_packets_compared_to_frozen_R10": 19,
+    "all_parsed_equal": true,
+    "input_modes_and_sha256_verified": 20,
+    "full_gate_119_zero_skips": true,
+    "format_doxygen_25": true,
+    "final_gate_no_work": true,
+    "native_assertion_counts_found": 118,
+    "native_assertion_sum": 48229
+  },
+  "six_current_goldens_parsed_equal_previous": true,
+  "candidate_local_markdown_links": {
+    "count": 21,
+    "all_exist": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "snapshot": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+  "command": [
+    "cmake",
+    "--build",
+    "build/rewrite-debug",
+    "--target",
+    "all"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.814828459173441,
+  "tests_excluded_from_all": true,
+  "product_exists": true
+}

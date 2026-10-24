@@ -1,0 +1,33 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "tests/native/v5-02-x05-a3-c05-support/adaptations.json",
+    "tests/native/v5-02-x05-a3-c05-support/allocations.py",
+    "tests/native/v5-02-x05-a3-c05-support/budget.py",
+    "tests/native/v5-02-x05-a3-c05-support/caught-memory-class-audit.json",
+    "tests/native/v5-02-x05-a3-c05-support/fields.py",
+    "tests/native/v5-02-x05-a3-c05-support/locations.py",
+    "tests/native/v5-02-x05-a3-c05-support/memory.py",
+    "tests/native/v5-02-x05-a3-c05-support/probe.py",
+    "tests/native/v5-02-x05-a3-c05-support/reachable.py",
+    "tests/native/v5-02-x05-a3-c05-support/red-reference5.py",
+    "tests/native/v5-02-x05-a3-c05-support/regressions.py",
+    "tests/native/v5-02-x05-a3-c05-support/repeat.py",
+    "tests/native/v5-02-x05-a3-c05-support/verify.py"
+  ],
+  "exact_owned_diff": true,
+  "owned_diff_sha256": "de4a3c0111d428548b88efa81dd0df23976b977121cab68b0587aba7a3ee5260",
+  "product_files": [
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp"
+  ],
+  "shipped_lua_guard_api_build_codec_vendor_unchanged": true,
+  "symlink": "CLAUDE.md"
+}

@@ -1,0 +1,86 @@
+{
+  "identities": {
+    "candidate-manifest.json": "b924e8f31db8b6749f6e8297f2be15f3af94cd6041e2880d592d721f8f3cdfde",
+    "final-source-manifest.json": "3d946a5396bd8c282211ce8dda55da83a0ef8f2ec848aa86115861b65aeeaa67",
+    "available-baseline.diff": "aa7abedcd20e0256312b3672a346c8c481d564789557953d1c955215bd2441e0",
+    "artifact-manifest.json": "2de6935eb7564697b815ad3d3492ea4a60157e729d832939bd751194296c7b3c"
+  },
+  "candidate_members": 24,
+  "author_artifacts": 119,
+  "baseline_files": 15123,
+  "final_files": 15125,
+  "symlinks": [
+    "compile_commands.json",
+    "AGENTS.md"
+  ],
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/V5-02-X03-B2-B.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/acceptance/prepared.cpp",
+    "src/engine/acceptance/prepared.cppm",
+    "src/engine/acceptance/prepared.t.cpp",
+    "src/engine/ledger/acceptance.t.cpp",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/history_verification.t.cpp",
+    "tests/native/r14-d8-support/acceptance_fault.t.cpp",
+    "tests/native/r14c3b2-support/atomic.t.cpp",
+    "tests/native/r14c3b2-support/digest.cppm",
+    "tests/native/r14c3b2-support/generate.py",
+    "tests/native/v5-02-x03-b2-b-support/freeze.py",
+    "tests/native/v5-02-x03-b2-b-support/run.py"
+  ],
+  "exact_diff_paths": [
+    "CLAUDE.md",
+    "tests/native/r14-d8-support/acceptance_fault.t.cpp",
+    "tests/native/r14c3b2-support/atomic.t.cpp",
+    "tests/native/r14c3b2-support/generate.py",
+    "tests/native/r14c3b2-support/digest.cppm",
+    "tests/native/v5-02-x03-b2-b-support/run.py",
+    "tests/native/v5-02-x03-b2-b-support/freeze.py",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/history_verification.t.cpp",
+    "src/engine/ledger/acceptance.t.cpp",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/acceptance/prepared.cppm",
+    "src/engine/acceptance/prepared.cpp",
+    "src/engine/acceptance/prepared.t.cpp"
+  ],
+  "coordinator_baseline_hash_only": "docs/vernacular/rounds/V5-02-X03-B2-B.md",
+  "all_four_variants_forward_reverse": {
+    "r12c2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r14f1-generated": [
+      "source_export.cppm",
+      "source_export.cpp"
+    ],
+    "r14c3b2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r13b1-generated": [
+      "verification_mutation",
+      "files"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "path_base": "repository root except evidence snapshot",
+  "source": "src/engine/acceptance/load.cpp",
+  "pre_comment_snapshot": "tests/native/r14-d5-evidence/pre-comment-load.cpp",
+  "snapshot_basis": "reconstructed exact previously displayed private struct block after comment-only correction; all other bytes unchanged",
+  "pre_comment_sha256": "57cd9c577b53984b62c3651af43061eaf70ed12d113c9b3eeab9c6b7fcbdc61f",
+  "final_sha256": "fb53e19b8f61349d43f3a73d734c66e3c51ee6769a9e6553570f676b74679ee6",
+  "lexical_tokens_ignoring_comments_and_whitespace_equal": true,
+  "tokens": 11100,
+  "passing_tests": "attempt-01-focused-final.xml; 123 cases; exact copy retained as focused-final.xml"
+}

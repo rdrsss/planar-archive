@@ -1,0 +1,19 @@
+{
+  "all_hashes_match": true,
+  "approved_shape_resolver_identical": true,
+  "artifact_entries": 380,
+  "author_private_commands": 7,
+  "candidate_entries": 233,
+  "debug_and_all_edits_released": true,
+  "full_shared_compiled_entries": 888,
+  "no_subsequent_edits": true,
+  "release_files": 3492,
+  "release_membership_bytes_modes_symlinks_preserved": true,
+  "shared_compiled_membership_bytes_preserved": true,
+  "source_changes": [
+    "docs/vernacular/rounds/V5-02-X05-C2-A-review.md"
+  ],
+  "source_entries": 30729,
+  "source_membership_bytes_modes_symlinks_preserved": true,
+  "timestamp_utc": "2026-10-23T20:25:16.141661+00:00"
+}

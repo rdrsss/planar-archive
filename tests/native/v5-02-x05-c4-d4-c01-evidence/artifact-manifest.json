@@ -1,0 +1,87 @@
+{
+  "REPORT.md": {
+    "bytes": 7455,
+    "mode": 420,
+    "sha256": "c5aa9f660b8db3c8a836eef7a9313459382975e5237f0f3dc356098c7018da88"
+  },
+  "coverage.json": {
+    "bytes": 5251,
+    "mode": 420,
+    "sha256": "6885628ed65b76e00896a15cab6aa281f42630c3666429ac4b321b2766e1693b"
+  },
+  "frozen-candidate.json": {
+    "bytes": 2687,
+    "mode": 420,
+    "sha256": "c67da31ced796500bfcea925976dfde2f18b7290e84fe1048e5a36782d9a2a86"
+  },
+  "identities-before.json": {
+    "bytes": 1262,
+    "mode": 420,
+    "sha256": "7afb74eac4e8f841894a80a735c5bb7ca392adc60d324b6fa3eae64d12657fa0"
+  },
+  "identities-final.json": {
+    "bytes": 1870,
+    "mode": 420,
+    "sha256": "72d46e50d3b1d981ee24bf4f27e7e9b8974c8dbb2d55c6331030b3541854370e"
+  },
+  "protected-before.json": {
+    "bytes": 16019729,
+    "mode": 420,
+    "sha256": "f958b63ebec91e937647605eb4083a0c4a9e9bed4c06c86a879d4262d7a18b0d"
+  },
+  "protection-result.json": {
+    "bytes": 642,
+    "mode": 420,
+    "sha256": "b77fc9e51e5306bd1dde2467a26ca6d310f3376213c851eb947c30e51a653f8a"
+  },
+  "red-outcomes.json": {
+    "bytes": 543,
+    "mode": 420,
+    "sha256": "cce5bf33b62029a4aa58cca284c7d917d945fbcb267910dfdcb33f7f5373c84b"
+  },
+  "status-before.json": {
+    "bytes": 1273,
+    "mode": 420,
+    "sha256": "f85846efdd9f8d18366e73df32d3d99331bf2626f6f63ef4a097c181471e6488"
+  },
+  "subsequently-sourced-D3-to-D4.diff": {
+    "bytes": 31784,
+    "mode": 420,
+    "sha256": "2d557d26a158ffc1ae730d12d907d2b8e2815cc0a6c5b01fe3267a246996e83b"
+  },
+  "subsequently-sourced-d3-baseline/src/engine/runtime/external_registration.t.cpp": {
+    "bytes": 217936,
+    "mode": 420,
+    "sha256": "e6d0f7cccd0a1c0aceb77b0dea55ac830be8464073446e5c6084064a88f0f88f"
+  },
+  "subsequently-sourced-d3-baseline/src/engine/runtime/runtime.cpp": {
+    "bytes": 246701,
+    "mode": 420,
+    "sha256": "1742fba034d9ff7f967365990b27e93a2a315f407318c9d2162b08092deeca8e"
+  },
+  "subsequently-sourced-d3-baseline/src/stdlib/planar/bootstrap.lua": {
+    "bytes": 1647,
+    "mode": 420,
+    "sha256": "093e95058acceb264cc39fa9019a8b2e6934bcabf97ca490142eaeca8521013c"
+  },
+  "subsequently-sourced-d3-baseline/src/stdlib/planar/render.lua": {
+    "bytes": 21615,
+    "mode": 420,
+    "sha256": "54802e3acce016e745a13f517c7f7d79e7d09ea13909b760ef3b8a7a47567ace"
+  },
+  "verification-attempt1.json": {
+    "bytes": 684,
+    "mode": 420,
+    "sha256": "81444dcbf8837bfe6f5fbcb78939d5924bfe82d928dcd1d960fa0ffbdb1941da"
+  },
+  "verification-results.json": {
+    "bytes": 324,
+    "mode": 420,
+    "sha256": "732545884cad81601b7afb647247267f4351b96f39f69cfec6a03c776d1d581b"
+  },
+  "verify.py": {
+    "bytes": 7064,
+    "mode": 420,
+    "sha256": "024c7edc150ae37de0424360a0835f157eddf2eedd9c666d98b624d0c9aa205a"
+  }
+}

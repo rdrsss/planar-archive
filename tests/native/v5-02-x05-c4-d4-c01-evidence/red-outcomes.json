@@ -1,0 +1,16 @@
+{
+  "cases": 4,
+  "errors": 0,
+  "failures": [
+    "C4 D4 role projection uses original role and exact shipped headed base",
+    "C4 D4 pair stays lazy and performed role DATA remains valid after project"
+  ],
+  "identity": {
+    "bytes": 1545,
+    "mode": 420,
+    "sha256": "cd1d45a3da60f796d98987b67ccf2be03f3ec097f91275c3b451f83f2de68ead"
+  },
+  "limitation": "Exact executed runtime/Lua source identity and closed-pair causal interpretation remain unproved.",
+  "skipped": 0,
+  "source": "tests/native/v5-02-x05-c4-d4-evidence/red.xml"
+}

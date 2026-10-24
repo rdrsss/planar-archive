@@ -1,0 +1,15 @@
+[
+  "src/engine/history/provenance_codec.cppm",
+  "src/engine/history/provenance_codec.cpp",
+  "src/engine/history/provenance_codec.t.cpp",
+  "src/engine/history/interpretation_codec.cppm",
+  "src/engine/history/interpretation_codec.cpp",
+  "src/engine/history/interpretation_codec.t.cpp",
+  "src/engine/history/provenance.cppm",
+  "src/engine/history/provenance.cpp",
+  "src/engine/history/interpretation.cppm",
+  "src/engine/history/interpretation.cpp",
+  "src/engine/CMakeLists.txt",
+  "docs/architecture.md",
+  "docs/testing.md"
+]

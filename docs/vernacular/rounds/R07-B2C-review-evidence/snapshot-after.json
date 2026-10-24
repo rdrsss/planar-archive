@@ -1,0 +1,93 @@
+{
+  "candidate_sha256": "f448b4a0e6eeae027640e365d1e14c7e32e298bb1f121d2b79fcccc7bdc48a84",
+  "verified": [
+    {
+      "path": "fixtures/render/quota/manifests/combined-builder.symbolic.json",
+      "sha256": "87167ff14dab7569ffa63bd05bfa81897c3cd7fed98aac0ab58b62b47101ac4d"
+    },
+    {
+      "path": "fixtures/render/quota/manifests/combined-reviewer.symbolic.json",
+      "sha256": "6507eb3302c48914519da1dfde11d094dd1395475317b2faed7292e2a785de93"
+    },
+    {
+      "path": "fixtures/render/quota/manifests/split-cli_worker-recovery.symbolic.json",
+      "sha256": "5bded175275b31240ec66cf4c46dca9c39a61a1e3e3cdb5d96429a629f1c743e"
+    },
+    {
+      "path": "fixtures/render/quota/manifests/split-cli_worker.symbolic.json",
+      "sha256": "6971f1b07ecdfb453ed784a242a34c7840fb9b6f1b330813491fef2bb357efe9"
+    },
+    {
+      "path": "fixtures/render/quota/manifests/split-reviewer.symbolic.json",
+      "sha256": "7fb0f44270398a741643378487ecc595222cbabf2a2a9aab510092d9d17742c3"
+    },
+    {
+      "path": "src/kernel/CMakeLists.txt",
+      "sha256": "d60782753e79a7c0bbdf9c5e5ec52494438caff1e94972cbd16086d908a464c1"
+    },
+    {
+      "path": "src/kernel/runtime/schema.t.cpp",
+      "sha256": "791487b3964f1f0641a488a95330cd093af4032e89acd702cfb370cc28c6e920"
+    },
+    {
+      "path": "stdlib/planar/README.md",
+      "sha256": "827539b3b375a01f197494521fec94c22bc61e701adc28203c09e67816939538"
+    },
+    {
+      "path": "stdlib/planar/bootstrap.lua",
+      "sha256": "5626ec21caaca7cd176017bccdf90535c451af0a0c6d3077f4bd3a05fc5576ce"
+    },
+    {
+      "path": "stdlib/planar/selection.lua",
+      "sha256": "f34e2bf74eaa44eaa64b015bcc3d9d56ed589a5a8027fd20d760af45dc3fde6b"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/README.md",
+      "sha256": "ada156e1360ed36af52fbf3f86bd41c02711c6d0683ab9d4cf53d0cdcc2e053e"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/build.log",
+      "sha256": "1d45b7fc1006136eebf5958480f736702b529973174ffd737651301133cfc10c"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/counts.json",
+      "sha256": "a8c2181c524b6d5ced431de142a6404705c7a5193cc74a3e3219020e3637cd92"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/ctest.log",
+      "sha256": "8ff7691ccf954b1751ba4d6013c932283debd3764f796f121ce67c33d9f6f09f"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/ctest.xml",
+      "sha256": "548b139bfbfcf8a416d703597f32d8017b1c4d5cc343be16e1336d6f4883ff4f"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/fixture-correction.json",
+      "sha256": "b2aaf19b6efe0a20ba81ee474e8b56e68d7820f03a9d048aafcd2bee3e5aa905"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/implementation-build.log",
+      "sha256": "1d45b7fc1006136eebf5958480f736702b529973174ffd737651301133cfc10c"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/initial-tests.log",
+      "sha256": "b0d26d359cd9463fc4937dd6ff38fa5c9acac5c5b6cce70c9b809403e041809f"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/lint.log",
+      "sha256": "61ea44525eba0748b74b2ec67312383e985f252e61dc1eea6ff5073ebf58fa91"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/no-change-build.log",
+      "sha256": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794"
+    },
+    {
+      "path": "tests/native/r07b2c-evidence/selection.log",
+      "sha256": "3501bc971fba120708b899cdb229d14a560fc87ad257aca83962fccbd908bc79"
+    }
+  ]
+}

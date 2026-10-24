@@ -1,0 +1,101 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_sqlite_tests",
+      "planar_ledger_format_tests",
+      "planar_history_read_tests",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "final-build",
+    "seconds": 0.13976166676729918
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "inventory-selected",
+    "seconds": 0.06587074976414442
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-b1-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-b1-evidence/focused-ctest.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "focused-ctest",
+    "seconds": 49.40929391607642
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-b1-support/private.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "private-final",
+    "seconds": 8.167121750302613
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "final-lint",
+    "seconds": 1.747908916324377
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_sqlite_tests",
+      "planar_ledger_format_tests",
+      "planar_history_read_tests",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "no-work",
+    "seconds": 0.14716870803385973
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "label": "inventory-final",
+    "seconds": 0.06287524942308664
+  }
+]

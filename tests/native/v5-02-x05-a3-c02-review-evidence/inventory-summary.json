@@ -1,0 +1,11 @@
+{
+  "added": [
+    "replacement.X05 A1 C02 detailed guard distinguishes pre root failures and restores stack",
+    "replacement.X05 A1 C02 detailed guard reports selected roots and preserves wrapper",
+    "replacement.X05 A1 C02 detailed guard retains shared memo and report",
+    "replacement.X05 A3 C02 sealing retains original mixed kind and module locations"
+  ],
+  "baseline": 573,
+  "current": 577,
+  "missing": []
+}

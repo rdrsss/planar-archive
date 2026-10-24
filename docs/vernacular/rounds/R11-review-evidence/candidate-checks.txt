@@ -1,0 +1,6 @@
+PASS: 3 documents, 33 local links, balanced code fences
+PASS: normative DDL parses with SQLite 3.54.1; 7 STRICT tables, 13 immutable triggers; integrity/FK checks; metadata mutation rejected
+LIMIT: host Python SQLite only; no native build, product execution, concurrency, crash or filesystem durability test
+17bc6f2b36e97bd6dc5caf661effe134e6331d98ac1590fd03ada589811083fb docs/vernacular/ledger-contract.md
+dd880f9f2c215485a7c9c285406670a19d42be40525ff0e0a22a498a97b5471a docs/vernacular/implementation.md
+7d0e4702c946295b62b3d10b322100aa8e302a3b1bc89772fe590799d75d1c3f docs/vernacular/roadmap.md

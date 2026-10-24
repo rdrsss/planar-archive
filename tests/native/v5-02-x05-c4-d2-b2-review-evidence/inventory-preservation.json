@@ -1,0 +1,21 @@
+{
+  "added": [
+    "replacement.D2 B2 caller file slots exclude private ordinal namespace in either order",
+    "replacement.D2 B2 discovery keeps private keys bounded and independent of caller keys",
+    "replacement.D2 B2 discovery rejects escapes grammar links and trusted aliases",
+    "replacement.D2 B2 empty and unread roots retain metadata through profile destruction",
+    "replacement.D2 B2 final rooted tree membership refuses additions and removals",
+    "replacement.D2 B2 metadata discovery refuses component case aliases",
+    "replacement.D2 B2 original root authority loads real declarations and text references",
+    "replacement.D2 B2 profile bound roots discover ordinary files and propagate poison",
+    "replacement.D2 B2 root discovery retains metadata only and original explicit selection",
+    "replacement.D2 B2 root receipt requires supplied roots and actual original root descriptors",
+    "replacement.D2 B2 root registration failure is terminal with no unbound retry",
+    "replacement.D2 B2 rooted caches refuse mutation without recapture",
+    "replacement.D2 B2 rooted capture survives admission destruction and verifies acceptance"
+  ],
+  "baseline": 838,
+  "current": 851,
+  "focused": 184,
+  "missing": []
+}

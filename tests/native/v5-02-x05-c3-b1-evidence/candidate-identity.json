@@ -1,0 +1,13 @@
+{
+  "candidate_entries": 225,
+  "candidate_manifest_sha256": "b4bbbe38d6d6d20bb361ca895ac2bee7771da46899647217d58acde0f60e85b6",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "owned_diff_sha256": "1c7a9583b785f8502574f7d1438ea17124a1778322b3037310a30111805669d4",
+  "protected_final": {
+    "protected_entries": 62673,
+    "release_entries": 4238,
+    "unchanged": true
+  },
+  "round": "V5-02-X05-C3-B1",
+  "schema": "planar.round.candidate.v1"
+}

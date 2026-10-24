@@ -1,0 +1,37 @@
+{
+  "initial": {
+    "returncode": 0,
+    "stdout": "ok:26cdd13583d5b8f7e23657108f30ad2d:independent_review:2026-10-20T16:54:49.085Z",
+    "stderr": ""
+  },
+  "ready": "ready:0",
+  "child_status": -9,
+  "page_size": 4096,
+  "genuine_journal_size": 14848,
+  "trailer_size": 125,
+  "before": {
+    "main": "13599af357b74c601a75285a56165be4a55f83cdccffbc27b8a4dde01272658d",
+    "journal": "55618dcece2fafc5a542b3f9e1da5feed0b88f2f91fde205cb21ea20303fe47f",
+    "external": "8ee48bc7d83d9991c41e03ed45b18c05d87292c215d43ca7acf5639e7bb10395",
+    "external_bytes": "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r12c1-super-0pxqnow7/ledger-journal\u0000"
+  },
+  "result": {
+    "returncode": 0,
+    "stdout": "ok:26cdd13583d5b8f7e23657108f30ad2d:independent_review:2026-10-20T16:54:49.085Z",
+    "stderr": ""
+  },
+  "after": {
+    "main": "95a2340fecbd069eb99c6a3dac049a4ade0ec354d6d05bab03645f1265a35d2f",
+    "journal_exists": false,
+    "external_exists": false,
+    "entries": [
+      "ledger"
+    ]
+  },
+  "external_deleted": true,
+  "open_after": {
+    "returncode": 0,
+    "stdout": "ok:26cdd13583d5b8f7e23657108f30ad2d:independent_review:2026-10-20T16:54:49.085Z",
+    "stderr": ""
+  }
+}

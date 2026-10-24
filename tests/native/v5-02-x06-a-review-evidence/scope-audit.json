@@ -1,0 +1,27 @@
+{
+  "additional_author_evidence_members": 25,
+  "all_build_trees_protected": true,
+  "author_baseline_members": 93736,
+  "author_final_drift": [],
+  "author_final_members": 93737,
+  "exact_author_changed_paths": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-contract.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x06-implementation.md"
+  ],
+  "exemptions": [
+    ".git",
+    "docs/vernacular/rounds/V5-02-X06-A-review.md",
+    "docs/vernacular/rounds/V5-02-X06-A.md",
+    "tests/native/v5-02-x06-a-review-evidence"
+  ],
+  "material_root_dotfiles_and_symlinks_included": true,
+  "review_baseline_members": 93762
+}

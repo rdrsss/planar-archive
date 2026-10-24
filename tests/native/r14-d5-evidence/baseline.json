@@ -1,0 +1,17 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/acceptance/load.cppm": null,
+    "src/engine/acceptance/load.cpp": null,
+    "src/engine/acceptance/load.t.cpp": null,
+    "src/engine/CMakeLists.txt": "9ed779a7055b278cf34a83b84b6c151c25ee83bd4c9e45ae7fb22b97089ce07d",
+    "docs/architecture.md": "81be472ffb5ff872bcefe292d9209c33e2d76e3dd6e34d1485b7700c531af9e9",
+    "docs/testing.md": "765ac3d4cc814507ab628ebef6c5f5ba97e1812556389551a2c672bfee14c929",
+    "CLAUDE.md": "85d8049b29148463f6eaa69e48150cfb155b9cec406ab5349a9ec4b794d1c347",
+    "docs/vernacular/implementation.md": "e290251cabdf484707b1ec063160bd90c791a58a43a59f17d703a7196e8389e3",
+    "docs/vernacular/roadmap.md": "b6da93ad24c826c5f99e26f53f393c824fb1a821cca7339575902647e44a1767",
+    "docs/vernacular/v5-alignment.md": "fdcf266c825da15e73c8d0b9788056494ddbada353611a88fab05c8070d93b6e",
+    "docs/vernacular/acceptance-matrix.md": "a59801b08575a53841a2e34e647614bd71e8702c229248aab7703cc0ef7e786b",
+    "docs/vernacular/load-command-contract.md": "9f316d0e525b8bdc924e5698b2f6373228cbe83e259da8946aeb1ecb812879ae"
+  }
+}

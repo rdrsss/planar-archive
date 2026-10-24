@@ -1,0 +1,19 @@
+{
+  "existing_owned": [
+    "src/stdlib/planar/selection.lua",
+    "src/stdlib/planar/bootstrap.lua",
+    "src/engine/runtime/runtime.cppm",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/external_registration.t.cpp",
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/external-profile-implementation.md"
+  ],
+  "new_support": "tests/native/v5-02-x05-b3-c-support/**",
+  "new_evidence": "tests/native/v5-02-x05-b3-c-evidence/**",
+  "coordinator_owned_round_excluded": true,
+  "frozen_entries": 164
+}

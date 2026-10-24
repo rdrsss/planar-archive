@@ -1,0 +1,157 @@
+[
+  {
+    "command": [
+      "python3",
+      "tests/acceptance/bootstrap_cli.py",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr/build/rewrite-debug/bin/planar"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 0,
+    "exit": 0,
+    "elapsed_seconds": 7.258544249460101,
+    "stdout_bytes": 4157,
+    "stderr_bytes": 0
+  },
+  {
+    "command": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 0,
+    "exit": 0,
+    "elapsed_seconds": 0.6474869167432189,
+    "stdout_bytes": 79,
+    "stderr_bytes": 0
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 0,
+    "exit": 0,
+    "elapsed_seconds": 0.028435250744223595,
+    "stdout_bytes": 22,
+    "stderr_bytes": 0
+  },
+  {
+    "command": [
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr/build/rewrite-debug/bin/planar",
+      "--help"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 0,
+    "exit": 0,
+    "elapsed_seconds": 0.01464658323675394,
+    "stdout_bytes": 197,
+    "stderr_bytes": 0
+  },
+  {
+    "command": [
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr/build/rewrite-debug/bin/planar",
+      "render",
+      "--workspace",
+      "fixtures/render/quota/workspace/workspace.lua",
+      "--registry",
+      "fixtures/render/quota/registry/quota-tools.json",
+      "--root",
+      "source=fixtures/render/quota/current",
+      "--capture-outputs",
+      "--base-root",
+      "source=fixtures/render/quota/base",
+      "--job",
+      "combined",
+      "--role",
+      "builder"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 0,
+    "exit": 0,
+    "elapsed_seconds": 0.06080600060522556,
+    "stdout_bytes": 51272,
+    "stderr_bytes": 0
+  },
+  {
+    "command": [
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr/build/rewrite-debug/bin/planar",
+      "render",
+      "--workspace",
+      "fixtures/render/quota/workspace/workspace.lua",
+      "--registry",
+      "fixtures/render/quota/registry/quota-tools.json",
+      "--root",
+      "source=fixtures/render/quota/current",
+      "--capture-outputs",
+      "--base-root",
+      "source=fixtures/render/quota/base",
+      "--job",
+      "split",
+      "--role",
+      "cli_worker",
+      "--observations",
+      "fixtures/render/quota/observations/recovery.json",
+      "--budget-bytes",
+      "32768"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 0,
+    "exit": 0,
+    "elapsed_seconds": 0.059738874435424805,
+    "stdout_bytes": 50505,
+    "stderr_bytes": 0
+  },
+  {
+    "command": [
+      "make",
+      "install"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 2,
+    "exit": 2,
+    "elapsed_seconds": 0.0237570833414793,
+    "stdout_bytes": 0,
+    "stderr_bytes": 126
+  },
+  {
+    "command": [
+      "make",
+      "release"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 2,
+    "exit": 2,
+    "elapsed_seconds": 0.020844167098402977,
+    "stdout_bytes": 0,
+    "stderr_bytes": 126
+  },
+  {
+    "command": [
+      "make",
+      "dist"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 2,
+    "exit": 2,
+    "elapsed_seconds": 0.02059362456202507,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123
+  },
+  {
+    "command": [
+      "make",
+      "run"
+    ],
+    "cwd": "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r09-review-9__32yxr",
+    "expected_exit": 2,
+    "exit": 2,
+    "elapsed_seconds": 0.020421958528459072,
+    "stdout_bytes": 0,
+    "stderr_bytes": 122
+  }
+]

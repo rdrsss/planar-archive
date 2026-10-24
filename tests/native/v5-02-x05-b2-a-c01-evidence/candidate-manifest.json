@@ -1,0 +1,45 @@
+{
+  "starting_revision": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "files": {
+    "CLAUDE.md": {
+      "sha256": "6eb4c09d3e11f298e5936cff2da3d000bdb7d53af91d46c002b6928971a1646b",
+      "mode": 420
+    },
+    "docs/architecture.md": {
+      "sha256": "5d038f659a05e106750c193465b6d9b557bfd1f11e22132581afb049c1328ffc",
+      "mode": 420
+    },
+    "docs/testing.md": {
+      "sha256": "53e74138ecae4c79377b771e29d13b92c7b346cf02886f6ad0de062874405929",
+      "mode": 420
+    },
+    "docs/vernacular/external-profile-implementation.md": {
+      "sha256": "be7dcf4db5b8af04c74288d0b5d35b29cbaf70ed22348d0d8e82bd6d7cc5d424",
+      "mode": 420
+    },
+    "docs/vernacular/implementation.md": {
+      "sha256": "6e62cb543bd57c236208a47158c35ff1257253883d13a885902c1a055bb62eab",
+      "mode": 420
+    },
+    "docs/vernacular/roadmap.md": {
+      "sha256": "20bfab56c6b79ee684cf0ed934d46b9c9aa146ae0216162efc5921fab8eaef89",
+      "mode": 420
+    },
+    "src/engine/runtime/runtime.cpp": {
+      "sha256": "c10b4b1ed837ef2ad88b060dfe33e6ad16854a02340785b3cb99ddab600a8883",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b2-a-c01-support/boundary.cpp": {
+      "sha256": "80bb4f9680c636b62bde7896c0c29a5c6951cc281b9dac5da3ab61421020e8e2",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b2-a-c01-support/gate.py": {
+      "sha256": "f1805d1496fd1a6074155adee5c0af3d4ea45084405949d71b8842805dac18f0",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b2-a-c01-support/probes.py": {
+      "sha256": "c509672dc75e7510f1126b7c35ca5a3b6a6519b9ba84078bc7b677caf3270f3b",
+      "mode": 420
+    }
+  }
+}

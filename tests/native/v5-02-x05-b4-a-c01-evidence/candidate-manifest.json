@@ -1,0 +1,17 @@
+{
+  "src/stdlib/planar/render.lua": "d862c5f6acd0cf1b687b60272458f011f81715c87ccd4a38c2312795184b632d",
+  "src/engine/runtime/external_registration.t.cpp": "690fb1b34ac0954e751391c4c5f299f6c57b3e76f3958134f4dddbad5e9485f5",
+  "CLAUDE.md": "c83c06eae3a3d7c9ba85cfa5dce21558818746443717fab1be3a75ed2fc84ed5",
+  "docs/architecture.md": "51298dda0e688b43f970e040b7b9ca26d3d6abc12c37e57bafdf911ac6be9897",
+  "docs/testing.md": "87aa9223eaeda4185cfac680c6b1e7196417326568568f17d2e6d7405a86d2ee",
+  "docs/vernacular/implementation.md": "812cb20cc366d32637cfb33085275d31b40c49ac47926cbb169b9669f367d2f7",
+  "docs/vernacular/roadmap.md": "32436b2fa28540107a1ab5e8788259bfca731c839a6ee7fa427a0689f647a0ab",
+  "docs/vernacular/external-profile-implementation.md": "3c9c9265a9f1ac367e2925cf41cfb0d1d08c5cf24b31d395d9b3b7c4460550df",
+  "tests/native/v5-02-x05-b4-a-c01-support/gate.py": "27bacc7f44d08fb248e9f3b5e94d8db474c01689bcb27ccfcca13bfecc296aa0",
+  "tests/native/v5-02-x05-b4-a-c01-support/private.py": "f3d8c0c79e9efda7fe6953f309dd99bc9f9bea0f3b4ecc1432e71899f75eb9bd",
+  "tests/native/v5-02-x05-b4-a-c01-support/prepare.py": "6778460e584d5d49cd5096d80ebe369e2498d4a803ea8f550adb98c8a8c9f0ef",
+  "tests/native/v5-02-x05-b4-a-c01-evidence/adversarial.cpp": "15b8cae42aa572c82b7af998f7be90194e887181012b017889fae6b1b23782ad",
+  "tests/native/v5-02-x05-b4-a-c01-evidence/runtime.cpp": "1f9f73a55831b0475093f1b4d3b916b46258a4d97b546e5899c1fba64183908b",
+  "tests/native/v5-02-x05-b4-a-c01-evidence/review-source.lua": "103dc59f6ba6ac28d1ea3c66ae5f2da691374f47e1b6a90430e0b5f826517f19",
+  "tests/native/v5-02-x05-b4-a-c01-evidence/review-source.inc": "c00a73be92e3e2858a4abb02614f6b6b2bb37e918f2c60af377dd163381fc533"
+}

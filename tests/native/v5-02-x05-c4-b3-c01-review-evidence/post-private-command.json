@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "build/rewrite-debug",
+    "--target",
+    "planar",
+    "planar_runtime_tests",
+    "planar_ledger_format_tests",
+    "planar_ledger_sqlite_tests",
+    "planar_history_read_tests",
+    "planar_history_fixture",
+    "planar_load_cli_probe",
+    "planar_cli_variant_0",
+    "planar_cli_variant_1",
+    "planar_cli_variant_2",
+    "planar_cli_variant_3",
+    "planar_cli_variant_4",
+    "planar_cli_variant_5",
+    "-j",
+    "2"
+  ],
+  "cwd": "<repo>",
+  "exit": 0,
+  "seconds": 0.26151404064148664
+}

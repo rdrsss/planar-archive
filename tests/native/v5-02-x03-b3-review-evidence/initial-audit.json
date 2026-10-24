@@ -1,0 +1,105 @@
+{
+  "author_artifacts": 156,
+  "baseline405_preserved": true,
+  "baseline_files": 15424,
+  "candidate_members": 13,
+  "final_files": 15425,
+  "identities": {
+    "artifact-manifest.json": "71f070efba709dab129f68832587eae8cea73adbc9b2fa13dca070cd3423d407",
+    "candidate-manifest.json": "81f93dfb3a0179092df56e9ded03edf781d2f26ea467881e566c6103e9421ade",
+    "final-complete-filesystem.json": "3ee8b2ce4e7869ab72cc1c727b0a87fd60f1007e05a732b4e66fb88977eec654",
+    "owned.diff": "de9f90f8b3aebbd9d6a7e093bba4513ecf585ebb19130c8887ffe9387181500d"
+  },
+  "old_binary_reused_runs": 8,
+  "ownership_and_diff_exact": true,
+  "protected_v1_files": 62,
+  "runs": {
+    "debug": {
+      "actual_cases": 430,
+      "build_identity_members": 47,
+      "faults": {
+        "1": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "2": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "full_command": {
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-debug",
+          "--output-on-failure",
+          "--output-junit",
+          "<repo>/tests/native/v5-02-x03-b3-evidence/debug-full.xml"
+        ],
+        "cwd": "<repo>",
+        "end_utc": "2026-10-22T21:24:09.226485+00:00",
+        "exit_code": 0,
+        "seconds": 223.06367301940918,
+        "start_utc": "2026-10-22T21:20:26.162885+00:00"
+      }
+    },
+    "release": {
+      "actual_cases": 430,
+      "build_identity_members": 47,
+      "faults": {
+        "1": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "2": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "full_command": {
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-release",
+          "--output-on-failure",
+          "--output-junit",
+          "<repo>/tests/native/v5-02-x03-b3-evidence/release-full.xml"
+        ],
+        "cwd": "<repo>",
+        "end_utc": "2026-10-22T21:27:21.313101+00:00",
+        "exit_code": 0,
+        "seconds": 119.38979768753052,
+        "start_utc": "2026-10-22T21:25:21.923357+00:00"
+      }
+    }
+  },
+  "utc": "2026-10-22T21:32:49.228309+00:00"
+}

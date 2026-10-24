@@ -1,0 +1,10 @@
+{
+  "files": {
+    "src/engine/capture/capture.cppm": "b21e5d37f92baf0996eeb29b4a5530566e485e3383d82a97aabde3fd101ad3d6",
+    "src/engine/capture/capture.cpp": "f10884dae2ff3eb98a06622add6054f9aea246e1a93211484d4026d8e17e4851",
+    "src/engine/capture/capture.t.cpp": "b2e6e254d53d99cd20c05e3f428d9179146b3591ba019dfb792a6fbc894a8316",
+    "docs/architecture.md": "6b469aea856aff361a7ac8b9841a53b3d19fe3332258a8419012113b3a69e4b9",
+    "docs/testing.md": "fb02aeb504ab3a9b2eca3b1a190ab16108afc028efa384046f58c5643015a5a9"
+  },
+  "identity": "41b4ef54273ae2c1a3c0efc956563d4809748e71e4f6ed6fb526225258234652"
+}

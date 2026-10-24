@@ -1,0 +1,9 @@
+{
+  "candidate_manifest_sha256": "9e1f7b32c0e1c09e71c44726e72568641fb5362b29bfacd36795f04f722c307a",
+  "final_pass_manifest_sha256": "fb27104739753e435db0501d2a8b45015699fbc974fbb79c6dfa27a5dab2aefc",
+  "final_source_freeze_sha256": "88059c697f5982a3958fd21665d3b285fdf5e05703fa52cd6496467f3b264915",
+  "owned_diff_sha256": "e22e9d36cf0f4a9c73ca333c4908e66f0cf905443c9184f943059f011360c63a",
+  "scope": "Coder candidate, independent review required; macOS ARM64 debug only.",
+  "test_pass09_archive_sha256": "9e06c68aa6202d4863f7a4cd3e31dea949b27a4426d63f877e1611408914a074",
+  "test_pass10_archive_sha256": "06c4ecfdf25eff34e6ccfd9c95a9331a13f2bd3de597c9e15327c60d9b75f5d1"
+}

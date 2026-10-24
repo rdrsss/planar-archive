@@ -1,223 +1,73 @@
 # Planar
 
-*A context plane for long-running agents.*
+Planar compiles restricted Lua declarations and captured observations into scoped
+worker and reviewer context. This checkout builds one `planar` binary with four
+commands: `render`, `init`, `history` and `export`. Render uses one spec and source
+root, manually declared job grouping, and explicit trusted toolchain registry and
+observation inputs. Init creates an explicit new-format ledger; history reads
+recorded state; export reconstructs recorded source into a new directory.
 
-Planar is a local, durable store for the state that long-running agent work
-accumulates, together with the protocol agents use to read and extend that
-state. The store holds specifications, plans, tasks, decisions, open questions,
-test scenarios, and the sessions and handoff records that document how the work
-proceeded. State is addressed by scope (repository, association, or global), not
-by process. It therefore persists across context compaction, session
-termination, and a change of model provider or agent harness, and an agent that
-joins later can resume from it.
+Native acceptance transactions and prepared-capture APIs are implemented, but no
+load service or load CLI is exposed. The ordinary CLI cannot yet populate accepted
+history. Load membership is declaration-closure-only; load service/CLI and the
+remaining R14 acceptance matrix are pending.
 
-## Motivation
+[V5](docs/vernacular/planar-design-spec-v5.md) is the product-direction baseline;
+[the alignment assessment](docs/vernacular/v5-alignment.md) distinguishes current
+behavior from planned work. Next is V5-02 contract alignment before load resumes,
+then remaining R14, RA01 authoring/observe and R15–R19 execution. Prompts,
+workspace-name convenience, Lua extension verbs and orchestrator rendering are
+future work. Exact approved contracts and explicit operator decisions govern
+current APIs; v5 examples do not add commands.
 
-Work that spans many sessions or many agents tends to fail in three ways.
+This is a breaking rewrite. There is no legacy database migration, upgrade path
+or compatibility CLI. Git preserves the previous implementation. No installer
+or release bundle is available for this replacement.
 
-1. **State lives in a conversation.** When a context window is compacted or a
-   session ends, decisions, their rationale, and the next intended step are lost
-   or must be reconstructed.
-2. **Ownership is implicit.** Concurrent agents have no shared record of who is
-   working on what, so they duplicate effort or overwrite one another.
-3. **Records diverge.** Plans written for agents and tickets kept in an issue
-   tracker drift apart, and neither is reliably current.
+## Build and render
 
-Planar addresses these with a shared, versioned store and three explicit
-synchronization protocols. It does not call models or supervise agents; it
-records and coordinates the work of agents that do.
-
-## Architecture
-
-```mermaid
-flowchart LR
-    subgraph H["Agent harnesses"]
-        H1["Claude Code"]
-        H2["Codex"]
-        H3["Copilot"]
-        H4["Gemini"]
-        H5["Other"]
-    end
-    subgraph P["Planar"]
-        CLI["Command-line interface"]
-        DB[("Context plane<br/>SQLite store")]
-        CLI --> DB
-    end
-    WB["Workbench<br/>Markdown files"]
-    TR["Issue trackers<br/>Jira, GitHub Issues"]
-    H --> CLI
-    DB <-->|"drafting"| WB
-    DB <-->|"operational"| TR
-```
-
-Agents interact with Planar only through its command-line interface, so any
-harness that can run a command can participate. The store is a single SQLite
-database whose schema, defined by ordered migrations, is the contract that all
-participants write against. Three synchronization planes operate over it.
-
-- **Coordination.** Leases and claims serialize concurrent agents on a task.
-  Exactly one agent holds a claim at a time, and an abandoned claim expires
-  after its time-to-live instead of blocking the task.
-- **Drafting.** A workbench of Markdown files, kept in sync with the store in
-  both directions, projects planning state for review and ingests the
-  operator's edits.
-- **Operational.** Adapters for Jira and GitHub Issues reconcile through
-  explicit link records. Remote values arrive as proposals for an agent to
-  verify; they are never applied silently.
-
-## A long-running workflow
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant O as Operator
-    participant A as Harness A
-    participant P as Planar
-    participant B as Harness B
-    O->>A: goal
-    A->>P: draft the specification, create plan and tasks
-    A->>P: pull (claim the next task, todo to doing)
-    loop while working
-        A->>P: capture notes, commands, decisions
-        A->>P: heartbeat (renew the lease)
-    end
-    Note over A: the context compacts, the session ends,<br/>or the harness is replaced
-    A->>P: handoff (snapshot and validated handoff record)
-    B->>P: resume (task, recent session, decisions, open questions, next action)
-    B->>P: heartbeat, capture
-    B->>P: complete (task done and claim closed in one transaction)
-```
-
-The figure follows one task across two harnesses, which may use different model
-providers. Everything the second harness needs is in the store: the resume
-packet contains the task state, recent session entries, open questions,
-decisions made, and the next intended action. If the first agent stops without
-handing off, its claim expires after the lease time-to-live, the task becomes
-claimable again, and whatever it captured remains in the store.
-
-## Using Planar from a harness
-
-Planar is harness-agnostic. A harness needs only to run commands and read their
-output; read commands accept `--json` for machine-readable results. The
-installer additionally places the `planar` skill and the role agents into each
-of six vendors it finds on the host, by presence marker: Claude Code
-(`~/.claude/`), Codex (`$CODEX_HOME` or `~/.codex/`), Copilot (`~/.copilot/`),
-Gemini CLI (`~/.gemini/settings.json`), Antigravity
-(`~/.gemini/antigravity-cli/`) and OpenCode (`~/.config/opencode/`). Skills go to
-`~/.claude/skills`, the shared `~/.agents/skills` (Codex, Copilot, Gemini CLI,
-OpenCode) and `~/.gemini/antigravity-cli/skills`; agents go to each vendor's own
-agents directory. The target table is in
-[INSTALL.md](INSTALL.md#install-layout-reference). The role specifications under
-[`agents/`](agents/) are vendor-neutral. For any other harness, the same
-operations are available as plain commands. The role specifications and skills
-are described in the [skill reference](docs/skill-reference.md).
-
-With the skill installed there is no command to type. Ask for the outcome from
-inside a project, and the harness loads the skill and dispatches the matching
-`planar-<role>` agent:
-
-```text
-Draft a Planar spec for adding multi-currency checkout.
-Review the spec for plan 42.
-Orchestrate plan 42.
-What needs my attention in this project?
-```
-
-In Claude Code, `/planar <request>` loads the skill explicitly. Applying an
-ingest, closing a plan and archiving its workbench wait for your confirmation.
-More requests, and a map from each retired `pl-*` skill to its replacement, are
-in the [skill reference](docs/skill-reference.md#using-it-day-to-day).
-
-## Core objects
-
-| Object | Role |
-|---|---|
-| Scope | Selects the entities a command sees: `repo:<slug>`, `assoc:<slug>`, or `global`. Derived from the `--scope` flag and the working directory. |
-| Plan, task | The unit of intent and the unit of work. A task carries a status and the next intended action. |
-| Decision, question, scenario | Recorded rationale, open issues, and test scenarios attached to a plan. |
-| Artifact | A specification or other document that belongs to a plan. |
-| Session, snapshot, handoff | The record of how work proceeded, and the validated transfer of a task to the next agent. |
-| Claim | A lease that gives one agent exclusive ownership of a task for a bounded time. |
-| Context record | Run-scoped working memory passed from one workflow stage to the next. |
-
-The [concepts](docs/concepts.md) document defines each of these precisely.
-
-## Design properties
-
-- **Local first.** State lives in one SQLite database per user. Nothing leaves
-  the machine until operational synchronization is explicitly enabled.
-- **The schema is the contract.** Ordered migrations define the schema, and
-  readers verify its version before use.
-- **Disjoint write surfaces.** Planar is five binaries. The four that open the
-  database each write to a distinct set of tables, and one of them is read-only.
-  The boundary is the set of verbs a binary provides.
-- **Explicit synchronization.** Remote changes arrive as proposals, and
-  conflicts are surfaced rather than resolved silently.
-
-## Install
-
-On Apple silicon macOS 26 or later, or x86_64 Linux with glibc 2.36 or later:
+Use CMake 4.3/4.4, Ninja, LLVM 23+ with modules-enabled libc++, Python 3 and
+Doxygen for the full gate. See [toolchain details](docs/toolchain-parity.md).
+CLI11 2.7.2, Glaze 8.1.0, Catch2, Lua 5.5.0, SQLite 3.53.3 and xxHash 0.8.3 sources are committed under `vendor/`;
+configuration does not fetch dependencies.
 
 ```sh
-curl -fsSL https://github.com/rdrsss/planar/releases/latest/download/get-planar.sh | sh
+make build
+build/rewrite-debug/bin/planar --help
+build/rewrite-debug/bin/planar render \
+  --workspace fixtures/render/quota/workspace/workspace.lua \
+  --registry fixtures/render/quota/registry/quota-tools.json \
+  --root source=fixtures/render/quota/current \
+  --capture-outputs --base-root source=fixtures/render/quota/base \
+  --job combined --role builder
 ```
 
-The script downloads the latest release bundle, verifies it against the
-release's `SHA256SUMS`, and installs it into `~/.planar` with the `planar` skill
-and the `planar-<role>` agents placed into each harness it finds. Add
-`~/.planar/bin` to your `PATH`. To pin a release, fetch that release's script
-and set `PLANAR_VERSION` on the shell that reads it:
+The command emits one canonical JSON envelope containing Markdown context and an
+identity manifest. Without `--capture-outputs` and `--base-root`, it previews
+requirements without scanning source/base files or computing output identities.
+Inputs are explicit; no home configuration or legacy database is consulted.
 
-```sh
-curl -fsSL https://github.com/rdrsss/planar/releases/download/vX.Y.Z/get-planar.sh | PLANAR_VERSION=vX.Y.Z sh
-```
+Render does not execute registry commands, verify driver assertions, activate
+runs, record completion or approval, call models, schedule sessions, manage
+worktrees or persist state. An external driver owns those future operations.
+Capture detects observed changes under a cooperative stable-input contract;
+it is not an atomic OS snapshot.
 
-Later, `planar update` moves to a newer release and `planar-uninstall` removes
-the install. [INSTALL.md](INSTALL.md) has the prerequisites, the platform
-floors, the update and uninstall details, and the source install for
-contributors.
+## References and verification
 
-## Quick start
+Product C++ and trusted Lua live under `src/`; build/integrity tooling and
+verification inputs live outside. The quota fixture models an external workspace
+with source snapshots, observations and expected packets.
 
-With the binaries on your path:
+- [CLI reference](docs/cli-reference.md) and [declaration reference](docs/declarations.md).
+- [Architecture](docs/architecture.md), [testing](docs/testing.md), and [distribution status](INSTALL.md).
+- [Quota fixture](fixtures/render/quota/README.md) and its [computed native packets](fixtures/render/quota/native/README.md).
+- [Acceptance traceability](docs/vernacular/acceptance-matrix.md).
+- [Implementation plan](docs/vernacular/implementation.md), [roadmap](docs/vernacular/roadmap.md), and [contributor guide](CONTRIBUTING.md).
 
-```bash
-planar init --name "my-project"
-planar plan create "Migrate to v2" --summary "Cut the v1 endpoints"
-planar task add "Inventory v1 callers" --plan 1 --next-action "grep the monorepo"
+Run `make test-all` and `make test-all PRESET=release` serially for the complete
+local gates. Replacement evidence is currently from macOS Apple Silicon; no
+replacement Linux CI result is claimed. Retired product CI workflows have been
+removed; local gates are authoritative until replacement CI is validated.
 
-export PLANAR_VENDOR=claude-code
-planar capture session --task 1
-planar capture note "found 7 callers under services/billing"
-planar handoff 1 --vendor codex --note "halfway through; payments next"
-
-export PLANAR_VENDOR=codex
-planar resume 1            # the resume packet, ready to place in context
-```
-
-The [getting started guide](docs/getting-started.md) continues from here.
-
-## Documentation
-
-The [documentation index](docs/README.md) gives a reading order. In brief:
-
-| To | Read |
-|---|---|
-| Understand the model | [Overview](docs/overview.md), [Concepts](docs/concepts.md) |
-| Install and try it | [INSTALL.md](INSTALL.md), [Getting started](docs/getting-started.md) |
-| See how work flows | [Operations](docs/operations.md), [Lifecycles](docs/lifecycles.md), [Workflows](docs/workflows.md) |
-| Look up a command | [CLI reference](docs/cli-reference.md) |
-| Use the skill and role agents | [Skill and agent reference](docs/skill-reference.md) |
-| Understand the internals | [Architecture](docs/architecture.md), [Testing](docs/testing.md) |
-| Contribute | [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) |
-
-## Status
-
-Planar is under active development, and its interfaces, including the command
-line and the schema, may still change. It is maintained as a personal project
-without roadmap commitments (see [CONTRIBUTING.md](CONTRIBUTING.md)).
-
-## License
-
-MIT. See [LICENSE](LICENSE). Third-party notices are in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Licensed under [MIT](LICENSE); see [third-party notices](THIRD_PARTY_NOTICES.md).

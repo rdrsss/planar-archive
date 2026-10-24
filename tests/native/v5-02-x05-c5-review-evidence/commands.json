@@ -1,0 +1,260 @@
+[
+  {
+    "label": "debug-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.1010599136352539
+  },
+  {
+    "label": "debug-historical",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-historical.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.44054508209228516
+  },
+  {
+    "label": "debug-d6",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-d6.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.2669639587402344
+  },
+  {
+    "label": "debug-d6-c01",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-d6-c01.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.16439604759216309
+  },
+  {
+    "label": "debug-d7-b",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-d7-b.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.12954211235046387
+  },
+  {
+    "label": "debug-b1",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-b1.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.05175495147705078
+  },
+  {
+    "label": "debug-retained-native",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b2-c01-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-retained-native.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.034423828125
+  },
+  {
+    "label": "debug-runtime",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d4-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/debug-runtime.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.0365290641784668
+  },
+  {
+    "label": "debug-lint",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 2.027820110321045
+  },
+  {
+    "label": "debug-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.274810791015625
+  },
+  {
+    "label": "release-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-release",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.06971192359924316
+  },
+  {
+    "label": "release-historical",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-historical.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.41133594512939453
+  },
+  {
+    "label": "release-d6",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-d6.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.2683238983154297
+  },
+  {
+    "label": "release-d6-c01",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-d6-c01.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.1611018180847168
+  },
+  {
+    "label": "release-d7-b",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-d7-b.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.1268308162689209
+  },
+  {
+    "label": "release-b1",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-b1.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.05160403251647949
+  },
+  {
+    "label": "release-retained-native",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b2-c01-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-retained-native.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.03362393379211426
+  },
+  {
+    "label": "release-runtime",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d4-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c5-review-evidence/release-runtime.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.03594708442687988
+  },
+  {
+    "label": "release-lint",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-release"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 1.9317150115966797
+  },
+  {
+    "label": "release-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.22970008850097656
+  }
+]

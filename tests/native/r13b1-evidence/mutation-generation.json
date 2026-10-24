@@ -1,0 +1,59 @@
+{
+  "verification_mutation": true,
+  "files": {
+    "format.cppm": {
+      "source_sha256": "e66db865f477b32204bed6b123af9a6fcd0470ef0fc49e4d785c3d391fef9378",
+      "generated_sha256": "584368d85f4a3514c37cddcc24ee82e61ca7ca8bfc2635b871a290164eb3da0f",
+      "substitutions": [
+        {
+          "before": "planar.engine.ledger.format;",
+          "after": "planar.test.record_format;",
+          "count": 1
+        },
+        {
+          "before": "namespace planar::engine::ledger {",
+          "after": "namespace planar::engine::record_test {",
+          "count": 1
+        }
+      ],
+      "reverse_identical": true
+    },
+    "format.cpp": {
+      "source_sha256": "adc85ffda1d55b691739c1ad244a9760d15e903e51e38d5edc334021eeff870c",
+      "generated_sha256": "fcd58f5c7401402b64370e389a7b2393d1edd894211aef24ac6212b052de84e8",
+      "substitutions": [
+        {
+          "before": "planar.engine.ledger.format;",
+          "after": "planar.test.record_format;",
+          "count": 1
+        },
+        {
+          "before": "namespace planar::engine::ledger {",
+          "after": "namespace planar::engine::record_test {",
+          "count": 1
+        },
+        {
+          "before": "import planar.engine.ledger.sqlite;",
+          "after": "import planar.engine.ledger.sqlite;\nimport planar.test.record_digest;",
+          "count": 1
+        },
+        {
+          "before": "namespace planar::engine::record_test {",
+          "after": "namespace planar::engine::record_test {\nusing namespace planar::engine::ledger;",
+          "count": 1
+        },
+        {
+          "before": "digest_record(",
+          "after": "planar::test::forced_digest(",
+          "count": 2
+        },
+        {
+          "before": "if (!bytes || *bytes != *encoded)\n        return refuse(format_error_code::hash_collision,",
+          "after": "if (!bytes)\n        return refuse(format_error_code::hash_collision,",
+          "count": 1
+        }
+      ],
+      "reverse_identical": true
+    }
+  }
+}

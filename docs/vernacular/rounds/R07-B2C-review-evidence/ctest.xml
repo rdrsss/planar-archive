@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="60"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="12"
+	timestamp="2026-10-20T05:38:27"
+	>
+	<testcase name="replacement.runtime bounds Lua execution allocation and native amplification" classname="replacement.runtime bounds Lua execution allocation and native amplification" time="1.02634" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime bounds Lua execution allocation and native amplification"
+Randomness seeded to: 149554333
+===============================================================================
+All tests passed (19 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime enforces immaterial text payloads on both boundaries" classname="replacement.runtime enforces immaterial text payloads on both boundaries" time="0.025979" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime enforces immaterial text payloads on both boundaries"
+Randomness seeded to: 4125349709
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime exposes only the selected bounded table helpers" classname="replacement.runtime exposes only the selected bounded table helpers" time="0.0186909" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime exposes only the selected bounded table helpers"
+Randomness seeded to: 843494007
+===============================================================================
+All tests passed (8 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime identifies the diagnostic actually escaping Lua" classname="replacement.runtime identifies the diagnostic actually escaping Lua" time="2.83875" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime identifies the diagnostic actually escaping Lua"
+Randomness seeded to: 2877039678
+===============================================================================
+All tests passed (15 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime makes caught quota terminal before protected calls return" classname="replacement.runtime makes caught quota terminal before protected calls return" time="1.88447" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime makes caught quota terminal before protected calls return"
+Randomness seeded to: 2920602634
+===============================================================================
+All tests passed (16 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime mutations cannot affect captured native input" classname="replacement.runtime mutations cannot affect captured native input" time="0.02159" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime mutations cannot affect captured native input"
+Randomness seeded to: 2745356711
+===============================================================================
+All tests passed (33 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime native hash primitives match direct canonical identities" classname="replacement.runtime native hash primitives match direct canonical identities" time="0.0306114" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime native hash primitives match direct canonical identities"
+Randomness seeded to: 2914426804
+===============================================================================
+All tests passed (13 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime preserves ordinary protected call arity errors and nesting" classname="replacement.runtime preserves ordinary protected call arity errors and nesting" time="0.0179646" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime preserves ordinary protected call arity errors and nesting"
+Randomness seeded to: 245594260
+===============================================================================
+All tests passed (9 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime preserves private declaration tags and raw captured bytes" classname="replacement.runtime preserves private declaration tags and raw captured bytes" time="0.0250305" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime preserves private declaration tags and raw captured bytes"
+Randomness seeded to: 269457897
+===============================================================================
+All tests passed (124 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime prevents finalizers from bypassing instruction limits" classname="replacement.runtime prevents finalizers from bypassing instruction limits" time="0.0293097" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime prevents finalizers from bypassing instruction limits"
+Randomness seeded to: 2071668572
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime refuses native count paths within a subprocess bound" classname="replacement.runtime refuses native count paths within a subprocess bound" time="0.0559145" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime refuses native count paths within a subprocess bound"
+Randomness seeded to: 2077149706
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime refuses native sparse table range helpers" classname="replacement.runtime refuses native sparse table range helpers" time="0.0204541" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime refuses native sparse table range helpers"
+Randomness seeded to: 1822976005
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime refuses native string pattern paths within a subprocess bound" classname="replacement.runtime refuses native string pattern paths within a subprocess bound" time="0.115388" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime refuses native string pattern paths within a subprocess bound"
+Randomness seeded to: 4122804386
+===============================================================================
+All tests passed (32 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime refuses unsupported trusted returns and malformed native inputs" classname="replacement.runtime refuses unsupported trusted returns and malformed native inputs" time="0.0285227" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime refuses unsupported trusted returns and malformed native inputs"
+Randomness seeded to: 3888392756
+===============================================================================
+All tests passed (23 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime repairs traversal state after caught conversion failures" classname="replacement.runtime repairs traversal state after caught conversion failures" time="0.0532902" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime repairs traversal state after caught conversion failures"
+Randomness seeded to: 1646017954
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime retains deterministic nonpattern string operations" classname="replacement.runtime retains deterministic nonpattern string operations" time="0.01836" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime retains deterministic nonpattern string operations"
+Randomness seeded to: 920478455
+===============================================================================
+All tests passed (11 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime retains rich stdlib diagnostics as structural data" classname="replacement.runtime retains rich stdlib diagnostics as structural data" time="0.0173922" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime retains rich stdlib diagnostics as structural data"
+Randomness seeded to: 2349318734
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.runtime states are fresh deterministic and separated from declarations" classname="replacement.runtime states are fresh deterministic and separated from declarations" time="0.0337525" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "runtime states are fresh deterministic and separated from declarations"
+Randomness seeded to: 386240951
+===============================================================================
+All tests passed (89 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema ID record normalization sorts collections and preserves ordered lists" classname="replacement.schema ID record normalization sorts collections and preserves ordered lists" time="0.16281" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema ID record normalization sorts collections and preserves ordered lists"
+Randomness seeded to: 718766776
+===============================================================================
+All tests passed (108 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema JSON counts container entries for empty and nonempty terminals" classname="replacement.schema JSON counts container entries for empty and nonempty terminals" time="0.0752195" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema JSON counts container entries for empty and nonempty terminals"
+Randomness seeded to: 3038692429
+===============================================================================
+All tests passed (54 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema JSON node limit and request envelopes refuse deterministically" classname="replacement.schema JSON node limit and request envelopes refuse deterministically" time="0.437969" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema JSON node limit and request envelopes refuse deterministically"
+Randomness seeded to: 719869097
+===============================================================================
+All tests passed (31 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema diagnostics choose logical file field code deterministically" classname="replacement.schema diagnostics choose logical file field code deterministically" time="0.0581715" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema diagnostics choose logical file field code deterministically"
+Randomness seeded to: 1883488009
+===============================================================================
+All tests passed (93 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema enforces job intrinsic policy budgets preferences and sorted sets" classname="replacement.schema enforces job intrinsic policy budgets preferences and sorted sets" time="0.0889409" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema enforces job intrinsic policy budgets preferences and sorted sets"
+Randomness seeded to: 1509567957
+===============================================================================
+All tests passed (73 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema enforces registry descriptor types bounds enums and uniqueness" classname="replacement.schema enforces registry descriptor types bounds enums and uniqueness" time="0.0932795" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema enforces registry descriptor types bounds enums and uniqueness"
+Randomness seeded to: 969321795
+===============================================================================
+All tests passed (93 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema enforces workspace intrinsic constraints and declaration constructors" classname="replacement.schema enforces workspace intrinsic constraints and declaration constructors" time="0.0589198" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema enforces workspace intrinsic constraints and declaration constructors"
+Randomness seeded to: 4292205081
+===============================================================================
+All tests passed (65 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema final text uses exact text identity and wrapped provenance" classname="replacement.schema final text uses exact text identity and wrapped provenance" time="0.0394667" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema final text uses exact text identity and wrapped provenance"
+Randomness seeded to: 3576668397
+===============================================================================
+All tests passed (30 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema production exports normalize every quota job and defaults" classname="replacement.schema production exports normalize every quota job and defaults" time="0.032585" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema production exports normalize every quota job and defaults"
+Randomness seeded to: 2338268531
+===============================================================================
+All tests passed (31 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema refuses malformed constructors fields lists wrappers and versions" classname="replacement.schema refuses malformed constructors fields lists wrappers and versions" time="0.0832676" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema refuses malformed constructors fields lists wrappers and versions"
+Randomness seeded to: 45645977
+===============================================================================
+All tests passed (77 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema resolves retained text from declaring directory with exact bytes" classname="replacement.schema resolves retained text from declaring directory with exact bytes" time="0.0573432" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema resolves retained text from declaring directory with exact bytes"
+Randomness seeded to: 1049426887
+===============================================================================
+All tests passed (37 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema resolves text in every job relative to that job declaration" classname="replacement.schema resolves text in every job relative to that job declaration" time="0.0310364" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema resolves text in every job relative to that job declaration"
+Randomness seeded to: 357585735
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema sorted records retain declaration indexes for intrinsic diagnostics" classname="replacement.schema sorted records retain declaration indexes for intrinsic diagnostics" time="0.038559" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema sorted records retain declaration indexes for intrinsic diagnostics"
+Randomness seeded to: 3030067441
+===============================================================================
+All tests passed (30 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema strict JSON preserves container Unicode and integer identities" classname="replacement.schema strict JSON preserves container Unicode and integer identities" time="0.0214763" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema strict JSON preserves container Unicode and integer identities"
+Randomness seeded to: 1882673745
+===============================================================================
+All tests passed (8 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema strict JSON refuses malformed syntax text duplicates and bounds" classname="replacement.schema strict JSON refuses malformed syntax text duplicates and bounds" time="0.0957812" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema strict JSON refuses malformed syntax text duplicates and bounds"
+Randomness seeded to: 521409557
+===============================================================================
+All tests passed (282 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema validates joined declaration and text paths before diagnostics" classname="replacement.schema validates joined declaration and text paths before diagnostics" time="0.127232" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema validates joined declaration and text paths before diagnostics"
+Randomness seeded to: 3360185939
+===============================================================================
+All tests passed (123 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.schema validates unselected jobs registry and exact workspace routes" classname="replacement.schema validates unselected jobs registry and exact workspace routes" time="0.0594718" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "schema validates unselected jobs registry and exact workspace routes"
+Randomness seeded to: 1398238416
+===============================================================================
+All tests passed (57 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection distinguishes capture absence empty outputs and missing facet paths" classname="replacement.selection distinguishes capture absence empty outputs and missing facet paths" time="0.0980108" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection distinguishes capture absence empty outputs and missing facet paths"
+Randomness seeded to: 4052740645
+===============================================================================
+All tests passed (30 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection enforces aggregate byte file limits and normalized executable modes" classname="replacement.selection enforces aggregate byte file limits and normalized executable modes" time="0.52748" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection enforces aggregate byte file limits and normalized executable modes"
+Randomness seeded to: 2891311712
+===============================================================================
+All tests passed (47 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection independently resolves every quota symbolic work manifest" classname="replacement.selection independently resolves every quota symbolic work manifest" time="0.710535" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection independently resolves every quota symbolic work manifest"
+Randomness seeded to: 2501543355
+===============================================================================
+All tests passed (12215 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection optional observations provenance syntax and set order remain immaterial" classname="replacement.selection optional observations provenance syntax and set order remain immaterial" time="0.323094" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection optional observations provenance syntax and set order remain immaterial"
+Randomness seeded to: 9099624
+===============================================================================
+All tests passed (4368 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection pipeline derives obligations before scope and records remapped producers" classname="replacement.selection pipeline derives obligations before scope and records remapped producers" time="0.2027" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection pipeline derives obligations before scope and records remapped producers"
+Randomness seeded to: 2057715637
+===============================================================================
+All tests passed (48 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection refuses inconsistent malformed and excessive retained byte records" classname="replacement.selection refuses inconsistent malformed and excessive retained byte records" time="0.142759" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection refuses inconsistent malformed and excessive retained byte records"
+Randomness seeded to: 3944035261
+===============================================================================
+All tests passed (88 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection retains check applicability registry definitions and pipeline assignment scope" classname="replacement.selection retains check applicability registry definitions and pipeline assignment scope" time="0.246936" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection retains check applicability registry definitions and pipeline assignment scope"
+Randomness seeded to: 419685204
+===============================================================================
+All tests passed (268 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection scopes requirements and excludes optional policy and own bytes" classname="replacement.selection scopes requirements and excludes optional policy and own bytes" time="0.769474" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection scopes requirements and excludes optional policy and own bytes"
+Randomness seeded to: 2158971142
+===============================================================================
+All tests passed (124 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.selection start facets are external exact content and completion is never inferred" classname="replacement.selection start facets are external exact content and completion is never inferred" time="0.36511" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "selection start facets are external exact content and completion is never inferred"
+Randomness seeded to: 131799293
+===============================================================================
+All tests passed (77 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic additions retain per-unit applicability even when definition unions match" classname="replacement.semantic additions retain per-unit applicability even when definition unions match" time="0.0793507" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic additions retain per-unit applicability even when definition unions match"
+Randomness seeded to: 1082474628
+===============================================================================
+All tests passed (27 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic captured file ancestors cannot satisfy file facets" classname="replacement.semantic captured file ancestors cannot satisfy file facets" time="0.0403128" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic captured file ancestors cannot satisfy file facets"
+Randomness seeded to: 2220049193
+===============================================================================
+All tests passed (21 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic checks trusted allowed definitions conformance and per-unit additions" classname="replacement.semantic checks trusted allowed definitions conformance and per-unit additions" time="0.10484" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic checks trusted allowed definitions conformance and per-unit additions"
+Randomness seeded to: 3965560905
+===============================================================================
+All tests passed (74 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic consumes sealed real quota topology after source trees are removed" classname="replacement.semantic consumes sealed real quota topology after source trees are removed" time="0.0408704" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic consumes sealed real quota topology after source trees are removed"
+Randomness seeded to: 3610775771
+===============================================================================
+All tests passed (20 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic contract complete dependencies allow only availability and still need start contract" classname="replacement.semantic contract complete dependencies allow only availability and still need start contract" time="0.0575024" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic contract complete dependencies allow only availability and still need start contract"
+Randomness seeded to: 1115696286
+===============================================================================
+All tests passed (32 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic distinguishes captured empty directories and current base boundary topology" classname="replacement.semantic distinguishes captured empty directories and current base boundary topology" time="0.127656" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic distinguishes captured empty directories and current base boundary topology"
+Randomness seeded to: 1593755579
+===============================================================================
+All tests passed (73 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier" classname="replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier" time="0.098493" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier"
+Randomness seeded to: 425246789
+===============================================================================
+All tests passed (66 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries" classname="replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries" time="0.0961424" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic ownership covers excluded lists and work with frozen and excluded boundaries"
+Randomness seeded to: 1069073897
+===============================================================================
+All tests passed (64 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic phase cycles report actual deterministic closed traces" classname="replacement.semantic phase cycles report actual deterministic closed traces" time="0.038507" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic phase cycles report actual deterministic closed traces"
+Randomness seeded to: 4141465705
+===============================================================================
+All tests passed (29 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic pipeline derives adjacent cross products and validates every stage" classname="replacement.semantic pipeline derives adjacent cross products and validates every stage" time="0.0755808" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic pipeline derives adjacent cross products and validates every stage"
+Randomness seeded to: 1311253644
+===============================================================================
+All tests passed (48 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic pipeline expands full adjacent stage work cross products before scope" classname="replacement.semantic pipeline expands full adjacent stage work cross products before scope" time="0.0518087" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic pipeline expands full adjacent stage work cross products before scope"
+Randomness seeded to: 467850531
+===============================================================================
+All tests passed (57 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic production validates both quota jobs and preserves grouped unit obligations" classname="replacement.semantic production validates both quota jobs and preserves grouped unit obligations" time="0.0307848" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic production validates both quota jobs and preserves grouped unit obligations"
+Randomness seeded to: 1334465284
+===============================================================================
+All tests passed (41 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic refuses all union boundary overlaps and segment aliases" classname="replacement.semantic refuses all union boundary overlaps and segment aliases" time="0.193754" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic refuses all union boundary overlaps and segment aliases"
+Randomness seeded to: 332247632
+===============================================================================
+All tests passed (153 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs" classname="replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs" time="0.0986422" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs"
+Randomness seeded to: 3193468273
+===============================================================================
+All tests passed (69 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic schema refusal precedes policy and diagnostics retain author indexes" classname="replacement.semantic schema refusal precedes policy and diagnostics retain author indexes" time="0.0455938" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic schema refusal precedes policy and diagnostics retain author indexes"
+Randomness seeded to: 1491975567
+===============================================================================
+All tests passed (31 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="replacement.semantic validates references and namespaces before selecting any job" classname="replacement.semantic validates references and namespaces before selecting any job" time="0.129943" status="run">
+		<properties>
+			<property name="cmake_labels" value="unit"/>
+		</properties>
+		<system-out>Filters: "semantic validates references and namespaces before selecting any job"
+Randomness seeded to: 4285284148
+===============================================================================
+All tests passed (111 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+</testsuite>

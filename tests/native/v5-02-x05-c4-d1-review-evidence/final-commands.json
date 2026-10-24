@@ -1,0 +1,187 @@
+[
+  {
+    "label": "private-cleanup",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/cleanup.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 3.2805884163826704
+  },
+  {
+    "label": "selection-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b3-c-support/vector.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6465898752212524
+  },
+  {
+    "label": "shape-definition-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6433799164369702
+  },
+  {
+    "label": "canonical-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6598359579220414
+  },
+  {
+    "label": "record-v1-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6214705826714635
+  },
+  {
+    "label": "request-v2-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6453205412253737
+  },
+  {
+    "label": "effective-provenance-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6745334584265947
+  },
+  {
+    "label": "historical-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/historical-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.39615737460553646
+  },
+  {
+    "label": "d6-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/d6-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.24964370857924223
+  },
+  {
+    "label": "d6-c01-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/d6-c01-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.14807304181158543
+  },
+  {
+    "label": "d7-b-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/d7-b-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.1180723337456584
+  },
+  {
+    "label": "b1-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/b1-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.04831812530755997
+  },
+  {
+    "label": "approved-runtime-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-c2-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/approved-runtime-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.03150295838713646
+  },
+  {
+    "label": "current-native-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d1-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-d1-review-evidence/current-native-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.029728292487561703
+  },
+  {
+    "label": "final-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.2327959593385458
+  }
+]

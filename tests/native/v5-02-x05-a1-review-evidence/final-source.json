@@ -1,0 +1,19 @@
+{
+  "artifact_entries": 222,
+  "artifact_mismatches": [],
+  "build_entries": 747,
+  "build_mismatches": [],
+  "current_entries": 18999,
+  "identities": {
+    "REPORT.md": "a75b5f3d4860d6fe0081fb9d2096b409e6fad95c49d513de3556aa852c3627b2",
+    "artifact-manifest.json": "dfe857c3865f036c442307d26105609657f7151836ee4b16aff7565b6ca565e1",
+    "attempt01/owned.diff": "c85838281aca49c545706e4dc865b24f4d856c84fd21a0ea72d573906ec614a4",
+    "attempt01/source-freeze.json": "959facccc82fa81be0b3e0acfaaf5c1e9bb77a5da8f51e2062129de792a48f5e"
+  },
+  "review_exclusions": [
+    "tests/native/v5-02-x05-a1-review-evidence",
+    "docs/vernacular/rounds/V5-02-X05-A1-review.md"
+  ],
+  "source_differences": [],
+  "source_entries": 18999
+}

@@ -1,0 +1,280 @@
+{
+  "candidate-manifest.json": {
+    "entries": 211,
+    "mismatches": [],
+    "sha256": "2e6b3e9beac951f9f7269fdbe0441ff0c1009ed8893df8c48c37857bcb160a2b"
+  },
+  "artifact-manifest.json": {
+    "entries": 734,
+    "mismatches": [],
+    "sha256": "d586eade82564b24a533d3257a5d8669b1ee448a21af2acd268ce326c454eb80"
+  },
+  "frozen-source.json": {
+    "entries": 211,
+    "mismatches": [],
+    "sha256": "aef0b8aacaa9d2d3e90e772daee98ba0699f7b49e550aebe3ef8c9f5838c2fcf"
+  },
+  "protected-start.json": {
+    "entries": 21492,
+    "mismatches": [],
+    "sha256": "58b760aff6f9c3b72eef8b51ad563de5779e155834f1ceec226cbbdd2fe73c3f"
+  },
+  "protected-unowned.json": {
+    "entries": 7,
+    "mismatches": [],
+    "sha256": "2bf53fc5a791167fc9ab24cca85c2a2292189374b89d9475e48da2c035921cfb"
+  },
+  "review_protected": {
+    "entries": 24430,
+    "mismatches": []
+  },
+  "release": {
+    "entries": 3463,
+    "membership_and_hashes_unchanged": true
+  },
+  "diff_sha256": "abb009633070b7cdca1a18e349e233a9f3ade8bd32957b869f721126ae9ed446",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "agents_symlink": true,
+  "xml": [
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/ceiling-final/ceiling.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/exhaustive-allocation/allocation.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/gate/focused.xml",
+      "cases": 408,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/gate/history-codec.xml",
+      "cases": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/gate/production-render.xml",
+      "cases": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/lifetime-controls-corrected/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/public-controls/adversarial.xml",
+      "cases": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/public-controls/ceiling.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/public-controls-final/adversarial.xml",
+      "cases": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-review-evidence/public-controls-final/ceiling.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "no_work": "[0/2] Re-checking globbed directories...\nninja: no work to do.\n"
+}

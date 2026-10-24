@@ -1,0 +1,6 @@
+{
+  "baseline_and_candidate_span_identical": true,
+  "sha256": "8a48089d4e32f556647c3eda5d98b80e77b84904c5770dde366efae4be8574f3",
+  "reason": "historical string-split includes pre-existing extension preparation, outside narrow lookup and outside C4-B2 changes",
+  "forbidden_baseline_token": "function_reference"
+}

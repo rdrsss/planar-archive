@@ -1,0 +1,19 @@
+{
+  "CLAUDE.md": "491dd7c3538e402e9f18ad874dbd4f80a50904f426e50a757101bbbd7af8b5e7",
+  "docs/architecture.md": "7ed479bb073aee634233a0925465e3fe46339f175f96f062e8453bcc44fecef8",
+  "docs/vernacular/acceptance-matrix.md": "7d8a454af27f51413a530e6d9200a3c77eac17974da89c68d503f24aaeb3dd9a",
+  "docs/vernacular/external-profile-implementation.md": "e70947537281dddfe61037e504d577bb874a8fc2d06f6c7708ffc00088a98ad9",
+  "docs/vernacular/implementation.md": "eb2dd8bff8fed16b7311bdd6b76d61205166891341ec3f49c7ca62befb0323da",
+  "docs/vernacular/roadmap.md": "1fd9df30d909a55a49657ff4e09b21d52e95616c99e67711a06edbfc0e7f3153",
+  "docs/vernacular/v5-alignment.md": "67561526b0a994de7fa69651345977df7fcb2cbe7f40282aeb316f7a032b3d06",
+  "src/engine/CMakeLists.txt": "e2296ff10974f21fc01aaef835d8933e80d8acd0efc7824f48758d3dab3ac133",
+  "src/engine/history/effective_catalog.cpp": "b9e34665b546e9a04139d273ebdfd3c3635930f6063e872809f5afa7dd2d24c1",
+  "src/engine/history/effective_catalog.cppm": "7a9870d4f70f24d443d6c951f8ea6b99110dbd88d286c5f5617b45bedecabb02",
+  "src/engine/history/effective_catalog.t.cpp": "cec5ec30abb412146b0c05712c3913cdb24c7aec70a585117a4917a5bf0ab809",
+  "tests/native/v5-02-x04-b2-support/audit.py": "37e6678db48be93e260550206ffdc4471bafc8b8de2dbb4dfade926eb666d50a",
+  "tests/native/v5-02-x04-b2-support/finalize.py": "c104c5c7e47ed72592c34a67c8dd7a77ec3e064e551d80fe7ace80ddf2cb2319",
+  "tests/native/v5-02-x04-b2-support/protect.py": "008ea81b6622fed75bded3a15c4ca558d81f07d8cab6e3ac07756e3ae13ebec3",
+  "tests/native/v5-02-x04-b2-support/regression.py": "acebf6ec6e8bada51b1fa3ed786d1b2903aefb0faefc90988d1f992f854603c2",
+  "tests/native/v5-02-x04-b2-support/verify.py": "e42f187c3a3088c421a9dda232b7094aa6d621d6c876e82f46b162d5b8bd553d",
+  "tests/native/v5-02-x04-b2-support/verify_final.py": "b264c7ae2a89783274370c6e9031685e648f5104a29aa75f29f4ecc49d0e9e63"
+}

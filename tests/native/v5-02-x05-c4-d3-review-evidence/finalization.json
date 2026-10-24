@@ -1,0 +1,22 @@
+{
+  "active_review_build_test_private_processes": false,
+  "author_artifact_entries": 253,
+  "author_artifact_manifest_sha256": "cb2834a7c9c5da37b8d6210427a299a23b82feccee4c1558685c483d39df04b9",
+  "author_finalization_sha256": "f866bfe4b137c2edcc9d4ef44c20ebfa98c26bac3d6c8b99cc18a8a4170d7302",
+  "author_report_sha256": "2e0a9cdedb6fbb7062a6cc61547c7fc52fcfb78599e869993a82bf36e54f0023",
+  "candidate_diff_sha256": "3e519da4c0a34ce7a6ddef659ec142a9ba66a2ef01c6cc27a15770bd54a9610f",
+  "candidate_entries": 28,
+  "candidate_sha256": "d554bccb9b1f2d65418abebf934addb6d55b4f2bf8bb8918bddb00b8ff55efee",
+  "debug_and_files_released": true,
+  "disposable_compiled_inputs_removed": true,
+  "disposition": "approve",
+  "full_gate": false,
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "linux_gate": false,
+  "protected_changes": [],
+  "protected_entries": 76064,
+  "release_gate": false,
+  "review_artifact_entries": 90,
+  "review_artifact_manifest_sha256": "685e38dc7d206128a0c17e5f85d2d2e213b02be552a884688dd2c15453cbd17b",
+  "review_report_sha256": "99f4a5962ea6d1a8943c17ae84001495d1828fe1a2e2cea19dd2ac72d2e00730"
+}

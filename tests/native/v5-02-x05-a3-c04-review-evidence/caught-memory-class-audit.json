@@ -1,0 +1,19 @@
+{
+  "allocator": {
+    "unchanged_from_C03": true,
+    "unchanged_from_pre_A3": true
+  },
+  "class_audit": {
+    "descriptor_collection_and_sealing": "host call adapter checks exhausted and status LUA_ERRMEM before bridge/status adaptation; no nested user pcall for these phases",
+    "external_curated_constructor_and_pure_helpers": "same nested protected_call seam; allocator null does not set exhausted. No new actual failure claim made for those helpers",
+    "function_reference_growth_control": "0 actual Lua growth requests in64-projection control; no fabricated refusal at this site",
+    "native_charge_stack_instruction_refusal": "conversion_failure/exhausted/stack/instruction signals survive nested pcall",
+    "native_diagnostic_bad_alloc_callback_refusal": "bridge_error selected once, later callback checks before token reset",
+    "raw_descriptor_and_callable_reference_retention": "Lua longjmp outside native catch; owner vector installed but no bridge_error; raw memory status can be caught without persistent signal",
+    "setup_initial_sealing": "host create_impl checks status LUA_ERRMEM"
+  },
+  "nested_pcall": {
+    "unchanged_from_C03": true,
+    "unchanged_from_pre_A3": true
+  }
+}

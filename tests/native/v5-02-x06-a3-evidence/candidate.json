@@ -1,0 +1,18 @@
+{
+  "diff_sha256": "b5c6d1c42ffb86e5268813ed4dec227f97fa173f3c5479f44e5fca1a7762e34e",
+  "files": {
+    "CLAUDE.md": "67c0e165cf4ddf1b5c84d4831c47ebbe8474004a497033cbd00108aa9cac5224",
+    "docs/architecture.md": "05ddf6458df8aea316ed94ea1e0fe0e3f6aa04441c6f4a77492347a2f9f3deaf",
+    "docs/testing.md": "19401449f987b9be7485ff0313da7d1e187cfe20934443e0725efb68c75158b4",
+    "docs/vernacular/acceptance-matrix.md": "51b038c1b8b26c348411006abda5a8635b35833cdacb6daee9dc8f9eb288feb8",
+    "docs/vernacular/external-profile-implementation.md": "ac4c2820827d8e73bb37cbc86c1955ada87b34d22dd35747de6f5bce171f1a7a",
+    "docs/vernacular/implementation.md": "33eaa2e12347f3c645b7211a586f09927edefa8c58868da7f32492b87eafefe0",
+    "docs/vernacular/roadmap.md": "14987d59417285e009753cf693eed6bc1f05bc28286d6c11df70d1a050d6dbfe",
+    "docs/vernacular/v5-alignment.md": "bdc5669e75dc9f16d4a9e47af8207da1a0e5ba2dfd96716e64c8eecdfb2db2d8",
+    "docs/vernacular/x06-implementation.md": "b72b4ae8756a4777389788e670c2215bd60422572a4114bf4d5375c797df3fb6",
+    "src/engine/CMakeLists.txt": "ee9e6cdf1693c6e49a9108bf8e916d321963c1117e005f0533c2f94cceec5aac",
+    "src/engine/history/read.cpp": "5adf7d442f33ae7623a7025d5bef33a4442c80407272e4a00fa264d6030b9108",
+    "src/engine/ledger/format.cpp": "32744d399b6f4c0fe62c59eb4720c31851e22e4dbf0f317c807c1800c0d34730",
+    "src/engine/ledger/history_verification.t.cpp": "1487a33c2cfba3cb013a15614790a134b621f00da4cb4857a608d54803dd190d"
+  }
+}

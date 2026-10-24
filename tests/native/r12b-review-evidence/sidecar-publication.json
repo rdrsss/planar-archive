@@ -1,0 +1,44 @@
+[
+  {
+    "suffix": "-journal",
+    "init_return": 0,
+    "init_output": "ok:abdbd96abde4584ccd678baaab3b61a9:review_workspace:2026-10-20T16:26:11.013Z",
+    "open_return": 1,
+    "open_output": "error:8:Ledger sidecar requires separately audited recovery",
+    "sidecar_preserved": true,
+    "entries": [
+      "db-journal",
+      "db-journal-journal"
+    ]
+  },
+  {
+    "suffix": "-wal",
+    "init_return": 0,
+    "init_output": "ok:e439084dc463f46875dfa6ce7a8505c0:review_workspace:2026-10-20T16:26:11.051Z",
+    "open_return": 1,
+    "open_output": "error:8:Ledger sidecar requires separately audited recovery",
+    "sidecar_preserved": true,
+    "entries": [
+      "db-journal",
+      "db-journal-journal",
+      "db-wal",
+      "db-wal-wal"
+    ]
+  },
+  {
+    "suffix": "-shm",
+    "init_return": 0,
+    "init_output": "ok:b1d0fee6ab0b79f48fcc9a4204e49971:review_workspace:2026-10-20T16:26:11.082Z",
+    "open_return": 1,
+    "open_output": "error:8:Ledger sidecar requires separately audited recovery",
+    "sidecar_preserved": true,
+    "entries": [
+      "db-journal",
+      "db-journal-journal",
+      "db-shm",
+      "db-shm-shm",
+      "db-wal",
+      "db-wal-wal"
+    ]
+  }
+]

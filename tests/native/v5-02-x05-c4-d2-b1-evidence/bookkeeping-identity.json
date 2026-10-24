@@ -1,0 +1,10 @@
+{
+  "bookkeeping_only": true,
+  "changed_only": [
+    "tests/native/v5-02-x05-c4-d2-b1-evidence/REPORT.md"
+  ],
+  "owned_product_test_prose_unchanged": true,
+  "repeat_whole_gate": false,
+  "support_unchanged": true,
+  "tested_candidate_sha256": "4c2532635dfcf4451b9cf8a71275477721f81552609e7585dbaa311bcf8f3988"
+}

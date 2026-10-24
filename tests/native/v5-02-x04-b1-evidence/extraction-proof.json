@@ -1,0 +1,12 @@
+{
+  "decoder_body_byte_identical_after_symbol_rename": true,
+  "glaze_adapters_byte_identical": true,
+  "decoder_body_sha256": "9d88538cf58676fce4194bb18dc4a2512654320c4d740dbf2241f6b02aa129d7",
+  "glaze_adapters_sha256": "e29b93f78e341ce90c9e5ebdcce4909befbb68fd70d17d53b87406907e1054de",
+  "imports": [
+    "std",
+    "planar.engine.value"
+  ],
+  "no_native_host_runtime_or_filesystem_dependency": true,
+  "capture_call_before_module_selections": true
+}

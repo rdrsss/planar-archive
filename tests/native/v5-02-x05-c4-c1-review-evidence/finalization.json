@@ -1,0 +1,18 @@
+{
+  "artifact_entries": 106,
+  "artifact_manifest_sha256": "65fa8a362175838bd43404cf78e40f601b7ed884d4037f65521163670875085c",
+  "author_artifact_manifest_sha256": "ea4672c81969c2218aacaaad64b405a5cff790e84376f583fb0da7ec447d4400",
+  "author_finalization_sha256": "6aa4c44be3efee01d7befccd0b2efa5f3fd8946826d9be61f4d2607cc4ef39b0",
+  "candidate_entries": 20,
+  "candidate_sha256": "76f717420b4e18b4d517a794e4b645a211dd301679d2b0a9ccab08f1d9a13339",
+  "debug_released": true,
+  "disposition": "approve",
+  "full_gate_claimed": false,
+  "linux_gate_claimed": false,
+  "protected_changed": 0,
+  "protected_entries": 73480,
+  "release_gate_claimed": false,
+  "report_sha256": "f21852a72531a23dc47935c05318fce6dee983fb31100fe773af48c9c1d96113",
+  "reviewer_files_released": true,
+  "schema": 1
+}

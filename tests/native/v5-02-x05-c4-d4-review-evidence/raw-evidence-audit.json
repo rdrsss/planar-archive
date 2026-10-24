@@ -1,0 +1,124 @@
+{
+  "source_baseline_correspondence": {
+    "src/engine/runtime/runtime.cpp": {
+      "original_baseline": {
+        "mode": 420,
+        "sha256": "1742fba034d9ff7f967365990b27e93a2a315f407318c9d2162b08092deeca8e"
+      },
+      "approved_d3_sha256": "1742fba034d9ff7f967365990b27e93a2a315f407318c9d2162b08092deeca8e",
+      "present_preedit_sha256": "421e44e3727872a78e111f16bdc814b4abf11ad178e5501528fba498a8fc0046",
+      "preedit_matches_original": false,
+      "present_preedit_mtime_ns": 1792838313972707450
+    },
+    "src/engine/runtime/external_registration.t.cpp": {
+      "original_baseline": {
+        "mode": 420,
+        "sha256": "e6d0f7cccd0a1c0aceb77b0dea55ac830be8464073446e5c6084064a88f0f88f"
+      },
+      "approved_d3_sha256": "e6d0f7cccd0a1c0aceb77b0dea55ac830be8464073446e5c6084064a88f0f88f",
+      "present_preedit_sha256": "e6d0f7cccd0a1c0aceb77b0dea55ac830be8464073446e5c6084064a88f0f88f",
+      "preedit_matches_original": true,
+      "present_preedit_mtime_ns": 1792838313973137653
+    },
+    "src/stdlib/planar/render.lua": {
+      "original_baseline": {
+        "mode": 420,
+        "sha256": "54802e3acce016e745a13f517c7f7d79e7d09ea13909b760ef3b8a7a47567ace"
+      },
+      "approved_d3_sha256": "54802e3acce016e745a13f517c7f7d79e7d09ea13909b760ef3b8a7a47567ace",
+      "present_preedit_sha256": "826433de51a3377e743a767645bb0fb139304fad1ed07d6e02fe79106516625b",
+      "preedit_matches_original": false,
+      "present_preedit_mtime_ns": 1792838313973305151
+    },
+    "src/stdlib/planar/bootstrap.lua": {
+      "original_baseline": {
+        "mode": 420,
+        "sha256": "093e95058acceb264cc39fa9019a8b2e6934bcabf97ca490142eaeca8521013c"
+      },
+      "approved_d3_sha256": "093e95058acceb264cc39fa9019a8b2e6934bcabf97ca490142eaeca8521013c",
+      "present_preedit_sha256": "3d0f18fb8bdb41d390c826cf109c320d800e569c47cd3098e77646e51333d504",
+      "preedit_matches_original": false,
+      "present_preedit_mtime_ns": 1792838313973515773
+    }
+  },
+  "xml": {
+    "focused.xml": {
+      "cases": 536,
+      "failures": [],
+      "errors": 0,
+      "skipped": 0,
+      "suites": []
+    },
+    "private/private.xml": {
+      "cases": 10,
+      "failures": [],
+      "errors": 0,
+      "skipped": 0,
+      "suites": [
+        {
+          "name": "green",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "709",
+          "hostname": "tbd",
+          "time": "2.607",
+          "timestamp": "2026-10-24T10:54:32Z"
+        }
+      ]
+    },
+    "attempt1-frozen-gate/focused.xml": {
+      "cases": 535,
+      "failures": [
+        "replacement.C4 D4 existing history projection keeps exact mandatory base and fixed budget"
+      ],
+      "errors": 0,
+      "skipped": 0,
+      "suites": []
+    },
+    "development-private-attempt1/private.xml": {
+      "cases": 10,
+      "failures": [
+        "D4 private selected F base helper assembly resource failures preserve their own attribution"
+      ],
+      "errors": 0,
+      "skipped": 0,
+      "suites": [
+        {
+          "name": "green",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "709",
+          "hostname": "tbd",
+          "time": "2.559",
+          "timestamp": "2026-10-24T10:52:28Z"
+        }
+      ]
+    },
+    "red.xml": {
+      "cases": 4,
+      "failures": [
+        "C4 D4 role projection uses original role and exact shipped headed base",
+        "C4 D4 pair stays lazy and performed role DATA remains valid after project"
+      ],
+      "errors": 0,
+      "skipped": 0,
+      "suites": [
+        {
+          "name": "planar_runtime_tests",
+          "errors": "0",
+          "failures": "2",
+          "skipped": "0",
+          "tests": "350",
+          "hostname": "tbd",
+          "time": "1.492",
+          "timestamp": "2026-10-24T10:40:26Z"
+        }
+      ]
+    }
+  },
+  "author_claim_not_supported": "Present preedit runtime/render/bootstrap do not match original baseline; candidate.diff omits substantive D4 changes; red run has no source identity manifest and red-build2 compiles tests only. Original source identity used in red run is not established by retained artifacts.",
+  "approved_d3_baseline_independently_reviewed_manifest_matches": true,
+  "approved_d3_manifest_sha256": "d554bccb9b1f2d65418abebf934addb6d55b4f2bf8bb8918bddb00b8ff55efee"
+}

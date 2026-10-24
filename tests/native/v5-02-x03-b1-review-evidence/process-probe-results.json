@@ -1,0 +1,409 @@
+{
+  "old_sha256": "be1c4cee1b358208831faa919707ce5fd01de3ea31bc63db333a027f8844464a",
+  "candidate_sha256": "6fec0272583060418f62dd950bf18f62ad82b484639530f4ef6b2ba908aa79f2",
+  "fixture_sha256": "62c8d83af0ccbc107026365180672aee9fa95835c86de1e5922bf277eb5f72d3",
+  "runs": [
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.lua",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "review",
+        "--actor",
+        "reviewer"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-journal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-journal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.lua",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "review",
+        "--actor",
+        "reviewer"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-journal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-journal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-wal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-wal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.lua",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "review",
+        "--actor",
+        "reviewer"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-wal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-wal": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-shm": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-shm": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+      "args": [
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.lua",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/missing.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "review",
+        "--actor",
+        "reviewer"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-shm": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "ledger-shm": "5bdefadb8193d44739a609e425f4431d25e402813c8debc9036240fc8d7b1e36"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "build/rewrite-debug/bin/planar",
+      "args": [
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger"
+      ],
+      "status": 0,
+      "stdout": "{\"active_revision\":\"none\",\"data\":{\"events\":[{\"actor\":\"planar:init\",\"occurred_at\":\"2026-10-22T20:14:07.358Z\",\"payload\":{\"after\":{\"active_revision\":\"none\"},\"before\":{\"active_revision\":\"none\"},\"reason\":\"initialized\",\"references\":{},\"version\":1},\"request_id\":\"none\",\"revision\":\"none\",\"sequence\":\"1\",\"type\":\"ledger_initialized\",\"version\":1}],\"selector\":\"page\"},\"kind\":\"history\",\"last_event\":\"1\",\"ledger\":\"43d5feacb7a9ad6b0a4b79fa25b52e23\",\"version\":1}\n",
+      "stderr": "",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5"
+      },
+      "unchanged": true
+    },
+    {
+      "exe": "build/rewrite-debug/bin/planar",
+      "args": [
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/quota/workspace/workspace.lua",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-review-1z_e6tgz/quota/registry/quota-tools.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "review",
+        "--actor",
+        "reviewer"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "quota": "directory",
+        "quota/README.md": "24aeeeca90c8dfbeec59f8a7069e31c1991c7a764042ca8e06f667ed8f83bb87",
+        "quota/base": "directory",
+        "quota/base/src": "directory",
+        "quota/base/src/core": "directory",
+        "quota/base/src/core/quota.py": "daaca196ac1ed5eb80e88ee09cf2216103a1cf31660386037f175f85314e1fca",
+        "quota/base/tests": "directory",
+        "quota/base/tests/core": "directory",
+        "quota/base/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+        "quota/base/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+        "quota/coverage.md": "07c4f3862ac7fe99b68e7537b1391775dbc7128f4b2ecd74601ba643adc35914",
+        "quota/current": "directory",
+        "quota/current/src": "directory",
+        "quota/current/src/cli": "directory",
+        "quota/current/src/cli/main.py": "fe3f0f3164b01a9e61e50800595813cbb02e1c33ff61d5a6c0100365a358912b",
+        "quota/current/src/core": "directory",
+        "quota/current/src/core/quota.py": "34abf0bb16524b1eb58891bf5e5eae163186a71569c6a1540b1c2b207d3ec3f4",
+        "quota/current/tests": "directory",
+        "quota/current/tests/cli": "directory",
+        "quota/current/tests/cli/__init__.py": "865fd3786c7da10e39f5cc97a75446847da6fc25a62a96f95c6d4bb9da57391e",
+        "quota/current/tests/cli/test_contract.py": "8e03e65d1bd4579263c04c0502e3a89d38956766cbb293f4dbacd765657d924a",
+        "quota/current/tests/cli/test_integration.py": "0deec819a7dd514500d16775b2fdced84049b49cace326de94f6d04bcdec5338",
+        "quota/current/tests/core": "directory",
+        "quota/current/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+        "quota/current/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+        "quota/expected": "directory",
+        "quota/expected/combined-builder.md": "2141a5fd892b5e83c36e9ef2550541fe47bdbdac45b2611cf0b9d4a666cefdd7",
+        "quota/expected/combined-reviewer.md": "717cd9b4e81b8e9974193b85913559521d8e06e5b8e71fb293092f898a4feb35",
+        "quota/expected/split-cli_worker-recovery.md": "4f4ae994f1f603e19b75f32a0f81d9b122a1ff8d215b5b483b7f961469d91ade",
+        "quota/expected/split-cli_worker.md": "854944cd926aeb7db7d2ef961085eaf8aa2298d9c34e3206859e6beb7f52ea6d",
+        "quota/expected/split-library_worker.md": "e5da49ecc16cf624ec10cefc440b35bbf56e77b131237559ae6f1634ceec0d6a",
+        "quota/expected/split-reviewer.md": "7c05fa07184bc4ad6f85d9928e9f8bb3d46c4719cbe112b1525fbda2be1b271a",
+        "quota/manifests": "directory",
+        "quota/manifests/combined-builder.symbolic.json": "87167ff14dab7569ffa63bd05bfa81897c3cd7fed98aac0ab58b62b47101ac4d",
+        "quota/manifests/combined-reviewer.symbolic.json": "6507eb3302c48914519da1dfde11d094dd1395475317b2faed7292e2a785de93",
+        "quota/manifests/split-cli_worker-recovery.symbolic.json": "5bded175275b31240ec66cf4c46dca9c39a61a1e3e3cdb5d96429a629f1c743e",
+        "quota/manifests/split-cli_worker.symbolic.json": "6971f1b07ecdfb453ed784a242a34c7840fb9b6f1b330813491fef2bb357efe9",
+        "quota/manifests/split-library_worker.symbolic.json": "12e90da89bd0c2c945d2402a67757fbcf784ae85194e33de8f5edf6b87cc2912",
+        "quota/manifests/split-reviewer.symbolic.json": "7fb0f44270398a741643378487ecc595222cbabf2a2a9aab510092d9d17742c3",
+        "quota/mutations.md": "4be91148b9d823234b0066c8c6316c72f068c665f4ec560d96452bdf5cf153d8",
+        "quota/native": "directory",
+        "quota/native/README.md": "299eaeb789fd7a067f034260e4a0a897465a0467981d44472b9116f7a267fff9",
+        "quota/native/combined-builder.json": "963b91210dbacd437e0fe3f5c3b23ad1e42435e43da19438569dcea8de019d59",
+        "quota/native/combined-builder.md": "9b66af925d18392317629d86f4f9de79a2e5678b2a0b4921717e8c1a324dbc75",
+        "quota/native/combined-reviewer.json": "dc967b5651c2ad57a04a296be7d26c246394ca9486226d883dae64be2a65d075",
+        "quota/native/combined-reviewer.md": "ab4af2bb750af5f4fb20961425a49c4d3c5530e01cf048dfbffd7b44691e3d03",
+        "quota/native/reviewer-resolved.json": "30fd5c3891c9fb9d7c32f00b6dc70d2b6b2f1bebdd810eb4a864e62dd4f42550",
+        "quota/native/split-cli_worker-recovery.json": "085dc686dd142e1587858b3594df1a7ff0b5088ad2092cd1d2e541c4edbfbdb9",
+        "quota/native/split-cli_worker-recovery.md": "90ad646e802a92ceb5e6c11f98bc435f1df91c47cb4dd88793799ad04089afd8",
+        "quota/native/split-cli_worker.json": "53e8650de5b588c4564d631bcd59bbc2871dface2ae48017d2eef1681beea60d",
+        "quota/native/split-cli_worker.md": "6ff9e2c8c72c3231e8d718d961b4c54540619e9cc75ee31efa377b83540880c4",
+        "quota/native/split-library_worker.json": "a8149d30a6fb403fe4f8fa435cfc8428e962c2664e9fa5e77f1afaf3857f4a34",
+        "quota/native/split-library_worker.md": "cc2e6edb7d094e7262738118c3669fea0dd64878537c5aee438a4fbc6203c166",
+        "quota/native/split-reviewer.json": "25373e03f4f30112424012fb4d90f7955da1db6ddd907e9c5799e6cd3fca7476",
+        "quota/native/split-reviewer.md": "c8edc7de42d9d425748389ecbe4e0cce4f938d8a2aa979f6486137d634cfee37",
+        "quota/observations": "directory",
+        "quota/observations/empty.json": "5fcbdafdf5d58ac06c32ebb1323b96863662b837442cac8e3d82cfc6fc6e33f0",
+        "quota/observations/recovery.json": "78f5d5e9dfaf76792f09fa7f28070d2ce8148d85e3ed0c31265476c39db25d41",
+        "quota/observations/reviewer.symbolic.json": "c7337596b6c20871e6021bd710de5b8f5c566dee3913b23f8b09f4204fc20708",
+        "quota/registry": "directory",
+        "quota/registry/quota-tools.json": "4894e5684d1574d8abd37b875d71c66704b34293af3f094b4f1bf036da87eb43",
+        "quota/workspace": "directory",
+        "quota/workspace/combined.lua": "462be3ceadfae3ef50dca7a3a245dee23dae22ddadfd7d1328052d0c8da95602",
+        "quota/workspace/spec.lua": "e0d488603bf98845dc3e05240c4df16b19aedc86f9b913b9bd3ca618d9948207",
+        "quota/workspace/split.lua": "6d3e2d2e981ec4507f27970a550f8074b0f4e0dfffc8b9cd02cf3641fc119c56",
+        "quota/workspace/text": "directory",
+        "quota/workspace/text/quota-api.md": "345af7f2c3662cbf956f9cf01f15cb03a4461cb4b256eeb6274e46ef2a2257d8",
+        "quota/workspace/text/shared.md": "0b9e5252625357561ad686366c0551305efac1d79e4b271d65a46d3a178c2d65",
+        "quota/workspace/workspace.lua": "b2fc8fd2f5f4b588203c5d9179817e1d3744f5ce804b491d62ac978396aed08a"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "ab8db5b670b01496f3c231bdffa42c3dda89e291fa3b2174b1b97b13dc38e9a5",
+        "quota": "directory",
+        "quota/README.md": "24aeeeca90c8dfbeec59f8a7069e31c1991c7a764042ca8e06f667ed8f83bb87",
+        "quota/base": "directory",
+        "quota/base/src": "directory",
+        "quota/base/src/core": "directory",
+        "quota/base/src/core/quota.py": "daaca196ac1ed5eb80e88ee09cf2216103a1cf31660386037f175f85314e1fca",
+        "quota/base/tests": "directory",
+        "quota/base/tests/core": "directory",
+        "quota/base/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+        "quota/base/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+        "quota/coverage.md": "07c4f3862ac7fe99b68e7537b1391775dbc7128f4b2ecd74601ba643adc35914",
+        "quota/current": "directory",
+        "quota/current/src": "directory",
+        "quota/current/src/cli": "directory",
+        "quota/current/src/cli/main.py": "fe3f0f3164b01a9e61e50800595813cbb02e1c33ff61d5a6c0100365a358912b",
+        "quota/current/src/core": "directory",
+        "quota/current/src/core/quota.py": "34abf0bb16524b1eb58891bf5e5eae163186a71569c6a1540b1c2b207d3ec3f4",
+        "quota/current/tests": "directory",
+        "quota/current/tests/cli": "directory",
+        "quota/current/tests/cli/__init__.py": "865fd3786c7da10e39f5cc97a75446847da6fc25a62a96f95c6d4bb9da57391e",
+        "quota/current/tests/cli/test_contract.py": "8e03e65d1bd4579263c04c0502e3a89d38956766cbb293f4dbacd765657d924a",
+        "quota/current/tests/cli/test_integration.py": "0deec819a7dd514500d16775b2fdced84049b49cace326de94f6d04bcdec5338",
+        "quota/current/tests/core": "directory",
+        "quota/current/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+        "quota/current/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+        "quota/expected": "directory",
+        "quota/expected/combined-builder.md": "2141a5fd892b5e83c36e9ef2550541fe47bdbdac45b2611cf0b9d4a666cefdd7",
+        "quota/expected/combined-reviewer.md": "717cd9b4e81b8e9974193b85913559521d8e06e5b8e71fb293092f898a4feb35",
+        "quota/expected/split-cli_worker-recovery.md": "4f4ae994f1f603e19b75f32a0f81d9b122a1ff8d215b5b483b7f961469d91ade",
+        "quota/expected/split-cli_worker.md": "854944cd926aeb7db7d2ef961085eaf8aa2298d9c34e3206859e6beb7f52ea6d",
+        "quota/expected/split-library_worker.md": "e5da49ecc16cf624ec10cefc440b35bbf56e77b131237559ae6f1634ceec0d6a",
+        "quota/expected/split-reviewer.md": "7c05fa07184bc4ad6f85d9928e9f8bb3d46c4719cbe112b1525fbda2be1b271a",
+        "quota/manifests": "directory",
+        "quota/manifests/combined-builder.symbolic.json": "87167ff14dab7569ffa63bd05bfa81897c3cd7fed98aac0ab58b62b47101ac4d",
+        "quota/manifests/combined-reviewer.symbolic.json": "6507eb3302c48914519da1dfde11d094dd1395475317b2faed7292e2a785de93",
+        "quota/manifests/split-cli_worker-recovery.symbolic.json": "5bded175275b31240ec66cf4c46dca9c39a61a1e3e3cdb5d96429a629f1c743e",
+        "quota/manifests/split-cli_worker.symbolic.json": "6971f1b07ecdfb453ed784a242a34c7840fb9b6f1b330813491fef2bb357efe9",
+        "quota/manifests/split-library_worker.symbolic.json": "12e90da89bd0c2c945d2402a67757fbcf784ae85194e33de8f5edf6b87cc2912",
+        "quota/manifests/split-reviewer.symbolic.json": "7fb0f44270398a741643378487ecc595222cbabf2a2a9aab510092d9d17742c3",
+        "quota/mutations.md": "4be91148b9d823234b0066c8c6316c72f068c665f4ec560d96452bdf5cf153d8",
+        "quota/native": "directory",
+        "quota/native/README.md": "299eaeb789fd7a067f034260e4a0a897465a0467981d44472b9116f7a267fff9",
+        "quota/native/combined-builder.json": "963b91210dbacd437e0fe3f5c3b23ad1e42435e43da19438569dcea8de019d59",
+        "quota/native/combined-builder.md": "9b66af925d18392317629d86f4f9de79a2e5678b2a0b4921717e8c1a324dbc75",
+        "quota/native/combined-reviewer.json": "dc967b5651c2ad57a04a296be7d26c246394ca9486226d883dae64be2a65d075",
+        "quota/native/combined-reviewer.md": "ab4af2bb750af5f4fb20961425a49c4d3c5530e01cf048dfbffd7b44691e3d03",
+        "quota/native/reviewer-resolved.json": "30fd5c3891c9fb9d7c32f00b6dc70d2b6b2f1bebdd810eb4a864e62dd4f42550",
+        "quota/native/split-cli_worker-recovery.json": "085dc686dd142e1587858b3594df1a7ff0b5088ad2092cd1d2e541c4edbfbdb9",
+        "quota/native/split-cli_worker-recovery.md": "90ad646e802a92ceb5e6c11f98bc435f1df91c47cb4dd88793799ad04089afd8",
+        "quota/native/split-cli_worker.json": "53e8650de5b588c4564d631bcd59bbc2871dface2ae48017d2eef1681beea60d",
+        "quota/native/split-cli_worker.md": "6ff9e2c8c72c3231e8d718d961b4c54540619e9cc75ee31efa377b83540880c4",
+        "quota/native/split-library_worker.json": "a8149d30a6fb403fe4f8fa435cfc8428e962c2664e9fa5e77f1afaf3857f4a34",
+        "quota/native/split-library_worker.md": "cc2e6edb7d094e7262738118c3669fea0dd64878537c5aee438a4fbc6203c166",
+        "quota/native/split-reviewer.json": "25373e03f4f30112424012fb4d90f7955da1db6ddd907e9c5799e6cd3fca7476",
+        "quota/native/split-reviewer.md": "c8edc7de42d9d425748389ecbe4e0cce4f938d8a2aa979f6486137d634cfee37",
+        "quota/observations": "directory",
+        "quota/observations/empty.json": "5fcbdafdf5d58ac06c32ebb1323b96863662b837442cac8e3d82cfc6fc6e33f0",
+        "quota/observations/recovery.json": "78f5d5e9dfaf76792f09fa7f28070d2ce8148d85e3ed0c31265476c39db25d41",
+        "quota/observations/reviewer.symbolic.json": "c7337596b6c20871e6021bd710de5b8f5c566dee3913b23f8b09f4204fc20708",
+        "quota/registry": "directory",
+        "quota/registry/quota-tools.json": "4894e5684d1574d8abd37b875d71c66704b34293af3f094b4f1bf036da87eb43",
+        "quota/workspace": "directory",
+        "quota/workspace/combined.lua": "462be3ceadfae3ef50dca7a3a245dee23dae22ddadfd7d1328052d0c8da95602",
+        "quota/workspace/spec.lua": "e0d488603bf98845dc3e05240c4df16b19aedc86f9b913b9bd3ca618d9948207",
+        "quota/workspace/split.lua": "6d3e2d2e981ec4507f27970a550f8074b0f4e0dfffc8b9cd02cf3641fc119c56",
+        "quota/workspace/text": "directory",
+        "quota/workspace/text/quota-api.md": "345af7f2c3662cbf956f9cf01f15cb03a4461cb4b256eeb6274e46ef2a2257d8",
+        "quota/workspace/text/shared.md": "0b9e5252625357561ad686366c0551305efac1d79e4b271d65a46d3a178c2d65",
+        "quota/workspace/workspace.lua": "b2fc8fd2f5f4b588203c5d9179817e1d3744f5ce804b491d62ac978396aed08a"
+      },
+      "unchanged": true
+    }
+  ],
+  "public_init_stdout": "{\"active_revision\":\"none\",\"event\":\"1\",\"kind\":\"init\",\"ledger\":\"3e2c9eada5a59ee9654c6b346b5fe587\",\"version\":1,\"workspace\":\"workspace\"}\n",
+  "schema_exact_delta": true
+}

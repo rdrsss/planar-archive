@@ -1,0 +1,640 @@
+{
+  "passed": 50,
+  "processes": [
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "-"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "--"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "--x"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "--revision"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "--request-id"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "--help"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "-h"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        ":"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "status": 3,
+      "code": "request_not_found",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--after-event",
+        "2",
+        "--limit",
+        "1"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 533
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1",
+        "--after-event",
+        "2"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 533
+    },
+    {
+      "arguments": [
+        "history",
+        "--after-event",
+        "2",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 533
+    },
+    {
+      "arguments": [
+        "history",
+        "--after-event",
+        "2",
+        "--limit",
+        "1",
+        "--ledger",
+        "SCRATCH/normal/ledger"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 533
+    },
+    {
+      "arguments": [
+        "history",
+        "--limit",
+        "1",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--after-event",
+        "2"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 533
+    },
+    {
+      "arguments": [
+        "history",
+        "--limit",
+        "1",
+        "--after-event",
+        "2",
+        "--ledger",
+        "SCRATCH/normal/ledger"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 533
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "1",
+        "--request-id",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "1",
+        "--at-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "1",
+        "--after-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "1",
+        "--limit",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "1",
+        "--revision",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "1",
+        "--at-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "1",
+        "--after-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--request-id",
+        "1",
+        "--limit",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--at-event",
+        "1",
+        "--revision",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--at-event",
+        "1",
+        "--request-id",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--at-event",
+        "1",
+        "--after-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--at-event",
+        "1",
+        "--limit",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--after-event",
+        "1",
+        "--revision",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--after-event",
+        "1",
+        "--request-id",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--after-event",
+        "1",
+        "--at-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1",
+        "--revision",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1",
+        "--request-id",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1",
+        "--at-event",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--",
+        "x"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1",
+        "--"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--",
+        "--limit",
+        "1"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "-h"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--limit",
+        "1",
+        "history"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "1",
+        "--help"
+      ],
+      "status": 2,
+      "code": "usage",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "1"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 9304
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "2"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 9302
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger",
+        "--revision",
+        "3"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 9301
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal/ledger"
+      ],
+      "status": 0,
+      "code": null,
+      "stdout_bytes": 1942
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/empty-file"
+      ],
+      "status": 3,
+      "code": "foreign_ledger",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/text"
+      ],
+      "status": 3,
+      "code": "foreign_ledger",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/truncated"
+      ],
+      "status": 3,
+      "code": "foreign_ledger",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/future/ledger"
+      ],
+      "status": 3,
+      "code": "unsupported_ledger_version",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/corrupt/ledger"
+      ],
+      "status": 4,
+      "code": "ledger_corrupt",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/link"
+      ],
+      "status": 3,
+      "code": "path_denied",
+      "stdout_bytes": 0
+    },
+    {
+      "arguments": [
+        "history",
+        "--ledger",
+        "SCRATCH/normal"
+      ],
+      "status": 3,
+      "code": "path_denied",
+      "stdout_bytes": 0
+    }
+  ]
+}

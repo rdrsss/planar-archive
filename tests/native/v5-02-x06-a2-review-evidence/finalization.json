@@ -1,0 +1,10 @@
+{
+  "disposition": "approve",
+  "candidate_sha256": "831d831bdcf93f64a023648451358b0500c3845f82f54522e4387df9bb82a5a1",
+  "report_sha256": "4eb1ca4076cfda2f903ff3a1c1389db7bb71ae218f85c9ccdcb1393985153ee9",
+  "artifact_manifest_sha256": "e864ffd0a2797df11e716f82d18544e456f1f48edb927adb8819cc1726787c4c",
+  "protection_audit_sha256": "696f4f826276b071ac9f06b6df786df145a0f0f51d744d05cdc2653667d683ed",
+  "review_artifacts": 30,
+  "report_links": 5,
+  "Debug_and_files_released": true
+}

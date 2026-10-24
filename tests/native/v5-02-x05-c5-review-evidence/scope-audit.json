@@ -1,0 +1,51 @@
+{
+  "author_baseline_entries": 76510,
+  "current_build_identity_entries_exact": {
+    "debug": 940,
+    "release": 940
+  },
+  "independent_before_entries": 77470,
+  "installed_tree_protected_entries": 8247,
+  "named_production_examples_present": 3,
+  "only_author_changes": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x05-projection-evidence.md"
+  ],
+  "protected_author_entries_exact": 76501,
+  "resolved_links": 514,
+  "variants": {
+    "debug": {
+      "commands_and_sources_exact": true,
+      "exact_reversed_files": 14,
+      "families": [
+        "r12c2-generated",
+        "r13b1-generated",
+        "r14c3b2-generated",
+        "r14f1-generated",
+        "v5-02-x03-b2-b-c01-generated",
+        "v5-02-x05-a0-generated"
+      ],
+      "generated_compile_entries": 191
+    },
+    "release": {
+      "commands_and_sources_exact": true,
+      "exact_reversed_files": 14,
+      "families": [
+        "r12c2-generated",
+        "r13b1-generated",
+        "r14c3b2-generated",
+        "r14f1-generated",
+        "v5-02-x03-b2-b-c01-generated",
+        "v5-02-x05-a0-generated"
+      ],
+      "generated_compile_entries": 191
+    }
+  }
+}

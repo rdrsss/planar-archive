@@ -1,0 +1,14 @@
+{
+  "command": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-R",
+    "replacement.(runtime|loader|capture|canonical|hash)",
+    "--output-on-failure",
+    "--output-junit",
+    "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac04-review-4r38hurv/native.xml"
+  ],
+  "exit": 0,
+  "seconds": 8.019849916920066
+}

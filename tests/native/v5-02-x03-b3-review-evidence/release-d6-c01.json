@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python3",
+    "<repo>/tests/native/r14-d6-c01-support/audit.py",
+    "<repo>/build/rewrite-release",
+    "<repo>/tests/native/v5-02-x03-b3-review-evidence/release-d6-c01-report.json"
+  ],
+  "cwd": "<repo>",
+  "start_utc": "2026-10-22T21:33:37.635901+00:00",
+  "end_utc": "2026-10-22T21:33:37.789883+00:00",
+  "seconds": 0.15400483272969723,
+  "exit_code": 0
+}

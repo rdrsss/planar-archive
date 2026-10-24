@@ -1,0 +1,52 @@
+{
+  "author": {
+    "cases": 252,
+    "unit": 245,
+    "acceptance": 7,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "ctest_junit_seconds": "133",
+    "console_and_LastTest_names_match": true
+  },
+  "reviewer": {
+    "cases": 252,
+    "unit": 245,
+    "acceptance": 7,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "ctest_junit_seconds": "130",
+    "console_and_LastTest_names_match": true
+  },
+  "passing_controls": {
+    "cases": 3,
+    "failed_cases": 0,
+    "junit_assertion_total": "377",
+    "junit_failed_assertions": "0",
+    "names": [
+      "Independent B2 A one-shot allocation refusal on protocol and sticky resource adapters",
+      "Independent B2 A exact bytes and separate same-ID namespaces",
+      "Independent B2 A one-shot actual allocation refusals on successful lookup path"
+    ]
+  },
+  "failing_adapters": {
+    "cases": 3,
+    "failed_cases": 3,
+    "junit_assertion_total": "14",
+    "junit_failed_assertions": "6",
+    "names": [
+      "Independent B2 A sticky resource allocation refusal stays in expected boundary",
+      "Independent B2 A embedded owner allocation refusal stays in expected boundary",
+      "Independent B2 A moved owner allocation refusal stays in expected boundary"
+    ]
+  },
+  "inventory": {
+    "registered": 606,
+    "preserved_b1": 600,
+    "preserved_a4": 582,
+    "not_a_full_run": true
+  }
+}

@@ -1,0 +1,8 @@
+normal: accepted_nontext_immaterial=true
+finalizer: TIMEOUT after 4s
+valid record input + finalizer: TIMEOUT after 4s
+caught unsupported callback then clean original table: returned=false
+stale-error: returned=false
+code=schema message=Invalid fragment text limit=
+caught: returned=false
+code=internal message=Unsupported trusted structural value limit=

@@ -1,0 +1,1 @@
+{"checker_failure":"Current journal follows author no-work build, later than private journals-final", "candidate_failure":false,"correction":"Verify original prefix SHA256 and only the later glob verification append"}

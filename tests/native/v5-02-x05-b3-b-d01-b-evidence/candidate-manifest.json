@@ -1,0 +1,82 @@
+{
+  "CLAUDE.md": {
+    "sha256": "b53a44bdc42173a35114e9dc984fa23c4f748b3b25e885b308dcf04f43aa56c8",
+    "bytes": 41821,
+    "mode": 420
+  },
+  "docs/architecture.md": {
+    "sha256": "f5fc216748cf0fb60689d5899be0a0b7e45fe99c5b08f6eccda5e037231a656e",
+    "bytes": 85927,
+    "mode": 420
+  },
+  "docs/testing.md": {
+    "sha256": "c922661440d697c824ebe0b43f3f11dac1c0c645cc0d37c893655886bbe4a11a",
+    "bytes": 90968,
+    "mode": 420
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "44f4830e9ead6f4a5f6cbcde8eb13dd95f64c0ebd5a47819a2ec5907f5d7f341",
+    "bytes": 48468,
+    "mode": 420
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "888aadda62b56950d151f418f8d533dab6c2885d5056e0804bd002b6a5acc715",
+    "bytes": 51374,
+    "mode": 420
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "0764ece1bd250a3fd6b7ec3e1c1b91c80b593f5e0940bf3c4c42b87f7a888c2d",
+    "bytes": 57770,
+    "mode": 420
+  },
+  "src/engine/json_codec/codec.cpp": {
+    "sha256": "4ef01f8d61106306e72d7a45bde7a4361ccb303823be081eb4831bbe5c7d8f73",
+    "bytes": 35114,
+    "mode": 420
+  },
+  "src/engine/json_codec/codec.cppm": {
+    "sha256": "3579663057fe2b7c15c06e6f18e41d7ef087da6dc016a43c4cab102f276ebda4",
+    "bytes": 6699,
+    "mode": 420
+  },
+  "src/engine/json_codec/codec.t.cpp": {
+    "sha256": "eb43c1b3f0b262fd0acd8e685aee975bedde4032e8d728e624b4dec82fba648d",
+    "bytes": 22194,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/gate.py": {
+    "sha256": "fce9c29d5572e720cf54ecf9311b9923361f0d142ded1917f9bec6db2ab4b65b",
+    "bytes": 3526,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/history-codec-selected.txt": {
+    "sha256": "d7e9e120d11cd26cd32e084330a68a14c82d72e3e697bff1d7341b046e5e1652",
+    "bytes": 981,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/probes.cpp": {
+    "sha256": "c29486757261dea8ea9e18c0b3cd4c368a10f65e07ceef208f271aa33a819472",
+    "bytes": 14369,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/red.py": {
+    "sha256": "958ed91871bef9a1152f32e39f79716a3866f462bcbb376f5378e0d204abaaa3",
+    "bytes": 3008,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/run.py": {
+    "sha256": "5fb5613202b27e4bf763ce0e4803c4990b088c92f0a493a57d3f710aa007caeb",
+    "bytes": 2497,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/selected-tests.txt": {
+    "sha256": "c45beccc2af4ee2ff8dc810b8511b58c9a869b2a9470d0dbf1699d787d37ea7c",
+    "bytes": 31550,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-b-support/source-and-capacity.md": {
+    "sha256": "eaa86fb2d3ceadc28b773f789a2964c799eebcd54a30197be331afc4ad900464",
+    "bytes": 8114,
+    "mode": 420
+  }
+}

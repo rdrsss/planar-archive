@@ -1,0 +1,10 @@
+{
+  "baseline_count": 402,
+  "current_count": 405,
+  "missing": [],
+  "added": [
+    "replacement.X01 CLI11 envelope and sealed catalog matrix",
+    "replacement.X01 CLI11 opaque positional probe rejects prefix flags before catalog selection",
+    "replacement.X01 CLI11 parsed profile scalar supports existing explicit value policy"
+  ]
+}

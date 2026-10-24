@@ -1,0 +1,11 @@
+docs/vernacular/ledger-contract.md: OK
+docs/vernacular/implementation.md: OK
+docs/vernacular/roadmap.md: OK
+docs/vernacular/rounds/R11-evidence/README.md: OK
+docs/vernacular/rounds/R11-evidence/check_candidate.py: OK
+docs/vernacular/rounds/R11-evidence/checks.txt: OK
+docs/vernacular/rounds/R11-evidence/implementation.md.snapshot: OK
+docs/vernacular/rounds/R11-evidence/ledger-contract.md.snapshot: OK
+docs/vernacular/rounds/R11-evidence/roadmap.md.snapshot: OK
+MANIFEST SHA256: dcf24a85f8d1e2198f412751481b22a84a7ea81f892f26addd0fc26cecc9c14b
+PASS: all 9 manifest entries and frozen manifest identity match review brief

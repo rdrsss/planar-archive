@@ -1,0 +1,11 @@
+{
+  "protected_dependency_files": 898,
+  "actual_compile_dependency_files": 775,
+  "all_actual_dependencies_snapshotted_before": true,
+  "mode_hash_mtime_and_other_stat_identity_unchanged": true,
+  "recursive_response_expansion": true,
+  "implicit_modules_disabled": true,
+  "ninja_journals_unchanged": true,
+  "private_object_and_executable_only": true,
+  "runtime_claim": "Uses existing pinned library paths; no copied libc++ runtime claim"
+}

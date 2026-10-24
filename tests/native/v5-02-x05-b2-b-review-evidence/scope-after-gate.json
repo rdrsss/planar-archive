@@ -1,0 +1,16 @@
+{
+  "manifests": {
+    "candidate-manifest.json": {
+      "entries": 12,
+      "sha256": "48e1fceb881ce55fcdd655b0f64a5d2b42b01dc419c21d0413f1e19dc081c91e"
+    },
+    "artifact-manifest.json": {
+      "entries": 90,
+      "sha256": "2f3991abd0d0ab2ee852c35fce355ddd1a7592ee20b8b316807a402389ceb394"
+    }
+  },
+  "frozen_entries": 384,
+  "freeze_equal": true,
+  "report_sha256": "3168f0afc4c952885a88a35fefbf1fc55feef9f0c2b605d9fc48061e822fb7fb",
+  "diff_sha256": "9a7c5e46f37423cdc3972cb4e12a7c7ac1bd5e4b07f3039efae434d3064c6525"
+}

@@ -1,0 +1,7 @@
+{
+  "complete_author_artifact_coverage": true,
+  "baseline_owned_matches_complete_baseline": true,
+  "author_artifact_count": 63,
+  "candidate_file_count": 13,
+  "author_final_focused_xml_testcases": 27
+}

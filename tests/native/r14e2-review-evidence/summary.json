@@ -1,0 +1,18 @@
+{
+  "disposition": "approve",
+  "candidate_identity": "cc6cfdaa19631a9a75de69edff3ebe2c02c777fa4f05903320fa33cd29586126",
+  "candidate_files": 17,
+  "coder_evidence_members": 66,
+  "focused_passed": 7,
+  "focused_skipped": 0,
+  "storage_passed": 5,
+  "storage_skipped": 0,
+  "additional_cli_processes": 50,
+  "protected_files_unchanged": 4897,
+  "prior_tests_retained": 312,
+  "registered_tests": 317,
+  "product_edits": 0,
+  "candidate_still_current": true,
+  "no_work_build": "ninja: no work to do.",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a"
+}

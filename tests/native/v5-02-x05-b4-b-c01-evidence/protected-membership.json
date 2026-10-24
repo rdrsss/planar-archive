@@ -1,0 +1,14 @@
+{
+  "build/rewrite-release": {
+    "entries": 3463,
+    "membership_and_hashes_unchanged": true
+  },
+  "tests": {
+    "entries": 18870,
+    "membership_and_hashes_unchanged": true
+  },
+  "fixtures": {
+    "entries": 52,
+    "membership_and_hashes_unchanged": true
+  }
+}

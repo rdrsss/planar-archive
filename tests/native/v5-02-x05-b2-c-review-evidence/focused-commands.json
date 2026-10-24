@@ -1,0 +1,35 @@
+[
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "tests/native/v5-02-x05-b2-c-evidence/final-gate/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-c-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 8,
+    "log": "focused-attempt01.log",
+    "note": "relative selection path unresolved; no tests ran"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-c-evidence/final-gate/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-c-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "log": "focused.log",
+    "cases": 353,
+    "seconds": 182.69
+  }
+]

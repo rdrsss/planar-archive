@@ -1,0 +1,13 @@
+{
+  "status": "candidate complete; independent review pending",
+  "candidate_members": 16,
+  "artifacts": 98,
+  "candidate_manifest": "e4c0f606852b51128aabb08614aa5efd19d5a4b99a57c50f3d50c7952eaffd89",
+  "candidate_diff": "5114d99baaed6cc99ea6a32441d32dc7fb002f671ee0f3887cb52996d7d95b3d",
+  "artifact_manifest": "9296d23b2c171dc69100d360bb326fa7a592b8ec54323498fd304f7f997e2a36",
+  "report": "7c5f46663cc7aa3056073810cf6201a4eeef31766b86fa9253820e32bb43a0d5",
+  "protected_entries": 5310,
+  "frozen_source_unchanged": true,
+  "debug_released": true,
+  "no_later_coder_edits": true
+}

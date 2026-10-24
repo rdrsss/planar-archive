@@ -1,0 +1,169 @@
+{
+  "a4_review_candidate_audit_keys": [
+    "URI_decoded_links",
+    "author_baseline_members",
+    "author_changed_files",
+    "author_directory_metadata_changes",
+    "author_final_members",
+    "candidate_files",
+    "diff_reconstructed_byte_exact",
+    "evidence_files",
+    "exact_membership",
+    "historical_bodies_exact",
+    "identities",
+    "local_links",
+    "preedit_matches_original_baseline",
+    "review_additional_author_artifact_entries",
+    "review_baseline_matches_author_final",
+    "review_baseline_members",
+    "review_directory_metadata_changes",
+    "support_files",
+    "symlinks_preserved"
+  ],
+  "baseline_final_changed_files": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/profile-preparation-architecture.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x06-implementation.md"
+  ],
+  "baseline_final_membership_equal": true,
+  "current_bytes_vs_c01_manifests": {
+    "_a4_subtrees_all_match_baseline": true,
+    "docs/vernacular/external-profile-contract.md": {
+      "baseline": true,
+      "final": true
+    },
+    "docs/vernacular/rounds/V5-02-X06-A4-review.md": {
+      "baseline": true,
+      "final": true
+    },
+    "docs/vernacular/rounds/V5-02-X06-A4.md": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/capture/admission.cpp": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/capture/admission.cppm": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/capture/admission.t.cpp": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/capture/capture.cppm": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/capture/native.cpp": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/capture/profile.cppm": {
+      "baseline": true,
+      "final": true
+    },
+    "src/engine/runtime/runtime.cpp": {
+      "baseline": true,
+      "final": true
+    }
+  },
+  "diff_reconstructed_exact": true,
+  "diff_reconstructed_sha256": "e8cb96b9f0049eca26d63500542ae874f25ffc0097215a424123c5303887d345",
+  "evidence_entries": {
+    "REPORT.md": true,
+    "baseline.json": true,
+    "candidate.diff": true,
+    "candidate.json": true,
+    "final.json": true,
+    "link-audit.json": true,
+    "preedit/CLAUDE.md": true,
+    "preedit/docs/architecture.md": true,
+    "preedit/docs/testing.md": true,
+    "preedit/docs/vernacular/acceptance-matrix.md": true,
+    "preedit/docs/vernacular/external-profile-implementation.md": true,
+    "preedit/docs/vernacular/implementation.md": true,
+    "preedit/docs/vernacular/profile-preparation-architecture.md": true,
+    "preedit/docs/vernacular/roadmap.md": true,
+    "preedit/docs/vernacular/v5-alignment.md": true,
+    "preedit/docs/vernacular/x06-implementation.md": true,
+    "protection-result.json": true,
+    "source-audit.json": true
+  },
+  "evidence_membership_exact": true,
+  "final_ten_equal_candidate": true,
+  "historical_bodies_unchanged": {
+    "CLAUDE.md": true,
+    "docs/architecture.md": true,
+    "docs/testing.md": true,
+    "docs/vernacular/acceptance-matrix.md": true,
+    "docs/vernacular/external-profile-implementation.md": true,
+    "docs/vernacular/implementation.md": true,
+    "docs/vernacular/roadmap.md": true,
+    "docs/vernacular/v5-alignment.md": true,
+    "docs/vernacular/x06-implementation.md": true
+  },
+  "live_equals_snapshot": {
+    "CLAUDE.md": false,
+    "docs/architecture.md": false,
+    "docs/testing.md": false,
+    "docs/vernacular/acceptance-matrix.md": false,
+    "docs/vernacular/external-profile-implementation.md": false,
+    "docs/vernacular/implementation.md": false,
+    "docs/vernacular/profile-preparation-architecture.md": true,
+    "docs/vernacular/roadmap.md": false,
+    "docs/vernacular/v5-alignment.md": false,
+    "docs/vernacular/x06-implementation.md": true
+  },
+  "manifest_candidate_equals_candidate_json": true,
+  "non_candidate_nondirectory_attribute_changes": [],
+  "preedit_matches_baseline": {
+    "CLAUDE.md": true,
+    "docs/architecture.md": true,
+    "docs/testing.md": true,
+    "docs/vernacular/acceptance-matrix.md": true,
+    "docs/vernacular/external-profile-implementation.md": true,
+    "docs/vernacular/implementation.md": true,
+    "docs/vernacular/profile-preparation-architecture.md": true,
+    "docs/vernacular/roadmap.md": true,
+    "docs/vernacular/v5-alignment.md": true,
+    "docs/vernacular/x06-implementation.md": true
+  },
+  "r1_anchor_links": 10,
+  "r1_anchor_resolves": true,
+  "round_record_identities": {
+    "REPORT.md": true,
+    "artifact-manifest.json": true,
+    "candidate.diff": true,
+    "candidate.json": true
+  },
+  "snapshot_hashes": {
+    "CLAUDE.md": true,
+    "docs/architecture.md": true,
+    "docs/testing.md": true,
+    "docs/vernacular/acceptance-matrix.md": true,
+    "docs/vernacular/external-profile-implementation.md": true,
+    "docs/vernacular/implementation.md": true,
+    "docs/vernacular/profile-preparation-architecture.md": true,
+    "docs/vernacular/roadmap.md": true,
+    "docs/vernacular/v5-alignment.md": true,
+    "docs/vernacular/x06-implementation.md": true
+  },
+  "snapshot_local_links": 552,
+  "snapshot_membership_exact": true,
+  "snapshot_unresolved_links": [],
+  "support_entries": {
+    "tests/native/v5-02-x06-a4-c01-support/audit.py": true,
+    "tests/native/v5-02-x06-a4-c01-support/edit.py": true,
+    "tests/native/v5-02-x06-a4-c01-support/finalize.py": true,
+    "tests/native/v5-02-x06-a4-c01-support/protect.py": true
+  }
+}

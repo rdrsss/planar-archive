@@ -1,0 +1,15 @@
+{
+  "one_sentence_replacement": true,
+  "all_other_bytes_unchanged": true,
+  "other_candidate_files_unchanged": 9,
+  "prior_evidence_files_unchanged": 95,
+  "published_manifest_entries_verified": {
+    "tests/native/r14a1-evidence": 60,
+    "tests/native/r14a1-review-evidence": 33
+  },
+  "before_sha256": "9f9b42dc81ebee3ea0d0044175d49153e9e49d5be67e23fd38f63678e4f872b7",
+  "after_sha256": "840f5431ba82ff74b3057cd44349cade1d07fdb7960af823c1c25f8f7c0cf33d",
+  "candidate_diff_sha256": "fd3598139dcfaa0b0d5685025a43872f6a0119119e6921aff44b6ca796bac2f2",
+  "candidate_identity": "ab97dafe6d075104025a8de52ebbb733cdc7e869c312d09d0534a8f7f5f5adec",
+  "builds_or_tests_run": false
+}

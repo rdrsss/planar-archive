@@ -1,0 +1,58 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T18:45:43.241977+00:00",
+    "end": "2026-10-21T18:45:43.354629+00:00",
+    "exit": 0,
+    "log": "build.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(capture |acceptance prepared |prepared |load capture |interpretation |atomic |command |runtime |.*cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d5-review-evidence/focused.xml"
+    ],
+    "start": "2026-10-21T18:45:43.355149+00:00",
+    "end": "2026-10-21T18:47:25.484201+00:00",
+    "exit": 0,
+    "log": "focused.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "start": "2026-10-21T18:47:25.484877+00:00",
+    "end": "2026-10-21T18:47:25.517238+00:00",
+    "exit": 0,
+    "log": "inventory.json"
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T18:47:25.517565+00:00",
+    "end": "2026-10-21T18:47:25.629512+00:00",
+    "exit": 0,
+    "log": "no-work.log"
+  }
+]

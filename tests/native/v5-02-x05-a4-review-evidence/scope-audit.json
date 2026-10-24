@@ -1,0 +1,59 @@
+{
+  "exact_owned_diff_reconstructed": true,
+  "historical_and_product_unchanged": true,
+  "original_documents_match_tested_freeze": true,
+  "owned": {
+    "CLAUDE.md": {
+      "added_lines": 43,
+      "existing": true,
+      "removed_lines": 27
+    },
+    "docs/architecture.md": {
+      "added_lines": 43,
+      "existing": true,
+      "removed_lines": 27
+    },
+    "docs/testing.md": {
+      "added_lines": 41,
+      "existing": true,
+      "removed_lines": 25
+    },
+    "docs/vernacular/acceptance-matrix.md": {
+      "added_lines": 22,
+      "existing": true,
+      "removed_lines": 8
+    },
+    "docs/vernacular/external-profile-implementation.md": {
+      "added_lines": 43,
+      "existing": true,
+      "removed_lines": 27
+    },
+    "docs/vernacular/implementation.md": {
+      "added_lines": 43,
+      "existing": true,
+      "removed_lines": 27
+    },
+    "docs/vernacular/roadmap.md": {
+      "added_lines": 43,
+      "existing": true,
+      "removed_lines": 27
+    },
+    "docs/vernacular/v5-alignment.md": {
+      "added_lines": 23,
+      "existing": true,
+      "removed_lines": 9
+    },
+    "docs/vernacular/x05-registration-evidence.md": {
+      "added_lines": 80,
+      "existing": false,
+      "removed_lines": 0
+    },
+    "tests/native/v5-02-x05-a4-support/verify.py": {
+      "added_lines": 111,
+      "existing": false,
+      "removed_lines": 0
+    }
+  },
+  "owned_diff_sha256": "81d9cd1ed957f05303cf7f50e056259127ee39c40d3029c9595f7a300028eb22",
+  "relative_links_checked": 385
+}

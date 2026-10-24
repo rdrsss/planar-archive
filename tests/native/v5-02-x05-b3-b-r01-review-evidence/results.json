@@ -1,0 +1,231 @@
+{
+  "checks": {
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-gate/focused.xml": {
+      "cases": 376,
+      "suite_tests": 376,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-gate/history-codec.xml": {
+      "cases": 11,
+      "suite_tests": 11,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-gate/production-semantics.xml": {
+      "cases": 11,
+      "suite_tests": 283,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-gate/codec.xml": {
+      "cases": 18,
+      "suite_tests": 413,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/gate/focused.xml": {
+      "cases": 376,
+      "suite_tests": 376,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/gate/history-codec.xml": {
+      "cases": 11,
+      "suite_tests": 11,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/gate/production-semantics.xml": {
+      "cases": 11,
+      "suite_tests": 283,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/gate/codec.xml": {
+      "cases": 18,
+      "suite_tests": 413,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/success.xml": {
+      "cases": 1,
+      "suite_tests": 62,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/semantic.xml": {
+      "cases": 1,
+      "suite_tests": 15,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/execution.xml": {
+      "cases": 1,
+      "suite_tests": 21,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/parser.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/conversion.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/instructions.xml": {
+      "cases": 1,
+      "suite_tests": 21,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/snapshot.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/lua.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/nodes.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/native.xml": {
+      "cases": 1,
+      "suite_tests": 21,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/error.xml": {
+      "cases": 1,
+      "suite_tests": 18,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/error-node.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/error-node-exact.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/error-map.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/error-string.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-probes/wrapper.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/success.xml": {
+      "cases": 1,
+      "suite_tests": 62,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/semantic.xml": {
+      "cases": 1,
+      "suite_tests": 15,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/execution.xml": {
+      "cases": 1,
+      "suite_tests": 21,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/parser.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/conversion.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/instructions.xml": {
+      "cases": 1,
+      "suite_tests": 21,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/snapshot.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/lua.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/nodes.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/native.xml": {
+      "cases": 1,
+      "suite_tests": 21,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/error.xml": {
+      "cases": 1,
+      "suite_tests": 18,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/error-node.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/error-node-exact.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/error-map.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/error-string.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/probes/wrapper.xml": {
+      "cases": 1,
+      "suite_tests": 23,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/adversarial/adversarial.xml": {
+      "cases": 3,
+      "suite_tests": 96,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-allocation/allocation.xml": {
+      "cases": 1,
+      "suite_tests": 1246,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-request423/checkpoint.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-evidence/final-request423/green.xml": {
+      "cases": 1,
+      "suite_tests": 22,
+      "zero_failures_errors_skips_disabled": true
+    },
+    "tests/native/v5-02-x05-b3-b-r01-review-evidence/allocation/allocation.xml": {
+      "cases": 1,
+      "suite_tests": 50575,
+      "zero_failures_errors_skips_disabled": true
+    }
+  },
+  "inventory": 642,
+  "preserved": 641
+}

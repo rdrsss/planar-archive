@@ -1,0 +1,37 @@
+{
+  "candidate_sha256": "9d7199a73694e12651182af7057dec919a0aa3b31f2eaafedfdb6dab0d1e18db",
+  "evidence_sha256": "13df22c0b91c6e4e83ce4be1d73db184921ac6a0d1de98022863ae9fb5b97ad7",
+  "candidate_files_verified": 16,
+  "evidence_files_verified": 24,
+  "protected_files_verified": 899,
+  "byte_identical_moves": 9,
+  "old_stdlib_absent": true,
+  "agents_symlink": "CLAUDE.md",
+  "scoped_diff_exact": true,
+  "embedded_payload_sha256": "6d29c15216cbff11a6f7c237f7ee118bff5d051975c21a9da578c531569f78f5",
+  "ordered_embed_inputs": [
+    "src/stdlib/planar/json.lua",
+    "src/stdlib/planar/schema.lua",
+    "src/stdlib/planar/semantic.lua",
+    "src/stdlib/planar/selection.lua",
+    "src/stdlib/planar/presentation.lua",
+    "src/stdlib/planar/observations.lua",
+    "src/stdlib/planar/render.lua",
+    "src/stdlib/planar/bootstrap.lua"
+  ],
+  "debug": {
+    "passed_tests_in_raw_gate_log": 113,
+    "generated_bytes_identical": true,
+    "new_regeneration_dependencies": 8,
+    "old_regeneration_dependencies": 0,
+    "acceptance_counts_in_ctest_log": true
+  },
+  "release": {
+    "passed_tests_in_raw_gate_log": 113,
+    "generated_bytes_identical": true,
+    "new_regeneration_dependencies": 8,
+    "old_regeneration_dependencies": 0,
+    "acceptance_counts_in_ctest_log": true
+  },
+  "release_doxygen_signal_retry_preserved": true
+}

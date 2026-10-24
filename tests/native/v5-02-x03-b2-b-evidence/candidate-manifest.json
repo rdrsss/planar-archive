@@ -1,0 +1,101 @@
+{
+  "path_base": "<repo>",
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "9d6c756849d70ae7f3b90097bfb1a03e26c401ac3d4f21844c2a31589c79e0be"
+    },
+    {
+      "path": "tests/native/r14-d8-support/acceptance_fault.t.cpp",
+      "sha256": "ef7e2df263f439808593b74d4205c4bc8ce7a053a5798857957d23f3bbca803e"
+    },
+    {
+      "path": "tests/native/r14c3b2-support/atomic.t.cpp",
+      "sha256": "5fdd0b997d71c8b0e9e4ec7fd5b2a9642b9c37f2b49b7d773b206777fbb9938a"
+    },
+    {
+      "path": "tests/native/r14c3b2-support/generate.py",
+      "sha256": "2ac3647d5133c782bb0c7e52b2638ae2b37d806882b2e6f6834b69bde5d7d30a"
+    },
+    {
+      "path": "tests/native/r14c3b2-support/digest.cppm",
+      "sha256": "fd61b65df0692b123bcd52cac61cc2bee68a394ac72dac125f132a796ba43ca2"
+    },
+    {
+      "path": "tests/native/v5-02-x03-b2-b-support/run.py",
+      "sha256": "f9292aedeb6004b10ab19adc1dd0f6de204e3a9be5792f356c38a9b631f720cd"
+    },
+    {
+      "path": "tests/native/v5-02-x03-b2-b-support/freeze.py",
+      "sha256": "1af52d2cdde63ff4d2b2b03e7e1e3ddd52e44de53c528274381eb09fa3c99af0"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256": "ae228fae8ded84f02606a50107609d0924f5155d9147131dfa8cdd89f4c7ddf6"
+    },
+    {
+      "path": "docs/testing.md",
+      "sha256": "46ace305fc2bd68d4a4c76e2e7fc69d34a068a736443a6255ce7372ee1458d6f"
+    },
+    {
+      "path": "docs/vernacular/acceptance-matrix.md",
+      "sha256": "306d9920e22a1bb6bc76ee636afd02f191635115228a6bdcdbff6658d0bbf4c6"
+    },
+    {
+      "path": "docs/vernacular/implementation.md",
+      "sha256": "5c2f22f7fd79fcd7159e73c209d5b568599a85d9267e0e9162e36d4f3e99cfbd"
+    },
+    {
+      "path": "docs/vernacular/roadmap.md",
+      "sha256": "0753b57b8e3766c40ecc8c577d72a4e26662a98a71d9ff2ee62c69c896b99f7c"
+    },
+    {
+      "path": "docs/vernacular/external-profile-implementation.md",
+      "sha256": "bf20ca63824a628341dff7e793ccebe00ef97a3a82cc46853084ef7eb8b7776b"
+    },
+    {
+      "path": "docs/vernacular/v5-alignment.md",
+      "sha256": "ca70a743444a93083c15cf008c1ad61fd3da82b868956edf2593d07393da9f32"
+    },
+    {
+      "path": "docs/vernacular/rounds/V5-02-X03-B2-B.md",
+      "sha256": "6f94364c4e488dace03318c6f843fc92ac6ee24aab352ac8ec42cd72dc7e3875"
+    },
+    {
+      "path": "src/engine/CMakeLists.txt",
+      "sha256": "1962cdd383f1480f6e6835c3e0bc26f1444a631bb6aec8f995b5a1d5ba9a8ea2"
+    },
+    {
+      "path": "src/engine/ledger/format.cpp",
+      "sha256": "c14a0ad92394c67e17280a65daa9e9aba70ccd5f72b3ee9b949a876341102d9b"
+    },
+    {
+      "path": "src/engine/ledger/history_verification.t.cpp",
+      "sha256": "f4dc9377d5b45b36114effec6416c95447ecc5db5b7764805f7683b75aa94020"
+    },
+    {
+      "path": "src/engine/ledger/acceptance.t.cpp",
+      "sha256": "754824601a3ddaf3127af2ddf850deeca10c0045d2feaec379bee1d918ce1fd5"
+    },
+    {
+      "path": "src/engine/ledger/format.t.cpp",
+      "sha256": "7bd19b8af5a2324949b1b1845b824c87152eecbafa29c98e10cb58a686b9bbcb"
+    },
+    {
+      "path": "src/engine/ledger/format.cppm",
+      "sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f"
+    },
+    {
+      "path": "src/engine/acceptance/prepared.cppm",
+      "sha256": "770fdfa36e577f8009cf7a619baf4feb8b736a177b47c0973121297abd2209b9"
+    },
+    {
+      "path": "src/engine/acceptance/prepared.cpp",
+      "sha256": "e957e4be894fc54a64784ea6362a7c94ec33a4040828d26b8686ad0e0f4f2c08"
+    },
+    {
+      "path": "src/engine/acceptance/prepared.t.cpp",
+      "sha256": "c2a54de573cb2701ca80a5e3b66f542c4287de7535b3169b34c0f2b97eef8389"
+    }
+  ]
+}

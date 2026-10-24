@@ -1,0 +1,12 @@
+{
+  "initial_source": "initial-adversarial.cpp",
+  "initial_xml": "initial-adversarial-final.xml",
+  "initial_commands": "initial-private-commands.json",
+  "initial_failure": "Existing selection correctly refused selection.files: Job bytes absent from bundle inventory",
+  "correction": "Add extra.lua captured-byte inventory entry to reviewer three-job fixture only",
+  "final_fresh_and_reused_production_controls": {
+    "cases": 5,
+    "assertions": 364
+  },
+  "product_edits": false
+}

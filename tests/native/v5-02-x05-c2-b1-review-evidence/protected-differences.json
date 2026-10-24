@@ -1,0 +1,12 @@
+{
+  "build/rewrite-debug/.ninja_log": {
+    "after": {
+      "mode": 420,
+      "sha256": "02c1ced556c1140db8a7baf0787bb1834548a87eb5ea1925d4e7da91e0197c53"
+    },
+    "before": {
+      "mode": 420,
+      "sha256": "3a1baacf439d5ab87cdeff76aea779a87cfd31afea6eeae527aea310f0cc07bd"
+    }
+  }
+}

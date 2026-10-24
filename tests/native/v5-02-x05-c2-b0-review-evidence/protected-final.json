@@ -1,0 +1,34 @@
+{
+  "agents_symlink_preserved": true,
+  "artifact-manifest.json": {
+    "count": 79,
+    "sha256": "cabab27a6298b0eeb8ce38898bd20167b5ee60c97dcee2efd292d1bc30a1f408",
+    "unchanged": true
+  },
+  "debug": {
+    "count": 890,
+    "unchanged": true
+  },
+  "frozen-support.json": {
+    "count": 3,
+    "sha256": "83907021ad6e9ddb84498f81fa28dc77d3d5d9709984e2bee55af4f453da78f2",
+    "unchanged": true
+  },
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "history": {
+    "count": 20807,
+    "unchanged": true
+  },
+  "release": {
+    "count": 3492,
+    "unchanged": true
+  },
+  "review_private": {
+    "count": 888,
+    "unchanged": true
+  },
+  "source": {
+    "count": 2286,
+    "unchanged": true
+  }
+}

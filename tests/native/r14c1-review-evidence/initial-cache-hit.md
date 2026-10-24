@@ -1,0 +1,1 @@
+The first all-method I/O probe assumed a large request read evicted current_state from SQLite cache. read_head succeeded from cache with no VFS hit, so this did not inject a fault. Corrected reviewer-only VFS captures SQLite PDB hint and calls sqlite3_db_release_memory before arming the one-shot xRead failure; snapshot remains active. Candidate untouched.

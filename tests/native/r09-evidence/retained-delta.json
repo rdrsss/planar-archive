@@ -1,0 +1,102 @@
+[
+  {
+    "path": ".clang-tidy",
+    "sha256": "66cd1b305bd7006bc2a2dc6e72912f16060a6dacb4a0c23242bcf08f20bc9a54",
+    "before_sha256": "cb5362e286738fe01db1a4b1476b398bb290b11ab87337c1360e2c9d5f09e50b"
+  },
+  {
+    "path": ".gitattributes",
+    "sha256": "caee710474ddf5cf1e0aa782cf6f7686a0e81d2d9dbb590e3ea2576524b23d23",
+    "before_sha256": "00e483534dc8bd566572d7bac51a9f631a46340c1ff89ff96923dcfdf726d3b2"
+  },
+  {
+    "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+    "sha256": "8238b74ed2affe4f814fa034e1dbf8e122387ffb410572a7b6459513de78b6f8",
+    "before_sha256": "4ca6e883f0d3fbc1f6cbb75dbb4dd0b50612902c2d95375a3a6b14a292e00f2b"
+  },
+  {
+    "path": ".gitignore",
+    "sha256": "b3f3249ec27d59a8209674a7a8088f7e80f0217373544241c086cfdba442569d",
+    "before_sha256": "412bcf048fc34fccc9439250a9f1e5b3a51b50ee7afc04b47820662ca0f60968"
+  },
+  {
+    "path": "CLAUDE.md",
+    "sha256": "b428f14c6aa4aff80f89d05ddb0b205bf76ab19cc0ce1d1222c334f0dfc5b538",
+    "before_sha256": "fcf046548cbf4845db4b4d2b6ea77a14a5e34e632c1a83cdde90badf3ff65abb"
+  },
+  {
+    "path": "CMakeLists.txt",
+    "sha256": "5e26f9bd6255c16eb751860149d54961058192bb637182ccb481f2915ad7fb7d",
+    "before_sha256": "3f042b2eb88deed6e12a786d77ef9aae2a07ba236b3c793bd3cdf5f2641194f0"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "sha256": "22b503b30a8c3012cc6ff1594a310521745d98e2894c8e51e0508c17bd007c65",
+    "before_sha256": "fb6498284339c1af2a23361e602ddeb6167a31c545928eafb2afb4d389e2ab8e"
+  },
+  {
+    "path": "INSTALL.md",
+    "sha256": "a2e11eb096bdba3a5897ab68a0943f503982c49a5935a9a34c22377e1adb64a7",
+    "before_sha256": "00d888d73a9fd839a79c7bba7d1e5ccd2c15a23038afb5003470a410287b0a03"
+  },
+  {
+    "path": "README.md",
+    "sha256": "9ccd7640fdc774e62f0a9e2d5aed70603d75b9db338cc295ca309f8b9c246876",
+    "before_sha256": "2d05791dc21b8f2fd5a210e9941ddccef44496c470396cb08f7673a7d2e8197e"
+  },
+  {
+    "path": "SECURITY.md",
+    "sha256": "b91fb3d4a055350fffdb4b730be3abe7080aa4ce6d28df17012b9628859a2a9b",
+    "before_sha256": "8137466d4816751a8204efe6b2cd8eb4b4270280c0d938c585004047ecbf6d24"
+  },
+  {
+    "path": "THIRD_PARTY_NOTICES.md",
+    "sha256": "69b108479bde7eb70cc420bf935d50a0716659bb2193d6373a0ba0f0ceaa9aa2",
+    "before_sha256": "a346062c01a4f0989e37a43f4ca32a106522d5e1349e527e0ad8ad0f653e746b"
+  },
+  {
+    "path": "cmake/rewrite.cmake",
+    "sha256": "1da0b8f958d5171cfee4891a7cdda9fbdbe1b4b55585a8e62f8d4dcc02c68ca4",
+    "before_sha256": "0a84e90ad1cb789a0e4a0cedafe9147ee2e42e0ca70b434b4d25db5fcf2ea88e"
+  },
+  {
+    "path": "docs/architecture.md",
+    "sha256": "fe09841ed8e0361b0ccd6fb48f9e02c4772e937dfb5f3416ffc9276b2f7dc140",
+    "before_sha256": "16f0b110aaa5bf0d85c0ef8827a8c5feb4781cd13a1ff4dcef30d2668a55d22f"
+  },
+  {
+    "path": "docs/cli-reference.md",
+    "sha256": "f2666131f11ee267e0ddd6055e38e0d5d24e6c0f053cd6d9e1ed910626f8663d",
+    "before_sha256": "3bc35e7b031e7f6f9ae6ff8bfc6df00736dada2eb9ab321b21ccfa4e1375f151"
+  },
+  {
+    "path": "docs/declarations.md",
+    "sha256": "72900b9ec37445598565ab5308720f9deadab4c6cf478b8e5fa325eed73faf78",
+    "before_sha256": null
+  },
+  {
+    "path": "docs/testing.md",
+    "sha256": "d0b4bebb67d215d2dd5c162c882eac05586807b3106350b15026700a15052d58",
+    "before_sha256": "961aca42423fc315261452a0181dba8d230b03ecd8d09aee273016af283415d4"
+  },
+  {
+    "path": "docs/toolchain-parity.md",
+    "sha256": "656555cb8c9e0ae5cad174113d51dc31d3d15c1fb369f2462792ac9540d52fb9",
+    "before_sha256": "03fa446e25d9b42a97087b6c2272ac6407fd7bce7b887cb54cbc50e108ffb1bb"
+  },
+  {
+    "path": "docs/vernacular/declarations.md",
+    "sha256": "88e05c160564eb7af1d6b1f71a9be2dc8cfef9472a27ebd13b2ef020cc9ab655",
+    "before_sha256": "1ea8f80baf297f01d29d6eb5a58676d13e533588c77f55ae18db5ef2f8005e6a"
+  },
+  {
+    "path": "docs/vernacular/render-contract.md",
+    "sha256": "2bdf159e2e93127de885c50ab3eec6ed76494242143bc28b3847fde6bce91b5d",
+    "before_sha256": "bae391eee5263e5b9dcd4a34e77aeb97b9dd9f19494e81cc899dc2204ceaf037"
+  },
+  {
+    "path": "scripts/cpp-lint-doxygen.sh",
+    "sha256": "97acc6904a5c119a8a9ed3abd8b4f4db513b60b594a68108ef0b2f04df985baf",
+    "before_sha256": "e2a6c8b72ffc26f1bee782a5b0c9d98ed82360bccba26c9af6b4d31cce684475"
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "prior_scoped_entries": 381,
+  "current_scoped_entries": 384,
+  "changed_existing": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/json_codec/codec.cpp",
+    "src/engine/json_codec/codec.cppm",
+    "src/engine/json_codec/codec.t.cpp"
+  ],
+  "added": [
+    "tests/native/v5-02-x05-b2-b-support/gate.py",
+    "tests/native/v5-02-x05-b2-b-support/phase.cpp",
+    "tests/native/v5-02-x05-b2-b-support/probes.py"
+  ],
+  "removed": [],
+  "owned_diff_reconstructed": true,
+  "candidate_source_copies_equal": true,
+  "whole_tree_claim": false
+}

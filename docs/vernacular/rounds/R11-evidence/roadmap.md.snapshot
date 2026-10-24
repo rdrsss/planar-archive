@@ -1,0 +1,320 @@
+# Planar rewrite roadmap
+
+Status: R01–R10 complete; the requested presentation revision is independently
+approved. R11 ledger/history design is a documentation candidate awaiting independent review.
+
+This roadmap executes [the implementation plan](implementation.md) against
+[the v4 design](Planar%20design%20spec%20-%20v4.md). Work happens in the current
+checkout on `dev/planar-v2-vernacular`, without existing Planar orchestration.
+
+Each numbered round uses fresh search, implementation and review agents, in that
+order. Models are `gpt-6-luna` high, `gpt-6.1-sol` medium and `gpt-6.1-sol` high,
+respectively. Approval closes a round; requested changes create a fresh
+corrective round before dependent work advances. Record evidence under
+`rounds/<id>.md`. Split a round if its bounded brief becomes too large for
+meaningful independent review.
+
+## Phase 0 — Make the product contract concrete
+
+### R01 — Repository map and rewrite instructions
+
+Status: complete; [approved R01 record](rounds/R01.md). Depends on: the approved planning baseline.
+
+- Map build targets, reusable libraries, Lua bindings, tests, installation and
+  authored workflow surfaces. Identify obsolete dependencies and constraints.
+- Find the referenced fixture if available; otherwise record its absence.
+- Update repository agent/contributor instructions for the rewrite, file-based
+  planning, direct serialized builds and the approved model/review protocol.
+- Preserve useful C++ engineering rules and remove contradictory operational
+  requirements. Follow the actual AGENTS/CLAUDE symlink structure.
+
+Acceptance: a cited source map and removal/reuse inventory; instructions cannot
+send an implementation agent into Planar claims, queues or legacy planning.
+
+### R02 — Declaration and render contracts
+
+Status: complete; [approved corrective record](rounds/R02-C01.md). Depends on: R01.
+
+- Create `declarations.md` with exact versioned constructor schemas.
+- Create `render-contract.md` with CLI, packet/manifest structure, capture rules,
+  identity inputs, diagnostics and budget behavior.
+- Resolve ownership path syntax, empty map/array representation, source-root
+  identity, supported shapes and phase/quality combinations.
+- Define explicit reviewer observations and render-only recovery semantics.
+- Reconcile v4's transition language with the approved breaking rewrite.
+
+Acceptance: constructors and examples are implementable without inventing field
+semantics; open product decisions are visible and resolved before dependent code.
+
+### R03 — Two jobs and expected packets
+
+Status: complete; [approved R03 record](rounds/R03.md). Depends on: R02.
+
+- Author `fixtures/render/quota/` with a single spec and combined/split jobs.
+- Include shared and scoped requirements, mandatory file content, optional prose,
+  a reviewed contract, check/toolchain descriptors and explicit ownership.
+- Provide output observations and a checkpoint for reviewer/recovery examples.
+- Author expected packets and a requirement-to-role coverage table.
+- Describe mutation cases for selective identity changes and invalid mappings.
+
+Acceptance: both jobs preserve requirements, checks, independent review and
+ownership; packets are concrete enough to inspect for usefulness. Examples are
+clearly labeled as expectations until native tests compute and verify them.
+
+Phase 0 delivers the first agreed slice. It does not build a second mock runtime.
+
+## Phase 1 — Build and prove native rendering
+
+### R04 — Replacement build and command skeleton
+
+Status: complete; [approved R04 record](rounds/R04.md). Depends on: R03.
+
+- Establish `src/engine/`, `src/stdlib/planar/` and the replacement CLI target.
+- Rewire module/dependency rules deliberately; keep the required pinned toolchain.
+- Provide direct build, unit-test and acceptance-test commands with no database
+  or old host queue requirement.
+- Define the replacement full gate and retire conflicting legacy targets as
+  their implementation surfaces leave the active build.
+
+Acceptance: a clean checkout builds the replacement command; basic invocation
+tests pass; no invocation opens the old database. Record the supported host
+verification and any platform coverage still outstanding.
+
+### R05 — Restricted loading and captured files
+
+Status: complete; [approved R05 correction](rounds/R05-C01.md). Depends on: R04.
+
+- Implement declaration environments, curated constructors and data conversion.
+- Add memory/instruction/input/depth limits and typed load diagnostics.
+- Implement confined captured reads with provenance and deterministic ordering.
+- Test forbidden capabilities, mutation attempts, loops, large allocations,
+  unsupported values, traversal, symlink escapes and inconsistent capture.
+
+Acceptance: native tests establish bounded failures and confined reads; all
+downstream consumers receive one captured input set.
+
+### R06 — Canonical encoding and identities
+
+Status: complete; [approved R06 record](rounds/R06.md). Depends on: R05.
+
+- Implement versioned canonical encoding and pinned XXH3_128bits hashing.
+- Pin native encoding/hash vectors, including empty containers, integer bounds,
+  ordering and invalid inputs.
+- Define observation and output manifests separately from work/render identity.
+
+Acceptance: exact bytes and digest representation match independently specified
+vectors; insertion order and fresh processes cannot change canonical results.
+
+### R07 — Trusted schemas, grouping and scoped inputs
+
+Status: complete; [approved component records](rounds/R07.md). Depends on: R06.
+
+- Implement workspace/spec/job validation in trusted Lua.
+- Resolve work assignments, ownership, mandatory policy and review separation.
+- Implement pipeline and fan-out/review semantics within the declared scope.
+- Resolve phase dependencies and reject unsatisfiable cycles.
+- Derive scoped material manifests and interpretation-version inputs.
+
+Acceptance: both fixture jobs validate; omissions, duplicates, overlap, unknown
+references, policy weakening and invalid wrappers fail. Grouped work retains its
+internal obligations without self-wait. Scoped mutation cases pass.
+
+### R08 — Worker, reviewer and recovery rendering
+
+Status: complete; [approved round record](rounds/R08.md). Depends on: R07.
+
+- Implement projections over captured inputs without fresh reads.
+- Emit Markdown and machine-readable identity manifests through the CLI.
+- Implement exact section byte counts, mandatory overflow refusal, optional
+  omission notices and labeled provenance.
+- Turn reviewed examples into computed goldens, with explicit review of changes
+  from the expected packets rather than blindly updating snapshots.
+
+Acceptance: actual packets meet the contract; reviewer targets are exact;
+recovery states no active run; missing checks/outputs never appear as success.
+
+### R09 — Remove obsolete product surfaces and integrate the gate
+
+Status: complete; [approved round record](rounds/R09.md). Depends on: R08.
+
+- Complete staged removal of old binaries, domain engine, migrations, operational
+  agents/skills/workflows, unused dependencies and obsolete tests or scripts.
+- Refresh README, architecture, CLI, declaration and testing references.
+- Remove or explicitly disable obsolete installation/release entry points.
+- Verify no active path implicitly accesses the legacy database or old queue.
+- Run the complete replacement gate on the integrated candidate, including
+  fresh-process renders and the adversarial render matrix.
+
+Acceptance: the active repository describes and builds one coherent replacement
+product. Required tests execute with reported counts, no unexplained skips and
+no stale references to operational features as available functionality.
+
+### R10 — Evaluate useful context
+
+Status: complete; operator feedback addressed by independently approved
+[R10-P01](rounds/R10-P01.md). [Round record](rounds/R10.md). Depends on: R09.
+
+- Present actual combined and split worker/reviewer packets and recovery examples
+  to the operator, together with identity-change demonstrations.
+- Assess missing context, distracting content, ownership clarity and actionable
+  check instructions. Record limitations and requested revisions.
+- Address changes through fresh reviewed rounds and rerun affected verification.
+
+Acceptance: operator evaluation of actual fragments is recorded and required
+changes are resolved. This is the boundary before persistence implementation.
+
+## Phase 2 — Ledger foundation, then observed-state execution
+
+### R11 — Ledger/history foundation contract
+
+Status: documentation candidate, awaiting independent review.
+[Round record](rounds/R11.md). Depends on approved R10 and R10-P01.
+
+Specify [ledger foundation v1](ledger-contract.md): exact new-format schema,
+bounded complete immutable trees, captured source and interpreted-state separation,
+chronological revision IDs, CAS, original-result request replay, append-only typed
+events/current projections, exact export, failure safety and backup evolution.
+Writer owns that contract and updates to this plan/implementation plan; coordinator
+owns round evidence. No product code, database creation or vendor changes.
+
+Acceptance: independently reviewed implementable contract, resolved bounded product
+choices and validated document links. Original v4 traceability is A20, storage/
+format parts of A23, and A25–A29. Execution portions remain later obligations.
+
+### R12 — SQLite dependency, new format and transaction foundation
+
+Status: next coding brief; starts only after independent R11 approval.
+
+Own `cmake/dependencies.cmake`, required committed SQLite vendor files/build wiring,
+new `src/engine/ledger/` modules and colocated tests; affected architecture/testing
+references and `rounds/R12*` evidence. Fresh search first verifies the historical
+SQLite 3.53.3 URL/SHA256/license and current CMake integration. Do not restore old
+openers/wrappers, commands, migration files or implicit database discovery.
+
+Implement only contract-v1 schema/format verification, explicit scratch initialization,
+prepared statements, typed failures, bounded locking, rollback/commit and SQLite
+backup/restore primitives. No CLI, capture policy, content trees, load or execution.
+Dependencies: existing downward module/build conventions and pinned libraries.
+
+Acceptance: direct serialized focused tests report nonzero counts/zero skips;
+foreign/empty/future/truncated files remain unchanged; immutable rows refuse edits;
+constraints and cross-row invariants reject malformed state; write failure, disk
+full and deliberate subprocess termination leave full old/new state; concurrent
+writers obey locking; explicit new-target backup/restore passes integrity and
+foreign-key checks. Run affected formatting/Doxygen and no-change build checks.
+Agree exact direct test commands after fresh search identifies registered targets;
+never invoke installed Planar, legacy tools or real operator data. Record raw
+failure-injection and restart evidence, then fresh independent review.
+
+### R13 — Immutable records, complete trees and interpretation provenance
+
+Status: planned; depends on approved R12. Own new `src/engine/history/` codec/tree
+modules, acceptance Lua envelope if needed, colocated tests, bounded fixture
+inputs and affected references/evidence. No commands or execution mutation.
+
+Implement record_v1 exact binary framing, bottom-up tree interning, exact collision
+refusal, complete reconstruction, bounds and separate exact registry/stdlib plus
+versioned normalized/semantic output fixtures. No JSON parser substitute.
+
+Acceptance: byte/mode/topology round trips; sorted metadata, deletion/rename and
+mtime-preserving edits; malformed/oversized graphs refuse; forced file/internal/
+value/request digest collisions fail atomically without aliasing; complete old
+trees reconstruct without patch replay or modern Lua. Demonstrate collision
+regression before its fix and retain evidence. Covers A27 and tree parts of A28/A29.
+
+### R14 — Acceptance, read history and explicit export
+
+Status: planned; depends on approved R13. Own new `src/engine/acceptance/`, trusted
+acceptance Lua, CLI11 `handlers/{init,load,history,export}/`, bootstrap registration,
+colocated/native acceptance tests and affected product references/evidence.
+Split into separately searched/coded/reviewed acceptance, read and export subrounds
+if needed to keep ownership/review bounded.
+
+Implement initial load, exact no-op, fresh chronological revert, CAS, original-
+result replay, typed append events/current projection in one transaction, bounded
+historical inspection and exact new-target export. Keep existing render unchanged.
+
+Acceptance: contract's complete R14 matrix, especially two competing loads,
+replay before CAS/capture after files disappear, changed parameter conflict,
+invalid draft leaving active history intact, request recovery after lost response,
+crash/disk-full rollback, early-event reconstruction without current policy,
+collision refusal and byte/mode exact export with safe partial-failure cleanup.
+Existing-target export never overwrites. Covers A20, storage/format A23, A25–A29;
+no role-state, missing dispatch-packet or check guarantee is claimed yet.
+
+### R15 onward — Separately designed execution cuts
+
+Status: future bounded contracts and rounds; depends on foundation evaluation.
+Each item starts with its own concrete schema/protocol and independent design
+review before dependent implementation; the numbers may split into subrounds.
+
+- R15: accepted-revision render and explicit draft status/impact read workflows,
+  active execution job, role generations, run ownership, claim request/packet
+  atomicity and fencing. Preserve source/interpretation history; A09/A10/A22/A33
+  and the missing-dispatched-packet portion of A23.
+- R16: same-run refresh, drift, checkpoints, interruption/release and historical
+  recovery. Pin observed/acknowledged revision and preserve context; A11/A19/A29.
+- R17: bounded real check execution, reservations, exact input/output observations,
+  before/after recheck, evidence applicability and prerequisite derivation;
+  A05/A12/A15–A18. Driver stability guarantees remain explicit.
+- R18: exact-target independent review, atomic rejection/repair rounds, cap and
+  blocker behavior; A06/A13/A14/A16. No authenticated-human claim; A24 applies
+  only if separately configured external approval policy is implemented.
+- R19: single-root external-driver demonstration with real checks and both job
+  groupings, restart/fault matrix and full trajectory inspection. No scheduler or
+  model calls in Planar. Repeat integrated execution acceptance before composition.
+
+No future cut may compress these obligations into a generic SQLite or execution
+TODO. Role activation and reconciliation must commit with declaration acceptance
+before enabling runs. The foundation alone does not establish full v4 Cut 2.
+
+## Later phases (deferred)
+
+1. Workspace composition: imports/exports, multi-root bindings, scoped reload and
+   impact, with alias and exact-output-vector tests.
+2. Measurement: controlled context, grouping and model trials with fixed starting
+   inputs and recorded driver provenance.
+3. Optional adapters: stronger isolation, archives, managed views or identity
+   attestation only for demonstrated requirements.
+4. Distribution: replacement installation/release design after an end-to-end
+   gate, with explicit format detection and no legacy migration promise.
+
+## Current position
+
+- Completed: repository inspection for planning and operator decisions about
+  scope, current checkout, fresh-agent protocol and model routing.
+- Written: this roadmap and the implementation plan.
+- Completed R01: repository map and rewrite instructions; independent review approved.
+- Completed R02: exact declaration/render contracts; five initial findings resolved
+  in a fresh corrective round, then full independent approval.
+- Completed R03: two same-spec jobs, concrete quota source/tests, six expected
+  packets with symbolic manifests, coverage and mutation cases; independently approved.
+- Completed R04: isolated native skeleton and direct debug/release verification gate.
+- Completed R05: native restricted Lua and confined capture; corrective review approved.
+- Completed R06: independently verified canonical encoding and XXH3 identities.
+- Completed R07: trusted bridge, normalized schemas, capture topology, global semantics and scoped identities independently approved.
+- Completed R08: actual native rendering, computed packets and CLI independently approved.
+- Completed R09: obsolete repository surfaces removed; debug/release full gates and independent fresh build passed.
+- R10: actual packet and identity demonstration package independently approved;
+  operator requested improved presentation before continuing. R10-P01 is approved
+  and resolves that request. R11 provides a ledger/history design candidate for independent review.
+
+
+## Subsequent operator corrections
+
+[N01](rounds/N01.md) renamed the native layer to engine; [N02](rounds/N02.md)
+moved product Lua to src/stdlib/planar while keeping fixtures outside src.
+[N03](rounds/N03.md) restored Glaze and removed handwritten product JSON handling.
+All three corrections are independently approved. Current Glaze wire-output
+[evaluation evidence](../../tests/native/n03b-evidence/README.md) supersedes only
+R10's serialization spelling; parsed packets/Markdown/identities remain equal.
+The subsequent R10 presentation revision is recorded below.
+
+[N04](rounds/N04.md) restored CLI11 parsing and the prior handlers/<command>/
+structure. Independently approved; its debug/release gates each passed 121 tests
+with zero skips.
+
+[R10-P01](rounds/R10-P01.md) addresses the operator's request to improve packet
+presentation first, then continue. Independently approved with no findings; both
+full gates passed 124 tests with zero skips. R11 now has a ledger/history
+contract candidate for review before persistence implementation.

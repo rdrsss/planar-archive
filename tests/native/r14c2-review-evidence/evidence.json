@@ -1,0 +1,38 @@
+{
+  "verdict": "approve",
+  "candidate_identity": "41b4ef54273ae2c1a3c0efc956563d4809748e71e4f6ed6fb526225258234652",
+  "coder_evidence_file_sha256": "3b319f50b6163e53b368cf5fbb38bb48352d4895834c63372023fcd293cfeb33",
+  "report": {
+    "path": "docs/vernacular/rounds/R14-C2-review.md",
+    "sha256": "f0ac273bae6b6291b0f948ff686221ad5a2a8e5430153bed9e4f17b04c907416"
+  },
+  "raw_sha256": {
+    "README.md": "d877b47c4c78810369c01865481c3528c3aefbb3175ef458cfa9962bfae1f17b",
+    "audit-final.txt": "ecf4e5b6df4c14e487c63170f0c19330f7bb6492b78042d2be5bfa1ddfec3757",
+    "audit.txt": "ecf4e5b6df4c14e487c63170f0c19330f7bb6492b78042d2be5bfa1ddfec3757",
+    "build.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "capture.txt": "334cf798dcc7f5471934ec6423c6560e541dbfcdb95d9d3a70a50431e7ec0c20",
+    "capture.xml": "d7408264ff48c93880713a722af49b2bc374be9e073a9328b4c492876e07df09",
+    "check.py": "6c4f3657a47e9576b121f062afe297dc93321db269309dc9c48ff5793496eecb",
+    "cli.txt": "a9afed12933b04f8866567e38aa849e19978cf11fb70e1baa6c13f7112687df7",
+    "cli.xml": "33f9f06fabdf33fc4c9730d616d6e2535373b448c9139bd84c58f49d7f400292",
+    "commands.json": "a8fe21e274398a34d6b71dcbf4fe9fa01f83419ed00dbc94b4318036fd5ae531",
+    "final-checks.py": "5100c270ec111c965c77718e44f521dec24b1f185510ff29cf8daebc78c438a4",
+    "final-commands.json": "0a6c8fda067a4906b3ff1d18b06abdf3eba07d437838b667f2c89fe58a615936",
+    "focused.txt": "d1480d4d2356f925f5eed70521eb4afaf7a45f9d7a8aa727904e96861d8a82be",
+    "focused.xml": "58ee91ddfa883387da7e594edb6ac8970b16311491345e503c5f5c09c935a44c",
+    "helper-lint.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint.txt": "1282150fcf0a6097387a5043f15120d00ab5f0e772f7b49c99359e53513bb60e",
+    "no-work.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "probe-artifacts.json": "e0ce7be1a63310dc4639315a9bd9f1cf9141a6f52de756e3ff2e45818f80cd21",
+    "probe-commands.json": "10d7e455a441249b8d063adc76e34620b61af93eb982975c71c569bcb0979a55",
+    "probe-compile.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe-link.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe.cpp": "f7814bf93d398ec1c1ce6d13a11556beeb7cea8ab07816b3709bffed6841e80f",
+    "probe.py": "73acca4e5e64273732c0f431bc6dac120a2e84acd1a3f396d97cec78a5ad75c6",
+    "probe.txt": "2d40bd22c92686a640af1263b03729e8af5dfd4b1bab426132c65057d1f141ca",
+    "record-vectors.txt": "b112fdde37b314e23ae46c1c190b65a7575877f687ca9085627427d91d195801",
+    "run.py": "fc4625dcda36711710cf3508de8240d41c09d1917347e80381d812649bb98459",
+    "vectors.txt": "6642b7c9c2a89bec52b0555a60c260cbfa95a547923c6102848e093ed7192eba"
+  }
+}

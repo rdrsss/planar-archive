@@ -1,0 +1,41 @@
+{
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.15.0",
+  "tools": {
+    "cmake --version": {
+      "exit": 0,
+      "output": "cmake version 4.4.4\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n"
+    },
+    "ninja --version": {
+      "exit": 0,
+      "output": "1.13.2\n"
+    },
+    "/opt/homebrew/opt/llvm/bin/clang++ --version": {
+      "exit": 0,
+      "output": "Homebrew clang version 23.1.3\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /opt/homebrew/Cellar/llvm/23.1.3_2/bin\nConfiguration file: /opt/homebrew/Cellar/llvm/23.1.3_2/etc/clang/arm64-apple-darwin25.cfg\n"
+    },
+    "doxygen --version": {
+      "exit": 0,
+      "output": "1.18.0\n"
+    },
+    "sw_vers": {
+      "exit": 0,
+      "output": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84\n"
+    }
+  },
+  "debug_cache": [
+    "CMAKE_BUILD_TYPE:STRING=Debug",
+    "CMAKE_CXX_COMPILER:FILEPATH=/opt/homebrew/opt/llvm/bin/clang++",
+    "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/homebrew/Cellar/llvm/23.1.3_2/bin/clang-scan-deps",
+    "CMAKE_CXX_FLAGS:STRING=-stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1",
+    "CMAKE_MAKE_PROGRAM:FILEPATH=/opt/homebrew/bin/ninja"
+  ],
+  "release_cache": [
+    "CMAKE_BUILD_TYPE:STRING=RelWithDebInfo",
+    "CMAKE_CXX_COMPILER:FILEPATH=/opt/homebrew/opt/llvm/bin/clang++",
+    "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/homebrew/Cellar/llvm/23.1.3_2/bin/clang-scan-deps",
+    "CMAKE_CXX_FLAGS:STRING=-stdlib=libc++ -nostdinc++ -isystem /opt/homebrew/opt/llvm/include/c++/v1",
+    "CMAKE_MAKE_PROGRAM:FILEPATH=/opt/homebrew/bin/ninja"
+  ]
+}

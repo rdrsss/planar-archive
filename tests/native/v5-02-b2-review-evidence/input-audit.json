@@ -1,0 +1,39 @@
+{
+  "candidate.json": {
+    "sha256": "35628357435d2708761f1a77bcc40e5a0614d7fb16092804d2ad00be24b4743f",
+    "verified_entries": 29,
+    "mismatches": []
+  },
+  "artifacts.json": {
+    "sha256": "ba9d890ad206af6656756af788c3bc9b6195b9ec8c8e84710709048744fd4ea5",
+    "verified_entries": 122,
+    "mismatches": []
+  },
+  "owned.diff": "59d8e8f3210f5cac827b6efb71eb6abd76a38063700d21a25e6349d54757be65",
+  "debug": {
+    "testcases": 361,
+    "skips": 0,
+    "failures": 0,
+    "preserved": 358,
+    "added": [
+      "replacement.export service facts allocation failure retains adapter publication",
+      "replacement.render mapping refusal precedes missing routed inputs",
+      "replacement.retained_cli"
+    ]
+  },
+  "release": {
+    "testcases": 361,
+    "skips": 0,
+    "failures": 0,
+    "preserved": 358,
+    "added": [
+      "replacement.export service facts allocation failure retains adapter publication",
+      "replacement.render mapping refusal precedes missing routed inputs",
+      "replacement.retained_cli"
+    ]
+  },
+  "symlink": {
+    "is_symlink": true,
+    "target": "CLAUDE.md"
+  }
+}

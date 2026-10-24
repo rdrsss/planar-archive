@@ -1,0 +1,23 @@
+{
+  "candidate_files_current": 10,
+  "candidate_identity": "ab97dafe6d075104025a8de52ebbb733cdc7e869c312d09d0534a8f7f5f5adec",
+  "other_a1_candidate_files_unchanged": 9,
+  "exact_single_sentence_replacement": true,
+  "all_other_bytes_including_247_and_historical_counts_preserved": true,
+  "unchanged_markdown_links_existing_targets": [
+    "toolchain-parity.md",
+    "vernacular/rounds/R09.md",
+    "../tests/vectors/README.md"
+  ],
+  "native_and_python_ctest_registration_source_verified": true,
+  "coder_evidence_entries_verified": 8,
+  "prior_evidence_files_unchanged": 95,
+  "prior_published_manifest_entries_verified": {
+    "tests/native/r14a1-evidence": 60,
+    "tests/native/r14a1-review-evidence": 33
+  },
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "builds_or_tests_run": false,
+  "verdict": "approve"
+}

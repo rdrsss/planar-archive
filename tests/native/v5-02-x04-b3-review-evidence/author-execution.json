@@ -1,0 +1,71 @@
+{
+  "counts": {
+    "attempt01": {
+      "errors": 0,
+      "failed": [
+        "replacement.replacement.effective provenance closed exact manifest and framing",
+        "replacement.replacement.effective provenance combined manifest one MiB ceiling",
+        "replacement.replacement.effective provenance embedded source order assembly and catalog owners",
+        "replacement.replacement.effective provenance external owners bind profile ordinals",
+        "replacement.replacement.effective provenance independent exact bytes and digest",
+        "replacement.replacement.effective provenance prefixed path byte and depth limits",
+        "replacement.replacement.effective provenance profile module order and correspondence",
+        "replacement.replacement.effective provenance raw whitespace modes and source bytes affect identity",
+        "replacement.replacement.effective provenance reachable external byte and profile boundaries"
+      ],
+      "passed": 88,
+      "skips": 0,
+      "tests": 97
+    },
+    "attempt02": {
+      "errors": 0,
+      "failed": [
+        "replacement.replacement.effective provenance closed exact manifest and framing",
+        "replacement.replacement.effective provenance combined manifest one MiB ceiling",
+        "replacement.replacement.effective provenance embedded source order assembly and catalog owners",
+        "replacement.replacement.effective provenance external owners bind profile ordinals",
+        "replacement.replacement.effective provenance independent exact bytes and digest",
+        "replacement.replacement.effective provenance maximum reachable file membership",
+        "replacement.replacement.effective provenance prefixed path byte and depth limits",
+        "replacement.replacement.effective provenance profile module order and correspondence",
+        "replacement.replacement.effective provenance raw whitespace modes and source bytes affect identity",
+        "replacement.replacement.effective provenance reachable external byte and profile boundaries"
+      ],
+      "passed": 88,
+      "skips": 0,
+      "tests": 98
+    },
+    "attempt03-oracle": {
+      "errors": 0,
+      "failed": [
+        "replacement.replacement.effective provenance closed exact manifest and framing",
+        "replacement.replacement.effective provenance prefixed path byte and depth limits"
+      ],
+      "passed": 14,
+      "skips": 0,
+      "tests": 16
+    },
+    "attempt04-oracle-tests": {
+      "errors": 0,
+      "failed": [
+        "replacement.replacement.effective provenance prefixed path byte and depth limits"
+      ],
+      "passed": 11,
+      "skips": 0,
+      "tests": 12
+    },
+    "attempt05-oracle-tests": {
+      "errors": 0,
+      "failed": [],
+      "passed": 12,
+      "skips": 0,
+      "tests": 12
+    }
+  },
+  "distinct_composed": 98,
+  "generated_variant_families": 5,
+  "inherited_passing": 86,
+  "inventory": 520,
+  "new_passing": 12,
+  "preserved": 508
+}

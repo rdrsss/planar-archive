@@ -1,0 +1,29 @@
+{
+  "adversarial_assertions": 68,
+  "adversarial_cases": 4,
+  "all_ownership_released": [
+    "docs/vernacular/rounds/V5-02-X05-C3-B1-review.md",
+    "tests/native/v5-02-x05-c3-b1-review-evidence/",
+    "build/rewrite-debug (exclusive serialized verification)"
+  ],
+  "author_artifact_manifest_sha256": "8c289dc4e13750138be2c0f9d82e574bf36a5a040e852b0fd9cde07460fce10e",
+  "candidate_diff_sha256": "1c7a9583b785f8502574f7d1438ea17124a1778322b3037310a30111805669d4",
+  "candidate_manifest_sha256": "b4bbbe38d6d6d20bb361ca895ac2bee7771da46899647217d58acde0f60e85b6",
+  "disabled": 0,
+  "disposition": "approve",
+  "errors": 0,
+  "failures": 0,
+  "focused_cases": 113,
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "no_build_test_private_process_remaining": true,
+  "no_later_edits_planned": true,
+  "protected_entries": 62673,
+  "release_entries": 4238,
+  "report_sha256": "0e2b5a06caf559ba68a9c43d21b666d02acc536e949450862c26c39492a6c3fb",
+  "review_entries": 32,
+  "review_manifest_sha256": "4a764c46d39f609bc5bd02b8411a04eaff96f95db8e993e67ae33f53e56c5c6e",
+  "round": "V5-02-X05-C3-B1",
+  "schema": "planar.round.review-final.v1",
+  "skips": 0,
+  "utc": "2026-10-23T23:24:29.188090+00:00"
+}

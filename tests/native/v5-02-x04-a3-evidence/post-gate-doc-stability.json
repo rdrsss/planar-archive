@@ -1,0 +1,15 @@
+{
+  "all_other_frozen_entries_unchanged": true,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-capture-evidence.md"
+  ],
+  "documentation_only": true,
+  "tested_freeze_sha256": "d5aa29591c76c5efc7130fec4bbf0eb64a97699f419579336e5f338e69c24b47"
+}

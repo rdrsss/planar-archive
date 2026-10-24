@@ -1,0 +1,32 @@
+{
+  "scope": "Independent bounded completed-memory-failure, protected-call and host-adapter audit of combined A3 through C05",
+  "allocator": {
+    "site": "src/engine/runtime/runtime.cpp:49",
+    "finding": "Logical heap quota sets exhausted before refusal. Actual realloc null leaves quota flag unchanged. Pinned Lua lmem.c tryagain performs emergency GC/retry; only a completed LUA_ERRMEM denotes terminal actual memory failure. C05 does not alter allocator or accounting."
+  },
+  "restricted_call": {
+    "site": "src/engine/runtime/runtime.cpp:79",
+    "finding": "Trivial status and native state only; LUA_ERRMEM writes lua_memory_failed before user code can resume. Shared exhaustion checks rethrow on every enclosing restricted wrapper, including status LUA_ERRRUN after the inner wrapper rethrows. No reset exists. xpcall/load/coroutine alternatives are unavailable. Errors occurring before the inner protected call are caught by an enclosing wrapper or direct host boundary."
+  },
+  "callbacks": {
+    "site": "src/engine/runtime/runtime.cpp:832",
+    "finding": "First original entry token precedes descriptor/function raw luaL_ref. Vector native ownership precedes longjmp-capable calls. The failure bit prevents later callback token selection/clearing; host handles resource before incomplete descriptor validation. All three descriptor-reference APIs are exercised with actual null returns. The function-reference fixture has zero actual growth, with source/control coverage only."
+  },
+  "host_calls": [
+    {"site": "runtime.cpp:286", "finding": "convert native anchor calls only native tag operations. Any returned failure throws resource through native adapters; no user code can swallow this inner status. Destructor-bearing native conversion frames contain no unprotected allocating Lua call."},
+    {"site": "runtime.cpp:629", "finding": "Standalone run_trusted preserves instruction priority and recognizes sticky memory when nested wrapper surfaces ordinary Lua status. On sticky nested failure status cannot become OK, because every enclosing restricted wrapper rethrows. Native escaped userdata handling remains after memory classification."},
+    {"site": "runtime.cpp:2134", "finding": "External module execution/collection/sealing share exhausted or direct ERRMEM resource check before bridge and protocol checks. Catch renders retained token outside Lua; allocation refusal retains staged module fallback. Failed constructor destroys owner, without later collection, sealing or provider effects."},
+    {"site": "runtime.cpp:2352,2360,2368", "finding": "Setup, immediate native enrollment and initial seal all check shared exhausted/direct ERRMEM before other errors. Terminal owners cannot escape constructor. Successful emergency retry is not marked."},
+    {"site": "runtime.cpp:2437", "finding": "Embedded invocation retains existing native_error-first completion policy, then shared exhausted/direct ERRMEM, bridge/protocol and response validation. New sticky bit never resets; invocation instructions retain their previous reset. Profile-owner invocation remains refused before provider effects."}
+  ],
+  "new_evidence": {
+    "projection_modes": 10,
+    "shape_modes": 9,
+    "command_modes": 9,
+    "actual_failure": "Two actual 24-byte null-return growth requests (initial + emergency retry); one real nested LUA_ERRMEM, quota/conversion flags false; no subsequent callback; resource_limit/Lua allocation exceeded/lua_bytes/67108864 with original projection2, shape2 or command7.",
+    "successful_retry": "The same 24-byte growth request is refused once then succeeds. Catalog completes with no completed LUA_ERRMEM and no sticky state.",
+    "nested": "Three catches log one real memory status and two enclosing ordinary error statuses with sticky state; later module-error tails cannot replace first category/location.",
+    "controls": "Direct host failure, ordinary caught/uncaught error, no-fault, zero-growth function-reference control; zero-live-byte destruction throughout. Controlled allocator refusal, not natural host exhaustion."
+  },
+  "result": "No remaining finding in the bounded class. R7 closes; previous R1-R6 mechanisms unchanged. No new quota/public API or future B/C/X06 behavior inferred."
+}

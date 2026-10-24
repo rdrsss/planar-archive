@@ -1,0 +1,17 @@
+{
+  "artifact_count": 173,
+  "artifact_manifest_sha256": "6c7ea8ab4f9d66f5940dfac29edea985c70ccc80db159af9f487af67bda0476b",
+  "build_ownership": "released after final hashing; no subsequent reviewer edits",
+  "closed_original_findings": [
+    "A3-R1",
+    "A3-R2",
+    "A3-R3"
+  ],
+  "disposition": "request-changes",
+  "remaining_findings": [
+    "A3-C01-R4"
+  ],
+  "report": "docs/vernacular/rounds/V5-02-X05-A3-C01-review.md",
+  "report_sha256": "c2d4153630088c6f51767b5c49a355f252e179f472adb589890fb3d7ca08a084",
+  "source_manifest_sha256": "b0c54d9e17b121747aaa17e19ad03f4c46e1e48fd05ec17da80c0f3caf838049"
+}

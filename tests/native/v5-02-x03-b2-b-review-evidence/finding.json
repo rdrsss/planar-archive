@@ -1,0 +1,14 @@
+{
+  "id": "B2B-R1",
+  "priority": "P2",
+  "decision": "request-changes",
+  "basis": "Source/contract inspection; no runtime reproduction claimed",
+  "contract": {"path": "docs/vernacular/external-profile-contract.md", "line": 644, "requirement": "Inside transaction: identity/format recheck"},
+  "primary": {"path": "src/engine/ledger/format.cpp", "line": 1368, "function": "begin_records", "omission": "checked->format is not compared with state->info.format after acquiring the write transaction"},
+  "consumer": {"path": "src/engine/ledger/format.cpp", "line": 1601, "function": "record_writer::complete_acceptance_impl", "use": "Fresh request codec/format admission branches on retained state->info.format"},
+  "related": [
+    {"path": "src/engine/ledger/format.cpp", "line": 1527, "function": "record_writer::commit", "omission": "Precommit metadata comparison excludes format"},
+    {"path": "src/engine/ledger/format.cpp", "line": 1731, "function": "record_writer::complete_acceptance_impl", "omission": "Final acceptance metadata comparison excludes format"}
+  ],
+  "requested_change": "Enforce the selected format continuity in the locked metadata check and corresponding precommit checks. Preserve exact replay-before-fresh-selector/CAS/candidate ordering and all receipt/recovery authority. Review the corrective candidate in a fresh round."
+}

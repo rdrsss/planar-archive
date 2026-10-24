@@ -1,0 +1,12 @@
+{
+  "disposition": "approve",
+  "closed_finding": "B4B-R1",
+  "report_sha256": "9d0639f4d815b92b093196c92d7d07aceafeec6fae2da452a0927dca28f9d1f7",
+  "artifact_manifest_sha256": "dd8fd22eef5b9020c5ef7348c03a0d98436625a4bda33fe6d6bcfc18ec587b22",
+  "artifact_entries": 143,
+  "debug_released": true,
+  "all_reviewer_edits_released": true,
+  "no_later_reviewer_edits": true,
+  "no_build_test_process_remains": true,
+  "release_read_only": true
+}

@@ -1,0 +1,44 @@
+{
+  "artifacts": {
+    "audit.py": {
+      "sha256": "25e01207156a01f7557b66301c3cc828d5ff85d05629a58439393a4028fe0ff6",
+      "size": 4020
+    },
+    "baseline.json": {
+      "sha256": "76ee477beed5a6380cbbe492b18ebdc18ccc501b0dd15ac5fff78c48ca55d6c7",
+      "size": 33076524
+    },
+    "candidate-audit.json": {
+      "sha256": "bfb519fe4611ce36785e52c72e2db253821b71e7b03c871f388624e455c758e1",
+      "size": 1443
+    },
+    "final.json": {
+      "sha256": "76ee477beed5a6380cbbe492b18ebdc18ccc501b0dd15ac5fff78c48ca55d6c7",
+      "size": 33076524
+    },
+    "finalize.py": {
+      "sha256": "2f012e87e9fc111bc92b85399737e842419403495e7ecbdccf5d5ede2a097b7b",
+      "size": 2860
+    },
+    "protect.py": {
+      "sha256": "24d214f134bba613532ac6b76d8079df694cd48fa549474ffbbf3b983a0b2b88",
+      "size": 1120
+    },
+    "protection-audit.json": {
+      "sha256": "c42324ec2c484a010cff92c0266fe9c609901d72222184516b7549f92c86cde8",
+      "size": 1079
+    },
+    "source-assessment.json": {
+      "sha256": "e910d65970f112489d18f1bdb435c14114c1ff459e0681ef01dd9c19819a790e",
+      "size": 10198
+    }
+  },
+  "disposition": "request-changes",
+  "finding": "X06A4-R1",
+  "report": {
+    "docs/vernacular/rounds/V5-02-X06-A4-review.md": {
+      "sha256": "95e58509a11b8ea672521549996b38d95cb36919621fe645af004471dc7edce2",
+      "size": 11289
+    }
+  }
+}

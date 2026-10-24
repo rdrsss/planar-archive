@@ -1,0 +1,38 @@
+{
+  "path_base": "tests/native/r14-d3-evidence",
+  "excludes": [
+    "artifacts.json"
+  ],
+  "files": {
+    "audit.py": "d144f8773cf53a5a61e25ee15fc346c66422757a5df4b6c1e7f06808b29ab26d",
+    "author-report.md": "b21525552dead06c338aad634f919b0fda4b089bee42c60e359d4831bef77c05",
+    "baseline/CLAUDE.md": "d33659b7459c30e4a8a8a616b6f19c770665f42ba2a2b76afd1350cff36f6641",
+    "baseline/docs/architecture.md": "6f89c582b875d5fb5390f16a74026bc016f6315c1a6c38b7a4950191243d8294",
+    "baseline/docs/vernacular/acceptance-matrix.md": "b485df7e981c493171ae24b70f892e5d2f6adbc68dacc4d30b5c48e30f81e53e",
+    "baseline/docs/vernacular/command-contract.md": "48cf9f14ce25b6f5af2ba1305fb506d7c93735c24b4301c0c9ab6cdc90a6ed86",
+    "baseline/docs/vernacular/implementation.md": "699cd5c0039b50330338c764e42c597d37de955d07b0a47e5621c9565f27d097",
+    "baseline/docs/vernacular/ledger-contract.md": "fbf693e00311172e8bc61ecb90111daa7ce7170faec359897a9a8e347618019d",
+    "baseline/docs/vernacular/roadmap.md": "2266d4704e4d643a3b8f25c1975f8dffbae7aed76ed1885b17f6d3eeee353ad2",
+    "baseline/docs/vernacular/v5-alignment.md": "cedcb462fc58f4e73782938567f47f9144c3e544241edf13c44b670da60f17cd",
+    "baseline.json": "e9cd97074fbd9e361d1bee73a749516fde9b329316afa8892345da9fdc7b011a",
+    "candidate/CLAUDE.md": "8bee653b17c68783e59225a3b6c82e583ed009e10f55909963bf0c81a9fc21c3",
+    "candidate/docs/architecture.md": "be7e48e6d8dbd01fc747106047253577f0d2f487b0f6b26428723b78b94bdac5",
+    "candidate/docs/vernacular/acceptance-matrix.md": "fba4ecf4607b9158515f941acde166eeea2844511bdf3675285a89922d61311a",
+    "candidate/docs/vernacular/command-contract.md": "3ebc3371e7475153399f38a5bbba569bada18d46c3246b3dc310a33b82568b10",
+    "candidate/docs/vernacular/implementation.md": "d3c863b7def630f4f5531d7632564ced4ffdc24d24bbb6df52603e2041be4553",
+    "candidate/docs/vernacular/ledger-contract.md": "0f24284dc1a3836ef5b14d13b36b9aa0cb0e5662fc05130111fd7ceff91bd5eb",
+    "candidate/docs/vernacular/load-command-contract.md": "381a7ecbcf6f71f1b1e75c0010082f201275b1dd070218279ec67d35458957eb",
+    "candidate/docs/vernacular/roadmap.md": "ab81847ab5012c7ac1808708fe5f83e5abc11cb03231084dab7ad7a2fb577142",
+    "candidate/docs/vernacular/v5-alignment.md": "45dfceb842366fce8fdb0c866e76ddd9abfdee346d05d71ce1c404b2ef4fc972",
+    "candidate.json": "ffe90a6e6db40b5d47ba72697bf85d7705bb08a41a67e85a51b93a70d12edb38",
+    "commands.txt": "0cffc5d7d67c4b09f08554d526b1ce69b91564f2a8a4118116187fa2a6e040e9",
+    "links.json": "6ad1960b12926f2c34ab06a6d5d1751769ccad7f59b9ddca05e37295297f58dd",
+    "owned.diff": "37508941e36017d8f9727d20aa9ce25822c19dba1e66e486cf15c6e749af1c7f",
+    "owned.json": "19926c76da9abd6b00a8df51817659193f64ef4fbd53ca950f1f39bfb2eed13e",
+    "protected-before.json": "70805f3774dcbc3f92a093de9e821c617a2cebe35002a6b59ba6bffab2191ef3",
+    "protection.json": "7c11a65a4354b0a1e9f567001525310432d9d1a2a648f387e0317eca9da8f343",
+    "starting-status.txt": "5eea306dba9d5b3c1ba152bde856de31f6f71025dfcfd5cfaf3629738874eb7a",
+    "traceability.json": "9f7a19162e32d58db587332f187aad6c0857f8ddb298b185717da4015b8308d3",
+    "whitespace.json": "ed2c988417ad1c6d7c5a26532c39de5b95aac7da06fe8a6f42cd9ce504576ced"
+  }
+}

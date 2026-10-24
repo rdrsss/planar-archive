@@ -1,0 +1,33 @@
+{
+  "source_freeze_sha256": "fb30a7afb6727652498b8e4cefb41d21e983dc6a75d161427f7122b777e23cf8",
+  "report_sha256": "c1542c263282b6700203e079a637d5651525b16d477d3d354ba31032233911f6",
+  "artifact_manifest_sha256": "b79f056b5a08ade6d84c931d0bb0df8c61823a36bf5f6454b546340eded0e4ab",
+  "baseline_entries": 18584,
+  "frozen_entries": 18590,
+  "symlinks": [
+    "AGENTS.md",
+    "compile_commands.json"
+  ],
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "tests/native/v5-02-x05-a0-support/audit.cpp",
+    "tests/native/v5-02-x05-a0-support/audit.cppm",
+    "tests/native/v5-02-x05-a0-support/audit.t.cpp",
+    "tests/native/v5-02-x05-a0-support/generate.py",
+    "tests/native/v5-02-x05-a0-support/shipped.t.cpp",
+    "tests/native/v5-02-x05-a0-support/verify.py"
+  ],
+  "source_mismatches": [],
+  "artifact_count": 122,
+  "artifact_mismatches": [],
+  "unexpected_added_paths": [],
+  "build_identity_count": 742,
+  "build_mismatches": []
+}

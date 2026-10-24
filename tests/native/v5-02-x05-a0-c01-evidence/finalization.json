@@ -1,0 +1,15 @@
+{
+  "all_commands_passed": true,
+  "final_source_matches_tested_freeze": true,
+  "finding": "A0-R1",
+  "focused_executed": 47,
+  "no_further_coder_edits": true,
+  "prior_a0_names_preserved": 532,
+  "prior_b4_names_preserved": 520,
+  "registered": 535,
+  "released_for_review_utc": "2026-10-23T01:07:48.645626+00:00",
+  "report_sha256": "43be76faa6caa67c07d2d2256ea390f22ec5d9e1a4f258c86f90561793566ef5",
+  "source_entries": 18754,
+  "source_freeze_sha256": "d0a2dfa9d471ddceb85dd9f16ba3ca21f333139dcedbdada1529d6c1ee9428d9",
+  "status": "candidate_pending_independent_review"
+}

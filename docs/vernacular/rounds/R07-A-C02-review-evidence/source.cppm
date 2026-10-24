@@ -1,0 +1,26 @@
+export module planar.kernel.runtime_source;
+import std;
+export namespace planar::kernel::embedded { std::string_view source() { return R"LUA(return {
+ caught=function() local ok=pcall(function() while true do end end); return ok end,
+ repeated=function() while true do pcall(function() while true do end end) end end,
+ handler=function() xpcall(function() while true do end end,function() while true do end end); return true end,
+ deep=function() local function nest(n) if n==0 then while true do end end; return pcall(nest,n-1) end; return nest(64) end,
+ close_loop=function() getmetatable('').__close=function() while true do end end; local x <close> = 'x'; return true end,
+ close_catch=function() getmetatable('').__close=function() pcall(function() while true do end end) end; local x <close> = 'x'; error('unwind') end,
+ close_on_quota=function() getmetatable('').__close=function() while true do end end; local x <close> = 'x'; while true do end end,
+ ordinary=function() local marker={}; local ok,inner,e=pcall(function() return pcall(error,marker) end); return ok and not inner and e==marker and select('#',pcall(function() return nil,2,nil end))==4 end,
+ oldtoken=function() local _,old=pcall(kernel.fragment_digest,string.char(255)); pcall(function() error('new') end); pcall(kernel.hash_value,'work_v1',function() end); local _,saved=pcall(function() error(old) end); error(saved) end,
+ repair=function() local x={nested={bad=function() end}}; pcall(kernel.hash_value,'work_v1',x); x.nested.bad=nil; return kernel.hash_value('work_v1',x) end,
+ memory=function() return string.rep('x',600*1024*1024) end,
+ memory_caught=function() local ok=pcall(string.rep,'x',600*1024*1024); return not ok end,
+ finalizer=function() return setmetatable==nil and xpcall==nil end,
+ returnzero=function() return end,
+ returnmany=function() return false,nil,5 end,
+ find50=function() return string.find(string.rep('a',50),'a*a*a*a*a*b')~=nil end,
+ find100=function() return string.find(string.rep('a',100),'a*a*a*a*a*b')~=nil end,
+ match=function() return string.match(string.rep('a',50000),'a*a*a*a*a*b')~=nil end,
+ gmatch=function() for _ in string.gmatch(string.rep('a',50000),'a*a*a*a*a*b') do end; return true end,
+ gsub=function() return string.gsub(string.rep('a',50000),'a*a*a*a*a*b','x') end,
+ plain=function() return string.find(string.rep('a',50000),'a*a*a*a*a*b',1,true)==nil end,
+ pattern=function() return string.find(string.rep('a',50000),'a*a*a*a*a*b')~=nil end,
+})LUA"; } }

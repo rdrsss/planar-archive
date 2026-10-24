@@ -1,0 +1,19 @@
+{
+  "known_canonical_controls": 11,
+  "known_portable_record_controls": 4,
+  "baseline_exact_H_and_digest_verified": true,
+  "mutations": {
+    "bytes": {
+      "definition": "xxh3_128:1d8be4cf7d0154630028b14dac4c8776",
+      "digest": "9e73e96c3ea68a4ab9343422fa1285a2"
+    },
+    "descriptor": {
+      "definition": "xxh3_128:a59b2597b0062700395fb9fac2363cf7",
+      "digest": "72206a274fd77ae9c52c3649b6cfb9e8"
+    },
+    "path": {
+      "definition": "xxh3_128:9096de59af6e3c9b0ce29433714887e4",
+      "digest": "52267ded41b34b5594826f8572683947"
+    }
+  }
+}

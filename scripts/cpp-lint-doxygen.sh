@@ -8,11 +8,11 @@
 # unrelated to load, config, or content — measured at roughly a 25-50%
 # crash rate against an unchanged tree (docs/toolchain-parity.md). Retrying
 # blindly on ANY non-zero exit would also swallow real lint failures:
-# Doxyfile.lint sets WARN_AS_ERROR=YES, so an undocumented exported entity
+# the gate Doxyfile sets WARN_AS_ERROR=YES, so an undocumented exported entity
 # yields exit 1. That must fail on the first attempt, every time, with no
 # retry and no masking.
 #
-# task 6315: exit status ALONE is not a reliable discriminator. Doxyfile.lint
+# task 6315: exit status ALONE is not a reliable discriminator. the gate Doxyfile
 # sets WARN_AS_ERROR=YES, whose own documented behavior is "immediately stop
 # when a warning is encountered" — and on this 1.18.0 build that stop can
 # itself manifest as a signal death (the same >=128 family as the SIGBUS
@@ -21,7 +21,7 @@
 # the retry loop this way (task 6303, task 6330) even though the exit-code
 # split below is exactly what the original design intended. So: capture
 # every attempt's combined output and scan it for a genuine WARN_FORMAT
-# diagnostic line ("$file:$line: $text", see Doxyfile.lint) BEFORE looking at
+# diagnostic line ("$file:$line: $text", see the gate Doxyfile) BEFORE looking at
 # the exit code at all. A diagnostic in the output is authoritative and never
 # retried, regardless of how the process then exited. Only a crash that
 # produced no diagnostic text is treated as the known content-independent
@@ -36,12 +36,8 @@ doxyfile="${1:?usage: cpp-lint-doxygen.sh <Doxyfile>}"
 # consecutive crashes at a 50% rate are ~12.5%, and worse-case correlated
 # runs still make a persistent doxygen breakage visible via the retry
 # messages below rather than infinite-looping silently.
-# OVERRIDABLE (task 6054). The default stays 3 for an interactive
-# `make cpp-lint`, where a human sees the retry messages and can just run it
-# again. `make test-all` composes the gating half of this recipe via
-# `cpp-lint-gate` and passes a HIGHER bound, because an automatic gate that
-# fails ~1-12% of the time for a content-independent reason trains people to
-# ignore it -- which is worse than not gating at all.
+# The default is 3 attempts for both interactive lint and the rewrite gate.
+# Callers may override it with DOXYGEN_MAX_ATTEMPTS; each retry is visible.
 #
 # Raising the bound CANNOT mask a finding: the scan below treats a genuine
 # WARN_FORMAT diagnostic as authoritative and never retries it, however many
@@ -52,7 +48,7 @@ attempt=1
 tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/cpp-lint-doxygen.XXXXXX") || exit 1
 trap 'rm -rf "$tmpdir"' EXIT
 
-# Matches Doxyfile.lint's WARN_FORMAT = "$file:$line: $text" — a path,
+# Matches the gate Doxyfile's WARN_FORMAT = "$file:$line: $text" — a path,
 # a colon, a line number, a colon-space. QUIET=YES means this is the only
 # kind of line doxygen ever writes on a clean invocation, so any match is a
 # genuine diagnostic, never incidental output.

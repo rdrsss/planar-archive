@@ -1,0 +1,23 @@
+{
+  "added": [
+    "tests/native/v5-02-x05-c1-support/finalize.py",
+    "tests/native/v5-02-x05-c1-support/freeze.py",
+    "tests/native/v5-02-x05-c1-support/gate.py",
+    "tests/native/v5-02-x05-c1-support/probes.py"
+  ],
+  "baseline_entries": 29923,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/stdlib/planar/bootstrap.lua",
+    "src/stdlib/planar/render.lua"
+  ],
+  "current_entries": 29927,
+  "historical_files_membership_bytes_modes_symlinks_preserved": true,
+  "protected_release_compiled": 885
+}

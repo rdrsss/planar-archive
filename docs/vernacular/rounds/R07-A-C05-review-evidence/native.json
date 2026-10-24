@@ -1,0 +1,14 @@
+{
+  "command": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-R",
+    "replacement.(runtime|loader|capture|canonical|hash)",
+    "--output-on-failure",
+    "--output-junit",
+    "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07ac05-independent-review-147zkw1g/native.xml"
+  ],
+  "returncode": 0,
+  "seconds": 7.942708709277213
+}

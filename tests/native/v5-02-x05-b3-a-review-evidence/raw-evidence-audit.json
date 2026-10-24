@@ -1,0 +1,42 @@
+[
+  {
+    "location": "tests/native/v5-02-x05-b3-a-evidence/final-gate",
+    "selection": "focused",
+    "cases": 361,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "junit_lasttest_names_exact": true
+  },
+  {
+    "location": "tests/native/v5-02-x05-b3-a-evidence/final-gate",
+    "selection": "history-codec",
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "junit_lasttest_names_exact": true
+  },
+  {
+    "location": "tests/native/v5-02-x05-b3-a-review-evidence",
+    "selection": "focused",
+    "cases": 361,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "junit_lasttest_names_exact": true
+  },
+  {
+    "location": "tests/native/v5-02-x05-b3-a-review-evidence",
+    "selection": "history-codec",
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "junit_lasttest_names_exact": true
+  }
+]

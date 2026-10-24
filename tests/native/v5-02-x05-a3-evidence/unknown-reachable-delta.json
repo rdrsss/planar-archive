@@ -1,0 +1,7 @@
+{
+  "before": "    lua_pushinteger(l,99);lua_pushcclosure(l,digest,1);lua_replace(l,2);",
+  "after": "    constexpr const char* factory=\"return function(f) return function() return f() end end\";\n    if(luaL_loadbufferx(l,factory,std::char_traits<char>::length(factory),\"a3-private-native-factory\",\"t\"))return lua_error(l);\n    lua_call(l,0,1);lua_pushinteger(l,99);lua_pushcclosure(l,digest,1);lua_call(l,1,1);lua_replace(l,2);",
+  "count": 1,
+  "source_sha256": "b4362cebed683a3dceab7b6131889c20e76874ce994013d0f3d57b193e648ec1",
+  "reverse_identical": true
+}

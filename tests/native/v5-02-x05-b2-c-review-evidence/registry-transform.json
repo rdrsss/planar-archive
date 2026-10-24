@@ -1,0 +1,19 @@
+{
+  "original_sha256": "123c785e971e9a81a4adf36d985f30b90d6dadc1c3fb9c7df3df7b273c45fc7f",
+  "variant_sha256": "290eb9d31cc5bd83168e35ae14a8fc2b800cf6eaaf88b060a3d8fa9bdfcf9d20",
+  "reverse_identical": true,
+  "substitutions": [
+    {
+      "before": "#include <cstdlib>",
+      "after": "#include <cstdlib>\nextern \"C\" void review_reference(int,int,int,const void*);"
+    },
+    {
+      "before": "int execute_shape(lua_State* l) {",
+      "after": "\nvoid review_references(lua_State* l,int stage) {\n for(auto& entry:commands(l).entries) {\n  lua_rawgeti(l,LUA_REGISTRYINDEX,entry.reference);\n  review_reference(stage,entry.reference,lua_type(l,-1),lua_topointer(l,-1));\n  lua_pop(l,1);\n }\n}\n\nint execute_shape(lua_State* l) {\n  review_references(l,0);"
+    },
+    {
+      "before": "        release_shape_temporaries(owner.lua);",
+      "after": "        release_shape_temporaries(owner.lua);\n        review_references(owner.lua,1);"
+    }
+  ]
+}

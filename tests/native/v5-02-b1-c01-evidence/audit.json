@@ -1,0 +1,11 @@
+{
+  "protected_files_unchanged": 13488,
+  "native_variants_audited": 21,
+  "fixed_export_variant_audited": true,
+  "prior_test_names_preserved": 354,
+  "candidate_test_names": 358,
+  "red_failures": 3,
+  "focused_passes": 87,
+  "failures": 0,
+  "skips": 0
+}

@@ -1,0 +1,47 @@
+{
+  "artifact_entries": 14,
+  "artifacts": {
+    "bytes": 2079,
+    "mode": 420,
+    "sha256": "5410402f2054a35b8505c5322c812cc0ce98307e0c82c6ab42d993aad15455ea"
+  },
+  "author_artifacts": {
+    "bytes": 2744,
+    "mode": 420,
+    "sha256": "52754b9bfaf1bffd37d2cf72b978e118d00ccf8c8410c500190eb301c78cfb26"
+  },
+  "author_candidate": {
+    "bytes": 2687,
+    "mode": 420,
+    "sha256": "c67da31ced796500bfcea925976dfde2f18b7290e84fe1048e5a36782d9a2a86"
+  },
+  "author_finalization": {
+    "bytes": 1513,
+    "mode": 420,
+    "sha256": "228287139d98bfaa0fad0ad79a9ed3c98dced9bbc800bf4f4be200f63e0a1cd5"
+  },
+  "build_ownership": "none",
+  "closed_finding": "D4-R1",
+  "combined_D4_C01_approved": true,
+  "no_product_build_or_test_rerun": true,
+  "protection": {
+    "bytes": 413,
+    "mode": 420,
+    "sha256": "f8713ef4267a022da3859719a737ad395aa3011dff8c31cff60c7425f6ae1b33"
+  },
+  "released_files": [
+    "docs/vernacular/rounds/V5-02-X05-C4-D4-C01-review.md",
+    "tests/native/v5-02-x05-c4-d4-c01-review-evidence"
+  ],
+  "report": {
+    "bytes": 5688,
+    "mode": 420,
+    "sha256": "562a54e7f3ac43320174dc0e96a46fac478e8732b1b64679df6ab0eb47559578"
+  },
+  "reviewed_candidate": {
+    "bytes": 2687,
+    "mode": 420,
+    "sha256": "c67da31ced796500bfcea925976dfde2f18b7290e84fe1048e5a36782d9a2a86"
+  },
+  "verdict": "approve"
+}

@@ -1,0 +1,8 @@
+{
+  "source_sha256": "8a9f2832cf6a50f460fc17c280de3c33cba2e9b6e3fba2c707c0e248eb45935f",
+  "matches_restored_source_note": true,
+  "debug_object_contains_original_log_string": true,
+  "debug_object_contains_transient_log_string": false,
+  "debug_object_sha256": "de580fd830bf7778d538069c45cfb4f3c4ff88499f37c6e09806a81b4c73eee2",
+  "debug_no_work_repeat": "debug-no-work-repeat.log"
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "final-no-work.log"
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-c4-d2-b1-review-evidence/verify.py",
+      "final"
+    ],
+    "exit": 0,
+    "log": "protection.log"
+  }
+]

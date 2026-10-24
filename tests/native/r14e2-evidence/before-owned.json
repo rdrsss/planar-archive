@@ -1,0 +1,12 @@
+{
+  "CMakeLists.txt": "153bd502ae81a4bd7cd662c2f304773e0ddc72dbc70f6fcd2616ec0037210aa4",
+  "docs/architecture.md": "79271ac074de0844b012e624bc5463e61af106337ee052152200414da0611b89",
+  "docs/testing.md": "bfb31da5e563e500f723af48d60b3a129d8d54d88b238792081e2d2bd229b692",
+  "docs/cli-reference.md": "5b4423dcb0817a483f1ae22c9ca1082a54448933bc12261bd737fee3a6c71449",
+  "src/engine/CMakeLists.txt": "3f42bea856a5fed0a6968e2a09c7f93baa59b1c1fb82765cd530b7004be3efa0",
+  "src/cmd/planar/bootstrap.t.cpp": "45a0f64e213e014f4ec08251780205b4baaf00853789490aa3f1b799643e222b",
+  "src/cmd/planar/CMakeLists.txt": "d7dbd3455632dc72ec4fede944713f1551166976ce918965a60e2d40bf52c681",
+  "src/cmd/planar/response.cpp": "22617b9ff2f130c2d56e3c7e7e96f86abffbe42a585a45e58de13298cc3feb03",
+  "src/cmd/planar/bootstrap.cpp": "7b303d5c546d60aed796e2db353275b5330069f632eaf24ff8ebf9c940730e2b",
+  "src/cmd/planar/response.cppm": "891354c3d934bba6c8f3c0808a318fd2e6e314794a46f596ccdf6d353134f232"
+}

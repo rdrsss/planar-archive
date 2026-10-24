@@ -1,0 +1,12 @@
+{
+  "private-probe.o": {
+    "mode": 33188,
+    "size": 5717608,
+    "sha256": "2f3a70fdb121b00ceb9770499085c0711d47cdaa1acea864f082fbf0ddba1480"
+  },
+  "private-probe": {
+    "mode": 33261,
+    "size": 15699296,
+    "sha256": "7b14c655994d9cb18495599febcd6f87517d7962190188f6aec06cb6c8d774e0"
+  }
+}

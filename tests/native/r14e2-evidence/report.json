@@ -1,0 +1,147 @@
+{
+  "status": "implemented; awaiting fresh independent review; no self-approval",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "candidate_identity": "cc6cfdaa19631a9a75de69edff3ebe2c02c777fa4f05903320fa33cd29586126",
+  "candidate_manifest_sha256": "84fd80fcf004897952530bf416a7fd7006ce9bdcfd6752ae7f0363de69db42fe",
+  "candidate_snapshot_members": 17,
+  "changed_or_new_owned_files": [
+    "CMakeLists.txt",
+    "src/engine/CMakeLists.txt",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/cmd/planar/bootstrap.cpp",
+    "src/cmd/planar/bootstrap.t.cpp",
+    "docs/cli-reference.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "src/engine/history/read.cppm",
+    "src/engine/history/read.cpp",
+    "src/engine/history/read.t.cpp",
+    "src/cmd/planar/handlers/history/command.cppm",
+    "src/cmd/planar/handlers/history/command.cpp",
+    "tests/acceptance/bootstrap_history.py",
+    "tests/native/r14e2-support/fixture.cpp"
+  ],
+  "unchanged_owned_snapshot_members": [
+    "src/cmd/planar/response.cpp",
+    "src/cmd/planar/response.cppm"
+  ],
+  "ownership": "Shared checkout; no protected source, prior evidence, planning, native format/types/schema/capture/Lua/vendor edits. Coordinator planning excluded from protected audit.",
+  "results": {
+    "full_debug": {
+      "registered": 317,
+      "passed": 317,
+      "skipped": 0,
+      "log": "gate.log"
+    },
+    "final_focused": {
+      "registered": 7,
+      "passed": 7,
+      "skipped": 0,
+      "log": "focused-candidate.log",
+      "xml": "focused-final.xml"
+    },
+    "history_cli_processes": 115,
+    "unchanged_render_cli_processes": 247,
+    "unchanged_init_cli_processes": 60,
+    "protected_files_unchanged": 4897,
+    "active_source_lint_count": 81,
+    "helper_format_lint_files": 1,
+    "generated_variants": [
+      "r12c2",
+      "r13b1",
+      "r14c3b2"
+    ],
+    "vectors": "12 hand byte,20 upstream hash,41 canonical/domain,10 record vectors",
+    "no_work": "ninja: no work to do."
+  },
+  "commands": [
+    {
+      "argv": "cmake --preset debug",
+      "exit": 0,
+      "log": "configure.log"
+    },
+    {
+      "argv": "cmake --build build/rewrite-debug --target all planar_tests",
+      "exit": 1,
+      "log": "build-initial.log",
+      "note": "Initial compile exposed immutable value_ptr construction and void expected helper errors; resolved before tests."
+    },
+    {
+      "argv": "cmake --build build/rewrite-debug --target all planar_tests",
+      "exit": 0,
+      "log": "build-second.log"
+    },
+    {
+      "argv": "ctest --test-dir build/rewrite-debug -R 'replacement.(history|init_cli$|cli$)' --output-on-failure",
+      "exit": 0,
+      "log": "focused-initial.log",
+      "matched": 6
+    },
+    {
+      "argv": "cmake --build build/rewrite-debug --target all planar_tests",
+      "exit": 0,
+      "log": "build-formatted.log"
+    },
+    {
+      "argv": "python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug",
+      "exit": 0,
+      "log": "gate.log",
+      "matched": 317
+    },
+    {
+      "argv": "python3 tests/vectors/generate.py --check",
+      "exit": 0,
+      "log": "vectors.log"
+    },
+    {
+      "argv": "python3 tests/vectors/records/generate.py --check",
+      "exit": 0,
+      "log": "record-vectors.log"
+    },
+    {
+      "argv": "/opt/homebrew/opt/llvm/bin/clang-format --dry-run --Werror tests/native/r14e2-support/fixture.cpp",
+      "exit": 0,
+      "log": "helper-lint.log"
+    },
+    {
+      "argv": "python3 tests/acceptance/bootstrap_history.py build/rewrite-debug/bin/planar build/rewrite-debug/src/engine/planar_history_fixture",
+      "exit": 0,
+      "log": "history-cli-final.log",
+      "note": "Full golden/payload/saved-result assertions strengthened after full gate began; product unchanged, final registered focused run covers final script."
+    },
+    {
+      "argv": "ctest --test-dir build/rewrite-debug -R 'replacement.(history|init_cli$|cli$)' -V --output-junit tests/native/r14e2-evidence/focused-final.xml",
+      "exit": 0,
+      "log": "focused-candidate.log",
+      "matched": 7,
+      "note": "CTest wrote relative XML under build directory; exact XML copied into round evidence."
+    },
+    {
+      "argv": "python3 tests/native/r14e2-evidence/audit.py",
+      "exit": 0,
+      "log": "audit-final.log"
+    },
+    {
+      "argv": "cmake --build build/rewrite-debug --target all planar_tests",
+      "exit": 0,
+      "log": "no-work.log"
+    }
+  ],
+  "fixtures": {
+    "ordinary": "initialize_new and complete_acceptance with opaque prepared native captures; empty/initial/noop/change/revert use no SQL publication.",
+    "unknown": "After native acceptance mutate only interpretation/versions value records with real canonical/record encodings/digests; restore exact records_no_update trigger and require complete production opener.",
+    "output_cap": "9 MiB control-byte historical extension passes native acceptance; JSON escaping exceeds real CLI response cap. wire-probes.json and stderr/stdout files retain exact refusal.",
+    "privacy_and_safety": "Every process checks PRIVATE_INTENT marker and scratch root absent from public output; all scratch file hashes/directory membership unchanged; scratch HOME and PLANAR_DB sentinel unused."
+  },
+  "dependency_evidence": "read-test-link.txt excludes Lua/runtime/live interpretation and provenance wrappers. Query imports format, values, JSON and historical interpretation codec; format transitively retains native prepared/capture types.",
+  "limits": [
+    "macOS Apple Silicon debug only; release/Linux/final R14 gates separately outstanding.",
+    "Oversize refusal proven in actual CLI; no exact-boundary full-response success or allocation-failure injection claim. Only output_bytes errors are remapped, retaining depth/node distinctions.",
+    "Metadata unit covers IDs above int32 through signed64 maximum; normal accepted fixtures use small chronological IDs.",
+    "Retained native history suites cover raw records with unknown interpretation; no export/load CLI added.",
+    "All preexisting owned bytes have baseline copies; other protected files have hash-only baseline. Coordinator docs/vernacular excluded.",
+    "Full gate product unchanged; acceptance-only strengthening reran all seven focused registered tests afterward."
+  ],
+  "authorization": "No legacy Planar tools, operator data, installed binaries, commits, installation, publication or merge."
+}

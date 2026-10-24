@@ -1,0 +1,25 @@
+{
+  "artifact_manifest": {
+    "entries": 10,
+    "path": "tests/native/v5-02-x06-a-review-evidence/artifact-manifest.json",
+    "sha256": "164239363d874c4b1505382b8d1f9aa3de808065de494faec01875bc7f6e0da6"
+  },
+  "author_combined_manifest_sha256": "d74ffa8f5286f3a30dcf5c88bf18b3315a4efad9482a4547e19ce69ce293ae25",
+  "author_evidence_entries": 20,
+  "build_ownership": "none",
+  "candidate_documents": 10,
+  "constness_precision": "Recursive const-facing API; nonconst underlying decoder allocations permit explicit native const_pointer_cast. Raw-tree authenticity required independently.",
+  "disposition": "approve",
+  "protected_members": 93762,
+  "protection_drift": 0,
+  "released": [
+    "docs/vernacular/rounds/V5-02-X06-A-review.md",
+    "tests/native/v5-02-x06-a-review-evidence/"
+  ],
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-X06-A-review.md",
+    "sha256": "ebccd22820ad5b274bf5ed3ec285ffbfcf8965a51822ba39bdfe1cf39afd4cba",
+    "size": 9625
+  },
+  "scope": "X06-A documentation only"
+}

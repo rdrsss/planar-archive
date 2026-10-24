@@ -1,0 +1,29 @@
+{
+  "inventory": 691,
+  "prior_names_preserved": 682,
+  "counts": {
+    "identity": 15,
+    "render": 46,
+    "extra": 2,
+    "author-allocation": 2
+  },
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "no_full_suite": true,
+  "no_release_run": true,
+  "independent_canonical_oracles": 2,
+  "author_xml_counts": {
+    "final-gate/focused.xml": 425,
+    "final-gate/history-codec.xml": 11,
+    "final-gate/projection-identity.xml": 9,
+    "final-gate/production-render.xml": 46,
+    "final-probes/allocation.xml": 2,
+    "final-probes/remaining.xml": 1,
+    "final-probes/late.xml": 1,
+    "final-probes/nodes.xml": 1
+  },
+  "author_outer_commands": 23,
+  "author_private_runtime_reverse_identical": true,
+  "reviewer_count_attempt_note": "verify.py initially asserted 14 identity cases, actual 15. All command/test exits were 0. raw.py corrects only the summary count without redundant reruns."
+}

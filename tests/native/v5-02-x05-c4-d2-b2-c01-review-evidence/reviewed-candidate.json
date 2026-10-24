@@ -1,0 +1,114 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "f98cb2367688c16706e04b3fa1fda8ead512076676dd68225a37bd0fbb294e99"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "bcd3c0316c423194626eca5ab4fcd8e68cb6fc3462d69ceab646d8531a59f4d1"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "c945a323fbed68c4515220054e547a50b7614204c2cd12c8d4d5c8bc84e5186c"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "e4560d68dfcefa4ca9f46320e7f9248e60f8c895812ea87b47a4300a7bd8fe7a"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "e92e4efd4f0b2fdac6a485ea46ffbbe564262cb98e95f6e3f186fa05ca7fa31d"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "234c038b2beba1c3a2b4d3c13445634d8ab95b6992995a76b6bf7cf0a19eadec"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "60195015a198fd5be3133f51da75c77c93df7566609626890f7c565b554b67ac"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "ca75f74fcb18772564691300d12d311ee2fe025997c9acdc9a351a6ee2297dac"
+  },
+  "src/engine/capture/admission.cpp": {
+    "mode": 420,
+    "sha256": "f5eab09a1dcb4e4dcb6c55290d574bb304c16bea0446d50911bbfddbf1f9bdc6"
+  },
+  "src/engine/capture/admission.cppm": {
+    "mode": 420,
+    "sha256": "172f206bd43294be5c6f21ca366b3887fae833b1cd7b601acb070be4ec23bea7"
+  },
+  "src/engine/capture/admission.t.cpp": {
+    "mode": 420,
+    "sha256": "8b1008069a9059ef43f5d57f690a47adf05365f66700df3808b7ba6507aa4282"
+  },
+  "src/engine/capture/capture.cpp": {
+    "mode": 420,
+    "sha256": "f1028f2c05f60ff6f629a9df606902b951fa11d3e177e365d6dd57a1d8592e9f"
+  },
+  "src/engine/capture/capture.cppm": {
+    "mode": 420,
+    "sha256": "2ab9a2abdcfa28e3ee8653d197cdf9a4ab7e627ce61405f1e5405ed95d4cd5ec"
+  },
+  "src/engine/capture/capture.t.cpp": {
+    "mode": 420,
+    "sha256": "c946431f615c4fadf99b61447203f746d603100f6c61691391fec08732bbb93e"
+  },
+  "src/engine/capture/native.cpp": {
+    "mode": 420,
+    "sha256": "8ea4b45d49331c01756647ff5194a92ab877789358840cf89f5590f958a5812d"
+  },
+  "src/engine/capture/native.cppm": {
+    "mode": 420,
+    "sha256": "cbba854e6c865aa1c627f01a6d3833d613f397400d646bfb49463ba7f9e7aace"
+  },
+  "src/engine/capture/native.t.cpp": {
+    "mode": 420,
+    "sha256": "6281db55b0ddacb20fd50195912616a782106a4dac3e81d51b2efe8bb5339a35"
+  },
+  "src/engine/capture/profile.cpp": {
+    "mode": 420,
+    "sha256": "eba6cfd7691243c51f8712dbfc35f61263f3a904897abe63380b80e4fd6ee49b"
+  },
+  "src/engine/capture/profile.cppm": {
+    "mode": 420,
+    "sha256": "61ca8e3d6f69d36df1d9f6456ed5698c9660ca0cf9cd3ad6c7c13dcd2bc4690c"
+  },
+  "src/engine/capture/profile.t.cpp": {
+    "mode": 420,
+    "sha256": "10052a79e53c5311babc94241dff9df0fa847e5280a798d83b8dae7626254698"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/audit.py": {
+    "mode": 420,
+    "sha256": "41aa3878204683ab0aa2f821a1ad51a37bde9f2e4c31b0b3b5f394cadac94897"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/cleanup.py": {
+    "mode": 420,
+    "sha256": "94298b514c34949570f07dd6aeaf43cac1a094ce4a7874d27df98a8b402abec8"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/freeze.py": {
+    "mode": 420,
+    "sha256": "c57e62d416e386a00c39b1a5b02a549adc45f904fca72f30bae792edc5fea0da"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/gate.py": {
+    "mode": 420,
+    "sha256": "0e448d3cf4115b12f3f970b2aa48289bee2bd6d113a2d8d610b87d01cd3b31c4"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/new-tests.txt": {
+    "mode": 420,
+    "sha256": "10ced16313cc3ac565fe810ff9152d92a5706eb25199a33d925c0086014bbf72"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/private-probe.cpp": {
+    "mode": 420,
+    "sha256": "45540183f1c3d30be43930e04bf5addd4f90d427c4dec6bbbd54607ec4b07672"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/private.py": {
+    "mode": 420,
+    "sha256": "68b17cb354fa3f79e1a105430563e68f887d0d4e95648f4f66fd212e9307ffaa"
+  },
+  "tests/native/v5-02-x05-c4-d2-b2-c01-support/syscalls.cpp": {
+    "mode": 420,
+    "sha256": "d2886042871701aa0206bdff8ba1040e85a9a200b1737f70343beaf34419a71d"
+  }
+}

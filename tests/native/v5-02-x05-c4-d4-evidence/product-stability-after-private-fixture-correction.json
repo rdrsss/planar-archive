@@ -1,0 +1,13 @@
+{
+  "all_product_tests_reference_and_other_support_bytes_unchanged": true,
+  "assembly_instruction_control": "controlled already-exhausted state; no actual instruction-crossing claim",
+  "broad_focused_passed": 536,
+  "changed": [
+    "tests/native/v5-02-x05-c4-d4-support/finalize.py",
+    "tests/native/v5-02-x05-c4-d4-support/freeze.py",
+    "tests/native/v5-02-x05-c4-d4-support/methods.inc",
+    "tests/native/v5-02-x05-c4-d4-support/private-tests.inc"
+  ],
+  "final_private_passed": 10,
+  "protection_control": "exact D4 round only; D3 remained in original baseline and is equal"
+}

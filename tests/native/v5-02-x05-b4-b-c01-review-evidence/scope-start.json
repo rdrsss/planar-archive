@@ -1,0 +1,38 @@
+{
+  "candidate-manifest.json": {
+    "entries": 210,
+    "sha256": "7f9ee160363fba3af1d652f328ffab596a2cad38cf6b5b98062f20c8c46e55a4",
+    "mismatches": []
+  },
+  "artifact-manifest.json": {
+    "entries": 276,
+    "sha256": "471a1c7a3044b0e22f3817394e7198e9f566ef3792c1e0f7e95bdcc92a3d481d",
+    "mismatches": []
+  },
+  "frozen-source.json": {
+    "entries": 210,
+    "sha256": "ed8b2b6ae2fbf88bd57ac6163d7f777e08c6788cfe41549a0d1ec9ee2d51c237",
+    "mismatches": []
+  },
+  "protected-start.json": {
+    "entries": 22385,
+    "sha256": "41c91163a12ec441e2a2eea47cde8275dc8b20b8a00c3bc26dc9b932f175f52e",
+    "mismatches": []
+  },
+  "protected-unowned.json": {
+    "entries": 203,
+    "sha256": "2fc680891b0111841321dfd944a015a7c5b810fec2a897fd24db7f1e36cd62cc",
+    "mismatches": []
+  },
+  "incremental": {
+    "sha256": "5c0671642ddbec600eebd587c10c9c3e9e3a5739d7ba99f620380bd93611ea0c",
+    "exact_reconstruction": true
+  },
+  "combined": {
+    "sha256": "f74a729e8af032465b453358d9b1495013c81a0eaefe0a8178d6d1c21aae5746",
+    "exact_reconstruction": true
+  },
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "reviewer_protected_entries": 22592
+}

@@ -1,0 +1,268 @@
+[
+  {
+    "label": "identity-before",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/identity.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.09838166739791632
+  },
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar",
+      "planar_runtime_tests",
+      "planar_ledger_format_tests",
+      "planar_ledger_sqlite_tests",
+      "planar_history_read_tests",
+      "planar_history_fixture",
+      "planar_load_cli_probe",
+      "planar_cli_variant_0",
+      "planar_cli_variant_1",
+      "planar_cli_variant_2",
+      "planar_cli_variant_3",
+      "planar_cli_variant_4",
+      "planar_cli_variant_5",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.2525052921846509
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.08853341545909643
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 172.61105454154313
+  },
+  {
+    "label": "selection-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b3-c-support/vector.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.7397560002282262
+  },
+  {
+    "label": "shape-definition-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6618125420063734
+  },
+  {
+    "label": "canonical-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6591783342882991
+  },
+  {
+    "label": "record-v1-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.7468277094885707
+  },
+  {
+    "label": "request-v2-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6611566664651036
+  },
+  {
+    "label": "effective-provenance-vectors",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.6702035823836923
+  },
+  {
+    "label": "historical-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/historical-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.40938837453722954
+  },
+  {
+    "label": "d6-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/d6-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.24785300064831972
+  },
+  {
+    "label": "d6-c01-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/d6-c01-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.1481000827625394
+  },
+  {
+    "label": "d7-b-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/d7-b-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.11880729254335165
+  },
+  {
+    "label": "b1-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/b1-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.04980191681534052
+  },
+  {
+    "label": "current-native-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-c4-b3-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/current-native-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.02941991575062275
+  },
+  {
+    "label": "lint",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 1.779299208894372
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar",
+      "planar_runtime_tests",
+      "planar_ledger_format_tests",
+      "planar_ledger_sqlite_tests",
+      "planar_history_read_tests",
+      "planar_history_fixture",
+      "planar_load_cli_probe",
+      "planar_cli_variant_0",
+      "planar_cli_variant_1",
+      "planar_cli_variant_2",
+      "planar_cli_variant_3",
+      "planar_cli_variant_4",
+      "planar_cli_variant_5",
+      "-j",
+      "2"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.19374174997210503
+  },
+  {
+    "label": "identity-after",
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-b3-review-evidence/identity.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.09517154190689325
+  }
+]

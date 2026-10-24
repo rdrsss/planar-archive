@@ -1,0 +1,32 @@
+[
+  {
+    "name": "interpretation-compile",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-DPLANAR_INTERPRETATION_GOLDENS=\"<repo>/tests/native/r13c2-fixtures\"",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_history_interpretation_codec_tests.dir/history/interpretation_codec.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r14a2-review-evidence/interpretation-probe.o",
+      "-c",
+      "<repo>/tests/native/r14a2-review-evidence/interpretation-probe.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 1
+  }
+]

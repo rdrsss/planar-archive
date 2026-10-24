@@ -1,0 +1,25 @@
+{
+  "all_owned_paths_and_debug_released": true,
+  "all_owned_probe_processes_finished": true,
+  "author_cases": 13,
+  "author_entries": 100,
+  "author_finalization": {
+    "mode": 420,
+    "sha256": "1e0000acfd007991fb1d2faa7df2e591f9d80b5907884390753ef97ddee83ca7"
+  },
+  "compiled_entries": 888,
+  "disposition": "approve",
+  "inventory": 756,
+  "manifest": {
+    "mode": 420,
+    "sha256": "03ea8a0e6967bd51e6b6776b7a19fe266d1323b06e6e5bef0965a1656c8e6ee3"
+  },
+  "no_further_reviewer_edits": true,
+  "protected_entries": 72017,
+  "report": {
+    "mode": 420,
+    "sha256": "6d4c9e736b17363246ca1ccde10454f6c0077f5ce7ffc9eb5eaaae0b844a9a30"
+  },
+  "reviewer_cases": 6,
+  "schema": "planar-c4-b0-independent-review-v1"
+}

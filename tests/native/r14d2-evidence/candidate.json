@@ -1,0 +1,12 @@
+{
+  "src/engine/capture/native.cpp": "ba713848914d80224142ff18e7891696be9b233f3b4d950c2533045a02ad6687",
+  "src/engine/capture/native.cppm": "66ebc893fa277b8dd0838184fbdef996c40d97e16fc87c756484481fc348cf7c",
+  "src/engine/capture/native.t.cpp": "31277d7d047f934602ff7740edf39dbc51ff75f78ce0dc874e41beff3b909c20",
+  "docs/architecture.md": "6ae8191c493053c43f95ddb3b0ebc000d3b52b755f1c483ecd30d588ebc80065",
+  "docs/testing.md": "c8aab7e3027d7f0317c4a6683797ef9c557689e917b001876b6232565747c106",
+  "CLAUDE.md": "3a7971f22c8d7867fdb53404c38d7f6c8277e4c05f1cdeccf84acd5a15bee734",
+  "README.md": "beb9c8b564870d02b3fdf5cc920daf470cfcbeaf93c032c2cc050473b9257181",
+  "CONTRIBUTING.md": "b987bab0b7566d5c818410929c596a41e7b5d4a87d1a7f649c37564d8bde0dd1",
+  "docs/cli-reference.md": "f95cb98741d26a1a38ff06d0e59229d210d757f34f9d67363a227300af3549ee",
+  "docs/vernacular/implementation.md": "c13249b8c9881d94d4285358a0605308f96f380c476118944021ea29b10551f4"
+}

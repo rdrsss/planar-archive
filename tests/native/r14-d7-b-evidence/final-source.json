@@ -1,0 +1,23 @@
+{
+  "path_base": "repository",
+  "evidence": "Final focused debug/release source after isolated intent-resource mapping correction; full 399-case gates use final-gate-source.json instead",
+  "files": {
+    "src/engine/runtime/commands.t.cpp": "313b202918972c7f67b8a81ff1ce39a9642de2f60d84ac21055635d6e67b61de",
+    "src/engine/runtime/runtime.cpp": "7629ca86e465c23f22dcd0d4b53e881ba99d8d406630015234e01372067ea0f5",
+    "src/stdlib/planar/commands.lua": "cf663703ceed18bf2c8204eda5e69dfa3aa7f76e4b7fe5ae84fb2274cc725da4",
+    "src/cmd/planar/bootstrap.t.cpp": "c42f04ea6006e382d3bf4156975baffccb62cd04b69298ad264e85437f439fa1",
+    "src/cmd/planar/CMakeLists.txt": "6af54932b8e0532c30e809a88e6eb928383f8bc35dd1dc078e79c41c8d4b47bf",
+    "src/cmd/planar/invocation.cpp": "a8a684b8df8c8fdd3785cb0c08a7b495499e6107a330c29d04692962db674ecb",
+    "src/cmd/planar/bootstrap.cpp": "074d9c5330afa9f7a3af8b15039bfa93d3b944d678b721c676f9ea6c539469a3",
+    "src/cmd/planar/handlers/load/command.cpp": "400d329972d40729adc61b3b91a6d19222a45ab52a41a141c8edad6a0d97c25b",
+    "src/cmd/planar/handlers/load/command.cppm": "78b7f8638456f6c6219293fe42f460da5580f9466b971da8cdbb985d40bac4ca",
+    "tests/acceptance/bootstrap_load.py": "bfcda9d114febaa5934bd2b3f6ab57022cc9b86e377218c7dd8d265798a4e06d",
+    "tests/native/r14-d6-support/audit.py": "def1c86ef02437ae28bb0153495738876b91be94d1bcebf0ac416d11807f172c",
+    "tests/native/r14-d6-support/generate.py": "87014ad07231b9d837198a89a7b927988faeb7e9a46df9c74d5fc87a198c1765",
+    "tests/native/r14-d6-c01-support/audit.py": "078b9e643a5f1046699dbd6e1d25113c4a05629205171b27dfe28be5b855f75c",
+    "tests/native/v5-02-b2-support/generate.py": "6a17053e880b22cddca7db50c2721a169987c264f8b3563fc5e8ce20ad679c9d",
+    "tests/native/r14-d7-b-support/run.py": "f1804ab02c76795488232dada6f3630c4fdf619f321be5ec7c5903cd0e5fc406",
+    "tests/native/r14-d7-b-support/audit.py": "b731932fe1ac80c584deab700d15801647e147bb10065bd07d554038a1ea538e",
+    "tests/native/r14-d7-b-support/generate.py": "27059603b6d48d4e061beffdebe0d029433dc0a98d2b4de26ac6c5ff4f61ad9c"
+  }
+}

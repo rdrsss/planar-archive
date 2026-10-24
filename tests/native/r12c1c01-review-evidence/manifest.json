@@ -1,0 +1,12 @@
+{
+  "docs/vernacular/rounds/R12-C1-C01-review.md": "5f3b8e713e386f3b21d92fd86e0bfc21277c574c0203310a4f43c40d910ba9ed",
+  "tests/native/r12c1c01-review-evidence/audit.py": "57d969865a892ca2f998a99a2667d7099bf13c59d3f0fdad15b0febf0eaddff8",
+  "tests/native/r12c1c01-review-evidence/build.log": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+  "tests/native/r12c1c01-review-evidence/focused-counts.json": "e1706f4cee3b4e63578853ff840137469343460233125fea387b98c4ca809c18",
+  "tests/native/r12c1c01-review-evidence/focused.log": "5315e457abbfcdfb2cd6e7cc4412dbbd02b78ffa255e1abf6cdf54b43c805138",
+  "tests/native/r12c1c01-review-evidence/focused.xml": "f74da05b5486c80dcfa6b07b32a74b34cabd53f6df74f59b87f1ffaf9ed0cce1",
+  "tests/native/r12c1c01-review-evidence/identity-after.json": "a57131f8251994bb2acf51c4b933db1cf46bbf6ad4b17e55dacda235751607ed",
+  "tests/native/r12c1c01-review-evidence/identity-before.json": "a57131f8251994bb2acf51c4b933db1cf46bbf6ad4b17e55dacda235751607ed",
+  "tests/native/r12c1c01-review-evidence/lint.log": "21c21521d2a8e84909299322f0fe84c1eae1bc27dd2932169519d0e5a7159915",
+  "tests/native/r12c1c01-review-evidence/no-work.log": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794"
+}

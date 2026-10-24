@@ -1,0 +1,13 @@
+{
+  "candidate-manifest.json": {
+    "entries": 12,
+    "sha256": "48e1fceb881ce55fcdd655b0f64a5d2b42b01dc419c21d0413f1e19dc081c91e"
+  },
+  "artifact-manifest.json": {
+    "entries": 90,
+    "sha256": "2f3991abd0d0ab2ee852c35fce355ddd1a7592ee20b8b316807a402389ceb394"
+  },
+  "scoped_entries": 384,
+  "scoped_source_equal": true,
+  "whole_tree_claim": false
+}

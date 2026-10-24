@@ -1,0 +1,108 @@
+[
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "seconds": 0.082
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b1-evidence/final-gate/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b1-review-evidence/focused.xml"
+    ],
+    "exit": 0,
+    "seconds": 93.374
+  },
+  {
+    "label": "historical-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b1-review-evidence/historical-audit.json"
+    ],
+    "exit": 0,
+    "seconds": 0.369
+  },
+  {
+    "label": "d6-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b1-review-evidence/d6-audit.json"
+    ],
+    "exit": 0,
+    "seconds": 0.227
+  },
+  {
+    "label": "d6-c01-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b1-review-evidence/d6-c01-audit.json"
+    ],
+    "exit": 0,
+    "seconds": 0.146
+  },
+  {
+    "label": "d7-b-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b1-review-evidence/d7-b-audit.json"
+    ],
+    "exit": 0,
+    "seconds": 0.117
+  },
+  {
+    "label": "b1-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b1-review-evidence/b1-audit.json"
+    ],
+    "exit": 0,
+    "seconds": 0.047
+  },
+  {
+    "label": "pinned-lint",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit": 0,
+    "seconds": 1.413
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "seconds": 0.239
+  }
+]

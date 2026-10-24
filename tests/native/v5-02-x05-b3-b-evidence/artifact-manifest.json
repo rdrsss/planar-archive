@@ -1,0 +1,257 @@
+{
+  "REPORT.md": {
+    "sha256": "85eec08f081459e65b64b4b7acb10ef761149b148048099bee67ac76f24e0207",
+    "bytes": 7912,
+    "mode": 420
+  },
+  "baseline/CLAUDE.md": {
+    "sha256": "8d171fcb1b2f48b6dbe8cc1523e5624e136ba4f2e2bb8596319edf0b1ee57d6f",
+    "bytes": 38904,
+    "mode": 420
+  },
+  "baseline/docs/architecture.md": {
+    "sha256": "9a155f8395e3e661859e67091f2f39650f16aeebae9ac9a6b64534cbc9b73829",
+    "bytes": 83705,
+    "mode": 420
+  },
+  "baseline/docs/testing.md": {
+    "sha256": "5c436c384b3efcc66fcccbd47977a07f61a2f31e7abe11407aa81277408ca43c",
+    "bytes": 88045,
+    "mode": 420
+  },
+  "baseline/docs/vernacular/external-profile-implementation.md": {
+    "sha256": "f374fa4ceb54dbb4d4b035afdad15745da1ef6b49b668cefb47fe9b19b69bc10",
+    "bytes": 45539,
+    "mode": 420
+  },
+  "baseline/docs/vernacular/implementation.md": {
+    "sha256": "96f018a0145f06375ce0decb63959cc1ea0352cb769060db4b95e4c3bd4d6d03",
+    "bytes": 48445,
+    "mode": 420
+  },
+  "baseline/docs/vernacular/roadmap.md": {
+    "sha256": "1a11f4b509f1854b794b4f74f13f6fec339753a476d5a078ccc08e12bbbd7a07",
+    "bytes": 54841,
+    "mode": 420
+  },
+  "baseline/src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "6c48f04d3edb21819adc2db7d7f1d65e2a42692a0328acfd1b3f450da6176971",
+    "bytes": 43620,
+    "mode": 420
+  },
+  "baseline/src/engine/runtime/runtime.cpp": {
+    "sha256": "798e032cd31944ced27d8f476cfabd392fbedd1c03c5f70064707ea4b04338e8",
+    "bytes": 115584,
+    "mode": 420
+  },
+  "baseline/src/engine/runtime/runtime.cppm": {
+    "sha256": "91e80d2525672d767ca2c7b8c1b169341586c6a4c8233d44ea70bbd831aebf45",
+    "bytes": 14470,
+    "mode": 420
+  },
+  "baseline.diff": {
+    "sha256": "ec1a57500b8b015ef23f659c1ba26b502ee1047421b57eca00de92e939a546f9",
+    "bytes": 468753,
+    "mode": 420
+  },
+  "baseline.json": {
+    "sha256": "39dcc662b0efd5e846c80d32522869de9c0b24c927d52da5e5835094c46c1852",
+    "bytes": 928,
+    "mode": 420
+  },
+  "candidate-manifest.json": {
+    "sha256": "c626acc345f9331e21f92ba6a868a2663ea5620121bb62402822fce5babf3c87",
+    "bytes": 2155,
+    "mode": 420
+  },
+  "candidate.diff": {
+    "sha256": "6cd56c2800c110638fc2f41cda859204bd9190fd2dceee9de8f437bebafe0c2e",
+    "bytes": 55075,
+    "mode": 420
+  },
+  "checkpoint-allocation/allocation": {
+    "sha256": "89ddc25bd600b496ee1a96c593b15dfda9d542990af539700c2d300b110ffc94",
+    "bytes": 11856760,
+    "mode": 493
+  },
+  "checkpoint-allocation/allocation-compile.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420
+  },
+  "checkpoint-allocation/allocation-link.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420
+  },
+  "checkpoint-allocation/allocation-shared-stability.json": {
+    "sha256": "3ccddebe225df2519feeb793c68658e036aae764e417f431a995425f3d96ce6e",
+    "bytes": 64,
+    "mode": 420
+  },
+  "checkpoint-allocation/allocation.log": {
+    "sha256": "7713b6fa0af1c1a6d9a0d1639d2559b7df3389f42ba7e057b42b3def747f1af5",
+    "bytes": 62,
+    "mode": 420
+  },
+  "checkpoint-allocation/allocation.o": {
+    "sha256": "e1ba1d8cd280a812ec9f11f43ed2c9750b169e36b0e1bf3c1dbaafc052442f5f",
+    "bytes": 3719368,
+    "mode": 420
+  },
+  "checkpoint-allocation/allocation.xml": {
+    "sha256": "a377b4c8cbdfa1e0fe4cfe3d219050102e6f440c227e18e03b15db549bd88ea6",
+    "bytes": 560,
+    "mode": 420
+  },
+  "checkpoint-allocation/commands.json": {
+    "sha256": "92560692906497204c80632a5a015b4c0e382167ab3939e9ca1cad8732708f2e",
+    "bytes": 9151,
+    "mode": 420
+  },
+  "checkpoint-allocation-progress.log": {
+    "sha256": "e745f76fb6f48baedc3d5d9abcba30b5dac8ca5bf30622089971ce945dbd70c3",
+    "bytes": 52,
+    "mode": 420
+  },
+  "checkpoint-build.log": {
+    "sha256": "9691019103360778c3b36a66c699a3cfbd675d75995eae9aad0bec42e5800af0",
+    "bytes": 57676,
+    "mode": 420
+  },
+  "checkpoint-checks.json": {
+    "sha256": "ab4d494e986d0008a8488fd4816ea75f5889ebc5745ecc4928fcda0f7e748dd9",
+    "bytes": 582,
+    "mode": 420
+  },
+  "checkpoint-format.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420
+  },
+  "checkpoint-inventory.json": {
+    "sha256": "6279b8b64adb9b706a1631ae2973ed2a3f2eb2118ffcab87493bd660b594dbaf",
+    "bytes": 515841,
+    "mode": 420
+  },
+  "checkpoint-no-work.log": {
+    "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+    "bytes": 63,
+    "mode": 420
+  },
+  "checkpoint-production.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420
+  },
+  "checkpoint-production.xml": {
+    "sha256": "9f6f061a1d2ddc608502e11e6433d68ca8fabdcad742cb3a807d28ffc220a52c",
+    "bytes": 2135,
+    "mode": 420
+  },
+  "commands.json": {
+    "sha256": "23dd71173a8f1e951e79510ce73a3b5bc0df9f879cee16fae514cd6dafff6db9",
+    "bytes": 2528,
+    "mode": 420
+  },
+  "development-build.log": {
+    "sha256": "eab3914508ffaf84337bb1b47ff6b883e1865746932871d2b8de421c68a0378e",
+    "bytes": 34191,
+    "mode": 420
+  },
+  "development-build02.log": {
+    "sha256": "3ad4792913810cb583a76ae25543bb85884b6cba09eeb126606d97d26779e485",
+    "bytes": 77839,
+    "mode": 420
+  },
+  "development-build03.log": {
+    "sha256": "efd180cd2efa2fae26d272c088a3dae8eecc983add5f8a3aa99a7e2c18376ec3",
+    "bytes": 39037,
+    "mode": 420
+  },
+  "development-build04.log": {
+    "sha256": "36a8c7965b352ac1a75c2f8a07b013ef5a2592803f7fe9e7b3030fcea39a1a3d",
+    "bytes": 423,
+    "mode": 420
+  },
+  "development-build05.log": {
+    "sha256": "36a8c7965b352ac1a75c2f8a07b013ef5a2592803f7fe9e7b3030fcea39a1a3d",
+    "bytes": 423,
+    "mode": 420
+  },
+  "development-build06.log": {
+    "sha256": "36a8c7965b352ac1a75c2f8a07b013ef5a2592803f7fe9e7b3030fcea39a1a3d",
+    "bytes": 423,
+    "mode": 420
+  },
+  "development-build07.log": {
+    "sha256": "36a8c7965b352ac1a75c2f8a07b013ef5a2592803f7fe9e7b3030fcea39a1a3d",
+    "bytes": 423,
+    "mode": 420
+  },
+  "development-build08.log": {
+    "sha256": "1813556c35379e4a56af492594d0c3154f2cc9493d7cbd88decc84db342f0d84",
+    "bytes": 57917,
+    "mode": 420
+  },
+  "development-probes01/allocation": {
+    "sha256": "a431d34b4ff1a26b3fa65653cf0c4ce2324c9f60f20b457cc03b85c9d74e1355",
+    "bytes": 11854472,
+    "mode": 493
+  },
+  "development-probes01/allocation-compile.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420
+  },
+  "development-probes01/allocation-link.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420
+  },
+  "development-probes01/allocation-shared-stability.json": {
+    "sha256": "3ccddebe225df2519feeb793c68658e036aae764e417f431a995425f3d96ce6e",
+    "bytes": 64,
+    "mode": 420
+  },
+  "development-probes01/allocation.log": {
+    "sha256": "7713b6fa0af1c1a6d9a0d1639d2559b7df3389f42ba7e057b42b3def747f1af5",
+    "bytes": 62,
+    "mode": 420
+  },
+  "development-probes01/allocation.o": {
+    "sha256": "63c1593543524305ea314897a802c32203e6d3072c146053752029aa6088f11e",
+    "bytes": 3719416,
+    "mode": 420
+  },
+  "development-probes01/allocation.xml": {
+    "sha256": "5d8eb26421da57a6df368cf1b7226099f1e86945eed5f060d53cb15b9d01c703",
+    "bytes": 809,
+    "mode": 420
+  },
+  "development-probes01/commands.json": {
+    "sha256": "7c84d5698d858be955390f2319613295afa5b2805baf21dc51b291ab7c77402e",
+    "bytes": 9148,
+    "mode": 420
+  },
+  "development-tests.log": {
+    "sha256": "17f93916324673693f5987d8d4ed83a10b989f647c10a8339300531fe3aa9632",
+    "bytes": 247,
+    "mode": 420
+  },
+  "development-tests02.log": {
+    "sha256": "d18ede3baffb51ff663f1d80bebebaef7929b8bac9509b55f8ff2a93bf2a87e2",
+    "bytes": 247,
+    "mode": 420
+  },
+  "development-tests03.log": {
+    "sha256": "92e8a2181ff1ca419c0034cf4c9292f9951e4761368f503d867087443abde11b",
+    "bytes": 102,
+    "mode": 420
+  },
+  "source-snapshot.json": {
+    "sha256": "10dd139231a1595219f160375e978bcbd781ad208e3c406ad4282e6ec4aaca8a",
+    "bytes": 70605,
+    "mode": 420
+  }
+}

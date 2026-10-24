@@ -1,0 +1,16 @@
+{
+  "author_identities": {
+    "artifact-manifest.json": "71f070efba709dab129f68832587eae8cea73adbc9b2fa13dca070cd3423d407",
+    "candidate-manifest.json": "81f93dfb3a0179092df56e9ded03edf781d2f26ea467881e566c6103e9421ade",
+    "final-complete-filesystem.json": "3ee8b2ce4e7869ab72cc1c727b0a87fd60f1007e05a732b4e66fb88977eec654",
+    "owned.diff": "de9f90f8b3aebbd9d6a7e093bba4513ecf585ebb19130c8887ffe9387181500d"
+  },
+  "decision": "approve",
+  "final_audit_sha256": "740384dd9f4fe8bf5f05ae1dc066accf7b7f78e207582163d605d4860ab2cdba",
+  "no_edits_after_ownership_release": true,
+  "repository_path_base": "<repo>",
+  "review_report": "docs/vernacular/rounds/V5-02-X03-B3-review.md",
+  "review_report_sha256": "f39b627f7e2da4a1f85c2a2f92ff6bdb28d4a6b49be80e2a39a43064efa3bf45",
+  "scope": "native X03-B complete; permits X04-A; external runtime gate remains open",
+  "utc": "2026-10-22T21:35:43.760601+00:00"
+}

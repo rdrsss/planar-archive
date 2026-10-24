@@ -1,0 +1,181 @@
+{
+  "review_scope": "docs-only proposal; no builds, product tests, Planar tools or installed binaries",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "manifest_sha256": "60cc071f6b49ff2b2049f8883d74cc12cff7d7de531e847e910e33d8f8916a76",
+  "manifest_matches_brief": true,
+  "manifest_checks": [
+    {
+      "path": "tests/native/v5-02-evidence/baseline.json",
+      "expected": "72d7921631c75cde6c015dcad55d5ab467eb8f986f5982622b93cf96c028f258",
+      "actual": "72d7921631c75cde6c015dcad55d5ab467eb8f986f5982622b93cf96c028f258",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/candidate.diff",
+      "expected": "dae9cdafdd746222113b28abd6ce330c36d9b3fe7e35ec4e552e60f3c8d8fd5f",
+      "actual": "dae9cdafdd746222113b28abd6ce330c36d9b3fe7e35ec4e552e60f3c8d8fd5f",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/candidate.md.snapshot",
+      "expected": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+      "actual": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+      "matches": true
+    },
+    {
+      "path": "docs/vernacular/v5-command-workspace-proposal.md",
+      "expected": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+      "actual": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/draft-01/candidate.diff",
+      "expected": "e6b724701168167e32b2623d3cfe236e9594aa8b7b57633cda536fb18a19664a",
+      "actual": "e6b724701168167e32b2623d3cfe236e9594aa8b7b57633cda536fb18a19664a",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/draft-01/candidate.md.snapshot",
+      "expected": "45e4e688b0e648c90cba27b87402bb2c7d3e5faa95b5c119b3193adeaa3854c9",
+      "actual": "45e4e688b0e648c90cba27b87402bb2c7d3e5faa95b5c119b3193adeaa3854c9",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/draft-01/manifest.json",
+      "expected": "e667b37ccd67b602b2521acf5cb045852568ad8065b4b72dd74194a08597639d",
+      "actual": "e667b37ccd67b602b2521acf5cb045852568ad8065b4b72dd74194a08597639d",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/draft-01/verification.json",
+      "expected": "be8281bd79710b510b0b51f8fbda37444aaaa846c3e7fefb0266bee617e633b7",
+      "actual": "be8281bd79710b510b0b51f8fbda37444aaaa846c3e7fefb0266bee617e633b7",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/protected-before.json",
+      "expected": "fd1ed46f371518b8c6bb157d5617e4d9fda05b1e55eb6595405b5ea3343b6e36",
+      "actual": "fd1ed46f371518b8c6bb157d5617e4d9fda05b1e55eb6595405b5ea3343b6e36",
+      "matches": true
+    },
+    {
+      "path": "tests/native/v5-02-evidence/verification.json",
+      "expected": "fd76b1486d0fd2c033a33825987136d45d11fb1b608652a8e5efd867f9fff41b",
+      "actual": "fd76b1486d0fd2c033a33825987136d45d11fb1b608652a8e5efd867f9fff41b",
+      "matches": true
+    }
+  ],
+  "proposal_sha256": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+  "proposal_lines": 393,
+  "snapshot_matches_proposal": true,
+  "diff_reconstructs_proposal": true,
+  "local_links": [
+    {
+      "target": "v5-alignment.md#authority-and-current-evidence",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "declarations.md",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "render-contract.md",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "ledger-contract.md",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/cmd/planar/bootstrap.cpp",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/engine/runtime/runtime.cpp",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/engine/history/provenance.cpp",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/engine/history/provenance_codec.cpp",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/engine/history/record.cppm",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/engine/acceptance/prepared.cppm",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "render-contract.md#invocation-and-trust",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/cmd/planar/handlers/init/command.cpp",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../vendor/cli11/9d6a/README.md",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "render-contract.md#errors-and-verification-boundary",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "../../src/engine/capture/host_path.cpp",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "declarations.md#paths-and-one-root",
+      "exists": true,
+      "fragment_valid": true
+    },
+    {
+      "target": "render-contract.md#capture-boundary",
+      "exists": true,
+      "fragment_valid": true
+    }
+  ],
+  "protected_checked": 12021,
+  "protected_changes": [],
+  "v5_sha256": "c3d37e0e28407a9066eb51c515982ef6c93d82795eb56f97dea4a780b66fe08e",
+  "v5_matches_expected": true,
+  "agents_symlink": "CLAUDE.md",
+  "passed": true
+}

@@ -1,0 +1,35 @@
+{
+  "status": "author complete; independent review required; not self-approved",
+  "utc": "2026-10-22T19:28:45.231875+00:00",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "baseline_manifest_sha256": "5525cd252c797e2b04117aa81256ca628b185aee210d14e6ac790717e75700f2",
+  "candidate_manifest_sha256": "67e3a6fa174d3f7a526e52d1717cb21f617655ebad65b8788d19b2ca264867bf",
+  "owned_diff_sha256": "400139e1f9686a00109cfea78c8530ce2639a36883e8e9461f567dc697e29f9b",
+  "candidate_files": [
+    "CLAUDE.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/command-contract.md",
+    "docs/vernacular/external-profile-contract.md",
+    "docs/vernacular/external-profile-implementation.md"
+  ],
+  "checks": {
+    "baseline_files": 14714,
+    "new_document_links_and_anchors": 27,
+    "textual_schema_coverage_assertions": 30,
+    "command_exact_body_preserved": true,
+    "unexpected_changes_or_additions": 0,
+    "AGENTS_symlink": "CLAUDE.md"
+  },
+  "tests": "No builds, CTest inventory, product tests, lint or runtime checks run;405 inventory inherited from approved X01. Source/tests/CMake and historical frozen evidence remain byte-identical.",
+  "limitations": [
+    "Textual checks do not prove runnable codecs, sandbox, capture, response or replay behavior.",
+    "P1 and P2 remain pending policy recommendations; independent review precedes operator decision.",
+    "No Linux, execution, RA01 or external-profile runtime acceptance claimed."
+  ],
+  "authoring_check_failure": "First textual E01\u2013E14 coverage matcher expected an extra table separator; corrected evidence script to match actual ID cell. No product/test failure or hidden runtime fix.",
+  "ownership_release": "All document ownership released to coordinator/reviewer; no builds run, debug/release left idle.",
+  "prohibited_actions": "No product/test/CMake edits, Planar tools/skills/queue, operator data, installed binaries, commits, install, publish or merge."
+}

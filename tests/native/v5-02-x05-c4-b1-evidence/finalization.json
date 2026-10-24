@@ -1,0 +1,26 @@
+{
+  "artifact_entries": 177,
+  "candidate": {
+    "mode": 420,
+    "sha256": "99ce8983f9d28d475ddd49f05fc906d1915353de5072707fc1bff54493fc31bc"
+  },
+  "candidate_entries": 16,
+  "cleanup": {
+    "mode": 420,
+    "sha256": "0b0e9804e69a39a5952a7ef8b3706f8d561beac82d21b1e8ff665533a1b2548d"
+  },
+  "manifest": {
+    "mode": 420,
+    "sha256": "1126d8104d1e2b32044800d41d92bb6ef77d1c476b30ca429a69369df5e8cb8f"
+  },
+  "product_tests_unchanged": true,
+  "report": {
+    "mode": 420,
+    "sha256": "f35d01a7f02e2466d2cb3cc47071f07c23c81e0e554b5fb32318fce99d58af72"
+  },
+  "schema": 1,
+  "tested_candidate": {
+    "mode": 420,
+    "sha256": "05940660e44677400b57cc7c350969d3ba60012fee9e5d2a0ae3f9a40e24328e"
+  }
+}

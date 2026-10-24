@@ -1,0 +1,22 @@
+{
+  "disposition": "approve combined original B3-B plus R01",
+  "report_sha256": "3a1f96ef8385a47d6fb6161cf14906010de469387ebfeb8a38344b1e329c1b41",
+  "reviewer_artifact_manifest_sha256": "0b5780a22bdd8eefba971d2d0504bf471cd9b2b6b1992de7049fb8bc9d46bfc7",
+  "reviewer_artifact_count": 121,
+  "candidate_identities": {
+    "candidate-manifest.json": "506381976c972a05d2bdffb56e72341868252bbf7e87c3cc9692476f5ee8ad90",
+    "candidate.diff": "334f680a9b997023fa784d749c34863b545d921c62a57d53dde65b8cf8896f3f",
+    "r01.diff": "7ae92ef1f632b4c119d5b53372a58a3291253bc0a8367d76476e7b3af598fc15",
+    "artifact-manifest.json": "cb8bdd69503c75140d0bc2b65e0175692bb47ef4a6ce9b2fa382ee324456f200",
+    "REPORT.md": "3b4f70433c5409a86f6fef0b22cf31fe31550ad4b4fa36ea2c77500920c9acb8"
+  },
+  "candidate_entries_rehashed": 21,
+  "author_artifacts_rehashed": 370,
+  "frozen_entries_rehashed": 2094,
+  "protected_entries_unchanged": 5479,
+  "shared_compiled_entries_unchanged": 748,
+  "debug_ownership_released": true,
+  "release_read_only": true,
+  "no_further_reviewer_edits": true,
+  "full_milestone_release_linux_gate": false
+}

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "tests/native/v5-02-x03-b1-support/fixture.cpp",
+    "tests/native/v5-02-x03-b1-support/publication.t.cpp"
+  ],
+  "cwd": "<repo>",
+  "started_at": "2026-10-22T20:10:15.700679+00:00",
+  "ended_at": "2026-10-22T20:10:15.740351+00:00",
+  "exit_code": 0
+}

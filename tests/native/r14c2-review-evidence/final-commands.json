@@ -1,0 +1,45 @@
+[
+  {
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "log": "vectors.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "log": "record-vectors.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--dry-run",
+      "--Werror",
+      "tests/native/r12c2-support/posix.cppm",
+      "tests/native/r12c2-support/posix.cpp",
+      "tests/native/r13b1-support/digest.cppm",
+      "tests/native/r13b1-support/collision.t.cpp"
+    ],
+    "cwd": "<repo>",
+    "log": "helper-lint.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "<repo>/tests/native/r14c2-review-evidence/check.py"
+    ],
+    "cwd": "<repo>",
+    "log": "audit-final.txt",
+    "exit": 0
+  }
+]

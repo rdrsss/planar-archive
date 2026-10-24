@@ -1,0 +1,22 @@
+{
+  "artifact_entries": 87,
+  "author_artifacts": {
+    "mode": 420,
+    "sha256": "1126d8104d1e2b32044800d41d92bb6ef77d1c476b30ca429a69369df5e8cb8f"
+  },
+  "author_candidate": {
+    "mode": 420,
+    "sha256": "99ce8983f9d28d475ddd49f05fc906d1915353de5072707fc1bff54493fc31bc"
+  },
+  "manifest": {
+    "mode": 420,
+    "sha256": "7c866e82d196074d877ea29708de3c400bf4b9010121b032fe0955f54d18171e"
+  },
+  "protected_entries": 72338,
+  "released": true,
+  "report": {
+    "mode": 420,
+    "sha256": "ecacc863b632d5ec3fdb776400a5c27c579e60d68f16642115e1540945f4e3ec"
+  },
+  "schema": 1
+}

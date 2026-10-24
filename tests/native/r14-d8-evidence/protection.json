@@ -1,0 +1,20 @@
+{
+  "path_base": "repository",
+  "baseline_file_count": 6806,
+  "changed": [
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/R14-D8.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "tests/acceptance/bootstrap_load.py"
+  ],
+  "coordinator_owned_exceptions": [
+    "docs/vernacular/rounds/R14-D8.md"
+  ],
+  "missing": [],
+  "unexpected": [],
+  "all_preexisting_evidence_and_goldens_unchanged": true
+}

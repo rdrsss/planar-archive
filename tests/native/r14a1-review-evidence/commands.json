@@ -1,0 +1,138 @@
+[
+  {
+    "name": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.153
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "../../tests/native/r14a1-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 35.656
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "python3",
+      "tests/acceptance/bootstrap_cli.py",
+      "build/rewrite-debug/bin/planar"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 9.681
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.671
+  },
+  {
+    "name": "record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.672
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.78
+  },
+  {
+    "name": "helper-lint",
+    "argv": [
+      "python3",
+      "tests/native/r13b1c01-evidence/helper-lint.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.109
+  },
+  {
+    "name": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0,
+    "seconds": 0.138
+  },
+  {
+    "name": "registry",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "no-work-final",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "audit-final",
+    "argv": [
+      "python3",
+      "tests/native/r14a1-review-evidence/audit.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python3",
+    "scripts/rewrite-check.py",
+    "lint",
+    "--build-dir",
+    "build/rewrite-debug"
+  ],
+  "cwd": "<repo>",
+  "start": 1792702461.967378,
+  "end": 1792702463.1347818,
+  "exit_code": 0
+}

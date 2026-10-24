@@ -1,0 +1,1 @@
+34 independent assertions passed in 7 adversarial scenarios

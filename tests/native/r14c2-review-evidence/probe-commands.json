@@ -1,0 +1,58 @@
+[
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/lua/0b10/src",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_capture.dir/capture/capture.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r14c2-review-evidence/probe.o",
+      "-c",
+      "<repo>/tests/native/r14c2-review-evidence/probe.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "log": "probe-compile.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "<repo>/tests/native/r14c2-review-evidence/probe.o",
+      "-o",
+      "<repo>/tests/native/r14c2-review-evidence/probe",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_capture.a",
+      "<repo>/build/rewrite-debug/src/engine/lib@cmake_cxx_std.a",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_lua_loader.a",
+      "<repo>/build/rewrite-debug/src/engine/libplanar_value.a",
+      "<repo>/build/rewrite-debug/libplanar_lua.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "log": "probe-link.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "<repo>/tests/native/r14c2-review-evidence/probe"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "log": "probe.txt",
+    "exit": 0
+  }
+]

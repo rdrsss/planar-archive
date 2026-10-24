@@ -1,0 +1,42 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "f1889fd3fce625cf8056915bf8fd9cde222036396b94029ab3e5850ba4545bf6"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "91611294f351924c9a2328cc618bef2acaa5d113e87846c2ffd6624c3c4176ed"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "9b57e67997afe8074c1bee8f9ecd66ff6b49959679be7969d913ddf70e729cde"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "11230f37badebc10c8ec039649606533c75f8e88ecbd5629bf307844b8549757"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "2c23e268065e219afee7ecc497e9e6c5da9de73df40da7056fb5c09f3752a145"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "ae1d45584037e71ba10eda62a17c92004ce91f4ac1fa6913cb48e8babbe8a422"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "c0d4646216f2ddcee5911f8764904f2d3d70b6eccbc1836ca1167d11814cbf26"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "707aa09564b6cc733bd4e0a8b58643a00091aa50d6540bc0bb6655a09a15c95c"
+  },
+  "docs/vernacular/x05-registration-evidence.md": {
+    "mode": 420,
+    "sha256": "c6dccd4b87580fd9cd696b2c22f3f7d80ad37db0c9a794a55ed70428a06d3f8d"
+  },
+  "tests/native/v5-02-x05-a4-support/verify.py": {
+    "mode": 420,
+    "sha256": "d9a44801343c36a92fd01f46d5ec09cd10ef720f671f7ef2d13b3d84257d13d0"
+  }
+}

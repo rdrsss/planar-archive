@@ -1,0 +1,87 @@
+{
+  "CLAUDE.md": {
+    "bytes": 69883,
+    "mode": 420,
+    "sha256": "f310ee28b33925fa14e390a1f88fd6372b2b07e1eafe7e131d195c8db32bfe01"
+  },
+  "docs/architecture.md": {
+    "bytes": 123956,
+    "mode": 420,
+    "sha256": "1276ee20799c170f67cd437710e9dc15eacfc48d0ac920552a7e62a698f9a140"
+  },
+  "docs/testing.md": {
+    "bytes": 127893,
+    "mode": 420,
+    "sha256": "4e1b5430c203f1cb1f13908b575d05418f854afc035ab81b816c481bd78e2ec3"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "bytes": 34165,
+    "mode": 420,
+    "sha256": "5b3650649ee0cc658f6007d36979e55f4c07433f27bffb2a7110793216f43edf"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "bytes": 76275,
+    "mode": 420,
+    "sha256": "ce422972278450523fda07bd772737eaffdf4c89a4009b4725e36e474caef6d0"
+  },
+  "docs/vernacular/implementation.md": {
+    "bytes": 78992,
+    "mode": 420,
+    "sha256": "17d0b5d983bb81b8a2cd801ad79db307dba89457c5a282efcc4f549569443bbb"
+  },
+  "docs/vernacular/roadmap.md": {
+    "bytes": 85214,
+    "mode": 420,
+    "sha256": "97647374632e488d6a4361f2d67d7ceb22187cef45e4a7811135ba5089d5e154"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "bytes": 26018,
+    "mode": 420,
+    "sha256": "0d413061e0d6e0629eeed2af51a42af1d2ab25da6413ca3b1e35b8beabf20cbd"
+  },
+  "docs/vernacular/x05-projection-evidence.md": {
+    "bytes": 8009,
+    "mode": 420,
+    "sha256": "ab04e2c417c7941b75f485b540c7eb12e8a0cae54e6420c0e604cfd1cfcd22ce"
+  },
+  "tests/native/v5-02-x05-c5-evidence/REPORT.md": {
+    "bytes": 9526,
+    "mode": 420,
+    "sha256": "9b1f11163928d391d89cdf3af209af91fb65f33863adaf90df1e6f6bd103208d"
+  },
+  "tests/native/v5-02-x05-c5-support/cleanup.py": {
+    "bytes": 2012,
+    "mode": 420,
+    "sha256": "a3d0443731c3042e096f0d2ec3165067bfe3e3f5190ed30fb426995cdd69272d"
+  },
+  "tests/native/v5-02-x05-c5-support/freeze.py": {
+    "bytes": 2831,
+    "mode": 420,
+    "sha256": "a8853fabefffaab97e8eea6907bd25720fa058927fd515d7a51485ccf923a26e"
+  },
+  "tests/native/v5-02-x05-c5-support/gate.py": {
+    "bytes": 5623,
+    "mode": 420,
+    "sha256": "c649afbaa4c84336acf156ca7afff2c2d4de302db433aae48e04497ba56af07c"
+  },
+  "tests/native/v5-02-x05-c5-support/generated.py": {
+    "bytes": 2577,
+    "mode": 420,
+    "sha256": "d3a2928bc7577b755df02a009d65b43a518d89a0e4552110cf38778b63d79f90"
+  },
+  "tests/native/v5-02-x05-c5-support/methods.inc": {
+    "bytes": 1429,
+    "mode": 420,
+    "sha256": "2bcab2f021d7af7b0755d4aa6866d36c5faab8bccdb53325acdfb1ada0d08fae"
+  },
+  "tests/native/v5-02-x05-c5-support/private-tests.inc": {
+    "bytes": 9500,
+    "mode": 420,
+    "sha256": "3cd882b5a18315f2f4a52ffa3f84c96241d060f1e73e9b57440a1049c1c9fac7"
+  },
+  "tests/native/v5-02-x05-c5-support/private.py": {
+    "bytes": 8223,
+    "mode": 420,
+    "sha256": "3334cdcc92c1ac26e6409277c0a6372e8cda9071ffb47758f6c17cdde643d9cd"
+  }
+}

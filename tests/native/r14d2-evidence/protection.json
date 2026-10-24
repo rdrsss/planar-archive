@@ -1,0 +1,14 @@
+{
+  "protected_count": 11614,
+  "changes": [],
+  "old_names": 331,
+  "current_names": 337,
+  "new_names": [
+    "replacement.capture native failed selected reads do not retain ancestor receipts",
+    "replacement.capture native selected ancestor changes refuse initial sealing and discovery",
+    "replacement.capture native selected ancestor removal and links refuse repeat verification",
+    "replacement.capture native selected ancestor replacement preserves file inode but refuses receipt",
+    "replacement.capture native selected closure ignores unrelated siblings and keeps topology private",
+    "replacement.capture native selected receipts preserve alias and file identity refusal"
+  ]
+}

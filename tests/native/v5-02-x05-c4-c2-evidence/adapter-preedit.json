@@ -1,0 +1,42 @@
+{
+  "tests/native/r12c2-support/generate.py": {
+    "sha256": "fef0ba5cf3a1f75fb65f7618d1d616bd047c4765d09f689b820777dc926ea312",
+    "mode": 420
+  },
+  "build/rewrite-debug/src/engine/r12c2-generated/format.cppm": {
+    "sha256": "c11b39d1503856ef16660f46c121b22036900e9a295be14eeed453feb9d389bc",
+    "namespace": "ledger_fault",
+    "unqualified_base": true,
+    "has_alias": false
+  },
+  "tests/native/r13b1-support/generate.py": {
+    "sha256": "af0548630bddf6806f076842b4d2386f63112ad3295145ff4d471d56c3578513",
+    "mode": 420
+  },
+  "build/rewrite-debug/src/engine/r13b1-generated/format.cppm": {
+    "sha256": "e6e76e197051c1b81a33b4b11b25e6c18ec68d555919650656b434d3d04b7cd7",
+    "namespace": "record_test",
+    "unqualified_base": true,
+    "has_alias": false
+  },
+  "tests/native/r14c3b2-support/generate.py": {
+    "sha256": "2ac3647d5133c782bb0c7e52b2638ae2b37d806882b2e6f6834b69bde5d7d30a",
+    "mode": 420
+  },
+  "build/rewrite-debug/src/engine/r14c3b2-generated/format.cppm": {
+    "sha256": "27517d837574a6cf3667ccb8cc9bd1d7f41a5372c715ab6a142b3cedb64ef636",
+    "namespace": "atomic_test",
+    "unqualified_base": true,
+    "has_alias": false
+  },
+  "tests/native/v5-02-x03-b2-b-c01-support/generate.py": {
+    "sha256": "b53b305538446cdb8bb7916709eaff7a7e4f49d3f738249c938d879ae39dcb5e",
+    "mode": 420
+  },
+  "build/rewrite-debug/src/engine/v5-02-x03-b2-b-c01-generated/format.cppm": {
+    "sha256": "0270f39fdbaee9c37520541a58e91093f770f7d518652dbf0d92c171e786fac8",
+    "namespace": "metadata_test",
+    "unqualified_base": true,
+    "has_alias": false
+  }
+}

@@ -1,0 +1,242 @@
+[
+  {
+    "label": "shape-definition-vector",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.756,
+    "inferred_end_utc": "2026-10-23T06:26:55.915153+00:00",
+    "inferred_start_utc": "2026-10-23T06:26:55.159153+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "configure",
+    "argv": [
+      "cmake",
+      "--preset",
+      "debug"
+    ],
+    "exit_code": 0,
+    "seconds": 7.062,
+    "inferred_end_utc": "2026-10-23T06:27:02.995778+00:00",
+    "inferred_start_utc": "2026-10-23T06:26:55.933778+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 14.829,
+    "inferred_end_utc": "2026-10-23T06:27:17.827924+00:00",
+    "inferred_start_utc": "2026-10-23T06:27:02.998924+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "seconds": 0.05,
+    "inferred_end_utc": "2026-10-23T06:27:17.879825+00:00",
+    "inferred_start_utc": "2026-10-23T06:27:17.829825+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/focused.xml"
+    ],
+    "exit_code": 0,
+    "seconds": 133.685,
+    "inferred_end_utc": "2026-10-23T06:29:31.569774+00:00",
+    "inferred_start_utc": "2026-10-23T06:27:17.884774+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "canonical",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.703,
+    "inferred_end_utc": "2026-10-23T06:29:32.269967+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:31.566967+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "record-v1",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.756,
+    "inferred_end_utc": "2026-10-23T06:29:33.022044+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:32.266044+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "request-v2",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.881,
+    "inferred_end_utc": "2026-10-23T06:29:33.904330+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:33.023330+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "effective-provenance",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.663,
+    "inferred_end_utc": "2026-10-23T06:29:34.579921+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:33.916921+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "historical-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/historical-audit.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.366,
+    "inferred_end_utc": "2026-10-23T06:29:34.946915+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:34.580915+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "d6-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/d6-audit.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.223,
+    "inferred_end_utc": "2026-10-23T06:29:35.170542+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:34.947542+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "d6-c01-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/d6-c01-audit.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.142,
+    "inferred_end_utc": "2026-10-23T06:29:35.312368+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:35.170368+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "d7-b-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/d7-b-audit.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.112,
+    "inferred_end_utc": "2026-10-23T06:29:35.425532+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:35.313532+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "b1-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/b1-audit.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.045,
+    "inferred_end_utc": "2026-10-23T06:29:35.472483+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:35.427483+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "b2-a-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b2-a-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-b2-a-evidence/final-gate/b2-a-audit.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.028,
+    "inferred_end_utc": "2026-10-23T06:29:35.475909+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:35.447909+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "pinned-lint",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "seconds": 1.41,
+    "inferred_end_utc": "2026-10-23T06:29:36.909976+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:35.499976+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.133,
+    "inferred_end_utc": "2026-10-23T06:29:37.046788+00:00",
+    "inferred_start_utc": "2026-10-23T06:29:36.913788+00:00",
+    "timing_source": "log mtime and measured duration; inferred interval"
+  }
+]

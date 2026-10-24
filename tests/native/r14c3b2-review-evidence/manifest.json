@@ -1,0 +1,24 @@
+{
+  "candidate_identity": "320c1ceeceab03d8944e33f829954c869e62a34403d5c46693644432c73214cd",
+  "identity": "36e9993a41d5f393ac5437329cf945c392a1fa7b9de709231792b94e9e7281b4",
+  "files": {
+    "tests/native/r14c3b2-review-evidence/adversarial-first.log": "dce0b57ab43ebe3943fa6418b89874865972ad20e81e592d6525e6fe0d97513e",
+    "tests/native/r14c3b2-review-evidence/adversarial.log": "e4ef9e0ac2332dc38d429d5df57417fab58c72ddc68bb003d02e4417c1751263",
+    "tests/native/r14c3b2-review-evidence/adversarial.t.cpp": "c846e3a38e2a0e22d16acf3ea08e42a524d18a247c237dda7fa55435263ada10",
+    "tests/native/r14c3b2-review-evidence/audit.log": "4e806c91c1379a91202b113bd1cc492068670491157d85e889b15cdd3d77bb9f",
+    "tests/native/r14c3b2-review-evidence/audit.py": "5a56c141595d6d8a07dea2dcbe281c5b00965f9c1c66637a5fdcd95b18eb4cd0",
+    "tests/native/r14c3b2-review-evidence/build_verify.py": "53dfb3b01daba0a38f96f0bc5aaac14703bca21165f076b2fcfdb9b647281a73",
+    "tests/native/r14c3b2-review-evidence/commands.txt": "83d144d06f86fbfb367597d45e149ea1cac2f2f747cdb1fecc21c9d7b3012c50",
+    "tests/native/r14c3b2-review-evidence/format.cpp.diff": "9e580d29d56362e012e8f72e04e6172f257399a7e7aa17c43c57c58ee17f0a65",
+    "tests/native/r14c3b2-review-evidence/format.cppm.diff": "bfdf02983da3a5be87857b445bc3fa16d5e8742546297f23de74d5b8f1c11c52",
+    "tests/native/r14c3b2-review-evidence/format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/native/r14c3b2-review-evidence/inventory.json": "c26b40fe356e735dab685aaf38b5b5cf7e88b20277e20708e3eddcc6251dd649",
+    "tests/native/r14c3b2-review-evidence/no-work.log": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "tests/native/r14c3b2-review-evidence/old-collision.log": "55bba45b543819c0ae7aa06727cb6ffeea71e0ee8ba97d020dbf641cf8a398b2",
+    "tests/native/r14c3b2-review-evidence/product.log": "acb39c1b4b8c63eced06665ee9ed8ffd7aa1121b7c6e399b9a9f96a916e674b8",
+    "tests/native/r14c3b2-review-evidence/record-writer.log": "02c308ae9a2868badfdd44d347cceb1bbe33cc2af7ff03dec2a2feceae29a352",
+    "tests/native/r14c3b2-review-evidence/types.cppm.diff": "8d00aa2a60f29ede04780cf5c2e4eb81b1d265f726c4ecfdbabaaa03a4d2d6bb",
+    "tests/native/r14c3b2-review-evidence/variant.log": "817c101a2402aaef736cd32f6d8ad5046ad98535dfcd03e03e28edb196b31437",
+    "docs/vernacular/rounds/R14-C3-B2-review.md": "56535a9c9634357094d9f341f8dd42005e8a74d3f2fd11867a5ed5b8a6be08af"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "agents_symlink": "CLAUDE.md",
+  "frozen_entries": 29306,
+  "only_changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x05-shape-evidence.md"
+  ],
+  "source_freeze_sha256": "a3aaffa0b11ba4ca894d81891a90665b78e456d79088b53c1a16efd36099581d",
+  "support_unchanged": true,
+  "tested_inputs_unchanged": true
+}

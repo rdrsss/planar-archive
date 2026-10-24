@@ -1,0 +1,108 @@
+[
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.command load",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d6-evidence/load-02.xml"
+    ],
+    "log": "load-02.log",
+    "start_utc": "2026-10-21T19:02:11.602197+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:02:16.816898+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(capture |acceptance prepared |prepared |load capture |interpretation |atomic |command |runtime |.*cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d6-evidence/focused-final.xml"
+    ],
+    "log": "focused-final.log",
+    "start_utc": "2026-10-21T19:02:32.905217+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:22.197399+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "log": "final-inventory.log",
+    "start_utc": "2026-10-21T19:04:30.411904+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:30.449131+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "log": "lint.log",
+    "start_utc": "2026-10-21T19:04:30.486659+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:31.537688+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "log": "vectors.log",
+    "start_utc": "2026-10-21T19:04:46.286361+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:46.972455+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d6-evidence/historical-variants.json"
+    ],
+    "log": "historical-variants.log",
+    "start_utc": "2026-10-21T19:04:47.033150+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:47.404458+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d6-evidence/private-variants.json"
+    ],
+    "log": "private-variants.log",
+    "start_utc": "2026-10-21T19:04:47.441573+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:47.661892+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "log": "no-work.log",
+    "start_utc": "2026-10-21T19:04:47.699188+00:00",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:04:47.818854+00:00"
+  }
+]

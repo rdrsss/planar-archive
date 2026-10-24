@@ -1,0 +1,12 @@
+{
+  "all_current_candidate_entries_match": true,
+  "all_manifested_author_artifacts_match": true,
+  "artifact_entries": 129,
+  "candidate_entries": 28,
+  "identities": {
+    "REPORT.md": "b1b010088684e06e7ee17a6a7ee82f58eff88cbe67fe3aa2da927e7be4fa4380",
+    "artifact-manifest.json": "4f3606796d9c6f9456db9e4e8372f115f707847eddb360972bff6dcd5bdc88a3",
+    "finalization.json": "cd6be0808562ae9f3b661802f0d56adeabd7b0532caa27ce9ef6dcc5d2a0ddc8",
+    "frozen-candidate.json": "ca756141175a1b3772a946e1246a13f04204b4306e86be8ecfb46c190a725781"
+  }
+}

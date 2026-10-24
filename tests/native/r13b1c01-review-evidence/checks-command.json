@@ -1,0 +1,60 @@
+[
+  {
+    "name": "audit",
+    "argv": [
+      "python3",
+      "tests/native/r13b1c01-review-evidence/audit.py"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "build-final",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "snapshot-final",
+    "argv": [
+      "build/rewrite-debug/src/engine/planar_ledger_format_tests",
+      "[snapshot]"
+    ],
+    "exit": 0
+  }
+]

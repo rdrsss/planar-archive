@@ -1,0 +1,34 @@
+{
+  "results": {
+    "focused": {
+      "cases": 401,
+      "assertions": null
+    },
+    "supplemental": {
+      "cases": 11,
+      "assertions": null
+    },
+    "production": {
+      "cases": 12,
+      "assertions": 824
+    },
+    "independent": {
+      "cases": 5,
+      "assertions": 364
+    },
+    "correspondence": {
+      "cases": 2,
+      "assertions": 491
+    },
+    "frozen_old": {
+      "cases": 18,
+      "assertions": 1672
+    }
+  },
+  "inventory": 667,
+  "preserved_names": 665,
+  "compiled_shared_membership_unchanged": true,
+  "private_native_copy_reverse_identical": true,
+  "old_render_SHA256": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364",
+  "no_full_milestone_or_release_gate": true
+}

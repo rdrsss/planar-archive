@@ -1,0 +1,13 @@
+{
+  "src/stdlib/planar/schema.lua": "90232b88350765a5000fd1d6b00a8c0b9449f61aa4811b6c11633678aeade3d7",
+  "src/stdlib/planar/semantic.lua": "0235c3589e24972a008ce85373391396b4e8b5a49860581b809d7fc40e104c61",
+  "src/stdlib/planar/bootstrap.lua": "b15092f3ae0989b1c09dbaa401c1657c93d1abf9a68703cb9cf7b0a5551b4b32",
+  "src/engine/runtime/shapes.t.cpp": "68a95f393daadac0336a694f2ae8cfa8e6a6ea588d5db9fe7b064f063d68319e",
+  "tests/stdlib/x05-shapes.lua": "c5c685759c915675c81c8d71f027bb65e6079e5198d41da859cb227295a133fd",
+  "CLAUDE.md": "3b4784803372b7c4e6d76426681b0718fc2589f3b1be6cf52a282978d9b0b83f",
+  "docs/architecture.md": "3462587ad99ec4d97d0def9887d945d65ae31065bf323b3b22aacda2b09d0017",
+  "docs/testing.md": "104b6fa96494b712f7167293da22ef53afb97d9f67a6889992d8efd3fd6e404d",
+  "docs/vernacular/implementation.md": "a4b5f0202358e9843353f68967b03d26cda64b68914691d1449cc282ba5bf487",
+  "docs/vernacular/roadmap.md": "44278dff5fac00afe1198eefcc09aeeb08eaa04eecfdabe83794eaf9fed69cd3",
+  "docs/vernacular/external-profile-implementation.md": "dfc437eb218a3ece151a2e510adf5fc0280ff38aeb447acb41b669409932e810"
+}

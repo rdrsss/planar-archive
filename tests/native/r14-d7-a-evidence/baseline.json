@@ -1,0 +1,42 @@
+[
+  {
+    "path": "src/engine/ledger/format.cppm",
+    "sha256": "3550fad0db3e1c9b2698778405d950b4d43b7a4e4012f9f8431b01a566569de6"
+  },
+  {
+    "path": "src/engine/ledger/format.cpp",
+    "sha256": "6f71d52148f6f92acdc637ff8cc5d164988fe4190fcca2e83114233810e89267"
+  },
+  {
+    "path": "src/engine/ledger/acceptance.t.cpp",
+    "sha256": "8be302056e1606449dddc135e3fcbe3f69565a9d58d81ff1a62cf86b915d2ab3"
+  },
+  {
+    "path": "src/engine/ledger/sqlite.cppm",
+    "sha256": "324b2068e0b18b00f3c57bf9d0698c6678cb39ee5cba59dc4a89066b4548fc7a"
+  },
+  {
+    "path": "src/engine/ledger/sqlite.cpp",
+    "sha256": "e93546b692e5b8897dfc6396d9d948f14772384b15eff622dd1b1d4e8e56c2b1"
+  },
+  {
+    "path": "src/engine/ledger/sqlite.t.cpp",
+    "sha256": "70ec9b6b3088d21c95dc8b01c61e39596d16782fba0b85e5e720dc3343c53d43"
+  },
+  {
+    "path": "src/engine/ledger/reliability.t.cpp",
+    "sha256": "8e8ee8fa6b3b7f2b2b23afe76b061e655a136ea1fe4906c49162672358334a30"
+  },
+  {
+    "path": "src/engine/CMakeLists.txt",
+    "sha256": "b8765be035b3cbc91510996a3aee34104ac14f56173bf63a5b9e2a88fac78176"
+  },
+  {
+    "path": "docs/architecture.md",
+    "sha256": "e7f4c947b040eb7530974f75ca945819120c06d31c2e3b84d481835605572abf"
+  },
+  {
+    "path": "docs/testing.md",
+    "sha256": "4d9c59fb3f055b9d6d5d899097bedf3fc6f5794a101cadbffdc7e653f877683d"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "label": "history-codec",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-b-evidence/history-codec-selected.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-b-evidence/history-codec.xml"
+    ],
+    "exit_code": 0,
+    "seconds": 0.249
+  },
+  {
+    "label": "final-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.13
+  }
+]

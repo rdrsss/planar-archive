@@ -1,0 +1,17 @@
+{
+  "candidate-manifest.json": {
+    "entries": 17,
+    "manifest_sha256": "38f773fc444870a3a601532585874ef775947e30a9506f56d1cb1a7e9a46a0aa",
+    "mismatch": []
+  },
+  "artifact-manifest.json": {
+    "entries": 179,
+    "manifest_sha256": "75146ca56d00679f4576552fd9c5d399896b354d6f45cf34778caa9c3e6aa90a",
+    "mismatch": []
+  },
+  "final-gate/source-freeze.json": {
+    "entries": 407,
+    "manifest_sha256": "5fb83f0d268ee629c3958ed4c88715b9eb42bba09d9f914ac7a2a1f40377f4ee",
+    "mismatch": []
+  }
+}

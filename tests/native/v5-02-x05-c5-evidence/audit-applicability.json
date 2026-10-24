@@ -1,0 +1,43 @@
+{
+  "applicable_replacement": "tests/native/v5-02-x05-c4-d4-support/audit.py",
+  "exact_boundary_end": "std::expected<projection_definition, registration_error> command_vm::resolve_projection_definition(",
+  "failure": "function_reference appears inside obsolete span through create_impl, not inside exact shape lookup",
+  "full_CTest_repeat": false,
+  "invariant_mapping": [
+    {
+      "current": "forbid lua_ / instruction/native/node resets / services / function_reference / filesystem",
+      "old": "forbid lua_ / instruction/native/node resets / services / function_reference / filesystem",
+      "status": "identical assertion on precisely delimited resolve_shape_definition body"
+    },
+    {
+      "current": "require hash_value(domain, input)",
+      "old": "require hash_value(domain, input)",
+      "status": "identical assertion on precisely delimited resolve_shape_definition body"
+    },
+    {
+      "current": "require command_text(\"external\")",
+      "old": "require command_text(\"external\")",
+      "status": "identical assertion on precisely delimited resolve_shape_definition body"
+    },
+    {
+      "current": "require source.bytes and source.path",
+      "old": "require source.bytes and source.path",
+      "status": "identical assertion on precisely delimited resolve_shape_definition body"
+    },
+    {
+      "current": "forbid ordinal in identity",
+      "old": "forbid ordinal in identity",
+      "status": "identical assertion on precisely delimited resolve_shape_definition body"
+    },
+    {
+      "current": "same exact original _owner->command.profile guard assertion",
+      "old": "generic profile invocation guard",
+      "status": "identical whole-source assertion"
+    }
+  ],
+  "obsolete_helper": "tests/native/v5-02-x05-b2-a-support/audit.py",
+  "original_B2_A_invariants_retained": true,
+  "preserved_failure": "debug/b2-a-audit.log",
+  "product_change": false,
+  "release_omits_obsolete_helper": true
+}

@@ -1,0 +1,46 @@
+{
+  "debug": {
+    "focused_names": [
+      "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+      "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic",
+      "replacement.load_cli"
+    ],
+    "passed": 3,
+    "skips": 0,
+    "journal_full_injections": 38,
+    "database_full_injections": 15,
+    "process_boundaries": [
+      "D8 process boundary=0 unchanged main/non-hot sidecar; recovery and retry deliberately refused",
+      "D8 process boundary=1 unchanged main/non-hot sidecar; recovery and retry deliberately refused",
+      "D8 process boundary=2 committed=false",
+      "D8 process boundary=3 committed=false",
+      "D8 process boundary=4 committed=true"
+    ],
+    "public_invocations": 163,
+    "active_draft_cases": 3,
+    "inventory": 402,
+    "no_work_before_and_after": true
+  },
+  "release": {
+    "focused_names": [
+      "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+      "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic",
+      "replacement.load_cli"
+    ],
+    "passed": 3,
+    "skips": 0,
+    "journal_full_injections": 38,
+    "database_full_injections": 15,
+    "process_boundaries": [
+      "D8 process boundary=0 unchanged main/non-hot sidecar; recovery and retry deliberately refused",
+      "D8 process boundary=1 unchanged main/non-hot sidecar; recovery and retry deliberately refused",
+      "D8 process boundary=2 committed=false",
+      "D8 process boundary=3 committed=false",
+      "D8 process boundary=4 committed=true"
+    ],
+    "public_invocations": 163,
+    "active_draft_cases": 3,
+    "inventory": 402,
+    "no_work_before_and_after": true
+  }
+}

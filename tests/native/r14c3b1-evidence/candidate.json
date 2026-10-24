@@ -1,0 +1,11 @@
+{
+  "files": {
+    "docs/architecture.md": "25bb00b51791be92863b45662b1c427eac59ecf77c1928e5f99617492b5df365",
+    "docs/testing.md": "2925854927857c723bd7c3e7e8b6bd8ae72d91b11d356fcc53b766a4647a8c9d",
+    "src/engine/CMakeLists.txt": "a226aff7449c15e6e9522e8f9aa70f1a158e2eccbdd5ea623e36c46d08ad8cba",
+    "src/engine/acceptance/prepared.cpp": "c2fe16f0a7b9bfa29194d98b78ca5815dfa3221c1e3dd31834a31c41076d9e9b",
+    "src/engine/acceptance/prepared.cppm": "c52e0405dbf3663d62efd53bb6aa10cb696c19c736395889070f3a26f4cff894",
+    "src/engine/acceptance/prepared.t.cpp": "04e7a1fdb97645b35396b3874f1e7aab36b4ea84cbf1bd4a7d971f21e95bf087"
+  },
+  "identity": "f3ddd6eeaae180475b74a1d16e975c1b671da87fb74c98d3a96b47c49dca6d34"
+}

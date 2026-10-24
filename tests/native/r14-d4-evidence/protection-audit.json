@@ -1,0 +1,20 @@
+{
+  "protected_before_count": 13867,
+  "approved_extra_support": "tests/native/r14c3b2-support/atomic.t.cpp",
+  "changed_protected_outside_owned": [],
+  "new_files_outside_scope": [],
+  "agents_symlink_preserved": true,
+  "exact_approved_contract_body_preserved": true,
+  "baseline_snapshots_verified": 17,
+  "preserved_test_names": 370,
+  "current_test_names": 373,
+  "new_test_names": [
+    "replacement.atomic conflict retains locked heads after rollback and later head advance",
+    "replacement.ledger authoritative diagnostics include stable revision and collision detail",
+    "replacement.ledger diagnostic malformed typed payloads refuse with exact redacted internal envelope"
+  ],
+  "focused_cases": 153,
+  "failures": 0,
+  "skips": 0,
+  "helper_python_ast": "passed"
+}

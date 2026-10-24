@@ -1,0 +1,19 @@
+{
+  "path_base": "repository root",
+  "snapshot_base": "tests/native/r13b1c01-evidence/candidate",
+  "identity_algorithm": "SHA256(compact sorted-key UTF-8 JSON files map; no terminal LF)",
+  "identity": "53542e7dd4e6dff86c8f0c45beb4c3b13c9c30b8ab6d172dc17263f8b714c7b4",
+  "files": {
+    "src/engine/ledger/format.cppm": "d0fd5880759ad2598293f6900235af14e93e95f70443eaf768cbb8af74ec354c",
+    "src/engine/ledger/format.cpp": "b740a2f1c2b645e5d6a14e47377ed647f7d1bd48d1f101c83e348db94f877216",
+    "src/engine/ledger/format.t.cpp": "a8907120d6d7e6e78e54fab00fe1b96e3ebcfe6adfb44eed9432bdcbf751786e",
+    "src/engine/CMakeLists.txt": "0ce13fb08b373884c689ff79902d3f5a6cc35f28466cb410f8c287261c7c998f",
+    "docs/architecture.md": "7753730acb1853eba792298643455f41e02333b2e6716ab6b5a062c4d6b02225",
+    "docs/testing.md": "f34d159c7ccbf72ce28cfd74abb74b1ff3694b67c7eb73cc58363768d505a71e",
+    "tests/native/r13b1-support/audit.py": "fe52e075b6d266cd4ed13c8cacbf7aff72c8521655002e8dc3064af8926ecd4e",
+    "tests/native/r13b1-support/collision.t.cpp": "441aa703225479d4c685923458e75913728a05a4c2d0a483ef42dd265b8693ef",
+    "tests/native/r13b1-support/digest.cppm": "ea16ef48b0829effb27f70e56efe77eecd6bf9b12128652a207dc871bee67685",
+    "tests/native/r13b1-support/generate.py": "af0548630bddf6806f076842b4d2386f63112ad3295145ff4d471d56c3578513",
+    "src/engine/ledger/snapshot.t.cpp": "ff5cf0498c597572cb117ad131d61c59af3310000d1d62bdba41e78bcb2ad9c9"
+  }
+}

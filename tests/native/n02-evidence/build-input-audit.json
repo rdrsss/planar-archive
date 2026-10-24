@@ -1,0 +1,46 @@
+{
+  "debug": {
+    "configured_lua_dependency_count": 8,
+    "configured_lua_dependencies": [
+      "src/stdlib/planar/json.lua",
+      "src/stdlib/planar/schema.lua",
+      "src/stdlib/planar/semantic.lua",
+      "src/stdlib/planar/selection.lua",
+      "src/stdlib/planar/presentation.lua",
+      "src/stdlib/planar/observations.lua",
+      "src/stdlib/planar/render.lua",
+      "src/stdlib/planar/bootstrap.lua"
+    ],
+    "old_top_level_lua_dependencies": false,
+    "generated_matches_exact_sources": true
+  },
+  "release": {
+    "configured_lua_dependency_count": 8,
+    "configured_lua_dependencies": [
+      "src/stdlib/planar/json.lua",
+      "src/stdlib/planar/schema.lua",
+      "src/stdlib/planar/semantic.lua",
+      "src/stdlib/planar/selection.lua",
+      "src/stdlib/planar/presentation.lua",
+      "src/stdlib/planar/observations.lua",
+      "src/stdlib/planar/render.lua",
+      "src/stdlib/planar/bootstrap.lua"
+    ],
+    "old_top_level_lua_dependencies": false,
+    "generated_matches_exact_sources": true
+  },
+  "embedded_bytes": {
+    "ordered_sources": [
+      "src/stdlib/planar/json.lua",
+      "src/stdlib/planar/schema.lua",
+      "src/stdlib/planar/semantic.lua",
+      "src/stdlib/planar/selection.lua",
+      "src/stdlib/planar/presentation.lua",
+      "src/stdlib/planar/observations.lua",
+      "src/stdlib/planar/render.lua",
+      "src/stdlib/planar/bootstrap.lua"
+    ],
+    "payload_sha256": "6d29c15216cbff11a6f7c237f7ee118bff5d051975c21a9da578c531569f78f5",
+    "debug_generated_matches_exact_sources": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "tagged_shape_definition": "xxh3_128:00000000000000000000000000000000",
+  "tagged_bytes": 41,
+  "raw_tree_digest_bytes": 32,
+  "AGENTS_symlink": "CLAUDE.md",
+  "material_root_dotfiles": "included",
+  "contract_change": "notation only; full diff retained"
+}

@@ -1,0 +1,48 @@
+{
+  "candidate_identity": "3ee4ca19f3748affc81a441f9376ba33b350fb67839b98311a219a53dd34922b",
+  "coder_evidence_manifest_file_sha256": "d8fe381eaf740700b59c3a77fce60510bebfa2c4cb24556339581d2531f84eff",
+  "coder_history_cases_audited_not_rerun": 151,
+  "debug_released": true,
+  "expected_negative_compilations": 2,
+  "files": {
+    "README.md": "545a6ef896101833a61e6c69663efe99eb2078d0b9223672386dc18380bb87bd",
+    "build.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "capture.txt": "dc2dd06859828916072a8b6ca4356da7a76854745c0fdd5dd99158de5d33752a",
+    "capture.xml": "1d03b50782686c0b29d80110330b40d1adcca166100d0b43bf6ad1f3a18c2a9c",
+    "check-final.txt": "9580014b7463ce242bb4bf0a2dd32e08ab73a34eff5719f865417a910e7465fb",
+    "check-initial.txt": "9580014b7463ce242bb4bf0a2dd32e08ab73a34eff5719f865417a910e7465fb",
+    "check.py": "ad8aff22ff198db9e62291ab2b437f323cf70214cb3b72342c88d2fc51405b14",
+    "cli.txt": "38140abf9b4d3f76cc4dc32b4e13196ec6668019624a412b55d1b286ee76ebf9",
+    "cli.xml": "2bde07f268df1cd25843343fe79b36a5baffba6ca31ff04e316a347757c7bba6",
+    "commands.json": "f3a0091a50f1df874524fdf0b6a72f1db8a4e156e4f5b7ee04fb58d66e17b458",
+    "freeze.py": "8fcd48d4d3f892e2a3878310ede1b944b37fe60c145e0144cb4e421e5c1ad294",
+    "lint.txt": "eb9892cff7b1fe55a1f7cbad23571415d84108c6d88e4101fad421f7457c990c",
+    "native-link.txt": "17430d6f26554f91f87151c541e6c0a7e3f5a6c7ad398934aac916fa95de0daf",
+    "no-work.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "private-state.cpp": "64a21e44422c530af925e479007710fccfe791a7865f62c37a9851f61b7073b8",
+    "private-state.txt": "91ba48058a44897a333981ac45e18dcf748cc81203f5f541cad9d63263280f32",
+    "probe-artifacts.json": "2d27d92811f076a9263f58d8be7edf01d59ef52e1df366a4cee0cc72c5156903",
+    "probe-compile.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe-link.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe.cpp": "dc5a6cdace32d21ae7ae23163b602c71a95236c3e27f97400d5e2162d5e30b73",
+    "probe.txt": "edac0ab7b597591539552f798f42ebd7bc3150cbb4ae2b68469a6b6d853c5417",
+    "run.py": "cc326f7684f53ef1428fbde4809505928609987fb5cc8dbdfbe41bbc40638b95",
+    "unchecked-receipt.cpp": "3b282cfa59ba43d78c175364aded6c46698648e2e10278f117d21e54a3c90fdb",
+    "unchecked-receipt.txt": "04f098f1a6b06ec8132fdba7ec4b6dc2b2359cd2df7e4ad46d7d88bc63b36e68"
+  },
+  "independent_capture_cases": 25,
+  "independent_cli_processes": 247,
+  "independent_skips": 0,
+  "limits": [
+    "macOS arm64 debug only",
+    "Linux unverified",
+    "release/full R14 gate outstanding"
+  ],
+  "parity_runtime_assertions": 185,
+  "parity_scenario_pairs": 15,
+  "report": {
+    "path": "docs/vernacular/rounds/R14-C3-A-review.md",
+    "sha256": "4f65a5d391d1065257b86c0444320019fe25debb6b7d5221d6eaf5c96b4422d1"
+  },
+  "verdict": "approve"
+}

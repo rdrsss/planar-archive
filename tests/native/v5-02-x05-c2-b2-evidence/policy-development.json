@@ -1,0 +1,42 @@
+{
+  "global_union": [
+    "authority",
+    "goal",
+    "acceptance",
+    "requirements",
+    "contracts",
+    "boundary",
+    "dependencies",
+    "shape_policy",
+    "checks",
+    "outputs",
+    "observations",
+    "preferences",
+    "rationale",
+    "workspace_notes",
+    "job_notes",
+    "checkpoint",
+    "omissions",
+    "recorded_history"
+  ],
+  "shipped_role_conditional_and_omission_ids": [
+    "acceptance",
+    "authority",
+    "boundary",
+    "checkpoint",
+    "checks",
+    "contracts",
+    "dependencies",
+    "goal",
+    "job_notes",
+    "observations",
+    "omissions",
+    "outputs",
+    "preferences",
+    "rationale",
+    "requirements",
+    "shape_policy",
+    "workspace_notes"
+  ],
+  "recorded_history": "reserved by amended contract; history projection rendering not delivered in this slice"
+}

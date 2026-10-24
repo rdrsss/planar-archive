@@ -1,0 +1,13 @@
+{
+  "path_base": "repository root",
+  "excludes": [
+    "tests/native/r14-d3-review-evidence/artifacts.json"
+  ],
+  "files": {
+    "docs/vernacular/rounds/R14-D3-review.md": "b195cb955d56559c22e1f1e9f0c1eb68b85bc058ae6109e742b0b2b2993f7308",
+    "tests/native/r14-d3-review-evidence/commands.txt": "7b72f7a01e7464462f8ae3373599eb85ed1f07e384047058bce814f5087682a5",
+    "tests/native/r14-d3-review-evidence/report-links.json": "3c18fdbde451a1e576d467ac51ca68b6c5f41ee31c9c5c46336a203655a03ff9",
+    "tests/native/r14-d3-review-evidence/verification.json": "ef9e1445519736db3425cf67e7b32adfb42dc46b328c58b7b426cb03d2701832",
+    "tests/native/r14-d3-review-evidence/verify.py": "69c1b1f6362de30d7707b3c402cf042b35933900777ceea13189bfd8991c9e45"
+  }
+}

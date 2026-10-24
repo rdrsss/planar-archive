@@ -1,0 +1,12 @@
+{
+  "AGENTS_symlink": "CLAUDE.md",
+  "artifact_entries": 20,
+  "author_manifest_sha256": "d74ffa8f5286f3a30dcf5c88bf18b3315a4efad9482a4547e19ce69ce293ae25",
+  "author_report_sha256": "95403f30b657a5920c48d71dc68dbb148f1c0f3ac3c9c8be80809e78ceabc7d7",
+  "candidate_documents": 10,
+  "exact_artifact_membership": true,
+  "historical_bodies_unchanged": true,
+  "local_links": 525,
+  "reconstructed_diff_sha256": "39404077c4a44c532dadd4cfe032fe3f505352feb2318a4c952c0b046dc8a69e",
+  "status_openings_only": 8
+}

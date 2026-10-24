@@ -1,0 +1,17 @@
+{
+  "candidate_entries": 20,
+  "artifact_entries": 217,
+  "author_green_case_counts": {
+    "focused-ctest.xml": 430,
+    "private/green-private.xml": 9,
+    "private/baseline-layout.xml": 1,
+    "private/green-layout.xml": 1
+  },
+  "expected_red_cases": 1,
+  "inventory_before": 790,
+  "inventory_after": 791,
+  "all_prior_names_preserved": true,
+  "gate_commands": 21,
+  "private_commands": 12,
+  "hashes_current": true
+}

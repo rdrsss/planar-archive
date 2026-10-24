@@ -1,0 +1,27 @@
+{
+  "retained_prior_evidence_inventory": {
+    "files": 824,
+    "note": "Full retained inventory; unchanged claims independently checked against frozen manifests above.",
+    "sha256": "12e4c8b1c6d8669c95cc41f3e1191416b2ab704a13d040afd021d41237db90ca"
+  },
+  "tests/native/n03a-evidence/coordinator-evidence-sha256.txt": {
+    "all_match": true,
+    "manifest_sha256": "fb2ced609623048e81a0eb7aa1b82d11f0349200e9f560a5e273c126bbfee5f7",
+    "verified_entries": 20
+  },
+  "tests/native/n03ac01-evidence/evidence-sha256.txt": {
+    "all_match": true,
+    "manifest_sha256": "3afc8e2be48fbd7a48d85a3c13fcaf36f5a4a86530d8db730f6070ff941c15ec",
+    "verified_entries": 37
+  },
+  "tests/native/n03ac01-review-evidence/evidence-sha256.txt": {
+    "all_match": true,
+    "manifest_sha256": "cf4d4776fe204cdb0213f08861deecf41320341aa44bfb3d9d1ed8725e5599db",
+    "verified_entries": 19
+  },
+  "tests/native/r10-evidence/evidence.sha256": {
+    "all_match": true,
+    "manifest_sha256": "37f236eb24bf30e2f81f6122cc53703952264736e29081acebf1ce7ba97f6275",
+    "verified_entries": 166
+  }
+}

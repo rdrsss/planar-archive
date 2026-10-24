@@ -1,0 +1,82 @@
+{
+  "capture": {
+    "matched": 31,
+    "passed": 31,
+    "skipped": 0
+  },
+  "dependent": {
+    "matched": 28,
+    "passed": 28,
+    "skipped": 0
+  },
+  "verdict": "approve",
+  "findings": [],
+  "candidate_manifest_sha256": "3da96db6f13b830b48d05bb024aa810e403f3cd5a0caa8f79b7358a2e74d7936",
+  "coder_evidence_manifest_sha256": "5c67ee687ee1415b917c26b021a8211d47f820e1eacca6153782a4dc53c2a2da",
+  "review_commands_serial": true,
+  "all_reviewer_commands": {
+    "build": {
+      "command": [
+        "cmake",
+        "--build",
+        "build/rewrite-debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "started_epoch": 1792587931.33315,
+      "ended_epoch": 1792587931.493647,
+      "exit": 0
+    },
+    "capture": {
+      "command": [
+        "ctest",
+        "--test-dir",
+        "build/rewrite-debug",
+        "-R",
+        "replacement.capture",
+        "--output-on-failure",
+        "--output-junit",
+        "<repo>/tests/native/r14d2-review-evidence/capture.xml"
+      ],
+      "started_epoch": 1792587937.254774,
+      "ended_epoch": 1792587977.181219,
+      "exit": 0
+    },
+    "dependent": {
+      "command": [
+        "ctest",
+        "--test-dir",
+        "build/rewrite-debug",
+        "-V",
+        "-R",
+        "^replacement\\.(cli|init_cli|history_cli|export_cli|acceptance |atomic )",
+        "--output-junit",
+        "<repo>/tests/native/r14d2-review-evidence/dependent.xml"
+      ],
+      "started_epoch": 1792588001.4971972,
+      "ended_epoch": 1792588023.100393,
+      "exit": 0
+    },
+    "final-build": {
+      "command": [
+        "cmake",
+        "--build",
+        "build/rewrite-debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "started_epoch": 1792588036.534255,
+      "ended_epoch": 1792588036.6948988,
+      "exit": 0
+    }
+  },
+  "release": "not run or modified by reviewer; G release331 remains prior evidence only",
+  "debug": "current fresh LLVM23.1.4 build; both all+tests checks no work",
+  "new_user_spec": "Preserved; outside this D2 review scope.",
+  "report": {
+    "path": "docs/vernacular/rounds/R14-D2-review.md",
+    "sha256": "acca1a810dda0c8bf2919e9ba1ef6cc716bdd51330a223ee99ded346b51e0e05"
+  }
+}

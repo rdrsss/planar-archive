@@ -1,0 +1,33 @@
+{
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "tools": {
+    "/opt/homebrew/opt/llvm/bin/clang++ --version": {
+      "exit": 0,
+      "output": "Homebrew clang version 23.1.4\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /opt/homebrew/Cellar/llvm/23.1.4/bin\nConfiguration file: /opt/homebrew/Cellar/llvm/23.1.4/etc/clang/arm64-apple-darwin25.cfg\n"
+    },
+    "/opt/homebrew/opt/llvm/bin/clang-scan-deps --version": {
+      "exit": 0,
+      "output": "/opt/homebrew/opt/llvm/bin/clang-scan-deps\nHomebrew LLVM version 23.1.4\n  Optimized build.\n"
+    },
+    "cmake --version": {
+      "exit": 0,
+      "output": "cmake version 4.4.4\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n"
+    },
+    "ninja --version": {
+      "exit": 0,
+      "output": "1.13.2\n"
+    },
+    "doxygen --version": {
+      "exit": 0,
+      "output": "1.18.0\n"
+    },
+    "sw_vers": {
+      "exit": 0,
+      "output": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84\n"
+    }
+  },
+  "stale_scanner": "/opt/homebrew/Cellar/llvm/23.1.3_2/bin/clang-scan-deps",
+  "preserved_stale_directory": "build/rewrite-debug-pre-r14d2-stale",
+  "fresh_directory": "build/rewrite-debug",
+  "release": "untouched; G used LLVM23.1.3"
+}

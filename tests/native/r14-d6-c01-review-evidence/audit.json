@@ -1,0 +1,30 @@
+{
+  "candidate_files": 13,
+  "candidate_identities": {
+    "candidate.json": "2aca1e4f34612574c53e895c2cd5949ca4a9f706b04a9cb8de407f7d5cfa60c2",
+    "owned.diff": "e8bd41c7ce466b0ae1b2d14b958f4633734b76c5e1705448d119b5f794446baf",
+    "artifacts.json": "d4540cf7fcbed5622e4f10389bbd1d01b30a14bedc2375b60fe378eb92dd67b9"
+  },
+  "candidate_snapshots_and_diff_verified": true,
+  "coder_artifacts": 67,
+  "inherited_candidate_snapshots": 17,
+  "inherited_artifacts": 67,
+  "contemporaneous_protected_paths": 14143,
+  "changed_outside_owned": [],
+  "new_outside_scope": [],
+  "contract_body_sha256": "a842901180c15691cda24a0ddafcc708dcb88add85717b0080b2a1313e6f4ab8",
+  "symlink_preserved": true,
+  "red_source_contemporaneous_and_unchanged_test": true,
+  "red_registration_failures": 2,
+  "coder_focused_cases": 134,
+  "coder_cli_suites": 6,
+  "failures": 0,
+  "skips": 0,
+  "inventory_before": 390,
+  "inventory_after": 391,
+  "baseline_names_preserved": true,
+  "new_names": [
+    "replacement.command load defers provenance refusal until fresh acceptance"
+  ],
+  "coder_build_test_serialized": true
+}

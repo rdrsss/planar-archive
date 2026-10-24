@@ -1,0 +1,2220 @@
+{
+  "support_recovery_changed": [
+    "tests/native/v5-02-x05-b4-b-support/probes.py",
+    "tests/native/v5-02-x05-b4-b-support/semantic.cpp",
+    "tests/native/v5-02-x05-b4-b-support/transport-accounting.md"
+  ],
+  "support_recovery_added": [
+    "tests/native/v5-02-x05-b4-b-support/heap-observation.md"
+  ],
+  "failed_support_exact": true,
+  "product_test_prose_unchanged": true,
+  "xml": [
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-probes/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/0.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/1.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/10.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/11.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/12.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/13.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/14.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/15.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/2.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/3.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/4.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/5.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/6.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/7.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/8.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/capacity-accounted-repeats/9.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-allocation01/allocation.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/render-native.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes01/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes02/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-probes03/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-render01.xml",
+      "cases": 6,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-render02.xml",
+      "cases": 7,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/development-render03.xml",
+      "cases": 7,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/repeat-0.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/repeat-1.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/repeat-2.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/repeat-3.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-capacity/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-gc/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-invariants/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/diagnose-probes/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-allocation/allocation.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-allocation-corrected/allocation.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-gate/focused.xml",
+      "cases": 408,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {
+        "name": "(empty)",
+        "tests": "408",
+        "failures": "0",
+        "disabled": "0",
+        "skipped": "0",
+        "hostname": "",
+        "time": "200",
+        "timestamp": "2026-10-23T09:27:23"
+      }
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-gate/history-codec.xml",
+      "cases": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {
+        "name": "(empty)",
+        "tests": "11",
+        "failures": "0",
+        "disabled": "0",
+        "skipped": "0",
+        "hostname": "",
+        "time": "0",
+        "timestamp": "2026-10-23T09:30:43"
+      }
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-gate/production-render.xml",
+      "cases": 19,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/conversion.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/error-map.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/error-node-exact.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/error-node.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/error-string.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/error.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/execution.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/hash-remaining.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/instructions.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/lua.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/parser.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/preflight-red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/preflight.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/render-codec.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/render-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/render-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/render-output-limit.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/selection-native.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/selection-nodes.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/semantic.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/snapshot.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/success.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/final-probes-corrected/wrapper.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-0.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-1.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-2.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-3.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-4.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-5.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-6.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/diagnose-probes-7.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-0.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-1.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-2.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-3.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-4.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-5.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-6.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    },
+    {
+      "path": "tests/native/v5-02-x05-b4-b-evidence/repeat-diagnosis/final-probes-7.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skips": 0,
+      "assertions": {}
+    }
+  ],
+  "initial_gate_last_command": {
+    "label": "private-probes",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "tests/native/v5-02-x05-b4-b-support/probes.py",
+      "final-probes"
+    ],
+    "cwd": "<repo>",
+    "exit": 1,
+    "seconds": 7.752369165420532
+  },
+  "recovery_commands": [
+    {
+      "label": "private-probes",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "tests/native/v5-02-x05-b4-b-support/probes.py",
+        "final-probes-corrected"
+      ],
+      "cwd": "<repo>",
+      "exit": 0,
+      "seconds": 18.851420879364014
+    },
+    {
+      "label": "allocation-probes",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "tests/native/v5-02-x05-b4-b-support/allocation.py",
+        "final-allocation-corrected"
+      ],
+      "cwd": "<repo>",
+      "exit": 0,
+      "seconds": 8.629423141479492
+    },
+    {
+      "label": "support-format",
+      "argv": [
+        "/opt/homebrew/opt/llvm/bin/clang-format",
+        "--dry-run",
+        "--Werror",
+        "tests/native/v5-02-x05-b4-b-support/semantic.cpp",
+        "tests/native/v5-02-x05-b4-b-support/allocation.cpp"
+      ],
+      "cwd": "<repo>",
+      "exit": 0,
+      "seconds": 0.04465198516845703
+    },
+    {
+      "label": "pinned-lint",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "scripts/rewrite-check.py",
+        "lint",
+        "--build-dir",
+        "<repo>/build/rewrite-debug"
+      ],
+      "cwd": "<repo>",
+      "exit": 0,
+      "seconds": 1.8103370666503906
+    },
+    {
+      "label": "no-work",
+      "argv": [
+        "cmake",
+        "--build",
+        "--preset",
+        "debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "cwd": "<repo>",
+      "exit": 0,
+      "seconds": 0.31482601165771484
+    }
+  ]
+}

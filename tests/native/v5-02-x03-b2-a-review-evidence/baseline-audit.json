@@ -1,0 +1,41 @@
+{
+  "baseline_regular_count": 14980,
+  "git_visible_first_manifest_count": 7273,
+  "git_visible_not_in_complete": [
+    "AGENTS.md",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/planar_load_c01_source.cppm",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/commands_0.lua",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cpp",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cppm"
+  ],
+  "git_visible_digest_disagreements": [],
+  "missing_baseline": [],
+  "changed_baseline": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/history_verification.t.cpp",
+    "src/engine/ledger/types.cppm"
+  ],
+  "unexpected_changed_baseline": [],
+  "symlinks": [
+    {
+      "path": "compile_commands.json",
+      "same_target": true
+    },
+    {
+      "path": "AGENTS.md",
+      "same_target": true
+    }
+  ],
+  "final_source_count": 13,
+  "final_source_mismatches": []
+}

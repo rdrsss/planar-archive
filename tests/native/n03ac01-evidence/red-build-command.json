@@ -1,0 +1,1 @@
+["cmake", "--build", "build/rewrite-debug", "--target", "planar_json_codec_tests"]

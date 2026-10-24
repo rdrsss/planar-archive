@@ -1,0 +1,22 @@
+{
+  "CLAUDE.md": "46faabb005c47ebf040a4ed45aa1079b5d5bf33e1e161a60285f6c579f4a3b37",
+  "docs/architecture.md": "6903b00b8758b85561b7a28990ac3ed5200bedcc41649e9e48d7d762f8262c7b",
+  "docs/vernacular/acceptance-matrix.md": "38cf98229a7b65e32e775b4d26cd8c18963d8c38b8c7a565adbea5ac89a5b178",
+  "docs/vernacular/external-profile-implementation.md": "ca67e2bc482de67d7be11830856d1c7cf2b0f130eccfea90754216b15329c807",
+  "docs/vernacular/implementation.md": "4ee515958984c6e4a62d34b5471e27ab4ed98f094efec938d15cd6ba0f27e786",
+  "docs/vernacular/roadmap.md": "3cc6228cd87a53d4e0b9d6833167bb8dd85d485ec486bcedd8b58342a9870334",
+  "docs/vernacular/v5-alignment.md": "72e86d2b25bda4bcd2ff1570ca8aee6e92f14adba5e05dc10cd70bc381b09435",
+  "src/engine/CMakeLists.txt": "1d983f75ee6b5529dcffe2b2e68174ada6b5314040f847d6096d20be2cf20d07",
+  "src/engine/capture/profile.cpp": "5e0eea4940f2454ee5f066452b696dced688cc3266e9cd4e54c1348be4fa93d1",
+  "src/engine/capture/profile.cppm": "5cc64d10806ca6c2b80ce2e5fb3ba9b46beeb65f180f901648ffa9e7ef5f2b7d",
+  "src/engine/capture/profile_codec.cpp": "089cbefbb47e9de3465179fef6351d9224711d3be47f220aa1b9733bd84714af",
+  "src/engine/capture/profile_codec.cppm": "6ba9151a6b01678957ff2f4c97a1fdee359983bc1d053b5b3e1a48dc8490908d",
+  "src/engine/capture/profile_codec.t.cpp": "59d650669fb50049ea87ed123c16245e832cf2aa615fbeddf16fa544dac304b7",
+  "src/engine/history/tree_core.cpp": "03bbfcece0b1b33b2d16eb6e57f39cf86a3e90bcc670bf77dc5a0bc2846ab51b",
+  "src/engine/history/tree_core.cppm": "a7e12fd702306b561b9dfb3a9ee96cc2513374a249fe48f68d68fb694316ace9",
+  "src/engine/history/tree_core.t.cpp": "af67ac3582030e8cdfe3c4224a1045f7b0732ecb1cb78e4e30dc4c1d9b185bd0",
+  "tests/native/v5-02-x04-b1-support/finalize.py": "0659b6c3e8c751ff1d5aa8eba80d18cd64a8847a02e86408476731ce33b2b56e",
+  "tests/native/v5-02-x04-b1-support/protect.py": "e0e6ab0702c1fe837699d5481ed176055cb3dc1cff8fcb7d7b72d124c051280d",
+  "tests/native/v5-02-x04-b1-support/verify.py": "37e187d9be201c773d1c0a9f73b42e57e9d560bc44815a35d37f11815aa84a6a",
+  "tests/native/v5-02-x04-b1-support/verify_docs.py": "f73887689984e96351a620a5b760ad0781ef4d863a682aebe552e90276a1d1fc"
+}

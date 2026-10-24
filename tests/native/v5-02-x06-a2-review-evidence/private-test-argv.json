@@ -1,0 +1,8 @@
+[
+  "<repo>/tests/native/v5-02-x06-a2-review-evidence/private-probe",
+  "[review]",
+  "--reporter",
+  "junit",
+  "--out",
+  "<repo>/tests/native/v5-02-x06-a2-review-evidence/private-tests.xml"
+]

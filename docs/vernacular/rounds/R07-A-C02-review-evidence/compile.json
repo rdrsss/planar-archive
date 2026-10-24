@@ -1,0 +1,80 @@
+[
+  {
+    "cmd": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-fmodule-file=std=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-output=/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/source.pcm",
+      "-c",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/source.cppm",
+      "-o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/source.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-fmodule-file=planar.kernel.runtime_source=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/planar_runtime_source.dir/planar.kernel.runtime_source.pcm",
+      "-fmodule-file=std=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-file=planar.kernel.hash=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/planar_hash.dir/planar.kernel.hash.pcm",
+      "-fmodule-file=planar.kernel.runtime=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/planar_runtime.dir/planar.kernel.runtime.pcm",
+      "-fmodule-file=planar.kernel.canonical=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/planar_canonical.dir/planar.kernel.canonical.pcm",
+      "-fmodule-file=planar.kernel.value=<repo>/build/rewrite-debug/src/kernel/CMakeFiles/planar_value.dir/planar.kernel.value.pcm",
+      "-c",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/probe.cpp",
+      "-o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/probe.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/probe.o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/source.o",
+      "src/kernel/libplanar_runtime.a",
+      "src/kernel/lib@cmake_cxx_std.a",
+      "src/kernel/libplanar_hash.a",
+      "src/kernel/libplanar_canonical.a",
+      "libplanar_xxhash.a",
+      "src/kernel/libplanar_lua_trusted_libs.a",
+      "src/kernel/libplanar_value.a",
+      "libplanar_lua.a",
+      "-o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac02-review-w10leipv/probe"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

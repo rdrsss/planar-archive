@@ -1,0 +1,25 @@
+{
+  "exact_forward_reverse": true,
+  "variants": {
+    "r12c2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r13b1-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r14c3b2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r14f1-generated": [
+      "source_export.cppm",
+      "source_export.cpp"
+    ],
+    "v5-02-x03-b2-b-c01-generated": [
+      "format.cppm",
+      "format.cpp"
+    ]
+  }
+}

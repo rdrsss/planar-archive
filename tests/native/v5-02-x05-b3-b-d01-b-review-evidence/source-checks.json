@@ -1,0 +1,9 @@
+{
+  "encoder_implementation_unchanged": true,
+  "encode_entrypoint_tail_unchanged": true,
+  "additional_pinned_sources": {
+    "/opt/homebrew/opt/llvm/include/c++/v1/__split_buffer": "c989f5f1a2ba4c8245aec2e7747f09a496b7de696983d376bfecaf202bfce55d",
+    "/opt/homebrew/opt/llvm/include/c++/v1/__memory/allocator_traits.h": "dcedb7a53f42df47ce451b8e2b8bedcd8d359f9b8b8e6428ea6a6acb12750b14",
+    "<repo>/vendor/glaze/a4a7/include/glaze/util/fast_float.hpp": "ea5bed7d198fe8263d4fc7885a98b4edf40e4c21f9957e676a12a325d28db12e"
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "label": "red-build",
+    "shell_command": "cmake --build --preset debug --target all planar_tests",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "red",
+    "shell_command": "build/rewrite-debug/src/engine/planar_runtime_tests '[render-complete-bound]' --reporter junit --out tests/native/v5-02-x05-b4-b-c01-evidence/red.xml",
+    "exit": 42,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "green-build",
+    "shell_command": "cmake --build --preset debug --target all planar_tests",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "green",
+    "shell_command": "build/rewrite-debug/src/engine/planar_runtime_tests '[render-complete-bound]' --reporter junit --out tests/native/v5-02-x05-b4-b-c01-evidence/green.xml",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "phases-build",
+    "shell_command": "cmake --build --preset debug --target all planar_tests",
+    "exit": 1,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "phases-build02",
+    "shell_command": "cmake --build --preset debug --target all planar_tests",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "phases",
+    "shell_command": "build/rewrite-debug/src/engine/planar_runtime_tests '[render-boundary-phases],[render-complete-bound]' --reporter junit --out tests/native/v5-02-x05-b4-b-c01-evidence/phases.xml",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "development-probes01",
+    "shell_command": "python3 tests/native/v5-02-x05-b4-b-c01-support/probes.py development-probes01",
+    "exit": 1,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "development-probes02",
+    "shell_command": "python3 tests/native/v5-02-x05-b4-b-c01-support/probes.py development-probes02",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "development-allocation01",
+    "shell_command": "python3 tests/native/v5-02-x05-b4-b-c01-support/allocation.py development-allocation01",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "development-final-build",
+    "shell_command": "cmake --build --preset debug --target all planar_tests",
+    "exit": 0,
+    "cwd": "<repo>"
+  },
+  {
+    "label": "development-final",
+    "shell_command": "build/rewrite-debug/src/engine/planar_runtime_tests '[render-boundary-phases],[render-complete-bound]' --reporter junit --out tests/native/v5-02-x05-b4-b-c01-evidence/development-final.xml",
+    "exit": 0,
+    "cwd": "<repo>"
+  }
+]

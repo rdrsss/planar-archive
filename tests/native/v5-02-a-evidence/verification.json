@@ -1,0 +1,20 @@
+{
+  "protected_unchanged": 5601,
+  "links_and_anchors_resolving": 175,
+  "agents_link": "CLAUDE.md",
+  "v5_sha256": "c3d37e0e28407a9066eb51c515982ef6c93d82795eb56f97dea4a780b66fe08e",
+  "owned_sha256": {
+    "docs/vernacular/command-contract.md": "fa7a6c22930073c84ec346a9b041a4b02b48eecd59dd9327e5ee0016862cf80a",
+    "docs/vernacular/render-contract.md": "59eaa6f191f8f7144474ca5ea6e4b681a282f4bdd972c355139199b80ce13767",
+    "docs/vernacular/ledger-contract.md": "fbf693e00311172e8bc61ecb90111daa7ce7170faec359897a9a8e347618019d",
+    "docs/vernacular/implementation.md": "fdc2d65027a6a0cff6cb9e563b91175414a377663b6e640e2168f86fe153192c",
+    "docs/vernacular/roadmap.md": "4852563454acf7de2be91adb1ea52b9981d7039c5c691baa3797a4eceb062bcc",
+    "docs/vernacular/v5-alignment.md": "a527e2b28211b2212f82852b504ae2d8c741def3f49f231dc582c1bc2b0e5e1e",
+    "docs/vernacular/acceptance-matrix.md": "817e33671ee5228352a7fd97cb29dad3f3903abac8e832a01472c60f7c2915c5",
+    "CLAUDE.md": "e5e0a41501fdb14641e5e8f59ba81fba7af32f20046acf20f5e56ec1aad7fa70"
+  },
+  "owned_diff_sha256": "4f53299a5263140987c7dd9680c64933bdeadc9c773e9b3d4787003db204beae",
+  "git_diff_check": "pass",
+  "product_builds_tests": "not run (docs-only)",
+  "scope": "No product, vendor, fixture, prior evidence or historical-round changes; coordinator current round excluded."
+}

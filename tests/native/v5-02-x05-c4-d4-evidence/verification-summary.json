@@ -1,0 +1,21 @@
+{
+  "added": 11,
+  "audits": 7,
+  "baseline_inventory": 865,
+  "corrected_private_only_after_fixture_change": true,
+  "current_inventory": 876,
+  "disabled": 0,
+  "errors": 0,
+  "failures": 0,
+  "focused": 536,
+  "full_gate": false,
+  "initial_focused": 535,
+  "initial_focused_passed": 534,
+  "initial_private": 10,
+  "initial_private_passed": 9,
+  "preserved_all_with_explicit_rename": true,
+  "private": 10,
+  "release_gate": false,
+  "skips": 0,
+  "vectors": 6
+}

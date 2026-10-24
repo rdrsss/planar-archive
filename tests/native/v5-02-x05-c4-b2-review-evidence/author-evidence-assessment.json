@@ -1,0 +1,71 @@
+{
+  "tested_product_test_cmake_unchanged": [
+    "CMakeLists.txt",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/engine/CMakeLists.txt",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/runtime.cppm",
+    "src/engine/runtime/runtime.t.cpp"
+  ],
+  "xml": [
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/first-candidate/gate/runtime-attempt1.xml",
+      "cases": 4,
+      "failures": 4,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/first-candidate/gate/runtime-attempt2.xml",
+      "cases": 4,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/first-candidate/gate/focused-ctest.xml",
+      "cases": 412,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/first-candidate/gate/format-attempt1.xml",
+      "cases": 2,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/first-error/red.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/private/green-native.xml",
+      "cases": 6,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/private/green-header.xml",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "tests/native/v5-02-x05-c4-b2-evidence/private/red-header.xml",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skips": 0
+    }
+  ]
+}

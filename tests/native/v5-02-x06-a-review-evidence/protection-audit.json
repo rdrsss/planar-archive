@@ -1,0 +1,13 @@
+{
+  "build_ownership": "none",
+  "exemptions": [
+    ".git",
+    "docs/vernacular/rounds/V5-02-X06-A-review.md",
+    "docs/vernacular/rounds/V5-02-X06-A.md",
+    "tests/native/v5-02-x06-a-review-evidence"
+  ],
+  "final_members": 93762,
+  "full_sha256_before_and_final": true,
+  "protected_members": 93762,
+  "unexpected_changes": []
+}

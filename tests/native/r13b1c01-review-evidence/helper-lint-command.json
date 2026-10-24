@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "python3",
+    "tests/native/r13b1c01-evidence/helper-lint.py"
+  ],
+  "exit": 0
+}

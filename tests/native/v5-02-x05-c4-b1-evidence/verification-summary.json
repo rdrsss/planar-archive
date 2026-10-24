@@ -1,0 +1,13 @@
+{
+  "current_inventory": 767,
+  "focused_cases": {
+    "planar_history_read_tests": 3,
+    "planar_ledger_format_tests": 80,
+    "planar_ledger_sqlite_tests": 33
+  },
+  "original_inventory": 756,
+  "preserved_all": true,
+  "private_green_cases": 6,
+  "skips": 0,
+  "total": 116
+}

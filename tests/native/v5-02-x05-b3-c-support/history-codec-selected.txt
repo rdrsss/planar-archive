@@ -1,0 +1,11 @@
+replacement.ledger history codec accepted changed noop and reverted independent event wires
+replacement.ledger history codec canonical decimal and optional head token refusals
+replacement.ledger history codec duplicate escape whitespace ordering and trailing bytes refuse
+replacement.ledger history codec event exact field sets and types refuse malformed schema
+replacement.ledger history codec initialization exact existing format payload
+replacement.ledger history codec ledger identity and bounded ASCII request grammar
+replacement.ledger history codec maximum signed IDs and nonconsecutive identities roundtrip
+replacement.ledger history codec result exact field sets and types refuse malformed schema
+replacement.ledger history codec saved load result keeps returned revision parent on noop
+replacement.ledger history codec typed state and enum validation refuses invalid encoding
+replacement.ledger history codec unsupported versions and redacted fixed byte ceiling failures

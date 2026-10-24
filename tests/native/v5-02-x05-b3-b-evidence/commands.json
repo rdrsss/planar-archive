@@ -1,0 +1,94 @@
+{
+  "checkpoint": [
+    {
+      "label": "checkpoint-build",
+      "argv": [
+        "cmake",
+        "--build",
+        "--preset",
+        "debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "exit_code": 0,
+      "log": "checkpoint-build.log"
+    },
+    {
+      "label": "checkpoint-production",
+      "argv": [
+        "build/rewrite-debug/src/engine/planar_runtime_tests",
+        "[profile-semantic]",
+        "--reporter",
+        "junit",
+        "--out",
+        "tests/native/v5-02-x05-b3-b-evidence/checkpoint-production.xml"
+      ],
+      "exit_code": 0,
+      "cases": 10,
+      "assertions": 259
+    },
+    {
+      "label": "checkpoint-allocation",
+      "argv": [
+        "python3",
+        "tests/native/v5-02-x05-b3-b-support/allocation.py",
+        "checkpoint-allocation"
+      ],
+      "exit_code": 0,
+      "nested_commands": "checkpoint-allocation/commands.json"
+    },
+    {
+      "label": "checkpoint-format",
+      "argv": [
+        "/opt/homebrew/opt/llvm/bin/clang-format",
+        "--dry-run",
+        "--Werror",
+        "src/engine/runtime/runtime.cpp",
+        "src/engine/runtime/runtime.cppm",
+        "src/engine/runtime/external_registration.t.cpp"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "checkpoint-inventory",
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "build/rewrite-debug",
+        "--show-only=json-v1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "checkpoint-no-work",
+      "argv": [
+        "cmake",
+        "--build",
+        "--preset",
+        "debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "development": {
+    "build01": "const-map staging compile failure",
+    "build02": "unused test helper compile failure",
+    "build03": "test INFO macro compile failure",
+    "build04_to07": "development build successes",
+    "development-tests": "6/7 pass; unsupported native-input encoding snapshot",
+    "development-tests02": "9/10 pass; unsupported canonical declaration snapshot",
+    "development-tests03": "10/10 pass,259 assertions",
+    "development-probes01": "expected regression exit42; actual native allocation423 unexpectedly ordinary",
+    "build08": "development build with rejected speculative decoder reservation; removed before checkpoint"
+  },
+  "not_run": [
+    "full test gate",
+    "361+new focused/11 supplemental gate",
+    "vectors/six source audits/Doxygen gate",
+    "full semantic registry/GC lifetime probe"
+  ]
+}

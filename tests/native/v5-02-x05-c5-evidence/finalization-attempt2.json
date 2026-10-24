@@ -1,0 +1,8 @@
+{
+  "stage": "seal after repeated full cryptographic protection passed",
+  "failure": "AssertionError: REPORT.md candidate.diff",
+  "cause": "Link checker ran before the finalizer creates the linked diff/manifests",
+  "correction": "Permit exactly the four scheduled final outputs and assert all links exist after sealing",
+  "product_or_document_link_change": false,
+  "product_tests_repeated": false
+}

@@ -1,0 +1,15 @@
+{
+  "binary_sha256": "35a8bc2095f014087f7e1771d3b136d078449291ea0aafca447679133bd483f5",
+  "cli_invocations": 19,
+  "debug_release_identical_artifacts": 79,
+  "golden_comparisons": 6,
+  "guide_relative_links": 35,
+  "helper_exit": 0,
+  "identity_comparisons": 11,
+  "independent_helper_command": "python3 -B tests/acceptance/render_evaluation.py build/rewrite-debug/bin/planar tests/native/r10-review-evidence/debug",
+  "matching_reference_artifacts": 79,
+  "same_debug_provenance": true,
+  "six_packets_match_goldens_and_extracted_markdown": true,
+  "skips": 0,
+  "syntax_compile": "passed in scratch"
+}

@@ -1,0 +1,10 @@
+{
+  "entries": 77470,
+  "exemptions": [
+    "docs/vernacular/rounds/V5-02-X05-C5-review.md",
+    "docs/vernacular/rounds/V5-02-X05-C5.md",
+    "tests/native/v5-02-x05-c5-review-evidence"
+  ],
+  "full_sha256": true,
+  "seconds": 45.03163695335388
+}

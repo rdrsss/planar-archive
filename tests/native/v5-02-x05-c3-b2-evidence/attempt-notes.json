@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "no_commit_install_publish_merge": true,
+    "no_full_release_suite": true,
+    "round": "docs/vernacular/rounds/V5-02-X05-C3-B2.md",
+    "shared_checkout": true
+  },
+  "baseline_attempt1": {
+    "raw_tool_error": "FileNotFoundError: [Errno 2] No such file or directory: <repo>/build/rewrite-release",
+    "reason": "original snapshot helper required build/rewrite-release, which was absent",
+    "recovery": "record actual absent rewrite-release, protect install-release, configure/build fresh Debug before mutation",
+    "result": "failed before source edits/builds"
+  },
+  "edit_guard": {
+    "product_failure": false,
+    "raw_tool_error": "Traceback (most recent call last): File <stdin>, line 44, in <module>; AssertionError",
+    "recovery": "matched formatted call site and completed intended extraction before build6",
+    "result": "one Python string-replacement assertion stopped after host_path edits and before runtime call-site edits"
+  },
+  "exploratory_first": {
+    "cases": 15,
+    "exit": 42,
+    "product_defect_claimed": false,
+    "reason": "test fixture used bare workspace alias without environment; symlink/nonregular expectations used io rather than native path_denied",
+    "xml": "exploratory-admission.xml"
+  },
+  "exploratory_second": {
+    "cases": 15,
+    "exit": 42,
+    "product_defect_claimed": false,
+    "reason": "one remaining directory leaf expected io; native correctly returns path_denied",
+    "xml": "exploratory-admission-corrected.xml"
+  },
+  "pre_final_builds": {
+    "all_exit": 0,
+    "logs": [
+      "implementation-build-attempt1.log",
+      "implementation-build-attempt2.log",
+      "implementation-build-attempt3.log",
+      "implementation-build-attempt4.log",
+      "implementation-build-attempt5.log",
+      "implementation-build-attempt6.log"
+    ],
+    "not_focused_gate": "Draft/test corrections and helper authorization caused successive rebuilds; only frozen gate counts as final verification"
+  },
+  "support_and_private_attempts": {
+    "private1": "nonexistent static syscall archive",
+    "private2": "owned copied readonly dylib overwrite refused; copied modes/hashes unchanged",
+    "private3": "executable-linked interposer positive read controls failed",
+    "private4": "four green probes but prehard two-fault control green; no defect claim",
+    "private_final": "one actual third-fault control, four green probes and exact prehard field red",
+    "resume1": "import cache freeze mismatch; raw cache preserved",
+    "resume2": "allowlist needed private import hygiene path",
+    "resume3": "Doxygen required private implementation docs; noncomment token equality followed"
+  }
+}

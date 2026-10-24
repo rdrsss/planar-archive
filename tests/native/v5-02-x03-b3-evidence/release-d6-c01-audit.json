@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.15/bin/python3.15",
+    "<repo>/tests/native/r14-d6-c01-support/audit.py",
+    "<repo>/build/rewrite-release",
+    "<repo>/tests/native/v5-02-x03-b3-evidence/release-d6-c01-audit-report.json"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:25:48.211618+00:00",
+  "exit_code": 0,
+  "seconds": 0.16308879852294922,
+  "start_utc": "2026-10-22T21:25:48.048554+00:00"
+}

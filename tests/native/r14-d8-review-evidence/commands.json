@@ -1,0 +1,147 @@
+[
+  {
+    "name": "debug-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:52:28.645832+00:00",
+    "end": "2026-10-22T18:52:28.886795+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "D8 complete|replacement.load_cli$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-review-evidence/debug-focused.xml"
+    ],
+    "start": "2026-10-22T18:52:29.025276+00:00",
+    "end": "2026-10-22T18:52:39.959725+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:52:54.641646+00:00",
+    "end": "2026-10-22T18:52:54.859489+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "-R",
+      "D8 complete|replacement.load_cli$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-review-evidence/release-focused.xml"
+    ],
+    "start": "2026-10-22T18:52:54.992443+00:00",
+    "end": "2026-10-22T18:52:59.725129+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-active-draft",
+    "argv": [
+      "python3",
+      "tests/native/r14-d8-review-evidence/active-draft.py",
+      "build/rewrite-debug/bin/planar"
+    ],
+    "start": "2026-10-22T18:53:30.049580+00:00",
+    "end": "2026-10-22T18:53:30.164235+00:00",
+    "exit": 1
+  },
+  {
+    "name": "debug-active-draft-final",
+    "argv": [
+      "python3",
+      "tests/native/r14-d8-review-evidence/active-draft.py",
+      "build/rewrite-debug/bin/planar"
+    ],
+    "start": "2026-10-22T18:53:35.493734+00:00",
+    "end": "2026-10-22T18:53:37.112176+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-active-draft-final",
+    "argv": [
+      "python3",
+      "tests/native/r14-d8-review-evidence/active-draft.py",
+      "build/rewrite-release/bin/planar"
+    ],
+    "start": "2026-10-22T18:53:49.862511+00:00",
+    "end": "2026-10-22T18:53:50.660754+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:54:01.824484+00:00",
+    "end": "2026-10-22T18:54:02.034936+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "start": "2026-10-22T18:54:02.176021+00:00",
+    "end": "2026-10-22T18:54:02.222770+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:54:02.351125+00:00",
+    "end": "2026-10-22T18:54:02.557117+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "--show-only=json-v1"
+    ],
+    "start": "2026-10-22T18:54:02.694249+00:00",
+    "end": "2026-10-22T18:54:02.737944+00:00",
+    "exit": 0
+  }
+]

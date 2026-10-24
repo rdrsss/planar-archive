@@ -1,0 +1,17 @@
+{
+  "artifact_manifest_sha256": "4580cb4c4de8daff699d3459b0d91924627e18177a02e3dd260f8557d626eedf",
+  "artifacts": 567,
+  "candidate_entries": 475,
+  "candidate_manifest_sha256": "6daa92dde43907bab1a4df060e532a29c41f5031d9f6a8eddcd88d172f83438c",
+  "no_later_author_edits": true,
+  "owned_diff_sha256": "784448312bdfbb9359bbc7ec846047a3c23eb54b2a7890d9e26c4ef4625fd63f",
+  "released": [
+    "build/rewrite-debug",
+    "build/rewrite-release",
+    "all author edits"
+  ],
+  "report_sha256": "9c6c5ff2ea0bdb70a1310a2bee88db8e6f6b7d085f260af71e14d65e3b86a71a",
+  "source_freeze_sha256": "a3aaffa0b11ba4ca894d81891a90665b78e456d79088b53c1a16efd36099581d",
+  "status": "complete candidate pending independent review",
+  "utc": "2026-10-23T19:25:46.662452+00:00"
+}

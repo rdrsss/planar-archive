@@ -1,0 +1,656 @@
+{
+  "binary_sha256": "4bc0fcd625c57145e63889ea7cae9cb7aec65e4b205cad98a5257f085d5e119a",
+  "processes": [
+    {
+      "args": [
+        "--help"
+      ],
+      "status": 0,
+      "stdout": "Usage: planar render --workspace FILE --registry FILE --root ID=DIRECTORY --job ID --role ID\nOptional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\nplanar init --ledger FILE --workspace-id ID\nplanar --help\n",
+      "stderr": ""
+    },
+    {
+      "args": [],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--help"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "--"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "--",
+        "private"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "-h"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "private"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "--private"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "--help",
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "--help"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "--help",
+        "--help"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "--ledger",
+        "different"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "--workspace-id",
+        "different"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger=private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "--private",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        ""
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "--private"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "--",
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample",
+        "render"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "render",
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "history",
+        "--ledger",
+        "private.db"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "load",
+        "--ledger",
+        "private.db"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"usage\",\"field\":\"\",\"message\":\"Expected render or init options or --help; see --help\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "Private"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "1private"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "private-id"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "private/path"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "privat\u00e9"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        ".",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "..",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "/",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private/",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"schema\",\"field\":\"\",\"message\":\"Invalid ledger arguments\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "absent/private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Ledger path requires existing real parent directories and a valid target\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "absent/../private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Ledger path requires existing real parent directories and a valid target\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-alias/private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Ledger path requires existing real parent directories and a valid target\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-alias/../private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Ledger path requires existing real parent directories and a valid target\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-parent-file/private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"path_denied\",\"field\":\"\",\"message\":\"Ledger path requires existing real parent directories and a valid target\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-existing",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-empty",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-directory",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-link",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-dangling",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-dirlink",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private-unwritable/private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 4,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"io\",\"details\":{\"operation\":\"ledger\"},\"field\":\"\",\"message\":\"Ledger operation failed\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "a"
+      ],
+      "status": 0,
+      "stdout": "{\"active_revision\":\"none\",\"event\":\"1\",\"kind\":\"init\",\"ledger\":\"a6f9fbc3c7c9c55b352384477e4515f5\",\"version\":1,\"workspace\":\"a\"}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "private.db",
+        "--workspace-id",
+        "a"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "real/../private-two.db",
+        "--workspace-id",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "status": 0,
+      "stdout": "{\"active_revision\":\"none\",\"event\":\"1\",\"kind\":\"init\",\"ledger\":\"42e50e1d84ac029e52e9b2c95e4f0464\",\"version\":1,\"workspace\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "real/../private-two.db",
+        "--workspace-id",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "-private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 0,
+      "stdout": "{\"active_revision\":\"none\",\"event\":\"1\",\"kind\":\"init\",\"ledger\":\"a9a9fad55479ff93d393154babcbd0ca\",\"version\":1,\"workspace\":\"sample\"}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "init",
+        "--ledger",
+        "-private.db",
+        "--workspace-id",
+        "sample"
+      ],
+      "status": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ledger_exists\",\"field\":\"\",\"message\":\"Ledger target already exists\"},\"kind\":\"error\",\"version\":1}\n"
+    }
+  ]
+}

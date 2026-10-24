@@ -1,0 +1,11 @@
+{
+  "reused_author_support_sha256": {
+    "probes.py": "0f267b214b09732a8642776fe3f54f2a4aaa277fda039ead1bc3eab93e3ce891",
+    "semantic.cpp": "71fee7bd610a2b1d769f977de2addc8007a74ca05f5792212cc4366146e95c16",
+    "allocation.py": "133e13a0071fc734107616df27366d1f3366c3d2acf663b2a6be2c9bcf2eee77",
+    "allocation.cpp": "6972902752b932e2e7380b5b0eb663058952ed32c1579803e4cf87be5852bb15"
+  },
+  "changes": "Output destinations and source paths redirected to reviewer ownership; independently authored original-input escaped/near-limit controls and exact prior-runtime red replay in adversarial.cpp/py.",
+  "release_membership_entries": 3463,
+  "release_membership_exact": true
+}

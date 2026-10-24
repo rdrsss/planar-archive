@@ -1,0 +1,17 @@
+{
+  "CLAUDE.md": "2a41fb209c97390791e0bced63ddfd99511aa653a4b774c85b45a366be4132ff",
+  "CONTRIBUTING.md": "ff854261811ed5e908337896e940d20840f42ca6208765afc3688bfded1f7959",
+  "INSTALL.md": "1111229ee3939f5d7104daf04d9cf458029906f2e4d196c09bdf36e07a08a3b9",
+  "README.md": "df494b20d1a79c649f623707a91ba1059affe865bb8d776301446515d207a0c9",
+  "docs/architecture.md": "bf764ec015030663e8e996e310c599ac182b653896398af9c8aa034e95d9dc7f",
+  "docs/cli-reference.md": "d007db70cf3860c6ce24471dc91b9aee0056b74d5493fead2cc4a93f932ea5d0",
+  "docs/declarations.md": "ba80a225a1160cbe9101b58919a80cccd55418d1a1a8254bd053f6fed5e20948",
+  "docs/testing.md": "e6ede2bd3a4676d5316e98a65de00d04d06b069d6302a60eb741961cd71ec8df",
+  "docs/vernacular/acceptance-matrix.md": "1b64e5e07d3e269341cbd5dceddcad6de348932ca822517a2039effa9ad0c6b3",
+  "docs/vernacular/declarations.md": "7f70115e723bd0ecb4dce239d57ad14a7a8953c054e96c3b21172a2bc13c6ff6",
+  "docs/vernacular/implementation.md": "191f6bce374235753653cad7b76b4b123ccaa7c6e83d88a3f3e343ee2ac1184d",
+  "docs/vernacular/ledger-contract.md": "cb5f4f201275b7f0890824c03eba545a141a0134fc30f0f6ede0d16c1ff84375",
+  "docs/vernacular/render-contract.md": "f36940e59141f451e6189ac258040601d1aeef7f49460fb85053a0999db7422b",
+  "docs/vernacular/roadmap.md": "01acf242ff9675e098ffa1120fafa19ec76089db3b0d4a5360334a72f2c49231",
+  "docs/vernacular/v5-alignment.md": "cb5b56c7842d9e027793f53d652b044c11f67ec63214b22e8b35a3eca5e6cd33"
+}

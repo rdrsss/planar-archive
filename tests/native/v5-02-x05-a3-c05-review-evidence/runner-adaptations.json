@@ -1,0 +1,101 @@
+[
+  {
+    "copy_sha256": "19b1a2c6e6f2c29c87fc963f820af20b2c6cadc1d9e1c08c5e443dcc5f221366",
+    "name": "memory",
+    "reverse_identical": true,
+    "source_sha256": "ec538aacb0a6b3a352080b586e9210ced25f91ff2622d4ed7c0612cde8c4e05e",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "9f54b5816ff5f5b59f5de24f0af39cab5cd51c6cc7a4e169f8956f53a3708695",
+    "name": "fields",
+    "reverse_identical": true,
+    "source_sha256": "2904a58821251808a6db42472b78b9a153383295e34191c75cd2c467f2a23376",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "bd2b41ab036cffae5f0f9de7737aec69f74e099d12cf3bf0e4dccf76804064f1",
+    "name": "allocations",
+    "reverse_identical": true,
+    "source_sha256": "cf0c674e572452819cc28b03e3d67eb9c082f3f57feae78f7d8712fe0eaa0c17",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "7e90ba0d17fbf714aecdfd523a2311ef11c8790ab31c91e42ec8129d0f47bdcf",
+    "name": "repeat",
+    "reverse_identical": true,
+    "source_sha256": "4c67502e85e0dcc92c106adee66a1dae7e17d6cf350d6c69ef83a28db57a63f7",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "37fd986b7aab8920f4de0d6a44e5eca9cf8a15137d39f30f07aaef9537b842ab",
+    "name": "locations",
+    "reverse_identical": true,
+    "source_sha256": "e05fc1078696a19b8fee3d4619fdb673b6d6cb4a0ca935d04a0eaf47ac2e6479",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "c1c57c774b60d3b0b00494df4bd3581ee0aac02a51ae04b619e81a9a85d44eb9",
+    "name": "probe",
+    "reverse_identical": true,
+    "source_sha256": "a6e3331280f858eab8028a83014b41fd412ede7d14ab3953b2e10ea10a0ff4cf",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "975044ba9b51942f42b9223cc3908cf4687cf5cec2ca727c6607cdf9ae782dbc",
+    "name": "reachable",
+    "reverse_identical": true,
+    "source_sha256": "156f2c09865eb4879d8e0ccc62c848ecd55ae9f36197bd7e95cacc5aed51808c",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "483857cb418359b51712a1d9761f4f1d3166228fdb1854a7146cabdbd18fc713",
+    "name": "regressions",
+    "reverse_identical": true,
+    "source_sha256": "792a24f408e5c270f8dfba276c7be763046e6132d422c8c972f9572fd90c4f85",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  },
+  {
+    "copy_sha256": "826d311bfdd8eb5405277d51a3d1b43415442fdecaad4a7495abb1b42bca1053",
+    "name": "budget",
+    "reverse_identical": true,
+    "source_sha256": "d786f4ea2a4191dd1658929924f899db49112c4a67bb334a5ed6c7d4e4834703",
+    "substitution": {
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "count": 1
+    }
+  }
+]

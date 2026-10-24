@@ -1,0 +1,43 @@
+{
+  "author-focused": {
+    "cases": 346,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0
+  },
+  "review-focused": {
+    "cases": 346,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "console_starts": 346,
+    "saved_LastTest_sha256": "009cd5d0007cc3966c32ee73c47f01a822240c20edf4f53eb3467f608a9731f5"
+  },
+  "author-history-codec": {
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0
+  },
+  "review-history-codec": {
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "console_starts": 11,
+    "saved_LastTest_sha256": "3f3a6d11ac4d5012bdd0523e4e16fc8e1c23c0ece77a2a2305dae1f4d02db6f3"
+  },
+  "red": {
+    "cases": 5,
+    "failed_cases": 2,
+    "failed_assertions": 7,
+    "errors": 0,
+    "skips": 0,
+    "exit_code": 42,
+    "initial_failed_run_preserved": true
+  }
+}

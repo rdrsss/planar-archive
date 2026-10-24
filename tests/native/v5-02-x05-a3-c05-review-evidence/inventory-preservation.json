@@ -1,0 +1,9 @@
+{
+  "added": [
+    "replacement.X05 A3 C05 nested ordinary errors permit later valid registration",
+    "replacement.X05 A3 C05 nested resource failure preserves first registration entry"
+  ],
+  "current": 582,
+  "missing": [],
+  "previous": 580
+}

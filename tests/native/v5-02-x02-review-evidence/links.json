@@ -1,0 +1,137 @@
+[
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "external-profile-implementation.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "rounds/V5-02.md#operator-decision",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "rounds/V5-02-X02.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "rounds/V5-02-X01-review.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "external-envelope-spike.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "declarations.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "render-contract.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "ledger-contract.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "command-contract.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-contract.md",
+    "target": "load-command-contract.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "external-profile-contract.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "rounds/V5-02-X02.md",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "external-profile-contract.md#x-pol--product-choices-for-review-then-operator-disposition",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/cmd/planar/bootstrap.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/cmd/planar/invocation.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/runtime/runtime.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/capture/native.cppm",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/acceptance/prepared.cppm",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/history/record.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/history/provenance_codec.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/history/interpretation_codec.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/engine/ledger/format.cpp",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/stdlib/planar/schema.lua",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/stdlib/planar/semantic.lua",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/stdlib/planar/selection.lua",
+    "valid": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "../../src/stdlib/planar/render.lua",
+    "valid": true
+  }
+]

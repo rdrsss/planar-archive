@@ -1,0 +1,170 @@
+[
+  {
+    "field": "identity",
+    "encoding": "nul",
+    "phase": "before",
+    "lengths": [
+      32,
+      2097185
+    ],
+    "returncode": 1,
+    "stdout": "RED oversized_cpp_request=2097200 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "identity",
+    "encoding": "nul",
+    "phase": "corrected",
+    "lengths": [
+      32,
+      2097185
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "identity",
+    "encoding": "multibyte",
+    "phase": "before",
+    "lengths": [
+      32,
+      64
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "identity",
+    "encoding": "multibyte",
+    "phase": "corrected",
+    "lengths": [
+      32,
+      64
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "workspace_id",
+    "encoding": "nul",
+    "phase": "before",
+    "lengths": [
+      16,
+      2097169
+    ],
+    "returncode": 1,
+    "stdout": "RED oversized_cpp_request=2097184 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "workspace_id",
+    "encoding": "nul",
+    "phase": "corrected",
+    "lengths": [
+      16,
+      2097169
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "workspace_id",
+    "encoding": "multibyte",
+    "phase": "before",
+    "lengths": [
+      64,
+      128
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "workspace_id",
+    "encoding": "multibyte",
+    "phase": "corrected",
+    "lengths": [
+      64,
+      128
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "created_at",
+    "encoding": "nul",
+    "phase": "before",
+    "lengths": [
+      24,
+      2097177
+    ],
+    "returncode": 1,
+    "stdout": "RED oversized_cpp_request=2097184 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "created_at",
+    "encoding": "nul",
+    "phase": "corrected",
+    "lengths": [
+      24,
+      2097177
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "created_at",
+    "encoding": "multibyte",
+    "phase": "before",
+    "lengths": [
+      24,
+      48
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  },
+  {
+    "field": "created_at",
+    "encoding": "multibyte",
+    "phase": "corrected",
+    "lengths": [
+      24,
+      48
+    ],
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true,
+    "passed": true
+  }
+]

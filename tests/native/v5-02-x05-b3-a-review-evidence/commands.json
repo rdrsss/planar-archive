@@ -1,0 +1,66 @@
+[
+  {
+    "label": "configure",
+    "argv": [
+      "cmake",
+      "--preset",
+      "debug"
+    ],
+    "exit": 0,
+    "seconds": 7.75
+  },
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "seconds": 21.836
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "seconds": 0.08
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b3-a-evidence/final-gate/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b3-a-review-evidence/focused.xml"
+    ],
+    "exit": 0,
+    "seconds": 203.649
+  },
+  {
+    "label": "history-codec",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b3-a-evidence/final-gate/history-codec-selected.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b3-a-review-evidence/history-codec.xml"
+    ],
+    "exit": 0,
+    "seconds": 0.271
+  }
+]

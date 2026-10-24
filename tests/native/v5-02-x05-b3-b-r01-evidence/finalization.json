@@ -1,0 +1,12 @@
+{
+  "status": "candidate awaiting independent combined original B3-B plus R01 review",
+  "debug_ownership_released": true,
+  "no_further_edits": true,
+  "source_entries": 2094,
+  "source_rehash_equal": true,
+  "candidate_manifest_sha256": "506381976c972a05d2bdffb56e72341868252bbf7e87c3cc9692476f5ee8ad90",
+  "candidate_diff_sha256": "334f680a9b997023fa784d749c34863b545d921c62a57d53dde65b8cf8896f3f",
+  "r01_diff_sha256": "7ae92ef1f632b4c119d5b53372a58a3291253bc0a8367d76476e7b3af598fc15",
+  "artifact_manifest_sha256": "cb8bdd69503c75140d0bc2b65e0175692bb47ef4a6ce9b2fa382ee324456f200",
+  "report_sha256": "3b4f70433c5409a86f6fef0b22cf31fe31550ad4b4fa36ea2c77500920c9acb8"
+}

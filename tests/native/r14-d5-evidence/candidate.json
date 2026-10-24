@@ -1,0 +1,17 @@
+{
+  "path_base": "repository root; snapshots in tests/native/r14-d5-evidence/candidate",
+  "files": {
+    "src/engine/acceptance/load.cppm": "561836155aa2a05b816db9cb441e0a8b600197c4d8bbff8ba7e9d36c6b7f1332",
+    "src/engine/acceptance/load.cpp": "fb53e19b8f61349d43f3a73d734c66e3c51ee6769a9e6553570f676b74679ee6",
+    "src/engine/acceptance/load.t.cpp": "f06f92adacd6b40786c8572571d1d037738720c0e25d4cf0808a9e4d8c9746af",
+    "src/engine/CMakeLists.txt": "dd7ff99a04e06b8320977f96fb28f0194ee219e11cc61ca986ace35cfb0ce223",
+    "docs/architecture.md": "c2d8198864b8079e478b61203b14d6e57680adca73711da74cb1d2841b4f7d76",
+    "docs/testing.md": "3da16d01294d725437904fa893afcc1e267138c425fcdb97effe301dfbdde26a",
+    "CLAUDE.md": "67fd279d224721ebce247b3a84ed84a054d4edd6958265897b0dafddecf1d7e8",
+    "docs/vernacular/implementation.md": "776fc01694a2097adcbde5d4e7da65fbfa9b02d4a9035cb00a7433f2e4b97587",
+    "docs/vernacular/roadmap.md": "08af221b03275463a8148a123c0e10ccf35ee5b349a2a0005069910202ffe617",
+    "docs/vernacular/v5-alignment.md": "0fa58905078c0ef14bb19ded776f7e02e39aec506e3bf5ecfe56ba2f2f5ddded",
+    "docs/vernacular/acceptance-matrix.md": "34194c0eb971fcb0e8e487de8e372cb466ea39d71ee023ac850c2f92aeb1bb77",
+    "docs/vernacular/load-command-contract.md": "5ec3b793c4b06dd88bcb982db46ef860b4dba1ed5a5b2c44792b98720acd7a09"
+  }
+}

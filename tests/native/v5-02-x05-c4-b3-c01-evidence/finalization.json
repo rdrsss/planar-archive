@@ -1,0 +1,60 @@
+{
+  "artifact_manifest": {
+    "entries": 134,
+    "path": "artifact-manifest.json",
+    "sha256": "f1ff95c407cae2e260f439e4ed5e416106e475efe64fb476a9c0b54400ffda2d"
+  },
+  "candidate": {
+    "entries": 17,
+    "path": "frozen-candidate.json",
+    "sha256": "97302a8a54a7bb1ea8352618819adb0e067a2cf9be5c84cd46c420c2fd36cf2d"
+  },
+  "cleanup": {
+    "copied_dependency_files": 888,
+    "copied_membership_modes_bytes_verified": true,
+    "only_coder_owned_disposable_inputs_and_products_removed": true,
+    "path": "cleanup.json",
+    "removed_bytes": 1384716240,
+    "removed_files": 894,
+    "sha256": "38ff7fb42e0d1ead2b07aacfd1975a4612ffbf5f768fbc3152691de3ab8a063f",
+    "shared_inputs_unchanged": true
+  },
+  "disposition": "candidate-awaiting-independent-combined-B3-C01-review",
+  "finding_to_review": "C4B3-R1",
+  "protection": {
+    "changed": [],
+    "entries": 73009,
+    "path": "final-protection.json",
+    "release_absent": true,
+    "sha256": "c13f052431537d1dea25dca8cd15b80de73e90b0abd7f6bb2f298a45fcce18f0"
+  },
+  "release": {
+    "coder_owned_paths": true,
+    "exclusive_debug": true,
+    "no_further_edits_builds_tests": true
+  },
+  "report": {
+    "path": "REPORT.md",
+    "sha256": "63dcb2bf0f5be95ba55b57e4ea7bf19057dbd00fe085617c8effa78e105113db"
+  },
+  "schema": 1,
+  "verification": {
+    "cli_cases": 7,
+    "current_inventory": 790,
+    "focused_cases": {
+      "planar_history_read_tests": 3,
+      "planar_ledger_format_tests": 82,
+      "planar_ledger_sqlite_tests": 33,
+      "planar_runtime_tests": 304
+    },
+    "original_inventory": 786,
+    "path": "verification-summary.json",
+    "preserved_all": true,
+    "private_green_cases": 13,
+    "production_red_failures": 1,
+    "reviewer_baseline_failing_cases": 2,
+    "sha256": "2f1f72788525b91ad9e75b91d04f0e14ebcf3eff7ea8b994641620b35733e19a",
+    "skips": 0,
+    "total": 429
+  }
+}

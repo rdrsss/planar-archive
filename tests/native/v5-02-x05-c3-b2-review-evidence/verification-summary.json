@@ -1,0 +1,25 @@
+{
+  "author-final20": {
+    "cases": 20,
+    "zero_failure_error_skip": true
+  },
+  "author-focused": {
+    "cases": 409,
+    "zero_failure_error_skip": true
+  },
+  "inventory": {
+    "before": 723,
+    "new": 20,
+    "now": 743,
+    "preserved": 723
+  },
+  "pinned_headers_match": true,
+  "review-focused": {
+    "cases": 87,
+    "zero_failure_error_skip": true
+  },
+  "review-private": {
+    "cases": 7,
+    "zero_failure_error_skip": true
+  }
+}

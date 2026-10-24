@@ -1,0 +1,14 @@
+{
+  "files": {
+    "docs/architecture.md": "f0172c0a27dc9f632b7f1a3b3ebbff29230d38628a4da7b6304f6de8cbee5043",
+    "docs/testing.md": "d8579215cb460061a4199820a565036c9937ad09ca0918e76f429d8c2cba24eb",
+    "src/cmd/planar/CMakeLists.txt": "e84e9a5bed2891239ac44e4acde50c0ee33c199f09fe84df4d5b1e066e200635",
+    "src/cmd/planar/handlers/render/command.cpp": "45584863fad87c58c1ce078f46926725543664aa48640c5f9a2c088d8c07e6d0",
+    "src/engine/CMakeLists.txt": "3f42bea856a5fed0a6968e2a09c7f93baa59b1c1fb82765cd530b7004be3efa0",
+    "src/engine/capture/host_path.cpp": "23f569736b3e684ecc657e69228353dbd86615e0cb66bae67d05854f08ea67fd",
+    "src/engine/capture/host_path.cppm": "114efac609480a6de376c10869d2b708dc5da9c389983b98e117dbb31b9fce01",
+    "src/engine/capture/host_path.t.cpp": "f1268f9ee28d87a3a4148b4cbbf56d3bdf441fc98c9357a5db6c124c63628f6c",
+    "tests/acceptance/bootstrap_paths.py": "880fdc75e6792cea23a23f6991db81128b74ba5e58a38b71abcc900d81bd270b"
+  },
+  "identity": "33c92e663087dff697b86d49c0b5e22d8ee510f5c3ac63a9643a833d93298808"
+}

@@ -1,0 +1,29 @@
+{
+  "author_final_all_exit0": true,
+  "author_final_commands": 21,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/closure_guard/closure_guard.cpp",
+    "src/engine/runtime/closure_guard/closure_guard.cppm",
+    "src/engine/runtime/closure_guard/closure_guard.t.cpp",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "tests/native/v5-02-x05-a3-c02-support/budget.py",
+    "tests/native/v5-02-x05-a3-c02-support/locations.py",
+    "tests/native/v5-02-x05-a3-c02-support/probe.py",
+    "tests/native/v5-02-x05-a3-c02-support/reachable.py",
+    "tests/native/v5-02-x05-a3-c02-support/regressions.py",
+    "tests/native/v5-02-x05-a3-c02-support/repeat.py",
+    "tests/native/v5-02-x05-a3-c02-support/verify.py"
+  ],
+  "historical_evidence_unchanged": true,
+  "owned_diff_exact": true,
+  "reconstructed_owned_diff_sha256": "a749522841f12e0e5eb90b99023807eefe18ebcc3055dba47d5f5615033cbece",
+  "shipped_and_vendor_unchanged": true,
+  "symlink": "CLAUDE.md"
+}

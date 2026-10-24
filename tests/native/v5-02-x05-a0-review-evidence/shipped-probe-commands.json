@@ -1,0 +1,118 @@
+[
+  {
+    "name": "compile-shipped-probe",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_x05_closure_audit_tests.dir/__/__/tests/native/v5-02-x05-a0-support/shipped.t.cpp.o.modmap",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-probe.cpp",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-probe.o"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "seconds": 0.4474766654893756,
+    "exit": 0
+  },
+  {
+    "name": "link-shipped-original",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-probe.o",
+      "src/engine/libplanar_x05_runtime_0.a",
+      "src/engine/libplanar_x05_runtime_1.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_x05_source_0.a",
+      "src/engine/libplanar_lua_trusted_libs.a",
+      "libplanar_lua.a",
+      "src/engine/libplanar_ledger_completion.a",
+      "src/engine/libplanar_history_provenance_codec.a",
+      "src/engine/libplanar_history_tree_core.a",
+      "src/engine/libplanar_ledger_types.a",
+      "src/engine/libplanar_history_request_v2.a",
+      "src/engine/libplanar_history_record.a",
+      "src/engine/libplanar_hash.a",
+      "src/engine/libplanar_canonical.a",
+      "libplanar_xxhash.a",
+      "src/engine/libplanar_json_codec.a",
+      "src/engine/libplanar_value.a",
+      "src/engine/libplanar_x05_source_1.a",
+      "src/engine/libplanar_x05_closure_audit.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-original"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "seconds": 4.648075915873051,
+    "exit": 0
+  },
+  {
+    "name": "link-shipped-instrumented",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-probe.o",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/instrumented-audit.o",
+      "src/engine/libplanar_x05_runtime_0.a",
+      "src/engine/libplanar_x05_runtime_1.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_x05_source_0.a",
+      "src/engine/libplanar_lua_trusted_libs.a",
+      "libplanar_lua.a",
+      "src/engine/libplanar_ledger_completion.a",
+      "src/engine/libplanar_history_provenance_codec.a",
+      "src/engine/libplanar_history_tree_core.a",
+      "src/engine/libplanar_ledger_types.a",
+      "src/engine/libplanar_history_request_v2.a",
+      "src/engine/libplanar_history_record.a",
+      "src/engine/libplanar_hash.a",
+      "src/engine/libplanar_canonical.a",
+      "libplanar_xxhash.a",
+      "src/engine/libplanar_json_codec.a",
+      "src/engine/libplanar_value.a",
+      "src/engine/libplanar_x05_source_1.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-instrumented"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "seconds": 0.253672250546515,
+    "exit": 0
+  },
+  {
+    "name": "shipped-original",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-original"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "seconds": 0.3217370416969061,
+    "exit": 0
+  },
+  {
+    "name": "shipped-instrumented",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-a0-review-evidence/shipped-instrumented"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "seconds": 0.3087102500721812,
+    "exit": 0
+  }
+]

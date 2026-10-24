@@ -1,0 +1,55 @@
+{
+  "author_commands": 6,
+  "author_lint_sources": 118,
+  "current_inventory_exact": true,
+  "independent_actual_allocations": {
+    "earlier_protocol_copy": 1,
+    "healthy": 3,
+    "usage": 3
+  },
+  "inventory": 716,
+  "new": 10,
+  "no_invocation_budget_reset_or_dispatch_in_new_method": true,
+  "no_work": true,
+  "preserved": 706,
+  "review_commands": [
+    [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--dry-run",
+      "--Werror",
+      "<repo>/tests/native/v5-02-x05-c3-a-review-evidence/adversarial.cpp"
+    ]
+  ],
+  "xml": {
+    "author-focused": {
+      "cases": 275,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0
+    },
+    "author-history": {
+      "cases": 11,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0
+    },
+    "review-independent": {
+      "cases": 5,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0
+    },
+    "review-production": {
+      "cases": 10,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0
+    }
+  }
+}

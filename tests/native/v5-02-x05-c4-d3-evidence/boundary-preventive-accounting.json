@@ -1,0 +1,9 @@
+{
+  "regression_claim": false,
+  "changes": [
+    "Reserve workspace filename before substring allocation",
+    "Borrow mapping ID through string_view",
+    "Reserve exclusion vector and both text copies before construction",
+    "Stage selected-shape diagnostic and original catalog field before nested execution"
+  ]
+}

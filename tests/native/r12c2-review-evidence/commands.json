@@ -1,0 +1,54 @@
+[
+  {
+    "log": "build-debug.log",
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0
+  },
+  {
+    "log": "focused-debug.log",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.ledger",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r12c2-review-evidence/focused-debug.xml"
+    ],
+    "exit_code": 0
+  },
+  {
+    "log": "build-release.log",
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0
+  },
+  {
+    "log": "focused-release.log",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "-R",
+      "replacement.ledger",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r12c2-review-evidence/focused-release.xml"
+    ],
+    "exit_code": 0
+  }
+]

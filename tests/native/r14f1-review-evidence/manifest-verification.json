@@ -1,0 +1,10 @@
+{
+  "candidate-files.json": {
+    "sha256": "f287ddaa8809b93d65b87fd066253a2fed1819bdc27d43b2a35c089eaa4dd12d",
+    "verified_entries": 9
+  },
+  "evidence-sha256.json": {
+    "sha256": "d2d092ad7969fb258c09e5627211321bfa30f1fea3acb565928bd4f539319774",
+    "verified_entries": 45
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "path_base": "repository root; snapshots under tests/native/r14-d3-evidence/candidate",
+  "files": {
+    "CLAUDE.md": "8bee653b17c68783e59225a3b6c82e583ed009e10f55909963bf0c81a9fc21c3",
+    "docs/architecture.md": "be7e48e6d8dbd01fc747106047253577f0d2f487b0f6b26428723b78b94bdac5",
+    "docs/vernacular/load-command-contract.md": "381a7ecbcf6f71f1b1e75c0010082f201275b1dd070218279ec67d35458957eb",
+    "docs/vernacular/command-contract.md": "3ebc3371e7475153399f38a5bbba569bada18d46c3246b3dc310a33b82568b10",
+    "docs/vernacular/ledger-contract.md": "0f24284dc1a3836ef5b14d13b36b9aa0cb0e5662fc05130111fd7ceff91bd5eb",
+    "docs/vernacular/implementation.md": "d3c863b7def630f4f5531d7632564ced4ffdc24d24bbb6df52603e2041be4553",
+    "docs/vernacular/roadmap.md": "ab81847ab5012c7ac1808708fe5f83e5abc11cb03231084dab7ad7a2fb577142",
+    "docs/vernacular/acceptance-matrix.md": "fba4ecf4607b9158515f941acde166eeea2844511bdf3675285a89922d61311a",
+    "docs/vernacular/v5-alignment.md": "45dfceb842366fce8fdb0c866e76ddd9abfdee346d05d71ce1c404b2ef4fc972"
+  }
+}

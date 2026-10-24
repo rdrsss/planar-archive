@@ -1,0 +1,6 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "initial_attempt": "freeze import before owned manifest failed; no product mutation",
+  "inventory": 743,
+  "rewrite_release_absent": true
+}

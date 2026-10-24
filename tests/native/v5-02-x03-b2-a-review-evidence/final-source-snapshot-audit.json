@@ -1,0 +1,6 @@
+{
+  "manifest_sha256": "d3c63e44ea9432fece7f5d6fe939f621932e1839ae49bc983fd0f5b62dd7e683",
+  "snapshot_path_base": "<repo>/tests/native/v5-02-x03-b2-a-evidence/final-source",
+  "files": 13,
+  "mismatches": []
+}

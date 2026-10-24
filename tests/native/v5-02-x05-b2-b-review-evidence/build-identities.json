@@ -1,0 +1,14 @@
+{
+  "build/rewrite-debug/src/engine/libplanar_json_codec.a": {
+    "sha256": "20102e89893491abc74188efd4dce0a8fd56268142525a33c170c5abc56ee6da",
+    "bytes": 3818256
+  },
+  "build/rewrite-debug/src/engine/libplanar_value.a": {
+    "sha256": "bb87d1e7745e8e4a23380c4e7adfe74680d1e88f565daae742b531957bcb8346",
+    "bytes": 74016
+  },
+  "build/rewrite-debug/src/engine/planar_json_codec_tests": {
+    "sha256": "8cce2fe22548a8f26250b8fa72948a27daf51b0bf8693e6d8234dedd8952d60d",
+    "bytes": 6441752
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "CLAUDE.md": {
+    "sha256": "8d171fcb1b2f48b6dbe8cc1523e5624e136ba4f2e2bb8596319edf0b1ee57d6f",
+    "mode": 420,
+    "bytes": 38904
+  },
+  "docs/architecture.md": {
+    "sha256": "9a155f8395e3e661859e67091f2f39650f16aeebae9ac9a6b64534cbc9b73829",
+    "mode": 420,
+    "bytes": 83705
+  },
+  "docs/testing.md": {
+    "sha256": "5c436c384b3efcc66fcccbd47977a07f61a2f31e7abe11407aa81277408ca43c",
+    "mode": 420,
+    "bytes": 88045
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "f374fa4ceb54dbb4d4b035afdad15745da1ef6b49b668cefb47fe9b19b69bc10",
+    "mode": 420,
+    "bytes": 45539
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "96f018a0145f06375ce0decb63959cc1ea0352cb769060db4b95e4c3bd4d6d03",
+    "mode": 420,
+    "bytes": 48445
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "1a11f4b509f1854b794b4f74f13f6fec339753a476d5a078ccc08e12bbbd7a07",
+    "mode": 420,
+    "bytes": 54841
+  },
+  "src/engine/runtime/shapes.t.cpp": {
+    "sha256": "05a5b6236b5eb1e4e9e77859e8ac79003945ccb8a3ed6f793899e27bcee09bd7",
+    "mode": 420,
+    "bytes": 33595
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "sha256": "65c2031f856f64643471283bd1561899a2a12d5008c30fc268de385a42f2146e",
+    "mode": 420,
+    "bytes": 1378
+  },
+  "src/stdlib/planar/schema.lua": {
+    "sha256": "984177803407ba8cf8cfe207f80477fa380fede071c40a89638642a7bf4b813c",
+    "mode": 420,
+    "bytes": 18903
+  },
+  "src/stdlib/planar/semantic.lua": {
+    "sha256": "44b106477fae45c70bb525e1c7517d1a815b6b45569763eaf90869dca06e6cac",
+    "mode": 420,
+    "bytes": 27880
+  },
+  "tests/native/v5-02-x05-b3-a-support/baseline.cpp": {
+    "sha256": "a3fe70988004bf8161884a29ed322ea536da360135e1dae1c73de67f264445ae",
+    "mode": 420,
+    "bytes": 1219
+  },
+  "tests/native/v5-02-x05-b3-a-support/baseline.py": {
+    "sha256": "58871bc3a161b112fc03e6c260aac5e0df4391f719b9888c7fa5c961fe67d1d8",
+    "mode": 420,
+    "bytes": 4802
+  },
+  "tests/native/v5-02-x05-b3-a-support/gate.py": {
+    "sha256": "326c4caaa5a4b61564edd408b3799d29ee9e4534f0611b83d994a943bb27757f",
+    "mode": 420,
+    "bytes": 7345
+  },
+  "tests/native/v5-02-x05-b3-a-support/phase-abi.md": {
+    "sha256": "049bd88143b8e6eec216446ece7352edfe68fc79a856552c9abccee162e30839",
+    "mode": 420,
+    "bytes": 3274
+  },
+  "tests/stdlib/x05-shapes.lua": {
+    "sha256": "c5c685759c915675c81c8d71f027bb65e6079e5198d41da859cb227295a133fd",
+    "mode": 420,
+    "bytes": 2049
+  }
+}

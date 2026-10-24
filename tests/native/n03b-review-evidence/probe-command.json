@@ -1,0 +1,6 @@
+{
+  "cwd": "<repo>/build/rewrite-debug",
+  "argv": [
+    "<repo>/tests/native/n03b-review-evidence/probe"
+  ]
+}

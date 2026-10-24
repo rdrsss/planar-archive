@@ -1,0 +1,62 @@
+{
+  "src/stdlib/planar/render.lua": {
+    "sha256": "deb4f2722bb40f71778a22f5483722531f13680e3fa4fa91b76ae5370ca10f82",
+    "bytes": 17750
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "sha256": "54d13632cc585b603781ccf4eda2fbb8394d82b12ed088ee7539f799270d1dd8",
+    "bytes": 1484
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "a5e1f1afd14cdcca0e5638b0ba64c6abece70d96ecedd9c540692b8fb14f299f",
+    "bytes": 91730
+  },
+  "CLAUDE.md": {
+    "sha256": "455ed78585d35a9d686cfe89ae8a71fe12a7bc5fa3073dbc4f42349d225b2f51",
+    "bytes": 46509
+  },
+  "docs/architecture.md": {
+    "sha256": "bbdb2c54c6e218b59bc65cb4a6fe3e3a9ad485ee38955951975459046e031b5a",
+    "bytes": 90615
+  },
+  "docs/testing.md": {
+    "sha256": "e7d72d65e0843083b1457cca0f1f66076a0a5edc6f9caa82a8605b6cd5bdb373",
+    "bytes": 95656
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "98e54716e9c16c2f1bcb0acd40a89f42292301627f694eaece6ba9d1c59f81f9",
+    "bytes": 56062
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "d8951040cf450a1611e057ad021e3bc76165811428066dfec9765840bebc128c",
+    "bytes": 62458
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "e1b91a8cafea006d17c09e84ea9f308effdc39a739c56935edcd5f7fc2e0a302",
+    "bytes": 53156
+  },
+  "tests/native/v5-02-x05-b4-a-support/baseline.py": {
+    "sha256": "742442663eaff3f2c11505261fcf4e3f09c1386107e543143f8f2ba9a99844d1",
+    "bytes": 2314
+  },
+  "tests/native/v5-02-x05-b4-a-support/freeze.py": {
+    "sha256": "95bd94630e1fd0fb563da1ebae64dd9a487e65d342d1d574f9b6a234c8aca684",
+    "bytes": 1225
+  },
+  "tests/native/v5-02-x05-b4-a-support/gate.py": {
+    "sha256": "dc2eed9181e3fd481b9952e8f337773435ad0749ad2dc045df5a214fb286a43a",
+    "bytes": 3625
+  },
+  "fixtures/render/external-shape/expected/README.md": {
+    "sha256": "3548fc88ef907c65c314a5890e9d3a3e024c55630fb842e23b8f51148e9d336a",
+    "bytes": 490
+  },
+  "fixtures/render/external-shape/expected/prerequisites.json": {
+    "sha256": "a4018141db3c91d0ede42964166c0310704aa5fc45400048554895cb231c75ab",
+    "bytes": 405
+  },
+  "fixtures/render/external-shape/expected/shape-policy.md": {
+    "sha256": "8f28ee1dc96e8051b0fcd2959e1c23e66938f02a5cfb7d82d09a2a1103581527",
+    "bytes": 464
+  }
+}

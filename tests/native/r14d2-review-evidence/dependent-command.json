@@ -1,0 +1,15 @@
+{
+  "command": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-V",
+    "-R",
+    "^replacement\\.(cli|init_cli|history_cli|export_cli|acceptance |atomic )",
+    "--output-junit",
+    "<repo>/tests/native/r14d2-review-evidence/dependent.xml"
+  ],
+  "started_epoch": 1792588001.4971972,
+  "ended_epoch": 1792588023.100393,
+  "exit": 0
+}

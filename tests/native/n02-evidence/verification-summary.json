@@ -1,0 +1,29 @@
+{
+  "gates": {
+    "debug": {
+      "registered_tests": 113,
+      "native_tests": 112,
+      "acceptance_tests": 1,
+      "skips": 0,
+      "cli_invocations": 150,
+      "native_goldens": 6,
+      "format_doxygen_sources": 25,
+      "no_change_build": "no work to do"
+    },
+    "release": {
+      "registered_tests": 113,
+      "native_tests": 112,
+      "acceptance_tests": 1,
+      "skips": 0,
+      "cli_invocations": 150,
+      "native_goldens": 6,
+      "format_doxygen_sources": 25,
+      "no_change_build": "no work to do"
+    }
+  },
+  "protected_files_after_gates": 899,
+  "candidate_file_count": 16,
+  "platform": "macOS Apple Silicon; Linux not run",
+  "no_runtime_behavior_changes": true,
+  "release_doxygen_retry": "Signal-only exit 138 on attempt 1; wrapper succeeded on attempt 2"
+}

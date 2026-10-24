@@ -1,0 +1,14 @@
+{
+  "only_changes_since_both_gates": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-provenance-evidence.md"
+  ],
+  "product_tests_support_configuration_unchanged": true,
+  "tested_source_freeze_sha256": "36f4559149fed381c2c092b962a75e6d50b435735ebfdd390eb2309d50b2dd38"
+}

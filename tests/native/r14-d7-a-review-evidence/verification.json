@@ -1,0 +1,77 @@
+{
+  "independent_cases": 39,
+  "failures": 0,
+  "skips": 0,
+  "inventory": 396,
+  "inventory_equal_to_candidate": true,
+  "vfs_failed_commit_observations": [
+    {
+      "journal": "true",
+      "sync": "false",
+      "ordinal": "0",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "true",
+      "sync": "false",
+      "ordinal": "1",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "true",
+      "sync": "false",
+      "ordinal": "2",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "true",
+      "sync": "false",
+      "ordinal": "3",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "true",
+      "sync": "true",
+      "ordinal": "0",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "true",
+      "sync": "true",
+      "ordinal": "1",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "false",
+      "sync": "false",
+      "ordinal": "0",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "false",
+      "sync": "false",
+      "ordinal": "1",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    },
+    {
+      "journal": "false",
+      "sync": "true",
+      "ordinal": "0",
+      "success": "false",
+      "confirmed_noncommit": "false"
+    }
+  ],
+  "vfs_successful_sentinels": 4,
+  "candidate_current_after_verification": true,
+  "build": "ninja: no work to do.",
+  "debug": "released idle after inventory",
+  "release": "untouched"
+}

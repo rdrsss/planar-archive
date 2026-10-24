@@ -1,0 +1,47 @@
+{
+  "CLAUDE.md": {
+    "sha256": "fee4ded47555c6c94b60273b770c999aa28447d0c6ca2470a2cc9bfbe744652e",
+    "bytes": 34827,
+    "mode": 420
+  },
+  "docs/architecture.md": {
+    "sha256": "f061bec405f475b62cd4fadbfd7884525da49ccacfe33f5c2ea9d80742c2a4ff",
+    "bytes": 79613,
+    "mode": 420
+  },
+  "docs/testing.md": {
+    "sha256": "b9965e6477305456452a3d4d9a5033223d7e59ee1fffb669282c9c446c033968",
+    "bytes": 83953,
+    "mode": 420
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "a77fc7c5d1889ac7ea5a04cbfa820f6a60a1e398d6c7ed83b5c8a90ad6dc06b7",
+    "bytes": 41432,
+    "mode": 420
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "6002506fbb5d54fc51cbb8df8a8a09b404d121529b25be95416a43c491f052c0",
+    "bytes": 44338,
+    "mode": 420
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "c044860ab5f9c3bdf150f0a696a65b6cd3edbe0a5da806c6dc885ed9cdecb1a6",
+    "bytes": 50734,
+    "mode": 420
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "c8fc48ffaa6294f4405a3008b09bd05159fbf1e903e62a768971225e20925621",
+    "bytes": 33904,
+    "mode": 420
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "sha256": "c10b4b1ed837ef2ad88b060dfe33e6ad16854a02340785b3cb99ddab600a8883",
+    "bytes": 105864,
+    "mode": 420
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "sha256": "994e046e9019e0cd2683c240d15c555da266a83fac31274b281d5a38689d7143",
+    "bytes": 13480,
+    "mode": 420
+  }
+}

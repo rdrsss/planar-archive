@@ -1,0 +1,2678 @@
+[
+  {
+    "path": "vendor/catch2/c601.hash",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601.lock",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.bazelrc",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.clang-format",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.clang-tidy",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.conan/build.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.conan/test_package/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.conan/test_package/conanfile.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.conan/test_package/test_package.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.gitattributes",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/FUNDING.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/ISSUE_TEMPLATE/bug_report.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/ISSUE_TEMPLATE/feature_request.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/pull_request_template.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/linux-bazel-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/linux-meson-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/linux-other-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/linux-simple-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/mac-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/mac-sanitizer-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/package-manager-builds.yaml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/validate-header-guards.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.github/workflows/windows-simple-builds.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/.gitignore",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/BUILD.bazel",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/Catch2Config.cmake.in",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/CatchConfigOptions.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/CatchMiscFunctions.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/FindGcov.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/FindLcov.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/Findcodecov.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/catch2-with-main.pc.in",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/catch2.pc.in",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMake/llvm-cov-wrapper",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CMakePresets.json",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/CODE_OF_CONDUCT.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/Doxyfile",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/LICENSE.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/MAINTAINERS.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/MODULE.bazel",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/README.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/SECURITY.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/appveyor.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/assertion_listener.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/discover_tests/benchmark_discovery.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/discover_tests/copy_shim.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/discover_tests/listing_template.json",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/only_include.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/readme.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/benchmarks/runtime_assertion_benches.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/codecov.yml",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/conanfile.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/data/artwork/catch2-c-logo.svg",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/data/artwork/catch2-hand-logo.svg",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/data/artwork/catch2-logo-full-with-background.svg",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/data/artwork/catch2-logo-full.svg",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/Readme.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/assertions.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/benchmarks.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/ci-and-misc.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/cmake-integration.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/command-line.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/commercial-users.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/comparing-floating-point-numbers.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/configuration.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/contributing.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/deprecations.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/event-listeners.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/faq.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/filtering-execution-path.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/generators.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/limitations.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/list-of-examples.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/logging.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/matchers.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/migrate-v2-to-v3.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/opensource-users.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/other-macros.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/own-main.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/release-notes.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/release-process.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/reporter-events.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/reporters.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/skipping-passing-failing.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/test-cases-and-sections.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/test-fixtures.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/thread-safety.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/tostring.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/tutorial.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/usage-tips.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/docs/why-catch.md",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/010-TestCase.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/020-TestCase-1.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/020-TestCase-2.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/030-Asn-Require-Check.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/100-Fix-Section.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/110-Fix-ClassFixture.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/111-Fix-PersistentFixture.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/120-Bdd-ScenarioGivenWhenThen.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/210-Evt-EventListeners.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/231-Cfg-OutputStreams.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/232-Cfg-CustomMain.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/300-Gen-OwnGenerator.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/301-Gen-MapTypeConversion.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/302-Gen-Table.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/310-Gen-VariablesInGenerators.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/311-Gen-CustomCapture.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/examples/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/Catch.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/CatchAddTests.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/CatchShardTests.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/CatchShardTestsImpl.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/ParseAndAddCatchTests.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/catch_amalgamated.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/catch_amalgamated.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/gdbinit",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/extras/lldbinit",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/NullOStream.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/NullOStream.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/build_fuzzers.sh",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/fuzz_TestSpecParser.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/fuzz_XmlWriter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/fuzzing/fuzz_textflow.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/mdsnippets.json",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/meson.build",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/meson_options.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_benchmark.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_benchmark_all.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_chronometer.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_chronometer.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_clock.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_constructor.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_environment.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_estimate.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_execution_plan.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_optimizer.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_outlier_classification.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/catch_sample_analysis.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_analyse.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_analyse.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_benchmark_function.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_benchmark_function.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_benchmark_stats.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_benchmark_stats_fwd.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_complete_invoke.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_estimate_clock.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_measure.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_repeat.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_run_for_at_least.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_run_for_at_least.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_stats.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_stats.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/benchmark/detail/catch_timing.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_all.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_approx.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_approx.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_assertion_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_assertion_result.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_assertion_result.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_case_sensitive.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_config.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_config.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_get_random_seed.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_get_random_seed.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_message.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_message.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_registry_hub.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_section_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_session.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_session.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_tag_alias.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_tag_alias_autoregistrar.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_tag_alias_autoregistrar.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_template_test_macros.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_test_case_info.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_test_case_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_test_macros.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_test_run_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_test_spec.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_test_spec.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_timer.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_timer.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_tostring.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_tostring.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_totals.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_totals.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_translate_exception.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_translate_exception.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_user_config.hpp.in",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_version.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_version.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/catch_version_macros.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generator_exception.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generator_exception.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_adapters.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_all.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_random.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_random.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_range.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_throw.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/generators/catch_generators_throw.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_all.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_capture.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_capture.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_config.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_config.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_exception.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_exception.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_generatortracker.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_generatortracker.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_registry_hub.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_registry_hub.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_reporter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_reporter.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_reporter_factory.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_reporter_factory.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_tag_alias_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_test_invoker.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_testcase.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/interfaces/catch_interfaces_testcase.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_assertion_handler.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_assertion_handler.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_case_insensitive_comparisons.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_case_insensitive_comparisons.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_clara.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_clara.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_commandline.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_commandline.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_compare_traits.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_compiler_capabilities.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_config_android_logwrite.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_config_counter.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_config_prefix_messages.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_config_static_analysis_support.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_config_uncaught_exceptions.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_config_wchar.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_console_colour.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_console_colour.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_console_width.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_container_nonmembers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_context.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_context.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_debug_console.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_debug_console.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_debugger.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_debugger.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_decomposer.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_decomposer.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_deprecation_macro.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_enforce.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_enforce.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_enum_info.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_enum_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_errno_guard.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_errno_guard.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_exception_translator_registry.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_exception_translator_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_fatal_condition_handler.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_fatal_condition_handler.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_floating_point_helpers.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_floating_point_helpers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_getenv.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_getenv.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_is_permutation.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_istream.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_istream.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_jsonwriter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_jsonwriter.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_lazy_expr.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_lazy_expr.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_leak_detector.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_leak_detector.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_lifetimebound.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_list.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_list.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_logical_traits.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_main.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_message_info.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_message_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_meta.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_move_and_forward.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_noncopyable.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_optional.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_output_redirect.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_output_redirect.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_parse_numbers.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_parse_numbers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_path_filter.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_platform.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_polyfills.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_polyfills.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_preprocessor.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_preprocessor_internal_stringify.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_preprocessor_remove_parens.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_random_floating_point_helpers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_random_integer_helpers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_random_number_generator.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_random_number_generator.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_random_seed_generation.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_random_seed_generation.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_reporter_registry.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_reporter_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_reporter_spec_parser.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_reporter_spec_parser.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_result_type.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_reusable_string_stream.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_reusable_string_stream.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_run_context.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_run_context.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_section.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_section.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_sharding.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_singletons.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_singletons.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_source_line_info.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_source_line_info.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_startup_exception_registry.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_startup_exception_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_stdstreams.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_stdstreams.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_stream_end_stop.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_string_manip.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_string_manip.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_stringref.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_stringref.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_tag_alias_registry.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_tag_alias_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_template_test_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_case_info_hasher.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_case_info_hasher.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_case_registry_impl.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_case_registry_impl.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_case_tracker.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_case_tracker.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_failure_exception.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_failure_exception.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_macro_impl.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_registry.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_registry.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_spec_parser.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_test_spec_parser.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_textflow.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_textflow.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_thread_local.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_thread_support.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_to_string.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_uncaught_exceptions.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_uncaught_exceptions.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_uniform_floating_point_distribution.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_uniform_integer_distribution.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_unique_name.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_unique_ptr.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_unreachable.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_void_type.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_wildcard_pattern.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_wildcard_pattern.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_windows_h_proxy.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_xmlwriter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/internal/catch_xmlwriter.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_all.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_container_properties.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_container_properties.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_contains.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_exception.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_exception.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_floating_point.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_floating_point.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_predicate.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_predicate.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_quantifiers.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_quantifiers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_range_equals.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_string.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_string.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_templated.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_templated.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/catch_matchers_vector.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/internal/catch_matchers_impl.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/matchers/internal/catch_matchers_impl.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/meson.build",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_automake.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_automake.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_common_base.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_common_base.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_compact.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_compact.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_console.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_console.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_cumulative_base.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_cumulative_base.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_event_listener.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_event_listener.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_helpers.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_helpers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_json.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_json.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_junit.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_junit.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_multi.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_multi.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_registrars.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_registrars.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_sonarqube.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_sonarqube.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_streaming_base.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_streaming_base.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_tap.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_tap.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_teamcity.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_teamcity.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_xml.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporter_xml.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/src/catch2/reporters/catch_reporters_all.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/BUILD.bazel",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/ToDo.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X01-PrefixedMacros.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X02-DisabledMacros.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X03-DisabledExceptions-DefaultHandler.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X04-DisabledExceptions-CustomHandler.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X05-DeferredStaticChecks.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X06-MixingClearedAndUnclearedMessages.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X07-FastCompileMacros.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X10-FallbackStringifier.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X11-DisableStringification.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X12-CustomDebugBreakMacro.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X20-AssertionStartingEventGoesBeforeAssertionIsEvaluated.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X21-PartialTestCaseEvents.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X22-BenchmarksInCumulativeReporter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X23-CasingInReporterNames.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X24-ListenerStdoutCaptureInMultireporter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X25-ListenerCanAskForCapturedStdout.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X26-ReporterPreferencesForPassingAssertionsIsRespected.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X27-CapturedStdoutInTestCaseEvents.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X28-ListenersGetEventsBeforeReporters.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X29-CustomArgumentsForReporters.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X30-BazelReporter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X31-DuplicatedTestCases.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X32-DuplicatedTestCasesDifferentTags.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X33-DuplicatedTestCaseMethods.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X34-DuplicatedTestCaseMethodsDifferentFixtures.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X35-DuplicatedReporterNames.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X36-ReportingCrashWithJunitReporter.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X40-QuickExit.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X90-WindowsHeaderInclusion.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X91-AmalgamatedCatch.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X92-NoTests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X93-AllSkipped.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X94-ThreadSafetyTests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/ExtraTests/X95-InfiniteGenerators.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/automake.std.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/automake.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/automake.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/compact.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/compact.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/console.std.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/console.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/console.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/console.swa4.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/default.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/junit.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/junit.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/sonarqube.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/sonarqube.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/tap.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/tap.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/teamcity.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/teamcity.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/xml.sw.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Baselines/xml.sw.multi.approved.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Algorithms.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/AssertionHandler.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Clara.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/CmdLine.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/CmdLineHelpers.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/ColourImpl.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Details.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/FloatingPoint.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/GeneratorsImpl.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Integer.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/InternalBenchmark.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Json.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Parse.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/PartTracker.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/RandomNumberGeneration.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Reporters.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Sharding.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Stream.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/String.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/StringManip.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Tag.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/TestCaseInfoHasher.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/TestSpec.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/TestSpecParser.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/TextFlow.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/ToString.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Traits.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/UniquePtr.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/IntrospectiveTests/Xml.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Misc/invalid-test-names.input",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Misc/plain-old-tests.input",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/Misc/special-characters-in-file.input",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/TestRegistrations.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/TimingTests/Sleep.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Approx.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/BDD.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Benchmark.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Class.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Compilation.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Condition.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Decomposition.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/EnumToString.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Exception.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Generators.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Matchers.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/MatchersConstexpr.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/MatchersRanges.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Message.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Misc.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Skip.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringByte.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringChrono.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringGeneral.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringOptional.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringPair.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringTuple.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringVariant.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringVector.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/ToStringWhich.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/Tricky.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/UsageTests/VariadicMacros.tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/helpers/parse_test_spec.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/helpers/parse_test_spec.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/helpers/range_test_helpers.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/SelfTest/helpers/type_with_lit_0_comparisons.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/ConfigureTestsCommon.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/DiscoverTests/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/DiscoverTests/TestDecomposeJsonArray.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/DiscoverTests/TestPrepareCommand.cmake",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/DiscoverTests/VerifyRegistration.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/DiscoverTests/register-tests.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testBazelExitGuardFile.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testBazelReporter.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testBazelSharding.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testConfigureDefaultReporter.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testConfigureDisable.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testConfigureDisableStringification.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testConfigureExperimentalRedirect.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testPartialTestCaseEvent.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testRandomOrder.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testSectionFiltering.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/TestScripts/testSharding.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tests/meson.build",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/third_party/clara.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/misc/CMakeLists.txt",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/misc/appveyorBuildConfigurationScript.bat",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/misc/appveyorMergeCoverageScript.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/misc/appveyorTestRunScript.bat",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/misc/coverage-helper.cpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/misc/installOpenCppCoverage.ps1",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/approvalTests.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/approve.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/buildAndTest.cmd",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/buildAndTest.sh",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/checkConvenienceHeaders.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/checkDuplicateFilenames.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/checkLicense.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/developBuild.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/extractFeaturesFromReleaseNotes.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/fixWhitespace.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/generateAmalgamatedFiles.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/majorRelease.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/minorRelease.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/patchRelease.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/releaseCommon.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/scriptCommon.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/updateDocumentSnippets.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/c601/tools/scripts/updateDocumentToC.py",
+    "matches": true
+  },
+  {
+    "path": "vendor/catch2/cmake.lock",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10.hash",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10.lock",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/Makefile",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/README",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/OSIApproved.png",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/contents.html",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/index.css",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/logo.png",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/lua.1",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/lua.css",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/luac.1",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/manual.css",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/manual.html",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/doc/readme.html",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/Makefile",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lapi.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lapi.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lauxlib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lauxlib.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lbaselib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lcode.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lcode.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lcorolib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lctype.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lctype.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ldblib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ldebug.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ldebug.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ldo.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ldo.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ldump.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lfunc.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lfunc.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lgc.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lgc.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/linit.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/liolib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ljumptab.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/llex.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/llex.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/llimits.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lmathlib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lmem.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lmem.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/loadlib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lobject.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lobject.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lopcodes.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lopcodes.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lopnames.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/loslib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lparser.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lparser.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lprefix.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lstate.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lstate.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lstring.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lstring.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lstrlib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ltable.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ltable.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ltablib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ltm.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/ltm.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lua.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lua.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lua.hpp",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/luac.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/luaconf.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lualib.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lundump.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lundump.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lutf8lib.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lvm.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lvm.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lzio.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/0b10/src/lzio.h",
+    "matches": true
+  },
+  {
+    "path": "vendor/lua/cmake.lock",
+    "matches": true
+  },
+  {
+    "path": "vendor/xxhash/0.8.3/LICENSE",
+    "matches": true
+  },
+  {
+    "path": "vendor/xxhash/0.8.3/xxhash.c",
+    "matches": true
+  },
+  {
+    "path": "vendor/xxhash/0.8.3/xxhash.h",
+    "matches": true
+  }
+]

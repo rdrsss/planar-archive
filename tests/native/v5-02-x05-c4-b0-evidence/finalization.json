@@ -1,0 +1,19 @@
+{
+  "all_owned_build_processes_finished": true,
+  "debug_released": true,
+  "disposable_dependencies_removed": true,
+  "manifest": {
+    "mode": 420,
+    "sha256": "1d55cfc2f6a6f0b8f935c1193f8bad656994781f699d11317859d1b49dd57d95"
+  },
+  "no_self_approval": true,
+  "report": {
+    "mode": 420,
+    "sha256": "b3d5eb3507300f3411be6f77f87a8057a6e660b26a30f6a299d6a35e6fcc597a"
+  },
+  "schema": "planar-c4-b0-artifacts-v1",
+  "support": {
+    "mode": 420,
+    "sha256": "990846d7c18eb7fdc16b697f585bd5ac642a0792933edb398194ebe2163af3fe"
+  }
+}

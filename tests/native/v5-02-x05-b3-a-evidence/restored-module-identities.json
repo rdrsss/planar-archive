@@ -1,0 +1,9 @@
+{
+  "module_info_uses_production_source": true,
+  "identities": {
+    "build/rewrite-debug/src/engine/planar_runtime_source.cppm": "68cb7bc035f94bb4163685fa26d846f0837195546fd692927b3ebcbaa1b2b5e0",
+    "build/rewrite-debug/src/engine/CMakeFiles/planar_runtime_source.dir/planar.engine.runtime_source.pcm": "30d26b07335a63a359151f7dd6bdadb900cefbc620abc30ad174d510f49c71c6",
+    "build/rewrite-debug/src/engine/CMakeFiles/planar_runtime_source.dir/planar_runtime_source.cppm.o": "b9f0917f05069e3abb7085c20de0e987759666012d5779c53d557a3e6056b02f",
+    "build/rewrite-debug/src/engine/libplanar_runtime_source.a": "89b04f34df1af471e6263711d529581cfe3f3d749fe74da0529726fa8c26e097"
+  }
+}

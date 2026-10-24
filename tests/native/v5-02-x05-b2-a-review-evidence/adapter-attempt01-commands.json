@@ -1,0 +1,41 @@
+[
+  {
+    "label": "adapter-compile",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-DPLANAR_LOAD_FIXTURE=\"<repo>/fixtures/render/quota\"",
+      "-DPLANAR_LOAD_GENERATED=\"<repo>/build/rewrite-debug/src/engine/r14-d6-generated\"",
+      "-DPLANAR_SCHEMA_FIXTURE=\"<repo>/fixtures/render/quota\"",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-isystem",
+      "<repo>/vendor/xxhash/0.8.3",
+      "-isystem",
+      "<repo>/vendor/lua/0b10/src",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_runtime_tests.dir/runtime/external_registration.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-b2-a-review-evidence/adapter.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-b2-a-review-evidence/adapter.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "seconds": 0.592
+  }
+]

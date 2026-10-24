@@ -1,0 +1,12 @@
+{
+  "artifact_entries": 324,
+  "artifact_manifest_sha256": "75b738a9ea2791515f4e0b31653b6cac74f3d5ffcaf5ea827b529777c76650fe",
+  "candidate_entries": 25,
+  "candidate_sha256": "c778c033a6630e67734850651b8ba9e8e634ff3279dd480c49602ab2f21f5e98",
+  "debug_released": true,
+  "full_gate_claimed": false,
+  "release_gate_claimed": false,
+  "report_sha256": "249fc1e439237b98a9b1e56fc6ddc9597d8938dbc3ee25eff45671e110eac735",
+  "review": "pending",
+  "schema": 1
+}

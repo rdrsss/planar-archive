@@ -1,0 +1,12 @@
+{
+  "protected_dependency_files": 797,
+  "actual_compile_dependency_files": 754,
+  "all_actual_dependencies_snapshotted_before": true,
+  "mode_hash_mtime_and_other_stat_identity_unchanged": true,
+  "recursive_response_expansion": true,
+  "implicit_modules_disabled": true,
+  "ninja_journals_unchanged": true,
+  "private_object_and_executable_only": true,
+  "checker_correction": "Make depfile contained catch2/../catch2 paths; canonical physical identity matches the already captured files. No compile or test rerun and no dependency resnapshot.",
+  "runtime_claim": "Uses existing pinned library paths; no copied libc++ runtime claim"
+}

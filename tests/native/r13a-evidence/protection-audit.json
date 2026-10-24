@@ -1,0 +1,86 @@
+{
+  "src/engine/hash/hash.cppm": {
+    "before": "86e59b0f9fc2e509f130ed768a658fb1343d77e77113900cf54193c43b3bc698",
+    "after": "86e59b0f9fc2e509f130ed768a658fb1343d77e77113900cf54193c43b3bc698"
+  },
+  "src/engine/hash/hash.t.cpp": {
+    "before": "610a60bcbae2690c80354f5b20c871192c66f67d6753d50f664c836d0accd339",
+    "after": "610a60bcbae2690c80354f5b20c871192c66f67d6753d50f664c836d0accd339"
+  },
+  "src/engine/hash/hash.cpp": {
+    "before": "a60137006cad3ccbe7eae1c4d6edfef6b9f198adff8e1d8a3fc0471062408f11",
+    "after": "a60137006cad3ccbe7eae1c4d6edfef6b9f198adff8e1d8a3fc0471062408f11"
+  },
+  "src/engine/ledger/format.cpp": {
+    "before": "4b9465a4dd7a2d8cdfc1f1f527ae34f53cff5e4f7b36dafcb0ead7a8c22033fd",
+    "after": "4b9465a4dd7a2d8cdfc1f1f527ae34f53cff5e4f7b36dafcb0ead7a8c22033fd"
+  },
+  "src/engine/ledger/sqlite.cpp": {
+    "before": "e93546b692e5b8897dfc6396d9d948f14772384b15eff622dd1b1d4e8e56c2b1",
+    "after": "e93546b692e5b8897dfc6396d9d948f14772384b15eff622dd1b1d4e8e56c2b1"
+  },
+  "src/engine/ledger/publication_fault.t.cpp": {
+    "before": "1638467a9dd3bb82e05b97bb5ffc3df684f117b7e0833ebef4a78fdef94c17c6",
+    "after": "1638467a9dd3bb82e05b97bb5ffc3df684f117b7e0833ebef4a78fdef94c17c6"
+  },
+  "src/engine/ledger/sqlite.cppm": {
+    "before": "324b2068e0b18b00f3c57bf9d0698c6678cb39ee5cba59dc4a89066b4548fc7a",
+    "after": "324b2068e0b18b00f3c57bf9d0698c6678cb39ee5cba59dc4a89066b4548fc7a"
+  },
+  "src/engine/ledger/reliability.t.cpp": {
+    "before": "8e8ee8fa6b3b7f2b2b23afe76b061e655a136ea1fe4906c49162672358334a30",
+    "after": "8e8ee8fa6b3b7f2b2b23afe76b061e655a136ea1fe4906c49162672358334a30"
+  },
+  "src/engine/ledger/format.t.cpp": {
+    "before": "64566a1a09b446c22d81f1c2df0aab72d17e8562bf1859c1ed50cf4831e7013f",
+    "after": "64566a1a09b446c22d81f1c2df0aab72d17e8562bf1859c1ed50cf4831e7013f"
+  },
+  "src/engine/ledger/format.cppm": {
+    "before": "bf3dc4b2b51c5d4f89f06a84d32f5b6fde9e422b41b0db9f8ea738591b6f5274",
+    "after": "bf3dc4b2b51c5d4f89f06a84d32f5b6fde9e422b41b0db9f8ea738591b6f5274"
+  },
+  "src/engine/ledger/sqlite.t.cpp": {
+    "before": "70ec9b6b3088d21c95dc8b01c61e39596d16782fba0b85e5e720dc3343c53d43",
+    "after": "70ec9b6b3088d21c95dc8b01c61e39596d16782fba0b85e5e720dc3343c53d43"
+  },
+  "src/stdlib/planar/semantic.lua": {
+    "before": "81f685fc2cdc807ddd48660357e0b096b437e91e31f5f60a79c4e75cdf1f1ab4",
+    "after": "81f685fc2cdc807ddd48660357e0b096b437e91e31f5f60a79c4e75cdf1f1ab4"
+  },
+  "src/stdlib/planar/observations.lua": {
+    "before": "dc530abaf8940e7f762e720541d8356c2191bff4fbe77ce743f198ae1359f3dc",
+    "after": "dc530abaf8940e7f762e720541d8356c2191bff4fbe77ce743f198ae1359f3dc"
+  },
+  "src/stdlib/planar/selection.lua": {
+    "before": "45557f3aa3b5f31a11f4e13f68f6abb0f059d583e46b125d820aa07a7dab313e",
+    "after": "45557f3aa3b5f31a11f4e13f68f6abb0f059d583e46b125d820aa07a7dab313e"
+  },
+  "src/stdlib/planar/json.lua": {
+    "before": "93990893a3ca859891d36f9b57f70f3dee986f7ce0922c9e267e3351bf3eb26b",
+    "after": "93990893a3ca859891d36f9b57f70f3dee986f7ce0922c9e267e3351bf3eb26b"
+  },
+  "src/stdlib/planar/presentation.lua": {
+    "before": "eef82d304189464f71e27d4ef0e659a7864835c64fd66f44c63a497667c22fd5",
+    "after": "eef82d304189464f71e27d4ef0e659a7864835c64fd66f44c63a497667c22fd5"
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "before": "f0443557e884583d822e13f4dbbb22cbb53d742e813e670cb0c0235f0c9b9886",
+    "after": "f0443557e884583d822e13f4dbbb22cbb53d742e813e670cb0c0235f0c9b9886"
+  },
+  "src/stdlib/planar/schema.lua": {
+    "before": "574fed2fe8cc0191a7659dd6b749cef289a8d427b13e900c8acb34101d4bc216",
+    "after": "574fed2fe8cc0191a7659dd6b749cef289a8d427b13e900c8acb34101d4bc216"
+  },
+  "src/stdlib/planar/render.lua": {
+    "before": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364",
+    "after": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364"
+  },
+  "cmake/dependencies.cmake": {
+    "before": "06467125c22055adfb53e7e58d8056cedcbe35da403dc2f4c132919ca53ede0b",
+    "after": "06467125c22055adfb53e7e58d8056cedcbe35da403dc2f4c132919ca53ede0b"
+  },
+  "canonical_encode_function": {
+    "unchanged": true,
+    "sha256": "591087ff2942eb0280e27b21b1b15ad722cbf1827e423b4c2357d84ae585bd4c"
+  }
+}

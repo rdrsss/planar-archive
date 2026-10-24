@@ -1,0 +1,71 @@
+[
+  {
+    "label": "journal-recompact",
+    "argv": [
+      "ninja",
+      "-C",
+      "build/rewrite-debug",
+      "-t",
+      "recompact"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T06:29:21.285681+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:29:21.308628+00:00",
+    "output_interval_seconds": 0.022946596145629883,
+    "log_sha256": "14d907f03cdfcfcd6f33309e6ec61793f55543e32ad4a63d93aeb2949ca42cbb"
+  },
+  {
+    "label": "journal-repair-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T06:30:03.266330+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:32:24.321762+00:00",
+    "output_interval_seconds": 141.05543160438538,
+    "log_sha256": "d4d1a6d7a86be1e9e2dded9c3e251b769951cccc48a698a47a1a532948702c3f"
+  },
+  {
+    "label": "journal-confirm-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T06:32:49.556608+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:32:49.691071+00:00",
+    "output_interval_seconds": 0.1344623565673828,
+    "log_sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  {
+    "label": "location-correction-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T06:34:55.756141+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:36:22.994060+00:00",
+    "output_interval_seconds": 87.23791837692261,
+    "log_sha256": "97f03aa62ce1bb6d864d93274f33adaf840c8d932ad8e12cbe87ae7a1593d74d"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "baseline": "full cryptographic hash capture",
+  "between_commands": "enumerate complete membership and mode/link targets; reuse SHA256 only when device inode ctime_ns mtime_ns size mode/type unchanged",
+  "limitation": "No continuous-change or filesystem adversary claim; sources are held stable cooperatively.",
+  "per_configuration_end_and_final": "fresh process full cryptographic recapture against immutable baseline",
+  "per_configuration_start": "fresh process full cryptographic capture against immutable baseline"
+}

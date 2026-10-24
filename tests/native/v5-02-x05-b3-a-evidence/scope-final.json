@@ -1,0 +1,23 @@
+{
+  "frozen_entries": 411,
+  "source_stability": true,
+  "changed_existing": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/shapes.t.cpp",
+    "src/stdlib/planar/bootstrap.lua",
+    "src/stdlib/planar/schema.lua",
+    "src/stdlib/planar/semantic.lua"
+  ],
+  "new_support": [
+    "tests/native/v5-02-x05-b3-a-support/baseline.cpp",
+    "tests/native/v5-02-x05-b3-a-support/baseline.py",
+    "tests/native/v5-02-x05-b3-a-support/gate.py",
+    "tests/native/v5-02-x05-b3-a-support/phase-abi.md"
+  ],
+  "symlink_preserved": true
+}

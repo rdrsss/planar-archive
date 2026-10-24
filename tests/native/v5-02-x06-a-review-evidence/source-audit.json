@@ -1,0 +1,37 @@
+{
+  "product_execution": "none",
+  "read_only_source_sha256": {
+    "docs/vernacular/ledger-contract.md": "0f24284dc1a3836ef5b14d13b36b9aa0cb0e5662fc05130111fd7ceff91bd5eb",
+    "docs/vernacular/load-command-contract.md": "c8edf39464bdcac4408b09728d439cf82d98450e261e32869c7ef2e1db4c8bd9",
+    "docs/vernacular/rounds/V5-02-X05-C4-C2-review.md": "6a44a4f9d675fbd2ed725d326c6b02e1fd6d1def60247f27081814296b90e899",
+    "docs/vernacular/rounds/V5-02-X05-C5-review.md": "c15baa09bd6e41a2bdcdb248e51e768d0dd05680d6db792a561c28b351a2c42f",
+    "src/engine/acceptance/load.cpp": "fb53e19b8f61349d43f3a73d734c66e3c51ee6769a9e6553570f676b74679ee6",
+    "src/engine/acceptance/prepared.cpp": "e957e4be894fc54a64784ea6362a7c94ec33a4040828d26b8686ad0e0f4f2c08",
+    "src/engine/acceptance/prepared.cppm": "770fdfa36e577f8009cf7a619baf4feb8b736a177b47c0973121297abd2209b9",
+    "src/engine/canonical/canonical.cpp": "e297500c5745c2be62d465eae896192edacee25d06fb3291345106b6864cccac",
+    "src/engine/hash/hash.cpp": "a60137006cad3ccbe7eae1c4d6edfef6b9f198adff8e1d8a3fc0471062408f11",
+    "src/engine/history/effective_catalog.cpp": "b9e34665b546e9a04139d273ebdfd3c3635930f6063e872809f5afa7dd2d24c1",
+    "src/engine/history/effective_catalog.cppm": "7a9870d4f70f24d443d6c951f8ea6b99110dbd88d286c5f5617b45bedecabb02",
+    "src/engine/history/effective_catalog.t.cpp": "cec5ec30abb412146b0c05712c3913cdb24c7aec70a585117a4917a5bf0ab809",
+    "src/engine/history/effective_provenance.cpp": "08b0423e747ee896c3b79a38c22067f29eb9f7b6a556c320fd2a4f29d239d8c6",
+    "src/engine/history/effective_provenance.cppm": "a5416be66f1e22e3823d707965cdeceaac397448d72ca13e29414602d555c900",
+    "src/engine/history/interpretation_codec.cpp": "08c995a8b62ee2c4f26a42d4c4d5f685572563db023f3f3d5ced73c226682497",
+    "src/engine/history/interpretation_codec.cppm": "31155c9305d6a6f2f2c28b8a7d6b213655cb07420434cde127b5bad71b05b387",
+    "src/engine/history/provenance_codec.cppm": "96c933ccbfb4263073aaf72305d096a2c9dc94b04b85ed30f7c673a0b09ced58",
+    "src/engine/history/read.cpp": "f5627ddbd55dd5406558931638297efa1aae9f14a1f02ac49cb13953f6f2265b",
+    "src/engine/history/tree_core.cpp": "03bbfcece0b1b33b2d16eb6e57f39cf86a3e90bcc670bf77dc5a0bc2846ab51b",
+    "src/engine/runtime/external_registration.t.cpp": "38f92794f5f3ed146959cb7350acfb24934ec12829c2a77a1bb5b9d54de187c1",
+    "src/engine/runtime/runtime.cpp": "4ca7ca5075b104ca2496db7d663e29ac9eef7216aaab465e7060412597e3c854",
+    "src/engine/runtime/runtime.t.cpp": "8fb0d2f4acae1414a04d18803da821971c929d8a68bc172e9802f60d4ed2d66d",
+    "src/engine/value/value.cppm": "8ca0b637fb05a2df1af4cbb0e13824fa4afe983773969fd9f38dc15a9cb2c83c",
+    "tests/native/v5-02-x05-c4-c2-evidence/REPORT.md": "249fc1e439237b98a9b1e56fc6ddc9597d8938dbc3ee25eff45671e110eac735"
+  },
+  "review_report_local_links": 16,
+  "source_facts": {
+    "canonical_decoder_allocation": "std::make_shared<value>(); actual nonconst objects exposed as const",
+    "catalog_alias_severing": "canonical encode then independently decode; const-facing data getter",
+    "shape_definition": "41-byte tagged H; source bytes lowercase hex, no owner ordinal",
+    "v1_precedence": "structure and separate-V equality before unsupported classification",
+    "value_ptr": "std::shared_ptr<const value>; fields/items recursively use value_ptr"
+  }
+}

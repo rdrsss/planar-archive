@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "<repo>/tests/native/v5-02-x05-b3-b-d01-a-support/prototype.cpp"
+  ],
+  "exit": 0
+}

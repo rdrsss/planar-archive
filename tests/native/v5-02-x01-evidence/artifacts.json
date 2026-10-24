@@ -1,0 +1,18 @@
+{
+  "base": "repository root",
+  "files": {
+    "build/rewrite-debug/CMakeCache.txt": "c09f519b2f4dbb3336a149690e610da2d88f3ff9d423ec69113220e9d96121aa",
+    "build/rewrite-debug/bin/planar": "be1c4cee1b358208831faa919707ce5fd01de3ea31bc63db333a027f8844464a",
+    "build/rewrite-debug/build.ninja": "78d97f45a58edeb2ed2101de695fd7e12e0fcab1ad88ede85249d845251b5f28",
+    "build/rewrite-debug/compile_commands.json": "073c02337244a6ab55951cc9cfc5339f5063515769242d24e028bf3e17ac1fa6",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_0": "f8a60e5d29fb7ea5a170c7db1f75dcb353fb9f1fb98204e4728e1d62c587b883",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_1": "552dc11fc5d8f27af92cbe9637995aafee191589b85731acce01fe530caca680",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_2": "c1dccac5a87a8c273f56ab17492b7dcb7fc387a05f28d47369ba223377c35015",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_3": "c5bc3afd41aed49753fe4c02ebcc66194843984c1dda4456dd805f94e1f9abee",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_4": "2e62f7f522eec618854fea555762444f2d81b35c47acadef0ae361b44272103b",
+    "build/rewrite-debug/src/cmd/planar/planar_cli_variant_5": "9b7203731bad4c74ed342e605091684a4f936cc1697c1f1e4d6574b6716eb28c",
+    "build/rewrite-debug/src/cmd/planar/planar_command_tests": "116ce0d56fded1aabcb15a5eaf4407520f5f7806741c0f59a9a553f7aaea8694",
+    "build/rewrite-debug/src/cmd/planar/planar_load_cli_probe": "8027ecf96c78abfb8b73df0ab2bda3566d071f4df5307a1c7a68d19460a5354c",
+    "build/rewrite-debug/src/engine/planar_history_fixture": "20c7549300051f4fa664ca650df6bce60bd9fd2eef68f913833dde517991ece4"
+  }
+}

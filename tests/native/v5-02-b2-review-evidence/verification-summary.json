@@ -1,0 +1,32 @@
+{
+  "debug": {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "zero_work": true
+  },
+  "release": {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "zero_work": true
+  },
+  "vectors": {
+    "command": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "result": "12 hand byte vectors; 20 upstream hashes; 41 canonical/domain vectors verified"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "<repo>/tests/native/r12c2-support/posix.cpp",
+    "<repo>/tests/native/r12c2-support/posix.cppm",
+    "<repo>/tests/native/r13b1-support/collision.t.cpp",
+    "<repo>/tests/native/r13b1-support/digest.cppm",
+    "<repo>/tests/native/r14-d8-support/acceptance_fault.t.cpp",
+    "<repo>/tests/native/r14c3b2-support/atomic.t.cpp",
+    "<repo>/tests/native/r14c3b2-support/digest.cppm",
+    "<repo>/tests/native/r14e2-support/fixture.cpp",
+    "<repo>/tests/native/r14f1-support/posix.cpp",
+    "<repo>/tests/native/r14f1-support/posix.cppm",
+    "<repo>/tests/native/r14f2-support/boundary.t.cpp",
+    "<repo>/tests/native/v5-02-x03-b1-support/fixture.cpp",
+    "<repo>/tests/native/v5-02-x03-b1-support/publication.t.cpp",
+    "<repo>/tests/native/v5-02-x03-b2-b-c01-support/fixture.cppm",
+    "<repo>/tests/native/v5-02-x03-b2-b-c01-support/metadata.t.cpp"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:25:48.582709+00:00",
+  "exit_code": 0,
+  "seconds": 0.20893430709838867,
+  "start_utc": "2026-10-22T21:25:48.373798+00:00"
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "gate": "final",
+    "announced_steps": 1469,
+    "last_logged_step": 1468,
+    "clean_build_exit": 0,
+    "all_commands_expected": true
+  },
+  {
+    "gate": "attempt1-frozen-gate/",
+    "announced_steps": 1469,
+    "last_logged_step": 1468,
+    "clean_build_exit": 0,
+    "all_commands_expected": true
+  }
+]

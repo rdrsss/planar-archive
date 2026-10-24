@@ -1,0 +1,33 @@
+{
+  "preserved_prior_frozen_members": 378,
+  "current_frozen_members": 381,
+  "changed_existing": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/runtime.cpp"
+  ],
+  "new_support": [
+    "tests/native/v5-02-x05-b2-a-c01-support/boundary.cpp",
+    "tests/native/v5-02-x05-b2-a-c01-support/gate.py",
+    "tests/native/v5-02-x05-b2-a-c01-support/probes.py"
+  ],
+  "prior_originals_match": true,
+  "inherited_evidence": {
+    "v5-02-x05-b2-a-evidence": {
+      "manifest_sha256": "17aecdc1eb098b6949339a735aa14ca7554f446f120a3805b7b9c35e4bbaf21f",
+      "preserved_artifacts": 76,
+      "finalization_sha256": "46c26d4335e4a1a84cc80612b469cedc9a9f088dfbe181d279a75302ef593d58"
+    },
+    "v5-02-x05-b2-a-review-evidence": {
+      "manifest_sha256": "5113ce2e55e89c8115c261888597f92ed7bc57488125f457baa1c10802a7f151",
+      "preserved_artifacts": 57,
+      "finalization_sha256": "f0da8d5ce432755fb4a69e19570e3db80603fa49375aff03387e4ebc0f2095b8"
+    }
+  },
+  "AGENTS_symlink": "CLAUDE.md",
+  "whole_tree_preservation_claimed": false
+}

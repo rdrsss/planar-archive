@@ -1,0 +1,22 @@
+{
+  "disposition": "approve",
+  "closes": "A0-R1",
+  "scope": "Combined A0+C01 bounded test-only feasibility",
+  "candidate_current": true,
+  "report_sha256": "52d48696d31831d2c39a44d58f6a2d597746532045a0432156185f7048bfc139",
+  "source_freeze_sha256": "d0a2dfa9d471ddceb85dd9f16ba3ca21f333139dcedbdada1529d6c1ee9428d9",
+  "author_artifact_manifest_sha256": "2a6687f9354e35d900c9d95fad97fe36bffce74d42b73494e63488ab9ec963aa",
+  "independent_focused": 47,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "source_entries": 18754,
+  "author_artifacts": 189,
+  "build_identities": 742,
+  "all_identity_checks_match": true,
+  "probes_match": true,
+  "no_work_build": true,
+  "released_utc": "2026-10-23T01:13:39.631582+00:00",
+  "no_further_reviewer_edits": true
+}

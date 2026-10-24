@@ -14,6 +14,6 @@ labels: bug
 
 **Environment**
 
-- `planar version`:
+- Source revision and build preset:
 - OS and architecture:
-- How it was built or installed:
+- How it was built:

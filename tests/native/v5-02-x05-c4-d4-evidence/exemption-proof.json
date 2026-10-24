@@ -1,0 +1,14 @@
+{
+  "baseline_always_captured_d3": true,
+  "baseline_and_finalizer_validate_current_exact_exemption": true,
+  "baseline_d3": {
+    "mode": 420,
+    "sha256": "5b810e19da5235b44a26080c36fd519ea72623585089c95ed6a959e5ceb0a5eb"
+  },
+  "current_d3": {
+    "mode": 420,
+    "sha256": "5b810e19da5235b44a26080c36fd519ea72623585089c95ed6a959e5ceb0a5eb"
+  },
+  "current_exact_round_exemption": "docs/vernacular/rounds/V5-02-X05-C4-D4.md",
+  "original_capture_excluded_only_lowercase_d4_test_prefix": true
+}

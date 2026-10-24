@@ -1,0 +1,36 @@
+{
+  "debug": {
+    "acceptance": 7,
+    "all_status_run": true,
+    "commands": 23,
+    "disabled": 0,
+    "errors": 0,
+    "failures": 0,
+    "full": 876,
+    "historical_676_present": true,
+    "inventory_junit_lasttest_cost_exact": true,
+    "no_work": true,
+    "private_assertions": 709,
+    "private_cases": 10,
+    "seconds": "283.98",
+    "skips": 0,
+    "unit": 869
+  },
+  "release": {
+    "acceptance": 7,
+    "all_status_run": true,
+    "commands": 16,
+    "disabled": 0,
+    "errors": 0,
+    "failures": 0,
+    "full": 876,
+    "historical_676_present": true,
+    "inventory_junit_lasttest_cost_exact": true,
+    "no_work": true,
+    "private_assertions": 709,
+    "private_cases": 10,
+    "seconds": "132.68",
+    "skips": 0,
+    "unit": 869
+  }
+}

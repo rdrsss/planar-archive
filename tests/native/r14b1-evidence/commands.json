@@ -1,0 +1,229 @@
+[
+  {
+    "name": "configure",
+    "argv": [
+      "cmake",
+      "--preset",
+      "debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 1
+  },
+  {
+    "name": "build-corrected",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "../../tests/native/r14b1-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "../../tests/native/r14b1-evidence/cli.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 1
+  },
+  {
+    "name": "build-final",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "focused-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "../../tests/native/r14b1-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "lint-final",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 1
+  },
+  {
+    "name": "build-docs",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "codec-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.ledger history codec ",
+      "--output-on-failure",
+      "--output-junit",
+      "../../tests/native/r14b1-evidence/codec.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "lint-green",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "helper-lint",
+    "argv": [
+      "python3",
+      "tests/native/r13b1c01-evidence/helper-lint.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "freeze",
+    "argv": [
+      "python3",
+      "tests/native/r14b1-evidence/freeze.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "audit",
+    "argv": [
+      "python3",
+      "tests/native/r14b1-evidence/audit.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "name": "audit-final",
+    "argv": [
+      "python3",
+      "tests/native/r14b1-evidence/audit.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "artifact_entries": 202,
+  "candidate_entries": 23,
+  "identities": {
+    "REPORT.md": "59cffe4fe4a4babb913e13a82f0d459db818460389436223d7845e2c8898fcdb",
+    "artifact-manifest.json": "4d660f00e4c194e64a54aa8da4ed5baf7b721fc95b9d9fccd8c90a38f4176e21",
+    "finalization.json": "35ccfd7e46aa9acc8fdc31519f5a42eb7ac798bdc9a5de25e08006898158c64c",
+    "frozen-candidate.json": "91778d33a7f1790c7334c9e207d471a9f37960235c79ac3fe72994eec1a4824d"
+  },
+  "verified": true
+}

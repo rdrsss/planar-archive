@@ -1,0 +1,342 @@
+{
+  "builds_executed": false,
+  "finding": {
+    "candidate_lines": [
+      183,
+      186,
+      226,
+      231
+    ],
+    "contract_lines": [
+      150,
+      155,
+      179,
+      182
+    ],
+    "existing_original_file_read": "runtime.cpp:5071-5076",
+    "existing_root_and_selected_file_admission": "runtime.cpp:4807-4809",
+    "id": "X06A4-R1",
+    "root_only_cannot_compare_regular_file_alias": "admission.cpp:225-245"
+  },
+  "product_tests_executed": false,
+  "proposed_core_graph": {
+    "acceptance.prepared": [
+      "acceptance.intent",
+      "capture.native",
+      "history.provenance_codec",
+      "history.interpretation_codec"
+    ],
+    "acceptance.source_capture": [
+      "capture",
+      "capture.native",
+      "capture.host_path",
+      "canonical"
+    ],
+    "capture": [
+      "capture.native",
+      "lua"
+    ],
+    "capture.profile": [
+      "capture.native",
+      "capture.profile_codec"
+    ],
+    "cmd.invocation": [
+      "ledger.acceptance"
+    ],
+    "history.effective_provenance": [
+      "history.provenance_codec"
+    ],
+    "history.interpretation_v2_codec": [
+      "history.effective_provenance"
+    ],
+    "history.read": [
+      "ledger.format",
+      "history.recorded_interpretation",
+      "history.tree"
+    ],
+    "history.recorded_interpretation": [
+      "history.interpretation_codec",
+      "history.interpretation_v2_codec"
+    ],
+    "history.tree": [
+      "ledger.format",
+      "history.tree_core"
+    ],
+    "history.tree_core": [
+      "ledger.types"
+    ],
+    "ledger.acceptance": [
+      "runtime",
+      "ledger.storage",
+      "acceptance.prepared",
+      "acceptance.intent",
+      "ledger.completion"
+    ],
+    "ledger.format": [
+      "ledger.storage",
+      "history.recorded_interpretation"
+    ],
+    "ledger.storage": [
+      "ledger.storage_types",
+      "ledger.sqlite",
+      "history.recorded_interpretation",
+      "history.tree_core"
+    ],
+    "ledger.storage_types": [
+      "ledger.types",
+      "ledger.history_codec"
+    ],
+    "runtime": [
+      "history.read",
+      "acceptance.intent",
+      "acceptance.source_capture",
+      "capture.profile",
+      "history.effective_provenance",
+      "history.interpretation_v2_codec",
+      "ledger.completion"
+    ]
+  },
+  "proposed_core_topological_order": [
+    "ledger.types",
+    "ledger.history_codec",
+    "ledger.storage_types",
+    "ledger.sqlite",
+    "history.interpretation_codec",
+    "history.provenance_codec",
+    "history.effective_provenance",
+    "history.interpretation_v2_codec",
+    "history.recorded_interpretation",
+    "history.tree_core",
+    "ledger.storage",
+    "ledger.format",
+    "history.tree",
+    "history.read",
+    "acceptance.intent",
+    "capture.native",
+    "lua",
+    "capture",
+    "capture.host_path",
+    "canonical",
+    "acceptance.source_capture",
+    "capture.profile_codec",
+    "capture.profile",
+    "ledger.completion",
+    "runtime",
+    "acceptance.prepared",
+    "ledger.acceptance",
+    "cmd.invocation"
+  ],
+  "scope": "Independent static architecture check only; uncompiled sketch and representative core DAG, not a compiler or complete generated-target proof.",
+  "sources": {
+    "docs/vernacular/external-profile-contract.md": {
+      "imports": [],
+      "sha256": "41a2153bce6bcbba46e7e0c06d93bb23f1d3c93d7b0a8a9e49c188f1153d2d1b"
+    },
+    "src/cmd/planar/invocation.cpp": {
+      "imports": [
+        "std",
+        "planar.engine.capture",
+        "planar.engine.acceptance.load",
+        "planar.engine.capture.host_path",
+        "planar.engine.ledger.format",
+        "planar.engine.history.read",
+        "planar.engine.source_export"
+      ],
+      "sha256": "a8a684b8df8c8fdd3785cb0c08a7b495499e6107a330c29d04692962db674ecb"
+    },
+    "src/engine/CMakeLists.txt": {
+      "imports": [],
+      "sha256": "ee9e6cdf1693c6e49a9108bf8e916d321963c1117e005f0533c2f94cceec5aac"
+    },
+    "src/engine/acceptance/load.cpp": {
+      "imports": [
+        "planar.engine.capture",
+        "planar.engine.capture.host_path",
+        "planar.engine.canonical"
+      ],
+      "sha256": "fb53e19b8f61349d43f3a73d734c66e3c51ee6769a9e6553570f676b74679ee6"
+    },
+    "src/engine/acceptance/load.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.acceptance.prepared"
+      ],
+      "sha256": "561836155aa2a05b816db9cb441e0a8b600197c4d8bbff8ba7e9d36c6b7f1332"
+    },
+    "src/engine/acceptance/prepared.cpp": {
+      "imports": [],
+      "sha256": "e957e4be894fc54a64784ea6362a7c94ec33a4040828d26b8686ad0e0f4f2c08"
+    },
+    "src/engine/acceptance/prepared.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.capture.native",
+        "planar.engine.history.provenance_codec",
+        "planar.engine.history.interpretation_codec",
+        "planar.engine.history.request_v2"
+      ],
+      "sha256": "770fdfa36e577f8009cf7a619baf4feb8b736a177b47c0973121297abd2209b9"
+    },
+    "src/engine/capture/admission.cpp": {
+      "imports": [
+        "std"
+      ],
+      "sha256": "f5eab09a1dcb4e4dcb6c55290d574bb304c16bea0446d50911bbfddbf1f9bdc6"
+    },
+    "src/engine/capture/admission.t.cpp": {
+      "imports": [
+        "std",
+        "planar.engine.capture.admission",
+        "planar.engine.capture.native"
+      ],
+      "sha256": "8b1008069a9059ef43f5d57f690a47adf05365f66700df3808b7ba6507aa4282"
+    },
+    "src/engine/capture/capture.cpp": {
+      "imports": [
+        "std"
+      ],
+      "sha256": "903c4f1171af00330c3faff731ca81239b47977f4569e431067331d27062b3d7"
+    },
+    "src/engine/capture/capture.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.capture.native",
+        "planar.engine.lua"
+      ],
+      "sha256": "3c7156449094f7f92b3974f4b8568e7c14df404b2b4e1b820c2ac81aedaf43c0"
+    },
+    "src/engine/capture/profile.cpp": {
+      "imports": [
+        "std",
+        "planar.engine.capture.host_path"
+      ],
+      "sha256": "a9d03fbd3a1fd325dfcd8f1642e5894395a32621dc4d7bead1f4c6ddf5c949e7"
+    },
+    "src/engine/capture/profile.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.capture.native",
+        "planar.engine.capture.profile_codec"
+      ],
+      "sha256": "d8290819281c0d6304dcd6516d02d8e9ef29ae09112b53ea2206cf2289f19002"
+    },
+    "src/engine/history/effective_provenance.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.history.provenance_codec"
+      ],
+      "sha256": "a5416be66f1e22e3823d707965cdeceaac397448d72ca13e29414602d555c900"
+    },
+    "src/engine/history/interpretation_v2_codec.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.history.effective_provenance",
+        "planar.engine.value"
+      ],
+      "sha256": "4f861ce7eea579ac8c0ba451bda2f1f70f7602b32206e2c742e42868b4e5b5cf"
+    },
+    "src/engine/history/read.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.ledger.format",
+        "planar.engine.value"
+      ],
+      "sha256": "8c57f884272480e0d28b203c265e5365173889138e90a7ce781b8ce22d029357"
+    },
+    "src/engine/history/recorded_interpretation.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.history.interpretation_codec",
+        "planar.engine.history.interpretation_v2_codec"
+      ],
+      "sha256": "318befcdde8d100295dc86bc8c304b6d2d729348acbcbb55d7f6ecaf2813f499"
+    },
+    "src/engine/history/tree_core.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.ledger.types"
+      ],
+      "sha256": "a7e12fd702306b561b9dfb3a9ee96cc2513374a249fe48f68d68fb694316ace9"
+    },
+    "src/engine/ledger/completion.cppm": {
+      "imports": [
+        "std"
+      ],
+      "sha256": "047ba39a8a9dc5b1608555dd5eddd164b55bc1bc5df184b48e4e925b45b6cab1"
+    },
+    "src/engine/ledger/format.cpp": {
+      "imports": [
+        "std",
+        "planar.engine.ledger.sqlite",
+        "planar.engine.json_codec",
+        "planar.engine.ledger.history_codec",
+        "planar.engine.history.tree_core",
+        "planar.engine.history.provenance_codec",
+        "planar.engine.history.interpretation_codec",
+        "planar.engine.history.recorded_interpretation",
+        "planar.engine.canonical"
+      ],
+      "sha256": "32744d399b6f4c0fe62c59eb4720c31851e22e4dbf0f317c807c1800c0d34730"
+    },
+    "src/engine/ledger/format.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.ledger.types",
+        "planar.engine.ledger.sqlite",
+        "planar.engine.ledger.completion",
+        "planar.engine.ledger.history_codec",
+        "planar.engine.acceptance.prepared"
+      ],
+      "sha256": "37c45942304ced319030710b75e87181a2e0576d21363f902ea59f8d89fd9b29"
+    },
+    "src/engine/ledger/history_codec.cppm": {
+      "imports": [
+        "std"
+      ],
+      "sha256": "8383c317e083ec128513f2faa69fa96f3eb33f60615ad64504771390abb74235"
+    },
+    "src/engine/ledger/sqlite.cppm": {
+      "imports": [
+        "std"
+      ],
+      "sha256": "8be385fa60b4e683a8b0f505af624edcfeb82297b287549d6b6bcbe1abad97ed"
+    },
+    "src/engine/ledger/types.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.history.record",
+        "planar.engine.history.request_v2"
+      ],
+      "sha256": "63840b7e1c21ec24cb8cac263b2348204003e066840333e1e1c1ffc4e5226e7e"
+    },
+    "src/engine/runtime/runtime.cpp": {
+      "imports": [
+        "planar.engine.runtime_source",
+        "std",
+        "planar.engine.hash",
+        "planar.engine.capture.host_path",
+        "planar.engine.json_codec",
+        "planar.engine.runtime.closure_guard",
+        "planar.engine.capture",
+        "planar.engine.history.effective_catalog",
+        "planar.engine.history.effective_provenance"
+      ],
+      "sha256": "4ca7ca5075b104ca2496db7d663e29ac9eef7216aaab465e7060412597e3c854"
+    },
+    "src/engine/runtime/runtime.cppm": {
+      "imports": [
+        "std",
+        "planar.engine.value",
+        "planar.engine.capture.profile",
+        "planar.engine.history.provenance_codec",
+        "planar.engine.ledger.completion",
+        "planar.engine.history.read"
+      ],
+      "sha256": "5999ac487c40ea77d713def1242ef61991ac815ba7eb19a4d90679f5d0c9796a"
+    },
+    "src/stdlib/planar/semantic.lua": {
+      "imports": [],
+      "sha256": "44b106477fae45c70bb525e1c7517d1a815b6b45569763eaf90869dca06e6cac"
+    }
+  }
+}

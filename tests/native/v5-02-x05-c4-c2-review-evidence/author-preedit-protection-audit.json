@@ -1,0 +1,23 @@
+{
+  "authorized_changes": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/V5-02-X05-C4-C2.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/runtime.cppm",
+    "src/engine/runtime/runtime.t.cpp",
+    "tests/native/r12c2-support/generate.py",
+    "tests/native/r13b1-support/generate.py",
+    "tests/native/r14c3b2-support/generate.py",
+    "tests/native/v5-02-x03-b2-b-c01-support/generate.py"
+  ],
+  "baseline_entries": 73593,
+  "current_entries": 73593,
+  "unexpected_changes": []
+}

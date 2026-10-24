@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-c05-review-evidence/api-memory.py",
+      "api-memory-shape"
+    ],
+    "kind": "shape",
+    "start": "2026-10-23T05:14:54.151165+00:00",
+    "end": "2026-10-23T05:14:56.742568+00:00",
+    "exit_code": 0
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a3-c05-review-evidence/api-memory.py",
+      "api-memory-command"
+    ],
+    "kind": "command",
+    "start": "2026-10-23T05:14:56.743008+00:00",
+    "end": "2026-10-23T05:14:59.236052+00:00",
+    "exit_code": 0
+  }
+]

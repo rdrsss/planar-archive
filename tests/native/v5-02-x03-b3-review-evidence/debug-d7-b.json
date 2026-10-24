@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python3",
+    "<repo>/tests/native/r14-d7-b-support/audit.py",
+    "<repo>/build/rewrite-debug",
+    "<repo>/tests/native/v5-02-x03-b3-review-evidence/debug-d7-b-report.json"
+  ],
+  "cwd": "<repo>",
+  "start_utc": "2026-10-22T21:33:36.880430+00:00",
+  "end_utc": "2026-10-22T21:33:37.009610+00:00",
+  "seconds": 0.12920816522091627,
+  "exit_code": 0
+}

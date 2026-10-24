@@ -1,0 +1,40 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "tests/native/v5-02-x05-a3-c03-support/adaptations.json",
+    "tests/native/v5-02-x05-a3-c03-support/allocations.py",
+    "tests/native/v5-02-x05-a3-c03-support/budget.py",
+    "tests/native/v5-02-x05-a3-c03-support/locations.py",
+    "tests/native/v5-02-x05-a3-c03-support/probe.py",
+    "tests/native/v5-02-x05-a3-c03-support/reachable.py",
+    "tests/native/v5-02-x05-a3-c03-support/regressions.py",
+    "tests/native/v5-02-x05-a3-c03-support/repeat.py",
+    "tests/native/v5-02-x05-a3-c03-support/verify.py"
+  ],
+  "complete_owned_diff_sha256": "d55974b8d82846851b58d76dcf71c761ed5b4b3492076960ade7d35ab8f61532",
+  "reconstructed_complete_diff_matches": true,
+  "unchanged_finding_regions": {
+    "int register_external(lua_State* l) {": {
+      "unchanged": true,
+      "sha256": "6ac338329a3a332bceaf14dc78c086137eae71e9f7af414370abbb6db0d21909"
+    },
+    "void validate_profile_catalog(state& runtime) {": {
+      "unchanged": true,
+      "sha256": "056ac3b18a023fce8874cf61a3d12ddad4c6b127c85e5a501141d687822e881d"
+    },
+    "int collect_final_descriptors(lua_State* l) {": {
+      "unchanged": true,
+      "sha256": "2d3d8d4572f0cf68524e9dbab25f35000cdd41ab262647c22aa455885d23b576"
+    }
+  },
+  "shipped_lua_unchanged": true,
+  "symlink": "CLAUDE.md",
+  "initial_reconstruction": "Only new-file header convention differed: a/path versus /dev/null; preserved reconstructed-owned.diff and reconstruction-discrepancy.diff; corrected exact reconstruction matches."
+}

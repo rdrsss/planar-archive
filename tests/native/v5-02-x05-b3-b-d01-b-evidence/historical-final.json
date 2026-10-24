@@ -1,0 +1,9 @@
+{
+  "prior_artifacts": {
+    "v5-02-x05-b3-b-d01-a-evidence": 98,
+    "v5-02-x05-b3-b-d01-a-review-evidence": 37
+  },
+  "prior_support": 5,
+  "b3b_support": 4,
+  "unchanged": true
+}

@@ -1,0 +1,7 @@
+{
+  "command": "python3 tests/native/v5-02-x05-c4-d4-c01-evidence/verify.py baseline",
+  "result": "protection capture completed before edits; identity check stopped",
+  "cause": "Checker incorrectly expected every D3 candidate entry, including support/audit.py, beneath candidate-source. That snapshot contains source/reference files; support entries are at their recorded paths.",
+  "correction": "D3 candidate check scoped to the required four product/test source files, with the complete D3 artifact manifest checked separately. Original protected-before.json retained unchanged. Identity/status baselines then completed before edits.",
+  "product_or_prior_artifact_changes": 0
+}

@@ -1,4 +1,0 @@
-{
-  "test_command": ["./run-tests"],
-  "archive": "foreign-flat"
-}

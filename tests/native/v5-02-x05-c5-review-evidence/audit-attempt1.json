@@ -1,0 +1,1 @@
+{"checker_failure":"D4 prior manifest entries omit bytes while C5 entries include it; full dict equality was invalid", "candidate_failure":false,"correction":"Compare all keys of the prior approved manifest, preserving exact mode and SHA256"}

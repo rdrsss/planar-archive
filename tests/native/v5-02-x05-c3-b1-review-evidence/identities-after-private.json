@@ -1,0 +1,12 @@
+{
+  "artifact_entries": 46,
+  "artifact_sha256": "8c289dc4e13750138be2c0f9d82e574bf36a5a040e852b0fd9cde07460fce10e",
+  "candidate_entries": 225,
+  "candidate_manifest_sha256": "b4bbbe38d6d6d20bb361ca895ac2bee7771da46899647217d58acde0f60e85b6",
+  "diff_sha256": "1c7a9583b785f8502574f7d1438ea17124a1778322b3037310a30111805669d4",
+  "protected": {
+    "protected_entries": 62673,
+    "release_entries": 4238,
+    "unchanged": true
+  }
+}

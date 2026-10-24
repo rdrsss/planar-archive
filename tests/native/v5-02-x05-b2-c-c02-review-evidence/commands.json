@@ -1,0 +1,143 @@
+[
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.2479239571839571
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "seconds": 0.08023075014352798
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/focused.xml"
+    ],
+    "exit_code": 0,
+    "seconds": 187.90109412465245
+  },
+  {
+    "label": "supplemental",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/history-codec-selected.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/supplemental.xml"
+    ],
+    "exit_code": 0,
+    "seconds": 0.26081333309412
+  },
+  {
+    "label": "prior-resource",
+    "argv": [
+      "python3",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/prior-resource.py"
+    ],
+    "exit_code": 0,
+    "seconds": 4.66344999987632
+  },
+  {
+    "label": "original-observer",
+    "argv": [
+      "python3",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/exact_green.py",
+      "exact-green"
+    ],
+    "exit_code": 0,
+    "seconds": 2.3861215841025114
+  },
+  {
+    "label": "registry",
+    "argv": [
+      "python3",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/registry.py",
+      "registry"
+    ],
+    "exit_code": 0,
+    "seconds": 2.512804833240807
+  },
+  {
+    "label": "partial-snapshot",
+    "argv": [
+      "python3",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/partial_snapshot.py",
+      "partial-snapshot"
+    ],
+    "exit_code": 0,
+    "seconds": 2.5171959586441517
+  },
+  {
+    "label": "allocation-lifetime",
+    "argv": [
+      "python3",
+      "<repo>/tests/native/v5-02-x05-b2-c-c02-review-evidence/probes.py",
+      "probes"
+    ],
+    "exit_code": 0,
+    "seconds": 10.259819332510233
+  },
+  {
+    "label": "pinned-lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "seconds": 1.4387793755158782
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.23837820813059807
+  },
+  {
+    "label": "final-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.23973212484270334
+  }
+]

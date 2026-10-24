@@ -1,0 +1,13 @@
+{
+  "path_base": "tests/native/r14-d3-evidence/baseline; keys repository-relative",
+  "files": {
+    "CLAUDE.md": "d33659b7459c30e4a8a8a616b6f19c770665f42ba2a2b76afd1350cff36f6641",
+    "docs/architecture.md": "6f89c582b875d5fb5390f16a74026bc016f6315c1a6c38b7a4950191243d8294",
+    "docs/vernacular/command-contract.md": "48cf9f14ce25b6f5af2ba1305fb506d7c93735c24b4301c0c9ab6cdc90a6ed86",
+    "docs/vernacular/ledger-contract.md": "fbf693e00311172e8bc61ecb90111daa7ce7170faec359897a9a8e347618019d",
+    "docs/vernacular/implementation.md": "699cd5c0039b50330338c764e42c597d37de955d07b0a47e5621c9565f27d097",
+    "docs/vernacular/roadmap.md": "2266d4704e4d643a3b8f25c1975f8dffbae7aed76ed1885b17f6d3eeee353ad2",
+    "docs/vernacular/acceptance-matrix.md": "b485df7e981c493171ae24b70f892e5d2f6adbc68dacc4d30b5c48e30f81e53e",
+    "docs/vernacular/v5-alignment.md": "cedcb462fc58f4e73782938567f47f9144c3e544241edf13c44b670da60f17cd"
+  }
+}

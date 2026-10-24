@@ -1,0 +1,14 @@
+{
+  "method": "Post-edit reconstruction by exact inverse transformation, checked against approved B3-C frozen SHA256; unchanged prose copied before edits. Not a pre-edit capture.",
+  "sha256": {
+    "src/stdlib/planar/render.lua": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364",
+    "src/stdlib/planar/bootstrap.lua": "0c1b65f5e0bc61f668dbcd9cf03416904cbcbc77e9716ace1b74c517c8aae5a7",
+    "src/engine/runtime/external_registration.t.cpp": "9bfdf788af420e4bf903d12955ea85b175a10b8741a091913cccad786c823efd",
+    "CLAUDE.md": "a3418be01b738393c779c07b068f7790948808f6e6a37338fa356b652ccbbd74",
+    "docs/architecture.md": "ff6f224b8513a9fcc7e27e89028d3ec2280b93f61fb247bdce6e653895fae61a",
+    "docs/testing.md": "e1a30916cd16e66870683ac344bf0fc7a477573764995797beb88af067d2d6b8",
+    "docs/vernacular/implementation.md": "587ad9a6585463708e4fbd4e42b06ffb9cc90524f26071b42b575cfa90bfdb7c",
+    "docs/vernacular/roadmap.md": "d3f0a403479f5ab9fa7e1684bb35b9331fa6e74bd5198572584fade44e434542",
+    "docs/vernacular/external-profile-implementation.md": "cbbdd10c9168166680dd2dc1030882474a6faf1eeaeee39ec5f9a9f39767c5fe"
+  }
+}

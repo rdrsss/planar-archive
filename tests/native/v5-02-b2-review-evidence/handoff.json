@@ -1,0 +1,13 @@
+{
+  "disposition": "approve",
+  "report": "docs/vernacular/rounds/V5-02-B2-review.md",
+  "report_sha256": "89ea070b850d840a07154114c590ed1699ca410bc130af12089da764f9a023b5",
+  "review_artifacts": "tests/native/v5-02-b2-review-evidence/artifacts.json",
+  "review_artifacts_sha256": "7f05a59311ba49a5cd73e91efde8a4f77bf80a791d3e5e0ba8b85d30581b09c4",
+  "review_artifact_count": 19,
+  "candidate_manifest_sha256": "35628357435d2708761f1a77bcc40e5a0614d7fb16092804d2ad00be24b4743f",
+  "build_directories_released": [
+    "build/rewrite-debug",
+    "build/rewrite-release"
+  ]
+}

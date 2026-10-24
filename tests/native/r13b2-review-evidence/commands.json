@@ -1,0 +1,243 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r13b2-review-evidence/focused.xml"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/sqlite/b9c7",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-isystem",
+      "<repo>/vendor/xxhash/0.8.3",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_history_tree_tests.dir/history/tree.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial.o",
+      "-c",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0
+  },
+  {
+    "command": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-arch",
+      "arm64",
+      "-Wl,-search_paths_first",
+      "-Wl,-headerpad_max_install_names",
+      "-stdlib=libc++",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial.o",
+      "-o",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial",
+      "src/engine/libplanar_history_tree.a",
+      "vendor/catch2/src/libCatch2Maind.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_ledger_format.a",
+      "src/engine/libplanar_ledger_sqlite.a",
+      "libplanar_sqlite.a",
+      "src/engine/libplanar_json_codec.a",
+      "src/engine/libplanar_history_record.a",
+      "src/engine/libplanar_canonical.a",
+      "libplanar_xxhash.a",
+      "src/engine/libplanar_value.a",
+      "vendor/catch2/src/libCatch2d.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0
+  },
+  {
+    "command": [
+      "<repo>/tests/native/r13b2-review-evidence/adversarial",
+      "[independent]"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 42
+  },
+  {
+    "command": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/sqlite/b9c7",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-isystem",
+      "<repo>/vendor/xxhash/0.8.3",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_history_tree_tests.dir/history/tree.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial.o",
+      "-c",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0
+  },
+  {
+    "command": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-arch",
+      "arm64",
+      "-Wl,-search_paths_first",
+      "-Wl,-headerpad_max_install_names",
+      "-stdlib=libc++",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial.o",
+      "-o",
+      "<repo>/tests/native/r13b2-review-evidence/adversarial",
+      "src/engine/libplanar_history_tree.a",
+      "vendor/catch2/src/libCatch2Maind.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_ledger_format.a",
+      "src/engine/libplanar_ledger_sqlite.a",
+      "libplanar_sqlite.a",
+      "src/engine/libplanar_json_codec.a",
+      "src/engine/libplanar_history_record.a",
+      "src/engine/libplanar_canonical.a",
+      "libplanar_xxhash.a",
+      "src/engine/libplanar_value.a",
+      "vendor/catch2/src/libCatch2d.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0
+  },
+  {
+    "command": [
+      "<repo>/tests/native/r13b2-review-evidence/adversarial",
+      "[independent]"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "tests/native/r13b1c01-evidence/helper-lint.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "tests/native/r13b2-review-evidence/audit.py"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "tests/native/r13b2-review-evidence/audit.py"
+    ],
+    "exit": 0
+  }
+]

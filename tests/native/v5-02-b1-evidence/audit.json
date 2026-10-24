@@ -1,0 +1,13 @@
+{
+  "candidate_files": 11,
+  "protected_files_unchanged": 5643,
+  "native_runtime_interface_variants": 18,
+  "original_runtime_variant": true,
+  "baseline_tests_preserved": 337,
+  "registered_tests": 354,
+  "new_tests": 17,
+  "executed_focused_tests": 83,
+  "skips": 0,
+  "failures": 0,
+  "diff_sha256": "295a89f4ff4c4952a2875634fc91e8710fc0780a3768be6b5a278cb7c4078f7a"
+}

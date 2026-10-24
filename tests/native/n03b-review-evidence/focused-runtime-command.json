@@ -1,0 +1,7 @@
+{
+  "cwd": "<repo>/build/rewrite-debug",
+  "argv": [
+    "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+    "[codec]"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "candidate.sha256": {
+    "entries": 4,
+    "manifest_sha256": "5660d992f6927c820f63011cba09ce67a2b43f0786e4380dd039e40abdf59d0c",
+    "mismatches": []
+  },
+  "evidence.sha256": {
+    "entries": 166,
+    "manifest_sha256": "37f236eb24bf30e2f81f6122cc53703952264736e29081acebf1ce7ba97f6275",
+    "mismatches": []
+  },
+  "r09_snapshot": {
+    "changed": [
+      "docs/testing.md",
+      "scripts/cpp-lint-doxygen.sh"
+    ],
+    "entries": 1296,
+    "unchanged": 1294
+  }
+}

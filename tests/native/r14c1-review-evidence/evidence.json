@@ -1,0 +1,33 @@
+{
+  "candidate_identity": "32decfef27b4453d44f705aaac1cfc108ffc6abd3af7d6763353a5084619f07a",
+  "raw_sha256": {
+    "README.md": "b87b4b7b11b62c760feb132b10c86d2e55458b498f6c740d28293d7cd30d8f07",
+    "audit.txt": "76ae49f3ea9ee5dbb0ac98ac0a6fc72f177712ab19e5a45e69d22d272d61ca6d",
+    "build.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "build_probes.py": "1d3167896f3f940e2a31c53cb58b4f3b6fca6c4d2fbcbdee4d7ad7ade7e36061",
+    "checks.py": "28273dc577969cc9de589d93615cdc8ae66e84f774b63eac810c047ee58326c6",
+    "cli.txt": "0a7aebfe3495dc792d53434809b239bc345cfca1bbaa7ce16190d57e7e1aaba4",
+    "cli.xml": "f73e9d3ce606c01896f0adca2ee3d13eca85c9611fdc366380ff3b01eab70dd0",
+    "commands.json": "444d86101e2a7da54ce6b98ea832cf7c552ca32237316a36c9d276f2723b650b",
+    "focused.txt": "7d48819746e1f1f840b845f61366b53017089fa1b79f27aa5559e8afd771ba41",
+    "focused.xml": "0248f569e5d1f1a9c7b78d6a72e91f809984273dba18af1a9f7b9f2a7c28192b",
+    "identity.txt": "d1f7597af9280f2fccef4650219b62faa780ae18e3b0c98b4c87e8ecc3ac38d2",
+    "initial-cache-hit-probes.txt": "77519784ca088552281bd25a3703a8a69731d74f2273135de72c637d2b0fe40a",
+    "initial-cache-hit-probes.xml": "bedbeb055b8bfc784915fe23538b96c97335ccc28efe2ea0cd639413887af1fa",
+    "initial-cache-hit.md": "1b1b6f2cf0178023f84a19ff458c02264c16f819deaa6850fea905b6c0e94b81",
+    "initial-harness-error-probes.txt": "dd0cbaf889ea4e45debb12dbdce3f0a6abf6ec68d15b6774c69baed26bc061e6",
+    "initial-harness-error-probes.xml": "2b19cfbe76bbd627c0f44e2be6cc03ef6453e62c40dd89ae902ead223b6e761f",
+    "initial-harness-error.md": "2307aa332f715f0277c71777c42c67e6bebbb833fb74e321c0e79a9348987c46",
+    "lint.txt": "9853c4f18202e9a21c7d4631999af7eb0da7c39d8beb78100d84d7910cc7a0d6",
+    "no-work.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+    "probe-binaries.json": "6e1147d134abd1ad0b1613926b67fbe09f6be8395d0ff3303aa76e78f7946f02",
+    "probe-commands.json": "1db1412aeb1189df46ca96951a399cb3e4ba79a5879ab22a196f2978bfb13363",
+    "probe-compile.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe-link.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probes.cpp": "dd806277c5f1452f0a60424f56e0f51f3ed41d2a1afbbcd5125b15779ee26d3b",
+    "probes.txt": "d51ec7d0acc1a93770b8040be58d8c7369fe1bf7b4fa37b073c4917f6bb419cb",
+    "probes.xml": "7ddd20090e7333aa150349ed23465461a0189fb3b8ae259a0c9e3954ce869d40",
+    "record-vectors.txt": "b112fdde37b314e23ae46c1c190b65a7575877f687ca9085627427d91d195801",
+    "vectors.txt": "6642b7c9c2a89bec52b0555a60c260cbfa95a547923c6102848e093ed7192eba"
+  }
+}

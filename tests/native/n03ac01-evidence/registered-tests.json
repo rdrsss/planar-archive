@@ -1,0 +1,3662 @@
+{
+  "backtraceGraph" : 
+  {
+    "commands" : 
+    [
+      "add_test"
+    ],
+    "files" : 
+    [
+      "<repo>/CMakeLists.txt"
+    ],
+    "nodes" : 
+    [
+      {
+        "file" : 0
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 57,
+        "parent" : 0
+      }
+    ]
+  },
+  "kind" : "ctestInfo",
+  "tests" : 
+  [
+    {
+      "backtrace" : 1,
+      "command" : 
+      [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15",
+        "<repo>/tests/acceptance/bootstrap_cli.py",
+        "<repo>/build/rewrite-debug/bin/planar"
+      ],
+      "name" : "replacement.cli",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "acceptance"
+          ]
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader bounds native amplification of reused scalar strings"
+      ],
+      "name" : "replacement.loader bounds native amplification of reused scalar strings",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader constructed nested records remain immutable and readable"
+      ],
+      "name" : "replacement.loader constructed nested records remain immutable and readable",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader denies ambient capabilities and all trusted mutation"
+      ],
+      "name" : "replacement.loader denies ambient capabilities and all trusted mutation",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader enforces independent instruction allocation and structural bounds"
+      ],
+      "name" : "replacement.loader enforces independent instruction allocation and structural bounds",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader preserves structural constructor tags"
+      ],
+      "name" : "replacement.loader preserves structural constructor tags",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader rejects unsupported structures"
+      ],
+      "name" : "replacement.loader rejects unsupported structures",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_lua_loader_tests",
+        "loader retains table identities across garbage collection"
+      ],
+      "name" : "replacement.loader retains table identities across garbage collection",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture bounds name staging across trees and both passes"
+      ],
+      "name" : "replacement.capture bounds name staging across trees and both passes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture bounds path metadata before staging on both passes"
+      ],
+      "name" : "replacement.capture bounds path metadata before staging on both passes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture bounds text raw files totals and exclusions"
+      ],
+      "name" : "replacement.capture bounds text raw files totals and exclusions",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture classifies retained binary growth beyond quota as changed"
+      ],
+      "name" : "replacement.capture classifies retained binary growth beyond quota as changed",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture classifies retained text growth beyond quota as changed"
+      ],
+      "name" : "replacement.capture classifies retained text growth beyond quota as changed",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture declaration references join final retained snapshot"
+      ],
+      "name" : "replacement.capture declaration references join final retained snapshot",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture detects empty directory membership and identity changes"
+      ],
+      "name" : "replacement.capture detects empty directory membership and identity changes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture deterministic seam detects bytes mode identity and membership changes"
+      ],
+      "name" : "replacement.capture deterministic seam detects bytes mode identity and membership changes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture empty directories leave file provenance unchanged"
+      ],
+      "name" : "replacement.capture empty directories leave file provenance unchanged",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture enforces aggregate bytes and count before retention"
+      ],
+      "name" : "replacement.capture enforces aggregate bytes and count before retention",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture exposes sealed logical topology independently of file snapshots"
+      ],
+      "name" : "replacement.capture exposes sealed logical topology independently of file snapshots",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture refuses portable paths aliases and unsafe file types"
+      ],
+      "name" : "replacement.capture refuses portable paths aliases and unsafe file types",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture rejects overlapping roots and cross-root hardlinks"
+      ],
+      "name" : "replacement.capture rejects overlapping roots and cross-root hardlinks",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture retains sorted bytes and discovered references"
+      ],
+      "name" : "replacement.capture retains sorted bytes and discovered references",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture standalone inputs share physical workspace without tree authority"
+      ],
+      "name" : "replacement.capture standalone inputs share physical workspace without tree authority",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_capture_tests",
+        "capture withholds topology after unsuccessful verification"
+      ],
+      "name" : "replacement.capture withholds topology after unsuccessful verification",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_canonical_tests",
+        "canonical bounds depth nodes and bytes without declaration string caps"
+      ],
+      "name" : "replacement.canonical bounds depth nodes and bytes without declaration string caps",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_canonical_tests",
+        "canonical distinguishes typed empty values and integer boundaries"
+      ],
+      "name" : "replacement.canonical distinguishes typed empty values and integer boundaries",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_canonical_tests",
+        "canonical preserves raw strings and unsigned UTF8 key order"
+      ],
+      "name" : "replacement.canonical preserves raw strings and unsigned UTF8 key order",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_canonical_tests",
+        "canonical refuses null private malformed cyclic and out of range input"
+      ],
+      "name" : "replacement.canonical refuses null private malformed cyclic and out of range input",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_hash_tests",
+        "hash matches independent hand canonical and domain vectors"
+      ],
+      "name" : "replacement.hash matches independent hand canonical and domain vectors",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_hash_tests",
+        "hash selected captured base observation unit and role recipes remain separate"
+      ],
+      "name" : "replacement.hash selected captured base observation unit and role recipes remain separate",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_hash_tests",
+        "hash validates published upstream seed zero XXH3 length vectors"
+      ],
+      "name" : "replacement.hash validates published upstream seed zero XXH3 length vectors",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render checkpoint canonical JSON byte bound accepts exactly 8192"
+      ],
+      "name" : "replacement.render checkpoint canonical JSON byte bound accepts exactly 8192",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render checkpoint is bounded role scoped unverified optional data"
+      ],
+      "name" : "replacement.render checkpoint is bounded role scoped unverified optional data",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render checkpoint missing paths stay valid and sorted"
+      ],
+      "name" : "replacement.render checkpoint missing paths stay valid and sorted",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render checkpoint paths refuse portable segment aliases"
+      ],
+      "name" : "replacement.render checkpoint paths refuse portable segment aliases",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render checkpoint sizes canonical long control escapes"
+      ],
+      "name" : "replacement.render checkpoint sizes canonical long control escapes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render computes all six quota projections through the production export"
+      ],
+      "name" : "replacement.render computes all six quota projections through the production export",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render distinguishes no capture empty capture and absent observations"
+      ],
+      "name" : "replacement.render distinguishes no capture empty capture and absent observations",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render errors unknown targets and stale producer vector without leaking assertions"
+      ],
+      "name" : "replacement.render errors unknown targets and stale producer vector without leaking assertions",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render exact budget boundaries optional removal order and overflow details"
+      ],
+      "name" : "replacement.render exact budget boundaries optional removal order and overflow details",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render fences injections controls binary deletions and complete upstream differences"
+      ],
+      "name" : "replacement.render fences injections controls binary deletions and complete upstream differences",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render preserves internal cross role and pipeline completion obligations"
+      ],
+      "name" : "replacement.render preserves internal cross role and pipeline completion obligations",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render refuses malformed observations with exact schema and duplicates"
+      ],
+      "name" : "replacement.render refuses malformed observations with exact schema and duplicates",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render reviewer obligation grouping follows worker assignments"
+      ],
+      "name" : "replacement.render reviewer obligation grouping follows worker assignments",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render semantic observation errors retain raw nested array indexes"
+      ],
+      "name" : "replacement.render semantic observation errors retain raw nested array indexes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "render validates assertions globally then filters role visibility"
+      ],
+      "name" : "replacement.render validates assertions globally then filters role visibility",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime bounds Lua execution allocation and native amplification"
+      ],
+      "name" : "replacement.runtime bounds Lua execution allocation and native amplification",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime enforces immaterial text payloads on both boundaries"
+      ],
+      "name" : "replacement.runtime enforces immaterial text payloads on both boundaries",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime exposes only the selected bounded table helpers"
+      ],
+      "name" : "replacement.runtime exposes only the selected bounded table helpers",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime identifies the diagnostic actually escaping Lua"
+      ],
+      "name" : "replacement.runtime identifies the diagnostic actually escaping Lua",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime makes caught quota terminal before protected calls return"
+      ],
+      "name" : "replacement.runtime makes caught quota terminal before protected calls return",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime mutations cannot affect captured native input"
+      ],
+      "name" : "replacement.runtime mutations cannot affect captured native input",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime native hash primitives match direct canonical identities"
+      ],
+      "name" : "replacement.runtime native hash primitives match direct canonical identities",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime preserves ordinary protected call arity errors and nesting"
+      ],
+      "name" : "replacement.runtime preserves ordinary protected call arity errors and nesting",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime preserves private declaration tags and raw captured bytes"
+      ],
+      "name" : "replacement.runtime preserves private declaration tags and raw captured bytes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime prevents finalizers from bypassing instruction limits"
+      ],
+      "name" : "replacement.runtime prevents finalizers from bypassing instruction limits",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime refuses native count paths within a subprocess bound"
+      ],
+      "name" : "replacement.runtime refuses native count paths within a subprocess bound",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime refuses native sparse table range helpers"
+      ],
+      "name" : "replacement.runtime refuses native sparse table range helpers",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime refuses native string pattern paths within a subprocess bound"
+      ],
+      "name" : "replacement.runtime refuses native string pattern paths within a subprocess bound",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime refuses unsupported trusted returns and malformed native inputs"
+      ],
+      "name" : "replacement.runtime refuses unsupported trusted returns and malformed native inputs",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime repairs traversal state after caught conversion failures"
+      ],
+      "name" : "replacement.runtime repairs traversal state after caught conversion failures",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime retains deterministic nonpattern string operations"
+      ],
+      "name" : "replacement.runtime retains deterministic nonpattern string operations",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime retains rich stdlib diagnostics as structural data"
+      ],
+      "name" : "replacement.runtime retains rich stdlib diagnostics as structural data",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "runtime states are fresh deterministic and separated from declarations"
+      ],
+      "name" : "replacement.runtime states are fresh deterministic and separated from declarations",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema ID record normalization sorts collections and preserves ordered lists"
+      ],
+      "name" : "replacement.schema ID record normalization sorts collections and preserves ordered lists",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema JSON counts container entries for empty and nonempty terminals"
+      ],
+      "name" : "replacement.schema JSON counts container entries for empty and nonempty terminals",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema JSON node limit and request envelopes refuse deterministically"
+      ],
+      "name" : "replacement.schema JSON node limit and request envelopes refuse deterministically",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema diagnostics choose logical file field code deterministically"
+      ],
+      "name" : "replacement.schema diagnostics choose logical file field code deterministically",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema enforces job intrinsic policy budgets preferences and sorted sets"
+      ],
+      "name" : "replacement.schema enforces job intrinsic policy budgets preferences and sorted sets",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema enforces registry descriptor types bounds enums and uniqueness"
+      ],
+      "name" : "replacement.schema enforces registry descriptor types bounds enums and uniqueness",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema enforces workspace intrinsic constraints and declaration constructors"
+      ],
+      "name" : "replacement.schema enforces workspace intrinsic constraints and declaration constructors",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema final text uses exact text identity and wrapped provenance"
+      ],
+      "name" : "replacement.schema final text uses exact text identity and wrapped provenance",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema production exports normalize every quota job and defaults"
+      ],
+      "name" : "replacement.schema production exports normalize every quota job and defaults",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema refuses malformed constructors fields lists wrappers and versions"
+      ],
+      "name" : "replacement.schema refuses malformed constructors fields lists wrappers and versions",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema resolves retained text from declaring directory with exact bytes"
+      ],
+      "name" : "replacement.schema resolves retained text from declaring directory with exact bytes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema resolves text in every job relative to that job declaration"
+      ],
+      "name" : "replacement.schema resolves text in every job relative to that job declaration",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema sorted records retain declaration indexes for intrinsic diagnostics"
+      ],
+      "name" : "replacement.schema sorted records retain declaration indexes for intrinsic diagnostics",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema strict JSON preserves container Unicode and integer identities"
+      ],
+      "name" : "replacement.schema strict JSON preserves container Unicode and integer identities",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema strict JSON refuses malformed syntax text duplicates and bounds"
+      ],
+      "name" : "replacement.schema strict JSON refuses malformed syntax text duplicates and bounds",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema validates joined declaration and text paths before diagnostics"
+      ],
+      "name" : "replacement.schema validates joined declaration and text paths before diagnostics",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "schema validates unselected jobs registry and exact workspace routes"
+      ],
+      "name" : "replacement.schema validates unselected jobs registry and exact workspace routes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection distinguishes capture absence empty outputs and missing facet paths"
+      ],
+      "name" : "replacement.selection distinguishes capture absence empty outputs and missing facet paths",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection enforces aggregate byte file limits and normalized executable modes"
+      ],
+      "name" : "replacement.selection enforces aggregate byte file limits and normalized executable modes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection independently resolves every quota symbolic work manifest"
+      ],
+      "name" : "replacement.selection independently resolves every quota symbolic work manifest",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection optional observations provenance syntax and set order remain immaterial"
+      ],
+      "name" : "replacement.selection optional observations provenance syntax and set order remain immaterial",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection pipeline derives obligations before scope and records remapped producers"
+      ],
+      "name" : "replacement.selection pipeline derives obligations before scope and records remapped producers",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection refuses inconsistent malformed and excessive retained byte records"
+      ],
+      "name" : "replacement.selection refuses inconsistent malformed and excessive retained byte records",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection retains check applicability registry definitions and pipeline assignment scope"
+      ],
+      "name" : "replacement.selection retains check applicability registry definitions and pipeline assignment scope",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection scopes requirements and excludes optional policy and own bytes"
+      ],
+      "name" : "replacement.selection scopes requirements and excludes optional policy and own bytes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "selection start facets are external exact content and completion is never inferred"
+      ],
+      "name" : "replacement.selection start facets are external exact content and completion is never inferred",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic additions retain per-unit applicability even when definition unions match"
+      ],
+      "name" : "replacement.semantic additions retain per-unit applicability even when definition unions match",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic captured file ancestors cannot satisfy file facets"
+      ],
+      "name" : "replacement.semantic captured file ancestors cannot satisfy file facets",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic checks trusted allowed definitions conformance and per-unit additions"
+      ],
+      "name" : "replacement.semantic checks trusted allowed definitions conformance and per-unit additions",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic consumes sealed real quota topology after source trees are removed"
+      ],
+      "name" : "replacement.semantic consumes sealed real quota topology after source trees are removed",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic contract complete dependencies allow only availability and still need start contract"
+      ],
+      "name" : "replacement.semantic contract complete dependencies allow only availability and still need start contract",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic distinguishes captured empty directories and current base boundary topology"
+      ],
+      "name" : "replacement.semantic distinguishes captured empty directories and current base boundary topology",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier"
+      ],
+      "name" : "replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic ownership covers excluded lists and work with frozen and excluded boundaries"
+      ],
+      "name" : "replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic phase cycles report actual deterministic closed traces"
+      ],
+      "name" : "replacement.semantic phase cycles report actual deterministic closed traces",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic pipeline derives adjacent cross products and validates every stage"
+      ],
+      "name" : "replacement.semantic pipeline derives adjacent cross products and validates every stage",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic pipeline expands full adjacent stage work cross products before scope"
+      ],
+      "name" : "replacement.semantic pipeline expands full adjacent stage work cross products before scope",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic production validates both quota jobs and preserves grouped unit obligations"
+      ],
+      "name" : "replacement.semantic production validates both quota jobs and preserves grouped unit obligations",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic refuses all union boundary overlaps and segment aliases"
+      ],
+      "name" : "replacement.semantic refuses all union boundary overlaps and segment aliases",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs"
+      ],
+      "name" : "replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic schema refusal precedes policy and diagnostics retain author indexes"
+      ],
+      "name" : "replacement.semantic schema refusal precedes policy and diagnostics retain author indexes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_runtime_tests",
+        "semantic validates references and namespaces before selecting any job"
+      ],
+      "name" : "replacement.semantic validates references and namespaces before selecting any job",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_tests",
+        "json canonical transport escapes controls and orders UTF8 keys"
+      ],
+      "name" : "replacement.json canonical transport escapes controls and orders UTF8 keys",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_tests",
+        "json transport bounds include exact payload but exclude caller LF"
+      ],
+      "name" : "replacement.json transport bounds include exact payload but exclude caller LF",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_tests",
+        "json transport covers every C0 and exact nesting ceilings"
+      ],
+      "name" : "replacement.json transport covers every C0 and exact nesting ceilings",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_tests",
+        "json transport rejects cycles private tags invalid UTF8 and traversal excess"
+      ],
+      "name" : "replacement.json transport rejects cycles private tags invalid UTF8 and traversal excess",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec Glaze syntax and schema boundaries"
+      ],
+      "name" : "replacement.codec Glaze syntax and schema boundaries",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec decode exact resource ceilings"
+      ],
+      "name" : "replacement.codec decode exact resource ceilings",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec diagnostics retain safe offsets and resource details"
+      ],
+      "name" : "replacement.codec diagnostics retain safe offsets and resource details",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec encode Glaze escaping and unsigned UTF8 key order"
+      ],
+      "name" : "replacement.codec encode Glaze escaping and unsigned UTF8 key order",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec encode refuses cycles tags and exact bounds"
+      ],
+      "name" : "replacement.codec encode refuses cycles tags and exact bounds",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec encoder enforces four million visits before expansion allocation"
+      ],
+      "name" : "replacement.codec encoder enforces four million visits before expansion allocation",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec strict Glaze object separators and offsets"
+      ],
+      "name" : "replacement.codec strict Glaze object separators and offsets",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+        "codec strict validation preserves object values and decoded duplicate policy"
+      ],
+      "name" : "replacement.codec strict validation preserves object values and decoded duplicate policy",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/cmd/planar/planar_command_tests",
+        "help is explicit and buffered"
+      ],
+      "name" : "replacement.help is explicit and buffered",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/cmd/planar"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/cmd/planar/planar_command_tests",
+        "legacy commands and implicit discovery are refused"
+      ],
+      "name" : "replacement.legacy commands and implicit discovery are refused",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/cmd/planar"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-debug/src/cmd/planar/planar_command_tests",
+        "missing explicit files refuse without partial output"
+      ],
+      "name" : "replacement.missing explicit files refuse without partial output",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-debug/src/cmd/planar"
+        }
+      ]
+    }
+  ],
+  "version" : 
+  {
+    "major" : 1,
+    "minor" : 0
+  }
+}

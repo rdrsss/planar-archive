@@ -1,0 +1,36 @@
+{
+  "path_base": "tests/native/r14-d7-b-evidence",
+  "direct_shell_builds_before_command_recorder": [
+    {
+      "log": "build-initial.log",
+      "argv": [
+        "cmake",
+        "--build",
+        "build/rewrite-debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "observed_exit": 0,
+      "timestamps": "not separately retained"
+    },
+    {
+      "log": "build-probes.log",
+      "argv": [
+        "cmake",
+        "--build",
+        "build/rewrite-debug",
+        "--target",
+        "all",
+        "planar_tests"
+      ],
+      "observed_exit": 0,
+      "timestamps": "not separately retained"
+    }
+  ],
+  "exploratory_notes": [
+    "A formatter-induced probe preflight anchor mismatch was observed in tool output before updating the exact anchor; its successful replacement is recorded in generate-audit-preflight.log. The failed exploratory trace was not retained as a raw file.",
+    "Initial scratch smoke used an uncanonicalized macOS /var temporary parent and was conservatively refused; resolving the scratch root produced actual init/load success. These were exploratory tool calls, not claimed gate evidence."
+  ],
+  "formal_failures": "All failed CTest attempts and both red product regressions retain JUnit and archived LastTest. Earlier full gates retain their exact pre-correction source distinction."
+}

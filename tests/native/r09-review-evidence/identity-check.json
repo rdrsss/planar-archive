@@ -1,0 +1,259 @@
+{
+  "candidate": {
+    "manifest": "tests/native/r09-evidence/candidate.sha256",
+    "manifest_sha256": "bb915f01a4231a28acbaa44489f02a3d72d558ba13873f98c13a2d4f5f958d67",
+    "count": 1296,
+    "mismatches": []
+  },
+  "evidence": {
+    "manifest": "tests/native/r09-evidence/evidence.sha256",
+    "manifest_sha256": "fc1f6b23e8490e69f2698763e230983a6d01da3f84034109f09f9c7d3d19d9b3",
+    "count": 33,
+    "mismatches": []
+  },
+  "initial_count": 9072,
+  "deleted_count": 7775,
+  "supplemental_count": 25,
+  "unexpected_existing_deleted": [],
+  "deletion_top_paths": {
+    ".dockerignore": 1,
+    ".github": 3,
+    ".sqlfluff": 1,
+    "Doxyfile.lint": 1,
+    "agents": 20,
+    "cmake": 64,
+    "docker": 1,
+    "docs": 20,
+    "evals": 91,
+    "examples": 6,
+    "install-cleanup.txt": 1,
+    "install.sh": 1,
+    "migrations": 83,
+    "scripts": 101,
+    "skills": 10,
+    "src": 1323,
+    "templates": 12,
+    "vendor": 6056,
+    "workflows": 5
+  },
+  "deleted_vendor_paths": {
+    "vendor/cli11": 322,
+    "vendor/curl": 3939,
+    "vendor/ftxui": 393,
+    "vendor/glaze": 672,
+    "vendor/spdlog": 180,
+    "vendor/sqlite": 7,
+    "vendor/tree_sitter": 489,
+    "vendor/tree_sitter_zig": 54
+  },
+  "symlink": "CLAUDE.md",
+  "retained_deltas": 20,
+  "final-preservation.json": {
+    "kind": "dict",
+    "count": 2,
+    "summary": {
+      "checked_files": 1117,
+      "changed": []
+    }
+  },
+  "product-preservation.json": {
+    "kind": "dict",
+    "count": 3,
+    "summary": {
+      "preserved_product_files": 448,
+      "changed": [],
+      "approved_manifests": {
+        "r08ac01": [
+          {
+            "path": "stdlib/planar/observations.lua",
+            "matches": true
+          },
+          {
+            "path": "src/kernel/runtime/schema.t.cpp",
+            "matches": true
+          },
+          {
+            "path": "stdlib/planar/README.md",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/README.md",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/ctest.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/ctest.xml",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/diff-check.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/final-build.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/final-focused.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/final-focused.xml",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/final-regressions.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/final-regressions.xml",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/green-build.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/green.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/green.xml",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/lint.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/no-change-build.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/red-build.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/red.log",
+            "matches": true
+          },
+          {
+            "path": "tests/native/r08ac01-evidence/red.xml",
+            "matches": true
+          }
+        ],
+        "r08b": [
+          {
+            "path": "fixtures/render/quota/README.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/README.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/combined-builder.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/combined-builder.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/combined-reviewer.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/combined-reviewer.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/reviewer-resolved.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-cli_worker-recovery.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-cli_worker-recovery.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-cli_worker.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-cli_worker.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-library_worker.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-library_worker.md",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-reviewer.json",
+            "matches": true
+          },
+          {
+            "path": "fixtures/render/quota/native/split-reviewer.md",
+            "matches": true
+          },
+          {
+            "path": "src/cmd/planar/CMakeLists.txt",
+            "matches": true
+          },
+          {
+            "path": "src/cmd/planar/bootstrap.cppm",
+            "matches": true
+          },
+          {
+            "path": "src/cmd/planar/bootstrap.t.cpp",
+            "matches": true
+          },
+          {
+            "path": "src/cmd/planar/main.cpp",
+            "matches": true
+          },
+          {
+            "path": "src/kernel/CMakeLists.txt",
+            "matches": true
+          },
+          {
+            "path": "src/kernel/json/json.cpp",
+            "matches": true
+          },
+          {
+            "path": "src/kernel/json/json.cppm",
+            "matches": true
+          },
+          {
+            "path": "src/kernel/json/json.t.cpp",
+            "matches": true
+          }
+        ],
+        "r08bc01": [
+          {
+            "path": "src/cmd/planar/bootstrap.cpp",
+            "matches": true
+          },
+          {
+            "path": "tests/acceptance/bootstrap_cli.py",
+            "matches": true
+          },
+          {
+            "path": "tests/acceptance/bootstrap_paths.py",
+            "matches": true
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "checks": [
+    {
+      "id": "integration_note",
+      "check": "integration",
+      "target": {
+        "work": "command",
+        "output": "xxh3_128:26251223d01bac7281172de5abd61dc4"
+      },
+      "reported": "inconclusive",
+      "summary": "Illustrative driver note: integration receipt is unavailable; do not infer completion.",
+      "vector": [
+        {
+          "work": "command",
+          "output": "xxh3_128:26251223d01bac7281172de5abd61dc4"
+        },
+        {
+          "work": "library",
+          "output": "xxh3_128:799d60775f9f630bf87d9f3fee5c8bd4"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "review_note",
+      "target": {
+        "work": "library",
+        "output": "xxh3_128:799d60775f9f630bf87d9f3fee5c8bd4"
+      },
+      "severity": "note",
+      "text": "Inspect lock coverage against the captured contract; this note grants no approval."
+    }
+  ]
+}

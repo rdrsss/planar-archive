@@ -1,0 +1,28 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "tests/acceptance/bootstrap_paths.py": "48954d8c63716397565d6dc030397626ec423e8ffe933ac9a16f465ab4690158",
+    "src/engine/capture/host_path.cppm": "14c012d63fbfad60a87e4edaca1e7de89b66c12bae997da203005f5160d3d845",
+    "src/engine/capture/host_path.cpp": "4d7464f5cca1907dea3440b6087b28d0ef1b82fcf4a2fa9e8c7bd3fb16323e14",
+    "src/engine/capture/host_path.t.cpp": "a66eb1256b082746a417f720c31fe65b426799172305645daa99783eced9ac7c",
+    "src/engine/CMakeLists.txt": "9ed779a7055b278cf34a83b84b6c151c25ee83bd4c9e45ae7fb22b97089ce07d",
+    "src/engine/acceptance/prepared.t.cpp": "4ad12ac57e5d1b1459006209e87dbabba99d2516c7fc2b625a0b64eb59e8f900",
+    "src/cmd/planar/invocation.cppm": "1d5dc6a8c11a2a95825ae051a957468f3bcc05931710833af924fe605ee7b61c",
+    "src/cmd/planar/invocation.cpp": "cc6b29f9a46f1d9d50317785fe6326d4b4ae1a60f6ee1993c8c044540728df2a",
+    "src/cmd/planar/bootstrap.t.cpp": "c5ee0a1d4a853cf073bc35d2e90d6ca592541556669783403aaca3666e5e1d5c",
+    "src/cmd/planar/CMakeLists.txt": "06a73fc01f65382b2148377bbea216a40c7da7332d339c3e04214f0b0f488a54",
+    "docs/architecture.md": "6f89c582b875d5fb5390f16a74026bc016f6315c1a6c38b7a4950191243d8294",
+    "docs/testing.md": "faee5e7fdfc6f74a939cc2ff66bd9254cd6207c0ce7ecc154f42a00673a15179",
+    "docs/cli-reference.md": "31a7494c41f04e9510d54e4c6aca017a85b67328b32385bf5671cf00b9c4a4ae",
+    "CLAUDE.md": "d33659b7459c30e4a8a8a616b6f19c770665f42ba2a2b76afd1350cff36f6641",
+    "docs/vernacular/implementation.md": "699cd5c0039b50330338c764e42c597d37de955d07b0a47e5621c9565f27d097",
+    "docs/vernacular/roadmap.md": "2266d4704e4d643a3b8f25c1975f8dffbae7aed76ed1885b17f6d3eeee353ad2",
+    "docs/vernacular/v5-alignment.md": "cedcb462fc58f4e73782938567f47f9144c3e544241edf13c44b670da60f17cd",
+    "docs/vernacular/acceptance-matrix.md": "b485df7e981c493171ae24b70f892e5d2f6adbc68dacc4d30b5c48e30f81e53e",
+    "docs/vernacular/command-contract.md": "48cf9f14ce25b6f5af2ba1305fb506d7c93735c24b4301c0c9ab6cdc90a6ed86",
+    "tests/native/v5-02-c-support/cli.py": "839abe13339a7516bc54adacf60839afe7fa01802e1273b14d00a587b59804fd",
+    "tests/native/v5-02-c-support/freeze.py": "570ac67b81eb9b5938242c2e4b2a025b0283c6f456c5e88dc63f4dc169c0f47a",
+    "tests/native/v5-02-c-support/gate.py": "2b576c6c4590815f5b2edd7157fbe394015a1532bc370e96dee80faa29a5fe5f",
+    "tests/native/v5-02-c-support/red.py": "4e160b14d970f0b5dcacb3cd5578f4cb5a8776007ecbeb4ca29df72e7f19fbfe"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "artifact_manifest_sha256": "dd66a4d41b2b33edf3916fc3e7a42190a9327a2e0e49b6b0ed40204e369e97f2",
+  "artifacts": 259,
+  "build_identities": 747,
+  "build_ownership_released": true,
+  "final_commands": 14,
+  "finalized_utc": "2026-10-23T02:12:37.133854+00:00",
+  "focused_executed": 140,
+  "focused_original": "attempt01",
+  "focused_reuse_sha256": "aed810953d04088a2443c44d7e25cf35578f687a7c91132e8b7e0861f758ded7",
+  "no_further_coder_edits": true,
+  "owned_diff_sha256": "c08997657a2afc4f4bfc354f2e0b964dbf237a2dab669450d641a7845679c9a2",
+  "prior_registered": 552,
+  "production_scenarios": 10,
+  "red_controls": 1,
+  "registered": 555,
+  "report_sha256": "2914d33398cded65ec12ba70293276ef0b21c430355c205d22fce48a8de75905",
+  "source_entries": 19331,
+  "source_manifest_sha256": "05caa65f7723a15331961db474d1f2bdde1c7680310d94643dfe79906f7e6d40",
+  "status": "candidate pending independent review",
+  "zero_failures_errors_skips_disabled": true
+}

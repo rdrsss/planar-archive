@@ -1,0 +1,12 @@
+{
+  "status": "test-only feasibility candidate; independent review pending",
+  "debug_ownership_released": true,
+  "no_further_edits": true,
+  "protected_rehash_equal_except_recorded_logs": true,
+  "compiled_rehash_equal": true,
+  "checkpoint_rehash_equal": true,
+  "candidate_manifest_sha256": "24c39ea1945bb7ed1d12446ca560d54a76ca5122a4a242712d6ae54a93796cbf",
+  "candidate_diff_sha256": "667640d86da888595ca4e451f7a80a5392920eb1cdf7bdda6cc00eeefaab8161",
+  "artifact_manifest_sha256": "f0f8a7417d4c64273b2e900ddaa06ef3aca62bb840d95652e92ec7eadf0ec1c9",
+  "report_sha256": "dad67275e270df6a42fffd6cd52bcb41ca3f65ac28c85ec0189f426c86f7d9c0"
+}

@@ -1,0 +1,33 @@
+{
+  "all_review_edits_released": true,
+  "branch": "dev/planar-v2-vernacular",
+  "candidate_manifest_sha256": "ccdc2b51bf79fc939134c3a9b8a0336306b7c5d47b932e698c9db71ddb847e1a",
+  "compiled": {
+    "all_response_files_expanded": true,
+    "entries": 888,
+    "implicit_modules_disabled": true,
+    "shared_and_private_unchanged": true
+  },
+  "debug_released": true,
+  "disposition": "approve",
+  "frozen_candidate_sha256": "0f10d1de1e900cff3a3d60497674a21db3b53b6a80f5491b7a0bae1812c5e2a2",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "independent_counts": {
+    "allocation": 1,
+    "independent": 3,
+    "memory-completed": 1,
+    "memory-retry": 1,
+    "partial": 1,
+    "production": 17,
+    "raw-observer": 2
+  },
+  "no_later_edits": true,
+  "protected": {
+    "changed": [],
+    "entries": 64042,
+    "release_entries": 4238
+  },
+  "report_sha256": "88e1a57ceef3be0d45ff13af990632f1500537a64fc393b4d9c4a4d01a943093",
+  "review_artifacts": 927,
+  "review_manifest_sha256": "fe739996a38d02b42573c30d67e5fecf2e07a9db9f1a89a4877011c8bb548142"
+}

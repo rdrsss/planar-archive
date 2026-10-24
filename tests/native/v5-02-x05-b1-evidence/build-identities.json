@@ -1,0 +1,9 @@
+{
+  "CMakeCache.txt": "c09f519b2f4dbb3336a149690e610da2d88f3ff9d423ec69113220e9d96121aa",
+  "build.ninja": "a6220bfe9b9b3cd64c6968356aa3027c5c5597655e3776bfda3c092d39ddf38b",
+  "compile_commands.json": "20973e88c03185dfe76f87b299647d6a546bae14afa1ee7e98384088570eeace",
+  "src/engine/planar_runtime_tests": "890e35827ff17de98e5f94d48a285b53053f68394425f9cd89106214fa69697b",
+  "src/engine/libplanar_shapes_test_harness.a": "bf5e2d42fa4679d51f2b42ff98f19d1ef88ffbf45b8ab33224be355a01687565",
+  "src/engine/libplanar_runtime.a": "581e62c697fc9da0404d2aa35f59871f4767d7f7d8da0f3199895cb967c11fe5",
+  "src/cmd/planar/planar_command_tests": "b0852d7e3beac0f927e908e76c14c37c3bd27861788cfee2b1f4dda14f4595a6"
+}

@@ -1,0 +1,17 @@
+[
+  "docs/vernacular/v5-alignment.md",
+  "docs/vernacular/acceptance-matrix.md",
+  "docs/vernacular/implementation.md",
+  "docs/vernacular/roadmap.md",
+  "docs/vernacular/declarations.md",
+  "docs/vernacular/render-contract.md",
+  "docs/vernacular/ledger-contract.md",
+  "CLAUDE.md",
+  "README.md",
+  "CONTRIBUTING.md",
+  "INSTALL.md",
+  "docs/architecture.md",
+  "docs/cli-reference.md",
+  "docs/declarations.md",
+  "docs/testing.md"
+]

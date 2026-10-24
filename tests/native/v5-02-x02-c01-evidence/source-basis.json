@@ -1,0 +1,7 @@
+{
+  "CLAUDE.md": "247c649175718489442b40a1a4e4595e1b77054b6b7bd0ba04096088ee5699ba",
+  "docs/vernacular/rounds/V5-02-X02-review.md": "bd44eee1a60312945c4582e86377fdfe37ac45e0196ec9dc46da62f81cbabb58",
+  "src/cmd/planar/handlers/history/command.cpp": "bad5ba563d443f9e6d24cec5d26c863d787f82475f9b0d67ad02796c3d8c0614",
+  "src/engine/runtime/runtime.cpp": "7629ca86e465c23f22dcd0d4b53e881ba99d8d406630015234e01372067ea0f5",
+  "src/stdlib/planar/render.lua": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364"
+}

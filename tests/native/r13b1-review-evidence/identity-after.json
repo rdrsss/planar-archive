@@ -1,0 +1,9 @@
+{
+  "candidate_manifest": "a654e1fe4444074f8b59ac82e031f5fbd9b148bf43fc5bb94de71fc9377e71e7",
+  "candidate_identity": "60f930eba1be7213dfb0c571e9c7f9bfcfc7f87522af3b6a2223bf296eb9c68a",
+  "candidate_count": 10,
+  "evidence_manifest": "d52c516e07573c326960b4a0ddd53b08d04c19ddc9668f44e73b100367d9c4a0",
+  "evidence_count": 50,
+  "protected_count": 1834,
+  "HEAD": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a"
+}

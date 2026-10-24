@@ -1,0 +1,826 @@
+[
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/implementation.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/roadmap.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/rounds/"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/planar-design-spec-v5.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/v5-alignment.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/acceptance-matrix.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/vernacular/repository-map.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/architecture.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/testing.md"
+  },
+  {
+    "source": "CLAUDE.md",
+    "url": "docs/toolchain-parity.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "CLAUDE.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "docs/vernacular/implementation.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "docs/vernacular/roadmap.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "docs/vernacular/planar-design-spec-v5.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "docs/vernacular/v5-alignment.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "docs/vernacular/acceptance-matrix.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "docs/testing.md"
+  },
+  {
+    "source": "CONTRIBUTING.md",
+    "url": "LICENSE"
+  },
+  {
+    "source": "INSTALL.md",
+    "url": "README.md"
+  },
+  {
+    "source": "INSTALL.md",
+    "url": "docs/toolchain-parity.md"
+  },
+  {
+    "source": "INSTALL.md",
+    "url": "docs/vernacular/planar-design-spec-v5.md"
+  },
+  {
+    "source": "INSTALL.md",
+    "url": "docs/vernacular/v5-alignment.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/vernacular/planar-design-spec-v5.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/vernacular/v5-alignment.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/toolchain-parity.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/cli-reference.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/declarations.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/architecture.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/testing.md"
+  },
+  {
+    "source": "README.md",
+    "url": "INSTALL.md"
+  },
+  {
+    "source": "README.md",
+    "url": "fixtures/render/quota/README.md"
+  },
+  {
+    "source": "README.md",
+    "url": "fixtures/render/quota/native/README.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/vernacular/acceptance-matrix.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/vernacular/implementation.md"
+  },
+  {
+    "source": "README.md",
+    "url": "docs/vernacular/roadmap.md"
+  },
+  {
+    "source": "README.md",
+    "url": "CONTRIBUTING.md"
+  },
+  {
+    "source": "README.md",
+    "url": "LICENSE"
+  },
+  {
+    "source": "README.md",
+    "url": "THIRD_PARTY_NOTICES.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "../src/stdlib/planar/README.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "declarations.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "cli-reference.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "testing.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "vernacular/implementation.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "vernacular/planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "vernacular/v5-alignment.md"
+  },
+  {
+    "source": "docs/architecture.md",
+    "url": "vernacular/acceptance-matrix.md"
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "url": "vernacular/v5-alignment.md"
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "url": "vernacular/render-contract.md#capture-boundary"
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "url": "vernacular/render-contract.md"
+  },
+  {
+    "source": "docs/cli-reference.md",
+    "url": "vernacular/declarations.md"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "vernacular/declarations.md"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "vernacular/render-contract.md"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "../fixtures/render/quota/workspace/workspace.lua"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "../fixtures/render/quota/workspace/spec.lua"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "../fixtures/render/quota/README.md"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "../fixtures/render/quota/native/README.md"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "vernacular/planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/declarations.md",
+    "url": "vernacular/v5-alignment.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "toolchain-parity.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "vernacular/rounds/R09.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "../tests/vectors/README.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "vernacular/acceptance-matrix.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "vernacular/v5-alignment.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "vernacular/rounds/R14-D2-review.md"
+  },
+  {
+    "source": "docs/testing.md",
+    "url": "vernacular/rounds/R14-G.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "planar-design-spec-v5.md#adversarial-acceptance-matrix"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "planar-design-spec-v5.md#open-items"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R06.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R08.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R08.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R05-C01.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-D2-review.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R05-C01.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-D2-review.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R08.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-C3-B2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R12-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-G.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-C3-B2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-E2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-F2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R12-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-C3-B2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R13-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-C3-B2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R13-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-C3-B2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-C1.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-E2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R14-F2.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R10-P01.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/declarations.md",
+    "url": "render-contract.md"
+  },
+  {
+    "source": "docs/vernacular/declarations.md",
+    "url": "planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/vernacular/declarations.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "Planar%20design%20spec%20-%20v4.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "roadmap.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "ledger-contract.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "ledger-contract.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "url": "acceptance-matrix.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "rounds/R14-D2-review.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "roadmap.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "declarations.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "render-contract.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "Planar%20design%20spec%20-%20v4.md"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "../../src/stdlib/planar/schema.lua"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "../../src/stdlib/planar/semantic.lua"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "../../src/stdlib/planar/selection.lua"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "../../src/engine/capture/capture.cppm"
+  },
+  {
+    "source": "docs/vernacular/ledger-contract.md",
+    "url": "rounds/R14-E2.md#search-outcome-and-concrete-contract"
+  },
+  {
+    "source": "docs/vernacular/render-contract.md",
+    "url": "declarations.md"
+  },
+  {
+    "source": "docs/vernacular/render-contract.md",
+    "url": "planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/vernacular/render-contract.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/render-contract.md",
+    "url": "acceptance-matrix.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "implementation.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "v5-alignment.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "acceptance-matrix.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R02-C01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R03.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R04.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R05-C01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R06.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R07.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R08.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R09.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R10-P01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R10.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R11-review.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R11.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "ledger-contract.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R12.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R12-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R13-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R13-D01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-A.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-B.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-C1.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-C2.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-C3-B2.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-D1.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-E1.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-E2.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-F1.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-F2.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-G.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R14-D2-review.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/V5-01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "acceptance-matrix.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/N01.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/N02.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/N03.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "../../tests/native/n03b-evidence/README.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/N04.md"
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "url": "rounds/R10-P01.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "Planar%20design%20spec%20-%20v4.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "implementation.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "../../CLAUDE.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "declarations.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "render-contract.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "ledger-contract.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "rounds/R13-C2-review.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "rounds/R14-D2-review.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "rounds/R14-G.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#scope"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#architecture-and-trust"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#identity-and-materiality"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#declaration-history-in-sqlite"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#runs-states-and-interruption"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#checks-ownership-and-observed-completion"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#review-and-acceptance"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#bootstrap-and-external-driver"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#open-items"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#engine-surface-and-sandbox"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#workspace-loading-and-persistence"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#bootstrap-and-external-driver"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#build-order-and-acceptance-gates"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#adversarial-acceptance-matrix"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "acceptance-matrix.md"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#deferred-phase-workspace-composition"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "planar-design-spec-v5.md#cut-3-measure-specific-claims"
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "url": "acceptance-matrix.md"
+  }
+]

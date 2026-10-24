@@ -1,0 +1,39 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "build-verified-final.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(capture |acceptance prepared |prepared |load capture |interpretation |atomic |command |runtime |.*cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d5-evidence/focused-final.xml"
+    ],
+    "exit": 0,
+    "log": "focused-final.log"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "exit": 1,
+    "log": "lint.log"
+  }
+]

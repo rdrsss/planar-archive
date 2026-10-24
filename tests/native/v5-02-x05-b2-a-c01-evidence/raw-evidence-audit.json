@@ -1,0 +1,56 @@
+{
+  "focused": {
+    "cases": 252,
+    "unit_native": 245,
+    "acceptance": 7,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "junit_console_LastTest_names_match": true
+  },
+  "probes": {
+    "before/adapter": {
+      "cases": 3,
+      "failed_cases": 3,
+      "assertions": "14",
+      "failed_assertions": "6"
+    },
+    "development/adapter": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": "23",
+      "failed_assertions": "0"
+    },
+    "development/adversarial": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": "377",
+      "failed_assertions": "0"
+    },
+    "development/boundary": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": "56",
+      "failed_assertions": "0"
+    },
+    "final-probes/adapter": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": "23",
+      "failed_assertions": "0"
+    },
+    "final-probes/adversarial": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": "377",
+      "failed_assertions": "0"
+    },
+    "final-probes/boundary": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": "56",
+      "failed_assertions": "0"
+    }
+  }
+}

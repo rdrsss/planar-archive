@@ -1,0 +1,70 @@
+{
+  "status": "candidate ready for independent review; not self-approved",
+  "candidate_identity": "33c92e663087dff697b86d49c0b5e22d8ee510f5c3ac63a9643a833d93298808",
+  "revision": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "owned_files": [
+    "src/engine/capture/host_path.cppm",
+    "src/engine/capture/host_path.cpp",
+    "src/engine/capture/host_path.t.cpp",
+    "src/engine/CMakeLists.txt",
+    "src/cmd/planar/handlers/render/command.cpp",
+    "src/cmd/planar/CMakeLists.txt",
+    "tests/acceptance/bootstrap_paths.py",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "changes": [
+    "Added value-only host_path module with exact original render helper bodies and expected/diagnostic adapters.",
+    "Renderer passes original spellings through required(resolve_explicit_file/directory); outer catches unchanged.",
+    "Separate filesystem-free normalizer validates explicit cwd/text and bounds inputs, joined spelling and output to 64 MiB; load service is outside scope.",
+    "Added eight native path cases and strengthened existing CLI error assertions without adding CLI invocations.",
+    "Updated architecture/testing references."
+  ],
+  "verification": {
+    "path_cases": 8,
+    "full_registered_cases": 309,
+    "skips": 0,
+    "retained_history": 151,
+    "retained_capture": 25,
+    "retained_prepared": 12,
+    "retained_atomic": 12,
+    "cli_processes": 247,
+    "cli_path_checks": 60,
+    "format_doxygen_active_sources": 74,
+    "protected_files": 4828,
+    "vectors": {
+      "hand": 12,
+      "upstream": 20,
+      "canonical_domain": 41
+    },
+    "no_work_build": true,
+    "native_path_only_link": true,
+    "exact_generated_variants": [
+      "r12c2",
+      "r13b1",
+      "r14c3b2"
+    ]
+  },
+  "commands": [
+    "cmake --preset debug",
+    "cmake --build build/rewrite-debug --target planar_capture_host_path_tests planar",
+    "ctest --test-dir build/rewrite-debug -R '^replacement\\.(host path|intent path)' --output-on-failure --output-junit tests/native/r14d1-evidence/paths-complete.xml",
+    "python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug",
+    "python3 tests/acceptance/bootstrap_cli.py build/rewrite-debug/bin/planar",
+    "python3 tests/vectors/generate.py --check",
+    "python3 tests/native/r14d1-evidence/audit.py"
+  ],
+  "initial_findings": [
+    "Initial test compile compared expected objects with noncomparable diagnostic errors; test comparison corrected (build-path.log).",
+    "Initial assertions guessed filesystem error messages and direct final-link acceptance incorrectly; exact unchanged helper behavior pinned by final tests and source-body identity (paths.log, cli-first.log, cli-final.log).",
+    "Exact root join at 64 MiB exposed an overly conservative separator budget; separator counting fixed before final complete path suite/gate (paths-final.log)."
+  ],
+  "limits": [
+    "macOS Apple Silicon debug only; no replacement Linux or release gate claim.",
+    "Shared host resolution retains cooperative filesystem semantics, not hostile race protection.",
+    "The final gate and final standalone CLI run were serialized; an earlier duplicate CLI probe overlapped immutable CTest execution, used independent scratch roots and changed no build/source state.",
+    "No service, membership policy, capture algorithm, Lua, ledger, prepared/schema, CLI registration, vendor or prior evidence changes."
+  ],
+  "debug_directory": "released; no running builds or tests"
+}

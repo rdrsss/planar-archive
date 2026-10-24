@@ -1,0 +1,9 @@
+{
+  "author_green_cases": 6,
+  "errors": 0,
+  "expected_backup_red_cases": 1,
+  "expected_backup_red_failures": 1,
+  "failures": 0,
+  "reviewer_green_cases": 6,
+  "skips": 0
+}

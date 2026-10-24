@@ -1,0 +1,13 @@
+{
+  "files": {
+    "docs/architecture.md": "82700288fc01c1d3a6363e5c5310d3e54ba3cb291e0b3f16c8ffe2b9295c4b35",
+    "docs/testing.md": "b37ea57a5ee2457101403773828330cfb0a040366c2fa1d064ba1a0c6db0c00d",
+    "src/engine/CMakeLists.txt": "72f2fd268b32df8da900fd5fea20de3ec17cd11ac781346cbb96f5f7a12b3169",
+    "src/engine/capture/capture.cpp": "8b5538a9c6c14fae0d444382aa304294a0aa3d6574bda13de02942e38fff274a",
+    "src/engine/capture/capture.cppm": "573e0745e3cdaff7aa519dea600cdb438b4f684ed92f63d216ff805e537ea551",
+    "src/engine/capture/native.cpp": "aeaca89b2112346cf05a139836268c53c94c58947ab37e1f173623a611275943",
+    "src/engine/capture/native.cppm": "6fdb8bf003055573ffd089568e674cf618241159004ca7c9e16c51464a03e6c8",
+    "src/engine/capture/native.t.cpp": "f4654878606422fa102116e07b3511aa3d741b952b7c4269bed53251ca371ab9"
+  },
+  "identity": "3ee4ca19f3748affc81a441f9376ba33b350fb67839b98311a219a53dd34922b"
+}

@@ -1,0 +1,11 @@
+{
+  "src/engine/ledger/format.cpp": "c14a0ad92394c67e17280a65daa9e9aba70ccd5f72b3ee9b949a876341102d9b",
+  "src/engine/ledger/format.cppm": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+  "src/engine/CMakeLists.txt": "220af1f8a23a958d629334c5ac133e57b526640fec26ec88b1f2f22f49d35aae",
+  "tests/native/v5-02-x03-b2-b-c01-support/fixture.cppm": "741fed3d10de5f70b3a620d5f688004a8960b2d7199a5b7a063264280af96090",
+  "tests/native/v5-02-x03-b2-b-c01-support/generate.py": "b53b305538446cdb8bb7916709eaff7a7e4f49d3f738249c938d879ae39dcb5e",
+  "tests/native/v5-02-x03-b2-b-c01-support/metadata.t.cpp": "ca5f6f02dd2e9dbf1bd82c38b0745ebe089ca0c79aa3cd8937cc2111f26cd4fa",
+  "build/rewrite-debug/src/engine/v5-02-x03-b2-b-c01-generated/format.cpp": "fdd9c90e1fc33ba5366134f13307847b9eb1983fcaaff3a38b6c91b0283c60cd",
+  "build/rewrite-debug/src/engine/v5-02-x03-b2-b-c01-generated/generation.json": "be5d38369851e0394daf567aa92c942c4f708eff359b7931122926b3b6d92162",
+  "build/rewrite-debug/src/engine/v5-02-x03-b2-b-c01-generated/format.cppm": "b798b7fc39e1ac66cc8d244347d8af38a40e2646c375a12c7f2c75de8aaf4f0e"
+}

@@ -1,0 +1,75 @@
+[
+  {
+    "label": "adversarial-compile",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_json_codec_tests.dir/json_codec/codec.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-b2-b-review-evidence/adversarial.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-b2-b-review-evidence/adversarial.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit_code": 0,
+    "seconds": 0.639
+  },
+  {
+    "label": "adversarial-link",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-arch",
+      "arm64",
+      "-Wl,-search_paths_first",
+      "-Wl,-headerpad_max_install_names",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-b2-b-review-evidence/adversarial.o",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-b2-b-review-evidence/adversarial",
+      "src/engine/libplanar_json_codec.a",
+      "vendor/catch2/src/libCatch2Maind.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_value.a",
+      "vendor/catch2/src/libCatch2d.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit_code": 0,
+    "seconds": 0.121
+  },
+  {
+    "label": "adversarial",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-b2-b-review-evidence/adversarial",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-b2-b-review-evidence/adversarial.xml"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit_code": 42,
+    "seconds": 0.408
+  }
+]

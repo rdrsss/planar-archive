@@ -1,0 +1,39 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "result": "no work"
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "result": "no work"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-on-failure"
+    ],
+    "exit": 0,
+    "result": "1 CTest, 150 CLI processes, six native goldens, zero skips"
+  }
+]

@@ -1,0 +1,244 @@
+[
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fmodule-file=std=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-file=planar.engine.json_codec=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_json_codec.dir/planar.engine.json_codec.pcm",
+      "-fmodule-file=planar.engine.value=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_value.dir/planar.engine.value.pcm",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/submitted.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/submitted.cpp",
+      "-fno-implicit-modules",
+      "-fno-implicit-module-maps"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "submitted-compile",
+    "seconds": 1.6937551498413086
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/submitted.o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/libplanar_json_codec.a",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/libplanar_value.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/submitted"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "submitted-link",
+    "seconds": 0.19656014442443848
+  },
+  {
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/submitted"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "submitted",
+    "seconds": 10.56496000289917
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fmodule-file=std=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-file=planar.engine.json_codec=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_json_codec.dir/planar.engine.json_codec.pcm",
+      "-fmodule-file=planar.engine.value=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_value.dir/planar.engine.value.pcm",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/adversarial.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/adversarial.cpp",
+      "-fno-implicit-modules",
+      "-fno-implicit-module-maps"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "adversarial-compile",
+    "seconds": 1.5234360694885254
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/adversarial.o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/libplanar_json_codec.a",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/libplanar_value.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/adversarial"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "adversarial-link",
+    "seconds": 0.10654115676879883
+  },
+  {
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/adversarial"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "adversarial",
+    "seconds": 31.988658905029297
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fmodule-file=std=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-file=planar.engine.json_codec=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_json_codec.dir/planar.engine.json_codec.pcm",
+      "-fmodule-file=planar.engine.value=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_value.dir/planar.engine.value.pcm",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect-codec.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect-codec.cpp",
+      "-fno-implicit-modules",
+      "-fno-implicit-module-maps"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "scratch-defect-codec-compile",
+    "seconds": 2.7114129066467285
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fmodule-file=std=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-file=planar.engine.json_codec=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_json_codec.dir/planar.engine.json_codec.pcm",
+      "-fmodule-file=planar.engine.value=<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/CMakeFiles/planar_value.dir/planar.engine.value.pcm",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/submitted.cpp",
+      "-fno-implicit-modules",
+      "-fno-implicit-module-maps",
+      "-DSCRATCH_DEFECT"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "scratch-defect-compile",
+    "seconds": 1.4447522163391113
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect.o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect-codec.o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/private/src/engine/libplanar_value.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "scratch-defect-link",
+    "seconds": 0.11417603492736816
+  },
+  {
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/scratch-defect"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "scratch-defect",
+    "seconds": 0.24953484535217285
+  },
+  {
+    "argv": [
+      "<repo>/build/rewrite-debug/src/engine/planar_json_codec_tests",
+      "[codec]",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x05-c2-b1-review-evidence/codec-targeted.xml"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 0,
+    "label": "codec-targeted",
+    "seconds": 4.168089866638184
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "exit": 1,
+    "label": "no-work",
+    "seconds": 0.03126931190490723
+  }
+]

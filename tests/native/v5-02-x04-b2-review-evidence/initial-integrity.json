@@ -1,0 +1,36 @@
+{
+  "anchors": {
+    "artifact-manifest.json": "e90f479d7ca2a215d2ec6c4f14d0ae849e8f9bd61fd3ba4e57c218c51b45ccba",
+    "candidate-manifest.json": "186f33f0101da7774325e0c5f835077b78d2340be37d3add81fd99b79fd7f4d1",
+    "owned.diff": "ae7611cf1602ee85af23c6ab3e738fa69a2d3ef091fcf5572ccb08b54578740d"
+  },
+  "archived_sources": {
+    "attempt01": 141,
+    "attempt02": 141,
+    "attempt03-classification-regression": 142,
+    "attempt04-final": 143
+  },
+  "author_artifacts": 663,
+  "baseline_changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/history/effective_catalog.cpp",
+    "src/engine/history/effective_catalog.cppm",
+    "src/engine/history/effective_catalog.t.cpp",
+    "tests/native/v5-02-x04-b2-support/audit.py",
+    "tests/native/v5-02-x04-b2-support/finalize.py",
+    "tests/native/v5-02-x04-b2-support/regression.py",
+    "tests/native/v5-02-x04-b2-support/verify.py",
+    "tests/native/v5-02-x04-b2-support/verify_final.py"
+  ],
+  "candidate_paths": 17,
+  "debug_build_identities": 721,
+  "protected_final_entries": 16692,
+  "symlink_preserved": true
+}

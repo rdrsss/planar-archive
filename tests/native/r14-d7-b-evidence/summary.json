@@ -1,0 +1,54 @@
+{
+  "disposition": "candidate for independent review; coder does not approve",
+  "candidate_files": 26,
+  "full_baseline_paths": 14301,
+  "verification": {
+    "debug": {
+      "final_registered": 400,
+      "final_affected_executed": 69,
+      "final_failures": [],
+      "final_skips": [],
+      "prior_names_preserved": 396,
+      "new_names": [
+        "replacement.load handler attaches six required text bindings",
+        "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+        "replacement.load invocation snapshots one cwd and environment with lexical targets",
+        "replacement.load_cli"
+      ],
+      "pre_mapping_full_executed": 399,
+      "full_gate_sources": "final-gate-source.json",
+      "final_focused_sources": "final-source.json",
+      "full_gate_not_claimed_for_final_mapping_or_new_regression": true
+    },
+    "release": {
+      "final_registered": 400,
+      "final_affected_executed": 69,
+      "final_failures": [],
+      "final_skips": [],
+      "prior_names_preserved": 396,
+      "new_names": [
+        "replacement.load handler attaches six required text bindings",
+        "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+        "replacement.load invocation snapshots one cwd and environment with lexical targets",
+        "replacement.load_cli"
+      ],
+      "pre_mapping_full_executed": 399,
+      "full_gate_sources": "final-gate-source.json",
+      "final_focused_sources": "final-source.json",
+      "full_gate_not_claimed_for_final_mapping_or_new_regression": true
+    }
+  },
+  "preserved_failed_commands": [
+    "focused-affected",
+    "focused-load",
+    "focused-load-2",
+    "intent-regression-red",
+    "ledger-regression-red"
+  ],
+  "vectors": "12 hand bytes, 20 upstream hashes, 41 canonical/domain, 10 independent record vectors",
+  "lint": "95 active C++ files, final debug/release",
+  "exact_audits": "seven historical families plus fixed-export harness, six D6 variants, C01, new load CLI probe in both final configurations",
+  "directories": "debug/release idle after serialized final no-work builds",
+  "platform": "macOS ARM64, LLVM 23.1.4; no Linux/hardware power-loss/actual C++ allocator-exhaustion claim",
+  "next": "independent review before D8; external-profile gate follows full R14"
+}

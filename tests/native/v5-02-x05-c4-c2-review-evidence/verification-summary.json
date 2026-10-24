@@ -1,0 +1,43 @@
+{
+  "adapters.xml": {
+    "cases": 17,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "commands": 18,
+  "focused-ctest.xml": {
+    "cases": 439,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "focused_binaries": {
+    "planar_history_read_tests": 3,
+    "planar_ledger_format_tests": 82,
+    "planar_ledger_sqlite_tests": 33,
+    "planar_runtime_tests": 314,
+    "python3.15": 7
+  },
+  "full_gate": false,
+  "inventory": 800,
+  "private/baseline-layout.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "private/green-layout.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "private/green-private.xml": {
+    "cases": 13,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "release_gate": false
+}

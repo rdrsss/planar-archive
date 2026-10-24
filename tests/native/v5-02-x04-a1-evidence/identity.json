@@ -1,0 +1,13 @@
+{
+  "baseline_filesystem_sha256": "0450d55d20c117b17e2f33b7f9137ea9b3c9bbc062e1d5325c32b7d5e4c2b929",
+  "candidate_manifest_sha256": "0ac575d8d962a97733807a439d43cac866af5be1fb1c9d736a8fbf9e85d48094",
+  "final_filesystem_sha256": "8aa37991673d596b78739d34da1fe8874e91b19b33be3b722f06d6a16afffc32",
+  "focused_passed": 120,
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "inventory": 451,
+  "owned_diff_sha256": "97362f82d1e2205cdd157ee7b29c909e923a07ff66bfff0d731e396f9d7c3b85",
+  "preserved": 430,
+  "repository": "<repo>",
+  "review_status": "awaiting independent review",
+  "skips": 0
+}

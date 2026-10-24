@@ -1,0 +1,20 @@
+{
+  "added": [
+    "replacement.D2 B1 binding wrong selected file poisons before publication",
+    "replacement.D2 B1 bound input restrictions and initial ceiling failures are terminal",
+    "replacement.D2 B1 bound standalone input moves original pending authority into first plain read",
+    "replacement.D2 B1 input binding failures close profile owner and preserve immutable closure",
+    "replacement.D2 B1 input binding opens physical parents without cancellation",
+    "replacement.D2 B1 pending and captured input refuse borrowed and different retained modes",
+    "replacement.D2 B1 pending input survives profile moves and destruction",
+    "replacement.D2 B1 profile binds colocated registry without supplied parent root",
+    "replacement.D2 B1 refused unpublished binding cannot be revived by unbound registration",
+    "replacement.D2 B1 same selection retained read preserves binding before and after transfer",
+    "replacement.D2 B1 unread bound input retains metadata authority through acceptance",
+    "replacement.D2 B1 unread native input change is visible to original profile"
+  ],
+  "baseline": 826,
+  "current": 838,
+  "focused": 171,
+  "preserved": 826
+}

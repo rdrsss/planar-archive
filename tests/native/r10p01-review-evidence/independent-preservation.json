@@ -1,0 +1,74 @@
+[
+  {
+    "packet": "combined-builder",
+    "changed_manifest_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "all_other_manifest_values_exact": true,
+    "policy_and_requirements_complete": true,
+    "before_bytes": 13405,
+    "after_bytes": 12496
+  },
+  {
+    "packet": "combined-reviewer",
+    "changed_manifest_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "all_other_manifest_values_exact": true,
+    "policy_and_requirements_complete": true,
+    "before_bytes": 14415,
+    "after_bytes": 13311
+  },
+  {
+    "packet": "split-cli_worker-recovery",
+    "changed_manifest_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "all_other_manifest_values_exact": true,
+    "policy_and_requirements_complete": true,
+    "before_bytes": 11961,
+    "after_bytes": 11121
+  },
+  {
+    "packet": "split-cli_worker",
+    "changed_manifest_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "all_other_manifest_values_exact": true,
+    "policy_and_requirements_complete": true,
+    "before_bytes": 11350,
+    "after_bytes": 10543
+  },
+  {
+    "packet": "split-library_worker",
+    "changed_manifest_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "all_other_manifest_values_exact": true,
+    "policy_and_requirements_complete": true,
+    "before_bytes": 7578,
+    "after_bytes": 7542
+  },
+  {
+    "packet": "split-reviewer",
+    "changed_manifest_fields": [
+      "render",
+      "sections",
+      "versions"
+    ],
+    "all_other_manifest_values_exact": true,
+    "policy_and_requirements_complete": true,
+    "before_bytes": 14436,
+    "after_bytes": 13332
+  }
+]

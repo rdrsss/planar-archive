@@ -1,0 +1,15 @@
+[
+  "CLAUDE.md",
+  "docs/architecture.md",
+  "docs/testing.md",
+  "docs/vernacular/acceptance-matrix.md",
+  "docs/vernacular/implementation.md",
+  "docs/vernacular/load-command-contract.md",
+  "docs/vernacular/roadmap.md",
+  "docs/vernacular/v5-alignment.md",
+  "src/engine/CMakeLists.txt",
+  "src/engine/runtime/commands.t.cpp",
+  "src/engine/runtime/runtime.cpp",
+  "tests/native/r14-d6-c01-support/audit.py",
+  "tests/native/r14-d6-c01-support/generate.py"
+]

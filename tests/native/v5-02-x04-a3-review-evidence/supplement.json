@@ -1,0 +1,23 @@
+{
+  "approved_A2_baseline_source_entries_identical": 1794,
+  "configurations": {
+    "debug": {
+      "CTestCostData_exact_names": 489,
+      "LastTest_exact_names": 489
+    },
+    "release": {
+      "CTestCostData_exact_names": 489,
+      "LastTest_exact_names": 489
+    }
+  },
+  "initial_tool_failure_raw_reproduction": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/audit-initial.py",
+      "initial-runner-reproduction"
+    ],
+    "exit_code": 1,
+    "scope": "read-only reviewer audit; no product commands",
+    "utc": "2026-10-22T22:57:16.362506+00:00"
+  }
+}

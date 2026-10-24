@@ -1,0 +1,97 @@
+{
+  "candidate_diff_sha256": "39404077c4a44c532dadd4cfe032fe3f505352feb2318a4c952c0b046dc8a69e",
+  "candidate_document_sha256": {
+    "CLAUDE.md": "5e27c562be8e3c5065de117f4997044a858149b3f432ae3a84cb2660124046bb",
+    "docs/architecture.md": "eb3d3fe271beee506bf00be4ecbb41fe4d2f9457faa3a4847fa83212dd4f4f95",
+    "docs/testing.md": "5b49c58b0b4b1148bf4a596c7157fc0f8dd5802d534890bb6d8471790f52a7a7",
+    "docs/vernacular/acceptance-matrix.md": "3b29fb5522d9038f40ad94cba0ad7760d0f755e5dbdc921c194e05ae7e5c1ed2",
+    "docs/vernacular/external-profile-contract.md": "41a2153bce6bcbba46e7e0c06d93bb23f1d3c93d7b0a8a9e49c188f1153d2d1b",
+    "docs/vernacular/external-profile-implementation.md": "eec76119d95bfa5e7c82a2461502a1a87359e511fd7748e2378e2ecd90ed8e30",
+    "docs/vernacular/implementation.md": "a12dc47f4a9eba087586ef702de84a570b5a58be03a37a3197c3d536ba2caf14",
+    "docs/vernacular/roadmap.md": "4ae709b09e2ada752505010a714781af1b7cc3a38baed227b1ffbd4c22e6b8aa",
+    "docs/vernacular/v5-alignment.md": "4e589fde03a1615f8d5f1c4577268ae36059a9096706742aff34c140b8723000",
+    "docs/vernacular/x06-implementation.md": "bef81a404669b9c3254ef685270f19634b8a6bd5850428845bd60ef5a4ccd6b1"
+  },
+  "evidence": {
+    "REPORT.md": {
+      "sha256": "95403f30b657a5920c48d71dc68dbb148f1c0f3ac3c9c8be80809e78ceabc7d7",
+      "size": 2725
+    },
+    "baseline.json": {
+      "sha256": "d44fd7ee3e8f4ee8c6c23d8d015607aa3cf2b01b5bdbfae995271e283e565d22",
+      "size": 25438732
+    },
+    "candidate.diff": {
+      "sha256": "39404077c4a44c532dadd4cfe032fe3f505352feb2318a4c952c0b046dc8a69e",
+      "size": 41890
+    },
+    "checks.json": {
+      "sha256": "235b583e4867decb3d8c4b790837549096025672666812ca333b278ab0c7dc5d",
+      "size": 643
+    },
+    "final-check.log": {
+      "sha256": "235b583e4867decb3d8c4b790837549096025672666812ca333b278ab0c7dc5d",
+      "size": 643
+    },
+    "final-protection.json": {
+      "sha256": "a0f640d62ef905d8a9c7832b248023786924daf3b5bf6b7dc0dab92b5b7c8dd0",
+      "size": 25438967
+    },
+    "identity-check.log": {
+      "sha256": "58176f6ff3a8111a98acacc5bc8762f3866fd091d228f7418c51454955d5baf8",
+      "size": 261
+    },
+    "identity-checks.json": {
+      "sha256": "58176f6ff3a8111a98acacc5bc8762f3866fd091d228f7418c51454955d5baf8",
+      "size": 261
+    },
+    "identity_checks.py": {
+      "sha256": "d332fce43c81f99edd9448acaecf937b91da09ff445d368c66f2d4c6bde5208f",
+      "size": 1573
+    },
+    "initial-link-check.txt": {
+      "sha256": "54a679ee4aaefbba37d3d3662acc3e1e8c1b836ded69e2ed5bb27c4b4a5ca17d",
+      "size": 359
+    },
+    "preedit/CLAUDE.md": {
+      "sha256": "f310ee28b33925fa14e390a1f88fd6372b2b07e1eafe7e131d195c8db32bfe01",
+      "size": 69883
+    },
+    "preedit/docs/architecture.md": {
+      "sha256": "1276ee20799c170f67cd437710e9dc15eacfc48d0ac920552a7e62a698f9a140",
+      "size": 123956
+    },
+    "preedit/docs/testing.md": {
+      "sha256": "4e1b5430c203f1cb1f13908b575d05418f854afc035ab81b816c481bd78e2ec3",
+      "size": 127893
+    },
+    "preedit/docs/vernacular/acceptance-matrix.md": {
+      "sha256": "5b3650649ee0cc658f6007d36979e55f4c07433f27bffb2a7110793216f43edf",
+      "size": 34165
+    },
+    "preedit/docs/vernacular/external-profile-contract.md": {
+      "sha256": "289ac9d08a6b9af064e9700063132be558f630e9f1cec6efe3da72e6ec29bae5",
+      "size": 48944
+    },
+    "preedit/docs/vernacular/external-profile-implementation.md": {
+      "sha256": "ce422972278450523fda07bd772737eaffdf4c89a4009b4725e36e474caef6d0",
+      "size": 76275
+    },
+    "preedit/docs/vernacular/implementation.md": {
+      "sha256": "17d0b5d983bb81b8a2cd801ad79db307dba89457c5a282efcc4f549569443bbb",
+      "size": 78992
+    },
+    "preedit/docs/vernacular/roadmap.md": {
+      "sha256": "97647374632e488d6a4361f2d67d7ceb22187cef45e4a7811135ba5089d5e154",
+      "size": 85214
+    },
+    "preedit/docs/vernacular/v5-alignment.md": {
+      "sha256": "0d413061e0d6e0629eeed2af51a42af1d2ab25da6413ca3b1e35b8beabf20cbd",
+      "size": 26018
+    },
+    "verify.py": {
+      "sha256": "e7bac50de5216e74013e22aa20d6cf59a90de56d74addea6d8a901778e426c25",
+      "size": 3107
+    }
+  }
+}

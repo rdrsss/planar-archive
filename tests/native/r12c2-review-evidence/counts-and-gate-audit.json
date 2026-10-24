@@ -1,0 +1,78 @@
+{
+  "debug": {
+    "focused": {
+      "selected": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0
+    },
+    "callback_positions": [
+      [
+        "true",
+        "false",
+        "4"
+      ],
+      [
+        "true",
+        "true",
+        "2"
+      ],
+      [
+        "false",
+        "false",
+        "2"
+      ],
+      [
+        "false",
+        "true",
+        "1"
+      ]
+    ],
+    "full_gate_passed": 170,
+    "full_gate_skipped": 0,
+    "full_gate_lint_sources": 37,
+    "full_gate_no_work": true,
+    "independent_initial_build_no_work": true
+  },
+  "release": {
+    "focused": {
+      "selected": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0
+    },
+    "callback_positions": [
+      [
+        "true",
+        "false",
+        "4"
+      ],
+      [
+        "true",
+        "true",
+        "2"
+      ],
+      [
+        "false",
+        "false",
+        "2"
+      ],
+      [
+        "false",
+        "true",
+        "1"
+      ]
+    ],
+    "full_gate_passed": 170,
+    "full_gate_skipped": 0,
+    "full_gate_lint_sources": 37,
+    "full_gate_no_work": true,
+    "independent_initial_build_no_work": true
+  },
+  "acceptance": {
+    "cli_processes": 247,
+    "goldens": 6,
+    "host_path_checks": 60,
+    "skipped": 0
+  }
+}

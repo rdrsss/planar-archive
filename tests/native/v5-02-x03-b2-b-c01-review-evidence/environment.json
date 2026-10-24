@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python3",
+    "-c",
+    "import platform,subprocess; print(platform.platform()); print(subprocess.check_output([\"cmake\",\"--version\"],text=True).strip()); print(subprocess.check_output([\"/opt/homebrew/opt/llvm/bin/clang++\",\"--version\"],text=True).strip())"
+  ],
+  "cwd": "<repo>",
+  "start": 1792703686.93574,
+  "end": 1792703687.2433689,
+  "exit_code": 0
+}

@@ -1,0 +1,12 @@
+{
+  "path_base": "tests/native/r14d01-review-evidence",
+  "files": {
+    "README.md": "5a637a2576a701704c0943a8b2e6f83babe7ee8509fbf6f6b8a3430adf7fe8c5",
+    "coder-candidate.diff": "fd3598139dcfaa0b0d5685025a43872f6a0119119e6921aff44b6ca796bac2f2",
+    "coder-candidate.json": "640d91b58b89bb4fc3e063bfae9f8e98f93841f2b712227e2bed521971f65ef6",
+    "coder-evidence.json": "981ae061208ff9ff8d6c741f0f331ccbf768f0d3bf946e69fb16f1cc7d3f49f9",
+    "coder-protected.json": "e8b3bf8e3381d1115d71010f9e8733683fdab4c24bcd763b1f05c0f74f789a35",
+    "verification.json": "c298d110d70ff26c0c61a88ccf1b0e82f6954f69d6f1061cc86b28103a53fef6",
+    "verify.py": "8ee9beb4379c07ac770f5d9adbd5de670fe0cef98f2d38e293accfacb7191838"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "added_names": [
+    "replacement.recorded effective history selects wider fixed tree profile for valid closure above4096 files",
+    "replacement.recorded effective provenance refuses request v1 independently of format2 schema",
+    "replacement.recorded history requires request selector family on accepted and noop events",
+    "replacement.recorded profile actual raw tree workspace digest catalog and selection forgeries refuse",
+    "replacement.recorded profile history reconstructs effective v2 and projects every selector",
+    "replacement.recorded profile saved accepted and noop replay precede unusable preparation while fresh profile stays refused",
+    "replacement.recorded profile unknown interpretation preserves raw export without semantic payload",
+    "replacement.recorded profile unknown manifest refuses typed unsupported before export"
+  ],
+  "all_hashes_membership_sizes": true,
+  "author_baseline_members": 94061,
+  "author_final_members": 94061,
+  "author_protection_verified": true,
+  "candidate_files": 13,
+  "evidence_files": 74,
+  "historical_bodies_unchanged": 9,
+  "inventory": 918,
+  "narrow_product_scope": true,
+  "preedit_and_exact_diff": true,
+  "prior_names_preserved": 910,
+  "review_baseline_members": 94149,
+  "root_symlinks_preserved": true,
+  "source_red_and_fixture_failures_preserved": {
+    "bounds-tests.xml": {
+      "error_elements": 0,
+      "failure_elements": 1,
+      "skip_elements": 0,
+      "suites": [
+        {
+          "errors": "0",
+          "failures": "1",
+          "hostname": "tbd",
+          "name": "planar_ledger_format_tests",
+          "skipped": "0",
+          "tests": "17",
+          "time": "0.064",
+          "timestamp": "2026-10-24T13:51:54Z"
+        }
+      ]
+    },
+    "bounds-tests2.xml": {
+      "error_elements": 0,
+      "failure_elements": 0,
+      "skip_elements": 0,
+      "suites": [
+        {
+          "errors": "0",
+          "failures": "0",
+          "hostname": "tbd",
+          "name": "planar_ledger_format_tests",
+          "skipped": "0",
+          "tests": "93",
+          "time": "9.210",
+          "timestamp": "2026-10-24T13:52:39Z"
+        }
+      ]
+    },
+    "first-tests.xml": {
+      "error_elements": 0,
+      "failure_elements": 0,
+      "skip_elements": 0,
+      "suites": [
+        {
+          "errors": "0",
+          "failures": "0",
+          "hostname": "tbd",
+          "name": "planar_ledger_format_tests",
+          "skipped": "0",
+          "tests": "88",
+          "time": "0.058",
+          "timestamp": "2026-10-24T13:49:47Z"
+        }
+      ]
+    },
+    "focused-tests.xml": {
+      "error_elements": 0,
+      "failure_elements": 0,
+      "skip_elements": 0,
+      "suites": []
+    },
+    "red-tests.xml": {
+      "error_elements": 0,
+      "failure_elements": 1,
+      "skip_elements": 0,
+      "suites": [
+        {
+          "errors": "0",
+          "failures": "1",
+          "hostname": "tbd",
+          "name": "planar_ledger_format_tests",
+          "skipped": "0",
+          "tests": "76",
+          "time": "0.029",
+          "timestamp": "2026-10-24T13:48:51Z"
+        }
+      ]
+    },
+    "supplement-tests.xml": {
+      "error_elements": 0,
+      "failure_elements": 0,
+      "skip_elements": 0,
+      "suites": []
+    }
+  },
+  "support_files": 3,
+  "untouched_A1_A2_prepared_transaction_load_runtime_Lua_export_contract": true
+}

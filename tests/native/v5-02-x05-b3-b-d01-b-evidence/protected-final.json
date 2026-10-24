@@ -1,0 +1,10 @@
+{
+  "entries": 5310,
+  "permitted_product_changes": [
+    "src/engine/json_codec/codec.cpp",
+    "src/engine/json_codec/codec.cppm",
+    "src/engine/json_codec/codec.t.cpp"
+  ],
+  "other_changes": [],
+  "membership_unchanged": true
+}

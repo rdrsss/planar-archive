@@ -1,0 +1,20 @@
+{
+  "AGENTS_symlink_preserved": true,
+  "all_bytes_preserved_except_permitted_debug_metadata": [
+    "build/rewrite-debug/.ninja_log"
+  ],
+  "all_edits_released": true,
+  "all_membership_modes_symlinks_preserved": true,
+  "author_artifacts": 363,
+  "candidate_entries": 232,
+  "codec_cases": 25,
+  "debug_entries": 4304,
+  "debug_released": true,
+  "entries": 52378,
+  "no_later_edits_planned": true,
+  "no_work_build": true,
+  "release_entries": 4238,
+  "reviewer_private_compiled_entries": 888,
+  "shared_compiled_entries": 888,
+  "unchanged_HEAD": true
+}

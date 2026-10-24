@@ -1,0 +1,11 @@
+{
+  "path_base": "repository root",
+  "parsed": [
+    "tests/native/v5-02-c-support/cli.py",
+    "tests/native/v5-02-c-support/freeze.py",
+    "tests/native/v5-02-c-support/gate.py",
+    "tests/native/v5-02-c-support/red.py",
+    "tests/acceptance/bootstrap_paths.py"
+  ],
+  "count": 5
+}

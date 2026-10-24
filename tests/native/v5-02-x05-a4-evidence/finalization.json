@@ -1,0 +1,13 @@
+{
+  "artifact_manifest_sha256": "ca79b698e7b8a2a6023f11166078289a6653abfe6a3ff11857525b0d9d6e6e52",
+  "artifacts": 244,
+  "build_directories_idle": true,
+  "candidate_sha256": "4dc82171c97f66d764f97fcc1145ccba81e8ea8decc8a15f969614d2e90b820e",
+  "final_filesystem_sha256": "070c6eefb5f036dda7278b25174bf5bb3e78cf913082cfd250fe8b37979aa76b",
+  "no_further_author_edits": true,
+  "owned_diff_sha256": "81d9cd1ed957f05303cf7f50e056259127ee39c40d3029c9595f7a300028eb22",
+  "released_utc": "2026-10-23T05:33:26.228973+00:00",
+  "report_sha256": "1a8e90be9594c54395cc89c472336a9284c07e54625028649089725c9e51d57f",
+  "source_entries": 24022,
+  "source_freeze_sha256": "2b25473281360b2527c52d027dedcc52daac633948b6953543e7b48cb08b8608"
+}

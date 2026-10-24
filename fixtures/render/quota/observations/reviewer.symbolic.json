@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "checks": [
+    {
+      "id": "integration_note",
+      "check": "integration",
+      "target": {
+        "work": "command",
+        "output": "$O_COMMAND"
+      },
+      "reported": "inconclusive",
+      "summary": "Illustrative driver note: integration receipt is unavailable; do not infer completion.",
+      "vector": [
+        {
+          "work": "command",
+          "output": "$O_COMMAND"
+        },
+        {
+          "work": "library",
+          "output": "$O_LIBRARY"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "review_note",
+      "target": {
+        "work": "library",
+        "output": "$O_LIBRARY"
+      },
+      "severity": "note",
+      "text": "Inspect lock coverage against the captured contract; this note grants no approval."
+    }
+  ]
+}

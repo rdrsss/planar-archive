@@ -1,0 +1,9 @@
+{
+  "B3_C_old_render": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364",
+  "current_render": "d862c5f6acd0cf1b687b60272458f011f81715c87ccd4a38c2312795184b632d",
+  "current_bootstrap": "54d13632cc585b603781ccf4eda2fbb8394d82b12ed088ee7539f799270d1dd8",
+  "B4_A_baseline_render": "deb4f2722bb40f71778a22f5483722531f13680e3fa4fa91b76ae5370ca10f82",
+  "C01_only_product_runtime_change": "src/stdlib/planar/render.lua",
+  "review_scope": "combined original pure helper and C01; no native authenticity or full milestone gate",
+  "native_product_runtime_unchanged": true
+}

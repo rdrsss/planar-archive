@@ -1,0 +1,27 @@
+{
+  "added": [
+    "replacement.capture admission root binding checks original ancestors leaf names and modes",
+    "replacement.capture admission root binding refuses wrong descriptor slot and invalid descriptor terminally",
+    "replacement.capture admission root binding retains exited physical parent branches",
+    "replacement.capture admission root binding retains original directory and ignores sibling timestamps",
+    "replacement.capture native bound root mismatch verifies before overlap and publishes nothing",
+    "replacement.capture native bound roots never cancel missing link or file parents",
+    "replacement.capture native bound roots preserve duplicate and physical overlap policy",
+    "replacement.capture native bound roots support physical parent spelling through final verification",
+    "replacement.capture native bound roots validate absolute host text without publishing",
+    "replacement.profile capture binds roots through the moved original admission and preserves closure",
+    "replacement.profile capture bound root failures close owner and leave original snapshot intact",
+    "replacement.profile capture bound roots still verify original trusted content receipts"
+  ],
+  "attempt1_reconstruction_labeled": true,
+  "author_cleanup_verified": true,
+  "author_commands_all_final_zero": true,
+  "author_old_harness_failures_preserved": true,
+  "baseline_preserved": 800,
+  "failed_enum_control_cases": 3,
+  "failed_read_control_cases": 3,
+  "final_focused": 145,
+  "final_private": 3,
+  "first_frozen_focused": 145,
+  "inventory_current": 812
+}

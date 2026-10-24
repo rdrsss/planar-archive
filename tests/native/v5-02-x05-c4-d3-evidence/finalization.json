@@ -1,0 +1,15 @@
+{
+  "active_processes": false,
+  "artifact_entries": 253,
+  "artifact_manifest_sha256": "cb2834a7c9c5da37b8d6210427a299a23b82feccee4c1558685c483d39df04b9",
+  "candidate_entries": 28,
+  "candidate_sha256": "d554bccb9b1f2d65418abebf934addb6d55b4f2bf8bb8918bddb00b8ff55efee",
+  "debug_and_files_released": true,
+  "frozen_inputs_unchanged": true,
+  "full_gate": false,
+  "independent_review_pending": true,
+  "linux_gate": false,
+  "no_self_approval": true,
+  "release_gate": false,
+  "report_sha256": "2e0a9cdedb6fbb7062a6cc61547c7fc52fcfb78599e869993a82bf36e54f0023"
+}

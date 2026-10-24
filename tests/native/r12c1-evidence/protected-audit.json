@@ -1,0 +1,17 @@
+{
+  "baseline_files": 3345,
+  "unchanged": 3337,
+  "owned_changes": [
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/sqlite.cpp",
+    "src/engine/ledger/sqlite.cppm",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/sqlite.t.cpp",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "coordinator_records": [],
+  "unexpected_changes": [],
+  "missing": []
+}

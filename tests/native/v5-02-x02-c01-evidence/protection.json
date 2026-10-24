@@ -1,0 +1,17 @@
+{
+  "baseline_files": 14740,
+  "changed": {
+    "docs/vernacular/external-profile-contract.md": {
+      "before": "de7a74e175aaf47c633776116dc3afc97b85335dabbddd88eb2f922c96e342a8",
+      "after": "93a2202ab841502a1753fb3484d66b9e7c0afb7822bda5289fddaa6a4d213ef6"
+    },
+    "docs/vernacular/external-profile-implementation.md": {
+      "before": "37f7d4d8872a9c6356097aee7f96e93435df6d9668aae46552fde6fa2ba4b2c8",
+      "after": "06a8063502a514c3823d40f447149253b48a451226f9c31222d27696d7460083"
+    }
+  },
+  "added": [],
+  "unexpected_changed": [],
+  "unexpected_added": [],
+  "agents_symlink": "CLAUDE.md"
+}

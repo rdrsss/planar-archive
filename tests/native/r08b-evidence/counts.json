@@ -1,0 +1,46 @@
+{
+  "ctest-frozen": {
+    "case_records": 83,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "suite_attributes": []
+  },
+  "json": {
+    "case_records": 4,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "suite_attributes": [
+      {
+        "name": "planar_json_tests",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "31",
+        "hostname": "tbd",
+        "time": "0.570",
+        "timestamp": "2026-10-20T10:17:23Z"
+      }
+    ]
+  },
+  "command": {
+    "case_records": 3,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "suite_attributes": [
+      {
+        "name": "planar_command_tests",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "11",
+        "hostname": "tbd",
+        "time": "0.001",
+        "timestamp": "2026-10-20T10:20:01Z"
+      }
+    ]
+  },
+  "candidate_files": 25
+}

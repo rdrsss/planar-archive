@@ -1,0 +1,13 @@
+{
+  "note": "Reviewer-only build outputs removed after successful probes; build_probes.py reproduces them against the exact candidate debug libraries.",
+  "files": {
+    "probes": {
+      "sha256": "e73b7beb143db1fb4ffb2ff5b05c63556c3e041c7460afa8d96b55fc6755190b",
+      "bytes": 11326136
+    },
+    "probes.o": {
+      "sha256": "f146606dcd95c76edd4e5d6657b265eec491141c8509da95b9fdbac5be9bbfa7",
+      "bytes": 4072792
+    }
+  }
+}

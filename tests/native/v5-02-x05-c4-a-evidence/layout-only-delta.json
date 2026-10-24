@@ -1,0 +1,8 @@
+{
+  "all_non_support_candidate_entries_identical": true,
+  "changed": [
+    "tests/native/v5-02-x05-c4-a-support/accounting.md",
+    "tests/native/v5-02-x05-c4-a-support/allocator-probes.inc",
+    "tests/native/v5-02-x05-c4-a-support/private.py"
+  ]
+}

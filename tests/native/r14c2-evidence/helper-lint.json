@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "tests/native/r12c2-support/posix.cppm",
+    "tests/native/r12c2-support/posix.cpp",
+    "tests/native/r13b1-support/digest.cppm",
+    "tests/native/r13b1-support/collision.t.cpp"
+  ],
+  "exit": 0,
+  "log": "helper-lint.txt",
+  "note": "Four unchanged verification helper C++ files; no warnings."
+}

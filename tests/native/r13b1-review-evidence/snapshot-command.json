@@ -1,0 +1,8 @@
+{
+  "command": [
+    "tests/native/r13b1-review-evidence/snapshot-probe",
+    "[snapshot]"
+  ],
+  "exit": 42,
+  "expected_exit": 42
+}

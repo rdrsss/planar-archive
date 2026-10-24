@@ -1,0 +1,72 @@
+{
+  "audit-attempt1.json": {
+    "bytes": 554,
+    "mode": 420,
+    "sha256": "3af3f5c5eb10468c79ce45b0e0327a56200259d8508876276178be91ed56adb6"
+  },
+  "audit.log": {
+    "bytes": 381,
+    "mode": 420,
+    "sha256": "2dd783b454535d00f3c7ac91fd66e738c8712add50a39497bd8be05b1b659970"
+  },
+  "audit.py": {
+    "bytes": 7407,
+    "mode": 420,
+    "sha256": "38e61324fc6a223747bda7a77776ca979bc86993488d2e4994260cc147c07015"
+  },
+  "author-protection-audit.json": {
+    "bytes": 277,
+    "mode": 420,
+    "sha256": "12c051168904a26b9c7ff7a99dd64714def69ad1f7c01916b5e8b11a9c5effde"
+  },
+  "finalize.py": {
+    "bytes": 2937,
+    "mode": 420,
+    "sha256": "07ad8bbde63cc6629a273ec7726efad772a37acc79558905f763af64b5c4a7f6"
+  },
+  "identity-audit.json": {
+    "bytes": 9525,
+    "mode": 420,
+    "sha256": "96ff1a115101750d100b792cbcba12c45b9fedf540a2881bb6556808e7f7499c"
+  },
+  "independent-D3-to-D4.diff": {
+    "bytes": 31784,
+    "mode": 420,
+    "sha256": "2d557d26a158ffc1ae730d12d907d2b8e2815cc0a6c5b01fe3267a246996e83b"
+  },
+  "protect.py": {
+    "bytes": 2028,
+    "mode": 420,
+    "sha256": "79c67995f26ab1bc9665913fde00c1023fb86838fe8fefc8a249de9d3cf27948"
+  },
+  "protected-before.json": {
+    "bytes": 16025749,
+    "mode": 420,
+    "sha256": "0c57273bfb4a93647f138f3bf3957632d101a7d739abf26e4fc5760d07610c33"
+  },
+  "protection-result.json": {
+    "bytes": 413,
+    "mode": 420,
+    "sha256": "f8713ef4267a022da3859719a737ad395aa3011dff8c31cff60c7425f6ae1b33"
+  },
+  "reviewed-candidate.json": {
+    "bytes": 2687,
+    "mode": 420,
+    "sha256": "c67da31ced796500bfcea925976dfde2f18b7290e84fe1048e5a36782d9a2a86"
+  },
+  "status-documents.diff": {
+    "bytes": 13826,
+    "mode": 420,
+    "sha256": "385d2f2093fc43f2f15ae8bf6e3e67ac565912b40fa6f8a633bf5a7752d5e7f5"
+  },
+  "verification-summary.json": {
+    "bytes": 851,
+    "mode": 420,
+    "sha256": "527720425748576d441d9204da6939144b4ff5cccbc3dc9e8fee23f1aec936bc"
+  },
+  "xml-audit.json": {
+    "bytes": 1743,
+    "mode": 420,
+    "sha256": "83e951d28d5a1487e8f1029304a4583001ec525343a2a40090ab5635744bd322"
+  }
+}

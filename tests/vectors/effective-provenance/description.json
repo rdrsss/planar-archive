@@ -1,0 +1,276 @@
+{
+  "assembly": "__planar__/embedded.lua",
+  "catalog": {
+    "commands": [
+      {
+        "descriptor": {
+          "capabilities": [
+            "export_source_v1"
+          ],
+          "family": "export",
+          "handler_id": "shipped.export.v1",
+          "help": "help",
+          "name": "export",
+          "options": [
+            {
+              "help": "option",
+              "name": "--ledger",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--revision",
+              "required": true,
+              "type": "decimal"
+            },
+            {
+              "help": "option",
+              "name": "--target",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "response_kind": "export_v1"
+        },
+        "owner": {
+          "module": "shipped/planar/commands.lua",
+          "ordinal": 2,
+          "tier": "shipped"
+        }
+      },
+      {
+        "descriptor": {
+          "capabilities": [
+            "read_history_v1"
+          ],
+          "family": "history",
+          "handler_id": "shipped.history.v1",
+          "help": "help",
+          "name": "history",
+          "options": [
+            {
+              "help": "option",
+              "name": "--after-event",
+              "required": false,
+              "type": "decimal"
+            },
+            {
+              "help": "option",
+              "name": "--at-event",
+              "required": false,
+              "type": "decimal"
+            },
+            {
+              "help": "option",
+              "name": "--ledger",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--limit",
+              "required": false,
+              "type": "decimal"
+            },
+            {
+              "help": "option",
+              "name": "--request-id",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--revision",
+              "required": false,
+              "type": "decimal"
+            }
+          ],
+          "response_kind": "history_v1"
+        },
+        "owner": {
+          "module": "shipped/planar/commands.lua",
+          "ordinal": 2,
+          "tier": "shipped"
+        }
+      },
+      {
+        "descriptor": {
+          "capabilities": [
+            "initialize_ledger_v1"
+          ],
+          "family": "init",
+          "handler_id": "shipped.init.v1",
+          "help": "help",
+          "name": "init",
+          "options": [
+            {
+              "help": "option",
+              "name": "--ledger",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--workspace-id",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "response_kind": "init_v1"
+        },
+        "owner": {
+          "module": "shipped/planar/commands.lua",
+          "ordinal": 2,
+          "tier": "shipped"
+        }
+      },
+      {
+        "descriptor": {
+          "capabilities": [
+            "accept_load_v1"
+          ],
+          "family": "load",
+          "handler_id": "shipped.load.v1",
+          "help": "help",
+          "name": "load",
+          "options": [
+            {
+              "help": "option",
+              "name": "--actor",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--expect-revision",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--ledger",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--registry",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--request-id",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--workspace",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "response_kind": "load_v1"
+        },
+        "owner": {
+          "module": "shipped/planar/commands.lua",
+          "ordinal": 2,
+          "tier": "shipped"
+        }
+      },
+      {
+        "descriptor": {
+          "capabilities": [
+            "render_capture_v1"
+          ],
+          "family": "render",
+          "handler_id": "shipped.render.v1",
+          "help": "help",
+          "name": "render",
+          "options": [
+            {
+              "help": "option",
+              "name": "--base-root",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--budget-bytes",
+              "required": false,
+              "type": "decimal"
+            },
+            {
+              "help": "option",
+              "name": "--capture-outputs",
+              "required": false,
+              "type": "flag"
+            },
+            {
+              "help": "option",
+              "name": "--job",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--observations",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--registry",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--role",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--root",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "help": "option",
+              "name": "--workspace",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "response_kind": "render_v1"
+        },
+        "owner": {
+          "module": "shipped/planar/commands.lua",
+          "ordinal": 2,
+          "tier": "shipped"
+        }
+      }
+    ],
+    "projections": [],
+    "shapes": [],
+    "version": 2
+  },
+  "embedded": "__planar__/embedded.bin",
+  "modules": [
+    {
+      "mode": 493,
+      "path": "external/ext/z.lua"
+    },
+    {
+      "mode": 420,
+      "path": "external/ext/a.lua"
+    }
+  ],
+  "profile": "profile/input.json",
+  "registration": "external_registration_v1",
+  "scheme": "effective_stdlib_v1",
+  "version": 1
+}

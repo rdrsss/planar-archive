@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "planar_runtime_tests": 287,
+    "planar_ledger_format_tests": 82,
+    "planar_ledger_sqlite_tests": 33,
+    "planar_history_read_tests": 3
+  },
+  "cli": 7,
+  "total": 412,
+  "skips": 0,
+  "current_inventory": 773,
+  "prior_inventory": 767,
+  "preserved": true
+}

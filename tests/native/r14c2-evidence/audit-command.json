@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "python3",
+    "tests/native/r14c2-evidence/audit.py"
+  ],
+  "exit": 0,
+  "log": "audit-final.txt"
+}

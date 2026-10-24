@@ -1,0 +1,50 @@
+{
+  "cmake/embed_lua.cmake": {
+    "expected": "666e9ae92fc87313095ff8e9bd1ade65dbae5bd67060733f3bbb7bde6eb0cd3d",
+    "actual": "666e9ae92fc87313095ff8e9bd1ade65dbae5bd67060733f3bbb7bde6eb0cd3d"
+  },
+  "cmake/rewrite.cmake": {
+    "expected": "8ec5cf1d0f3589ae3f8529dbde02e155e99dc836d53854d723cec0bba2422526",
+    "actual": "8ec5cf1d0f3589ae3f8529dbde02e155e99dc836d53854d723cec0bba2422526"
+  },
+  "src/kernel/CMakeLists.txt": {
+    "expected": "f8ec6fea5225d51b83500bd39a827c251641e59fbdcff6a1282ca33e6053bbdd",
+    "actual": "f8ec6fea5225d51b83500bd39a827c251641e59fbdcff6a1282ca33e6053bbdd"
+  },
+  "src/kernel/runtime/runtime.cppm": {
+    "expected": "a87fbd8b7598270e28b6edba53dd1bbd0522a3c281f961bc64ada6773c142185",
+    "actual": "a87fbd8b7598270e28b6edba53dd1bbd0522a3c281f961bc64ada6773c142185"
+  },
+  "src/kernel/runtime/runtime.cpp": {
+    "expected": "d2f3480c7dea0280c456584818faca614bbebade500e9c8e002af7f1c17ef8e0",
+    "actual": "d2f3480c7dea0280c456584818faca614bbebade500e9c8e002af7f1c17ef8e0"
+  },
+  "src/kernel/runtime/runtime.t.cpp": {
+    "expected": "8f1502cbfb7836ebbf62723ee96a4a2a601338b5d3fd753c0bb4b76001bb83f5",
+    "actual": "8f1502cbfb7836ebbf62723ee96a4a2a601338b5d3fd753c0bb4b76001bb83f5"
+  },
+  "stdlib/planar/bootstrap.lua": {
+    "expected": "4d84a194597198224d4eef3e015cf7c73a7afe71eb84f28490b39959ffae77c0",
+    "actual": "4d84a194597198224d4eef3e015cf7c73a7afe71eb84f28490b39959ffae77c0"
+  },
+  "stdlib/planar/README.md": {
+    "expected": "4f386b5d41fe4a891f3d5ec21308cd0db741f1ff0f2ed327a227fff00735dc43",
+    "actual": "4f386b5d41fe4a891f3d5ec21308cd0db741f1ff0f2ed327a227fff00735dc43"
+  },
+  "tests/stdlib/harness.cppm": {
+    "expected": "7decac9fa158c5bffb829a1097f0ecea9f9d045a4aa27579c0647d567108d6df",
+    "actual": "7decac9fa158c5bffb829a1097f0ecea9f9d045a4aa27579c0647d567108d6df"
+  },
+  "tests/stdlib/bridge.lua": {
+    "expected": "2cee969a37aa6825d0dd9c367a7f87c8151df95f65224c46d1894e2b53410a33",
+    "actual": "2cee969a37aa6825d0dd9c367a7f87c8151df95f65224c46d1894e2b53410a33"
+  },
+  "docs/architecture.md": {
+    "expected": "f89bfead0876951ac6eb71b7509d523f3485f1902a968f1372a7b851e14597dd",
+    "actual": "f89bfead0876951ac6eb71b7509d523f3485f1902a968f1372a7b851e14597dd"
+  },
+  "docs/testing.md": {
+    "expected": "ca6c80a8c6b3bd78b0c0584c7351cc73f4f0a46affaa3fb030507a455e360cd6",
+    "actual": "ca6c80a8c6b3bd78b0c0584c7351cc73f4f0a46affaa3fb030507a455e360cd6"
+  }
+}

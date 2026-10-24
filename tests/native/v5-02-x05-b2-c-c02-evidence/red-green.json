@@ -1,0 +1,14 @@
+{
+  "production_regression_argv": [
+    "build/rewrite-debug/src/engine/planar_runtime_tests",
+    "[shape-prior-resource]"
+  ],
+  "red_exit_code": 42,
+  "initial_green_exit_code": 0,
+  "red_runtime_sha256": "a25e768815546792cee33f71acec2d80903a4a542c52dceb0833aea535643732",
+  "fault_injection": false,
+  "resource": "existing cumulative native work counter",
+  "red_log": "red.log",
+  "initial_green_log": "green.log",
+  "final_rerun": "final-gate/focused.xml"
+}

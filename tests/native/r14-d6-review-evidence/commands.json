@@ -1,0 +1,80 @@
+[
+  {
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-review-evidence/audit.py"
+    ],
+    "start_utc": "2026-10-21T19:08:01.254452+00:00",
+    "log": "audit.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:08:04.095017+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start_utc": "2026-10-21T19:08:06.350175+00:00",
+    "log": "build.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:08:06.469623+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(command |runtime |load capture )",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d6-review-evidence/focused.xml"
+    ],
+    "start_utc": "2026-10-21T19:08:10.027141+00:00",
+    "log": "focused.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:08:50.952330+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "start_utc": "2026-10-21T19:09:06.188365+00:00",
+    "log": "inventory.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:09:06.224016+00:00"
+  },
+  {
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d6-review-evidence/private-variants.json"
+    ],
+    "start_utc": "2026-10-21T19:09:06.332256+00:00",
+    "log": "private-variants.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:09:06.551814+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start_utc": "2026-10-21T19:09:06.686176+00:00",
+    "log": "no-work.log",
+    "exit": 0,
+    "end_utc": "2026-10-21T19:09:06.800951+00:00"
+  }
+]

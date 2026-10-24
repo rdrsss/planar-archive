@@ -1,0 +1,25 @@
+{
+  "sha256": {
+    "base/src/core/quota.py": "daaca196ac1ed5eb80e88ee09cf2216103a1cf31660386037f175f85314e1fca",
+    "base/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+    "base/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+    "current/src/cli/main.py": "fe3f0f3164b01a9e61e50800595813cbb02e1c33ff61d5a6c0100365a358912b",
+    "current/src/core/quota.py": "34abf0bb16524b1eb58891bf5e5eae163186a71569c6a1540b1c2b207d3ec3f4",
+    "current/tests/cli/__init__.py": "865fd3786c7da10e39f5cc97a75446847da6fc25a62a96f95c6d4bb9da57391e",
+    "current/tests/cli/test_contract.py": "8e03e65d1bd4579263c04c0502e3a89d38956766cbb293f4dbacd765657d924a",
+    "current/tests/cli/test_integration.py": "0deec819a7dd514500d16775b2fdced84049b49cace326de94f6d04bcdec5338",
+    "current/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+    "current/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+    "observations/empty.json": "5fcbdafdf5d58ac06c32ebb1323b96863662b837442cac8e3d82cfc6fc6e33f0",
+    "observations/recovery.json": "78f5d5e9dfaf76792f09fa7f28070d2ce8148d85e3ed0c31265476c39db25d41",
+    "observations/reviewer.symbolic.json": "c7337596b6c20871e6021bd710de5b8f5c566dee3913b23f8b09f4204fc20708",
+    "registry/quota-tools.json": "4894e5684d1574d8abd37b875d71c66704b34293af3f094b4f1bf036da87eb43",
+    "workspace/combined.lua": "462be3ceadfae3ef50dca7a3a245dee23dae22ddadfd7d1328052d0c8da95602",
+    "workspace/spec.lua": "e0d488603bf98845dc3e05240c4df16b19aedc86f9b913b9bd3ca618d9948207",
+    "workspace/split.lua": "6d3e2d2e981ec4507f27970a550f8074b0f4e0dfffc8b9cd02cf3641fc119c56",
+    "workspace/text/quota-api.md": "345af7f2c3662cbf956f9cf01f15cb03a4461cb4b256eeb6274e46ef2a2257d8",
+    "workspace/text/shared.md": "0b9e5252625357561ad686366c0551305efac1d79e4b271d65a46d3a178c2d65",
+    "workspace/workspace.lua": "b2fc8fd2f5f4b588203c5d9179817e1d3744f5ce804b491d62ac978396aed08a"
+  },
+  "unchanged_count": 20
+}

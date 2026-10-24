@@ -1,0 +1,20 @@
+{
+  "native": {
+    "cpp": {
+      "production": "715de12988c52e7cf0fd4df2e04a1cf3ba3ddc285285c57d15e95211f4438a5f",
+      "test": "5533798dc5ed5c4228800dc46d855c462d079d175aa3b558102a7003c8c67de6"
+    },
+    "cppm": {
+      "production": "a85fdc6a937811966bbc9df32bbbd1ee48b7399066a9b53987a585bc474f3cb3",
+      "test": "c030baf6cda3045261578c9e94b3627c5f4500a94171813e7d21bf02d916f4ee"
+    }
+  },
+  "originals": [
+    "planar/json.lua",
+    "planar/schema.lua",
+    "planar/semantic.lua",
+    "tests/stdlib/x05-shapes.lua"
+  ],
+  "assembly_sha256": "776e18e556e112c48faff7a1c9c8da710fa5acf7a0e5c1c7bae1c84075b14233",
+  "product_embed_list_unchanged": true
+}

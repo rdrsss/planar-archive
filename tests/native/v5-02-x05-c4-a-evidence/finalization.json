@@ -1,0 +1,38 @@
+{
+  "artifact_manifest_sha256": "fe8f191b3752724f0d914595e5e0c5c0cad5780adfcea82afc6e686c2981bec2",
+  "candidate_entries": 231,
+  "candidate_sha256": "3e11f8a9e9e15792e0d975ddb0689f8b69fc0a0aff47a1d5af729f179c9b847b",
+  "compiled_dependency_members": 888,
+  "diff_sha256": "1f1a493f0e3a41a4c1cdadb4e1a052301399803bd0d36a876588573ef0a0b309",
+  "exact_preselection_green": true,
+  "exclusive_debug_released": true,
+  "final_exact_focused": 47,
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "independent_review_required": true,
+  "initial_focused": 422,
+  "inventory": 756,
+  "new_execution_cases": 13,
+  "no_full_or_release_run": true,
+  "no_running_build_test_private_process": true,
+  "ownership_released": true,
+  "prior_preserved": 743,
+  "private_production_cases": 4,
+  "private_variants": [
+    "forced-gc",
+    "node-boundary",
+    "native-boundary",
+    "layout"
+  ],
+  "protected_entries": 63055,
+  "reconstructed_preselection_red": true,
+  "release_entries": 8248,
+  "report_sha256": "d07b4e4da7fcf15bcda385cecd743d67754eece18e42315196cdbf3416d8702c",
+  "schema": "planar.rewrite.candidate-handoff.v1",
+  "sources_sha256": {
+    "src/engine/runtime/external_registration.t.cpp": "4947093f0774a15707699424d5ab736576fe070c929075dc0127c9a0a3023923",
+    "src/engine/runtime/runtime.cpp": "538132c2efc9dca0d99d558f25e456bf9ff0188b953695591a412ff3817c961d",
+    "src/engine/runtime/runtime.cppm": "e7e63035b0b217456e8db6dab5b45a1bc0d6a52ca531707fc591897a85ad0cea"
+  },
+  "tested422_candidate_sha256": "c776997fa4e46af97c98f7f3dd9f4dd193d9be5cf01dbcb5e4ef0b44fa630e34",
+  "tested_to_final_sha256": "23131f8996291a82b43031e792a9d7b48b6b1ec9cf839dfb963d5481b355169f"
+}

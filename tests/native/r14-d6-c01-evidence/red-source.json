@@ -1,0 +1,14 @@
+{
+  "frozen_before_red_utc": "2026-10-21T19:14:57.414363+00:00",
+  "path_base": "repository root; snapshots under red-source",
+  "files": {
+    "src/engine/runtime/runtime.cpp": "20679c1d957647ab83f77b4eda5331eff2483828235f5c7e3a5bd5f2d2efedbf",
+    "src/engine/runtime/commands.t.cpp": "117faa302a8ed52aed2db0f6d8b1724238ac63dec0ae6791a1e0f0936e171b80",
+    "src/engine/CMakeLists.txt": "b8765be035b3cbc91510996a3aee34104ac14f56173bf63a5b9e2a88fac78176",
+    "tests/native/r14-d6-c01-support/generate.py": "b3d37934392909b88e2b693782a19bf235a497f17f01f9e6b945c7106bd47ebc",
+    "build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cpp": "279a66631b06d3d04a00d598c66c206ba561ffef6af18b6f40568ff710add0ad",
+    "build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cppm": "2ea743fd6654619e73aa72168795c6d25a4cbca00d542cb08d0239c6db66d19a",
+    "build/rewrite-debug/src/engine/r14-d6-c01-generated/commands_0.lua": "4e816d9f6eb7168c365f26984760dd2b10ab5331b9ae42edd6382c9c6c8bcd36",
+    "build/rewrite-debug/src/engine/planar_load_c01_source.cppm": "6362cf35d44a48940b0ff992d6e988db74ed1088ab20b797d75777dd4d298a60"
+  }
+}

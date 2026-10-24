@@ -1,0 +1,8 @@
+{
+  "all_exact": true,
+  "artifact_entries": 324,
+  "artifact_sha256": "75b738a9ea2791515f4e0b31653b6cac74f3d5ffcaf5ea827b529777c76650fe",
+  "candidate_entries": 25,
+  "candidate_sha256": "c778c033a6630e67734850651b8ba9e8e634ff3279dd480c49602ab2f21f5e98",
+  "finalization_sha256": "52fe9fed364fc2069428dac8c8a8dbeca36b4cfb25f42554e2f22c5dcc41932a"
+}

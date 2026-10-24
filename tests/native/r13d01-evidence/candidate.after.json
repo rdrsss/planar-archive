@@ -1,0 +1,19 @@
+{
+  "files": {
+    "docs/architecture.md": "6fc0c8f96275505165c135c931a362ba4ac6e3a1be95365893e6a7ade57dbebb",
+    "docs/testing.md": "21291bfe17530c471189a2b597313bd36505c34e12c9e34ec50e324fc78ebf0d",
+    "src/engine/CMakeLists.txt": "63a8339d1d8876c87f38c5c7fce4153c6f7170682ec918e77b597aee8174f87e",
+    "src/engine/history/interpretation.cpp": "2ee8f97e42b6011a46e8d618dcefc7fec942853dba872bd3ac5d9f701899475d",
+    "src/engine/history/interpretation.cppm": "4b1056a91dab53602057f18dc072fba3879c632fe3d878d011eed847834323ad",
+    "src/engine/history/interpretation.t.cpp": "2f233ef2e2ec93305f8d45aab200717922cdc5ced070561b5ba97bfc7d172d47",
+    "src/engine/history/provenance.t.cpp": "90fb95de9373d52b01435d16000eca761d72e352b529671d244bd7c05ae6c31e",
+    "src/stdlib/planar/acceptance.lua": "c87833c0d59b5ba6fa7b3a4658b36e5bbe9d43cf0b354ab4038e7ebb1c3dd014",
+    "src/stdlib/planar/bootstrap.lua": "b15092f3ae0989b1c09dbaa401c1657c93d1abf9a68703cb9cf7b0a5551b4b32",
+    "tests/native/r13c2-fixtures/interpretation.canonical": "12219b92935a27cde1d6afa09024e5ae62069e17ce8c7650bad3a7a6fe69c286",
+    "tests/native/r13c2-fixtures/interpretation.json": "6021b7d7cc874d6fed880bd7b929058ef513a4ced073895f51737444ac35bbd3",
+    "tests/native/r13c2-fixtures/versions.canonical": "423159e5801644c5116bd850489a0316d68237a1c068859a7e28f5b5be8d974d",
+    "tests/native/r13c2-fixtures/versions.json": "1fbbe566c98b145d0565761a8823fbc646886242a097529c153045e31fb4d246"
+  },
+  "identity": "82fdee63179c8d4eb8cc4417dbd5a08efb1546de2963df006ed212543415fbd8",
+  "path_base": "repository root; docs/testing.md snapshot is testing.after.md; 12 remaining paths retain C2 snapshots"
+}

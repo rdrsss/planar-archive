@@ -1,0 +1,38 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "520de152cf79105d1d3150ecd1432f4dc808ddd13986e7e2d7b1cf395a9f585f"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "4f9abba8c0a785abcf121f15def09e8b146b9021e50644cc83ad1d484fd82f40"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "b6fc360a2175454207bef4a3c74d9c6282dd207c3acf1f97a84dab6e5944de3c"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "bdfe61bff4fa8c2874008d6d89db9fc7c90cc78a84f3c17f45602fbdbabe7f94"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "493ae53161d8ebda629451a6b0352c44761df9e74e5fc510bb5df62408318ba3"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "29805857d676962733b9398442522b5862e113808083a9c0f511bc88e70e08ff"
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "mode": 420,
+    "sha256": "6c19262c4bcf7ad8249938f953769b3a29d2b137074051b8128dab0460570612"
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "mode": 420,
+    "sha256": "03921424f1a934ede13f8b2d921ef30bba75d10a942c1f49fe8f6fb16d9ad33d"
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "mode": 420,
+    "sha256": "9043b70b95f3929a9e78c8ce26ee569e7710c7bcfc1edac824317e909ec8972c"
+  }
+}

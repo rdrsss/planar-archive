@@ -1,0 +1,11 @@
+{
+  "src/engine/ledger/format.cpp": "83bd96e3c7c5513780f2c657f07f2f18dac5921393265bcd1e27cdd624b8dda6",
+  "src/engine/ledger/sqlite.cpp": "e93546b692e5b8897dfc6396d9d948f14772384b15eff622dd1b1d4e8e56c2b1",
+  "src/engine/ledger/sqlite.cppm": "324b2068e0b18b00f3c57bf9d0698c6678cb39ee5cba59dc4a89066b4548fc7a",
+  "src/engine/ledger/format.t.cpp": "8ba627c062d096f0b501dcca2cca49cc7a3fe2791ed3151cbbb86ed02ccab8f3",
+  "src/engine/ledger/format.cppm": "bf3dc4b2b51c5d4f89f06a84d32f5b6fde9e422b41b0db9f8ea738591b6f5274",
+  "src/engine/ledger/sqlite.t.cpp": "70ec9b6b3088d21c95dc8b01c61e39596d16782fba0b85e5e720dc3343c53d43",
+  "src/engine/CMakeLists.txt": "1f740372049f437ee9a8d7ad62cb733fc286b409c13c8a1380cf31287df19d4b",
+  "docs/architecture.md": "cd0736fc4636081a9756e902aab1586eb61ffabfe4b2117f57a82a8d0c179911",
+  "docs/testing.md": "9ab793bbf264480781297110a2e4b3a66302fa6a1fcd21fa32908b971916dc07"
+}

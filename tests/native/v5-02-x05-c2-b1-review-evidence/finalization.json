@@ -1,0 +1,13 @@
+{
+  "all_reviewer_edits_released": true,
+  "author_artifact_sha256": "6c3e835cc20d8624b888081e9e190d7a7adc8149ba96b6c0532e53686ab4b7b0",
+  "candidate_sha256": "793584ecc965e2e006f1b56af925bd678789a0348734e1ec71e7c8ea88029b99",
+  "debug_released": true,
+  "disposition": "approve",
+  "no_later_edits_planned": true,
+  "private_compiled_entries": 888,
+  "report_sha256": "4502e5780fe16927c4dbb768146b0a59a25aa8743f700c96a6b183c31b7d1f6b",
+  "reviewer_artifact_entries": 46,
+  "reviewer_artifact_manifest_sha256": "f212878ef331ed8995a326824af374967465182c164bfc782116e06ca2b458af",
+  "utc": "2026-10-23T21:52:10.525001+00:00"
+}

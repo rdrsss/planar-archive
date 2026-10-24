@@ -1,0 +1,15 @@
+{
+  "contemporaneous_full_hash_manifest": "baseline.json",
+  "before_edit_copied_files": [
+    "tests/acceptance/bootstrap_load.py",
+    "src/engine/CMakeLists.txt",
+    "src/cmd/planar/CMakeLists.txt"
+  ],
+  "documentation_snapshots_reconstructed_after_append_and_verified_against_contemporaneous_hashes": [
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "revision": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "product": [
+    {
+      "path": "stdlib/planar/semantic.lua",
+      "bytes": 19621,
+      "sha256": "fbafc60c6ce956b8902fcffc612e6905590d2f3f18256b0a9c13adbbe2084da0"
+    },
+    {
+      "path": "stdlib/planar/bootstrap.lua",
+      "bytes": 1137,
+      "sha256": "41a29369164cd17cc05a9fb74660a68a51ff696b325290968c90bb0533312b7a"
+    },
+    {
+      "path": "stdlib/planar/README.md",
+      "bytes": 18592,
+      "sha256": "22737f637f4c3c1c13219763178d7a7687c57d5daa5ac0ff34eb91af9cc11561"
+    },
+    {
+      "path": "src/kernel/CMakeLists.txt",
+      "bytes": 3390,
+      "sha256": "ca251f91b7bdad2538b179a25852062463ec422b07e4b6da43e2a58effeeabdf"
+    },
+    {
+      "path": "src/kernel/runtime/schema.t.cpp",
+      "bytes": 69602,
+      "sha256": "bdbb8d189aff780c4142e0f2577d116031a527989f479ebcb2043745cf4c728a"
+    }
+  ],
+  "product_snapshot_sha256": "a159ac473640184f7b61561ec96834acdb54ccf38423bd8f2bf777ab7049940f",
+  "evidence": [
+    {
+      "path": "tests/native/r07b2b-evidence/README.md",
+      "bytes": 3694,
+      "sha256": "76a9150b2779f11ed67e4097d77f1b9b0abf24413957bda4120da6f7078139c2"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-expanded-tests.log",
+      "bytes": 352,
+      "sha256": "1d45b7fc1006136eebf5958480f736702b529973174ffd737651301133cfc10c"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-final.log",
+      "bytes": 352,
+      "sha256": "1d45b7fc1006136eebf5958480f736702b529973174ffd737651301133cfc10c"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-green.log",
+      "bytes": 2339,
+      "sha256": "47b071533c56b599ea18950bd826cc82facef9afe0b58c40f55c4355dd9ffd78"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-initial-corrections.log",
+      "bytes": 2131,
+      "sha256": "254afcd79c32f1ab09c6d52926451a5ecb6e0f0c82cfd941f48819c2fe885f21"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/counts.log",
+      "bytes": 290,
+      "sha256": "4d24fb2da41553293dcfc87ad086db4abb3fcbd44d1e02a3837b744763557117"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/ctest.log",
+      "bytes": 25117,
+      "sha256": "3ee976675fab47f4dd0481359657edf7be2f3c9450b35951e3cac16a3a0e0e28"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/ctest.xml",
+      "bytes": 30189,
+      "sha256": "6b35ed4bd9d4c72650349a9425667c8ee84977866deb18ad63d2f0d7947dadfb"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/initial-tests.log",
+      "bytes": 2213,
+      "sha256": "72da62dc8c30f60c701511dd1a8ea5521fc33e6a0c19fd8d17b7a30d4f2ad26c"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/lint.log",
+      "bytes": 1812,
+      "sha256": "f66c28517e2e64d39a5bea9587a9b954e73d5a8370c060b88bbd59783492db45"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/no-change-build.log",
+      "bytes": 22,
+      "sha256": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-expanded-red.log",
+      "bytes": 909,
+      "sha256": "005879c743fce782ddb33e1123c144f63f5ad1426653e100e167dcca12972d77"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-final.log",
+      "bytes": 183,
+      "sha256": "7b4c16cb09b453a5bbb7b8ecffab9bfcf981a8c87954ac6e834935e9b40e72da"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-green.log",
+      "bytes": 182,
+      "sha256": "94b318493d2740135c813581bfa6a25ccd2a081b581138e47166b07610332538"
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-initial-corrections.log",
+      "bytes": 183,
+      "sha256": "0ab24a85cf7940ed663d0d194c7cf0f042a6cb1263ef879c452cf0db1019f61c"
+    }
+  ],
+  "review_status": "not_self_approved",
+  "scope": "R07-B2B"
+}

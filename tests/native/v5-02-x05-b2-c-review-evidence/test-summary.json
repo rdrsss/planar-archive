@@ -1,0 +1,20 @@
+{
+  "focused.xml": {
+    "cases": 353,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "allocation.xml": {
+    "cases": 2,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "history-codec.xml": {
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  }
+}

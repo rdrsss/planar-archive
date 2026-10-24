@@ -1,0 +1,18 @@
+{
+  "focused": 536,
+  "inventory": 876,
+  "private_cases": 16,
+  "private_assertions": 947,
+  "fresh_private": 6,
+  "author_private_replays": 10,
+  "vectors": 6,
+  "audits": 7,
+  "lint_sources": 118,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "full_gate": false,
+  "release_gate": false,
+  "verdict": "request-changes",
+  "finding": "D4-R1 evidence correspondence correction; no product defect found"
+}

@@ -1,0 +1,16 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/ledger/types.cppm": "697e735d77b192d7705c66873a909879934493774ccceade0fca430d5bba8535",
+    "src/engine/ledger/format.cppm": "f6282c59ea78954ccaccb301ded9f2dad0bb66a3689e9374462e4feb8745aac6",
+    "src/engine/history/tree_core.cppm": "c89a0fda03d2d92f844eabf12820d04cd07d51e7e0ab2b3acfae1b8c093ce4de",
+    "src/engine/history/tree_core.cpp": "56357f4054cc25773cd47c2868858e607add3b5c2d894272fbb1ed3c657f85b5",
+    "src/engine/history/tree_core.t.cpp": "bfd034218ccf967efb7f14211d012371dde7a32ecef48616cde7406ef3ea5657",
+    "src/engine/history/tree.cppm": "55c32708e48bcd3e8998848537498a8501192f4922f4a11d766bbf8c0a6c6e28",
+    "src/engine/history/tree.cpp": "6232a5efd8b4c41c8ece3348d57c42c56b4ae3d9411ac7854abd58d4af9748e6",
+    "src/engine/CMakeLists.txt": "9aa048629457049a826758a3387d7cfcd05c5344581302cfaa6920d768a1bce7",
+    "docs/architecture.md": "55658c4d14f58532646c4929ccc001110fbe86e390d851671d7c218642a39ff2",
+    "docs/testing.md": "9f9b42dc81ebee3ea0d0044175d49153e9e49d5be67e23fd38f63678e4f872b7"
+  },
+  "identity": "f8fc71887c97f775d40556e1a6f15177759620f348f42d7f3a188621315305be"
+}

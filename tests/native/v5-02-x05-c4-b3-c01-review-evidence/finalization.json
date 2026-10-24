@@ -1,0 +1,62 @@
+{
+  "artifact_manifest": {
+    "entries": 82,
+    "path": "artifact-manifest.json",
+    "sha256": "4ca8140e4b9d997b79d19b6f9962c801dc846071ce9a9f7cb3924e78cb6e50dd"
+  },
+  "author_identity": {
+    "artifact_entries": 134,
+    "candidate_entries": 17,
+    "exact_membership_modes_bytes": true,
+    "hashes": {
+      "REPORT.md": "63dcb2bf0f5be95ba55b57e4ea7bf19057dbd00fe085617c8effa78e105113db",
+      "artifact-manifest.json": "f1ff95c407cae2e260f439e4ed5e416106e475efe64fb476a9c0b54400ffda2d",
+      "finalization.json": "e6463907ea43e2f85edb4852a309ddcd03aeb64a2726aeac3e67f98751076cb8",
+      "frozen-candidate.json": "97302a8a54a7bb1ea8352618819adb0e067a2cf9be5c84cd46c420c2fd36cf2d"
+    }
+  },
+  "cleanup": {
+    "copied_dependency_files": 888,
+    "copied_membership_modes_bytes_verified": true,
+    "only_reviewer_owned_disposable_inputs_and_products_removed": true,
+    "path": "cleanup.json",
+    "removed_bytes": 1384743344,
+    "removed_files": 894,
+    "sha256": "32538beb8d59575a92b2139bbd75648287053f63fe1aefc37f494323ecc84e66",
+    "shared_inputs_unchanged": true
+  },
+  "closed_findings": [
+    "C4B3-R1"
+  ],
+  "combined_identity": {
+    "path": "combined-identity.json",
+    "sha256": "a254ce1e9d3e11bc927c145c5ddc4e8d8c2dfbd3c3f83f5f09c5657a0dbcd9ad"
+  },
+  "disposition": "approve",
+  "open_findings": [],
+  "protection": {
+    "changes": 0,
+    "entries": 80868,
+    "path": "protection-after.json",
+    "sha256": "57ce5c4de1e8aeec8ec3b16d95de39520d6afe498264eea679445c5edf4eea58"
+  },
+  "release": {
+    "exclusive_debug": true,
+    "no_further_edits_builds_tests": true,
+    "reviewer_owned_paths": true
+  },
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-X05-C4-B3-C01-review.md",
+    "sha256": "60fa8207f648434795b13bcf8f5a98a56f998cce35a8ff8abcceb2bb6e4e2830"
+  },
+  "reviewed_candidate": {
+    "entries": 26,
+    "path": "reviewed-candidate.json",
+    "sha256": "0eebf0495c4f69c0692ee44c2dedcf0692f9bec532f8eaeb276aff0b604fd97a"
+  },
+  "schema": 1,
+  "verification": {
+    "path": "verification-summary.json",
+    "sha256": "3c637f45edace4ba071babeaf06e8475b39f11feec2ac44d3e86aad7f4185755"
+  }
+}

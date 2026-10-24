@@ -1,0 +1,125 @@
+[
+  {
+    "log": "build-current-fixture.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "focused-final.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14b2-evidence/focused-final.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "history-final.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.ledger (accepted history|complete accepted)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14b2-evidence/history-final.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "cli.txt",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r14b2-evidence/cli.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "vectors.txt",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "record-vectors.txt",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "lint-final.txt",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "no-work.txt",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "audit-final.txt",
+    "argv": [
+      "python3",
+      "tests/native/r14b2-evidence/audit.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "log": "baseline-positive-refused.txt",
+    "argv": [
+      "build/rewrite-debug/src/engine/planar_ledger_format_tests",
+      "ledger complete accepted change noop and revert history reopens writes backs up and restores"
+    ],
+    "cwd": "<repo>",
+    "exit": 42
+  }
+]

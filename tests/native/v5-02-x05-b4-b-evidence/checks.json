@@ -1,0 +1,19 @@
+{
+  "checks": {
+    "frozen-source.json": {
+      "entries": 211,
+      "all_unchanged": true
+    },
+    "protected-start.json": {
+      "entries": 21492,
+      "all_unchanged": true
+    },
+    "protected-unowned.json": {
+      "entries": 7,
+      "all_unchanged": true
+    }
+  },
+  "agents_symlink_preserved": true,
+  "debug_released": true,
+  "independent_review_required": true
+}

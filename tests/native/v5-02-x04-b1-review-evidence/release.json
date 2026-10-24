@@ -1,0 +1,63 @@
+{
+  "additional_paths": [
+    "docs/vernacular/rounds/V5-02-X04-B1-review.md"
+  ],
+  "disposition": "approve",
+  "final_candidate_unchanged": true,
+  "integrity": {
+    "anchors": {
+      "artifact-manifest.json": "2b73a7c1a1d85ec303d63bfdd7afdb2a4a80e99ca6bac0cfcb741a4d13b1776f",
+      "candidate-manifest.json": "efcb368aeb321450de2686ca18daad87074c044f694bbae9a2a5b0bb7f7aa4ab",
+      "owned.diff": "2998f8318d3e0234752cada944342ac90271999d1eda98b2ff756c968b0123a5"
+    },
+    "archived_source_copies": {
+      "attempt01": 138,
+      "attempt02-final-docs": 139
+    },
+    "artifacts": 368,
+    "attempts": {
+      "attempt01": 163,
+      "attempt02-final-docs": 150
+    },
+    "branch": "dev/planar-v2-vernacular",
+    "candidates": 20,
+    "changed": [
+      "CLAUDE.md",
+      "docs/architecture.md",
+      "docs/vernacular/acceptance-matrix.md",
+      "docs/vernacular/external-profile-implementation.md",
+      "docs/vernacular/implementation.md",
+      "docs/vernacular/roadmap.md",
+      "docs/vernacular/v5-alignment.md",
+      "src/engine/CMakeLists.txt",
+      "src/engine/capture/profile.cpp",
+      "src/engine/capture/profile.cppm",
+      "src/engine/capture/profile_codec.cpp",
+      "src/engine/capture/profile_codec.cppm",
+      "src/engine/capture/profile_codec.t.cpp",
+      "src/engine/history/tree_core.cpp",
+      "src/engine/history/tree_core.cppm",
+      "src/engine/history/tree_core.t.cpp",
+      "tests/native/v5-02-x04-b1-support/finalize.py",
+      "tests/native/v5-02-x04-b1-support/verify.py",
+      "tests/native/v5-02-x04-b1-support/verify_docs.py"
+    ],
+    "debug_build_identities": 716,
+    "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+    "posttest_changes": [
+      "CLAUDE.md",
+      "docs/architecture.md",
+      "docs/vernacular/acceptance-matrix.md",
+      "docs/vernacular/external-profile-implementation.md",
+      "docs/vernacular/implementation.md",
+      "docs/vernacular/roadmap.md",
+      "docs/vernacular/v5-alignment.md",
+      "tests/native/v5-02-x04-b1-support/verify_docs.py"
+    ],
+    "protected_final_entries": 16285
+  },
+  "ownership_released": true,
+  "report_sha256": "96b6c2e808471236dffc5b3b63e0e6a96eb93f2a318d4154f46003b00da94914",
+  "timestamp": "2026-10-22T23:15:51.006451+00:00",
+  "zero_further_reviewer_edits": true
+}

@@ -1,0 +1,19 @@
+{
+  "adapter_cases": 17,
+  "baseline_inventory": 791,
+  "current_inventory": 800,
+  "errors": 0,
+  "failures": 0,
+  "final_private": 9,
+  "final_scoped_runtime": 57,
+  "full_gate": false,
+  "layout_cases": 2,
+  "preserved_all_with_explicit_rename": true,
+  "prior_focused_candidate_sha256": "240d53228575fbd109b49b5db46617c0028323378547261818ab8e73bb2f4dd2",
+  "prior_focused_cases": 439,
+  "release_gate": false,
+  "renames": {
+    "replacement.C4 B3 general decimal maximum remains Lua integer and mixed history projection stays closed": "replacement.C4 C2 general decimal maximum remains Lua integer and history projection is lazy while role stays closed"
+  },
+  "skips": 0
+}

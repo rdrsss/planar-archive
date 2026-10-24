@@ -1,0 +1,13 @@
+{
+  "AGENTS_symlink": {
+    "link": "CLAUDE.md",
+    "mode": 493
+  },
+  "c01_author_evidence_protected": true,
+  "changes": [],
+  "d4_round_protected": true,
+  "entries": 76491,
+  "exact_coordinator_round_exemption": "docs/vernacular/rounds/V5-02-X05-C4-D4-C01.md",
+  "owned_evidence": "tests/native/v5-02-x05-c4-d4-c01-review-evidence",
+  "owned_report": "docs/vernacular/rounds/V5-02-X05-C4-D4-C01-review.md"
+}

@@ -1,0 +1,164 @@
+{
+  "approved_sources": {
+    "b2-b": {
+      "manifest_sha256": "b924e8f31db8b6749f6e8297f2be15f3af94cd6041e2880d592d721f8f3cdfde",
+      "verified_members": {
+        "src/engine/acceptance/prepared.cpp": "e957e4be894fc54a64784ea6362a7c94ec33a4040828d26b8686ad0e0f4f2c08",
+        "src/engine/acceptance/prepared.cppm": "770fdfa36e577f8009cf7a619baf4feb8b736a177b47c0973121297abd2209b9",
+        "src/engine/acceptance/prepared.t.cpp": "c2a54de573cb2701ca80a5e3b66f542c4287de7535b3169b34c0f2b97eef8389",
+        "src/engine/ledger/acceptance.t.cpp": "754824601a3ddaf3127af2ddf850deeca10c0045d2feaec379bee1d918ce1fd5",
+        "src/engine/ledger/format.cppm": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+        "src/engine/ledger/format.t.cpp": "7bd19b8af5a2324949b1b1845b824c87152eecbafa29c98e10cb58a686b9bbcb",
+        "src/engine/ledger/history_verification.t.cpp": "f4dc9377d5b45b36114effec6416c95447ecc5db5b7764805f7683b75aa94020",
+        "tests/native/r14-d8-support/acceptance_fault.t.cpp": "ef7e2df263f439808593b74d4205c4bc8ce7a053a5798857957d23f3bbca803e",
+        "tests/native/r14c3b2-support/atomic.t.cpp": "5fdd0b997d71c8b0e9e4ec7fd5b2a9642b9c37f2b49b7d773b206777fbb9938a",
+        "tests/native/r14c3b2-support/digest.cppm": "fd61b65df0692b123bcd52cac61cc2bee68a394ac72dac125f132a796ba43ca2",
+        "tests/native/r14c3b2-support/generate.py": "2ac3647d5133c782bb0c7e52b2638ae2b37d806882b2e6f6834b69bde5d7d30a",
+        "tests/native/v5-02-x03-b2-b-support/freeze.py": "1af52d2cdde63ff4d2b2b03e7e1e3ddd52e44de53c528274381eb09fa3c99af0",
+        "tests/native/v5-02-x03-b2-b-support/run.py": "f9292aedeb6004b10ab19adc1dd0f6de204e3a9be5792f356c38a9b631f720cd"
+      }
+    },
+    "b2-b-c01": {
+      "manifest_sha256": "6497c9c720369653b60f38b180dae32465ab7468ccdab3685ac10827522490a6",
+      "verified_members": {
+        "src/engine/CMakeLists.txt": "220af1f8a23a958d629334c5ac133e57b526640fec26ec88b1f2f22f49d35aae",
+        "src/engine/ledger/format.cpp": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+        "tests/native/v5-02-x03-b2-b-c01-support/fixture.cppm": "741fed3d10de5f70b3a620d5f688004a8960b2d7199a5b7a063264280af96090",
+        "tests/native/v5-02-x03-b2-b-c01-support/generate.py": "b53b305538446cdb8bb7916709eaff7a7e4f49d3f738249c938d879ae39dcb5e",
+        "tests/native/v5-02-x03-b2-b-c01-support/metadata.t.cpp": "ca5f6f02dd2e9dbf1bd82c38b0745ebe089ca0c79aa3cd8937cc2111f26cd4fa"
+      }
+    }
+  },
+  "author_artifacts": 156,
+  "baseline405_preserved": true,
+  "baseline_files": 15424,
+  "candidate_members": 13,
+  "coverage_exact_test_references": [
+    "request v2 independent complete frame and digest vectors",
+    "request v2 refuses malformed framing tags versions and oversized claims",
+    "request v2 inherits text head bounds and requires normalized absolute profile",
+    "request v2 complete 64 MiB frame ceiling includes selector and suffix",
+    "acceptance request intent preserves exact shared record bytes and positive signed64 heads",
+    "ledger format2 exact schema delta and native initialization retain format",
+    "ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged",
+    "ledger format2 backup restore preserve format identity and never overwrite",
+    "ledger format2 reads native typed embedded request-v2 fixture",
+    "ledger format2 mixed request codecs preserve recorded history export and privacy",
+    "ledger format2 request-v2 malformed and mismatched rows refuse unchanged privately",
+    "ledger request children of either codec refuse format2 directories",
+    "acceptance request v2 owns exact normalized embedded and profile selectors",
+    "atomic codec2 forced request collision rolls back and redacts private digest",
+    "atomic forced request digests separate codec buckets and preserve version body conflict",
+    "atomic targeted collisions refuse file directory interpretation and request without prefixes",
+    "atomic acceptance initial noop change and revert retain chronology",
+    "atomic concurrent identical requests replay and competing heads refuse within finite retry",
+    "atomic format request mismatch and profile refusal precede CAS and unusable candidate",
+    "metadata continuity locked begin includes selected format",
+    "metadata continuity record precommit includes selected format",
+    "metadata continuity acceptance precommit includes selected format",
+    "atomic native format2 acceptance history export and backup restore survive removed inputs",
+    "ledger format2 structurally decodes private profile request without claiming acceptance",
+    "ledger format2 request-v2 malformed and mismatched rows refuse unchanged privately",
+    "D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+    "D8 complete acceptance process death at write sync and returned completion stays atomic"
+  ],
+  "final_files": 15425,
+  "identities": {
+    "artifact-manifest.json": "71f070efba709dab129f68832587eae8cea73adbc9b2fa13dca070cd3423d407",
+    "candidate-manifest.json": "81f93dfb3a0179092df56e9ded03edf781d2f26ea467881e566c6103e9421ade",
+    "final-complete-filesystem.json": "3ee8b2ce4e7869ab72cc1c727b0a87fd60f1007e05a732b4e66fb88977eec654",
+    "owned.diff": "de9f90f8b3aebbd9d6a7e093bba4513ecf585ebb19130c8887ffe9387181500d"
+  },
+  "old_binary_reused_runs": 8,
+  "ownership_and_diff_exact": true,
+  "protected_v1_files": 62,
+  "runs": {
+    "debug": {
+      "actual_cases": 430,
+      "build_identity_members": 47,
+      "faults": {
+        "1": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "2": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "full_command": {
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-debug",
+          "--output-on-failure",
+          "--output-junit",
+          "<repo>/tests/native/v5-02-x03-b3-evidence/debug-full.xml"
+        ],
+        "cwd": "<repo>",
+        "end_utc": "2026-10-22T21:24:09.226485+00:00",
+        "exit_code": 0,
+        "seconds": 223.06367301940918,
+        "start_utc": "2026-10-22T21:20:26.162885+00:00"
+      }
+    },
+    "release": {
+      "actual_cases": 430,
+      "build_identity_members": 47,
+      "faults": {
+        "1": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "2": {
+          "database": 15,
+          "journal": 38,
+          "unique_process_boundaries": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "full_command": {
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-release",
+          "--output-on-failure",
+          "--output-junit",
+          "<repo>/tests/native/v5-02-x03-b3-evidence/release-full.xml"
+        ],
+        "cwd": "<repo>",
+        "end_utc": "2026-10-22T21:27:21.313101+00:00",
+        "exit_code": 0,
+        "seconds": 119.38979768753052,
+        "start_utc": "2026-10-22T21:25:21.923357+00:00"
+      }
+    }
+  },
+  "utc": "2026-10-22T21:33:50.116968+00:00"
+}

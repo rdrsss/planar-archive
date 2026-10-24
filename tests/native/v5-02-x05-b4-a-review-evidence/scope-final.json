@@ -1,0 +1,22 @@
+{
+  "disposition": "request-changes",
+  "finding": "B4A-R1",
+  "protected_entries": 5398,
+  "membership_and_hashes_unchanged": true,
+  "candidate_members": 15,
+  "author_artifacts": 66,
+  "author_identities": {
+    "candidate-manifest.json": "86f2ee5a919d3f2a6f14cf8b71dfe4ad66adbc1ed194ae29fe72e6ea0bd633a7",
+    "candidate.diff": "753408bc7641c721f4019a71c22e82940f38b8ef141bd3b3a8cba03f1ed07588",
+    "artifact-manifest.json": "125d42a25234407f7e923f66f0a40f93153f684dc6d0d90e8c84588719671adb",
+    "REPORT.md": "c98c6324003afd2d60feb82a50eef152d2376b66e75e19b3088fcc04d567977d"
+  },
+  "AGENTS_symlink_preserved": true,
+  "final_no_work": true,
+  "production_cases": 2,
+  "production_assertions": 159,
+  "variant_cases": 13,
+  "variant_assertions": 976,
+  "old_render_combinations": 150,
+  "correspondence_refusal_failed": true
+}

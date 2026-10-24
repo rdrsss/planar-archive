@@ -1,0 +1,10 @@
+{
+  "count": 633,
+  "expected_categories": {
+    "OK": 80,
+    "ERR:0": 541,
+    "ERR:1": 10,
+    "ERR:2": 2
+  },
+  "failures": []
+}

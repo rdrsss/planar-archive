@@ -1,0 +1,22 @@
+{
+  "protected_files": 13968,
+  "changed_outside_owned": [],
+  "new_outside_scope": [],
+  "coordinator_exception": "docs/vernacular/rounds/R14-D5*",
+  "symlink_preserved": true,
+  "approved_exact_contract_body_preserved": true,
+  "baseline_count": 373,
+  "current_count": 380,
+  "new_names": [
+    "replacement.load capture prepares complete multi-job closure and exact trusted provenance without source trees",
+    "replacement.load capture refuses B M membership headers and captured reference mismatches",
+    "replacement.load capture rejects malformed and mismatched routes before routed reads",
+    "replacement.load capture retains original selected receipts and ignores unrelated siblings",
+    "replacement.load capture seals original workspace and refuses missing linked or oversized references",
+    "replacement.load capture state moves failures paths aliases provenance and bounds are terminal",
+    "replacement.load capture trusted all-job validation preserves unselected and duplicate logical diagnostics"
+  ],
+  "focused_cases": 123,
+  "failures": 0,
+  "skips": 0
+}

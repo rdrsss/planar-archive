@@ -1,0 +1,53 @@
+{
+  "starting_revision": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "files": {
+    "CLAUDE.md": {
+      "sha256": "378c416a3189de4edfd71ffde27736d63f59c3a26d1af53bd57af1f6d918e300",
+      "mode": 420
+    },
+    "docs/architecture.md": {
+      "sha256": "9588b565a835938ff1f515239dd47fe7b101fea9273dc73ad5db60964d8ff6d6",
+      "mode": 420
+    },
+    "docs/testing.md": {
+      "sha256": "4cfd199f735a91af3918876e70219a1eb3cfc21f329659f4adaa66a11e624c16",
+      "mode": 420
+    },
+    "docs/vernacular/external-profile-implementation.md": {
+      "sha256": "b1ad6b78883c7d385874ca13b8694a9bdcf6084332998ee1c41ef9f13ea45325",
+      "mode": 420
+    },
+    "docs/vernacular/implementation.md": {
+      "sha256": "01d666e6d06bee160539414753565ec7737a42085e7b1716772f8b6c8e396674",
+      "mode": 420
+    },
+    "docs/vernacular/roadmap.md": {
+      "sha256": "5af4fb0a78eca31b99f5f9d44e78a64fe3a0ef6429da9c7761fd748dcc8cae9b",
+      "mode": 420
+    },
+    "src/engine/runtime/external_registration.t.cpp": {
+      "sha256": "c8fc48ffaa6294f4405a3008b09bd05159fbf1e903e62a768971225e20925621",
+      "mode": 420
+    },
+    "src/engine/runtime/runtime.cpp": {
+      "sha256": "4fa55ab312342e9e87f52ecf5fd82c15ce123855e73b6b8c5f21a748572351e7",
+      "mode": 420
+    },
+    "src/engine/runtime/runtime.cppm": {
+      "sha256": "994e046e9019e0cd2683c240d15c555da266a83fac31274b281d5a38689d7143",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b2-a-support/audit.py": {
+      "sha256": "dfaa8a1a258ab4bc6381e514d75ec9e23c752d86769f9a809e6e9aef601c5398",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b2-a-support/gate.py": {
+      "sha256": "8b6bcc28bda5582a56280de2e4af19825d636a33db2e24752267d2d3eeb53edf",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b2-a-support/vector.py": {
+      "sha256": "f35073740c212de515b9a2061ff2ce77489f8ddb0aa5fd6eae4141dc269f7727",
+      "mode": 420
+    }
+  }
+}

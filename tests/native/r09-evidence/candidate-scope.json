@@ -1,0 +1,15 @@
+{
+  "retained_files": 1296,
+  "manifest_encoding": "SHA256 of file bytes (symlink file reads follow target); AGENTS.md additionally verified as symlink to CLAUDE.md",
+  "exclusions": [
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/R09.md",
+    "tests/native/r09-evidence/** (separate evidence manifest)"
+  ],
+  "modified_or_added_retained_files": 20,
+  "deletions": "deleted-inventory.json and supplemental-ignored-deletion-inventory.json",
+  "candidate_manifest_sha256": "bb915f01a4231a28acbaa44489f02a3d72d558ba13873f98c13a2d4f5f958d67",
+  "symlinks": {
+    "AGENTS.md": "CLAUDE.md"
+  }
+}

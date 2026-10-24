@@ -1,0 +1,8 @@
+{
+  "all_candidate_sources_and_author_evidence_unchanged": true,
+  "author_artifact_manifest_sha256": "e90f479d7ca2a215d2ec6c4f14d0ae849e8f9bd61fd3ba4e57c218c51b45ccba",
+  "candidate_manifest_sha256": "186f33f0101da7774325e0c5f835077b78d2340be37d3add81fd99b79fd7f4d1",
+  "report_sha256": "e95df925ba01c63e002c295f61901c201ab8b9f93dbc0a405747a8bb3b886ea8",
+  "status": "review complete; ownership released after final artifact manifest; zero further reviewer edits",
+  "verdict": "approve"
+}

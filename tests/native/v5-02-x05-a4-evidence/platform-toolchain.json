@@ -1,0 +1,50 @@
+[
+  {
+    "label": "platform",
+    "argv": [
+      "uname",
+      "-a"
+    ],
+    "start_utc": "2026-10-23T05:33:05.550907+00:00",
+    "end_utc": "2026-10-23T05:33:05.557517+00:00",
+    "exit_code": 0,
+    "stdout": "Darwin mbpa.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:18:58 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T6000 arm64\n",
+    "stderr": ""
+  },
+  {
+    "label": "cmake",
+    "argv": [
+      "cmake",
+      "--version"
+    ],
+    "start_utc": "2026-10-23T05:33:05.557534+00:00",
+    "end_utc": "2026-10-23T05:33:05.566431+00:00",
+    "exit_code": 0,
+    "stdout": "cmake version 4.4.4\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+    "stderr": ""
+  },
+  {
+    "label": "formatter",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--version"
+    ],
+    "start_utc": "2026-10-23T05:33:05.566451+00:00",
+    "end_utc": "2026-10-23T05:33:05.600587+00:00",
+    "exit_code": 0,
+    "stdout": "Homebrew clang-format version 23.1.4\n",
+    "stderr": ""
+  },
+  {
+    "label": "doxygen",
+    "argv": [
+      "doxygen",
+      "--version"
+    ],
+    "start_utc": "2026-10-23T05:33:05.600611+00:00",
+    "end_utc": "2026-10-23T05:33:05.619379+00:00",
+    "exit_code": 0,
+    "stdout": "1.18.0\n",
+    "stderr": ""
+  }
+]

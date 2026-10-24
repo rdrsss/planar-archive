@@ -1,0 +1,30 @@
+{
+  "candidate_files": 13,
+  "artifacts": 72,
+  "frozen_entries": 375,
+  "a4_baseline_entries": 24022,
+  "a4_existing_changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/rounds/V5-02-X05-A4.md",
+    "src/engine/CMakeLists.txt",
+    "src/stdlib/planar/schema.lua",
+    "src/stdlib/planar/semantic.lua"
+  ],
+  "a4_missing": [],
+  "originals_match_a4": {
+    "src/stdlib/planar/schema.lua": true,
+    "src/stdlib/planar/semantic.lua": true,
+    "src/engine/CMakeLists.txt": true,
+    "CLAUDE.md": true,
+    "docs/architecture.md": true,
+    "docs/testing.md": true,
+    "docs/vernacular/implementation.md": true,
+    "docs/vernacular/roadmap.md": true,
+    "docs/vernacular/external-profile-implementation.md": true
+  }
+}

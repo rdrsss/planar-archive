@@ -1,0 +1,7 @@
+{
+  "changed": [
+    "tests/native/v5-02-x05-c3-b2-support/allocator-probes.inc"
+  ],
+  "product_test_and_prose_unchanged": true,
+  "reason": "one actual outer adapter control at requests1,4,5 after C3A inner/outer retry; existing double-fault pre-hardening run green retained"
+}

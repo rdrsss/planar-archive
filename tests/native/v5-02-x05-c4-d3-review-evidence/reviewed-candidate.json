@@ -1,0 +1,114 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "aea51ec8d3f65fac622cd1f0cb6d831d5aaa9be2122f07262d707e18138f1eed"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "3854b12aed5915db3876c3bfb0502625e7691a59364f8c50d65d49a8b7f7247c"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "4784f20e92d6929490b2e0e41f96eb41eb2a3e9b24e3b3afc5acfd587350f105"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "ab3f91c29b987f0f2d204a299bf14b300fa74399015a52b8ef21ceca566b9d63"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "23258a4bea625b9d598b9d288c682dc32da7e8c82c1875501cf8e153273bf611"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "e01892111a6003cf40ac7ba49590e9c8e681ed09846beaf5386d92416c175243"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "15071d6429a31a3e4190d0c043a360a88b07b508204f97bb8f91405246d24693"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "76121cba52c4d66f7e78e493ee9df6d166d9fb9d89b75fb5a6678b99b5a4b659"
+  },
+  "src/cmd/planar/CMakeLists.txt": {
+    "mode": 420,
+    "sha256": "ef87d056e321222e25c26859b62d4be6b30ab7d878a6d72e26928a49595266b9"
+  },
+  "src/engine/CMakeLists.txt": {
+    "mode": 420,
+    "sha256": "8457333e1358e8cfe47f2d281e51c4a0571048bc78cc48210d63ef83f1b11bef"
+  },
+  "src/engine/capture/capture.cpp": {
+    "mode": 420,
+    "sha256": "903c4f1171af00330c3faff731ca81239b47977f4569e431067331d27062b3d7"
+  },
+  "src/engine/capture/capture.cppm": {
+    "mode": 420,
+    "sha256": "3c7156449094f7f92b3974f4b8568e7c14df404b2b4e1b820c2ac81aedaf43c0"
+  },
+  "src/engine/capture/capture.t.cpp": {
+    "mode": 420,
+    "sha256": "c946431f615c4fadf99b61447203f746d603100f6c61691391fec08732bbb93e"
+  },
+  "src/engine/capture/profile.cpp": {
+    "mode": 420,
+    "sha256": "a9d03fbd3a1fd325dfcd8f1642e5894395a32621dc4d7bead1f4c6ddf5c949e7"
+  },
+  "src/engine/capture/profile.cppm": {
+    "mode": 420,
+    "sha256": "d8290819281c0d6304dcd6516d02d8e9ef29ae09112b53ea2206cf2289f19002"
+  },
+  "src/engine/capture/profile.t.cpp": {
+    "mode": 420,
+    "sha256": "10052a79e53c5311babc94241dff9df0fa847e5280a798d83b8dae7626254698"
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "mode": 420,
+    "sha256": "e6d0f7cccd0a1c0aceb77b0dea55ac830be8464073446e5c6084064a88f0f88f"
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "mode": 420,
+    "sha256": "1742fba034d9ff7f967365990b27e93a2a315f407318c9d2162b08092deeca8e"
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "mode": 420,
+    "sha256": "5999ac487c40ea77d713def1242ef61991ac815ba7eb19a4d90679f5d0c9796a"
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "mode": 420,
+    "sha256": "093e95058acceb264cc39fa9019a8b2e6934bcabf97ca490142eaeca8521013c"
+  },
+  "src/stdlib/planar/render.lua": {
+    "mode": 420,
+    "sha256": "54802e3acce016e745a13f517c7f7d79e7d09ea13909b760ef3b8a7a47567ace"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/audit.py": {
+    "mode": 420,
+    "sha256": "37367018492660fd6d4fcbf4dc544cf0e419aefd5a42bf9663a38785e2975e0a"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/cleanup.py": {
+    "mode": 420,
+    "sha256": "bd4a29e0b92a34c02301f15a32536f61623e88e3cbc4783fb962c4a42cec7245"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/freeze.py": {
+    "mode": 420,
+    "sha256": "19b5c5db6386cbccff3e56ebff40c233c134ed2fa7e49a3cd98afaeff0d288a1"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/gate.py": {
+    "mode": 420,
+    "sha256": "2ae7bfdebd79f8157dcd2c0588f96e7fad90c0da7e1996f0d7531b534b02eabd"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/methods.inc": {
+    "mode": 420,
+    "sha256": "dbce420f5b7c2d9c3be0e1a2b79da9690acf828bbcf2e814e209ba56b5e0c574"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/private-tests.inc": {
+    "mode": 420,
+    "sha256": "406fd2f313885d796997537ece74191691f72c3aabd93c33d034f6176144dbe0"
+  },
+  "tests/native/v5-02-x05-c4-d3-support/private.py": {
+    "mode": 420,
+    "sha256": "b8bba64689eed87159802158087dd2850c2829bd101ccb2a29ecc93f340901f2"
+  }
+}

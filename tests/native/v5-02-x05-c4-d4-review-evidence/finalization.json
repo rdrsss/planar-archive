@@ -1,0 +1,17 @@
+{
+  "artifact_entries": 107,
+  "artifact_manifest_sha256": "3249a70cec9cd44c4e3a561aabbd5ef8e15d0ae0e3df50eb02da7fd6a7da981d",
+  "candidate_entries": 20,
+  "candidate_sha256": "875be93d599299846396174e059bdc1f543ad5fb029bb341d23b1ca4648bfed0",
+  "debug_and_review_files_released": true,
+  "focused": 536,
+  "no_full_or_release_claim": true,
+  "private": 16,
+  "private_assertions": 947,
+  "product_defect_found": false,
+  "protection_entries": 76348,
+  "report_sha256": "cda1f6559412551b2e5bd8bdd0e996737641a2c1515b601d3d9adf402fbfe2d1",
+  "required_finding": "D4-R1",
+  "unauthorized_drift": 0,
+  "verdict": "request-changes"
+}

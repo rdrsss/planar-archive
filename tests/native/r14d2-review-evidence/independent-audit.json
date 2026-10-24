@@ -1,0 +1,13 @@
+{
+  "candidate_manifest_sha256": "3da96db6f13b830b48d05bb024aa810e403f3cd5a0caa8f79b7358a2e74d7936",
+  "candidate_files": 10,
+  "evidence_manifest_sha256": "5c67ee687ee1415b917c26b021a8211d47f820e1eacca6153782a4dc53c2a2da",
+  "evidence_files": 72,
+  "protected_unchanged": 11614,
+  "AGENTS_symlink": "CLAUDE.md",
+  "red_implementation_equals_before": true,
+  "full_LastTest_total": 337,
+  "full_LastTest_passed": 337,
+  "capture_passed": 31,
+  "dependent_passed": 28
+}

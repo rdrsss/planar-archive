@@ -1,0 +1,8 @@
+{
+  "file": "tests/native/r14-d8-support/acceptance_fault.t.cpp",
+  "restored_mtime_utc": "2026-10-22T18:43:50.919328+00:00",
+  "restored_sha256": "8a9f2832cf6a50f460fc17c280de3c33cba2e9b6e3fba2c707c0e248eb45935f",
+  "transient_sha256_reconstructed": "67e753ca5568823598a01ac610e260ec46841a60df8affa3b9079b36f6333605",
+  "restoration_equal": true,
+  "evidence_limit": "Intermediate hash reconstructed from exact two reversible substitutions recorded in tool transcript, not a contemporaneous intermediate snapshot. No implementation behavior changed; binary was built before substitutions. Native source will be rebuilt after active gate and final no-work repeated."
+}

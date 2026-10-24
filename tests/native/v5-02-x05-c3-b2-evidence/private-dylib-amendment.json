@@ -1,0 +1,8 @@
+{
+  "changed": [
+    "tests/native/v5-02-x05-c3-b2-support/private.py"
+  ],
+  "old_probe_preserved": "private-attempt3",
+  "product_test_and_prose_unchanged": true,
+  "reason": "existing Mach interposition requires shared image; activate copied dylib via private rpath and retain positive controls"
+}

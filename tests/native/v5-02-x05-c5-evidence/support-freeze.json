@@ -1,0 +1,37 @@
+{
+  "tests/native/v5-02-x05-c5-support/cleanup.py": {
+    "bytes": 2012,
+    "mode": 420,
+    "sha256": "a3d0443731c3042e096f0d2ec3165067bfe3e3f5190ed30fb426995cdd69272d"
+  },
+  "tests/native/v5-02-x05-c5-support/freeze.py": {
+    "bytes": 2831,
+    "mode": 420,
+    "sha256": "a8853fabefffaab97e8eea6907bd25720fa058927fd515d7a51485ccf923a26e"
+  },
+  "tests/native/v5-02-x05-c5-support/gate.py": {
+    "bytes": 5666,
+    "mode": 420,
+    "sha256": "9feeb2597d97b25c35885db3cd762fdca1595867d1d3e887ecbb8b882ebc7777"
+  },
+  "tests/native/v5-02-x05-c5-support/generated.py": {
+    "bytes": 2577,
+    "mode": 420,
+    "sha256": "d3a2928bc7577b755df02a009d65b43a518d89a0e4552110cf38778b63d79f90"
+  },
+  "tests/native/v5-02-x05-c5-support/methods.inc": {
+    "bytes": 1429,
+    "mode": 420,
+    "sha256": "2bcab2f021d7af7b0755d4aa6866d36c5faab8bccdb53325acdfb1ada0d08fae"
+  },
+  "tests/native/v5-02-x05-c5-support/private-tests.inc": {
+    "bytes": 9500,
+    "mode": 420,
+    "sha256": "3cd882b5a18315f2f4a52ffa3f84c96241d060f1e73e9b57440a1049c1c9fac7"
+  },
+  "tests/native/v5-02-x05-c5-support/private.py": {
+    "bytes": 8223,
+    "mode": 420,
+    "sha256": "3334cdcc92c1ac26e6409277c0a6372e8cda9071ffb47758f6c17cdde643d9cd"
+  }
+}

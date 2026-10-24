@@ -1,0 +1,38 @@
+{
+  "source_sha256": "ec538aacb0a6b3a352080b586e9210ced25f91ff2622d4ed7c0612cde8c4e05e",
+  "copy_sha256": "058d220a7f2d4e1b2db618ea4e726de5f7838ba9d7d6c4ca822b053bb29349b2",
+  "reverse_identical": true,
+  "substitutions": [
+    {
+      "before": "tests/native/v5-02-x05-a3-c05-evidence",
+      "after": "tests/native/v5-02-x05-a3-c05-review-evidence",
+      "count": 1
+    },
+    {
+      "before": "std::string_view mode(){return std::getenv(\"REVIEW_REF_MODE\");}",
+      "after": "std::string_view mode(){return std::getenv(\"REVIEW_REF_MODE\");}\nstd::string_view api_kind(){return std::getenv(\"REVIEW_API_KIND\");}\nstd::size_t expected_index(){return api_kind()==\"command\"?7:2;}\nstd::string expected_field(){return std::format(\"catalog.{}[{}]\",api_kind()==\"command\"?\"commands\":\"shapes\",expected_index());}",
+      "count": 1
+    },
+    {
+      "before": "for(int i=1;i<=64;++i){auto registration=std::format(\"registration.projection({{id='p{}',abi='projection_v1',revision='v1',input='role_context_v1',help=''}},function()end)\",i);",
+      "after": "for(int i=1;i<=(api_kind()==\"command\"?59:64);++i){auto registration=api_kind()==\"command\"?std::format(\"registration.add({{name='x{}',family='extension_read_v1',handler_id='external.x{}',options=engine.array({{}}),help='',response_kind='extension_v1',capabilities=engine.array({{}})}},function()end)\",i,i):std::format(\"registration.shape({{id='s{}',abi='shape_v1',revision='v1',stages='optional',help=''}},function()end)\",i);",
+      "count": 1
+    },
+    {
+      "before": "&&first_index==2&&first_phase==1;",
+      "after": "&&first_index==expected_index()&&first_phase==1;",
+      "count": 1
+    },
+    {
+      "before": "vm.error().field==\"catalog.projections[2]\"&&refusals==2&&first_index==2&&first_phase==1&&index==2&&phase==1",
+      "after": "vm.error().field==expected_field()&&refusals==2&&first_index==expected_index()&&first_phase==1&&index==expected_index()&&phase==1",
+      "count": 1
+    },
+    {
+      "before": "['control','function','one','one-later','nested3','nested3-later','recovery','host','ordinary-caught','ordinary-later']",
+      "after": "['control','one','one-later','nested3','nested3-later','recovery','host','ordinary-caught','ordinary-later']",
+      "count": 1
+    }
+  ],
+  "scope": "Same real descriptor-reference refusal across the other two API kinds. Native token index includes five shipped commands. No product bytes changed."
+}

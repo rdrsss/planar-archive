@@ -1,0 +1,19 @@
+{
+  "CMakeLists.txt": "a17585720b898991278ee05ab7fddd3f46ca9dc9ef6ae39e2a468b36962aa966",
+  "docs/architecture.md": "7b8657f70ebbe44d6c5469f31c0871d4b022eb7d7dfe72fe13ce622426d4f5b5",
+  "docs/cli-reference.md": "dd74511a955c509beb68a852edc27631ebf2a91109a56c015ef6d0755662a0af",
+  "docs/testing.md": "d313d6a7a7b94760b99c47abd71f73c0e20917ed5fef9ce39fad9534779cbf9f",
+  "src/cmd/planar/CMakeLists.txt": "1a2c02c37aba8513297c2030c24772e71678dafbf06669ffed1285ebf0ec805a",
+  "src/cmd/planar/bootstrap.cpp": "cb43f75161f7ad2bb4c867d033da8d1eae8dc2378c592dd53be6256789f9bbba",
+  "src/cmd/planar/bootstrap.t.cpp": "3d70f79a128880a34d7d01202260f73058e008c23327fa6ca90b70c77e0c35c7",
+  "src/cmd/planar/handlers/history/command.cpp": "1d750b0c5901a89f764be79b8bd8163c366df8a7d985878ee4d446ca9a2f7398",
+  "src/cmd/planar/handlers/history/command.cppm": "1d6e29b29d81670b705daa38e7c50fc43d6c5f241d7f1bacadc7b767c967c297",
+  "src/cmd/planar/response.cpp": "22617b9ff2f130c2d56e3c7e7e96f86abffbe42a585a45e58de13298cc3feb03",
+  "src/cmd/planar/response.cppm": "891354c3d934bba6c8f3c0808a318fd2e6e314794a46f596ccdf6d353134f232",
+  "src/engine/CMakeLists.txt": "98a5bc75484bdfac7a667b817402d91cf2bc90aa32b5db58effa837109b7fec8",
+  "src/engine/history/read.cpp": "f5627ddbd55dd5406558931638297efa1aae9f14a1f02ac49cb13953f6f2265b",
+  "src/engine/history/read.cppm": "8c57f884272480e0d28b203c265e5365173889138e90a7ce781b8ce22d029357",
+  "src/engine/history/read.t.cpp": "32b2f7feb52ca74c504b876c31670540e347d9e5b1b453ee05b8fe9e68127d79",
+  "tests/acceptance/bootstrap_history.py": "18f1151a889c9eb1743c30ee84fc8755d26fc971026718fe588ed2743ac375a9",
+  "tests/native/r14e2-support/fixture.cpp": "f5b494ce8424d2f8dfcc515a3a0b17dbeea443a399154f715541c12e633592af"
+}

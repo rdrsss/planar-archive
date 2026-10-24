@@ -1,0 +1,1 @@
+["python3", "scripts/rewrite-check.py", "lint", "--build-dir", "build/rewrite-debug"]

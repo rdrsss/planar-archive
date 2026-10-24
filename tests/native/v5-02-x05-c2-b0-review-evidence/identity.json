@@ -1,0 +1,11 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "symlink": "CLAUDE.md",
+  "counts": {
+    "source": 2286,
+    "history": 20807,
+    "debug": 890,
+    "release": 3492
+  }
+}

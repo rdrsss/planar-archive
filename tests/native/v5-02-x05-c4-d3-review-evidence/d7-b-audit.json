@@ -1,0 +1,38 @@
+{
+  "path_base": "build directory",
+  "files": {
+    "runtime.cppm": "e340b46fa9411fae7e9cdf7fdd2f9fa421d56ab5497520ab521940e70e8c1b11",
+    "invocation.cpp": "7f4062b4befbf7eb9404991689bdfa3b65b1b46982dd86f6dfe1349e7e33dec2",
+    "commands.lua": "682a9ce26ff6aeb0825d772fabf33a35b5814e98cdd7db7734fc1aeed8efce36",
+    "bootstrap.cpp": "5b9c91bc15d6bdd76889d2b51390b5deeec44a21dc56f8e67eebcdf226b48248",
+    "bootstrap.cppm": "3f7110454c7d77ffd383623f892c0ef870301700b7a6e076092f75eb90c5a1a4",
+    "generation.json": "fe493035f3735ea68152f4a1c4c1af6547597ddb46b39cce466cc2f02ae1e83b",
+    "runtime.cpp": "dae72b861718054d087a169754cabe876c7415671b8ce1e55cc19d7494feecd5",
+    "main.cpp": "69ac62e5ebd31317220ca3468b83add395227c42a6162029a1514f573ea3e83e",
+    "invocation.cppm": "ff5c42fb9ead6307d1b78d8e623fd12ac30f075bd0a126a84e3c636058e7c514",
+    "handlers/init/command.cpp": "23585b798f05898d12830224fb0feab30052461d64927c7e60c779b03e9e5839",
+    "handlers/init/command.cppm": "13e3358e5db8b534ae2a6f1f48033ef130d76eec4885504d6f1b6bf454f76c01",
+    "handlers/render/command.cpp": "3be8e0b5b32bcfad14ded6a1acda3bc1211f1fcda681b76daa1d0d8dd68940ce",
+    "handlers/render/command.cppm": "7dc53b4f7d3fc13a8c310aba919e1e948ff45b239dcc4ad24edc2a93b1cc2bd9",
+    "handlers/load/command.cpp": "2c1edfc9c42b916eed31bd8a6ec73b33bf168f54b9d6b072519e6d4af28f7e13",
+    "handlers/load/command.cppm": "0cf05b0b6d1c5f159d4c26478f13ff465846dd38fc6d7129d39c2426fab59e8a",
+    "handlers/history/command.cpp": "4faa19f5c604021d7e05893f94bb4561ddb7d744c776a9424243ab88d06cd814",
+    "handlers/history/command.cppm": "67fa8fa38255e5b3b961a3597c8b626f0374d3881a7c8c5c446faa2e34737ff3",
+    "handlers/export/command.cpp": "93b4428d816947afa42b2b68c19380f561b9b82c4b89cee276fc4cbe42fe0fd4",
+    "handlers/export/command.cppm": "bb28d1304f4cae5093cf7e67a749b4f4e9ea04fa5495cdab506fb7f873811c04"
+  },
+  "originals": [
+    "planar/json.lua",
+    "planar/schema.lua",
+    "planar/semantic.lua",
+    "planar/selection.lua",
+    "planar/presentation.lua",
+    "planar/observations.lua",
+    "planar/render.lua",
+    "planar/acceptance.lua",
+    "planar/commands.lua",
+    "planar/bootstrap.lua"
+  ],
+  "assembly_sha256": "4c271e5e0df6f52c98d2348985a0e82fd1784c5ad351e0b039cad529a9de622a",
+  "module_sha256": "552a000212e3488f0fb8606b6b337371e6c186b5a184cf4843db656078a4501c"
+}

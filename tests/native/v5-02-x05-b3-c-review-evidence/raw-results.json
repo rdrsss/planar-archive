@@ -1,0 +1,267 @@
+{
+  "tests/native/v5-02-x05-b3-c-evidence/final-gate/focused.xml": {
+    "cases": 389,
+    "reported_tests": 389,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-gate/history-codec.xml": {
+    "cases": 11,
+    "reported_tests": 11,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-gate/production-selection.xml": {
+    "cases": 13,
+    "reported_tests": 334,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-gate/production-semantics.xml": {
+    "cases": 11,
+    "reported_tests": 283,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-gate/codec.xml": {
+    "cases": 18,
+    "reported_tests": 413,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/focused.xml": {
+    "cases": 389,
+    "reported_tests": 389,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/history-codec.xml": {
+    "cases": 11,
+    "reported_tests": 11,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/production-selection.xml": {
+    "cases": 13,
+    "reported_tests": 334,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/production-semantics.xml": {
+    "cases": 11,
+    "reported_tests": 283,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/codec.xml": {
+    "cases": 18,
+    "reported_tests": 413,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/adversarial.xml": {
+    "cases": 3,
+    "reported_tests": 160,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/allocation.xml": {
+    "cases": 1,
+    "reported_tests": 71329,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/hash.xml": {
+    "cases": 1,
+    "reported_tests": 303,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/lua.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/conversion.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/semantic.xml": {
+    "cases": 1,
+    "reported_tests": 15,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/parser.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/hash-adversaries.xml": {
+    "cases": 1,
+    "reported_tests": 18,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/instructions.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/snapshot.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/error-string.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/execution.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/native.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/hash-remaining.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/selection-nodes.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/error.xml": {
+    "cases": 1,
+    "reported_tests": 18,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/selection-native.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/error-map.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/error-node.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/success.xml": {
+    "cases": 1,
+    "reported_tests": 67,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/wrapper.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/nodes.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-evidence/final-probes/error-node-exact.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/lua.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/conversion.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/semantic.xml": {
+    "cases": 1,
+    "reported_tests": 15,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/parser.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/hash-adversaries.xml": {
+    "cases": 1,
+    "reported_tests": 18,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/instructions.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/snapshot.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/error-string.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/execution.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/native.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/hash-remaining.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/selection-nodes.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/error.xml": {
+    "cases": 1,
+    "reported_tests": 18,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/selection-native.xml": {
+    "cases": 1,
+    "reported_tests": 21,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/error-map.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/error-node.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/success.xml": {
+    "cases": 1,
+    "reported_tests": 67,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/wrapper.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/nodes.xml": {
+    "cases": 1,
+    "reported_tests": 22,
+    "zero_failures_errors_skips_disabled": true
+  },
+  "tests/native/v5-02-x05-b3-c-review-evidence/probes/error-node-exact.xml": {
+    "cases": 1,
+    "reported_tests": 23,
+    "zero_failures_errors_skips_disabled": true
+  }
+}

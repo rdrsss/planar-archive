@@ -1,0 +1,10 @@
+{
+  "owned_files": 13,
+  "format_only_two_functions_and_import": true,
+  "pure_A1_A2_modules_unchanged": true,
+  "transaction_prepared_load_runtime_Lua_export_exact_contract_unchanged": true,
+  "CMake_only_required_dependencies_and_test_vector": true,
+  "historical_bodies_unchanged": 9,
+  "AGENTS_symlink": "CLAUDE.md",
+  "red_readers_match_original_baseline": true
+}

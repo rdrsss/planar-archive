@@ -1,0 +1,30 @@
+{
+  "candidate_manifest_sha256": "5f66c57ff3224d4a79ea33f991adc45ca4b05998f1447e0228782f12308eb8c3",
+  "owned_diff_sha256": "39a63c3366fc9757b2ba59f8c9ec24510780929425058558928177ce9f5808fc",
+  "artifact_manifest_sha256": "22806bdbabe149e38d9bfed9f4d84c28ce9122ca5ec4b62a4c183091fd2ebdd3",
+  "current_and_snapshot_files": 12,
+  "baseline_files": 10,
+  "artifacts": 48,
+  "inherited": {
+    "d6": {
+      "candidate_files": 17,
+      "artifacts": 67
+    },
+    "c01": {
+      "candidate_files": 13,
+      "artifacts": 67
+    }
+  },
+  "historical_protected_paths": 14145,
+  "historical_exceptions_changed": [
+    "docs/vernacular/rounds/R14-D6-C01.md"
+  ],
+  "unexpected_historical_changes": [],
+  "protection_limit": "Historical protection plus contemporaneous owned snapshots only; no complete D7-A starting tree or exhaustive new-path audit.",
+  "contract_body_sha256": "a842901180c15691cda24a0ddafcc708dcb88add85717b0080b2a1313e6f4ab8",
+  "symlink_preserved": true,
+  "coder_final_cases": 188,
+  "coder_skips": 0,
+  "baseline_inventory": 391,
+  "coder_inventory": 396
+}

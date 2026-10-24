@@ -1,0 +1,17 @@
+{
+  "candidate_unchanged": true,
+  "author_artifacts_unchanged": 115,
+  "protected_records_unchanged": 15641,
+  "only_new_file_outside_review_evidence": [
+    "docs/vernacular/rounds/V5-02-X04-A1-review.md"
+  ],
+  "build_identities_unchanged": {
+    "build/rewrite-debug/bin/planar": "14f099c722e957ddf64af5ef45ca67e672c4f8d91f462e38e4941b0c6d0e7b82",
+    "build/rewrite-debug/src/engine/CMakeFiles/planar_capture_admission.dir/capture/admission.cpp.o": "6d4fcb16b884c842978d70de9ef08366bdbd70c887f33b477d086046c139b748",
+    "build/rewrite-debug/src/engine/libplanar_admission_syscalls.dylib": "09813d6d7382970399d38068f0e770c5cdf0ce35e6fda8a8ec30fef43bf1efe5",
+    "build/rewrite-debug/src/engine/planar_capture_admission_tests": "207abdb450320adc5d8a270f0e0139ab67fd9b9b77c0700d51e47ffd89fbd027"
+  },
+  "original_read_overload_byte_identical": true,
+  "original_read_helper_exact_except_optional_binding": true,
+  "admission_has_no_content_or_directory_enumeration_calls": true
+}

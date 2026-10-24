@@ -1,0 +1,12 @@
+{
+  "artifact_entries": 40,
+  "artifact_manifest_sha256": "5a1eac4901f72c65a4b38963ab1b39beee42e6f578910f825ed4720372bbbe4a",
+  "candidate_manifest_sha256": "492e4d8cd34c8d23e40e9fb3b9709f1c02432e5b71ba165ce605900b34e6c88d",
+  "debug_and_all_reviewer_edits_released": true,
+  "disposition": "approve",
+  "final_source_sha256": "1798ff2c82d5f1eece75ee666ac394f1b0f4a9effe93a24b0d8e8a1c82e6f332",
+  "no_later_edits": true,
+  "release_remained_read_only": true,
+  "report_sha256": "6a0b37fb94284cbfa286a02fa2531776f1ad26334ba30f58e92268145bd63525",
+  "timestamp_utc": "2026-10-23T19:58:21.336532+00:00"
+}

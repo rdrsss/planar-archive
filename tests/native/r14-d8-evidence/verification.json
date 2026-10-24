@@ -1,0 +1,35 @@
+{
+  "path_base": "repository",
+  "results": {
+    "debug": {
+      "executed": 402,
+      "failures": 0,
+      "skips": 0,
+      "preserved_prior_names": 400,
+      "added": [
+        "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+        "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic"
+      ]
+    },
+    "release": {
+      "executed": 402,
+      "failures": 0,
+      "skips": 0,
+      "preserved_prior_names": 400,
+      "added": [
+        "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+        "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic"
+      ]
+    }
+  },
+  "debug_no_work_final": "tests/native/r14-d8-evidence/debug-no-work-repeat.log",
+  "release_no_work_final": "tests/native/r14-d8-evidence/release-no-work.log",
+  "limitations": [
+    "macOS ARM64 / LLVM23.1.4 only; Linux not executed",
+    "early non-hot journal remnants refuse unchanged; no supported automatic recovery/retry demonstrated",
+    "native VFS fault/process proof is not public CLI fault injection or hardware power loss",
+    "future R15+ execution and RA01 authoring remain open",
+    "independent review required"
+  ],
+  "attempt_notes": "tests/native/r14-d8-evidence/failed-attempts.md"
+}

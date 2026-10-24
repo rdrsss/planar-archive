@@ -1,0 +1,19 @@
+{
+  "count": 13,
+  "links": [
+    "../load-command-contract.md#fixed-catalog-admission-and-typed-intent",
+    "../load-command-contract.md#native-prelude-and-early-replay",
+    "../../../src/engine/acceptance/prepared.cppm#L24",
+    "../load-command-contract.md#finite-fresh-load-service-protocol",
+    "../../../src/stdlib/planar/acceptance.lua#L3",
+    "../load-command-contract.md#atomic-completion-and-saved-byte-transport",
+    "../../../src/engine/ledger/format.cpp#L1436",
+    "../../../src/engine/capture/native.cpp#L479",
+    "../load-command-contract.md#typed-authoritative-diagnostics",
+    "../../../src/engine/ledger/types.cppm#L27",
+    "../../../src/engine/ledger/format.cpp#L1317",
+    "../load-command-contract.md#bounds-and-failure-precedence",
+    "../../../tests/native/r14-d3-review-evidence/verification.json"
+  ],
+  "failures": []
+}

@@ -1,0 +1,46 @@
+{
+  "machine": "arm64",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "versions": {
+    "clang": {
+      "argv": [
+        "/opt/homebrew/opt/llvm/bin/clang++",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "Homebrew clang version 23.1.4\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /opt/homebrew/Cellar/llvm/23.1.4/bin\nConfiguration file: /opt/homebrew/Cellar/llvm/23.1.4/etc/clang/arm64-apple-darwin25.cfg\n"
+    },
+    "cmake": {
+      "argv": [
+        "cmake",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "cmake version 4.4.4\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n"
+    },
+    "doxygen": {
+      "argv": [
+        "doxygen",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "1.18.0\n"
+    },
+    "ninja": {
+      "argv": [
+        "ninja",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "1.13.2\n"
+    },
+    "python": {
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "Python 3.15.0\n"
+    }
+  }
+}

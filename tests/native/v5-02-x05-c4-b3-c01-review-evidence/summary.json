@@ -1,0 +1,13 @@
+{
+  "focused": 429,
+  "counts": {
+    "planar_runtime_tests": 304,
+    "planar_history_read_tests": 3,
+    "planar_ledger_format_tests": 82,
+    "planar_ledger_sqlite_tests": 33
+  },
+  "cli": 7,
+  "current": 790,
+  "baseline": 786,
+  "preserved_all": true
+}

@@ -1,0 +1,19 @@
+{
+  "audits": 7,
+  "debug_released": true,
+  "disposition": "request-changes",
+  "finding": "B2-R1",
+  "focused_pass": 184,
+  "focused_seconds": 43.55267766676843,
+  "inventory": 851,
+  "lint_sources": 118,
+  "preserved": 838,
+  "private_replays_pass": 6,
+  "product_edits": false,
+  "protection_changes": 0,
+  "protection_entries": 75393,
+  "review_positive_pass": 1,
+  "review_regression_failed_assertions": 8,
+  "review_regression_failing_cases": 1,
+  "vectors": 6
+}

@@ -1,0 +1,18 @@
+{
+  "path_base": "repository root; snapshots under tests/native/r14-d6-c01-evidence/candidate",
+  "files": {
+    "CLAUDE.md": "7f2ea065fc38537f47c264a4aa41113e7eb60bd23176684eaf01735162bc376b",
+    "docs/architecture.md": "e7f4c947b040eb7530974f75ca945819120c06d31c2e3b84d481835605572abf",
+    "docs/testing.md": "4d9c59fb3f055b9d6d5d899097bedf3fc6f5794a101cadbffdc7e653f877683d",
+    "docs/vernacular/acceptance-matrix.md": "1b86b44950e0bd03092a135e8ca50b8d7c69f70ff0c85751fc5d8f05879bd8b8",
+    "docs/vernacular/implementation.md": "4be92422e58e0a5b391a53ffddf4dcdd7bf4bcee6ab91ce046e6d264a5bd10f1",
+    "docs/vernacular/load-command-contract.md": "834d986ed80a9c98dfd5a92bb7cbea319e3750e329a1ab4c21d6b5ba5009a413",
+    "docs/vernacular/roadmap.md": "b114cc5e965693df80c1dad0aa47a59623fb88df5a1b6df59b76c37831065456",
+    "docs/vernacular/v5-alignment.md": "ad53bf36fdda36aec1fe46acf835580adbb5b12ea22ef2d3a357cd3ec71bb28f",
+    "src/engine/CMakeLists.txt": "b8765be035b3cbc91510996a3aee34104ac14f56173bf63a5b9e2a88fac78176",
+    "src/engine/runtime/commands.t.cpp": "117faa302a8ed52aed2db0f6d8b1724238ac63dec0ae6791a1e0f0936e171b80",
+    "src/engine/runtime/runtime.cpp": "9c59fd760f16460fe549857cff2e1b1a10f54e28362eef4c7bf2c972b828cff8",
+    "tests/native/r14-d6-c01-support/audit.py": "dffefdd7de5475e4ebf0f6d65abbbb7382f0e96eaa3015620e0f0e5598047758",
+    "tests/native/r14-d6-c01-support/generate.py": "7e3dc366563edf7bd0e7ae39b1828199dd34b66b4f8a90b8027fe52936ebaa0b"
+  }
+}

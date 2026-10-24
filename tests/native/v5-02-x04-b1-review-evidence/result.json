@@ -1,0 +1,19 @@
+{
+  "author_focused_cases": 177,
+  "errors": 0,
+  "failures": 0,
+  "independent_cases": 8,
+  "inventory": 497,
+  "names": [
+    "replacement.profile codec decodes exact ordered paths in memory",
+    "replacement.profile codec enforces bounded strings arrays nodes depth and input",
+    "replacement.profile codec keeps strict schema and arbitrary integer classification",
+    "replacement.profile codec preserves path policy and logical error fields",
+    "replacement.tree core effective provenance byte budgets preserve original ceilings",
+    "replacement.tree core effective provenance counts expanded file occurrences",
+    "replacement.tree core effective provenance file boundary validates before callbacks",
+    "replacement.tree core effective provenance preserves lower path depth and file limits"
+  ],
+  "preserved_names": 489,
+  "skips": 0
+}

@@ -1,0 +1,45 @@
+{
+  "base": "repository root; logs/XML in tests/native/v5-02-x01-review-evidence",
+  "checks": {
+    "spike": {
+      "matched": 3,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "focused": {
+      "matched": 41,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  },
+  "raw_spike_rows": 56,
+  "raw_rows_equal_author": true,
+  "assertion_counts": [
+    309,
+    24,
+    17
+  ],
+  "inventory": {
+    "baseline": 402,
+    "current": 405,
+    "missing": [],
+    "added": [
+      "replacement.X01 CLI11 envelope and sealed catalog matrix",
+      "replacement.X01 CLI11 opaque positional probe rejects prefix flags before catalog selection",
+      "replacement.X01 CLI11 parsed profile scalar supports existing explicit value policy"
+    ]
+  },
+  "candidate_mismatches": [],
+  "artifact_mismatches": [],
+  "focused_cli_suites": [
+    "replacement.cli",
+    "replacement.init_cli",
+    "replacement.history_cli",
+    "replacement.export_cli",
+    "replacement.retained_cli",
+    "replacement.workspace_selector_cli",
+    "replacement.load_cli"
+  ]
+}

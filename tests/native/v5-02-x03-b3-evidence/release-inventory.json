@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "<repo>/build/rewrite-release",
+    "--show-only=json-v1"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:25:21.918996+00:00",
+  "exit_code": 0,
+  "seconds": 0.08096718788146973,
+  "start_utc": "2026-10-22T21:25:21.838037+00:00"
+}

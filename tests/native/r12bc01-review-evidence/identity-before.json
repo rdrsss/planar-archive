@@ -1,0 +1,14 @@
+{
+  "candidate-manifest.json": {
+    "sha256": "a068dd223db5786d2bbcb96ce48a52c801e977862810a84101f4ff3f13025071",
+    "expected_sha256": "a068dd223db5786d2bbcb96ce48a52c801e977862810a84101f4ff3f13025071",
+    "count": 7,
+    "mismatches": []
+  },
+  "evidence-manifest.json": {
+    "sha256": "d8038ade832f2aecfe1070c4467c8f0ccc6505b2b7636e36276a82107f56807f",
+    "expected_sha256": "d8038ade832f2aecfe1070c4467c8f0ccc6505b2b7636e36276a82107f56807f",
+    "count": 39,
+    "mismatches": []
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "inspection_only_missing_file": "A read-only inspection requested final-gate/summary.json, which does not exist; raw focused XML, inventory and commands were inspected instead. No test was rerun due to this inspection.",
+  "test_build_failures": 0
+}

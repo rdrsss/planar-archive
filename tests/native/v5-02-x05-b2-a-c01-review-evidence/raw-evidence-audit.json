@@ -1,0 +1,80 @@
+{
+  "author": {
+    "cases": 252,
+    "unit_native": 245,
+    "acceptance": 7,
+    "unique_JUnit_console_LastTest_match": true,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0
+  },
+  "reviewer": {
+    "cases": 252,
+    "unit_native": 245,
+    "acceptance": 7,
+    "unique_JUnit_console_LastTest_match": true,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0
+  },
+  "probes": {
+    "original_red/adapter": {
+      "cases": 3,
+      "failed_cases": 3,
+      "assertions": 14,
+      "failed_assertions": 6,
+      "errors": 0,
+      "skips": 0
+    },
+    "author/adapter": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": 23,
+      "failed_assertions": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "author/adversarial": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": 377,
+      "failed_assertions": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "author/boundary": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": 56,
+      "failed_assertions": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "reviewer/adapter": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": 23,
+      "failed_assertions": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "reviewer/adversarial": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": 377,
+      "failed_assertions": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "reviewer/boundary": {
+      "cases": 3,
+      "failed_cases": 0,
+      "assertions": 56,
+      "failed_assertions": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  }
+}

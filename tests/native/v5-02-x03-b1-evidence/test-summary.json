@@ -1,0 +1,1009 @@
+{
+  "count": 167,
+  "failures": [],
+  "skips": [],
+  "cases": [
+    {
+      "name": "replacement.history_cli",
+      "classname": "replacement.history_cli",
+      "time": "3.95697",
+      "status": "run"
+    },
+    {
+      "name": "replacement.loader constructed nested records remain immutable and readable",
+      "classname": "replacement.loader constructed nested records remain immutable and readable",
+      "time": "0.0169693",
+      "status": "run"
+    },
+    {
+      "name": "replacement.prepared native paths retain render spelling and normalize future intent",
+      "classname": "replacement.prepared native paths retain render spelling and normalize future intent",
+      "time": "0.0168215",
+      "status": "run"
+    },
+    {
+      "name": "replacement.capture acceptance detects changes after sealing without changing published values",
+      "classname": "replacement.capture acceptance detects changes after sealing without changing published values",
+      "time": "0.0346806",
+      "status": "run"
+    },
+    {
+      "name": "replacement.capture acceptance owns receipts after moves and session destruction",
+      "classname": "replacement.capture acceptance owns receipts after moves and session destruction",
+      "time": "0.0175112",
+      "status": "run"
+    },
+    {
+      "name": "replacement.capture acceptance preserves exclusions and normalized modes",
+      "classname": "replacement.capture acceptance preserves exclusions and normalized modes",
+      "time": "0.0192121",
+      "status": "run"
+    },
+    {
+      "name": "replacement.capture acceptance releases root descriptors exactly once",
+      "classname": "replacement.capture acceptance releases root descriptors exactly once",
+      "time": "0.0190784",
+      "status": "run"
+    },
+    {
+      "name": "replacement.capture acceptance retains standalone registry file and parent receipts",
+      "classname": "replacement.capture acceptance retains standalone registry file and parent receipts",
+      "time": "0.023472",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record decoder rejects corrupt framing and oversized claims before allocation",
+      "classname": "replacement.record decoder rejects corrupt framing and oversized claims before allocation",
+      "time": "0.0169359",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record decoding validates persisted local directory and request fields",
+      "classname": "replacement.record decoding validates persisted local directory and request fields",
+      "time": "0.016811",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record directory local IDs change storage while metadata changes portable digest",
+      "classname": "replacement.record directory local IDs change storage while metadata changes portable digest",
+      "time": "0.0158845",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record file and value payload ceilings include canonical framing bytes",
+      "classname": "replacement.record file and value payload ceilings include canonical framing bytes",
+      "time": "0.0314529",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record independent literal framing and canonical digest vectors",
+      "classname": "replacement.record independent literal framing and canonical digest vectors",
+      "time": "0.0380148",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record rejects invalid modes names aliases ordering kinds and local IDs",
+      "classname": "replacement.record rejects invalid modes names aliases ordering kinds and local IDs",
+      "time": "0.0177806",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record requests validate local text and head tokens without normalizing arguments",
+      "classname": "replacement.record requests validate local text and head tokens without normalizing arguments",
+      "time": "0.0181927",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record values require exact supported bounded canonical data",
+      "classname": "replacement.record values require exact supported bounded canonical data",
+      "time": "0.0177114",
+      "status": "run"
+    },
+    {
+      "name": "replacement.record whole encoding ceiling is exact for requests",
+      "classname": "replacement.record whole encoding ceiling is exact for requests",
+      "time": "0.711694",
+      "status": "run"
+    },
+    {
+      "name": "replacement.request v2 complete 64 MiB frame ceiling includes selector and suffix",
+      "classname": "replacement.request v2 complete 64 MiB frame ceiling includes selector and suffix",
+      "time": "0.745537",
+      "status": "run"
+    },
+    {
+      "name": "replacement.request v2 independent complete frame and digest vectors",
+      "classname": "replacement.request v2 independent complete frame and digest vectors",
+      "time": "0.0257592",
+      "status": "run"
+    },
+    {
+      "name": "replacement.request v2 inherits text head bounds and requires normalized absolute profile",
+      "classname": "replacement.request v2 inherits text head bounds and requires normalized absolute profile",
+      "time": "0.0182189",
+      "status": "run"
+    },
+    {
+      "name": "replacement.request v2 refuses malformed framing tags versions and oversized claims",
+      "classname": "replacement.request v2 refuses malformed framing tags versions and oversized claims",
+      "time": "0.0177114",
+      "status": "run"
+    },
+    {
+      "name": "replacement.command export publication state survives invalid projection and caught exhaustion",
+      "classname": "replacement.command export publication state survives invalid projection and caught exhaustion",
+      "time": "0.668074",
+      "status": "run"
+    },
+    {
+      "name": "replacement.command history selects exact typed decimal strings and defaults without Lua number conversion",
+      "classname": "replacement.command history selects exact typed decimal strings and defaults without Lua number conversion",
+      "time": "0.0605708",
+      "status": "run"
+    },
+    {
+      "name": "replacement.command initialization semantic policy refuses invalid workspace IDs before publication",
+      "classname": "replacement.command initialization semantic policy refuses invalid workspace IDs before publication",
+      "time": "0.0482386",
+      "status": "run"
+    },
+    {
+      "name": "replacement.command load defers provenance refusal until fresh acceptance",
+      "classname": "replacement.command load defers provenance refusal until fresh acceptance",
+      "time": "0.0478256",
+      "status": "run"
+    },
+    {
+      "name": "replacement.command load validates retained token head request and actor before services",
+      "classname": "replacement.command load validates retained token head request and actor before services",
+      "time": "0.0683708",
+      "status": "run"
+    },
+    {
+      "name": "replacement.schema ID record normalization sorts collections and preserves ordered lists",
+      "classname": "replacement.schema ID record normalization sorts collections and preserves ordered lists",
+      "time": "0.181906",
+      "status": "run"
+    },
+    {
+      "name": "replacement.schema JSON node limit and request envelopes refuse deterministically",
+      "classname": "replacement.schema JSON node limit and request envelopes refuse deterministically",
+      "time": "0.112939",
+      "status": "run"
+    },
+    {
+      "name": "replacement.schema sorted records retain declaration indexes for intrinsic diagnostics",
+      "classname": "replacement.schema sorted records retain declaration indexes for intrinsic diagnostics",
+      "time": "0.0499018",
+      "status": "run"
+    },
+    {
+      "name": "replacement.selection pipeline derives obligations before scope and records remapped producers",
+      "classname": "replacement.selection pipeline derives obligations before scope and records remapped producers",
+      "time": "0.212428",
+      "status": "run"
+    },
+    {
+      "name": "replacement.selection refuses inconsistent malformed and excessive retained byte records",
+      "classname": "replacement.selection refuses inconsistent malformed and excessive retained byte records",
+      "time": "0.154333",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite URI looking native filenames remain persistent files",
+      "classname": "replacement.ledger sqlite URI looking native filenames remain persistent files",
+      "time": "0.0191272",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite VFS write and sync errors never report commit and permit complete retry",
+      "classname": "replacement.ledger sqlite VFS write and sync errors never report commit and permit complete retry",
+      "time": "0.0437795",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite authorizer prevents manual transaction bypass",
+      "classname": "replacement.ledger sqlite authorizer prevents manual transaction bypass",
+      "time": "0.0179051",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite bare memory filename existing modes refuse missing files",
+      "classname": "replacement.ledger sqlite bare memory filename existing modes refuse missing files",
+      "time": "0.017029",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite bare memory filename persists through native path spellings",
+      "classname": "replacement.ledger sqlite bare memory filename persists through native path spellings",
+      "time": "0.0181263",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite binding failures and preparation errors abandon writes",
+      "classname": "replacement.ledger sqlite binding failures and preparation errors abandon writes",
+      "time": "0.0185199",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite bounded busy refusal releases for retry",
+      "classname": "replacement.ledger sqlite bounded busy refusal releases for retry",
+      "time": "0.130088",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite commit evidence distinguishes success inactive and deferred rollback",
+      "classname": "replacement.ledger sqlite commit evidence distinguishes success inactive and deferred rollback",
+      "time": "0.0240922",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite configured full rolls back complete symbolic storage state",
+      "classname": "replacement.ledger sqlite configured full rolls back complete symbolic storage state",
+      "time": "0.0234031",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite extended constraints rollback and permit retry",
+      "classname": "replacement.ledger sqlite extended constraints rollback and permit retry",
+      "time": "0.0188022",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite failed deferred commit rolls back and releases writer",
+      "classname": "replacement.ledger sqlite failed deferred commit rolls back and releases writer",
+      "time": "0.0195781",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite handled rollback write fault recovers complete state and permits retry",
+      "classname": "replacement.ledger sqlite handled rollback write fault recovers complete state and permits retry",
+      "time": "0.0243923",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite online backup propagates actual destination VFS failure",
+      "classname": "replacement.ledger sqlite online backup propagates actual destination VFS failure",
+      "time": "0.0218137",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite online backup supports pinned snapshots and rejects invalid owners",
+      "classname": "replacement.ledger sqlite online backup supports pinned snapshots and rejects invalid owners",
+      "time": "0.018946",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite owns binary text blob empty and null values",
+      "classname": "replacement.ledger sqlite owns binary text blob empty and null values",
+      "time": "0.0185872",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite process termination brackets actual commit sync and returned commit",
+      "classname": "replacement.ledger sqlite process termination brackets actual commit sync and returned commit",
+      "time": "0.0286878",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite readonly existing mode never creates missing files",
+      "classname": "replacement.ledger sqlite readonly existing mode never creates missing files",
+      "time": "0.018173",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite separate reader makes commit busy and complete rollback reusable",
+      "classname": "replacement.ledger sqlite separate reader makes commit busy and complete rollback reusable",
+      "time": "0.123039",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite separate writer process busy bound releases and retries",
+      "classname": "replacement.ledger sqlite separate writer process busy bound releases and retries",
+      "time": "0.136374",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite statements retain moved and destroyed connections",
+      "classname": "replacement.ledger sqlite statements retain moved and destroyed connections",
+      "time": "0.0260675",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite transactions commit abandon and survive wrapper destruction",
+      "classname": "replacement.ledger sqlite transactions commit abandon and survive wrapper destruction",
+      "time": "0.0216067",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger sqlite unavailable cwd returns typed path failure",
+      "classname": "replacement.ledger sqlite unavailable cwd returns typed path failure",
+      "time": "0.0187155",
+      "status": "run"
+    },
+    {
+      "name": "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+      "classname": "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+      "time": "2.44753",
+      "status": "run"
+    },
+    {
+      "name": "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic",
+      "classname": "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic",
+      "time": "0.270592",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic acceptance initial noop change and revert retain chronology",
+      "classname": "replacement.atomic acceptance initial noop change and revert retain chronology",
+      "time": "0.236558",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic concurrent identical requests replay and competing heads refuse within finite retry",
+      "classname": "replacement.atomic concurrent identical requests replay and competing heads refuse within finite retry",
+      "time": "0.148673",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic final native receipt refusal rolls back all tentative history",
+      "classname": "replacement.atomic final native receipt refusal rolls back all tentative history",
+      "time": "0.0565105",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic unknown request CAS precedes prepared inspection and leaves no rows",
+      "classname": "replacement.atomic unknown request CAS precedes prepared inspection and leaves no rows",
+      "time": "0.0372297",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic valid maximum record ID refuses allocation without writes",
+      "classname": "replacement.atomic valid maximum record ID refuses allocation without writes",
+      "time": "0.0419299",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic workspace mismatch refuses before record writes",
+      "classname": "replacement.atomic workspace mismatch refuses before record writes",
+      "time": "0.034735",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history checks saved noop parent event references request body and bounded metadata",
+      "classname": "replacement.ledger accepted history checks saved noop parent event references request body and bounded metadata",
+      "time": "1.68636",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history distinguishes unknown event and result payload versions",
+      "classname": "replacement.ledger accepted history distinguishes unknown event and result payload versions",
+      "time": "0.253851",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history negotiates unknown event row versions separately from outer format",
+      "classname": "replacement.ledger accepted history negotiates unknown event row versions separately from outer format",
+      "time": "0.093313",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history permits raw access to shape verified unsupported interpretation versions",
+      "classname": "replacement.ledger accepted history permits raw access to shape verified unsupported interpretation versions",
+      "time": "0.117609",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history refuses identical content hidden behind duplicate record IDs",
+      "classname": "replacement.ledger accepted history refuses identical content hidden behind duplicate record IDs",
+      "time": "0.138621",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history rejects orphan and projection rows",
+      "classname": "replacement.ledger accepted history rejects orphan and projection rows",
+      "time": "0.550229",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history rejects schema valid relational and chronology corruption unchanged",
+      "classname": "replacement.ledger accepted history rejects schema valid relational and chronology corruption unchanged",
+      "time": "1.66579",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger accepted history validates complete provenance workspace and interpretation shapes",
+      "classname": "replacement.ledger accepted history validates complete provenance workspace and interpretation shapes",
+      "time": "2.45521",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger complete accepted change noop and revert history reopens writes backs up and restores",
+      "classname": "replacement.ledger complete accepted change noop and revert history reopens writes backs up and restores",
+      "time": "0.263399",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger complete accepted history survives explicit quiescent hot journal recovery",
+      "classname": "replacement.ledger complete accepted history survives explicit quiescent hot journal recovery",
+      "time": "0.140534",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format all immutable triggers abort meaningful row mutations",
+      "classname": "replacement.ledger format all immutable triggers abort meaningful row mutations",
+      "time": "0.0307613",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format backup restore refuse existing destinations and sidecars unchanged",
+      "classname": "replacement.ledger format backup restore refuse existing destinations and sidecars unchanged",
+      "time": "0.258306",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format backup restore reject invalid sources before target creation",
+      "classname": "replacement.ledger format backup restore reject invalid sources before target creation",
+      "time": "0.124991",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format explicit recovery rolls back real killed dirty pages",
+      "classname": "replacement.ledger format explicit recovery rolls back real killed dirty pages",
+      "time": "0.0854659",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format initialization refuses every existing destination sidecar",
+      "classname": "replacement.ledger format initialization refuses every existing destination sidecar",
+      "time": "0.0291821",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format initialization rejects invalid arguments and persists literal memory filename",
+      "classname": "replacement.ledger format initialization rejects invalid arguments and persists literal memory filename",
+      "time": "0.0282202",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format initializes exact metadata schema and Glaze event",
+      "classname": "replacement.ledger format initializes exact metadata schema and Glaze event",
+      "time": "0.0357997",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format malformed btree and altered trigger refuse unchanged",
+      "classname": "replacement.ledger format malformed btree and altered trigger refuse unchanged",
+      "time": "0.0662509",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format no replace and no follow initialization preserves all targets",
+      "classname": "replacement.ledger format no replace and no follow initialization preserves all targets",
+      "time": "0.0289186",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format online backup and restore preserve initialized metadata and state",
+      "classname": "replacement.ledger format online backup and restore preserve initialized metadata and state",
+      "time": "0.0509925",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format recovery accepts redundant genuine hot journal",
+      "classname": "replacement.ledger format recovery accepts redundant genuine hot journal",
+      "time": "0.037718",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format recovery refuses super-journal authority unchanged",
+      "classname": "replacement.ledger format recovery refuses super-journal authority unchanged",
+      "time": "0.312511",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format recovery rejects deceptive and malformed pairs unchanged",
+      "classname": "replacement.ledger format recovery rejects deceptive and malformed pairs unchanged",
+      "time": "0.433469",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format refuses every missing trigger and explicit index unchanged",
+      "classname": "replacement.ledger format refuses every missing trigger and explicit index unchanged",
+      "time": "0.913197",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format refuses foreign empty truncated and version files unchanged",
+      "classname": "replacement.ledger format refuses foreign empty truncated and version files unchanged",
+      "time": "0.0891974",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format refuses metadata grammar and timestamp corruption",
+      "classname": "replacement.ledger format refuses metadata grammar and timestamp corruption",
+      "time": "0.0898452",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format rejects NUL suffixes and oversized encoded metadata unchanged",
+      "classname": "replacement.ledger format rejects NUL suffixes and oversized encoded metadata unchanged",
+      "time": "0.916121",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format rejects altered schema and extra objects unchanged",
+      "classname": "replacement.ledger format rejects altered schema and extra objects unchanged",
+      "time": "0.0881171",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format reopens read only and writable without mutation",
+      "classname": "replacement.ledger format reopens read only and writable without mutation",
+      "time": "0.0343257",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format schema and initialization rollback are one atomic transaction",
+      "classname": "replacement.ledger format schema and initialization rollback are one atomic transaction",
+      "time": "0.0343941",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format sidecars require recovery without writable fallback",
+      "classname": "replacement.ledger format sidecars require recovery without writable fallback",
+      "time": "0.083696",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format validates init cross rows and refuses populated history explicitly",
+      "classname": "replacement.ledger format validates init cross rows and refuses populated history explicitly",
+      "time": "0.126894",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 backup restore preserve format identity and never overwrite",
+      "classname": "replacement.ledger format2 backup restore preserve format identity and never overwrite",
+      "time": "0.12682",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 exact schema delta and native initialization retain format",
+      "classname": "replacement.ledger format2 exact schema delta and native initialization retain format",
+      "time": "0.0335039",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 refuses mutation before writable access and preserves codec1 reads",
+      "classname": "replacement.ledger format2 refuses mutation before writable access and preserves codec1 reads",
+      "time": "0.0422678",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged",
+      "classname": "replacement.ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged",
+      "time": "0.124206",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger reader ordinary failures invalidate through moves and preserve metadata",
+      "classname": "replacement.ledger reader ordinary failures invalidate through moves and preserve metadata",
+      "time": "0.0372894",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger record IDs guard signed overflow and preserve existing rows",
+      "classname": "replacement.ledger record IDs guard signed overflow and preserve existing rows",
+      "time": "0.0361978",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger record only backups restoration and real hot recovery preserve records",
+      "classname": "replacement.ledger record only backups restoration and real hot recovery preserve records",
+      "time": "0.048195",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger record reader remains independent and blocked commit rolls back",
+      "classname": "replacement.ledger record reader remains independent and blocked commit rolls back",
+      "time": "5.43766",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger record transaction errors and abandonment roll back every prefix",
+      "classname": "replacement.ledger record transaction errors and abandonment roll back every prefix",
+      "time": "0.144649",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger records intern all kinds with exact reuse and ordered edges",
+      "classname": "replacement.ledger records intern all kinds with exact reuse and ordered edges",
+      "time": "0.0333105",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger records refuse malformed metadata and unknown value codecs before use",
+      "classname": "replacement.ledger records refuse malformed metadata and unknown value codecs before use",
+      "time": "8.58777",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger records reject inconsistent graphs and encoded rows without mutation",
+      "classname": "replacement.ledger records reject inconsistent graphs and encoded rows without mutation",
+      "time": "0.26659",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger refuses orphan revision history after valid record storage",
+      "classname": "replacement.ledger refuses orphan revision history after valid record storage",
+      "time": "0.0420689",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed DELETE snapshot blocks commit until released then fresh reads observe later head",
+      "classname": "replacement.ledger typed DELETE snapshot blocks commit until released then fresh reads observe later head",
+      "time": "0.143959",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed initialized snapshot has absent head and revision but owned initialization event",
+      "classname": "replacement.ledger typed initialized snapshot has absent head and revision but owned initialization event",
+      "time": "0.0288797",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed pages enforce exclusive ascending bounded snapshot cursors",
+      "classname": "replacement.ledger typed pages enforce exclusive ascending bounded snapshot cursors",
+      "time": "0.168913",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed read failures invalidate every read method while cached metadata survives",
+      "classname": "replacement.ledger typed read failures invalidate every read method while cached metadata survives",
+      "time": "0.24168",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed reads distinguish optional misses from invalid arguments and retain owned rows",
+      "classname": "replacement.ledger typed reads distinguish optional misses from invalid arguments and retain owned rows",
+      "time": "0.0604656",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed reads permit raw unsupported interpretation without poisoning history",
+      "classname": "replacement.ledger typed reads permit raw unsupported interpretation without poisoning history",
+      "time": "0.0622842",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed reads preserve exact initial change noop revert rows and replay bytes",
+      "classname": "replacement.ledger typed reads preserve exact initial change noop revert rows and replay bytes",
+      "time": "0.102795",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger typed request read fault invalidates all methods after real SQLite IOERR",
+      "classname": "replacement.ledger typed request read fault invalidates all methods after real SQLite IOERR",
+      "time": "0.692228",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger verified reader must not silently switch snapshots after storage read failure",
+      "classname": "replacement.ledger verified reader must not silently switch snapshots after storage read failure",
+      "time": "0.239956",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger writer explicit abort is idempotent releases lock and prevents commit",
+      "classname": "replacement.ledger writer explicit abort is idempotent releases lock and prevents commit",
+      "time": "0.0322544",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger writer read failure invalidates and rolls back uncommitted prefix",
+      "classname": "replacement.ledger writer read failure invalidates and rolls back uncommitted prefix",
+      "time": "0.177119",
+      "status": "run"
+    },
+    {
+      "name": "replacement.tree exact and excessive file bounds for both profiles and expanded shared records",
+      "classname": "replacement.tree exact and excessive file bounds for both profiles and expanded shared records",
+      "time": "1.03292",
+      "status": "run"
+    },
+    {
+      "name": "replacement.tree exact bytes modes sorted topology and immutable history",
+      "classname": "replacement.tree exact bytes modes sorted topology and immutable history",
+      "time": "0.0417181",
+      "status": "run"
+    },
+    {
+      "name": "replacement.tree input duplicate aliases conflicts grammar and modes abort prior pending records",
+      "classname": "replacement.tree input duplicate aliases conflicts grammar and modes abort prior pending records",
+      "time": "0.0935549",
+      "status": "run"
+    },
+    {
+      "name": "replacement.tree pending records rollback through idempotent abort and abandoned writer",
+      "classname": "replacement.tree pending records rollback through idempotent abort and abandoned writer",
+      "time": "0.0327185",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 publication faults retain complete target only after atomic publication",
+      "classname": "replacement.ledger format2 publication faults retain complete target only after atomic publication",
+      "time": "0.19047",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 publication late sidecar refuses and preserves arriving sidecar",
+      "classname": "replacement.ledger format2 publication late sidecar refuses and preserves arriving sidecar",
+      "time": "0.0390715",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger format2 publication no replace preserves target arriving at link boundary",
+      "classname": "replacement.ledger format2 publication no replace preserves target arriving at link boundary",
+      "time": "0.0250191",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger publication faults retain complete target only after atomic publication",
+      "classname": "replacement.ledger publication faults retain complete target only after atomic publication",
+      "time": "0.18745",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger publication late sidecar refuses and preserves arriving sidecar",
+      "classname": "replacement.ledger publication late sidecar refuses and preserves arriving sidecar",
+      "time": "0.0388462",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger publication no replace preserves target arriving at link boundary",
+      "classname": "replacement.ledger publication no replace preserves target arriving at link boundary",
+      "time": "0.0247668",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger forced ambiguous exact plus unequal buckets refuse every opening path unchanged",
+      "classname": "replacement.ledger forced ambiguous exact plus unequal buckets refuse every opening path unchanged",
+      "time": "0.0503541",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger forced collisions refuse every kind and roll back prefix records",
+      "classname": "replacement.ledger forced collisions refuse every kind and roll back prefix records",
+      "time": "0.07896",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger forced directory collisions compare exact database local child IDs",
+      "classname": "replacement.ledger forced directory collisions compare exact database local child IDs",
+      "time": "0.0372865",
+      "status": "run"
+    },
+    {
+      "name": "replacement.interpretation stored record roundtrip reopens exact historical bytes without Lua",
+      "classname": "replacement.interpretation stored record roundtrip reopens exact historical bytes without Lua",
+      "time": "0.0355717",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec accepted changed noop and reverted independent event wires",
+      "classname": "replacement.ledger history codec accepted changed noop and reverted independent event wires",
+      "time": "0.0197708",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec canonical decimal and optional head token refusals",
+      "classname": "replacement.ledger history codec canonical decimal and optional head token refusals",
+      "time": "0.0203426",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec duplicate escape whitespace ordering and trailing bytes refuse",
+      "classname": "replacement.ledger history codec duplicate escape whitespace ordering and trailing bytes refuse",
+      "time": "0.0204146",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec event exact field sets and types refuse malformed schema",
+      "classname": "replacement.ledger history codec event exact field sets and types refuse malformed schema",
+      "time": "0.020042",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec initialization exact existing format payload",
+      "classname": "replacement.ledger history codec initialization exact existing format payload",
+      "time": "0.0193399",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec ledger identity and bounded ASCII request grammar",
+      "classname": "replacement.ledger history codec ledger identity and bounded ASCII request grammar",
+      "time": "0.0195996",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec maximum signed IDs and nonconsecutive identities roundtrip",
+      "classname": "replacement.ledger history codec maximum signed IDs and nonconsecutive identities roundtrip",
+      "time": "0.0187909",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec result exact field sets and types refuse malformed schema",
+      "classname": "replacement.ledger history codec result exact field sets and types refuse malformed schema",
+      "time": "0.0198119",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec saved load result keeps returned revision parent on noop",
+      "classname": "replacement.ledger history codec saved load result keeps returned revision parent on noop",
+      "time": "0.0188961",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec typed state and enum validation refuses invalid encoding",
+      "classname": "replacement.ledger history codec typed state and enum validation refuses invalid encoding",
+      "time": "0.0194074",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger history codec unsupported versions and redacted fixed byte ceiling failures",
+      "classname": "replacement.ledger history codec unsupported versions and redacted fixed byte ceiling failures",
+      "time": "0.0290954",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared binds selected exact snapshot bytes after disk changes",
+      "classname": "replacement.acceptance prepared binds selected exact snapshot bytes after disk changes",
+      "time": "0.0222343",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared bounds external inputs before owning bytes",
+      "classname": "replacement.acceptance prepared bounds external inputs before owning bytes",
+      "time": "0.0259979",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared enforces source directory ceiling on genuine captured selections",
+      "classname": "replacement.acceptance prepared enforces source directory ceiling on genuine captured selections",
+      "time": "3.30922",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared owns values across moves destruction and final native verification",
+      "classname": "replacement.acceptance prepared owns values across moves destruction and final native verification",
+      "time": "0.023696",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared refuses empty duplicate absent invalid and excessive selections",
+      "classname": "replacement.acceptance prepared refuses empty duplicate absent invalid and excessive selections",
+      "time": "0.0238381",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared rejects canonical version mismatch unsupported and workspace shape",
+      "classname": "replacement.acceptance prepared rejects canonical version mismatch unsupported and workspace shape",
+      "time": "0.0335679",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared rejects malformed canonical manifest and retains original parsed ownership",
+      "classname": "replacement.acceptance prepared rejects malformed canonical manifest and retains original parsed ownership",
+      "time": "0.0244603",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared requires exactly registry input json",
+      "classname": "replacement.acceptance prepared requires exactly registry input json",
+      "time": "0.0227928",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared reverifies stdlib files manifest aliases mode and recorded digest",
+      "classname": "replacement.acceptance prepared reverifies stdlib files manifest aliases mode and recorded digest",
+      "time": "0.0385383",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance prepared selects only explicit workspace paths and ignores other logical roots",
+      "classname": "replacement.acceptance prepared selects only explicit workspace paths and ignores other logical roots",
+      "time": "0.0235073",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance request intent preserves exact shared record bytes and positive signed64 heads",
+      "classname": "replacement.acceptance request intent preserves exact shared record bytes and positive signed64 heads",
+      "time": "0.0174147",
+      "status": "run"
+    },
+    {
+      "name": "replacement.acceptance request intent rejects grammar relative nonnormalized and invalid text arguments",
+      "classname": "replacement.acceptance request intent rejects grammar relative nonnormalized and invalid text arguments",
+      "time": "0.017406",
+      "status": "run"
+    },
+    {
+      "name": "replacement.workspace names and explicit targets frame the same pure future load request",
+      "classname": "replacement.workspace names and explicit targets frame the same pure future load request",
+      "time": "0.0177873",
+      "status": "run"
+    },
+    {
+      "name": "replacement.atomic targeted collisions refuse file directory interpretation and request without prefixes",
+      "classname": "replacement.atomic targeted collisions refuse file directory interpretation and request without prefixes",
+      "time": "0.0921516",
+      "status": "run"
+    },
+    {
+      "name": "replacement.history initialized views use one read owner and typed misses",
+      "classname": "replacement.history initialized views use one read owner and typed misses",
+      "time": "0.0281938",
+      "status": "run"
+    },
+    {
+      "name": "replacement.history metadata preserves native IDs above int32 exactly",
+      "classname": "replacement.history metadata preserves native IDs above int32 exactly",
+      "time": "0.0207024",
+      "status": "run"
+    },
+    {
+      "name": "replacement.history summary keeps structured payload and absent IDs without null",
+      "classname": "replacement.history summary keeps structured payload and absent IDs without null",
+      "time": "0.0195493",
+      "status": "run"
+    },
+    {
+      "name": "replacement.source export fault boundaries clean before publication and preserve after",
+      "classname": "replacement.source export fault boundaries clean before publication and preserve after",
+      "time": "0.421304",
+      "status": "run"
+    },
+    {
+      "name": "replacement.history CLI11 bindings validate selectors before any ledger access",
+      "classname": "replacement.history CLI11 bindings validate selectors before any ledger access",
+      "time": "0.0320429",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger authoritative diagnostics include stable revision and collision detail",
+      "classname": "replacement.ledger authoritative diagnostics include stable revision and collision detail",
+      "time": "0.0255348",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger diagnostic malformed typed payloads refuse with exact redacted internal envelope",
+      "classname": "replacement.ledger diagnostic malformed typed payloads refuse with exact redacted internal envelope",
+      "time": "0.0255552",
+      "status": "run"
+    },
+    {
+      "name": "replacement.ledger error adapter pins every typed refusal without native messages",
+      "classname": "replacement.ledger error adapter pins every typed refusal without native messages",
+      "time": "0.0255147",
+      "status": "run"
+    },
+    {
+      "name": "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "classname": "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "time": "0.513423",
+      "status": "run"
+    },
+    {
+      "name": "replacement.export postpublication encoding refusal returns prebuilt uncertainty",
+      "classname": "replacement.export postpublication encoding refusal returns prebuilt uncertainty",
+      "time": "0.180226",
+      "status": "run"
+    },
+    {
+      "name": "replacement.export service facts allocation failure retains adapter publication",
+      "classname": "replacement.export service facts allocation failure retains adapter publication",
+      "time": "0.165696",
+      "status": "run"
+    }
+  ]
+}

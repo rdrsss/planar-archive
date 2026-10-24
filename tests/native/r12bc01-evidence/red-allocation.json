@@ -1,0 +1,62 @@
+[
+  {
+    "column": "identity",
+    "encoding": "nul",
+    "character_length": 32,
+    "byte_length": 2097185,
+    "returncode": 1,
+    "stdout": "RED oversized_cpp_request=2097200 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true
+  },
+  {
+    "column": "identity",
+    "encoding": "multibyte",
+    "character_length": 32,
+    "byte_length": 64,
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true
+  },
+  {
+    "column": "workspace_id",
+    "encoding": "nul",
+    "character_length": 16,
+    "byte_length": 2097169,
+    "returncode": 1,
+    "stdout": "RED oversized_cpp_request=2097184 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true
+  },
+  {
+    "column": "workspace_id",
+    "encoding": "multibyte",
+    "character_length": 64,
+    "byte_length": 128,
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true
+  },
+  {
+    "column": "created_at",
+    "encoding": "nul",
+    "character_length": 24,
+    "byte_length": 2097177,
+    "returncode": 1,
+    "stdout": "RED oversized_cpp_request=2097184 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true
+  },
+  {
+    "column": "created_at",
+    "encoding": "multibyte",
+    "character_length": 24,
+    "byte_length": 48,
+    "returncode": 0,
+    "stdout": "corrupt=1 largest_cpp_request=768 budget=1048576\n",
+    "stderr": "",
+    "unchanged": true
+  }
+]

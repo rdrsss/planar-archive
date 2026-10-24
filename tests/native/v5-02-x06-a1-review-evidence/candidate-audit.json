@@ -1,0 +1,17 @@
+{
+  "all_candidate_and_artifact_hashes_verified": true,
+  "artifact_manifest_sha256": "55410c2b3137563223a6a0aa4c5ef80ed34725c688b1bd228e4c8450192b9f11",
+  "author_final_members": 93818,
+  "author_protection_verified": true,
+  "candidate_files": 25,
+  "candidate_sha256": "1b3831fbd549d15e38105dac2ad339da3a2c6223c812f92f07a45d1f130dbaec",
+  "diff_reconstructed_exact": true,
+  "diff_sha256": "57f0832d9a2cb763dcac28d877ed6bd39f633f6a6f27eca978362f914587e7ea",
+  "evidence_files": 49,
+  "original_preedit_hashes_verified": true,
+  "red_failure_elements": 1,
+  "review_baseline_members": 93879,
+  "root_symlinks_preserved": true,
+  "support_files": 3,
+  "v1_runtime_shippedLua_readers_acceptance_storage_CLI_unchanged": true
+}

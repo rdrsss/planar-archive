@@ -1,0 +1,20 @@
+{
+  "codec_and_identity_sources": {
+    "src/engine/canonical/canonical.cpp": "c56a141999ef7a7a15d740931c5df1c369a2defca5e9d0e4d57d384ad6c0c084",
+    "src/engine/canonical/canonical.cppm": "9d81fa7ccadaeabe23d291efc4e074185f72ac0a65b331af62d2edcf129a2ea3",
+    "src/engine/canonical/canonical.t.cpp": "f7e172188e82a4080f742e5a5aa3a10f238ff9868ff29ca6394c4dcddb27e2fa",
+    "src/engine/hash/hash.cpp": "a60137006cad3ccbe7eae1c4d6edfef6b9f198adff8e1d8a3fc0471062408f11",
+    "src/engine/hash/hash.cppm": "86e59b0f9fc2e509f130ed768a658fb1343d77e77113900cf54193c43b3bc698",
+    "src/engine/hash/hash.t.cpp": "610a60bcbae2690c80354f5b20c871192c66f67d6753d50f664c836d0accd339",
+    "src/engine/json_codec/codec.cpp": "43a0465a3b5c41ea90584836260d94c3fc3123641aec099a980be88759905f4a",
+    "src/engine/json_codec/codec.cppm": "fe4caca4cacb0010541aa9d353e8394340f2521684a70aec1fe6a622973733a0",
+    "src/engine/json_codec/codec.t.cpp": "d9e7c78c072b6b8a9e9904ddf610a4154964f1b6e5ddd869a0dc8f0c5b7f7674"
+  },
+  "deleted": [
+    "src/engine/json/json.cpp",
+    "src/engine/json/json.cppm",
+    "src/engine/json/json.t.cpp"
+  ],
+  "handwritten_json_parser_writer_markers": 0,
+  "note": "Lua UTF-8 validation and presentation_hex_byte are text/display policy; canonical is unchanged binary identity encoding. observations.lua has a static JSON input document, parsed by Glaze."
+}

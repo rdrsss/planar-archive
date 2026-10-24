@@ -1,0 +1,29 @@
+[
+  {
+    "manifest": "tests/native/r08bc01-evidence/candidate.sha256",
+    "sha256": "6a69d02528e5d05dcfa22c0b8c73e5a9347ad5e9609275f1eded445c098b4109",
+    "matched": 3,
+    "excluded": []
+  },
+  {
+    "manifest": "tests/native/r08bc01-evidence/evidence.sha256",
+    "sha256": "c7d6f295ea3d3c0821de86c11922e9ae0d80de7223014e8a3f52678587173c83",
+    "matched": 19,
+    "excluded": []
+  },
+  {
+    "manifest": "tests/native/r08b-evidence/candidate.sha256",
+    "sha256": "c8171f623a8426e377ffa33e8e03fa62a4eb32306c63fd3343142e1ff28f4889",
+    "matched": 23,
+    "excluded": [
+      "src/cmd/planar/bootstrap.cpp",
+      "tests/acceptance/bootstrap_cli.py"
+    ]
+  },
+  {
+    "manifest": "tests/native/r08ac01-evidence/candidate.sha256",
+    "sha256": "5e2d0a4b3aca349e3fbd4e9e9a151e9c01c193144c38c7e3bd99db00679696d5",
+    "matched": 20,
+    "excluded": []
+  }
+]

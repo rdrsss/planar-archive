@@ -1,0 +1,7 @@
+{
+  "cwd": "<repo>",
+  "argv": [
+    "build/rewrite-debug/src/engine/planar_json_codec_tests",
+    "[codec]"
+  ]
+}

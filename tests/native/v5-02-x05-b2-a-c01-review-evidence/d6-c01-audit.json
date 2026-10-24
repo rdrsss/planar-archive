@@ -1,0 +1,28 @@
+{
+  "path_base": "build directory",
+  "variants": {
+    "0": {
+      "files": {
+        "runtime_0.cpp": "0d92906e3094ff32ab6b49557f57d57b8c1b84b70b6bbf685fc54cca9cd6037a",
+        "runtime_0.cppm": "2af79a59962f9f8f6842f0ff74564fb130889d29066845f477ac46f2755e65b2",
+        "commands_0.lua": "4e816d9f6eb7168c365f26984760dd2b10ab5331b9ae42edd6382c9c6c8bcd36"
+      },
+      "logical_originals": [
+        "../json.lua",
+        "planar/schema.lua",
+        "planar/semantic.lua",
+        "planar/selection.lua",
+        "planar/presentation.lua",
+        "planar/observations.lua",
+        "planar/render.lua",
+        "planar/acceptance.lua",
+        "planar/commands.lua",
+        "planar/bootstrap.lua"
+      ],
+      "assembly_sha256": "3800ca4d4cf956d53a9a6a0bac1ddbf6829b2669de53b30ba2922b3b8d3ff60c",
+      "embedded_module_sha256": "1f5def4ec176bac3d86d7f82cc121f2a63e72b3de8da1fa3bf7ce773bc275053"
+    }
+  },
+  "production_admission": 5,
+  "private_admission": 5
+}

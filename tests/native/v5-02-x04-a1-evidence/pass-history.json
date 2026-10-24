@@ -1,0 +1,34 @@
+{
+  "limitation": "Earlier three-run standard verify.py filenames were overwritten before per-pass archival was requested. Superseded rows are execution summaries from coordinator updates, not retained hash-bound verification evidence. Only final archived pass supports review.",
+  "passes": [
+    {
+      "failed": 0,
+      "focused": 118,
+      "id": "01-pre-component-accounting",
+      "inventory": 449,
+      "preserved": 430,
+      "skipped": 0,
+      "status": "superseded summary only; raw freeze/verification outputs not retained"
+    },
+    {
+      "failed": 0,
+      "focused": 119,
+      "id": "02-component-accounting",
+      "inventory": 450,
+      "preserved": 430,
+      "skipped": 0,
+      "status": "superseded summary only; raw freeze/verification outputs not retained"
+    },
+    {
+      "failed": 0,
+      "focused": 120,
+      "id": "03-final-target-alias",
+      "inventory": 451,
+      "manifest": "passes/03-final-target-alias/manifest.json",
+      "manifest_sha256": "232c3fb8c04494f0af488643621d6170c817070f6da21e4627ab841ba96e4806",
+      "preserved": 430,
+      "skipped": 0,
+      "status": "authoritative retained final source-bound pass"
+    }
+  ]
+}

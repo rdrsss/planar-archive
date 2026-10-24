@@ -1,0 +1,8 @@
+{
+  "path_base": "repository root",
+  "disposition": "approve",
+  "files": {
+    "docs/vernacular/rounds/R14-D7-A-review.md": "69376e549709718bc6ab3aba5cd1bbcac75cb10186e048cd4767117189a31bc9",
+    "tests/native/r14-d7-a-review-evidence/artifacts.json": "062181ed41f254d4734fe938d29db396d4c85089f6f226be75f219601bd3dbc9"
+  }
+}

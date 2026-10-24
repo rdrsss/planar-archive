@@ -1,0 +1,10 @@
+{
+  "exact_shape_lookup_boundary": true,
+  "all_original_b2a_invariants": true,
+  "native_helper_no_lua_or_recapture": true,
+  "original_private_selector_path": true,
+  "same_original_receipt_descriptor_gate": true,
+  "bind_before_header_before_sqlite": true,
+  "downward_format_boundary": true,
+  "owned_error_before_copy": true
+}

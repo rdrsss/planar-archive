@@ -1,0 +1,12 @@
+{
+  "debug": {
+    "all_current_hashes_match": true,
+    "configuration": "Debug",
+    "entries": 711
+  },
+  "release": {
+    "all_current_hashes_match": true,
+    "configuration": "RelWithDebInfo",
+    "entries": 708
+  }
+}

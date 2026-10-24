@@ -1,0 +1,30 @@
+{
+  "additional_actual_conversion_scenarios": 12,
+  "artifact_entries": 377,
+  "artifact_manifest_sha256": "8cfeb4f908e9f50ddf4c060792c93a2e87362de1f6e352143392cccd2771a5b8",
+  "author_artifact_entries": 1171,
+  "author_artifact_mismatches": 0,
+  "author_diff_sha256": "8c104bd45f9b32c9851fb1ff39cf452b753f4cb96cc3ba400bd2d850a1305462",
+  "author_source_sha256": "4c011b6f9582daf395fc5435c06e37f286da3c6a6c4aadad76ec5be3935a117e",
+  "build_entries": 931,
+  "build_mismatches": 0,
+  "class_scenarios": 69,
+  "disabled": 0,
+  "errors": 0,
+  "failures": 0,
+  "focused": 207,
+  "inventory": 580,
+  "preserved_inventory": 578,
+  "report_sha256": "081c2e44c25be348224d1f0d14074c820b953d8eb081067d405700a613549cd6",
+  "resource_detectors": {
+    "function_growth_control": 0,
+    "later_error_tail": 1,
+    "no_fault_twin": 0,
+    "normal_tail": 1
+  },
+  "skips": 0,
+  "source_entries": 21700,
+  "source_mismatches": 0,
+  "status": "request-changes; R6 corrected; residual R7 requires fresh corrective round; serialized build ownership released",
+  "timestamp": "2026-10-23T04:58:30.239702+00:00"
+}

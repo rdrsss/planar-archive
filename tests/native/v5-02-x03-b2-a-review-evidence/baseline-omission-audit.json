@@ -1,0 +1,46 @@
+{
+  "path_base": "<repo>",
+  "root_only_exclusions": [
+    ".git",
+    "build",
+    "tests/native/v5-02-x03-b2-a-evidence",
+    "tests/native/v5-02-x03-b2-a-review-evidence",
+    "tests/native/v5-02-x03-b2-a-support"
+  ],
+  "additional_regular_files": [
+    {
+      "path": "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/planar_load_c01_source.cppm",
+      "size": 861358,
+      "sha256": "6362cf35d44a48940b0ff992d6e988db74ed1088ab20b797d75777dd4d298a60",
+      "first_manifest_sha256": "6362cf35d44a48940b0ff992d6e988db74ed1088ab20b797d75777dd4d298a60"
+    },
+    {
+      "path": "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cpp",
+      "size": 67544,
+      "sha256": "279a66631b06d3d04a00d598c66c206ba561ffef6af18b6f40568ff710add0ad",
+      "first_manifest_sha256": "279a66631b06d3d04a00d598c66c206ba561ffef6af18b6f40568ff710add0ad"
+    },
+    {
+      "path": "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/commands_0.lua",
+      "size": 6749,
+      "sha256": "4e816d9f6eb7168c365f26984760dd2b10ab5331b9ae42edd6382c9c6c8bcd36",
+      "first_manifest_sha256": "4e816d9f6eb7168c365f26984760dd2b10ab5331b9ae42edd6382c9c6c8bcd36"
+    },
+    {
+      "path": "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cppm",
+      "size": 10998,
+      "sha256": "2ea743fd6654619e73aa72168795c6d25a4cbca00d542cb08d0239c6db66d19a",
+      "first_manifest_sha256": "2ea743fd6654619e73aa72168795c6d25a4cbca00d542cb08d0239c6db66d19a"
+    }
+  ],
+  "additional_symlinks": [],
+  "omitted_current_count": 4,
+  "omitted_current_bytes": 946649,
+  "first_manifest_omitted_matches": [
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/planar_load_c01_source.cppm",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cpp",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/commands_0.lua",
+    "tests/native/r14-d6-c01-evidence/red-source/build/rewrite-debug/src/engine/r14-d6-c01-generated/runtime_0.cppm"
+  ],
+  "first_manifest_omitted_mismatches": []
+}

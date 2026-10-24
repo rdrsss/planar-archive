@@ -1,0 +1,73 @@
+[
+  {
+    "name": "spike-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "X01",
+      "-V",
+      "--output-junit",
+      "/tmp/x01-final.xml"
+    ],
+    "started_utc": "2026-10-22T19:06:19.905772+00:00",
+    "ended_utc": "2026-10-22T19:06:20.032422+00:00",
+    "status": 0
+  },
+  {
+    "name": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "started_utc": "2026-10-22T19:06:20.033148+00:00",
+    "ended_utc": "2026-10-22T19:06:20.064927+00:00",
+    "status": 0
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x01-evidence/focused-names.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "/tmp/x01-focused.xml"
+    ],
+    "started_utc": "2026-10-22T19:06:20.067996+00:00",
+    "ended_utc": "2026-10-22T19:06:56.143516+00:00",
+    "status": 0
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "started_utc": "2026-10-22T19:06:56.144240+00:00",
+    "ended_utc": "2026-10-22T19:06:57.231257+00:00",
+    "status": 0
+  },
+  {
+    "name": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "started_utc": "2026-10-22T19:06:57.231541+00:00",
+    "ended_utc": "2026-10-22T19:06:57.345345+00:00",
+    "status": 0
+  }
+]

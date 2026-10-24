@@ -1,0 +1,14 @@
+{
+  "docs/vernacular/implementation.md": {
+    "r13_sha256": "6adb20c3bee3cf51ce0fa8db120dd51d50e6ce0e8111d662e2931f72dd219096",
+    "current_sha256": "6965c78eaefe82aacb9486890a9045569e93f2ce0e29a9e1be3b2f7757561ab4"
+  },
+  "docs/vernacular/ledger-contract.md": {
+    "r13_sha256": "7947a6b93426aa19cd099f3c678f32f530f6760a6ed077fb0971c209159ff44b",
+    "current_sha256": "838820f4163ca3c2b94f2f0322bb57b3808881871d95c43422a4ef7b0aa3f2a1"
+  },
+  "docs/vernacular/roadmap.md": {
+    "r13_sha256": "639f979625694994292bd63634dd4e436bd2df6bafa9b5241f9fe6cb20988189",
+    "current_sha256": "0402da4606b43c5fc61fe2910898229e25ee02c687150b9ffcabbec4bd5e9c56"
+  }
+}

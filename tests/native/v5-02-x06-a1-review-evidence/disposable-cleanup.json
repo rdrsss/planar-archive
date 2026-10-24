@@ -1,0 +1,18 @@
+{
+  "proof_verified_before_cleanup": true,
+  "owned_outputs_removed": {
+    "private-probe.o": {
+      "sha256": "68fc717cfa09c77237f30e45a37ce0b9a68a03305e442518babbcb96cf174f30",
+      "size": 2700656
+    },
+    "private-probe": {
+      "sha256": "d95d5c8a488234c9e850ef8a1dcf4d9d02c3832486cc1e5578d00503d6df8db7",
+      "size": 7575072
+    },
+    "private-xxhash.dylib": {
+      "sha256": "68cf31ac2b56b8169abeaeeccb77cfa6687b57c85ccd2ff18881aa7e71f768a2",
+      "size": 53336
+    }
+  },
+  "sources_argv_XML_dependency_proofs_preserved": true
+}

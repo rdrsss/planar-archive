@@ -1,0 +1,15 @@
+{
+  "path_base": "repository root; same paths under candidate/ are snapshots",
+  "identity": "7328603aef4edf6a49cdd62a92274b6d046b55f7ae2820a1e42c517d4cc40ec0",
+  "files": {
+    "src/engine/history/tree.cppm": "80d0809bfd84969bc246b0cdd660a50693f4854b15dca0777127780200119a1f",
+    "src/engine/history/tree.cpp": "18f170fb8f6568ea8efab63ea0acbed2a0adb25f132a2d71734e9970c537ee8d",
+    "src/engine/history/tree.t.cpp": "09b188336f5fd81faab549d6a1db0093e06a8fe985744c9630e5cb8bd6a41592",
+    "src/engine/ledger/format.cppm": "41fed577a1155d1c358e261121f000af8a7bb8241e0fe10a7b21f7dcacf8705d",
+    "src/engine/ledger/format.cpp": "2fac3706afa400a1fd01ec15b1920ef15965c513338c961e2aea74a70e854d98",
+    "src/engine/ledger/format.t.cpp": "d96109f12a822b266980e66874d6e0eb6f45f975b83ade3e0c9a49daa5f2a7ca",
+    "src/engine/CMakeLists.txt": "7c8942311245e82db7f6cf5875295e05b52f6d7efc666eaf571d1339cb95b567",
+    "docs/architecture.md": "9e7ef5c579aece93282cabe8d70d1102f679550b96533b666341bb219d857e40",
+    "docs/testing.md": "0d8ed54676f02aa4fd9451cce1cd89bd579628cfe2af3735f5d7b8d080c2387f"
+  }
+}

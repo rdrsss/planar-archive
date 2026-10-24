@@ -1,0 +1,13 @@
+{
+  "command": [
+    "cmake",
+    "--build",
+    "build/rewrite-debug",
+    "--target",
+    "all",
+    "planar_tests"
+  ],
+  "started_epoch": 1792587931.33315,
+  "ended_epoch": 1792587931.493647,
+  "exit": 0
+}

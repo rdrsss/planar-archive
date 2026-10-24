@@ -1,0 +1,15 @@
+{
+  "identity": "60f930eba1be7213dfb0c571e9c7f9bfcfc7f87522af3b6a2223bf296eb9c68a",
+  "files": {
+    "src/engine/ledger/format.cppm": "e66db865f477b32204bed6b123af9a6fcd0470ef0fc49e4d785c3d391fef9378",
+    "src/engine/ledger/format.cpp": "adc85ffda1d55b691739c1ad244a9760d15e903e51e38d5edc334021eeff870c",
+    "src/engine/ledger/format.t.cpp": "187db66d255ebc5bcb981bd7654565181d9aa4fa59b5f30853f3555a31ee5209",
+    "src/engine/CMakeLists.txt": "34f7ab15ececf678ee9c6e33e99f9bafca70b4bb53a99857d85db10999530de1",
+    "docs/architecture.md": "fcdcb59ad8cd2bd8748efab591446c68c40c4fbf725767159671e459aba0d599",
+    "docs/testing.md": "de38b677f94139f4ef3822f3ea2d6a0d6e38b993c6d8b619901ec56b3d10d86a",
+    "tests/native/r13b1-support/audit.py": "fe52e075b6d266cd4ed13c8cacbf7aff72c8521655002e8dc3064af8926ecd4e",
+    "tests/native/r13b1-support/collision.t.cpp": "441aa703225479d4c685923458e75913728a05a4c2d0a483ef42dd265b8693ef",
+    "tests/native/r13b1-support/digest.cppm": "ea16ef48b0829effb27f70e56efe77eecd6bf9b12128652a207dc871bee67685",
+    "tests/native/r13b1-support/generate.py": "af0548630bddf6806f076842b4d2386f63112ad3295145ff4d471d56c3578513"
+  }
+}

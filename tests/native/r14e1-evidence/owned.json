@@ -1,0 +1,14 @@
+[
+  "CMakeLists.txt",
+  "src/cmd/planar/CMakeLists.txt",
+  "src/cmd/planar/bootstrap.cpp",
+  "src/cmd/planar/bootstrap.t.cpp",
+  "src/cmd/planar/response.cppm",
+  "src/cmd/planar/response.cpp",
+  "src/cmd/planar/handlers/init/command.cppm",
+  "src/cmd/planar/handlers/init/command.cpp",
+  "tests/acceptance/bootstrap_init.py",
+  "docs/cli-reference.md",
+  "docs/architecture.md",
+  "docs/testing.md"
+]

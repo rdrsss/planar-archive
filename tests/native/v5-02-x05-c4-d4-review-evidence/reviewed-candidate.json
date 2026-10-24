@@ -1,0 +1,82 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "fdeb2bbfc8f4ca51632b1b6d2a55fc22e09e7e8d9c0e3c36070a5150441780a9"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "57645594bfe22fd7f6272078b15b134ee0159d48e13928a8f9a74ddf38fd809e"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "4dc0a12308cfcfdc565f6983662592e5eb927d03b41e239ea1b2b1874e47a8cd"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "5db7345b0d171398523ab04860f0fd701260a90145b8f8b79a995c58a63dcd1a"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "9ca46e8c423c09c9fdfbac1b7015f93ac004bbf08cc4163e9dd9c3cd04ad5684"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "0ac011a803c792089eefe0ceba1bb03fef4e7ed4c0889037d8453df60a0df564"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "1b9de4a2b2c57fcd5725eb6a10451b3597dc5d4d02ffa378c6e9beac87de51d5"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "9317445c09bc6ef6a7c3e277210e39aa10c2641a334bbb584e46e77207d7e968"
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "mode": 420,
+    "sha256": "38f92794f5f3ed146959cb7350acfb24934ec12829c2a77a1bb5b9d54de187c1"
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "mode": 420,
+    "sha256": "4ca7ca5075b104ca2496db7d663e29ac9eef7216aaab465e7060412597e3c854"
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "mode": 420,
+    "sha256": "3d0f18fb8bdb41d390c826cf109c320d800e569c47cd3098e77646e51333d504"
+  },
+  "src/stdlib/planar/render.lua": {
+    "mode": 420,
+    "sha256": "b11b3643dd18a1479059b8514dc23505bdcd0713324b3a5abce7d5e7a1c9c228"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/audit.py": {
+    "mode": 420,
+    "sha256": "d6a8be13bc942bb7e4f09e9bdd4a9f946cf04688717a51efeaab6ca503bca5ce"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/cleanup.py": {
+    "mode": 420,
+    "sha256": "379c10c9a4388f61677d9a9d2b673820cc4ecd8a1418e8b3b661dac653385c5f"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/finalize.py": {
+    "mode": 420,
+    "sha256": "ba35632129332e1e263c53d10d291dd65856fb579c6bb50cde87fca251a5a77b"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/freeze.py": {
+    "mode": 420,
+    "sha256": "3efe9a81711157559fa3bff7bf63be6b288885765f00dde31548c76765cdc7f9"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/gate.py": {
+    "mode": 420,
+    "sha256": "ca8e0aaba7d0c242576b631bf24efd0c32b09aa86ef9ad4c709fc68c925f029b"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/methods.inc": {
+    "mode": 420,
+    "sha256": "2bcab2f021d7af7b0755d4aa6866d36c5faab8bccdb53325acdfb1ada0d08fae"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/private-tests.inc": {
+    "mode": 420,
+    "sha256": "3cd882b5a18315f2f4a52ffa3f84c96241d060f1e73e9b57440a1049c1c9fac7"
+  },
+  "tests/native/v5-02-x05-c4-d4-support/private.py": {
+    "mode": 420,
+    "sha256": "2c982002080da598f7148551c8db25d270d66c1b045c2f2148b1dc372370b71a"
+  }
+}

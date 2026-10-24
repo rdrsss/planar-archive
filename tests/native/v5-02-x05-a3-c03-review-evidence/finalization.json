@@ -1,0 +1,15 @@
+{
+  "artifact_count": 228,
+  "artifact_manifest_sha256": "a6a5b116610faed7b5ad70304d0b0efa6feba7d767a5575714d80698a2fc0963",
+  "author_artifact_manifest_sha256": "b428790057cccda22dd869b3b2f515a1c989a953b1bf32d3b8762bac8a3d13f0",
+  "author_build_manifest_sha256": "68d4f3375c744266173946a66ba16becb645fa8e3c4e486e9785b0289be8fe37",
+  "author_complete_diff_sha256": "d55974b8d82846851b58d76dcf71c761ed5b4b3492076960ade7d35ab8f61532",
+  "author_source_sha256": "00aedef73482d57d51b3578faf51edb2f0702bc3fb5d66d76bfdf03430416fdb",
+  "closed": "A3-C02-R5 seal path",
+  "disposition": "request-changes",
+  "final_source_check_sha256": "e5152ab22ad5887fbefc317c3a4b7dc27b0df6144f278359b964b9f6670a45e2",
+  "finding": "A3-C03-R6",
+  "report_sha256": "69ffeaafda32ad5938e0fcddf99e941f55beb1b5d062360b1728d4f6b938c241",
+  "serialized_build_ownership": "released; no subsequent edits or builds by reviewer",
+  "utc": "2026-10-23T04:26:14.193565+00:00"
+}

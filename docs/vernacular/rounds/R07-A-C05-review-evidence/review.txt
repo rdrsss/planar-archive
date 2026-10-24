@@ -1,0 +1,11 @@
+Disposition: approve. Applies to full effective R07-A trusted runtime bridge through R07-A-C05; no schema or CLI/render integration approval.
+
+All 12 effective files verified before and after. C05 candidate manifest SHA256 899c2e06450e20f2d55645407115a00fa67be3b452172a2821f3bb934d91ea99.
+
+No findings requiring changes. runtime.cpp:371-380 constructs only concat/create/pack/unpack; registry original is unreachable with no package/require/debug. ltablib.c:158-182 requires stored string/number at every concat index, stops at first missing; :62-68 bounds create capacity under allocator; :192-202 pack derives count from stack; :205-218 unpack validates unsigned range and reserves full result stack before loop. No retained table helper accepts a comparator. Fixed seed remains runtime.cpp:444; no reliance on sparse randomization.
+
+Earlier fixes retained: no finalizer constructor runtime.cpp:365-368; scoped traversal :84-89,:95,:206; actual escaping token identity :335-351,:458-469; immaterial input/output :105-106,:248-250; curated quota-terminal protected call :55-67 and host :451-454; removed pattern/rep functions including shared method lookup :381-387. Safe Lua operations across C++ lifetime boundaries reviewed: transfer/setup callbacks have trivial locals; digest allocations/errors occur after native helper unwinds; conversion anchor allocations are internally protected :208-216.
+
+Independently executed serialized under finite process timeouts: cmake build all planar_tests (no work), runtime executable [r07ac05] 2 cases/14 assertions, [runtime] 18/432, CTest replacement.(runtime|loader|capture|canonical|hash) 42 with zero failures/skips (JUnit verified), rewrite-check lint 21 active sources, repeated build no work. Raw commands/status/timings/logs and manifest identities are adjacent.
+
+Coder red evidence independently read: two cases fail with 5 assertions establishing all three unwanted native capabilities and the excessive surface; no huge native operations executed by this review. macOS arm64 debug only; no Linux/release/sanitizer or full CLI gate claim. Read-only candidate; scratch evidence only.

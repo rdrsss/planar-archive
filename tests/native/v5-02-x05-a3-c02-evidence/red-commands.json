@@ -1,0 +1,18 @@
+[
+  {
+    "label": "writer-first",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/adversarial/probe",
+      "writer-first"
+    ],
+    "exit_code": 1
+  },
+  {
+    "label": "native-first",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-a3-c01-review-evidence/adversarial/probe",
+      "native-first"
+    ],
+    "exit_code": 1
+  }
+]

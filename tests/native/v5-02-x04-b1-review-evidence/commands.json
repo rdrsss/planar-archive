@@ -1,0 +1,71 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "end": "2026-10-22T23:13:36.501402+00:00",
+    "exit_code": 0,
+    "label": "build",
+    "start": "2026-10-22T23:13:36.262471+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "end": "2026-10-22T23:13:41.402193+00:00",
+    "exit_code": 0,
+    "label": "inventory",
+    "start": "2026-10-22T23:13:41.326973+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement\\.(profile codec|tree core effective provenance)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-b1-review-evidence/added-cases.xml"
+    ],
+    "end": "2026-10-22T23:13:47.021681+00:00",
+    "exit_code": 0,
+    "label": "added-cases",
+    "start": "2026-10-22T23:13:45.904040+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "end": "2026-10-22T23:13:53.869105+00:00",
+    "exit_code": 0,
+    "label": "lint",
+    "start": "2026-10-22T23:13:52.552272+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "end": "2026-10-22T23:13:58.540027+00:00",
+    "exit_code": 0,
+    "label": "no-work",
+    "start": "2026-10-22T23:13:58.303407+00:00"
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "path_base": "<repo>",
+  "snapshot_path_base": "tests/native/v5-02-x03-b2-a-evidence/candidate-owned",
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "fceefc87c9b940c778139dd82e30cb493f1e6e41d8453ba1b604ebdfe552f454"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256": "d43b92a6c5b3ac75d1b78e0e2449f1c1e8f17c682249aca3cebe14c3839ec5eb"
+    },
+    {
+      "path": "docs/vernacular/acceptance-matrix.md",
+      "sha256": "0f4d99fa9236ea8955a5f5aa5245384363df6536d990c79a55c4fa1ff133b6d5"
+    },
+    {
+      "path": "docs/vernacular/external-profile-implementation.md",
+      "sha256": "983482b61c081e95e5732994be22ab53d1794196e0c577b6ce1d32256de9404d"
+    },
+    {
+      "path": "docs/vernacular/implementation.md",
+      "sha256": "9047eab124610e1f7c389adb906a947bd44a4960e8eaf504b24be0cab29b1788"
+    },
+    {
+      "path": "docs/vernacular/roadmap.md",
+      "sha256": "5d609d7475c9154dd2a07255030f4d11395536630e6480703bb223bc2e6d22f7"
+    },
+    {
+      "path": "docs/vernacular/v5-alignment.md",
+      "sha256": "4c102a971ab2832c1345ff772cf8856fe7fce8c881e573c8ae96fb3a46dd0bd7"
+    },
+    {
+      "path": "src/engine/CMakeLists.txt",
+      "sha256": "20ad1e4454007bde1c5d2a7597ec210387f104c79e95fd02b496df47d93e5415"
+    },
+    {
+      "path": "src/engine/export/source_export.cpp",
+      "sha256": "f0a79bfd69559b9aac348c11fa0b5a79080d170c4b56d44a761e5ed0fa85623c"
+    },
+    {
+      "path": "src/engine/history/read.cpp",
+      "sha256": "f5627ddbd55dd5406558931638297efa1aae9f14a1f02ac49cb13953f6f2265b"
+    },
+    {
+      "path": "src/engine/history/read.cppm",
+      "sha256": "8c57f884272480e0d28b203c265e5365173889138e90a7ce781b8ce22d029357"
+    },
+    {
+      "path": "src/engine/history/read.t.cpp",
+      "sha256": "32b2f7feb52ca74c504b876c31670540e347d9e5b1b453ee05b8fe9e68127d79"
+    },
+    {
+      "path": "src/engine/ledger/format.cpp",
+      "sha256": "abe067dd2cdde55261526ff6a034e95e3226c974f4db9102773bc5b1b9d87412"
+    },
+    {
+      "path": "src/engine/ledger/format.cppm",
+      "sha256": "42e25df686f81892a848af22ee078d2091fcca46611079c0803f1825c1733b7e"
+    },
+    {
+      "path": "src/engine/ledger/format.t.cpp",
+      "sha256": "ac0bda3c3ea6b9cbbc91378b552cc2c0be2cda9433724345efaab0c4f36f5c3f"
+    },
+    {
+      "path": "src/engine/ledger/history_verification.t.cpp",
+      "sha256": "037699dbc64480d83fc747cdcf10538bfb9856727e06394b5298e2de8482ab24"
+    },
+    {
+      "path": "src/engine/ledger/types.cppm",
+      "sha256": "63840b7e1c21ec24cb8cac263b2348204003e066840333e1e1c1ffc4e5226e7e"
+    },
+    {
+      "path": "tests/native/v5-02-x03-b2-a-support/run.py",
+      "sha256": "fb303589e6788810e5284a8205bf4be191bd002a7de812da46a7852d05b9d099"
+    }
+  ],
+  "owned_diff_sha256": "888a8b1f6e9f0d78f83f373f1eabebf8172209c18537e9acf0fd246918c98dbb"
+}

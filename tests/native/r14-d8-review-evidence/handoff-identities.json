@@ -1,0 +1,10 @@
+{
+  "path_base": "repository",
+  "files": {
+    "docs/vernacular/rounds/R14-D8-review.md": "f6e7f378f512bfd28985c201672c66cea10c0b5ff6e9877d8f0ef8e596364d55",
+    "tests/native/r14-d8-review-evidence/evidence-sha256.json": "5e8153ead4f62281947da441f5f888d55abf6d07c144a3c303faff3f6a7c1575"
+  },
+  "candidate_sha256": "439abd02ca0ee1c7532e8a7b9a43982dde3762fdb10663031106fcd17b6bd0e8",
+  "disposition": "approve",
+  "build_directories": "released idle"
+}

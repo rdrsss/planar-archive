@@ -1,0 +1,10 @@
+{
+  "final_source_matches_tested_freeze": true,
+  "focused_executed": 44,
+  "no_further_coder_edits": true,
+  "prior_names_preserved": 520,
+  "registered": 532,
+  "released_for_review_utc": "2026-10-23T00:44:31.416001+00:00",
+  "source_freeze_sha256": "fb30a7afb6727652498b8e4cefb41d21e983dc6a75d161427f7122b777e23cf8",
+  "status": "candidate_pending_independent_review"
+}

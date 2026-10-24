@@ -1,0 +1,33 @@
+{
+  "source_files": 15288,
+  "symlinks": {
+    "compile_commands.json": "<repo>/build/install-release/compile_commands.json",
+    "AGENTS.md": "CLAUDE.md"
+  },
+  "variants": {
+    "r12c2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r14f1-generated": [
+      "source_export.cppm",
+      "source_export.cpp"
+    ],
+    "r14c3b2-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "r13b1-generated": [
+      "format.cppm",
+      "format.cpp"
+    ],
+    "v5-02-x03-b2-b-c01-generated": [
+      "format.cppm",
+      "format.cpp"
+    ]
+  },
+  "forward_reverse_exact": true,
+  "metadata_variant_comparison_substitutions": 0,
+  "metadata_fixture_substitutions": 3,
+  "all_baseline_unowned_paths_unchanged": true
+}

@@ -1,0 +1,308 @@
+{
+  "files": {
+    "REPORT.md": {
+      "sha256": "20c88b35324c8825df0618c135ee3450cc6638244d5ee4df6dfb29088b76354c",
+      "size": 8448
+    },
+    "baseline-head.txt": {
+      "sha256": "dcd8613a29222f79706a2648d356a869f1392f7c6f159940b34824d17ebec2c2",
+      "size": 41
+    },
+    "baseline-source.json": {
+      "sha256": "29a14f46e8b1ee25b8123d9fb572f3b5cabf8b384c60de64917816371101a4a0",
+      "size": 929
+    },
+    "baseline-status.txt": {
+      "sha256": "c3c9cfc4da91e3f6eed29cbf298c5c3b2931c668f5a4425fc20c99edbbc19c68",
+      "size": 317949
+    },
+    "build-01.log": {
+      "sha256": "ce163d0a4cdcf06310aae855a8dc639cdc05927f78b9fe73e9b4efacd2c9dcc2",
+      "size": 80013
+    },
+    "build-02.log": {
+      "sha256": "eae3f6e8ff4f30ac26850f33b7e6c6e43ace0fbe4606e076681a6bb6902b5fe0",
+      "size": 58894
+    },
+    "build-03.log": {
+      "sha256": "36a8c7965b352ac1a75c2f8a07b013ef5a2592803f7fe9e7b3030fcea39a1a3d",
+      "size": 423
+    },
+    "build-identities.json": {
+      "sha256": "310fe4a53c71dde5c849cb614d52263f8c900d98dce2d5ad9d9ba7f3ecf592c7",
+      "size": 232
+    },
+    "candidate-manifest.json": {
+      "sha256": "b80a540b4c0db0a79b9acf560d039f2935e1c65c8d8ada9b6cfa98db36376a14",
+      "size": 1907
+    },
+    "command-timing.json": {
+      "sha256": "44b68863d3ee24757d7cea37adb29c01e983e1eb694fc4d5bbcca9cdf2cfa276",
+      "size": 8413
+    },
+    "final-gate/CTestCostData.txt": {
+      "sha256": "0f63fbd7c3c1ba1e7e6bd14b27f1e609aa28f7de308410af9fbb194c084f85f4",
+      "size": 59254
+    },
+    "final-gate/LastTest.log": {
+      "sha256": "5f4f026f83b9fab0c7002b1fc56580ad48bad7a2ed6814eff99b9f8124d2c7ff",
+      "size": 334118
+    },
+    "final-gate/b1-audit.json": {
+      "sha256": "c1c707f2b03c5b792697a4cd3fbd50711fe0ca48c8eabaa3de3393af427c63fd",
+      "size": 660
+    },
+    "final-gate/b1-audit.log": {
+      "sha256": "d7b3eb67d9c3118fc5992691e9df7ec49c4bfd6c733bfe4fb5c307dd15ee656e",
+      "size": 109
+    },
+    "final-gate/b2-a-audit.json": {
+      "sha256": "73a6778d199eb7e0077754a4d03a07c1ed4ba0c1543d3daca27862d5d3d4f3dc",
+      "size": 198
+    },
+    "final-gate/b2-a-audit.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "final-gate/build.log": {
+      "sha256": "c2263a16183c3c42aff3f9ae46d31a21dd1329f17bfb105651014e06426e799f",
+      "size": 54459
+    },
+    "final-gate/canonical.log": {
+      "sha256": "6642b7c9c2a89bec52b0555a60c260cbfa95a547923c6102848e093ed7192eba",
+      "size": 79
+    },
+    "final-gate/commands.json": {
+      "sha256": "83b3611fd4d1f51d4c3415c176eaa297d38d3ddea2b07b35bf7a8fb14ca5a5d5",
+      "size": 5064
+    },
+    "final-gate/configure.log": {
+      "sha256": "9e00b5bde4840ee754b2a53adf907c71cdeb7784ac9dd3ceb9e3d316ce3b1119",
+      "size": 866
+    },
+    "final-gate/d6-audit.json": {
+      "sha256": "2463a4b46e41affaf370624dc64edefdb30da6bee8895ef4d004a657b1ee9836",
+      "size": 5314
+    },
+    "final-gate/d6-audit.log": {
+      "sha256": "94659fda7a6de2958823f6bf6fd3192b2b99c5b4477432f18dce2467083efa3d",
+      "size": 152
+    },
+    "final-gate/d6-c01-audit.json": {
+      "sha256": "0a4d238219f403587c2dd9e021caf9c334550c00b2ef62148f8ea6d1609e0561",
+      "size": 975
+    },
+    "final-gate/d6-c01-audit.log": {
+      "sha256": "91f72ed3b1c2d80d1d17708b8a4b0d826506a28b3be25cc2bbb8abb2f67499a2",
+      "size": 214
+    },
+    "final-gate/d7-b-audit.json": {
+      "sha256": "55cd7f6f168085564313b0182ec11d34d008e4f32670ef7c5c96bef2d03c65c5",
+      "size": 2352
+    },
+    "final-gate/d7-b-audit.log": {
+      "sha256": "b104d6d3629a93d70beec2e735446bdcbb830569ec34347b924d981985de1cab",
+      "size": 128
+    },
+    "final-gate/effective-provenance.log": {
+      "sha256": "a4d50bbf88c4f61c514278409826262e4a08990ead035cd675546063755b96e3",
+      "size": 157
+    },
+    "final-gate/focused.log": {
+      "sha256": "2b05a47e39ec70f816bf0d0e8143a7a2fc31ec2f562b092dcf44b21903648f53",
+      "size": 68254
+    },
+    "final-gate/focused.xml": {
+      "sha256": "31714b372f9002311f26984494df25bd08192a0191168f8b35abbb14b2c94f3f",
+      "size": 150568
+    },
+    "final-gate/historical-audit.json": {
+      "sha256": "79ee53c84c71668402a49ed3c12e7329d31f1276970559e9db3d5152c12c8a21",
+      "size": 18900
+    },
+    "final-gate/historical-audit.log": {
+      "sha256": "8af60f3b6d2b4ce04127b52618585bdbac72e818e64fb7d11d33b097d468f153",
+      "size": 87
+    },
+    "final-gate/inventory-preservation.json": {
+      "sha256": "66260bc915f0295ad0ee8901e11ff85ad853c32b3c06b9bfc0d43b8c0a57af94",
+      "size": 2577
+    },
+    "final-gate/inventory.log": {
+      "sha256": "51f7af7a1c2494d3f9b5f6ee7b9d14f6af0a852bb604665c9fb280dd5051daa5",
+      "size": 490590
+    },
+    "final-gate/no-work.log": {
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "size": 63
+    },
+    "final-gate/pinned-lint.log": {
+      "sha256": "bcfe772d63f5192c8fa40c6fae663d5c8acebc6bff02bfc1b62546e71b40e2af",
+      "size": 9150
+    },
+    "final-gate/record-v1.log": {
+      "sha256": "b112fdde37b314e23ae46c1c190b65a7575877f687ca9085627427d91d195801",
+      "size": 39
+    },
+    "final-gate/request-v2.log": {
+      "sha256": "8452da8a1f5e4fdfcd78674828e1e59a0e847a545d4f71ecfdcc76b3c35c73fa",
+      "size": 42
+    },
+    "final-gate/selected-tests.txt": {
+      "sha256": "1347a64de8a4eccefdbec972e7c7a41c7bba1dadeaad855f652b39d33ad55bfc",
+      "size": 20631
+    },
+    "final-gate/shape-definition-vector.log": {
+      "sha256": "102d8c03648d6b9977135442e9aeae12a61f4e47fc3e4828329f1c56b1d62554",
+      "size": 1769
+    },
+    "final-gate/source-freeze.json": {
+      "sha256": "54610f9a33131668da9c0645966f230efc15f36f57194b68fbefa12b1d38a3f0",
+      "size": 56945
+    },
+    "final-gate/source-stability.json": {
+      "sha256": "5d6f56287fa2c140151269aec8d70152563d3843fba0b9e8ef2b237213276850",
+      "size": 87
+    },
+    "final-gate/test-summary.json": {
+      "sha256": "a5794991259eeb051d86ca0eac0a3b84c3ed8137c0c9b07e8f0a0b541c3e8db2",
+      "size": 120
+    },
+    "final-gate-driver.log": {
+      "sha256": "2f7381a74e405271f2372270ad14e21238ec155db4552cc8be8441842adec16f",
+      "size": 259
+    },
+    "final-owned/CLAUDE.md": {
+      "sha256": "378c416a3189de4edfd71ffde27736d63f59c3a26d1af53bd57af1f6d918e300",
+      "size": 32152
+    },
+    "final-owned/docs/architecture.md": {
+      "sha256": "9588b565a835938ff1f515239dd47fe7b101fea9273dc73ad5db60964d8ff6d6",
+      "size": 76929
+    },
+    "final-owned/docs/testing.md": {
+      "sha256": "4cfd199f735a91af3918876e70219a1eb3cfc21f329659f4adaa66a11e624c16",
+      "size": 81269
+    },
+    "final-owned/docs/vernacular/external-profile-implementation.md": {
+      "sha256": "b1ad6b78883c7d385874ca13b8694a9bdcf6084332998ee1c41ef9f13ea45325",
+      "size": 38739
+    },
+    "final-owned/docs/vernacular/implementation.md": {
+      "sha256": "01d666e6d06bee160539414753565ec7737a42085e7b1716772f8b6c8e396674",
+      "size": 41645
+    },
+    "final-owned/docs/vernacular/roadmap.md": {
+      "sha256": "5af4fb0a78eca31b99f5f9d44e78a64fe3a0ef6429da9c7761fd748dcc8cae9b",
+      "size": 48041
+    },
+    "final-owned/src/engine/runtime/external_registration.t.cpp": {
+      "sha256": "c8fc48ffaa6294f4405a3008b09bd05159fbf1e903e62a768971225e20925621",
+      "size": 33904
+    },
+    "final-owned/src/engine/runtime/runtime.cpp": {
+      "sha256": "4fa55ab312342e9e87f52ecf5fd82c15ce123855e73b6b8c5f21a748572351e7",
+      "size": 105701
+    },
+    "final-owned/src/engine/runtime/runtime.cppm": {
+      "sha256": "994e046e9019e0cd2683c240d15c555da266a83fac31274b281d5a38689d7143",
+      "size": 13480
+    },
+    "final-owned/tests/native/v5-02-x05-b2-a-support/audit.py": {
+      "sha256": "dfaa8a1a258ab4bc6381e514d75ec9e23c752d86769f9a809e6e9aef601c5398",
+      "size": 1082
+    },
+    "final-owned/tests/native/v5-02-x05-b2-a-support/gate.py": {
+      "sha256": "8b6bcc28bda5582a56280de2e4af19825d636a33db2e24752267d2d3eeb53edf",
+      "size": 5381
+    },
+    "final-owned/tests/native/v5-02-x05-b2-a-support/vector.py": {
+      "sha256": "f35073740c212de515b9a2061ff2ce77489f8ddb0aa5fd6eae4141dc269f7727",
+      "size": 1424
+    },
+    "finalize-attempt01.log": {
+      "sha256": "50fa940e0656934f2f7dadbb866caccd73ef18bc783171bf15fcae3ef760f454",
+      "size": 1194
+    },
+    "finalize-attempt01.py": {
+      "sha256": "6f4c2d745e794525150d9671602b8fa97f472c2114e8a5c5d356b84c4594ac7d",
+      "size": 4366
+    },
+    "finalize.py": {
+      "sha256": "d214455d175296b2a2d055e08a531e7e02980cc2eafb7c2da661eae83e069068",
+      "size": 4355
+    },
+    "independent-vector.json": {
+      "sha256": "102d8c03648d6b9977135442e9aeae12a61f4e47fc3e4828329f1c56b1d62554",
+      "size": 1769
+    },
+    "original-source/CLAUDE.md": {
+      "sha256": "01331f44df50364f155a1370908031296d0ae44dc88c9ef31252ddd32a798f1c",
+      "size": 31175
+    },
+    "original-source/docs/architecture.md": {
+      "sha256": "2ccb1b21b99b8a2d05d5c1a396feff0c0ce64700145df98edd3112919b40cc13",
+      "size": 75949
+    },
+    "original-source/docs/testing.md": {
+      "sha256": "acea86f2a791d42852216da8c39b59d3e7973c253e5493f0a6d88d2ea98af280",
+      "size": 80289
+    },
+    "original-source/docs/vernacular/external-profile-implementation.md": {
+      "sha256": "ccf0983359cf4490a458ef6f511360c65fabbab4a0ca89e7fb12421783f599b2",
+      "size": 37756
+    },
+    "original-source/docs/vernacular/implementation.md": {
+      "sha256": "9c7bb166cc5d045f3dd98cc1eab8c0bae332192299014007618f2c3fda7490cf",
+      "size": 40662
+    },
+    "original-source/docs/vernacular/roadmap.md": {
+      "sha256": "aeb0f54dd9faf8e2297256618abb7ddddd2e4aad397f976a1ad04158db3ccb28",
+      "size": 47058
+    },
+    "original-source/src/engine/runtime/external_registration.t.cpp": {
+      "sha256": "1fca8237c333de37e71cf4047151b51381a62b7582f35389a5a547fce53a26ff",
+      "size": 25770
+    },
+    "original-source/src/engine/runtime/runtime.cpp": {
+      "sha256": "5463fdcfebcf7ad1c76b68999196a5d9e9541832fd91e445612010ce2322a7f9",
+      "size": 101397
+    },
+    "original-source/src/engine/runtime/runtime.cppm": {
+      "sha256": "f395645379ac977a30a8f37dd0acc06e54a1e69bbd82c73248982f3388dbeac6",
+      "size": 12483
+    },
+    "owned.diff": {
+      "sha256": "edb204aca17f35691af73155e2f4de4ac18026d879991b1a4933de7064bc1959",
+      "size": 32229
+    },
+    "probes-01.log": {
+      "sha256": "7858c19ea2eca7eade3eba52d0c37bedc25284dd2a46fa36dffce958344cc5f0",
+      "size": 96
+    },
+    "probes-01.xml": {
+      "sha256": "eeaa99de887e0269d32a77d30ad761a5194be3b30a4d01a2cddcfb8ee3fa87d1",
+      "size": 175
+    },
+    "probes-02.log": {
+      "sha256": "12a537eef75629b634a01ae8193c5cd19f57407e306ca3543aedb612955bfdd9",
+      "size": 2836
+    },
+    "probes-02.xml": {
+      "sha256": "67ca77eb7f106f3060178ffff25c24f17e367175003b87cc0ceae67ac967dcc2",
+      "size": 4306
+    },
+    "probes-03.log": {
+      "sha256": "2d666fa7c6e7799c7ef0f9d1bcaf6c71a7c19c9d1d3ce08006fbee74545c1c58",
+      "size": 1686
+    },
+    "probes-03.xml": {
+      "sha256": "c9ecf92c70e44e042eba60738af16f34a0b72e0313a58b810872e22c9d712a4e",
+      "size": 3917
+    },
+    "scope-audit.json": {
+      "sha256": "fb362114388d9c12e8b44d19edf5d9ae86f0e08bac6ebaf5c95643cc35c32abe",
+      "size": 799
+    }
+  }
+}

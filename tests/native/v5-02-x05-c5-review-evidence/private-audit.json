@@ -1,0 +1,50 @@
+{
+  "debug": {
+    "actual_argv_exact": true,
+    "copied_libcxx_claim": false,
+    "current_journal_preserved_prefix_and_only_later_glob_check": {
+      ".ninja_deps": "",
+      ".ninja_log": "15\t32\t1792842145528280866\t<repo>/build/rewrite-debug/CMakeFiles/cmake.verify_globs\te0d843c653fdc59b\n16\t33\t1792843509455625671\t<repo>/build/rewrite-debug/CMakeFiles/cmake.verify_globs\te0d843c653fdc59b\n"
+    },
+    "current_shared_dependencies_exact": 888,
+    "direct_dependencies": 133,
+    "helper_load_proved": true,
+    "layout": [
+      1056,
+      1464,
+      600,
+      56
+    ],
+    "mode": "Debug",
+    "no_implicit_modules": true,
+    "private_compiler_link_inputs_owned": true,
+    "private_journals_before_final_exact": true,
+    "recursive_response_files": 3,
+    "removed_bytes": 1460326228,
+    "removed_files": 893
+  },
+  "release": {
+    "actual_argv_exact": true,
+    "copied_libcxx_claim": false,
+    "current_journal_preserved_prefix_and_only_later_glob_check": {
+      ".ninja_deps": "",
+      ".ninja_log": "16\t33\t1792842681006581745\t<repo>/build/rewrite-release/CMakeFiles/cmake.verify_globs\tf27aebe8da99070d\n17\t31\t1792843512806903677\t<repo>/build/rewrite-release/CMakeFiles/cmake.verify_globs\tf27aebe8da99070d\n"
+    },
+    "current_shared_dependencies_exact": 888,
+    "direct_dependencies": 133,
+    "helper_load_proved": true,
+    "layout": [
+      1056,
+      1464,
+      600,
+      56
+    ],
+    "mode": "O2/NDEBUG",
+    "no_implicit_modules": true,
+    "private_compiler_link_inputs_owned": true,
+    "private_journals_before_final_exact": true,
+    "recursive_response_files": 3,
+    "removed_bytes": 1312133952,
+    "removed_files": 893
+  }
+}

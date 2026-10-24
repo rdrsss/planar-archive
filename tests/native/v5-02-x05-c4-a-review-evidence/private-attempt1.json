@@ -1,0 +1,8 @@
+{
+  "phase": "dependency copy before compilation",
+  "exit": 1,
+  "failure": "AssertionError: copied libc++abi target compared against overwritten alias-link identity",
+  "product_mutated": false,
+  "compilation_started": false,
+  "correction": "resolve dylib alias before entry; preserve failed script and baseline"
+}

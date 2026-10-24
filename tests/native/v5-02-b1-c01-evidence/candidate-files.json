@@ -1,0 +1,8 @@
+{
+  "src/engine/runtime/runtime.cpp": "4dac9e6272c00870d067092691d57135349f3f9420e41209d6a9e558b250bd30",
+  "src/engine/runtime/commands.t.cpp": "481dba2e6e8d78e07c876a29e1416af4ac71d9e195d6bdc6aca2e70c44bfe557",
+  "src/engine/CMakeLists.txt": "b288bcce2b3d5e8083613ea92d0afb6188972f23400378a1aa302568f2428138",
+  "tests/native/v5-02-b1-support/generate.py": "cba2c63be72bdcde53d6f318b702e722497f8c3c8d5146dc2ab13b5910c886eb",
+  "docs/architecture.md": "1f0f4db507c5c5b347535d8022697597a74b82d85379a8f40d53de4f21d5427c",
+  "docs/testing.md": "39667f30a2041fc123581a2f7f07c2b50088d25061ff9748257597a912c7eb2d"
+}

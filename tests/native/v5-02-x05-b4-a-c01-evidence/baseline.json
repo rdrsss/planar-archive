@@ -1,0 +1,14 @@
+{
+  "timing": "actual pre-edit capture before any product/test/prose writes",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "files": {
+    "src/stdlib/planar/render.lua": "deb4f2722bb40f71778a22f5483722531f13680e3fa4fa91b76ae5370ca10f82",
+    "src/engine/runtime/external_registration.t.cpp": "a5e1f1afd14cdcca0e5638b0ba64c6abece70d96ecedd9c540692b8fb14f299f",
+    "CLAUDE.md": "455ed78585d35a9d686cfe89ae8a71fe12a7bc5fa3073dbc4f42349d225b2f51",
+    "docs/architecture.md": "bbdb2c54c6e218b59bc65cb4a6fe3e3a9ad485ee38955951975459046e031b5a",
+    "docs/testing.md": "e7d72d65e0843083b1457cca0f1f66076a0a5edc6f9caa82a8605b6cd5bdb373",
+    "docs/vernacular/implementation.md": "98e54716e9c16c2f1bcb0acd40a89f42292301627f694eaece6ba9d1c59f81f9",
+    "docs/vernacular/roadmap.md": "d8951040cf450a1611e057ad021e3bc76165811428066dfec9765840bebc128c",
+    "docs/vernacular/external-profile-implementation.md": "e1b91a8cafea006d17c09e84ea9f308effdc39a739c56935edcd5f7fc2e0a302"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "actual_archived_renamed_body_present": true,
+  "added": [
+    "tests/native/v5-02-x05-c1-support/finalize.py",
+    "tests/native/v5-02-x05-c1-support/freeze.py",
+    "tests/native/v5-02-x05-c1-support/gate.py",
+    "tests/native/v5-02-x05-c1-support/probes.py"
+  ],
+  "approved_release_identities_preserved": 940,
+  "archived_render_sha256": "803287f7bd091c2bea270021c4bbda94204f62648bc884f0691bb320455fbe51",
+  "baseline_entries": 29923,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/stdlib/planar/bootstrap.lua",
+    "src/stdlib/planar/render.lua"
+  ],
+  "frozen_entries": 29927,
+  "review_start_entries": 30295,
+  "scoped_diff_reconstructed": true,
+  "symlink": {
+    "mode": 493,
+    "symlink": "CLAUDE.md"
+  }
+}

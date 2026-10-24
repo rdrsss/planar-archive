@@ -1,0 +1,214 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "label": "initial-build",
+    "seconds": 0.26944720931351185
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "label": "inventory",
+    "seconds": 0.09292637463659048
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/focused.xml"
+    ],
+    "exit": 0,
+    "label": "focused",
+    "seconds": 42.81017112545669
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b3-c-support/vector.py",
+      "--check"
+    ],
+    "exit": 0,
+    "label": "selection-vectors",
+    "seconds": 0.7588091669604182
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-b2-a-support/vector.py"
+    ],
+    "exit": 0,
+    "label": "shape-definition-vectors",
+    "seconds": 0.636680374853313
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "exit": 0,
+    "label": "canonical-vectors",
+    "seconds": 0.6362762497738004
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "exit": 0,
+    "label": "record-v1-vectors",
+    "seconds": 0.6395082920789719
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/records/generate-request-v2.py",
+      "--check"
+    ],
+    "exit": 0,
+    "label": "request-v2-vectors",
+    "seconds": 0.6284523755311966
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/vectors/effective-provenance/generate.py",
+      "--check"
+    ],
+    "exit": 0,
+    "label": "effective-provenance-vectors",
+    "seconds": 0.6614782083779573
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/historical-audit.json"
+    ],
+    "exit": 0,
+    "label": "historical-audit",
+    "seconds": 0.38145354110747576
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/d6-audit.json"
+    ],
+    "exit": 0,
+    "label": "d6-audit",
+    "seconds": 0.25086504220962524
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/d6-c01-audit.json"
+    ],
+    "exit": 0,
+    "label": "d6-c01-audit",
+    "seconds": 0.1474239993840456
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/d7-b-audit.json"
+    ],
+    "exit": 0,
+    "label": "d7-b-audit",
+    "seconds": 0.11736316606402397
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-b1-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/b1-audit.json"
+    ],
+    "exit": 0,
+    "label": "b1-audit",
+    "seconds": 0.0490938751026988
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-c2-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/runtime-audit.json"
+    ],
+    "exit": 0,
+    "label": "runtime-audit",
+    "seconds": 0.032301999628543854
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c4-d2-b1-review-evidence/native-audit.json"
+    ],
+    "exit": 0,
+    "label": "native-audit",
+    "seconds": 0.029280750080943108
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "exit": 0,
+    "label": "lint",
+    "seconds": 1.8387412913143635
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "label": "no-work",
+    "seconds": 0.12730216700583696
+  }
+]

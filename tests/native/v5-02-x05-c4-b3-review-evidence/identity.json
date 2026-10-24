@@ -1,0 +1,11 @@
+{
+  "artifact_entries": 166,
+  "candidate_entries": 18,
+  "exact_membership_modes_bytes": true,
+  "hashes": {
+    "REPORT.md": "e42cf175003dbdc28a2afea1f06cb11b970fe77ccc7e1974c96ce1a3145c8507",
+    "artifact-manifest.json": "8cd9069f84100de6afd887214c05bd601afc9409890e1da331bc552298e9b8af",
+    "finalization.json": "215ce1baac3b992e9aa6f5ac9ffcbc367c41066322450c9c91f15f16c2dc820b",
+    "frozen-candidate.json": "65c517516840505ee603ece2f28899830f19a0c036864aa37a852c126973eb7d"
+  }
+}

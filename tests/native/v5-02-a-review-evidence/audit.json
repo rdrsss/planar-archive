@@ -1,0 +1,58 @@
+{
+  "verdict_from_technical_review": "approve",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "candidate_manifest_sha256": "32d5e5a2f695d34afb62e6fadeaf353c485432d6b5b6a1c8706a4152405d5352",
+  "verified_manifest_entries": 23,
+  "candidate_files": {
+    "docs/vernacular/command-contract.md": "fa7a6c22930073c84ec346a9b041a4b02b48eecd59dd9327e5ee0016862cf80a",
+    "docs/vernacular/render-contract.md": "59eaa6f191f8f7144474ca5ea6e4b681a282f4bdd972c355139199b80ce13767",
+    "docs/vernacular/ledger-contract.md": "fbf693e00311172e8bc61ecb90111daa7ce7170faec359897a9a8e347618019d",
+    "docs/vernacular/implementation.md": "fdc2d65027a6a0cff6cb9e563b91175414a377663b6e640e2168f86fe153192c",
+    "docs/vernacular/roadmap.md": "4852563454acf7de2be91adb1ea52b9981d7039c5c691baa3797a4eceb062bcc",
+    "docs/vernacular/v5-alignment.md": "a527e2b28211b2212f82852b504ae2d8c741def3f49f231dc582c1bc2b0e5e1e",
+    "docs/vernacular/acceptance-matrix.md": "817e33671ee5228352a7fd97cb29dad3f3903abac8e832a01472c60f7c2915c5",
+    "CLAUDE.md": "e5e0a41501fdb14641e5e8f59ba81fba7af32f20046acf20f5e56ec1aad7fa70"
+  },
+  "owned_diff_sha256": "4f53299a5263140987c7dd9680c64933bdeadc9c773e9b3d4787003db204beae",
+  "protected_files_unchanged": 5601,
+  "protection_coverage": {
+    "src": {
+      "current_files": 100,
+      "unexplained_omissions": []
+    },
+    "vendor": {
+      "current_files": 1661,
+      "unexplained_omissions": []
+    },
+    "fixtures": {
+      "current_files": 49,
+      "unexplained_omissions": []
+    },
+    "scripts": {
+      "current_files": 7,
+      "unexplained_omissions": []
+    },
+    "cmake": {
+      "current_files": 4,
+      "unexplained_omissions": []
+    },
+    "docs/vernacular/rounds": {
+      "current_files": 251,
+      "unexplained_omissions": []
+    },
+    "tests": {
+      "current_files": 3558,
+      "unexplained_omissions": []
+    }
+  },
+  "local_links_and_anchors": 175,
+  "agents_symlink_target": "CLAUDE.md",
+  "git_diff_check": "pass",
+  "added_line_whitespace_check": "pass",
+  "builds_and_product_tests": "not run; authorized docs-only review",
+  "limitations": [
+    "Inventory creation order is recorded by coder/coordinator; this audit verifies frozen content and complete present coverage, not wall-clock authorship.",
+    "Contract approval is not runtime security or implementation evidence."
+  ]
+}

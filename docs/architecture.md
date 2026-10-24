@@ -1,1212 +1,1532 @@
-# Planar Architecture
-
-Planar is a local-first task tracker and agent-operations infrastructure tool. It spans planning, tasking, scoping, durable agent handoff, vendor parity, and operational-plane integration with Jira and GitHub Issues.
-
-Planar also owns the read-only `block-document-v1` authority for plan and
-artifact content. The projection binds a source document identity to a SHA-256
-content revision and an ordered list of source-mapped passages. Range
-validation always rebuilds that projection from one database snapshot: callers
-provide the revision, boundary keys, UTF-8 byte offsets, every claimed covered
-key, and every claimed segment quote. Planar rejects stale, foreign, reordered,
-discontinuous, or forged evidence and returns the actual covered keys and
-server-derived normalized quote only after the complete range matches.
-
-This document describes the system as it stands today — for a new contributor or curious user who wants to understand how Planar works without reading the full source. For the operational flows drawn as diagrams — the spec pipeline, orchestration lifecycle, and claim ritual — see [Operations](operations.md).
-
----
-
-## System Layers
-
-```mermaid
-flowchart TD
-    subgraph Surface["User / Agent surface"]
-        direction LR
-        S1["planar skill (rules + references)"]
-        S2["planar-orchestrator · planar-coder · planar-reviewer · …"]
-    end
-
-    subgraph Binaries["Planar CLI (four planning-state surfaces + one DB-handle-free engine)"]
-        direction LR
-        B1["<b>planar</b><br/>operator RW<br/>planning entities"]
-        B2["<b>planar-agent</b><br/>agent RW<br/>agent_actions + claims"]
-        B3["<b>planar-watch</b><br/>read-only viewer<br/>file:?mode=ro"]
-        B4["<b>planar-execute</b><br/>spawn-free Lua engine<br/>no DB handle · shells planar"]
-        B5["<b>planar-ext</b><br/>operational-plane RW<br/>external_links/systems/sync_events only"]
-    end
-
-    DB[("SQLite database<br/>~/.planar/planar.db<br/>41 migrations · embedded at build time")]
-
-    Surface -->|invoke| Binaries
-    B1 -->|read / write| DB
-    B2 -->|read / write| DB
-    B3 -->|read-only| DB
-    B4 -->|shells| B1
-    B4 -->|shells| B2
-    B4 -->|shells| B3
-    B5 -->|read planning / write its 3 tables| DB
-```
-
-Two layers are touched by users and agents:
-
-1. **The Planar binaries** — five C++26 executables. Four share the SQLite engine/runtime graph: `planar` is the operator surface, `planar-agent` owns coordination writes, `planar-watch` is a driver-enforced read-only viewer, and `planar-ext` (decisions 995–1001) owns the operational-plane adapters (Jira, GitHub Issues) with read-only access to planning tables and read-write access to exactly `external_links` / `external_systems` / `sync_events`, enforced by a `sqlite3_set_authorizer` allowlist. `planar-execute` links the vendored Lua runtime and reaches state only through an exact allowlist of sibling Planar commands — it holds no SQLite handle at all. Capability boundaries are enforced by each binary's verb set and locked by integration tests. See [Five-binary architecture](#five-binary-architecture) below. The Zig implementation these binaries were ported from was retained under `zig/` as the port's parity oracle and DELETED at the M10 cutover (decisions 963/982) once its state-differential evidence came back clean; C++26 is now the only implementation.
-2. **The skill and agent layer** — one skill, `planar` (`skills/planar/`), and fifteen role agents (`agents/planar-<role>.md`), placed unchanged into six vendors' directories at install time with no rendering step. The skill states the rules that cross verbs and routes to references; the agents are dispatched by name. Both invoke binary verbs; binary verbs operate on SQLite. See [skill-reference.md](skill-reference.md).
-
-An LLM agent running a skill has no direct database access. It calls Planar verbs and reads their stdout.
-
----
-
-## Storage
-
-The database lives at `~/.planar/planar.db` by default. Set `PLANAR_DB` to override the path; there is no global `--db` flag.
-
-### Schema management
-
-Migrations are plain SQL files under `migrations/` in sqlx-cli format (`NNNNN_<name>.up.sql` / `.down.sql`, five-digit zero-padded prefix). The configure-time CMake codegen `cmake/generate_migrations.cmake` scans the directory (sorted explicitly, never relying on glob order) and `#embed`s each pair into a generated `planar.db.migrations` module that the runtime applies on startup; already-applied migrations are skipped. There is no external migrator dependency — the migration corpus is embedded in the binary at compile time.
-
-`schema_migrations` is the public schema-version contract. Every migration inserts one row with a version number and description. Read-side tools (e.g., a web viewer, an Obsidian bridge) must open the database read-only and query `schema_migrations` to verify they support the current version before operating. Every binary that holds a SQLite handle performs this handshake at startup, in `planar.db.migrate`'s `assert_schema_compatible` (`planar-execute` holds no handle and is exempt). A database **ahead** of the binary — migrated by a newer build — is refused by all four with exit code 7. A database **behind** the binary is refused with exit code 7 by the three consumer binaries (`planar-agent`, `planar-watch`, `planar-ext`), whose remediation is `planar init`; `planar` itself owns migration and applies the pending chain instead. A database whose applied set has a **hole** in it — `max(version)` reports a version whose predecessors are not all present, which `max(version)` alone cannot distinguish from a healthy database — produces a warning on stderr rather than a refusal, so the diagnostic verbs stay reachable. The embedded chain itself must be contiguous (`1..n`, no holes); `apply_all` refuses a chain that is merely monotonic.
-
-Authoring rules (file naming, the `schema_migrations` insert/delete contract, the `.sqlfluff` linter config, and the up/down/up roundtrip test) live in [`migrations/README.md`](../migrations/README.md). New migrations are created via `sqlx migrate add -r <name> --source migrations`; the next `cmake --build` regenerates the embedded module (CMake re-runs configure automatically on new/removed migration files).
-
-### The schema is the contract
-
-Forty-one migration files (`migrations/00001_foundation.up.sql` through `migrations/00041_contextual_annotation_threads.up.sql`) define Planar's schema. The runtime applies them from a generated `planar.db.migrations` module, `#embed`-produced at CMake configure time (`cmake/generate_migrations.cmake`); the public schema-version tracker is `schema_migrations`.
-
-Read-side tooling — viewers, query CLIs, Obsidian bridges, future binaries — opens `~/.planar/planar.db` with `PRAGMA query_only = 1`, reads `schema_migrations` to verify version compatibility, and operates without going through the binary. The contract is the schema, not the codebase. The table inventory is below.
-
-### Application tables
-
-| Migration | Tables / schema change |
-|-----------|------------------------|
-| 0001 foundation | `schema_migrations`, `config`, `projects`, `associations`, `project_associations` |
-| 0002 planning | `plans`, `artifacts`, `decisions` |
-| 0003 work items | `agents`, `active_scope`, `tasks`, `questions`, `test_scenarios`, `plan_steps` |
-| 0004 entity links | `entity_links` |
-| 0005 sessions | `sessions`, `session_entries`, `context_snapshots`, `handoffs` |
-| 0006 external | `external_systems`, `external_links`, `sync_events` |
-| 0007 workbench | `workbench_sync_state` |
-| 0008 doc artifact kinds | extends `artifacts.kind` CHECK with `research`, `getting_started`, `changelog_entry`, `glossary_term` |
-| 0009 drop active scope | drops `active_scope` (replaced by cwd-derived resolution) |
-| 0010 task reopens | `task_reopens` — one audit row per reopen of a terminal (`done`/`cancelled`) task, with `from_status`, `to_status`, `source`, and optional `reason` |
-| 0011 slug refs FTS | slug-reference index + per-entity FTS5 virtual tables for search (`plans_fts`, `tasks_fts`, `questions_fts`, `test_scenarios_fts`, `decisions_fts`, `artifacts_fts`) |
-| 0012 annotations | `annotations`, `annotation_tags`, and the `search_annotations` FTS5 virtual table |
-| 0013 test_spec artifact kind | extends `artifacts.kind` CHECK with `test_spec` |
-| 0014 audit log | `audit_log` |
-| 0015 agent activity | `agent_work_claims`, `agent_actions` (claims carry `repo_root` / `branch` / `head_sha_at_claim` / `dirty_at_claim` + optional worktree id/path; actions carry `head_sha` / `dirty`) |
-| 0016 agent_actions metadata | adds nullable `agent_actions.metadata` text column for caller-attached opaque JSON (orchestrator strategy persistence; first consumer is the orchestrator's rule-6 stickiness) |
-| 0017 handoffs worktree | adds nullable `handoffs.worktree_path` / `repo_root` / `branch` columns; `planar handoff create` copies them from the active `agent_work_claims` row on the target task so `planar resume` can recover `cd <path>` even after the originating claim has been released |
-| 0018 fix migration descriptions | data-only: corrects the `schema_migrations.description` text for versions 2-7, which had been copy-pasted from unrelated Go-archive migrations. No schema change; the `description` column is not read at runtime (the version contract is the numeric `version`). |
-| 0019 task touch paths | `task_touch_paths` (path-level touch declarations: `task_id` → `repo_id` (`projects.id`) → repo-relative `path`); additive to the coarse `entity_links` repo-touch edge, consumed by `plan recommend-strategy` for the path-shaped parallelizability rules |
-| 0020 cli_invocations usage log | `cli_invocations` — opt-in local log of operator CLI usage (one row per `planar` invocation when `[introspection].cli_log = true` in config.toml). Privacy: `args_shape` carries flag names + positional arity only; flag/arg values are never written. Rows expire statelessly via a retention-prune on the capture path. |
-| 0021 session commits | `session_commits` — persisted `session_id → commit` attribution rows (`sha`, `repo_root`, `branch`, `subject`, `author`, `committed_at`, `recorded_at`, optional `claim_id`) plus nullable `sessions.repo_root` and `sessions.head_sha_at_start` columns for operator-session commit windows |
-| 0022 workflow context plane | `workflow_runs` — identity + audit for one external harness run (`plan_id`, `workflow_name`, `run_identifier` unique, `pid`, `repo_root`, `started_at`, `ended_at`, `status` in `running\|completed\|failed\|interrupted\|abandoned`); `context_records` — run-scoped working memory keyed `(run_id, stage, session_id, claim_id)` with `kind` in `finding\|risk\|artifact\|followup\|summary\|capsule` and `status` lifecycle `active\|consumed\|superseded`, plus nullable `compiled_from` provenance column for capsule rows |
-| 0023 claims run/stage | adds nullable `agent_work_claims.run_id` (FK `workflow_runs(id) on delete set null`) and `agent_work_claims.stage` (text) so claims acquired inside an external workflow harness run carry the run identity and stage name; `planar-agent pull` and `claim` gain optional `--run <id>` / `--stage <text>` flags that populate these columns; claims acquired without those flags behave unchanged (null run/stage) |
-| 0024 context_records nullable claim | table-rebuild (rename → recreate → copy → drop) that relaxes `context_records.claim_id NOT NULL → nullable`; indexes are also rebuilt to match migration-22 shape. Required by decision 456 (plan 585 stage-close compaction): when the orchestrator writes a compiled capsule via `planar-agent context capsule --run <id>`, the write is run-keyed to `workflow_runs`, not to a worker claim, so capsule rows carry `claim_id = NULL` |
-| 0025 runs | `runs` (one row per `(plan, arm, repetition)` — the measurement-rig experimental unit: `run_uid` unique external id, `plan_id` cascade FK, `arm`/`status`/`corpus_repo` plain-TEXT CLI-enforced enums, `config_hash` GROUP BY key + opaque `config_json`, `base_sha`, `started_at`/`ended_at`); `run_events` (append-only seq-ordered journal, `unique(run_id, seq)`, standalone from `agent_activity`); `run_touches` (declared-vs-actual harvest for RQ1, `kind in (declared, actual)` CHECK, `task_id` a plain integer **not** an FK-cascade so deleting a task never erases historical evidence — only `run_id` cascades) |
-| 0026 closures | `closures` (one row per `(task, symbol unit)` in a task's *derived* closure — the symbols a task must hold resident, computed by static analysis from its declared seed paths: `task_id`/`repo_id` cascade FKs, `path` (defining file) + `symbol` (stem-only qualified name) **both** stored so same-stem files don't collide, `role in (modify, reference, transitive)` CHECK, `token_weight`, `extractor_version`; `unique(task_id, repo_id, path, symbol, role, extractor_version)`). Written by `planar closure compute`, read by `planar closure show`. `transitive` rows are stored but excluded from the effective closure by default |
-| 0027 external sync baseline | adds nullable `external_links.baseline_title` and `baseline_status`, the last common synchronized values used to classify converged, local-only, remote-only, and two-sided changes |
-| 0028 feedback triage | `feedback_triage` — one structured triage row per task or question finding, with severity, disposition, reproduction status, optional duplicate relationship, redacted evidence, and database constraints for target/disposition consistency |
-| 0029 agent failure categories | adds nullable `agent_work_claims.failure_category` with the closed `usage_limit\|context_limit\|output_limit\|tool_failure\|validation\|unknown` enum and a category/claimed-time partial index for aggregate reporting |
-| 0030 adaptive routing evidence | the routing evidence plane: `routing_candidates` + `routing_candidate_bindings` + `routing_host_observations` (opaque, host-scoped model registry), `routing_task_facts`, `routing_experiments` (frozen manifests), `routing_dispatch_snapshots` (immutable per-dispatch record), `routing_dispatch_events` (append-only attempts/outcomes, unique `event_id`), `routing_terminal_samples`, `routing_legacy_outcomes`. A trigger rejects any declared-experiment dispatch whose work item, cohort, or candidate falls outside the frozen manifest |
-| 0032 routing sample cost metrics | adds nullable `latency_ms`, `cost_micros`, and `total_tokens` to `routing_terminal_samples`, plus a partial index over measured rows. All three are nullable ON PURPOSE: a sample from a host that cannot report them genuinely has no value, and a zero would rank an unmeasured candidate as instant and free — the exact ordering error the quality floor exists to prevent. Ranking compares them only when both candidates carry them. `total_tokens` is kept separate from `cost_micros` so a price change cannot silently re-scale historical samples |
-| 0031 dispatch confirmation tokens | `routing_dispatch_previews` — freezes every value a dispatch preview showed the operator (packet/profile/policy/capability digests, cohort, candidate, host, claim target, exclusions, evidence state) behind a single-use, expiry-bound `preview_token`. Confirm revalidates each bound value before writing a snapshot; a trigger makes a consumed token immutable so the preview→dispatch audit link cannot be rewritten |
-| 0033 rename blocks to depends_on | renames the `entity_links` relationship `blocks` to `depends-on` |
-| 0034 annotation anchors and receipts | rebuilds `annotations` and `annotation_tags` (entity anchors, revisions) and adds `annotation_source_identity` and `annotation_operation_receipts` |
-| 0035 annotation bulk receipts | adds `annotation_operation_receipts.affected_count`, the durable affected-row count on bulk annotation receipts |
-| 0036 cli_invocations busy category | widens `cli_invocations.error_category` with `busy` (a competing Planar writer is retryable) |
-| 0037 drop dormant slug columns | drops `artifacts.slug`, `questions.slug`, `test_scenarios.slug`, `decisions.slug` and their partial unique indexes. Migration 0011 added `slug` to five tables; only `tasks.slug` was ever read or written, and the other four never held a value (task 6808, measured 2026-09-17). `plans.slug`, `tasks.slug` and `annotations.slug` are live. No new `--slug` flag is to be added for the four domains |
-| 0038 execution supervision | plan 1033 (decision 1007): adds `agent_work_claims.supervisor` (`caller`/`engine`, default `caller`) and `agent_work_claims.attempt_id` (the supervising Centurion attempt, partial index where not null), adds `workflow_runs.engine` (`embedded`/`centurion`, default `embedded`), makes `workflow_runs.plan_id` nullable (a run need not be bound to a plan), and widens `agent_actions.action_kind` with `claim_associate`, `claim_terminal`, `supervisor_override`, `run_submitted`, `run_reconciled`. Pre-existing rows read `caller` / null / `embedded`. The NOT NULL and CHECK relaxations are made by editing the stored `CREATE TABLE` text under `writable_schema` rather than by table rebuild, because both tables are foreign-key parents and a rebuild inside the foreign-keys-on migration transaction cascades into `context_records` and nulls claims' `run_id` (measured; see the migration's header). Its down refuses by name while a plan-less run or a new-kind action exists. |
-| 0039 workflow_runs lease | plan 1065 M2 (decision D11, task 6846): makes `workflow_runs.pid` nullable and adds `workflow_runs.expires_at` (text, nullable) — a pid-less run's lease deadline, extended by `planar-agent run heartbeat` — plus `CHECK (pid is not null or expires_at is not null)` so a run is supervised one way or the other. Pre-existing rows keep their pid and no `expires_at`, unaffected by the CHECK. `reconcile` marks a pid-less run `abandoned` only once its `expires_at` has lapsed; a pid-bound run keeps the existing pid-probe behavior. Like 0038, the NOT NULL relaxation and the CHECK are `writable_schema` text edits, not a table rebuild, for the same foreign-key-cascade reason (0038's header measured it; `workflow_runs` is still a foreign-key parent of `agent_work_claims.run_id` and `context_records.run_id`). Its down deletes any pid-less row (a shape the pre-0039 schema could never hold) before restoring `pid NOT NULL`. |
-| 0040 host queue | plan 1089 (decisions 1219, 1220, 1222): moves the host-wide build and test queue into `planar.db`. `queue_entries` and `queue_history` are created with the columns and CHECKs described under [The host queue's tables](#the-host-queues-tables) (`run_limit_ms` and `wait_limit_ms` last), with `idx_queue_entries_state`, `idx_queue_entries_parent_seq` and `idx_queue_history_ended_at`; `queue_schema` (`version`, `compat`, `description`) is the queue tables' own compatibility marker, seeded (1, 1); and `sqlite_sequence` is seeded at 1000000 for `queue_entries`, so the first entry is 1000001 (the sequence floor). No foreign key, trigger or view touches the three tables. No existing queue state is imported: the old separate queue store is retired by `install.sh`, not migrated. Its down refuses by name (`m00040_down_refused_live_queue_entries`) while `queue_entries` has a row, and otherwise drops the three tables, `queue_history` included, which also removes the `sqlite_sequence` row; see [`migrations/README.md`](../migrations/README.md) § Host-queue rollback recovery. |
-| 0041 contextual annotation threads | keeps an entity `annotations` row as thread identity and adds revisioned `annotation_messages` ordered by `(created_at,id)`, immutable body snapshots in `annotation_message_revisions`, optional version-1 `annotation_contextual_anchors`, and ordered `annotation_anchor_segments`. Existing entity notes migrate to one page-level message with their IDs, revisions, provenance, timestamps, tags, lifecycle, scope, and audit references unchanged; file annotations remain in their existing model. Contextual targets inherit the thread's Planar entity authorization. Rollback accepts only the untouched migrated page-thread shape and refuses anchors, replies, or revised messages rather than discarding review history. |
-
-Migration 0015 (`migrations/00015_agent_activity.up.sql`) lands the claim + action store that the agent-coordination feature is built on. `claim_token` is generated in SQL via `lower(hex(randomblob(16)))` (32-char opaque handle). Exclusivity of `(entity_kind, entity_id)` is enforced transactionally in the engine store (`src/engine/runtime/agentactivity.cpp`) under `BEGIN IMMEDIATE` because SQLite cannot express the time-dependent "unexpired" predicate in a partial unique index. WAL mode is enabled per-connection in `db::connection::open` (`src/lib/db/db.cpp`, task 6842/decision D7 — set once for every read-write connection rather than duplicated per binary) — load-bearing for the wake-tier ladder behind `--follow` AND for cross-binary concurrency between the operator and agent binaries (see Five-binary architecture below).
-
-Migration 0029 adds the nullable, CHECK-constrained
-`agent_work_claims.failure_category` classification. `planar-agent fail`
-writes a supplied category (default `unknown`) inside the same transaction as
-the action, task, and claim terminal updates. Operator recovery may attach the
-same classification through `abort --category` or `reconcile --category` when
-clearing dead-session claims. Omitted recovery categories, legacy rows, and
-`complete`/`release`/`block` terminals remain null. Free-text
-`release_reason` remains operator-facing context and is not a substitute for
-the closed aggregate field. `planar report` groups only aborted/stale claims by
-provider plus closed category (null recovery/legacy values become `unknown`),
-and never selects the release reason or action prose. `planar-watch` exposes
-the nullable enum on claim JSON rows and appends a text `category:` column only
-for categorized terminals; its database handle remains strictly read-only.
-
-The `worktree_path TEXT` column on `agent_work_claims` (also migration 0015) is the persistence path for worktree-isolated dispatch. Sequential worktree isolation and `parallel-fanout` are model-runnable via the spawn-free `workflows/parallel-dispatch.lua` seam — an optional deterministic helper, not a required exclusive path: `cycle_plan` computes one sequential lane, while `plan`/`waves` compute staged fan-out lanes; the model orchestrator, a host-native workflow, or a background agent (decision 1007) runs the git worktree/branch/merge ops and spawns the coders. `planar-agent pull --worktree <path>` and `claim --entity task:<id> --worktree <path>` write the path; `planar resume <task>` reads it via the active claim row (surfaced as `active_claim.worktree_path` in `--json` and as a `cd:` line in the text packet); `planar-watch claims | log | feed | ps` and `planar dashboard --agents` surface it in their projections. The persistence model is deliberately claim-attached — there is no standalone `worktrees` table — though the forward-compat `validate_worktree_id` hook in `src/engine/runtime/agentactivity.cpp` is the seam should that decision ever be revisited. For the concept overview and canonical path/branch/lifecycle convention see [`docs/concepts.md §Worktree`](concepts.md#worktree).
-
-The `handoffs.worktree_path` / `repo_root` / `branch` columns (migration 00017) close the cold-start recovery loop for plan 297. At handoff-create time the `planar handoff` handler copies the active claim's worktree fields onto the new row; `planar resume` reads them as a fallback when no active claim exists or the active claim row has a NULL `worktree_path`. The fallback surfaces as `from_handoff.{worktree_path,repo_root,branch,handoff_id}` in the `--json` packet and as a `from handoff: <id>` block (with `worktree:` / `cd:` / `branch:` / `repo_root:` lines) in the text packet's audit footer. Both fallback projections lie alongside `active_claim` rather than replacing it — when both are populated, `active_claim` is authoritative. See [`docs/cli-reference.md` § Domain: handoff](cli-reference.md#domain-handoff) for the lifecycle overview and [`references/resume-handoff.md`](../skills/planar/references/resume-handoff.md) in the planar skill for the operator-facing prose.
-
-The `task_touch_paths` table (migration 00019) is the path-level touch surface for the parallelizability rules behind `planar plan recommend-strategy` (decision 370, plan 492 M5). Each row declares that a task is expected to modify a specific repo-relative file path: `(task_id → tasks.id, repo_id → projects.id, path)` with a `unique(task_id, repo_id, path)` guard and cascade-delete on both FKs. It is ADDITIVE to — and coexists with — the coarse `entity_links(from_kind='task', to_kind='repo', relationship='touches')` repo-level edge; the two are written together by `planar task touches add <task> <repo> --path <p>` (a path-touch implies the repo-touch). The strategy engine (`src/engine/planning/strategy.cpp`) reads path-level rows where a repo has them and falls back to the coarse repo slug only for repos with no path declaration, so two tasks editing different files in the same repo are parallel-eligible while an under-declared (empty) touch set is treated as "touches everything" → never eligible. Rules 3/4 (migration touched, singleton authoritative file touched) match on the raw repo-relative path. `planar task touches list <task> --json` surfaces both granularities (`repos` + `paths`).
-
-The `cli_invocations` table (migration 00020) is the opt-in local log of operator CLI usage. It is written by the capture hook in `src/cmd/planar/cli_log.cpp` when `[introspection].cli_log = true` in `~/.planar/config.toml`. Privacy is enforced at the write site: `args_shape` carries flag names and positional arity only — argument and flag values are never written to this table. The hook runs synchronously on the `planar` exit path and is fail-open: any write failure is swallowed and leaves the command's stdout, stderr, and exit code unchanged. Retention pruning piggybacks on each capture write: SQLite date arithmetic (`date('now', '-N days')`) compares `recorded_at` to the configured `retention_days` (default 90) and deletes expired rows in the same write; no last-prune timestamp is stored anywhere. The table is indexed on `recorded_at`, `verb_path`, and `exit_code` for the aggregate queries that will power `planar report` (M2). The `error_category` column is gated by a dual CHECK: the set of valid enum values (`usage`, `scope`, `not_found`, `conflict`, `validation`, `io`, `db`, `busy`, `internal`; `busy` was added by migration 00036) and the consistency invariant `(exit_code = 0) = (error_category is null)`.
-
-The `session_commits` table (migration 00021) is the durable commit-attribution surface for sessions. Each row links a commit SHA to a `sessions.id` and, when the commit came from an agent claim window, optionally to `agent_work_claims.id`. Commit metadata (`subject`, `author`, `committed_at`, `branch`, `repo_root`) is denormalized into the row so audit queries still work after a worktree is deleted or history is rewritten. A `unique(session_id, sha)` constraint makes re-recording idempotent within a session, while still allowing the same commit to appear in multiple sessions. The operator-session side of the feature extends `sessions` with nullable `repo_root` and `head_sha_at_start` columns: `planar capture session` records the first-open repo and starting HEAD, `planar capture end` walks `head_sha_at_start..HEAD` in that repo before marking the session ended, and `planar capture commits` is the explicit recovery path for ended sessions, multi-repo work, or any missed automatic window. On the agent path, `planar-agent complete|fail|release|block` record commits from `head_sha_at_claim..HEAD` after the atomic terminal transaction succeeds, so claim outcome and commit attribution remain independent facts.
-
-Migration 00022 lands the **workflow context plane** (plan 585): two tables that give an external Lua-based workflow harness a run-scoped durable context surface. `workflow_runs` is the identity and audit record for one harness run. Rows are created and closed by `planar-agent run start/end` — the harness remains DB-handle-free and shells those verbs (decision 444). `pid` and `repo_root` are stored so crash reconciliation can pid-probe a stalled run and flip its `status` to `abandoned` without a terminal verb having been called; `abandoned` is never written by `run end`. The `run_identifier` column carries a unique runlock-derived string and has a `UNIQUE` index so duplicate-run detection is atomic. `context_records` is run-scoped working memory distinct from `session_entries` by deliberate design (decision 445): `session_entries` is a narrative timeline (what happened); `context_records` is working memory (what the next stage needs), with its own lifecycle and consumers. Records are keyed `(run_id, stage, session_id, claim_id)`. For worker-written records (kinds `finding`, `risk`, `artifact`, `followup`, `summary`), `claim_id` is the worker-side correlation key (decision 447) — `context add --claim <token>` stamps `run_id`, `session_id`, and `stage` server-side from the claim row, and `claim_id` is NOT NULL. For compaction-written `capsule` records (written at stage close by `context capsule --run <id>`), the write is run-keyed to `workflow_runs`, not to a worker claim, so `claim_id` is NULL (decision 456; migration 0024 relaxes the original NOT NULL constraint to support this). The `kind` CHECK (`finding`, `risk`, `artifact`, `followup`, `summary`, `capsule`) covers both raw records and the compiled stage-capsule records written at stage close. Cleanup is lifecycle, not deletion (decision 446): stage close marks raw records `consumed` or `superseded` and writes one compiled `capsule` record whose nullable `compiled_from` column stores the integer ids of the raw records it distilled, retaining full provenance. The three-value `status` CHECK (`active`, `consumed`, `superseded`) with default `active` is the machine-readable lifecycle signal; `compiled_from` is the audit trail.
-
-Migration 00025 lands the **measurement-rig substrate** (plan 635, experiment anchor 634): three tables that record one benchmark run of the vertical-slice decomposition experiment. The subsystem is reached only through the `planar run *` verb group in the engine — it holds no coupling to any execution mechanism, so the same recording surface measures a Lua-harness run, a bare-loop run, and a host-native run, and it survives the Lua-layer excision by construction (`docs/research/run-record-schema.md §1`). `runs` is the experimental unit: one row per `(plan, arm, repetition)`, comparison paired per plan (two runs are comparable iff their `config_hash` matches except for `arm`). `run_uid` is the stable harness-minted external id (`unique`) that keys the archived transcript tree, decoupled from the autoincrement `id` so artifacts survive a DB rebuild; `config_hash` is the GROUP BY key and `config_json` the opaque audit blob it is taken over (same opaque-text philosophy as `agent_actions.metadata`). `arm`, `status`, and `corpus_repo` are deliberately plain `TEXT` with their enum sets enforced at the CLI parse layer rather than a schema CHECK, so pilot/probe runs introduce no migration (run-record-schema.md §2). `run_events` is an append-only, `seq`-ordered journal (`unique(run_id, seq)`) standalone from `agent_activity` (decision D3) so operational or excision-driven changes cannot corrupt a recorded measurement; token samples, reviewer decisions, conflict events, and budget marks land here. `run_touches` is the declared-vs-actual harvest for RQ1: each `(task, path)` touch is tagged `kind in ('declared','actual')` — a schema CHECK, since the two-value set is closed and central to the precision/recall self-join. `declared` rows are the predicted closure snapshotted into the run at start (not a live FK to `task_touch_paths`, so improving the extractor cannot rewrite a recorded prediction); `actual` rows are ground truth from `git diff --name-only` at fan-in. `run_touches.task_id` is a **plain integer, not an FK-cascade** (decision D2): a run is immutable historical evidence, so deleting a task later must not erase the record of what it once touched — the `run_id` cascade is the only intended deletion path. No `run_metrics` table exists by design (run-record-schema.md §3): primary metrics are computed by checked-in SQL over these raw tables, never materialized, to keep every reported number reproducible and the pre-registration honest.
-
-Migration 00026 lands the **derived-closure snapshot** (plan 636 M2; `docs/research/closure-measurement-build-spec.md §3`): the `closures` table records, per task, the symbol-level closure the task must hold resident — *computed* by static analysis from its declared seed paths rather than asserted via `task_touch_paths`. This is the experiment's contribution (the derived closure the declared-touch baseline must be beaten by). One row is one `(task, symbol unit)` in the closure. Both `path` (the repo-relative file the symbol is defined in) and `symbol` (the qualified name) are stored: the qualified-name scheme is **stem-only** (`<file-stem>.<decl>`), so without `path` two same-stem files in different directories would collide once their modify-sets coexist in one table (the M2.2 reviewer caveat). `role` partitions the closure with a schema CHECK (`modify` = the seed's own edited symbols, `reference` = the interfaces it depends on, `transitive` = deeper hops); `transitive` rows are stored — so the extractor's decisions stay auditable and promotion experiments need no re-extraction — but are **excluded from the effective closure by default** (`modify ∪ interfaces(reference)`). `token_weight` is the unit's raw Zig-token count (a bounded C++ port of Zig's `std.zig.Tokenizer` algorithm, `tokens()` in `src/engine/closure/compute.cpp`; deterministic); `extractor_version` records which extractor produced the row so a re-extraction is comparable rather than silently overwritten, and `unique(task_id, repo_id, path, symbol, role, extractor_version)` lets a recompute at the same version replace cleanly. `task_id` and `repo_id` both cascade-delete. The pipeline lives in `src/engine/closure/` (`compute` → `store`); `planar closure compute <task>` runs it and persists the rows (the only write verb in the group; standard write-scope guard), `planar closure show <task> [--json]` reads them back.
-
-The `agent_actions.metadata` JSON column (migration 00016) is the durable home for caller-attached per-action context. It is a nullable `TEXT` column; the engine and CLI store it opaquely, only parsing happens at the consuming surface. The first consumer is the orchestrator strategy-persistence model (see [`docs/concepts.md §Orchestration strategy`](concepts.md#orchestration-strategy) and `agents/methodology.md` § Strategy gate): when the orchestrator confirms a strategy for a cycle it writes `{"strategy":"<name>","axes":{...},"dispatch_shape":"<shape>","rationale":"<text>"}` to the dispatch action row via `planar-agent pull --metadata '...'` (for plan-pull dispatch) or `planar-agent action start --metadata '...' --claim <token>` (for hand-picked task dispatch). The next cycle's strategy gate reads the most recent dispatch entry's metadata via `planar-watch actions --plan <id> --json` and applies the recommendation algorithm's rule-6 stickiness. Both write verbs validate `--metadata` as well-formed JSON at the CLI parse layer; the read-side surfaces (`planar-watch actions | log | feed`) include the field in their `ActionRow` JSON shape as a nullable string.
-
-Migration 00027 adds `external_links.baseline_title` and `baseline_status`. These fields store the last common synchronized values used to distinguish local-only, remote-only, converged, and true two-sided changes before a two-way pull mutates local state.
-
-#### The host queue's tables
-
-Migration 00040 puts `queue_entries`, `queue_history` and `queue_schema` in `planar.db` (plan 1089). They stay a separable unit: only `src/engine/hostqueue/` names them in SQL, they carry no foreign key, and no transaction writes both a queue table and a planning table, so a later plan can still split them out again.
-
-`queue_schema` is the queue's own compatibility contract, separate from `schema_migrations`. The row with the highest `version` is authoritative; its `compat` is the oldest queue version that may use the tables. The queue verbs accept a `planar.db` that is ahead of their binary (decision 1220) when `queue_schema`, `queue_entries` and `queue_history` exist, the highest row's `compat` is at most the binary's queue version (`k_queue_schema_version` in `planar.engine.hostqueue.schema`), and every column in the binary's column lists exists. They refuse a `planar.db` that is behind. Claims and heartbeats, including `queue run --claim` renewal, keep `planar-agent`'s exact-version rule.
-
-The contract for every later migration:
-
-- A migration whose SQL names `queue_entries`, `queue_history` or `queue_schema` inserts a `queue_schema` row.
-- It may keep the previous `compat` only if every binary in the compatible range behaves correctly on rows the other side wrote: adding a table, an index, or a nullable column whose NULL means exactly the older behaviour for every newer binary.
-- Everything else sets `compat` to its own version: a NOT NULL column, a narrowed or added CHECK, a UNIQUE index, any column whose value newer slot or liveness accounting relies on, and any drop, rename or change of meaning. `pragma table_info` cannot see most of these, so the marker is authoritative and the column guard is only a backstop.
-- A protocol change with no DDL (liveness rules, slot accounting, `refreshed_mono` or deadline semantics, state transitions) needs a marker-only migration that bumps `version`, and `compat` too when older binaries would misbehave against it.
-
-`queue_entries` holds one row per submitted command that has not finished: `seq integer primary key autoincrement` (the sequence number; `autoincrement` means a number is never reused, so arrival order is sequence order even across deleted entries), `state text check in ('waiting','running')`, the submitter's identity (`host_id`, `pid`, `pid_started`), the command's process group once started (`child_pgid`, `child_started`), `parent_seq` for a nested run, the stopping markers (`terminating_since_mono`, `terminate_reason check in ('timeout','cancelled')`, `cancelled_by`), what runs (`cwd`, `argv` as a JSON array of strings, `label`, `vendor`, `role`, `claim_token`, `log_path`), the wall-clock display columns (`enqueued_at`, `started_at`, ms since the epoch), the monotonic columns that are compared (`refreshed_mono`, `deadline_mono`, `wait_deadline_mono`) and the limits in force (`run_limit_ms`, `wait_limit_ms`), indexed on `state` and `parent_seq`. `queue_history` holds one row per entry that has ended: the same `seq`, `outcome check in ('exited','signaled','timeout','cancelled','wait_timeout','not_started','abandoned')`, `exit_code`, `signal`, `successor_seq`, `cancelled_by`, `nested` (default 0) and `parent_seq`, the command columns copied from the entry, `enqueued_at`, `started_at`, `ended_at`, `waited_ms`, `ran_ms` and the two limit columns, indexed on `ended_at` for retention pruning. An entry's delete and its one history row are one transaction, and rows (with their log files) older than `[queue] history_days` are deleted at enqueue.
-
-`wait_limit_ms` is the `--wait-timeout` value, written by `enqueue` (NULL when the entry has no wait limit; a nested entry never waits and records none). `run_limit_ms` is written in the same statement that sets `deadline_mono` from it, by the poll that gives an entry its turn and by the nested insert, so the recorded limit and the deadline cannot disagree; it is NULL while an entry waits. The tables hold only monotonic deadlines otherwise, from which the limit an entry was submitted with cannot be recovered, and `queue status` reports the limits in force. `end_entry` copies both into the history row.
-
-Only `src/engine/hostqueue/` writes these tables. The `planar-agent queue` verbs open `planar.db` as an existing file (`queue_store` in `src/cmd/planar-agent/`): they never create it and never migrate it, so on a host where `planar init` has not run they refuse at exit 125 and name it. Detached-run logs go to `queue-logs/` beside the database file (`<stem>.queue-logs/` for a database not named `planar.db`), so two databases in one directory never share a log directory, and a log that already exists is never overwritten.
-
-The hostqueue observer behind `planar-agent queue wait` reads typed entry/history snapshots through a read-only connection. It has no observer table or daemon and does not parse `queue status` text or launch a status subprocess. Its monotonic deadline (default 30 minutes, explicit maximum 24 hours) starts before store open and covers busy reads, successor traversal and sleeps. Each read completes before the next sleep, so later observations can see committed history and rejoin transactions. SIGINT/SIGTERM and the deadline stop only the observer. The queue handler owns the connection and interruption resources; its cleanup closes statements and the connection, restores changed signal dispositions, and releases callback state. It never reaps, cancels, rejoins, signals, refreshes, renews a claim, changes a log, or writes queue history.
-
-The observer keeps the requested ticket distinct from the latest resolved successor. It follows a recorded successor chain without resetting the deadline, treats an abandoned row without a successor as pending because rejoin may occur later, and reports a missing explicit successor as unavailable history. An active entry with unknown liveness remains pending; one known dead must be confirmed on the same sequence in a fresh observation at least one second later before `stalled` is returned. A `terminating` marker is still active until ended history is recorded. Recorded command outcomes and observer stop reasons are separate results; process exits 124 and 125 alone cannot distinguish command exit from deadline, cancellation, stall or read failure. The public mappings and same-ticket resume procedure are in [`queue wait`](cli-reference.md#waiting-for-a-logical-ticket-queue-wait).
-
-The sequence floor keeps the first entry's number at 1,000,001, above any number the retired separate queue store handed out. A rollback, a backup restore or a re-init rewinds the counter; detached logs are opened with `O_EXCL`, so a colliding run refuses at 125, and `scripts/queue-logs-after-reset.py` archives the colliding logs (never deletes them). The recipe is in [`migrations/README.md`](../migrations/README.md) § Host-queue rollback recovery.
-
-#### Reading the queue tables from another tool
-
-The queue tables are a public contract for read-side tools (a viewer, a status line, a dashboard), as `schema_migrations` is for the rest of the database. `planar-watch queue` and `queue history` are the reference readers.
-
-| | |
-|---|---|
-| Location | `PLANAR_DB`, else `$HOME/.planar/planar.db`: the main database. There is no separate queue file and no queue-specific path variable. |
-| Version tables | `schema_migrations` for the database, and `queue_schema(version, compat, description)` for the queue tables. The `queue_schema` row with the highest `version` is authoritative. |
-| Versions today | One row, (1, 1), seeded by migration 00040. |
-| Open | Read-only, never read-write. A reader never creates, migrates, reaps, refreshes or signals anything: only `planar-agent` writes these tables. |
-
-- **The compat rule.** `compat` is the oldest queue version that may use the tables. A reader whose own queue version is below the highest row's `compat` must refuse before it reads a table. A reader that wants to keep working against an ahead `planar.db`, as the `planar-agent` queue verbs do, additionally checks that the three tables exist and that every column it names exists, and uses the tables as they are. `planar-watch` is simpler and stricter: it follows its main-database rules and exits 7 on a `schema_migrations` mismatch in either direction.
-- **Two clocks.** `enqueued_at`, `started_at` and `ended_at` are wall-clock milliseconds for display. `refreshed_mono`, `deadline_mono`, `wait_deadline_mono` and `terminating_since_mono` are monotonic milliseconds that stop while the host sleeps; they are comparable only with a reading from the same boot on the same host (`host_id`) and mean nothing to another tool's clock. A reader that judges liveness applies the rules the queue's poll applies (`src/engine/hostqueue/liveness.cppm`) and reports the verdict without acting on it.
-- **What a later migration may do.** One that only adds a table, an index or a nullable column whose NULL means the older behaviour keeps `compat`. One that drops, renames or changes the meaning of anything sets `compat` to its own version, and every reader built before it refuses the tables. Every migration that names a queue table inserts a `queue_schema` row, and a protocol change with no DDL (liveness, slot accounting, deadline semantics) is a marker-only migration that sets `compat` too when an older binary would misbehave against it. Tests pin the marker, the binary's queue version against the embedded chain, and a fingerprint of the queue's SQL and protocol constants.
-
-### Five-binary architecture
-
-Planar ships five binaries (decisions 995–1001 add the fifth, `planar-ext`, this milestone). Four planning-state binaries share the SQLite engine/runtime graph; `planar-execute` links the vendored Lua runtime and no SQLite graph. The split is real: separate `src/cmd/<binary>/` source trees, separate CMake executable targets (`src/cmd/CMakeLists.txt`), separate `--help` surfaces, and separate installed artifacts.
-
-(`planar-execute` ships from `src/cmd/planar-execute/`, but it is **not a planning-state binary**: it holds no SQLite handle and is absent from the capability matrix below. It is the deterministic, spawn-free Lua workflow engine described in [`planar-execute` — no DB handle](#planar-execute--no-db-handle) below; its constrained host surface shells only `planar`, `planar-agent`, and `planar-watch`, so its state access remains bounded by those binaries' verb sets.)
-
-| Binary | Audience | Write surface | DB open mode |
-|---|---|---|---|
-| `planar` | Operator (human + scripts) | Planning entities (plans/tasks/decisions/etc.) + `tasks.status` on operator-driven transitions. **Plus**, outside the database and through `update` only (plan 1122 M3), the mutation-lock record beside the install root and a download directory under `<root>/.planar-update/` before it execs the bundled installer; `update` opens no database (pinned in `src/cmd/planar/parity.t.cpp`). | Read-write; owns `init` and runs migrations. |
-| `planar-agent` | Agent (vendor hook, orchestrator dispatch) + operator recovery | `agent_actions`, `agent_work_claims`, `workflow_runs`, `context_records`, and the `routing_dispatch_previews` / `routing_dispatch_snapshots` authorization tables (migrations 0030/0031, written by `dispatch preview` / `dispatch confirm` through `src/engine/routing/routing.cpp`); `tasks.status` ONLY as part of an atomic coordinated operation under a status-transition guard. **Plus** `queue_entries` and `queue_history`, through `queue run` and `queue cancel` (plan 1080; in `planar.db` since plan 1089). `queue run` also **executes** the command its caller names, in the caller's directory and environment. | Read-write on `planar.db`; refuses startup with exit 7 if schema is older than the binary's embedded minimum. The `queue` domain opens `planar.db` itself (`queue_store`): it refuses a behind database at 125 and, unlike every other verb, accepts an ahead one whose `queue_schema` marker admits the binary, so a migration by a newer build does not stop `queue run`. |
-| `planar-watch` | Operator (live view) + scripts | None — the binary registers zero write verbs AND opens SQLite via `file:?mode=ro` URI as a second line of defense | Read-only; same schema-version handshake as `planar-agent`. |
-| `planar-ext` | Agent / operator (operational-plane sync) | Exactly three tables — `external_links`, `external_systems`, `sync_events` — enforced by a `sqlite3_set_authorizer` allowlist keyed on the parsed table name, not by convention alone (decision 995) | Read-write on its three tables; **read-only** on planning tables (`plans`, `tasks`, `questions`, `artifacts`). Owns both operational adapters, Jira and GitHub Issues together (decision 997 — one `external_adapter` interface, one binary). `sync pull` no longer writes remote values into planning entities (decision 996): it emits `remote_title`/`remote_status` for an agent to verify and write back through `planar`. Exposes its own `schema` catalog so `cli-usage-check` polices it (decision 998). |
-
-Capability invariant — non-overlapping write surfaces enforced at
-compile time by each binary's verb set, not by runtime ACLs:
-
-- `planar` NEVER writes to `agent_work_claims`. It writes `agent_actions`
-  only through the best-effort entity-create provenance hook (plan 467
-  D2/D3): when `decision` / `question` / `artifact add` runs under an
-  active agent claim it appends a `created <entity>` action; with no
-  active claim (the ordinary operator shell) the call is a silent no-op.
-  No other `agent_*` write path exists on `planar`. The `planar agent`
-  subcommand namespace does not exist; agent observability lives on
-  `planar-watch`, agent-table mutation lives on `planar-agent`.
-- `planar-agent` NEVER writes to plan / decision / question / scenario
-  / artifact / annotation rows. A vendor hook configured with only
-  `planar-agent` on its PATH has bounded blast radius — it cannot
-  touch planning state. Since plan 1080 the same binary also EXECUTES a
-  command its caller names (`queue run -- <command>`) and writes the
-  queue tables in `planar.db` (`queue_entries`, `queue_history`); neither
-  reaches a planning table, and the queue is a coordination aid, not a
-  security boundary (a caller can always run its command directly).
-- `planar-watch` is incapable of writing to the DB at all — both the
-  verb set and the read-only DB handle are load-bearing.
-
-The operator-recovery verbs `planar-agent reconcile` and
-`planar-agent abort` live on `planar-agent` (not `planar`) because both
-are `agent_*` table writers. The capability boundary tracks tables,
-not audience. Their optional `--category` flag records an operator-supplied
-closed failure classification only while the existing recovery transaction
-clears the claim; neither verb categorizes claims autonomously.
-
-Default direct task claims use the same atomic ownership model as pulls.
-`planar-agent claim --entity task:<id>` acquires the claim, moves an eligible
-task from `todo` to `doing`, and opens a `claim_check` action in one
-`BEGIN IMMEDIATE` transaction. The action is durable evidence that this claim
-owned the transition. `abort` and `reconcile` may therefore restore that task
-to `todo` only when no live replacement claim exists, and close the marker in
-the same recovery transaction. `claim --no-transition` is the explicit
-low-level primitive: it creates no marker and recovery does not infer a task
-status change from it.
-
-Capacity containment is deliberately split between durable classification
-and deterministic orchestration. Migration 0029 stores the closed category on
-terminal claims; `planar-watch` and `planar report` expose it. The
-`capacity_reconcile` phase of `workflows/parallel-dispatch.lua` consumes
-caller-supplied lane outcomes and opens an in-memory breaker only for a
-provider with `usage_limit`, `context_limit`, or `output_limit`. It preserves
-landed and already-running lanes, blocks only later lanes for that provider,
-and emits inspection/resume commands. The phase uses only `flow.*`: it never
-spawns, mutates a claim, reconciles, aborts, or persists breaker state. Provider
-reset and any recovery mutation remain explicit operator decisions.
-
-The `planar-agent run start/end` verbs and the `planar-agent context add/list/resolve/capsule` verbs (plan 585) are agent-table writers — they write `workflow_runs` and `context_records` respectively — so they live on `planar-agent`, not `planar`. (`context capsule` is the run-keyed capsule writer used by stage-close compaction; it writes a `capsule` record with `claim_id = NULL`, distinct from the claim-keyed worker writes of `context add`.) The observability view (`planar-watch run list/show`) lives on `planar-watch`, consistent with the zero-write boundary. These verbs were originally designed to serve an embedded-Lua harness; that re-entrant, model-spawning incarnation was extracted to a separate external project. They remain in `planar-agent` / `planar-watch` as the durable coordination surface any external harness — or the revived deterministic `planar-execute` engine — can consume.
-
-The shared engine module lives at `src/engine/runtime/agentactivity.cpp`/`.cppm`; per-binary handlers live under `src/cmd/<binary>/handlers/`. `planar-agent` carries the full coordination surface; `planar-watch` carries the read-only viewer surface (`feed`, `ps`, `claims`, `actions`, `plans`, `log`, `tree`, `run`, `sync-events`, `version`, `completion`, `schema`) with a Tier-2 event-driven `--follow` loop.
-
-### `planar-execute` — no DB handle
-
-Revived in plan 633, `planar-execute` is a deterministic, spawn-free Lua workflow engine. A caller invokes `planar-execute run <wf.lua> --phase <name> [--args <json>]`; the engine loads the workflow in a Lua sandbox, registers an allowlisted host surface (`cli`/`git`/`fs`/`flow`/`ctx`), runs the named phase, and prints `flow.result(table)` as JSON. The CLI boundary is an exact `(binary, command path)` allowlist, and each Planar binary is resolved beside the running `planar-execute` rather than through `PATH`. `git.*` is confined with `-C <worktree>` plus validated refs. `fs.*` walks from an opened sandbox-root handle, opens every parent and final entry with no-follow semantics, and rejects absolute paths, dot segments, alternate separators, and symlink components. The sandbox exposes no model-spawning primitive and nils `os`/`io`/`load`/`loadfile`/`loadstring`/`require`/`dofile`/`math.random`. The engine holds no SQLite handle and does not participate in the claim ritual; the caller owns transitions between deterministic phases and any LLM work.
-
-Its source tree lives under `src/cmd/planar-execute/` (its own `planar_binary()` target in `src/cmd/planar-execute/CMakeLists.txt`); it links the Lua 5.5 C library (vendored), but does not link `src/lib/db/` or `vendor/sqlite/`. See [`docs/concepts.md` § Deterministic workflow engine](concepts.md#deterministic-workflow-engine) for the concept overview and host-surface reference.
-
-> **Centurion engine verbs are not part of this build.** In this tree `planar-execute` is the deterministic, spawn-free Lua runner; the embedded runner and the guards and boundary tests that pin it are the shipped surface. The Centurion client verbs (`submit`, `status`, `cancel`, `follow`, `host`) require a Centurion-enabled build (the `dev/centurion-integration` branch); this build does not link the Centurion client and refuses them with `planar-execute was built without the Centurion engine` and exit `1`. The Planar side of the supervision contract (migration 00038, engine-supervised claims, the `planar-watch` supervisor display) ships and compiles without it.
-
-### Live tail wake abstraction
-
-The `planar-watch <verb> --follow` family runs a poll loop: take an
-initial snapshot, then re-query the watermark whenever new activity
-might have landed. The TRANSPORT — how the loop knows when to wake
-— is INTERNAL and evolves through a tier ladder. The public contract
-(JSON event shape, watermark columns, `--interval` flag, SIGINT
-exit-0) is preserved across tiers.
-
-| Tier | Transport | Latency | Idle CPU | Status |
-|---|---|---|---|---|
-| 1 | Fixed-interval sleep (`--interval` cadence) | `--interval` floor (default 1s) | ~0 (sleeps) | Shipped; remains the fallback. |
-| 2 | kqueue (macOS/BSD) or inotify (Linux) on the SQLite `-wal` sibling | Sub-millisecond wake from any committed write | ~0 (kernel notification) | Shipped. |
-| 3 | Writer-side `update_hook` → sidecar notify socket | Same as Tier 2, plus per-row filtering | ~0 | Future. |
-
-The abstraction lives in `src/cmd/planar-watch/handlers/shared/follow.cpp` as
-the `wake_source` class, constructed around a `wake_event` enum. The follow
-loop in the same file calls `wake_source::wait_next(timeout_ns)` once per
-iteration; the wake source returns `wake_event::wal_changed` when a kernel
-notification arrived, or `wake_event::heartbeat` when the timeout elapsed
-without a notification. The `--interval` flag is the HEARTBEAT cadence — a
-maximum fallback that catches coalesced/missed wake events (laptop sleep,
-ENOMEM, etc.).
-
-Backend selection is compile-time: macOS/BSD get kqueue with
-`EVFILT_VNODE` (`NOTE_WRITE | NOTE_EXTEND | NOTE_DELETE | NOTE_RENAME`)
-on the `-wal` fd opened with `O_EVTONLY` (darwin's "watch but don't
-hold a real reference" mode — required to avoid interfering with
-SQLite's WAL coordination); Linux gets inotify with
-`IN_MODIFY | IN_DELETE_SELF | IN_MOVE_SELF`. Unsupported platforms
-fall back to a plain timed sleep with a one-shot stderr warning.
-
-WAL rotation (`PRAGMA wal_checkpoint(TRUNCATE)`, crash recovery) is
-detected via `NOTE_DELETE`/`NOTE_RENAME` (kqueue) and
-`IN_DELETE_SELF`/`IN_IGNORED` (inotify); the wake source re-opens
-the watch transparently on the next `wait_next` call. Operators
-never have to restart `planar-watch` after a checkpoint.
-
-The wake transport is NOT part of the public contract — future
-tiers (Tier 3 writer-side hook + sidecar; alternative IPC mechanisms)
-can swap behind the same `wake_source` interface without breaking
-consumers.
-
-### SQLite driver
-
-Planar vendors the official SQLite amalgamation, CPM-cached under `vendor/sqlite/` and compiled by the CMake build (`cmake/dependencies.cmake`) as a static library with the same flags the Zig build used: `SQLITE_THREADSAFE=1`, `SQLITE_ENABLE_FTS5`, `SQLITE_ENABLE_JSON1`, `SQLITE_DQS=0`, `SQLITE_DEFAULT_FOREIGN_KEYS=1`, and `SQLITE_USE_URI=1`. There is no system SQLite requirement and no external wrapper.
-
-The C++ bindings and RAII wrappers (`connection`, `statement`, `transaction`) live in `src/lib/db/db.cppm`/`db.cpp`; migration application lives in `src/lib/db/migrate.cppm`/`migrate.cpp` against the generated `planar.db.migrations` module.
-
----
-
-## Repository Layout
-
-The repo root IS the CMake project root: `CMakeLists.txt` and `CMakePresets.json` sit at the top level alongside the C++ module tree (`src/`), build-support CMake modules (`cmake/`), the CPM-cached vendor sources (`vendor/`), and the tool sources (`src/tools/`). There is no second implementation tree — `zig/` was deleted at the M10 cutover. The tree under `src/` is described in [Source Layout](#source-layout) below.
-
-| Path | Role |
-|------|------|
-| `CMakeLists.txt`, `CMakePresets.json` | Top-level CMake project (C++26, modules) and the pinned `debug`/`release` presets |
-| `src/cmd/` | One directory per binary — `planar/`, `planar-agent/`, `planar-watch/`, `planar-execute/`, `planar-ext/` — each its own CMake target |
-| `src/engine/` | Domain logic and state transitions, bucketed as `identity/`, `planning/`, `external/`, `runtime/`, plus subsystem dirs (`extsync/`, `workbench/`, `templates/`, `routing/`, `config/`, and others) |
-| `src/lib/` | Shared base modules: `db/` (connection + migrations), `cliapp/` (CLI11-backed parser wrapper), `adapter/`, `http/`, `git/`, `process/`, `log/`, `incident_model/` (the finding, coverage, incident and occurrence value types shared by the diagnose engine and the incident ledger: fingerprint and SHA-256 evidence digest over `sha256/`, the severity ordinal, the check kind, the closed incident-status set and the fixed finding order, cluster fingerprints and per-member digests; no database access), and the other leaf libraries |
-| `src/tools/` | Project tooling, one directory per tool (`cli_usage_lint/`, `cli_docs_coverage/`, `surface_lint/`, `queue_contention_probe/`) |
-| `cmake/dependencies.cmake` | Every third-party dependency as a pinned `CPMAddPackage(...)` (release archive + SHA256, cached under `vendor/`) |
-| `cmake/generate_migrations.cmake`, `cmake/generate_templates.cmake` | Configure-time codegen: `#embed`s `migrations/` and `templates/defaults/` into generated modules the runtime embeds |
-| `vendor/` | CPM's committed source cache for third-party dependencies — pinned release archives only, no `git clone`/submodule vendoring |
-| `src/cmd/parity_harness.hpp` | The cross-process (black-box) test harness — `run_pinned()` execs a built binary over fixed argv in a scratch environment with its own `PLANAR_DB` and `HOME`. Cases live in `src/cmd/*/parity.t.cpp` and `src/cmd/planar/cross_process.t.cpp` |
-| `migrations/` | SQLite migrations in sqlx-cli format (`NNNNN_<name>.up.sql` / `.down.sql`) — single authoritative source |
-| `templates/defaults/` | Propagation templates (JSON) for external systems (`github-issues/`, `github-projects/`, `jira/`); embedded at build time |
-| `templates/doc-prompts/agents.md`, `templates/workspace-capabilities.toml` | Operator-editable defaults staged into `~/.planar/templates/` on install (alongside `templates/defaults/`) |
-| `skills/planar/` | The one authored skill: `SKILL.md` plus `references/` |
-| `$PLANAR_HOME/skills/planar/`, `$PLANAR_HOME/agents/`, `$PLANAR_HOME/codex-agents/` | Staged skill and agents, the authority the placed targets are compared against (install output, not checked in) |
-| `agents/` | The `planar-<role>.md` agent role specs, with the doctrine documents beside them |
-| `workflows/` | Lua workflows run by `planar-execute` (staged into `~/.planar/workflows/` on install) |
-| `docs/` | User-facing reference docs (architecture, CLI, skills, concepts, workflows) |
-| `examples/` | Copy-paste oriented examples for the spec, orchestration, workflow, and propagation flows |
-| `evals/` | Orchestrator and planning evaluation harnesses |
-| `scripts/` | Bash tooling (acceptance validators, session stats, git hooks); independent of the build |
-| `Makefile` | Thin wrapper around `cmake --preset` / `cmake --build` / `ctest` invocations |
-| `install.sh` | Source-checkout installer; builds and installs the C++ binaries via CMake |
-
----
-
-## Source Layout
-
-The repo root IS the CMake project root: `CMakeLists.txt`, `CMakePresets.json`, and the source tree (`src/`) sit together at the top level. There is no second implementation tree: `zig/` was deleted at the M10 cutover (decisions 963/980/982). The C++ runtime is organized into per-binary entry points, a domain engine grouped by bucket, a CLI11-backed parser wrapper, a database layer, and configure-time codegen.
-
-```mermaid
-flowchart LR
-    subgraph CMD["src/cmd/ — binary entry points"]
-        P["planar/<br/>main + handlers/"]
-        PA["planar-agent/<br/>main + handlers/"]
-        PW["planar-watch/<br/>main + handlers/"]
-        PX["planar-execute/<br/>main + handlers/"]
-        PE["planar-ext/<br/>main + handlers/"]
-    end
-
-    subgraph CLI["src/lib/cliapp/ — CLI wrapper over vendored CLI11"]
-        CLI1["args · schema · completion · walk · surface"]
-    end
-
-    subgraph ENG["src/engine/ — domain engine"]
-        EB["buckets: identity/ · planning/ · external/ · runtime/"]
-        ES["subsystems: workbench/ · extsync/ · templates/ · ingest/ · …"]
-    end
-
-    DBM["src/lib/db/<br/>db · migrate"]
-    CODEGEN["cmake/<br/>generate_migrations · generate_templates"]
-    VEND["vendor/sqlite/<br/>amalgamation (CPM-cached)"]
-
-    CMD --> CLI
-    CMD --> ENG
-    ENG --> DBM
-    DBM --> VEND
-    CODEGEN -.->|configure-time #embed| ENG
-```
-
-### Binary entry points (`src/cmd/`)
-
-| Path | Role |
-|------|------|
-| `src/cmd/internal/` | Shared command invocation context, environment and config-path resolution, and an injected lazy database holder. The binary supplies the database open policy; the context only holds values and the database object. `planar-execute` does not link this target. |
-| `src/cmd/planar/` | Operator binary entry and command families under `handlers/<family>/`. `planar` also registers an `explore` leaf, reserved for launching Planar Explorer; it currently prints its help and exits 0 (see [`planar explore`](cli-reference.md#domain-explore)). |
-| `src/cmd/planar-agent/` | Agent-callable coordination binary — its claim, action, run, context, recovery, and terminal-operation handlers, and the `queue` domain (`handlers/queue/`): `queue run -- <command>` is the foreground host-wide build and test queue verb, while `queue status <seq>` (`handlers/queue/status.cppm`) and `queue wait <seq>` (`handlers/queue/wait.cppm`) are read-only companions: status renders one typed snapshot and wait observes successive snapshots within a finite independent deadline, each as text or `--json`. It reads `[queue]` configuration and the queue tables, hands the engine (`src/engine/hostqueue/`) plain values, and returns the command's exit status through dispatch's pass-through outcome. |
-| `src/cmd/planar-watch/` | Read-only viewer binary — root command families under `handlers/<family>/` (including the `--follow` wake loop). |
-| `src/cmd/planar-execute/` | Manual CLI parser and per-command handlers for the legacy Lua `run` path and Centurion client verbs (`submit`, `status`, `cancel`, `follow`, `host`), which this build refuses (they require a Centurion-enabled build). Links the vendored Lua runtime, but no Centurion target, no `src/lib/db/` and no SQLite. |
-| `src/cmd/planar-ext/` | Operational-plane binary (decisions 995–1001) — `ext`/`sync` command families, the strategy selector (`handlers/ext/ext_strategy.cpp`), and the adapter factory (`handlers/shared/ext_adapter_factory.cppm`). Opens SQLite directly; read-only on planning tables, read-write on exactly `external_links`/`external_systems`/`sync_events`. |
-
-Each `src/cmd/<binary>/` target is registered through `src/cmd/CMakeLists.txt`'s guarded helper (never a bare `add_executable()`), which is what lets `planar-ext`'s write-capability allowlist be enforced at the same registration point as every other binary's capability boundary.
-
-### Domain engine (`src/engine/`)
-
-The engine is organized into buckets that map to data-model domains plus a flat set of subsystem modules, carried forward from the Zig tree's `src/engine/` layout (ADR-0007/0008 bucket conventions survive the port).
-
-| Path | Contents |
-|------|----------|
-| `src/engine/identity/` | Project, scope, association, and scope-argument parsing — "who is asking and in what context." |
-| `src/engine/planning/` | Plans, tasks, questions, test scenarios, artifacts, decisions — the core structured-intent and execution surfaces. |
-| `src/engine/external/` | External-system registration, external-link tracking, `parent_issue` (GitHub sub-issue strategy). Compiled into `planar-ext`. |
-| `src/engine/extsync/` | Propagation strategy selection (`propagate.cppm`/`.cpp` — `strategy_for_system`, `strategy_for_repo_count`) shared by `planar-ext`'s handlers. |
-| `src/engine/runtime/` | Sessions, session entries, context snapshots, handoffs, capture, audit trail, claim + action store. |
-| `src/engine/hostqueue/` | The host-wide build and test queue's engine over the queue tables in `planar.db` (plan 1080): `enqueue` records the submitter (host identity, pid, start time, cwd, argv as a JSON array, label, vendor, role, claim token) and returns the sequence number; `find` and `list` read entries back. `end_entry` (in `history.cppm`) deletes an entry and inserts its `queue_history` row in one `BEGIN IMMEDIATE` transaction, recording the outcome (`exited`, `signaled`, `timeout`, `cancelled`, `wait_timeout`, `not_started`, `abandoned`), the exit code, signal or canceller (a `{vendor, role, pid}` JSON object, decision 1193) that fits it, `nested` and `parent_seq` for a nested run, and wall-clock `waited_ms` and `ran_ms`; a caller that finds the entry already deleted writes nothing and gets `already_gone` rather than an error, so exactly one process writes each row. `record_successor` names the entry a reaped waiter re-enqueued as on its history row, and `rejoin(conn, old_seq, request)` (task hq-missing-entry) is that re-enqueue as one `BEGIN IMMEDIATE` transaction: it reads the old row and only for `abandoned` inserts the new entry and records the successor, returning `no_history` or `not_abandoned` (with the outcome) and writing nothing otherwise; `planar-agent queue run` calls it when a waiting submitter finds its entry missing, at most three times per submitter. `find_history` and `list_history` (ordered by `ended_at`, with an optional lower bound) serve `queue status` and the viewer tasks. `query_status` (`status.cppm`, task hq-queue-status) is what `queue status <seq>` prints: it answers from the entry while it exists and from its history row afterwards, follows a `successor_seq` chain to the entry that replaced a reaped waiter, counts an entry's place among the waiting entries only, and judges liveness with `judge_liveness` while only reading, so it runs on the read-only connection `queue status` opens (no file created, no migration applied). It reports `run_limit_ms` and `wait_limit_ms` from the entry, or from the history row that copied them. The configuration it asks for (only for an entry still in the queue) may come back without a slot count or grace period: `planar-agent queue status` supplies that, with the default staleness window, when the `[queue]` table is unusable, reports `slots` and `grace_ms` as null, writes one `warning: queue status:` line on standard error and exits 0 rather than 125 (task hq-status-degrade-config). The enqueue that takes a retention in days deletes history rows that ended more than that long before the new entry's `enqueued_at`, in the insert's transaction, then removes their log files after the commit; a log file already gone counts as removed, and one that cannot be removed is returned in the enqueue's prune report without failing the enqueue (decision 1199). `planar.engine.hostqueue.liveness` (task hq-liveness) judges an entry: `judge_liveness(entry, context, probe)` returns `live`, `submitter_live` (the waiting test: the submitter exists, `EPERM` included, its start time matches `pid_started`, and `refreshed_mono` is within the staleness window) and a `group_verdict` (`not_checked`, `has_members`, `empty`, or `reused` when a process with the id `child_pgid` exists with a start time other than `child_started`, which is treated as empty and must not be signalled). A running entry is live when its submitter is or its group has members. An entry whose `host_id` differs from the checker's, or is `unknown` on either side, is judged by freshness alone and its pids are never queried. Freshness is `|now - refreshed_mono| <= stale_after`, so a refresh from an earlier boot's longer-running clock reads as stale. `submitter_gone` is the failed waiting test; `select_not_live` returns the sequence numbers a poll would reap, deleting nothing, and never selects an entry whose process query failed. Process queries go through `process_probe`, whose default `system_process_probe()` forwards to `planar.process.identity`. `planar.engine.hostqueue.poll` (task hq-poll-transaction) is the poll a submitter runs at every interval: `poll(conn, request, clock, probe)` is one `BEGIN IMMEDIATE` transaction that refreshes the caller's entry, ends every other entry that is not live through `end_entry` in that same transaction (an entry already gone is skipped), with outcome `abandoned`, except that an entry whose stop was already under way ends with the outcome its `terminate_reason` names (`timeout`, or `cancelled` with its recorded canceller; returned in `stopped`, not `reaped`), whichever of a poll or `advance_terminations` finds its group empty first, marks as terminating (`terminating_since_mono`, `terminate_reason = 'timeout'`) every running entry past its `deadline_mono` whose submitter is gone and returns those entries for the caller to signal after the commit, and, when the caller's entry is `waiting` and fewer than `slots` standing entries that are not nested sit ahead of it by sequence number, sets it `running` with `started_at` and `deadline_mono` = now + the run limit. A running entry keeps the start time and deadline it was given, so lowering the slot count stops nothing and nested entries never count toward a turn. The monotonic clock is read once, after the write lock is held (decision 1203). The caller's own entry is never judged. An entry whose process query failed is neither reaped nor marked, is returned in `liveness_errors`, and still counts toward the turn. A store busy past the busy timeout yields `poll_status::skipped` with nothing changed; the poll sends no signal. `planar.engine.hostqueue.nested` (task hq-nested-entry) inserts a nested run's entry: `enqueue_nested(conn, parent_seq, request, limits, clock, probe)` reads the named parent in one `BEGIN IMMEDIATE` transaction, with the monotonic clock read after the write lock, and only when the parent exists, is `running`, is recorded on the caller's own host identity (decision 1209: an entry on another host identity, or an `unknown` one, never parents a nested run, however fresh it is, because nesting asserts that the parent's command started this run) and passes `judge_liveness` inserts the entry `running` with `parent_seq`, `refreshed_mono` at now, `started_at` and `deadline_mono` = now + the run limit, so the poll enforces its deadline like any other entry's. A nested entry may parent another. A missing, waiting, other-host, not-live or unjudgeable parent (a failed process query) yields `nested_status::queue_normally` with the `nested_refusal` and inserts nothing, so the caller queues the command as an ordinary waiting entry (decision 1191). `planar-agent queue run` is that caller (task hq-nested-run): it reads `PLANAR_QUEUE_SLOT` from its environment, retries the insert while the store is busy for up to the staleness window and then refuses at 125, and queues normally on `queue_normally`. Nested entries never count toward a turn, and ending one writes a history row with `nested = 1` and the parent's sequence number. `planar.engine.hostqueue.terminate` (task hq-terminate) stops a running entry's command in two steps, neither of which signals or waits under the write lock. `begin_terminate(conn, request, clock, probe, signaller)` is one `BEGIN IMMEDIATE` transaction that records `terminating_since_mono` (the monotonic clock, read after the lock is held), `terminate_reason` (`timeout` or `cancelled`) and, for a cancellation, `cancelled_by` on a running entry not already terminating, and commits; only then does the process that set the marker send SIGTERM to the child group. An entry already terminating is left unchanged and not signalled again; a waiting or missing entry is reported and not written. `advance_terminations(conn, request, clock, probe, signaller)`, which any process may call (and `queue cancel` for one entry), holds no transaction while it judges or signals: a terminating entry whose child group is empty, or whose group id has been reused (which counts as empty), is ended through `end_entry` with the outcome its `terminate_reason` names, never `abandoned`, because the stop was already under way; one whose group still has members is kept, with its slot, and receives SIGKILL once it has been terminating for strictly longer than the grace period. `poll_and_stop(conn, request, clock, probe, signaller)` (task hq-orphan-deadline) is the one call a polling submitter makes at each interval: it runs `poll`, then, with the poll committed, sends SIGTERM to each entry the poll marked and runs `advance_terminations`, so every polling submitter enforces an orphan's deadline (decision 1184); a skipped poll signals and advances nothing, a negative grace period is refused before the poll, and an advance failure is reported on the result because the poll has already committed. `cancel_waiting(conn, seq, who, ended_at)` (task hq-queue-cancel) is the other half of a cancellation: one `BEGIN IMMEDIATE` transaction reads the entry and, only while it is still `waiting`, ends it through `end_entry` with outcome `cancelled` and the canceller; an entry that has started is reported `not_waiting` and left untouched, so a turn taken between the caller's read and this call cannot strand a running command without its entry. `planar-agent queue cancel` calls it, or `begin_terminate` with the canceller for a running entry, and then runs `advance_terminations` for that one entry itself, sending the overdue SIGKILL, until the group is empty or a bounded wait (the grace period plus 15 seconds) ends. Every signal passes `signal_child_group`, which the poll's caller also uses for the entries a poll newly marked: it signals only an entry whose host identity is the checker's (neither `unknown`), which records a group id above 1 and its leader's start time, whose id has not been reused (`judge_child_group`, the liveness rule) and whose group has members, so groups 0, 1 and -1, other hosts' groups and reused ids are never signalled. Signals go through an injectable `group_signaller`, by default `planar.process.identity::signal_group`. A signal the kernel refuses with `EPERM` is a failure, except for a group the probe's `group_only_zombies` (the identity primitive above) verifies to hold only exited members, which macOS refuses to signal: that is reported as `group_empty`. A submitter whose entry cannot carry its run limit (the entry vanished, or its child group could not be recorded, tasks hq-vanished-entry-run-limit and hq-unrecorded-group-timeout) does not go through this path: `planar-agent queue run` signals the group it started itself, guarded by the leader start time it read at start, and ends an entry that names no group with outcome `timeout`. Imports only `src/lib/` modules; slot counts, intervals, process identity and clocks are passed in as values by the `planar-agent` handlers, never read from `engine_config` or the process. |
-| `src/engine/diagnose/` | The read-only diagnosis framework behind `planar-watch diagnose` (plan 1132). `run(conn, request, catalog)` evaluates a catalog of checks over a plan scope (the plan, its descendant plans, and tasks attached to the anchor directly) and a window (the plan's lifetime for `--plan`, `--days` when given, 7 days with neither) at an injected evaluation instant, and returns a `diagnosis`: the catalog version, the resolved scope and window, one coverage row per input, one row per check, and findings in the fixed order (severity from `error` down to `info`, then check id, then primary entity, then earliest evidence time). Every read runs in one deferred read transaction with the connection's busy timeout lowered to 250 ms and restored afterwards; a busy database, a failed query or a missing planning table ends the run as an `unavailable` diagnosis (`busy`, `query-failed`, `schema-unsupported`) rather than an error, and only bad input (an unknown check or plan, an invalid instant, `days` below 1) is a `run_error`. An input needed only by an unselected or unbuilt check is `not_applicable` and never degrades the outcome; one a selected check needs and cannot read (`unavailable`) makes it `partial`, while one the operator turned off (`disabled`) is named, its checks are not run, and the outcome stays `ok`. Its SQL filters before any limit and never reuses `planar-watch`'s `list_actions` (a source guard in the test suite enforces this). It renders text and the `planar.diagnose/1` JSON. The shipped catalog is the concatenation of per-family factories (`checks_<family>.cpp`). It holds the claim-liveness checks (`claim-lease-lapsed`, `claim-process-died`, `claim-superseded-active`, `task-doing-unclaimed`, `claim-closed-by-reconcile`, `heartbeat-gap`), the dispatch checks (`dispatch-no-role-action`, `dispatch-unconfirmed`, `dispatch-confirmed-late`; a claim is a dispatch only with a preview or snapshot record), `action-unended`, `apply-without-preview` and `cli-failure-cluster` (over `cli_invocations`; their `cli_log` input is the caller's reading of `[introspection].cli_log`, since this module reads no config; the cluster check drops rows whose `verb_path` is not catalog-shaped or that the caller's optional `verb_path_recognized` predicate rejects), `claim-failure-cluster` (over `agent_work_claims`; members are claims, the scope is their common entity scope), `sync-conflict-unresolved` (over `sync_events`; an external conflict with a link and no later clean or resolving event for it; the incident is the link's) and `handoff-stale` (its cutoff is `planar.core.thresholds`, shared with `planar health` and `planar report`) and one unbuilt check (`queue-ended-unobserved`); each later task appends one `check_def` to its family's file, and a family reads its rows through `detail::query_findings`. A finding's `primary` entity is always added to its evidence, and a cluster finding carries a grouping key whose fingerprint ignores its members. The run also sets `pragma query_only` for its duration and restores it. Imports only `db`, `incident_model`, `json_text` and `core`; no other engine bucket. |
-
-Subsystem modules at the engine root include `workbench/` (bidirectional filesystem sync), `templates/` (three-level template resolution), `ingest/` (planning-document parser), `config/` (config-plane reader), `workspace/` (workspace state directory model), `closure/`, `grouping/`, `health/`, `importer/`, `introspect/`, `introspection_adapters/`, `local/`, `models/`, `promotion/`, `routing/`, `runs/`, `search/`, `synthesize/`, `tree/`, `workflows/`, and `execute/` (the `planar-execute` Lua sandbox's engine-side pieces).
-
-### CLI wrapper (`src/lib/cliapp/`, over vendored CLI11)
-
-CLI11 (vendored, `vendor/cli11/`) owns tokenization and value coercion only — decision 948, a mid-port plan change from the originally-intended `etcli` C++ library (which was never adopted; `import cli11;` in `args.cppm` is ground truth). Planar's own `src/lib/cliapp/` wraps it with the help renderer, the deterministic `schema` JSON catalog emitter, exit-code mapping, and completion generation — the parts that carry the oracle-pinned parity surface (help text, parse-error wording, exit codes) and that CLI11 itself does not provide in that shape. Each binary's entry point builds a command tree over this wrapper and dispatches to its handlers.
-
-### Database layer (`src/lib/db/`)
-
-| File | Role |
-|------|------|
-| `db.cppm` / `db.cpp` | `connection` / `statement` / `transaction` RAII wrappers, PRAGMA setup (foreign keys on, WAL mode). Every fallible boundary returns `std::expected<T, db_error>` — no exceptions cross the module boundary. |
-| `migrate.cppm` / `migrate.cpp` | Applies the generated `planar.db.migrations` module on startup. |
-| `migrations.cppm` | The generated module's declared interface (implementation is `#embed`-generated at configure time into a file under the build tree, not checked in). |
-
-### Process identity (`src/lib/process/identity.cppm`)
-
-The host queue's liveness rules (plan 1080, tech spec artifact 647 § Liveness, precisely) rest on primitives in `planar.process.identity` (`src/lib/process/identity.cppm`), a second interface unit in the dependency-free `planar_process` target beside the spawn seam `planar.process`. It exports: `process_start_time(pid)`, an opaque `start_time` that identifies one incarnation of a process id (macOS: `proc_pidinfo` with `PROC_PIDTBSDINFO`, `pbi_start_tvsec` and `pbi_start_tvusec` as microseconds; Linux: field 22 of `/proc/<pid>/stat`, parsed after the last `)` so a command name containing spaces or parentheses cannot break it), reporting an absent process as `std::nullopt` rather than an error; `process_exists(pid)` and `group_has_members(pgid)`, which are `kill(pid, 0)` and `kill(-pgid, 0)` through the exported pure mapping `exists_from_errno`, where success and `EPERM` both mean the target exists and `ESRCH` means it is absent; `signal_group(pgid, sig)`, which is `kill(-pgid, sig)` behind the module's own `error` enum; `group_only_zombies(pgid)`, which on macOS reads the kernel's process list for the group (`sysctl KERN_PROC_PGRP`) and says whether every member has exited unreaped or is being torn down, because macOS answers `kill(-pgid, sig)` with `EPERM` for exactly such a group and the queue must tell that from a real refusal (always false elsewhere); `host_identity(source)`, which returns what the injectable `identity_source` reads (`native_identity_source()`: Linux, the boot id from `/proc/sys/kernel/random/boot_id` joined with the target of `/proc/self/ns/pid`; macOS, `sysctl kern.bootsessionuuid`) or the literal `unknown` when it cannot be read, so an entry from an unreadable host is judged by freshness alone; and the `clock` interface with `monotonic_ms()` from a clock that does not advance while the host is asleep (Linux `CLOCK_MONOTONIC`, macOS `CLOCK_UPTIME_RAW`; decision 1195) and `wall_ms()` for display values, implemented by `system_clock` and replaceable by a fake in engine tests. Every fallible call returns `std::expected<T, error>`; no errno and no exception crosses the module boundary. An id that is not positive or that the platform `pid_t` cannot hold names no process, and group ids 0 and 1 are refused, so no call reaches `kill(0, ...)` or `kill(-1, ...)`. One limit is documented rather than handled: on Linux with `/proc` mounted `hidepid`, another user's live process has no readable start time and reads as absent to `process_start_time` while `process_exists` sees it (`EPERM`), so the engine's "exists and start time matches" rule would judge it dead; queue entries are normally the checking user's own. On macOS, `proc_pidinfo` fails for another user's process, so `process_start_time` returns `query_failed` while `process_exists` sees the process (`EPERM`); a liveness check on it then errors, and an entry it owns is never reaped until that process exits, while same-user queues are unaffected.
-
-### Command runner (`src/lib/process/runner.cppm`)
-
-`planar.process.runner`, a third interface unit in the `planar_process` target, is what the host queue starts a queued command with (plan 1080, task hq-process-runner; tech spec artifact 647 § Running). `resolve(env, program)` follows `PATH` lookup for a bare name and uses a name containing `/` as given, returning `not_found` or `not_executable` as distinct errors before anything is spawned (a match that is not an executable regular file does not end the `PATH` search, but makes a fruitless search `not_executable`), so the queue can refuse a command before enqueueing it and exit 127 or 126. `start(env, argv, options)` resolves `argv[0]`, then forks a child that leads a new process group (placed by both parent and child), with the caller's environment plus one added variable (`PLANAR_QUEUE_SLOT` for the queue, replacing any inherited one), the caller's standard streams, and an optional working directory. The child waits on a pipe until the parent has read its start time, so the returned `child` carries `pid`, `pgid` and a `started` value read from a live, unreaped child for `child_pgid` and `child_started`. A failure after the fork (changing directory, or an `exec` that fails because the program vanished or lost its permission) is reported through a close-on-exec pipe as `working_directory_failed`, `not_found` or `not_executable`, with the child reaped. Caught signal handlers are reset to the default in the child before `exec`. `poll(child)` is `waitpid` with `WNOHANG`: it reports `running`, `exited` with the status, or `signalled` with the signal number, never folding a signal into an exit status (the queue maps signal N to 128 + N). `signal(child, sig)` delegates to `planar.process.identity::signal_group`, so group ids 0 and 1 are refused. Every fallible call returns `std::expected<T, error>`. `planar.process::run_inherited` is unchanged: it still reports death by signal as 1 and cannot tell a missing program from an unexecutable one.
-
-### Configure-time codegen (`cmake/`)
-
-| File | Role |
-|------|------|
-| `cmake/generate_migrations.cmake` | Scans a stream directory's `*.up.sql`/`*.down.sql`, sorts explicitly, and `#embed`s each pair into a generated implementation unit for the module, namespace and accessor it is given. Called once, for `migrations/` into `planar.db.migrations`. Re-runs configure automatically on new/removed migration files (`file(GLOB CONFIGURE_DEPENDS)`). |
-| `cmake/generate_templates.cmake` | Same pattern for `templates/defaults/` — embeds propagation-template defaults so they compile into the binary. |
-
-<!-- surface-lint-ignore surface-path-missing: names the deleted-with-zig/ codegen tooling for history -->
-Both superseded the Zig tree's build-time `tools/gen_migrations.zig` / `tools/gen_templates.zig`, deleted with that tree at the M10 cutover.
-
----
-
-## CLI Binary
-
-Structured feedback triage is operator-plane planning state stored in
-`feedback_triage` (migration 00028). Each row belongs to exactly one task or
-question finding and records severity, disposition, reproduction status,
-optional duplicate target, and a redacted evidence summary. Partial unique
-indexes enforce one row per finding; duplicate targets must remain in the same
-`planar-feedback` plan. Unplanned findings, questions linked to multiple plans,
-and findings on other plans are rejected. Deleting a duplicate target preserves
-dependent triage rows and atomically clears their duplicate reference while
-resetting their disposition to `untriaged`. The `planar feedback triage` read
-leaves are deterministic and `set` uses the normal entity scope guard. It never
-writes agent tables or external systems.
-
-`planar` is a C++26 executable whose entry point builds a command tree against the CLI11-backed wrapper in `src/lib/cliapp/` (see [Source Layout § CLI wrapper](#cli-wrapper-srclibcliapp-over-vendored-cli11) above). Each subcommand domain maps to one entity kind or system surface. Tokenization and value coercion come from vendored CLI11; help rendering, the `schema` catalog, exit-code mapping, and shell completion are Planar's own, preserved across the parser swap because they carry the oracle-pinned parity surface.
-
-### Handler layout
-
-The `planar` binary assembles its root `CLI::App` in `src/cmd/planar/main.cppm`. Each root command has a directory under `src/cmd/planar/handlers/` with a `command.cppm` module for its root declaration. Each child CLI node has a sibling module in the same directory (for example, `plan/step_add.cppm` declares `plan step add`). Deeper command paths are encoded in filenames rather than additional directories. Family-specific handlers stay in that family directory; helpers shared by several root commands live under `handlers/shared/`. `dispatch.cpp` remains the generic parser and path-to-handler router. Shared domain logic stays under `src/engine/`. `ext`, `sync`, and their supporting handlers moved off `planar` entirely onto `planar-ext` at task 6419 (decisions 995–1001); `link`, `unlink`, and `audit` stayed on `planar`.
-
-`planar-agent`, `planar-watch`, and `planar-ext` assemble their roots in their own `main.cppm` modules. Each root command family has a directory under that binary's `handlers/`, with its CLI declaration in `command.cppm` and related implementation and tests beside it. Shared handler helpers live under `handlers/shared/`. `planar-execute` keeps its manual argument parser; its `main.cpp` dispatches to `handlers/run/`, `handlers/profile/`, `handlers/schema/`, `handlers/submit/`, `handlers/status/`, `handlers/cancel/`, `handlers/follow/`, and `handlers/host/`. Its Centurion client bridge lives under `handlers/shared/`.
-
-The database-using binaries construct their database objects in `main.cpp` and inject them into a context. `src/cmd/internal/` holds the shared context holder, lazy database holder, environment lookup, and configuration path resolution. Each binary supplies its own database access policy, including migration behavior and SQLite write restrictions. `planar-execute` has no database object or dependency on `cmd_internal`.
-
-### Subcommand domains
-
-The live `planar` command tree currently exposes `init`, `scope`, `assoc`, `plan`,
-`task`, `question`, `scenario`, `decision`, `artifact`, `annotate`, `promote`,
-`demote`, `workbench`, `workspace`, `link`, `unlink`, `links`,
-`resume`, `handoff`, `capture`, `audit`, `health`, `models`, `dashboard`,
-`spec`, `test-spec`, `config`, `templates`, `tree`, `search`, `local`, `skills`,
-`import`, `synthesize`, `version`, `completion`, `schema`, `report`, `bench`,
-`closure`, `run`, `groups`, `explore` (registered leaf, stub handler — see
-above), `workflow`, and `feedback`. `ext` and `sync` are exposed by
-`planar-ext`, not `planar` — see [`planar-ext`](cli-reference.md#domain-ext)
-in the CLI reference.
-
-Use `planar --help` for the current list. Use `planar <domain> --help` for subcommand detail. The full surface is enumerated in [docs/cli-reference.md](cli-reference.md).
-
-### Command flags
-
-The root command has no inherited global flags. Flags are declared on the leaf
-that consumes them; for example, commands that support machine output declare
-their own `--json`. The deterministic `planar schema` catalog is the authority
-for paths, positionals, aliases, required flags, types, and defaults, and is
-also the input to the schema-driven authored-usage validator.
-
-### Output conventions
-
-- Human mode (default): line-oriented text.
-- Machine mode (`--json`, where declared): one JSON value followed by a newline.
-  List leaves normally emit an array; single-result leaves emit an object.
-  Stable engine structs generally use snake_case field names, while command
-  envelopes document their own explicit keys.
-- Mutating commands that produce no entity data emit `{"ok":true,"id":<id>}` under `--json`.
-- Shared exit mapping: `0` success, `1` operational/default failure, `2`
-  parse or input failure, `3` sync conflict, `5` scope mismatch, `6`
-  conflict/precondition failure, `7` schema-version mismatch, and `64`
-  registered-but-not-implemented. Individual command sections narrow this set.
-
----
-
-## The Workbench
-
-The workbench is a bidirectionally synced drafting filesystem at `$PLANAR_WORKBENCH_ROOT` (default `~/.planar/workbench/`). It is the primary surface where agents and users read and write planning documents.
-
-Each anchor plan gets its own directory:
-
-```
-~/.planar/workbench/
-  <assoc-slug>/
-    p<plan-id>-<plan-slug>/
-      product-spec.md      ← artifact (kind=product_spec)
-      tech-spec.md         ← artifact (kind=tech_spec)
-      roadmap.md           ← artifact (kind=roadmap)
-      tasks/
-        <id>-<slug>.md     ← task
-      scenarios/
-        <id>-<slug>.md     ← test_scenario
-      decisions/
-        <id>-<slug>.md     ← decision
-      ...
-```
-
-Sync is explicit, not automatic:
-
-- `planar workbench push <plan>` — DB → FS: write the current DB state to disk.
-- `planar workbench pull <plan>` — FS → DB: read disk changes into DB.
-- `planar workbench sync <plan>` — bidirectional: apply FS→DB and DB→FS in one pass; surface conflicts as `sync_events(outcome='conflict')` rows.
-- `planar workbench status [<plan>]` — show FS-only, DB-only, and conflicting files without writing.
-- `planar workbench lint <plan>|--all|--path <file-or-directory>` — validate workbench Markdown without changing the filesystem or database.
-- `planar workbench resolve <event-id> --prefer fs|db` — settle a conflict.
-
-Workbench Markdown begins with YAML front matter that identifies the entity and
-its anchor plan. Pull, push, status, sync, and lint all use the same
-schema-aware parser, so runtime reconciliation and preflight validation accept
-the same files. The parser requires a supported entity kind, positive entity
-ID, non-empty title and status, a status allowed by that entity kind's schema,
-and, for artifacts, a valid artifact kind. Lint additionally verifies that
-`anchor_plan_id` names an existing plan and reports each issue with its path,
-line, stable severity/code, message, and repair hint. It can validate one plan
-tree, the entire workbench, or an explicit Markdown file or directory as a
-read-only CI or pre-commit surface.
-
-Malformed files are classified separately from ordinary drift and conflicts.
-Push refuses to overwrite them, while pull and sync refuse to import or
-auto-delete them; other files in the same run may still be reconciled. Text
-summaries report the malformed count, JSON results include
-`malformed_files` entries with `path` and `parse_error`, and the command exits
-with code 1. When malformed files and conflicts occur together, the malformed
-exit takes precedence while both classes remain visible; the diagnostic points
-the operator to `planar workbench lint` for field- and line-level repair
-guidance.
-
-`workbench_sync_state` tracks the per-file relationship (entity kind, entity id, content hash, last sync time) so the sync engine can detect changes without re-reading every file on every run.
-
-When a feature is complete, `planar workbench archive <plan>` removes the on-disk tree. The database retains every entity row. `planar workbench restore <plan>` recreates the tree byte-identically from the DB.
-
-`planar workbench publish <plan> --system <slug>` renders the workbench files for a plan and pushes the rendered content to a registered external operational system via the adapter layer. For full plan-subtree counterpart creation in an external system, `planar-ext ext propagate <plan> --system <slug>` is the verb of record (every strategy except the cut `github-projects-v2` — see `docs/cli-reference.md`); `planar-ext ext propagate-one <system> --from <kind:id>` is the single-entity equivalent.
-
----
-
-## Workspace State Directory Model
-
-A workspace is an `associations` row of `kind=org` together with its `project_associations` members — a polyrepo grouping. Each workspace owns a state directory under `~/.planar/` that holds the canonical AGENTS.md surface and the structured routing table that drives it. There is no `workspaces` table; the state directory path is derived from the org's id and the convention is the contract.
-
-### Layout
-
-```
-~/.planar/workspaces/<org_id>/
-├── AGENTS.md                       # canonical, generated by workspace regenerate
-├── routing-table.json              # structured project map, generated by routing build
-├── config.toml                     # optional per-workspace settings (enrich_command, etc.)
-└── routing-table-overrides.json    # optional manual overrides merged on every build
-```
-
-The state directory lives alongside the rest of Planar's state under `~/.planar/`: the database (`planar.db`), the workbench tree (`workbench/`), the templates layer (`templates/`), and the enrichment cache (`cache/workspace-enrichment/<org_id>/`). Keeping everything under one root makes backup, sync, and clean-slate operations a single-path operation.
-
-### Symlink lifecycle at the workspace root
-
-Two symlinks at the workspace root (the cwd of `planar workspace init` — typically `~/work/`) project the canonical content into the directory where agents naturally look:
-
-```
-<workspace-root>/AGENTS.md  →  ~/.planar/workspaces/<org_id>/AGENTS.md
-<workspace-root>/CLAUDE.md  →  ~/.planar/workspaces/<org_id>/AGENTS.md
-```
-
-Both names point at the same target so Codex / Copilot (which read `AGENTS.md`) and Claude Code (which reads `CLAUDE.md`) see the same content. On filesystems that reject symlinks (Windows without developer-mode enabled), the installer falls back to a regular-file copy and records the degraded mode in the routing table so subsequent regenerations rewrite the copy. `planar workspace doctor` re-creates either form when it is missing or pointing at the wrong target; the operation is idempotent.
-
-### Bare-init guardrail
-
-`planar init` refuses when cwd has no `.git` of its own but contains one or more immediate child directories that do. Without the guardrail, a bare init in `~/work/` would register a semantically-wrong project row (`~/work/` is not a repo) and quietly skip the workspace-shaped intent the user clearly had. The refusal points at `planar workspace init` instead. The `--allow-no-repo` (alias `--force`) escape hatch exists for the rare standalone non-repo project; routine workflows should not need it. See [cli-reference.md § `planar init`](cli-reference.md#planar-init) and [concepts.md § Workspace](concepts.md#workspace).
-
----
-
-## The Configuration Plane
-
-Configuration lives in `~/.planar/config.toml`. The `planar config` domain manages it.
-
-### Resolution order (highest wins)
-
-1. Environment variables (`PLANAR_*` prefix).
-2. Per-association overrides in `config.toml` under `[associations."<slug>"]`.
-3. Top-level keys in `config.toml`.
-4. Embedded defaults compiled into the binary.
-
-### Config subcommands
-
-| Command | Purpose |
-|---------|---------|
-| `planar config show` | Print the fully-resolved configuration as TOML. |
-| `planar config validate` | Check `config.toml` for syntax and semantic errors. |
-| `planar config edit` | Open `config.toml` in `$EDITOR`. |
-| `planar config init` | Write a starter `config.toml` with documented defaults. |
-| `planar config path` | Print the path to the active config file. |
-
-The `[queue]` table configures the host-wide build and test queue: `slots`, `poll_interval`, `stale_after`, `grace` and `history_days` (ranges and units in [`docs/cli-reference.md`](cli-reference.md#the-queue-table)). Its typed, range-checked view is `planar.engine.config.queue` (`src/engine/config/queue.cppm`): `load_queue_settings(path)` reads only `config.toml`, never a database, so a `planar-agent` handler calls it at each poll and hands the engine `slots`, `stale_after_ms`, `grace_ms` and `history_days` even when `planar.db` is schema-locked. `planar config validate` reports every refused `[queue]` value with its key.
-
-The `[introspection]` table configures `planar report`'s usage evidence: `cli_log` (opt-in capture, default off), `retention_days` (default 90), `transcript_scan_bytes` and `[introspection.transcripts]` (per-vendor `*_enabled` and `*_path`). `transcript_scan_bytes` (an integer above 0, default `67108864`) is the transcript read budget: the bytes streamed from disk, newest files first, across the enabled vendors, split evenly with unused shares flowing to the others. The scan keeps only lines that can be a planar tool call or the paired result of one, within a separate fixed 4 MiB retained budget, and never stores the rest (`src/engine/introspection_adapters/`; the coverage counters are in [`docs/cli-reference.md`](cli-reference.md#planar-report---days-n---tail-n---json)). The key is range-checked by `validate_introspection` (`src/engine/config/effective.cppm`): `planar config validate`, `planar config show` and `planar report` refuse a value that is not an integer above 0, naming the key.
-
-`~/.planar/config.toml` is hand-edited or written by an agent (TOML). Validate it with `planar config validate` and inspect the effective result with `planar config show --effective`. A minimal example:
-
-```toml
-[templates]
-default_set = "default"
-
-[associations."org:my-org"]
-github_lead_repo = "owner/repo"
-default_template_set = "my-custom-set"
-```
-
-`PLANAR_CONFIG_PATH` overrides the config file location, and `PLANAR_WORKBENCH_ROOT` overrides the workbench directory (default `~/.planar/workbench/`).
-
-Notable config keys: the per-association `github_lead_repo` (used by the GitHub zero-repo propagation strategy), `external.jira.base_url`, the `external.jira.status.*` and `external.github-issues.status.*` status maps, and template set selection (`templates.default_set`, and per association `default_template_set`).
-
----
-
-## The Templates Layer
-
-Templates live under `~/.planar/templates/` and drive external-system payload rendering for propagation (`ext propagate`) and ext-sync.
-
-The resolution chain for any template file:
-
-1. The user-chosen template set (configured in `config.toml`).
-2. The `default` set under `~/.planar/templates/default/`.
-3. Embedded binary defaults (compiled into the binary at configure time from `templates/defaults/` via `cmake/generate_templates.cmake`).
-
-Templates are JSON files; string values may contain a Go-template-compatible placeholder mini-language (`{{.Plan.Title}}`, `{{range .Touches}}…{{end}}`, `{{if .ExternalKey}}…{{end}}`) which `src/engine/templates/render.cpp` substitutes against a rendering context exposing `.Task`, `.Plan`, `.Feature`, `.Scenario`, `.Touches`, `.Assoc`, `.ExternalKey`, and `.Children`. Non-string JSON values pass through unchanged. The placeholder syntax was preserved from the original Go implementation so existing template authors did not need to relearn the surface — but the renderer itself is first-party C++ with no Go dependency.
-
-Template files live at `~/.planar/templates/<set>/<system>/<kind>.json` and control the payloads sent to Jira and GitHub when `planar-ext ext propagate` creates or updates external counterparts. Ten defaults ship with the binary (5 `github-issues`, 1 `github-projects`, 4 `jira`) and `planar templates init` extracts them to `~/.planar/templates/default/`. Override the set per association with the `default_template_set` config key.
-
-`planar templates list` shows all available templates and their source level. `planar templates validate` checks them for syntax errors. `planar templates render <set> <system> <kind> --entity <ref>` renders a template against a live entity for inspection, for example `planar templates render default github-issues issue --entity task:42`.
-
----
-
-## Operational Plane Adapters
-
-The operational plane adapters connect Planar to external issue trackers, and are compiled into **`planar-ext`** (decisions 995–1001), not `planar`. `planar-ext` opens SQLite directly: read-only on planning tables (`plans`, `tasks`, `questions`, `artifacts`), read-write on exactly `external_links` / `external_systems` / `sync_events`, enforced by a `sqlite3_set_authorizer` allowlist keyed on the parsed table name (not by convention alone — a boundary test must assert against prepared statements, since `sync.cpp`'s `UPDATE` composes its table name at runtime via `table_for`, invisible to a literal source grep).
-
-The boundary is a pure-virtual C++ interface: `src/lib/adapter/adapter.cppm`'s `external_adapter` class declares four operations — `validate`, `pull`, `push`, `render` — and `sync.cppm`/`propagate.cppm` consume any adapter polymorphically through `const external_adapter&`. (This is a smaller, C++-native surface than the Zig tree's five-method `fetch`/`create`/`update`/`comment`/`search` duck-typed `adapter: anytype`; both adapters implement the smaller interface.) `render` returns the provider's JSON creation payload without sending it.
-
-HTTP transport runs over vendored libcurl (`vendor/curl/`, `src/lib/http/`) with a 30-second client timeout and no redirect following (`curl_transport`). A separate download policy, `planar::http::download`, serves the `planar update` asset fetch: it follows redirects by hand, validating the initial URL and every hop with `check_download_url` (HTTPS in production; fixtures only `file://` or `http://` on the exact hosts `127.0.0.1` and `localhost`; no userinfo; an HTTPS chain never steps down to HTTP or `file`), sets no headers so no `Authorization` header is ever sent, and bounds a request by 10 minutes plus a low-speed abort.
-
-Both adapters together are one binary, deliberately — decision 997: splitting Jira and GitHub across two binaries would put one interface across two write surfaces and split `sync_events` writes between them, breaking the disjoint-write-surface property the five-binary doctrine rests on.
-
-| Adapter | Location | Transport |
-|---------|----------|-----------|
-| Jira | `src/engine/extsync/jira.cppm`/`.cpp` (~460 lines) | libcurl (30s client timeout) |
-| GitHub Issues | `src/engine/extsync/github.cppm`/`.cpp` (~725 lines) | libcurl (30s client timeout) |
-
-Per-vendor logic stays behind the interface boundary; the sync engine and `planar-ext`'s handlers never branch on adapter kind except to select a propagation strategy (below).
-
-### Strategy selection
-
-For GitHub Issues, the propagation strategy is selected once at first propagation per feature (`src/cmd/planar-ext/handlers/ext/ext_strategy.cpp`'s `select_strategy`) and cached on `external_links.config_json` of the anchor plan. The whole-tree `ext propagate` verb executes `github-parent-issue` when the feature's descendant tasks touch exactly one repo, and runs `github-zero-repo` and `github-tracking-issue` through the generic per-entity tree walk (see [`planar-ext ext propagate`](cli-reference.md#planar-ext-ext-propagate-plan)). The multi-repo `github-projects-v2` strategy (a GitHub Projects board mirroring the feature tree) is permanently cut — decision 1001 — and will not be built; `select_strategy` still reports that bucket by name so `ext propagate` can refuse it with a message naming the real reason (a multi-repo feature) rather than a generic "not implemented."
-
-The strategy is sticky: subsequent re-propagations use the cached value. `--restrategize` forces fresh detection.
-
-For Jira, `strategy_for_system`/`strategy_for_repo_count` always resolve the epic hierarchy (anchor plan → Epic, child plans → Stories, tasks → Sub-tasks) ; the whole-tree `ext propagate` verb executes it as `jira-epic` through the same per-entity tree walk. `ext propagate-one`, the entity-level primitive, does not branch on strategy for Jira.
-
-### The operational-plane binary (`planar-ext`)
-
-`src/engine/extsync/propagate.cpp` (strategy selection) and `src/engine/external/sync.cpp` (pull/push) are compiled into `planar-ext`'s handlers. **`sync pull` no longer writes remote values into planning entities (decision 996, a deliberate divergence from the Zig oracle recorded against decision 982's clean-differential gate, and carried forward past that oracle's deletion).** The oracle's `apply_remote_to_local` wrote `title`/`status` straight into `tasks`/`plans`/`questions`/`artifacts` on a clean pull; `planar-ext` instead fetches and *emits* `remote_title`/`remote_status` on the result row, and records a `sync_events` row per link touched. The intended flow is three steps across two actors: `planar-ext` fetches and emits (`sync pull`); an agent verifies, synthesizes, and validates the emitted values; the agent then calls `planar` to create or update the planning entity if warranted — precedent already established by `import` and `synthesize`, which externalize their own model calls the same way via a pending/cache-file handoff under `$PLANAR_HOME/cache/<kind>/<slug>/`.
-
-External conflict events persist a versioned evidence envelope in the existing `sync_events.context_json` contract: exact local and remote title/status values, provenance, observation time, the local entity's `updated_at`, the provider's non-empty remote `updated`/`updated_at` version, and a SHA-256 evidence token. `audit trail --link --json` (on `planar`, reading `planar-ext`'s tables) exposes that envelope as `sync_events[].evidence`. Resolution is compare-and-swap guarded: the event must remain latest, the link conflicted, the approved token and local version exact, and a fresh adapter read must carry a non-empty provider version and match the recorded remote values and provider version before a whole-entity keep-local or keep-remote mutation proceeds. The local transaction and fresh remote read narrow the race window but cannot eliminate a provider-side GET-to-write race when the provider offers no conditional update primitive. After an ambiguous adapter or process failure, inspect audit, sync status, and entity post-state before deciding whether to obtain fresh approval or retry.
-
----
-
-## Repo Onboarding Pipelines
-
-Planar onboards an existing repository into the data model via two sibling verbs that share the same downstream Apply machinery but enter from different contracts.
-
-### Transcription pipeline (`import`)
-
-The `import` verb is a translator: it reads the repo's existing planning docs and emits them as Planar artifacts as-is. The pipeline lives in `src/engine/importer/importer.cpp`:
-
-```
-discover  → walk repo, classify .md files (frontmatter → filename → path)
-parse     → extract roadmap milestones, ADR decisions, deferred items
-infer     → status correlation from git log + branch list + checkbox state
-diff      → match against DB by fingerprint; emit additions / updates / removals
-apply     → commit additions, updates, and (with --apply-removals) soft-cancels
-```
-
-The optional `--interpret` pass writes a fingerprinted Request to `$PLANAR_HOME/cache/import-interpretation/<repo-slug>/_pending.json` and exits 0. The vendor skill produces a Result; the next invocation merges it with the deterministic Corpus before reaching the Diff/Apply stages.
-
-### Synthesis pipeline (`synthesize`)
-
-The `synthesize` verb is a generator: it reads docs *and* source, then produces fresh planning artifacts via an LLM pass. The pipeline lives in `src/engine/synthesize/synthesize.cpp`:
-
-```
-codeprobe       → per-FeatureArea source / test / CI / commit signals with
-                  SignalStrength scores; output is an EvidenceMap
-discover+parse  → existing docs become Request context (not source-of-truth)
-Request         → fingerprinted package: docs + EvidenceMap + greenfield flag,
-                  written to $PLANAR_HOME/cache/bootstrap-synthesis/<slug>/_pending.json
-[vendor skill]  → reads Request, writes Result to <cache-dir>/<fingerprint>.json
-Validate        → hard-rejects Results that violate the code-evidence invariant
-Merge           → adapts Result to interpretation.Result, merges with deterministic baseline
-Diff + Apply    → SHARED with import — same Diff/Apply stages
-```
-
-The LLM never runs in the Planar binary. The binary stays free of provider API keys, retries, and rate limits; the `planar-synthesizer` agent, installed for each selected vendor, is the LLM engine. The cache contract is the handoff: the binary writes a Request, the skill writes a Result, the binary validates and merges.
-
-### Merge rules (synthesis)
-
-`synthesis.Merge` honors four rules when combining the LLM Result with the deterministic baseline:
-
-1. **Deterministic kind wins.** Frontmatter / filename / path classification of existing docs is locked; the LLM cannot reclassify them.
-2. **LLM fills the qualitative output.** Phase decomposition, rich task bodies, status claims, decisions, deferred items, and forward specs all come from the LLM.
-3. **Code-evidence outranks LLM-claimed-done.** A task with `status != "todo"` must cite a `code_evidence` path that exists in the deterministic EvidenceMap. The validator rejects any Result that violates the invariant; the LLM cannot lie about completion.
-4. **Floor refusals propagate.** A deterministic confidence-floor refusal (50% threshold) and a greenfield invariant (no `status != "todo"` when codeprobe reports zero source evidence) cannot be rescued by good LLM data.
-
-### Shared Apply machinery
-
-The Diff/Apply stages are shared between both verbs via the apply helpers in `src/engine/importer/importer.cpp`. After the synthesis-specific merge or the import-specific interpretation merge, both pipelines converge on the same idempotent diff (match by fingerprint; additions / updates / proposed-removals) and the same apply path (soft-cancel removed entities; preserve the audit trail).
-
-The synthesis-vs-transcription split serves the same downstream pipeline: both verbs produce artifacts that flow through the `planar-ingestor` agent for task decomposition, then through the orchestrator's execution + propagation phases. The split is at the entry point only — what counts as the authoritative planning material.
-
-See [docs/concepts.md § Transcription vs Synthesis](concepts.md#transcription-vs-synthesis) for the conceptual framing and [docs/cli-reference.md § Domain: synthesize](cli-reference.md#domain-synthesize) for the full CLI surface.
-
----
-
-## The Agent Methodology
-
-Planar defines vendor-neutral agent roles under `agents/`. Per-vendor command surfaces (Claude, Codex, Copilot, Gemini) inherit the role spec and add vendor-specific invocation details.
-
-### Roles
-
-| Agent | Tier | Responsibility |
-|-------|------|---------------|
-| `orchestrator` | large | Receives a goal or task list; manages the full feature lifecycle across up to six phases; dispatches to coders; routes output through reviewers; enforces the iteration cap. |
-| `coder` | medium | Implements one task (or task group) end-to-end; receives reviewer feedback and addresses it in the next iteration. |
-| `research` | large | Read-only investigation dispatch; turns a question into a structured, cited findings brief and never writes code or mutates repository or Planar state. |
-| `test-coder` | large | Adversarial test authoring against the coder diff; dispatched when uncovered test-spec slugs intersect the cycle's tasks. |
-| `reviewer` | large | Reviews coder output; returns `approve`, `request-changes`, `open-question`, or `abort`. |
-| `janitor` | medium | Merge, Planar state reconciliation, worktree/branch cleanup, and `planar plan closeout` after Phase 3 finalization. |
-| `planner` | large | Drafts planning documents (product spec, tech spec, roadmap, test spec) from a goal statement and registers them as workbench artifacts. |
-| `spec-reviewer` | large | Adversarially reviews draft planning artifacts before ingestion and returns a readiness verdict. |
-| `ingestor` | large | Reads planning documents from the workbench and decomposes them into plans, tasks, decisions, and scenarios in the database. |
-| `ext-sync` | large | Propagates the feature tree to the operational plane and syncs changes bidirectionally. |
-| `sync-reconciler` | large | Compares local and external sync-conflict evidence and coordinates the exact operator-approved whole-entity resolution. |
-| `importer` | large | Translates an existing repository's planning artefacts (specs, ADRs, roadmaps, backlog files, GitHub issues) into Planar's data model without a goal statement. |
-| `synthesizer` | large | Produces fresh planning artifacts for a repo from existing docs + git log + source code via an LLM pass. Sibling of `importer`; shares the Apply machinery but enters from a synthesis contract (code-evidence invariant) rather than transcription. |
-| `introspector` | medium | Mines redacted local usage signal into preview-gated feedback findings. |
-| `feedback-triager` | large | Applies deterministic severity, disposition, reproduction, and duplicate triage to feedback findings. |
-
-### Phases (orchestrator)
-
-| Phase | Agent / Verb | Trigger |
-|-------|---------------|---------|
-| 1 — Planning | `planar-planner` | Goal given; no anchor plan or draft with no artifacts |
-| 2 — Ingestion | `planar-ingestor` | Anchor plan draft with workbench artifacts present |
-| 3 — Execution | coder + optional test-coder + reviewer | Anchor plan active with todo/doing tasks |
-| 3.5 — Test-coder | `test-coder` | Cycle's tasks intersect uncovered test-spec slugs after coder output |
-| 3.7 — Finalization | `janitor` | Explicit `--finalize` or interactive confirm after Phase 3; merge -> reconcile -> closeout gate |
-| 4 — Propagation | `planar-ext-sync` | User requests `--propagate` |
-| 5 — Archive | `planar workbench archive` (the planar skill's `spec-pipeline.md` reference) | Anchor plan done, user requests `--archive` |
-
-The orchestrator gates Phases 2 and 3 on explicit user confirmation. Ingestion never auto-applies. Phases 3.7 and 4-5 are explicit/opt-in; The iteration cap is 5 per reviewer dispatch cycle.
-
-### Skill and agent install
-
-The skill source is `skills/planar/` (one `SKILL.md`, nine `references/` files);
-the agent sources are `agents/planar-<role>.md`. `install.sh` copies both into
-`$PLANAR_HOME` (`skills/planar/`, `agents/`), derives the Codex TOML agents into
-`$PLANAR_HOME/codex-agents/`, and then places the staged skill and agents into
-each vendor whose presence marker exists. No generated projection exists: a
-placed skill is the staged directory and a placed agent is the staged file,
-except the Copilot (`.agent.md` suffix), Codex (TOML) and OpenCode (reduced
-frontmatter) forms, which are derived from the one Markdown source. Review and
-edit `skills/planar/` and `agents/`; never edit a placed or staged copy. The
-vendor table, link and copy mode, and the Gemini subagent switch are in
-[skill-reference.md § What installs where](skill-reference.md#what-installs-where);
-the install layout and the upgrade note for the previous per-vendor projections
-are in [INSTALL.md](../INSTALL.md#install-layout-reference).
-
-`planar skills` is a retirement notice with no subcommands.
-
-The skill and the agents are documented in
-[skill-reference.md](skill-reference.md). The skill carries thirteen invariants
-and a routing table over nine references (claim ritual, status, recovery,
-resume and handoff, spec pipeline, knowledge, external sync, local, and the
-feedback contract); it states no verb detail, which comes from each binary's
-`--help` and `schema --command`.
-
-Fifteen agent roles (the `agents/*.md` role specs: `orchestrator`, `coder`, `reviewer`, `test-coder`, `janitor`, `planner`, `spec-reviewer`, `ingestor`, `ext-sync`, `sync-reconciler`, `importer`, `synthesizer`, `introspector`, `feedback-triager`, and `research`) cover orchestration and review, planning and ingestion, external propagation, repo adoption, introspection and feedback triage, guarded sync reconciliation, research, testing, and closeout. The specialist boundaries are deliberate: `feedback-triager` and `sync-reconciler` coordinate preview-gated changes, `research` is read-only, and planning-state writes still go through the owning CLI binary. See [`agents/methodology.md`](../agents/methodology.md) for orchestration and [`skill-reference.md`](skill-reference.md) for the role inventory.
-
-Agent role specs live under `agents/`. The planning-lifecycle files are `agents/planar-planner.md`, `agents/planar-spec-reviewer.md`, `agents/planar-ingestor.md`, `agents/planar-ext-sync.md`, `agents/planar-importer.md`, `agents/planar-synthesizer.md`, `agents/planar-sync-reconciler.md`, `agents/planar-feedback-triager.md`, and `agents/planar-introspector.md`. The orchestrator, coder, reviewer, research, test-coder, and janitor roles — plus their companion methodology, doctrine, cross-scope-writes, and model-tier-routing docs — also live here.
-
-`install.sh`, the update verb and the uninstaller change an installation only
-while they hold its **mutation lock**, a coordination directory beside the
-canonical install root (`<root>.lock`, so removing or purging the root cannot
-split it). Ownership is a generation-numbered record created with `link(2)`,
-naming the operation, the pid, the process start time and the host's machine
-identity (`/etc/machine-id` with the pid namespace, or the macOS hardware UUID,
-so a renamed host still recovers a dead owner); the highest
-generation owns the lock until it is released or its process is proven dead,
-and two processes reclaiming a dead owner race for the same generation so at
-most one wins. The update verb hands its generation to the installer it execs
-(`PLANAR_MUTATION_HANDOFF`), which adopts it once and only in that process.
-`scripts/install-lib/mutation-lock.sh` specifies the protocol for the shell and
-native implementations. Under the lock, an install keeps a **recovery journal**
-(`<root>/.planar-journal`, replaced atomically; the `mutating` and `complete`
-records are flushed with `sync(1)`) with the phases `prepared`,
-`mutating`, `complete`, `aborted-before-mutation` and `uninstalling`, the
-target release and per-subtree swap progress
-(`scripts/install-lib/journal.sh`): it stages every managed subtree, probes the
-database with the staged binaries, swaps each subtree in by two renames through
-`<name>.old`, then creates or migrates the database with the installed
-`planar init`, and writes `release.json` and the install stamp last. A run
-after an interruption resumes the same target, and a `mutating` journal takes
-precedence over the old release's stamp. [INSTALL.md](../INSTALL.md#ownership-recovery-and-the-order-of-an-install)
-gives the full order and the failure rules.
-
-The uninstaller is `scripts/uninstall.sh`, a standalone bash script installed as
-`$PLANAR_HOME/bin/planar-uninstall` and shipped at the bundle root as
-`uninstall.sh`; `install.sh --uninstall` execs it. It shares the installer's
-library: the prefix guard, the lock, the journal, the data-path list and the
-vendor ownership rules (`scripts/install-lib/ownership.sh`, moved out of
-`install.sh`). Under the lock it records `uninstalling` before its first
-removal, removes the recorded vendor projections it can prove are Planar's
-(reading the version 2 manifest with `sed`), the journal-owned staging and
-backups, the managed subtrees and the install records, keeps and names the data
-paths (or removes them under `--purge`, never a relocated one), keeps and
-reports every unknown entry, and removes the journal last. A root it keeps gets
-`<root>/.planar-uninstalled`, validated evidence naming the root that the
-prefix guard accepts in place of `--force`; the next install removes it.
-
-`install.sh` writes `$PLANAR_HOME/install-manifest.json` (normally
-`~/.planar/install-manifest.json`) before the first vendor target is placed and
-again after every target, through a same-directory temp file and an atomic
-rename, so an interrupted run leaves the previous complete manifest
-authoritative. Version 2 records the build id, the global `copy|link` mode, the
-vendors the run found (`claude`, `codex`, `copilot`, `gemini`, `antigravity`,
-`opencode`), `extras` (the staged `skills/planar/**`, `agents/*.md` and
-`codex-agents/*.toml` paths, and every placed file) and one `projections` row
-per placed target: the skill directory, or one agent file. A row fixes the
-vendor, kind (`skill|agent`), name, staged source, installed path and the
-actual `copy|link` install kind; its two digest fields are always empty. The
-vendor is the target's only owner, or `shared` for `~/.agents/skills`, which
-codex, copilot, gemini and opencode all read: it is placed once, so no one
-vendor owns it. An OpenCode agent is a derived copy (frontmatter reduced to
-`description` and `mode: subagent`) in both modes, so its row is always
-`copy`.
-
-The staged authority the rows compare against is `$PLANAR_HOME/skills/planar/`
-(the skill, compared as a directory, every file), `$PLANAR_HOME/agents/planar-<role>.md`
-(Markdown and Copilot agents; OpenCode's derivation of it) and
-`$PLANAR_HOME/codex-agents/planar-<role>.toml`. The nine roots, each tagged with
-the vendors that read it, are: `~/.claude/skills` (claude), `~/.agents/skills`
-(codex, copilot, gemini, opencode), `~/.gemini/antigravity-cli/skills`
-(antigravity), `~/.claude/agents`, `$CODEX_HOME/agents` (default
-`~/.codex/agents`), `~/.copilot/agents`, `~/.gemini/agents`,
-`~/.gemini/antigravity-cli/agents` and `~/.config/opencode/agents`. A root
-takes part only while one of its vendors is present (the installer's markers:
-`~/.claude/`, `$CODEX_HOME` set or `~/.codex/`, `~/.copilot/`,
-`~/.gemini/settings.json`, `~/.gemini/antigravity-cli/`, `~/.config/opencode/`).
-
-The manifest is the ownership boundary: only its rows are Planar-managed.
-Destination-only entries are discovered only under Planar's own names (the
-skill `planar`, agents `planar-*`) so a shared root's other tools are never
-reported. The older `.planar-install` prefix stamp remains for legacy-install
-detection and the prefix adoption guard.
-
-`src/lib/installed_surface/installed_surface.cpp`'s `status()` classifier is the read-only
-consumer of this contract. There is no standalone `planar skills status`
-CLI verb to expose it directly. The classifier reports selected versus unselected
-vendors and classifies managed rows as `fresh`, `stale` (drifted), or `missing`
-by plain existence + byte/symlink comparison against the staged authority: a
-link to the staged source is `fresh` by construction, a copy is `fresh` only
-when every byte matches. Missing, malformed, unsupported-version and stamped
-legacy manifests remain aggregate manifest states with a source-checkout
-`./install.sh --prefix <resolved-prefix>` bootstrap command; they are never
-guessed into managed rows. A version 1 manifest (the retired four-vendor,
-per-file layout, or the interim one that kept placements only in `extras`) is
-the `legacy` state: one degraded `planar health` contributor naming the
-reinstall, no rows. `scripts/check-self-installed.sh` reads `planar health
---json`'s `projection_freshness` for the installed host (Recipe 14A).
-
-`planar health` calls this same classifier and folds its summary into the
-`projection_freshness` contributor; classification and ownership decisions
-are not duplicated elsewhere. Manifest-owned stale/missing rows and aggregate
-legacy, invalid, or unsupported manifest states degrade overall health and
-carry the exact classifier recovery command. No manifest and no legacy stamp
-is `not_installed`; unmanaged entries and unselected vendors remain visible
-counts but do not degrade. The health path never invokes repair,
-installation, or any filesystem/database mutation.
-
-There is no more per-name `planar skills repair` verb — it retired alongside
-`skills status` and the digest path both used to read (plan 918 D5). Any
-stale or missing row now surfaces the same fixed full-reinstall recovery
-command: `repair_command` is always the `./install.sh --prefix
-<resolved-prefix>` bootstrap, never a scoped per-row repair. The classifier
-itself never opens SQLite and has no write path of its own.
-
-### Release bundles
-
-A release is one tarball per platform, `planar-<os>-<arch>.tar.gz` with
-`<os>-<arch>` in `{macos-arm64, linux-x86_64}`, built by `make dist` and
-`make linux-dist` (`scripts/dist.sh`). The name carries no version; the version
-is inside, in `release.json`. The bundle is a relocatable image of the managed
-part of `~/.planar`, so a prebuilt install is a copy:
-
-```
-planar-<os>-<arch>/
-├── release.json          # version, sha, date, os, arch, os_floor, schema_version
-├── install.sh            # the repository installer, byte for byte
-├── uninstall.sh          # the uninstaller, byte for byte
-├── get-planar.sh         # the bootstrap, byte for byte
-├── install-cleanup.txt
-├── bin/                  # the five binaries
-├── skills/planar/
-├── agents/
-├── codex-agents/         # rendered at dist time
-├── templates/
-├── workflows/
-├── migrations/
-└── scripts/install-lib/  # the only part of scripts/ that ships
-```
-
-`release.json` is one `"key": value` pair per line (string values quoted, and
-`schema_version` an unquoted integer) so the POSIX bootstrap reads it with
-`sed`. `schema_version` is the bundle's highest migration number,
-read from a scratch database at dist time. A release publishes five assets: both
-tarballs, a merged `SHA256SUMS`, `VERSION` and the standalone `get-planar.sh`.
-The cut and its gates are in [operations.md § 6](operations.md#6-release-gate-evidence).
-
-**Install order.** The bootstrap (`get-planar.sh`) and `planar update` both end
-in `install.sh --prebuilt <bundle>`, the same installer a source install runs.
-It takes the mutation lock, validates the recovery journal, stages every managed
-subtree, probes the database with the staged binaries (an ahead database
-refuses), swaps each subtree in by two renames through `<name>.old`, creates or
-migrates the database with the installed `planar init`, places the vendor
-surfaces, and writes `release.json` and then the install stamp last. The full
-order and the failure rules are in
-[INSTALL.md](../INSTALL.md#ownership-recovery-and-the-order-of-an-install).
-
-**Managed subtrees and data paths.** The installer owns `bin/`, `skills/`,
-`agents/`, `codex-agents/`, `workflows/`, `scripts/` and `migrations/` outright
-and replaces each whole. It never removes a data path, and the uninstaller keeps
-them without `--purge`: `planar.db` with `planar.db-wal` and `planar.db-shm`,
-`queue-logs/`, `retired/`, `workbench/`, `config.toml`, `local/`, `workspaces/`,
-`models/`, `execute/` and `templates/`. They live under `~/.planar` unless
-`PLANAR_DB`, `PLANAR_CONFIG_PATH`, `PLANAR_WORKBENCH_ROOT`, `PLANAR_LOCAL_HOME`
-or `PLANAR_TEMPLATES_DIR` relocates one; `--purge` names a relocated path and
-leaves it. The list exists once, in `scripts/install-lib/data-paths.sh`, and a
-test compares it with INSTALL.md. Two writes to a data path are allowed:
-migrating a `planar.db` that is behind, and placing shipped `templates/` files
-where missing.
-
-**`PLANAR_PORTABLE`.** A shipped binary links the C++ runtime statically and
-carries no rpath into a toolchain prefix, so it starts on a supported host with
-no compiler installed. The CMake option `PLANAR_PORTABLE` (default `OFF`)
-selects that link: `-nostdlib++` with the toolchain's `libc++.a`, `libc++abi.a`
-and, on Linux, `libunwind.a`. The `dist` preset turns it on (with version
-metadata and a macOS 26.0 deployment target); the `debug` and `release` presets
-leave it off. Under it, `portable.binaries` fails a binary that depends on the
-toolchain prefix, carries an rpath, or misses the floor: macOS 26.0, or glibc
-2.36 on Linux. Details are in
-[toolchain-parity.md](toolchain-parity.md#portable-distribution-builds).
-
-### Authored-surface validation
-
-<!-- surface-lint-ignore surface-path-missing: names the deleted-with-zig/ source this tool was ported from, for history -->
-`src/tools/surface_lint/` (ported from the Zig tree's `tools/surface_lint.zig` at task 6402, decision 1000) deterministically scans canonical Markdown under
-`agents/`, `skills/`, and `docs/`. Its stable finding codes are
-`surface-link-missing`, `surface-legacy-reference`,
-`surface-artifact-set-drift`, `surface-capability-drift`,
-`surface-command-drift`, `surface-skill-spec` and
-`surface-path-missing`; the host-queue rule adds `surface-queue-command` and
-`surface-queue-marker-invalid` (below); the retired-reference rule adds
-`surface-retired-reference` and `surface-retired-ref-marker-invalid`; malformed or unused suppressions use
-`surface-suppression-invalid` and `surface-suppression-unused`. These cover absent repository-relative links,
-pinned retired implementation references, contradictory four-artifact
-contracts, read-only roles containing write commands, and invalid semantic
-command shapes. `surface-skill-spec` is the Agent Skills format check, applied
-to every `skills/<name>/SKILL.md`: frontmatter present, `name` matching its
-directory and the name format, a description of at most 1024 characters, only
-the allowed frontmatter keys, a body of at most 500 lines, links that resolve,
-and references one level deep. Planar's own tighter budget, 150 lines of body for
-`skills/planar/SKILL.md`, is a Catch2 contract test in the lint's test binary,
-not a lint rule. Link checks verify file existence only; they do not check
-anchors.
-
-Run `make surface-lint` for stable text findings or the built
-`surface_lint <repo-root> --json` binary directly for the versioned envelope
-`{version,ok,files_scanned,findings}`. Each finding is
-`{code,file,line,message}`; findings are ordered by file, line, code, and
-message. A clean result exits 0, and any finding or validator failure exits
-non-zero. An intentional match may be suppressed only by a comment on the
-preceding non-blank line naming one code and a non-empty rationale:
-
-```html
-<!-- surface-lint-ignore surface-legacy-reference: historical comparison required -->
-```
-
-Unknown, malformed, file-wide, and unused suppressions are errors.
-
-The two queue codes enforce the host-queue rule on authored agent and skill
-sources (plan 1080, [operations.md](operations.md#5-the-host-build-and-test-queue)).
-`surface-queue-command` is reported for an inline code span, or a line of a
-fenced code block, in `agents/` or `skills/` whose first word is a build or
-test program (`make`, `cmake --build`, `ninja`, `ctest`, `cargo build`/`test`,
-`go build`/`test`, `npm test`, `pytest`, `tox`, `gradle build`) and which is not
-given to the queue; a command given to the queue begins `planar-agent queue
-run`, and its program follows a bare `--`. `docs/` is not scanned for it, since
-it describes the tools rather than instructing an agent, and prose outside a
-span or block is never read. `surface-queue-marker-invalid` is reported for an
-unbalanced region marker (below), so a typo cannot exempt the rest of a file.
-These two codes are not suppressible with the comment above, which needs a
-code and a rationale on the line before and cannot sit inside a table row or a
-verbatim section. They have their own markers:
-
-- a line containing `queue-lint-ignore` is exempt, for a line that must keep
-  the command (a failure-signature table row), with the reason beside it;
-- the lines between `<!-- queue-lint-ignore-begin: <reason> -->` and
-  `<!-- queue-lint-ignore-end -->` are exempt, for text pinned byte for byte
-  elsewhere, where a per-line marker would change the bytes (the queue rule in
-  `agents/methodology.md`). The marker lines sit outside the pinned text.
-
-`surface-retired-reference` (plan 1089) keeps the removed separate agent
-database from coming back: its file name, its path variable, its migration
-directory and its read-tolerance helper (the `k_scoped_retired_patterns` table in
-`src/tools/surface_lint/main.cpp`) may not appear in `docs/`, `agents/`,
-`skills/`, `copilot/` or the root guides (`README.md`, `CLAUDE.md`,
-`AGENTS.md`, `INSTALL.md`). This is the one check that also reads `README.md`,
-`INSTALL.md` and `copilot/`, and it reads fenced code blocks as well. Two things
-are exempt: `docs/changelog.md`, which records the removal, and the lines of
-`INSTALL.md` between two `retired-ref` marker lines (the upgrade note, whose
-exact marker text is the `k_retired_region_marker` constant). Everything outside
-that scope (`install.sh`, `scripts/`, `src/`, `migrations/README.md`) is never
-read for it, since the installer legitimately names the store it retires.
-`surface-retired-ref-marker-invalid` is reported for a region that is never
-closed and for a marker in any file but `INSTALL.md`, so a stray marker cannot
-silence a hit. Neither code is suppressible with the comment above: the scope and
-the marked region are the whole exemption mechanism.
-
-The semantic validator is read-only and does not invoke an LLM or open SQLite.
-The normal authored-surface quality gate is `make cli-usage-check`: it runs the
-existing schema-driven CLI-usage validator first, then this semantic validator.
-The ordering preserves schema-lint diagnostics for unexposed flags instead of
-duplicating them as semantic findings. `make test-all` reaches both validators
-once through that composed target; it does not depend separately on
-`surface-lint`.
-
----
-
-## Build and Test
-
-The CMake project root IS the repo root: `CMakeLists.txt` and `CMakePresets.json` sit at the top level. Build via the Makefile wrappers or CMake/ctest directly.
-
-```bash
-# Makefile wrappers
-make build              # cmake --preset release -DPLANAR_VERSION_META=OFF; copies
-                        # the five Planar binaries into ./bin/
-make test               # cmake --preset debug; cmake --build --target all planar_tests; ctest
-make test-cpp-report    # the same ctest suite plus its SKIP TALLY (expected: 0)
-make test-all           # unit (ctest) + ctest-registry-check + coverage +
-                        # cli-usage-check + surface-check + exit-code-contract +
-                        # eval-contracts + cpp-lint-gate
-
-# Direct CMake/ctest from the repo root
-cmake --preset debug                          # or --preset release
-cmake --build build/debug --target all planar_tests   # test binaries are not in `all`
-ctest --test-dir build/debug --output-on-failure
-```
-
-There is no second build. `zig/` and every Makefile target that shelled it (`test-integration`, `test-integration-files`, `test-parity-cpp`, `test-cpp-strict`, `oracle-retirement-gate`) were removed at the M10 cutover rather than stubbed — a target that runs nothing and exits 0 is the failure mode the retired gate existed to prevent. `make fmt` / `make fmt-check` now run the pinned `clang-format` over first-party C++ instead of `zig fmt`.
-
-Planar runs a two-tier test model:
-
-- **Unit tests** — Catch2 `TEST_CASE`s in `*.t.cpp` files colocated with the code under test throughout `src/lib/` and `src/cmd/`. They exercise the module directly (plus the `db` module when they need one) and run under `ctest` (`make test`).
-- **CLI black-box tests** — the cross-process lane, in-tree since the M10 cutover. `src/cmd/parity_harness.hpp`'s `make_arena()` builds a scratch environment (its own `PLANAR_DB`, `HOME`, `PLANAR_WORKBENCH_ROOT`) and `run_pinned()` execs a built binary inside it over fixed argv, capturing stdout, stderr, and the exit code. The cases live in `src/cmd/*/parity.t.cpp`, `src/cmd/planar/cross_process.t.cpp`, and the `*_leaves.t.cpp` / `*_leaf.t.cpp` files, and run under the same `ctest` invocation as the unit tests. They grade the SHIPPED binary — argv in, stdout/stderr/exit-code/on-disk-state out — so an internal refactor cannot silently change the user-visible contract. This lane replaced the Zig `integration_tests/` suite in three steps taken BEFORE the deletion, not with it (decision 1035): task 6546 gave eight uncovered CLI leaves black-box coverage, task 6547 ported the irreplaceable cross-process cases onto `run_pinned()`, and task 6548 deleted 108 Zig blocks the C++ port had already superseded.
-- **Cross-implementation differential lanes (ALL RETIRED)** — two existed. `make parity-check` diffed the Zig binary against the archived Go reference and was retired once the port outgrew it (the archive's last migration is `00030`, so the two binaries could no longer open the same database, and the audit's premise was that both operate on identical state). The C++/Zig state-differential lane — `statediff.t.cpp`, `scripts/oracle-retirement-gate.sh`, `src/cmd/parity_strict.hpp`, and the `PLANAR_REQUIRE_ORACLE` / `PLANAR_PARITY_STRICT` machinery — was retired with its subject at the M10 cutover. **What remains under the `parity` name is not a differential.** The `src/cmd/*/parity.t.cpp` cases pin bytes TRANSCRIBED from those references against the current binary alone; they are still the strongest grading this repo has on help text, exit codes, error wording, and the `schema` catalog, but they cannot be re-derived. `scripts/parity-data/parity-triage.md` is retained as their rationale.
-- **Authored-surface lint gate** — `make cli-usage-check` runs the schema-driven CLI validator (`cli_usage_lint`) followed by the semantic authored-surface validator (`surface_lint`), both C++ tools under `src/tools/` (decision 1000, ported from the Zig tree at task 6402 — no `zig build-exe` remains in this gate). `cli_usage_lint` dumps all **five** binaries' `schema` catalogs, `planar`/`planar-agent`/`planar-watch`/`planar-ext`/`planar-execute` (decision 998 adds `planar-ext`'s). `cli_usage_lint` also reads each catalog's `docs.examples` and validates every entry like an authored invocation (an unknown flag is a finding naming the command path and the flag; an example that invokes another command is a finding too), and its summary line counts the examples checked. `make surface-lint` runs only the semantic validator. The composed gate is wired into `make test-all` once.
-- **C++ format/tidy/doc-comment lint** — `make cpp-lint` (pinned `clang-format`/`clang-tidy`/Doxygen; see [docs/toolchain-parity.md](toolchain-parity.md)). The full target is not composed into `make test-all`: it requires the build already configured and built (clang-tidy needs the module BMIs materialized) and clang-tidy is advisory only, with 105 residual findings (task 6439). Its gating half — `clang-format --Werror` plus the Doxygen pass — runs in `make test-all` as `make cpp-lint-gate`. `make fmt-check` runs the cheap format half with no build precondition.
-
-The binaries produced by `make build` land under `./bin/`; `make dist` builds the
-portable release bundle ([Release bundles](#release-bundles)). The Makefile has no
-install target; `cmake --install` places the C++ executables under a prefix you
-choose, and `install.sh` additionally
-stages the skill, agents, workflows, and migrations under `~/.planar` and places
-the skill and agents into each present vendor's directories after the CMake build.
-
-The black-box lane follows two stylistic conventions documented in [Testing § Black-box harness](testing.md#black-box-harness): focused per-leaf tests live beside their command family under `src/cmd/planar/handlers/<family>/` and pin that verb's contract; multi-command lifecycle scenarios and their inventory live in [`src/cmd/integration_tests/`](../src/cmd/integration_tests/README.md). `planar`-only scenarios share an injected in-memory SQLite connection across handler invocations; cross-binary tests use a scratch database file and real processes, as in `src/cmd/planar/cross_process.t.cpp`. The `src/cmd/*/parity.t.cpp` cases pin process-level output. `planar_binary()` discovers nested `*.t.cpp` files so colocated tests remain in the binary's test target; `src/cmd/integration_tests/CMakeLists.txt` adds its scenarios to that target explicitly.
-
----
-
-## Key Invariants
-
-- **One connection per process.** Passed through explicit context/handler parameters; no global mutable state.
-- **Migrations are append-only.** Never edit a released migration. Add a new file with the next sequence number via `sqlx migrate add -r <name> --source migrations`.
-- **The adapter boundary is interface-typed.** The sync engine and propagation modules dispatch through the `external_adapter` interface; they never branch on adapter kind.
-- **No external (system) C dependencies — only vendored, CPM-cached C/C++ source.** `vendor/sqlite/` (linked into `planar`, `planar-agent`, `planar-watch`, `planar-ext`) and `vendor/lua/` (linked into `planar-execute`) are the C the build touches; `vendor/curl/`, `vendor/glaze/`, `vendor/spdlog/`, `vendor/cli11/`, `vendor/catch2/`, `vendor/tree_sitter/`, `vendor/tree_sitter_zig/` round out the dependency set. Master has no dynamic runtime library dependency beyond the platform: the Mt-KaHyPar solver arm, and with it TBB, lives on branch `dev/grouping-solvers` (decision 1293).
-- **Skills call the binaries.** Agent skills do not write the database directly. They invoke `planar` / `planar-agent` / `planar-ext` verbs and read stdout. `planar-watch` is read-only and opens the database via `file:?mode=ro`.
-- **Schema is the contract.** Read-side tools must check `schema_migrations.version` before operating against the database. `planar`, `planar-agent`, `planar-watch` and `planar-ext` all enforce this at startup (exit 7 on a version mismatch); see the schema-contract section above for which direction each binary refuses.
-- **The capability split is verb-level.** Each of the four planning-state binaries can only do what its registered verb set (and, for `planar-ext`, its `sqlite3_set_authorizer` allowlist) lets it do; the `src/cmd/*/capability.t.cpp` cases fail the build if a write verb is registered on `planar-watch` or a planning-entity verb on `planar-agent`. `planar-execute` holds no DB handle at all and is bounded by the verb sets of the binaries it shells.
-- **The workflow engine holds no DB handle.** `planar-execute` is a pure, deterministic CLI driver: it shells an exact subset of sibling `planar`/`planar-agent`/`planar-watch` commands and confined Git operations, never opens SQLite, and exposes no model-spawning host function.
-- **The Zig oracle was retired on EVIDENCE, not on milestone arithmetic.** `zig/` was deleted at the M10 cutover (task 6045) only after decision 963/982's three conditions were met: a clean state differential across the eleven in-scope ported leaves, `explore` recorded as deferred-by-decision-980 rather than pending, and every oracle-conditional skip removed in the same commit (the tally is now zero, enforced by `scripts/ctest-report.sh --max-skips 0`). The gate that checked those conditions was deleted in that same commit — after the deletion its own preconditions are permanently false, so leaving it behind would have left a gate that can never pass.
-
-## Host-aware agent model binding
-
-### Ownership boundary
-
-Planar does not know what a model is, and deliberately cannot.
-
-**Planar owns** opaque candidate identifiers (stored and compared as bytes,
-never parsed), coordination state (claims, actions, dispatch authorization),
-routing evidence (declared-experiment samples, terminal outcomes), and
-*resolution* — deriving a work type, complexity, and tier floor from a task's
-own packet, then ranking candidates on the evidence recorded for that exact
-cohort.
-
-**The orchestration layer's `agents/models.md` owns** the editable per-vendor presets: which concrete model a tier
-maps to, what each candidate is good at, and when an operator should prefer
-one over another. That table is hand-maintained in the orchestration layer
-(`agents/models.md`), not generated by Planar.
-
-**Host adapters own** spawn verification — confirming that the model that
-actually answered is the model that was requested. Planar records the
-requested and actual identities as separate fields and names a mismatch
-(`candidate_mismatch`); it never asserts which model served a request,
-because it has no way to know.
-
-The split exists because a curated model catalog inside Planar was the source
-of a real defect: a Claude-hosted orchestrator would read a catalog entry for
-a Codex model and recommend a candidate its own host could not spawn. Moving
-tier→model ownership to per-vendor presets removed the failure structurally —
-there is no cross-host answer left for Planar to give wrongly.
-
-A vendor host's native subagent surface remains the final capability
-boundary: Codex-native orchestration binds only Codex agents and Claude-native
-orchestration binds only Claude agents. The orchestrator agent
-declares its active host vendor and refuses a candidate the host cannot
-represent rather than silently substituting a provider, tier, model, or agent
-type. Claude supports invocation-level model overrides (subject to its
-environment override); Codex role agents may be fixed to their
-TOML model and therefore require a visible matching agent type.
-
-### Routing evidence plane
-
-Migrations 00030–00032 carry the evidence pipeline. Each stage refuses rather
-than guesses, and the refusal is always named:
-
-1. **Packet** — the authoritative current state of a task, with a canonical
-   form and digest. An incomplete packet reports named readiness reasons
-   instead of a partial answer.
-2. **Profile** — compiles a ready packet into a work type, complexity, and
-   tier *floor*. An operator may raise the tier above the floor and never
-   lower it: the floor is derived from the task's own evidence, so a
-   below-floor request is a request to ignore that evidence.
-3. **Role resolution** — the nine runtime roles resolve from their
-   authoritative packet class (pre-task roles from a planning packet,
-   task-bound roles from a task profile). An absent or unready packet yields
-   the configured static fallback plus a reason, and never a derived
-   classification — a fallback that showed a work type would be
-   indistinguishable from a real derivation.
-4. **Preview / confirm** — a dispatch is authorized in two steps. Preview
-   freezes every value shown to the operator behind a single-use,
-   expiry-bound token; confirm revalidates each against current state and
-   writes an immutable snapshot atomically, or refuses with `stale_preview`
-   naming which binding moved.
-5. **Evidence** — only *declared-experiment* samples can move a
-   recommendation. Defaults, fallbacks, overrides, and review-bypass runs
-   keep full telemetry but never touch a recommendation's numerator or
-   denominator: a fallback that succeeded is evidence the primary was
-   unavailable, not evidence the fallback is good.
-6. **Ranking** — candidates are ordered by the 95% Wilson score *lower bound*,
-   not the raw success rate, so a candidate earns a recommendation by being
-   repeatedly good rather than by being new. Under-sampled candidates are
-   `insufficient_data`; candidates below the quality floor are excluded
-   before any iteration, gate-failure, latency, or cost comparison.
-
-Confirmed dispatch records persist the actual `{tier,candidate,work_type}`
-triple. Evidence is never pooled across cohorts: a candidate good at
-`mechanical`/`bounded` work has told you nothing about `architectural`/
-`high-risk` work.
-
-Shipped Lua workflows are installation assets under
-`${PLANAR_HOME:-$HOME/.planar}/workflows/`. Authored agents and skills invoke
-that installed path instead of assuming the target repository contains a
-`workflows/` directory.
+# Planar architecture
+
+Current rewrite status is the [roadmap opening](vernacular/roadmap.md#current-status).
+Superseded status checkpoints that formerly opened this file are preserved in
+[history](vernacular/history.md#former-opening-of-architecturemd).
+
+The replacement builds one thin `planar` command over a small native engine and
+an embedded trusted Lua standard library. There is no legacy engine or database,
+command fleet or operational agent workflow in the source tree.
+
+| Layer | Source | Responsibility |
+| --- | --- | --- |
+| Command | `src/cmd/planar/` | Parse explicit arguments once, validate the embedded catalog, invoke retained Lua command handlers through finite native render/init/history/export/load services, buffer canonical output and check process writes. |
+| Values and declaration loading | `src/engine/value/`, `src/engine/lua/` | Immutable typed values, text-only restricted constructors, bounded protected Lua evaluation. |
+| Capture | `src/engine/capture/` | Confined no-follow reads, logical provenance, stable retained bytes and directory topology, final verification. |
+| Identity | `src/engine/canonical/`, `src/engine/hash/` | Typed canonical_v1 binary encoding and bounded decoding, domain-separated seed-zero XXH3-128. |
+| Trusted runtime | `src/engine/runtime/` | Fresh fixed-export states, invocation-local retained command VMs, bounded typed bridges and native structural/hash capabilities; internal original-receipt-bound native history preparation closes its ledger snapshot before returning. |
+| Transport | `src/engine/json_codec/` | Pinned Glaze parsing and buffered canonical UTF-8 JSON with a 16 MiB payload ceiling. |
+| Pure record codec | `src/engine/history/record.cppm`, `record.cpp` | Bounded record_v1 framing and raw portable XXH3-128; independent of storage, runtime and filesystem access. |
+| Complete immutable trees | `src/engine/history/tree.cppm`, `tree.cpp` | Captured logical views to immutable directory roots and complete owned reconstruction, bounded by explicit source/provenance/effective-provenance profiles; no filesystem capture or Lua replay. |
+| Native ledger foundation | `src/engine/ledger/` | Internal trusted SQLite primitives plus opaque typed record transactions, complete record and accepted-history verification, atomic acceptance and safe new-file publication. |
+| Native acceptance preparation | `src/engine/acceptance/` | Declaration-closure load capture and immutable prepared candidates backed by native receipts; identity-bound atomic completion. |
+| Recorded reads | `src/engine/history/read.cppm`, `read.cpp` | Bounded history projections from one verified snapshot, without replaying recorded policy; the current retained handler selects the verified envelope. |
+| Exact source export | `src/engine/export/` | Reconstruct recorded source and publish a new target without replacing existing entries. |
+| Product policy | `src/stdlib/planar/` | Schema validation, semantic resolution, selection, observations, Markdown projection, budgeting and render orchestration. |
+
+First-party product implementation lives under `src/`, including native C++ and
+trusted Lua; future product workflows follow the same rule. Build and integrity
+tooling may live in `cmake/` and `scripts/`. Fixtures remain outside `src/`: their
+sample external workspaces, current/base source snapshots, observations and
+expected packets are verification inputs, not runtime implementation. Test-only
+Lua and bridge harnesses remain in `tests/stdlib/`.
+
+Trusted Lua owns schemas, shapes, selection, materiality and identity recipes.
+The engine owns isolation, captured filesystem access, canonical encoding,
+hashing and output. `cmake/embed_lua.cmake` embeds exact configured stdlib bytes;
+the runtime does not load product Lua from host paths. Test-only bridge exports
+are independently embedded outside the product graph.
+
+Declaration states expose only curated immutable constructors, no standard
+libraries or engine access. The trusted state receives independent copies and
+selected deterministic base/table/string/math/utf8 functions, with no I/O,
+process, dynamic loading, clocks or randomness. Native conversion/setup/callbacks
+use protected Lua boundaries so longjmp does not cross live C++ destructors.
+The [bridge reference](../src/stdlib/planar/README.md) details its allowlist and bounds.
+
+Capture retains explicit workspace/spec/jobs, text references, registry and
+observations. With output capture it scans current/base trees, including
+untracked/ignored files except declared exclusions. Discovery and final
+verification check file bytes, normalized executable mode, identity and
+membership; directory topology is retained separately from file provenance.
+Reads use retained root descriptors and no-follow relative opens. The driver
+must keep inputs stable: this cooperative contract does not freeze the OS or
+defend against every concurrent change-and-revert. Downstream Lua consumes only
+sealed captured values and never recaptures files.
+
+X04-A1 adds a native-only metadata admission prerequisite in
+`capture/admission.cppm`: explicit trusted directory and selected files, staged
+supplied roots/files/export targets, retained no-follow ancestor/mode/identity
+receipts, and file-descriptor binding before a native content read. Receipt
+verification reads no selected content and does not enumerate siblings. Registry
+directory colocation is allowed; trusted aliases and untrusted tree overlap refuse.
+X04-A2 composes it in `capture/profile.cppm`: the native-only service captures
+strict Glaze profile JSON through the pure `capture/profile_codec` decoder and the entire ordered module closure, selecting every
+module identity before reading any module content. Profile bytes are capped at
+65536, modules at 1 MiB each/8 MiB total, and strings/paths at 1024 decoded bytes.
+Glaze decodes into fixed bounded scratch before retained string allocation; raw
+integer version views avoid machine-integer classification limits. The owner
+retains both metadata admission and native content receipts; staged admission
+and descriptor binding consume no supplied file content. Repeated verification
+compares original receipts, and failed/moved owners refuse. Only the listed
+closure and its ancestors are selected; sibling membership remains irrelevant.
+A1, A2 and the integrated A3 native verification gate are independently approved.
+The full A3 gates pass 489/489 in debug and RelWithDebInfo.
+Registration, public CLI, result/commit phase wiring and sharing 64 MiB/10000
+capture limits with later services remain future integration. External-profile
+acceptance remains open.
+
+Work fingerprints exclude optional prose, checkpoints, assertions and source
+output bytes. Output identities remain per unit regardless of job grouping;
+reviewer packets carry exact captured target vectors. Optional context is
+omitted deterministically under budget; mandatory overflow refuses explicitly.
+No hash substitutes for exact comparison at a boundary that requires it.
+
+The C++26 module graph is declared by `src/engine/CMakeLists.txt` and
+`src/cmd/planar/CMakeLists.txt`, using `cmake/rewrite.cmake`. Dependencies point
+downward. Only pinned committed CLI11, Lua, Glaze, xxHash, SQLite and test-only Catch2 are retained.
+Configuration performs no dependency download. Test executables remain outside
+`all`; there are no product install rules or live Git version metadata inputs.
+
+An external driver owns sessions and scheduling. Render executes no checks,
+verifies no driver assertions, persists no state and establishes no completion
+or approval. The native ledger/history foundation followed completed operator
+packet evaluation. The D7-B load candidate exposes native acceptance through a
+retained Lua handler and declaration-closure capture; independent review and the
+full R14 acceptance matrix remain pending. Execution workflows remain outside this slice. See [contracts](declarations.md), [CLI](cli-reference.md),
+[testing](testing.md) and the [implementation plan](vernacular/implementation.md).
+
+The trusted bridge alone exposes `engine.json_decode` and `engine.json_encode`.
+Glaze owns all JSON grammar, unescaping and escaping; Lua applies schema policy.
+Checkpoint byte accounting, Markdown descriptors and machine transport use the
+same native codec. Binary canonical_v1 encoding and hash domains are unchanged.
+Codec allocations are separate from Lua's allocator: each encode uses at most
+96 MiB + 1 KiB scratch plus bounded structural copies and its caller-owned input.
+Cumulative native bridge conversion retains its 512 MiB accounting ceiling.
+
+`main.cpp` performs checked process writes. `bootstrap` creates the CLI11 root,
+attaches render, init, history and export command handlers, counts
+bindings across all five, and dispatches exactly one selected command. The
+render handler owns option bindings through parsing and execution, host path
+resolution, capture routing and trusted render composition. The shared response
+module sits below both bootstrap and handlers, avoiding a dependency cycle.
+CLI11 owns verbs, option recognition, required counts and duplicate handling.
+Planar retains semantic validation, fixed help and Glaze diagnostics. A narrow
+preflight rejects long tokens containing `=`; parsed CLI11 metadata accounts
+for separate value tokens and rejects discarded positional terminators.
+
+The current Markdown presentation is `projection_v2`: labeled check/dependency
+policy, fenced exact argument/environment arrays, and full ordered reviewer
+targets. Global capture and per-file content identities remain in the manifest;
+Markdown retains the work fingerprint and relevant output identities. This keeps
+an unselected unit edit from changing an otherwise identical worker fragment.
+Work selection, canonical identity domains and capture semantics are unchanged.
+
+The standalone `planar.engine.ledger.sqlite` module restores SQLite 3.53.3 from
+exact committed amalgamation bytes (public domain). Its offline static target
+compiles only `sqlite3.c`, with `SQLITE_THREADSAFE=1`, `SQLITE_DQS=0` and
+`SQLITE_DEFAULT_FOREIGN_KEYS=1`: serialized library internals, no double-quoted
+string literals and foreign keys enabled by default. URI opening is not enabled.
+The wrapper and every related statement/transaction are confined to one caller
+thread. Statements and transaction guards retain the connection; result columns
+are owned copies. Busy waits default to 5000 ms and cannot exceed that setting.
+Manual transaction/savepoint SQL is rejected through SQLite's authorizer, and
+prepare/bind/step failures roll back an active transaction. A failed commit is
+always a failure; failed rollback poisons the connection against further use.
+
+This module is an internal trusted SQL primitive, unreferenced directly by
+render, Lua or CLI handlers. Explicit read-only/read-write modes do not create
+missing files. `scratch_create` uses SQLite CREATE on a caller-owned staging or
+scratch path; it is not exclusive creation or safe publication. No default paths,
+parent creation, schema recognition, format verification, migrations or ledger
+acceptance are implemented by this primitive. Its narrow `online_backup_to` uses
+SQLite backup init/step/finish, always finishes the handle, preserves typed codes,
+and refuses invalid owners, a shared source/destination or an active destination
+transaction. A pinned source read snapshot is supported. One step copies all pages;
+there is no retry loop extending the configured busy wait. The separate format
+module adds the bounded typed format API below. Opening an
+arbitrary file through this primitive does not establish ledger validity.
+
+The primitive makes supplied paths absolute without normalizing components or
+resolving links before calling SQLite. This disambiguates native filenames such
+as `:memory:` and `file:literal?mode=memory&cache=shared` from SQLite special
+filenames and URI syntax. SQLite itself can collapse dot components, so the
+wrapper first requires the OS to traverse the original absolute parent to an
+existing directory. Thus `missing/../db` cannot silently open `db`. SQLite
+NOFOLLOW remains enabled, including for symlink ancestors followed by `..`.
+These checks are not a hostile filesystem race guarantee or format validation.
+
+
+`planar.engine.ledger.format` exposes `initialize_new`, `open_existing`,
+`backup_new`, `restore_new`, `recover_quiescent`, `begin_records` and opaque move-only owners
+with verified metadata and typed record reads. It exposes no SQL or SQLite
+handle. Initialization accepts an explicit new filename and declaration workspace
+ID, obtains sixteen identity bytes from OS `getentropy`, and records a UTC
+millisecond timestamp once. The initialization event actor is the fixed native
+assertion `planar:init`; it is not an authenticated operator identity. Meta,
+event 1 and the empty current projection commit together, with bound values and
+the existing Glaze codec for the typed event payload.
+
+The format opener traverses original parent components using retained no-follow
+directory descriptors before normalizing the SQLite path. It retains a regular
+file descriptor and compares device/inode identities before and after read-only
+verification and on the writable transition. It checks the SQLite header,
+application/version/encoding, exact named stored schema SQL including automatic
+indexes and all thirteen triggers, integrity and foreign keys. Foreign keys ON,
+synchronous FULL and trusted_schema OFF are session settings; existing-file
+verification never assigns persistent journal/version settings. DELETE journal
+mode and UTF-8 encoding are required. Both access modes retain a read snapshot.
+The explicit recovery operation described below can write an existing ledger.
+
+The internal read-only `open_existing_gated` additionally accepts a generic
+`format_read_guard`. Its bind operation receives the actual no-follow held file
+descriptor before the first raw header pread. The same object gates SQLite reads
+and fetches through `connection::open_gated`. Format reads verify it before and
+after even cached SQL results, inspect SQLite's sticky status, and retain the first
+format-boundary refusal. No writable transition is exposed by this opener.
+`format_file::gate_status()` does not allocate; cached `metadata()` remains
+inspectable after refusal and does not authorize further facts.
+
+The internal `extension_invocation::prepare_history()` composes that boundary with
+its original moved profile capture and admitted `extension.ledger` receipt. It
+uses only the private prepared selector and path, verifies the actual held
+descriptor before reading, and owns a duplicate without reopening or recapturing.
+Native history conversion runs without Lua. The complete format snapshot,
+transaction and connection close before the final original receipt seal; the
+duplicate closes after the final verifier use and before return. The native
+history envelope stays private. Original profile diagnostics, format failures and
+history misses retain separate typed alternatives. Preparation is once-only and
+failed owners remain terminal. The C4-B3 candidate admits a history-only handler
+through lazy `context.read_history({})`. The synchronous native bridge returns only
+after this helper closes, then freezes its private facts for Lua. Exact raw fact
+comparison precedes response copying; original receipts are checked before release.
+Pure handlers remain supported; role/projection services and X06 profile
+interpretation/shared accounting remain open.
+
+Initialized, record-only and accepted-history states are supported. Initialized
+state has exact singleton metadata/current state and initialization event, with
+empty revision/request tables.
+The streaming validator decodes and hashes every bounded record, checks stored
+kind/codec, exact ordered directory edges, older child IDs and child kind/digest,
+and refuses non-directory edges or any unequal member of a digest bucket.
+Only one record and bounded comparison buffers are retained at a time; total
+history is not materialized. Complete accepted-history verification is described
+below. Any journal/WAL/SHM sidecar returns `recovery_required` before SQLite opens
+the file. There is no writable fallback after a read-only refusal. Explicit
+recovery is separate.
+
+`format_file::read_record` returns owned typed data from the retained verified
+snapshot. Every failed read returns its original typed error and permanently
+invalidates further reads, including invalid-ID and not-found refusals. This
+prevents a storage error that rolls back SQLite from silently starting a newer
+snapshot. Moves transfer this validity state; cached immutable initialization
+metadata remains accessible. Resources release normally through RAII; a non-storage
+refusal need not release the retained read lock immediately. An explicit reopen
+is required for a fresh verified snapshot. `begin_records` independently performs the safe read-only/writable
+transition, releases its own read snapshot, acquires `BEGIN IMMEDIATE`, and
+revalidates before exposing a `record_writer`. It never promotes an existing
+reader. The writer can read and intern all four record kinds in one transaction,
+with atomic acceptance composition described below. Interning validates child
+references and scans every digest-bucket member for exact encoded equality;
+directory local child IDs participate in equality even though portable hashes
+omit them. Unequal candidates return `hash_collision`. New IDs use guarded
+signed-64 `MAX(id)+1` under the writer lock. Ordered edges and records commit
+together only on explicit `commit`, after full revalidation. Every failed writer
+operation, failed commit or abandonment invalidates and rolls back the complete
+transaction. Owners are move-only and caller-thread confined; no SQL or raw
+handles escape. Separate reader snapshots can block DELETE-mode writer commits;
+a busy commit fails and rolls back rather than claiming partial success.
+
+Creation uses a fresh exclusive 0700 sibling staging directory, retained directory
+identity, a committed/closed database, and file/directory sync. POSIX `linkat`
+publishes the regular database as a hard link atomically without replacing any
+existing target, followed by parent sync; this requires a filesystem supporting
+hard links and durable file/directory sync. Failure never falls back to an
+overwriting rename. Cleanup checks owned staging directory identity and owned
+regular entries before unlinking only its database/journal and directory. After
+publication, cleanup or sync failures return `publication_uncertain` and never
+remove the published target. Failures before publication report incomplete
+cleanup if necessary. Cooperative directory ownership remains a precondition;
+these checks do not defend against a hostile path swapper.
+
+
+Backup and restore require a quiescent source and a new explicit target. Both
+validate the source in a retained read snapshot, use SQLite's online backup API
+into exclusive owned staging, close it, sync it, and revalidate full supported
+state and exact metadata before publication. They share initialization's early
+and late target-sidecar refusal and no-replace publication/cleanup. Identity,
+workspace and creation time are preserved. No arbitrary file-copy restore,
+overwrite, ambient path discovery or CLI is provided. Typed storage errors include
+`busy` and `storage_full` where SQLite reports them.
+
+`recover_quiescent` requires callers to close all external writers for the whole
+operation and own the directory cooperatively. This is an explicit precondition;
+no automatic quiescence guarantee or external-writer coordination is claimed.
+It retains no-follow regular main/journal descriptors, rejects WAL/SHM entries,
+and checks main application/version and hot-journal magic and dimensions. Before
+creating scratch or opening SQLite for recovery, a fixed eight-byte tail read
+refuses the SQLite super-journal footer magic. This single-database boundary
+does not interpret or open any encoded external pathname; malformed or coincidental
+matching footers are conservatively refused as well. Bounded
+buffers copy both files into exclusive 0700 scratch, retaining immutable captured
+inputs beside a working pair. SQLite alone recovers the working pair; exact schema,
+integrity, foreign keys, complete supported state, recovered size and journal consumption
+must pass before any writable original open. Main/journal identity and exact bytes
+are then rechecked, along with competing sidecars. SQLite recovers the original,
+which is fully verified again against the scratch metadata and synced. No VFS lock
+method is called outside SQLite's pager. Refused scratch validation never mutates
+the original pair. Failures after original recovery begins may have completed
+rollback; they do not report success or attempt to replace original bytes.
+
+A genuine hot journal can be redundant when death occurs before its first main
+page write; recovery need not change main bytes. Header/consumption checks and
+SQLite interpretation establish this bounded recognition policy. SQLite rollback
+journal checksums are not authentication, and scratch validation cannot establish
+the provenance of arbitrary malicious journal bytes. Accepted-history verification also applies to recovery. Historical R12-C1
+functional/crash evidence preceded R12-C2 broad I/O/full-storage/concurrency fault
+injection and integrated gates; see the preserved round records.
+
+`planar.engine.history.record` is a pure leaf above canonical values and pinned
+xxHash, with no ledger dependency. It encodes and decodes file, directory, value
+and request records under the 64 MiB whole-record and 16 MiB file/value bounds.
+File bytes remain arbitrary binary. Directory mode is fixed at 0755; portable
+ASCII child names are sorted, unique and case-alias free. Stored bytes retain
+positive signed-64 child IDs, while portable digest preimages omit exactly those
+IDs. Raw seed-zero XXH3-128 digests use canonical sixteen-byte order, without
+changing render-domain recipes. Local framing accepts defined child kinds;
+record existence, matching references, parent ordering and tree membership
+remain contextual history policy.
+
+Value envelopes validate nonempty UTF-8 codec identifiers and currently support
+only `canonical_v1`; unknown identifiers return `unsupported_codec` before
+payload interpretation. Canonical decoding preserves arbitrary string bytes and
+empty map/list distinctions, validates UTF-8 non-NUL sorted unique map keys and
+signed-32 integers, and clamps depth/node/encoded-byte ceilings before allocation.
+Request arguments retain exact UTF-8 spellings; argument normalization, operation
+semantics and ledger state are outside the codec. Codec operations have no shared
+mutable state and return redacted typed failures. These primitives do not enable
+populated-history opening, acceptance or new CLI commands.
+
+`planar.engine.ledger.types` is an inert leaf containing the exact ledger error
+vocabulary and record DTOs, importing only std and the pure record codec.
+`ledger.format` exports explicit aliases, preserving existing caller names and
+error values while retaining all owner/access/metadata policy.
+
+`planar.engine.history.tree_core` depends downward on those DTOs and the portable
+path validator. It owns the shared bounded validation, trie construction, digest
+and reconstruction algorithms. Synchronous typed per-call reader/interner
+callbacks carry only leaf DTOs and exact ledger failures; the core retains no
+callback state and owns no storage, SQL, transaction, retries or commit.
+Its independent test target links no format, SQLite, runtime or embedded Lua.
+The `history.tree` module re-exports core DTOs and `digest_tree`, and adapts
+existing writer and pinned reader owners to the core. Writer adapters create
+the abort guard before any allocation or callback conversion; readers call
+`read_record` on the original owner, preserving sticky failure semantics.
+
+`build_tree` accepts sealed one-root path/payload views and normalized numeric
+modes. It emits only the root and file ancestors, sorts names by ASCII
+bytes, and refuses duplicates, case aliases and file/directory conflicts. Roots
+are exact typed directory references, including the digest. Reconstruction owns
+all returned bytes, sorts logical files, refuses non-tree children and non-root
+empty directories, and counts shared subtree occurrences separately.
+
+Source budgets are 64 MiB, 4096 files and 8192 directories; provenance independently
+uses 16 MiB and 4096 files. Both use depth 64 and paths of at most 1024 bytes, with
+root at depth zero and counted as one directory. Provenance's directory ceiling
+is the induced `1 + 4096 * 63`, rather than the source directory ceiling. Build
+scratch stores local names; traversal retains one decoded record at a time and
+bounds pending occurrences before allocation. Payload limits apply across the
+expanded tree rather than unique stored records.
+
+Tree writes compose in a caller-owned `record_writer` with other records and
+never commit implicitly. Every tree failure or exception aborts the entire writer,
+including earlier pending inserts. Explicit `abort() noexcept` is idempotent and
+releases transaction resources through existing RAII abandonment; it does not
+promise additional rollback-error reporting. Tree errors retain original typed
+ledger errors. Historical tree reads use recorded bytes and require no current
+Lua interpretation. Higher-level acceptance, history and export compose these
+primitives as described below.
+
+`digest_tree` uses the same bounded validation, trie and original record hashing
+as `build_tree`, with positive placeholder IDs omitted from portable preimages.
+It computes identity before a transaction without opening a ledger. Writer paths
+retain complete abort-on-refusal and exception behavior.
+
+`planar.engine.history.provenance_codec` prepares owned sorted files plus that
+pure root digest, depending only on tree_core and canonical/value leaves. Registry provenance is exactly captured `input.json` bytes and its
+normalized mode. Embedded stdlib provenance retains ordered originals at portable
+`src/stdlib`-relative names, all mode 0644, plus two explicit synthetic files:
+`__planar__/assembly.lua` is the exact runtime chunk and
+`__planar__/assembly.canonical` is a canonical_v1 map with exactly `version:1`,
+`scheme:"ordered_concat_v1"`, ordered original path `files`, and exact `separator`.
+Every original is followed by separator, including the last; generated embedding
+uses LF and preserves the existing chunk. Source boundaries, ordering and separator
+therefore remain part of identity even for equal concatenated chunks.
+
+Preparation verifies assembly without constructing a second chunk and applies
+the provenance 16 MiB/4096-file ceilings to originals and both synthetics together.
+Count/path/separator and payload sums bound metadata scratch before canonical
+encoding; the combined encoded total is checked before file payload ownership.
+Reconstructed stdlib sets decode and validate this fixed manifest without Lua,
+refusing reserved namespace aliases, duplicate/unsafe paths, missing/extra files,
+unsupported or malformed manifests, inconsistent chunks and modes other than 0644.
+The higher `history.provenance` wrapper re-exports this codec and the existing
+owner-backed tree convenience APIs. Only its `prepare_embedded_stdlib` imports
+generated source; original views use embedded bytes without runtime source reads.
+The codec has no format, SQLite, runtime, embedded-source or Lua dependency.
+
+`planar.engine.history.interpretation` prepares complete recorded interpretation
+before any transaction. It internally prepares the exact embedded stdlib and
+calls only the fixed `interpret_bundle` export. Trusted `acceptance.lua` composes
+existing validation (which already normalizes), uses `not_captured` source
+topology, preserves complete normalized and semantic values, and sorts both job
+lists by ID. Registry provenance remains separately prepared from the same
+captured registry bytes/mode; the complete normalized parsed registry is inside
+the bundle. Neither preparation adds database, filesystem or Lua capabilities.
+
+The owned result contains immutable interpretation/versions values, their exact
+canonical bytes (each bounded to 16 MiB), and prepared embedded stdlib provenance
+for native acceptance transaction composition. The fixed ten-key versions map includes the
+internally computed portable stdlib digest; callers cannot supply that digest.
+The ninth embedded file deliberately changes stdlib identity while existing
+render/work recipes and packets remain unchanged.
+
+The pure `history.interpretation_codec` owns recorded types/errors, the single
+supported-version table, fixed envelope checker, historical decoder and
+`encode_interpretation`. Its encoder accepts bundle/semantic values and a digest
+as recorded data, assembles the original envelope and finishes through that same
+decoder; it makes no authenticity claim about the supplied digest. The live
+`history.interpretation` wrapper re-exports the codec, retains runtime invocation
+and typed live diagnostics, and passes only its internally derived digest.
+The codec depends only on canonical/value, with no storage or Lua link.
+
+Historical decoding validates canonical framing, exact envelope/version keys and
+types, digest spelling, normalized/semantic container structure, and sorted
+paired jobs with matching IDs/files. The separate versions record must equal the
+envelope's versions byte for byte. Recorded policy identifiers may be unsupported,
+which differs from malformed structure, excessive resources, live declaration
+validation and runtime failure. It does not execute Lua, compare old stdlib
+identity to today's, or rerun current declaration/ownership policy. Historical
+schema extensions remain data. This adds no load transaction, populated history
+activation or CLI command.
+
+
+`planar.engine.ledger.history_codec` is a pure typed boundary for fixed v1 event
+payloads and saved load results. It depends only on the Glaze structural JSON
+adapter and its leaves, with no format, SQLite, filesystem, Lua or runtime edge.
+Enums, optional signed-64 heads and named record references encode initialization,
+accepted revisions and no-op. Version and result kind are codec constants.
+Exact field/type/state checks, positive decimal-string IDs, ledger/request grammar
+and canonical Glaze re-encoding enforce stored bytes under one MiB without LF.
+Failures expose only malformed, unsupported-version or resource categories.
+A result parent is the returned revision's parent, including no-op. Cross-row
+reference agreement belongs to format verification; R14-B2 integrates it with
+complete accepted-history and deep referenced-content validation below.
+
+R14-B2 integrates those codecs into the private shared format verifier. Ordinary
+read and writable open, record-write acquisition and precommit, staged backup and
+restore, and scratch/original explicit recovery all verify complete accepted
+history. A chronological SQL cursor retains only the current head, its parent,
+five references and counters. Accepted revisions start at 1, then increase with
+the immediate prior head as parent; event sequences are gap-free. Record and
+later revision IDs may have gaps. No-op results retain the existing revision's
+parent, and timestamps have validated syntax without imposing clock order.
+Counts and reverse request/event agreement reject orphan or multiply accepted
+history; actor/time, request body, result, event, revision and projection links
+must agree. Identical active content cannot allocate another revision, including duplicate
+record IDs with exactly equal encodings. Hashes alone never decide this equality.
+
+Each accepted revision reconstructs source, registry and stdlib independently,
+releasing each bounded tree before the next. Registry is exactly `input.json`;
+stdlib must satisfy its fixed assembly manifest and recorded digest. The pure
+interpretation decoder checks canonical bytes, fixed shape and separate versions;
+workspace and stdlib metadata must match the ledger and provenance. A well-shaped
+unsupported interpretation policy remains available as raw records only after
+these integrity checks. Unknown event/result versions refuse with
+`unsupported_state`; malformed persisted data is `corrupt`. The format depends
+only on pure tree/provenance/interpretation codecs below owner wrappers, with no
+Lua execution or filesystem recapture during history verification. The native
+acceptance writer and history CLI compose this verifier as described below.
+
+Historical integrity verifies complete bounded stored topology and fixed recorded
+relationships. It does not rerun Lua or rederive the semantic capture closure
+using current policy. Exact declaration-closure capture belongs to acceptance
+preparation and its writer; stored bytes do not prove semantic derivation.
+
+The verified format owner also exposes bounded native historical reads on its
+existing pinned snapshot. `read_head` returns the active revision and last event;
+`read_revision`, `read_event` and `read_request` return owned optional rows, with
+valid missing keys represented as successful misses. `read_events_after` returns
+ascending events strictly after a signed-64 cursor (zero starts before event one)
+with an explicit limit of 1..100. Its optional continuation cursor is present only
+when this same snapshot has more events. No all-history cache or SQL handle is
+exposed. Invalid arguments, storage failures and decoding failures invalidate all
+read methods; immutable cached initialization metadata remains available. Existing
+`read_record` missing-record failure semantics are unchanged.
+
+Event payloads, saved successful results and request codec bytes are copied
+exactly from storage after bounded typed validation. Request records contain
+private host argument bytes and are native replay inputs; public history must
+never emit those arguments. Higher callers reconstruct state at an event by
+purely decoding its after-state and reading that revision. Raw history remains
+available for a structurally verified unsupported interpretation version without
+rerunning historical policy. Under the supported DELETE journal policy a pinned
+reader blocks a concurrent commit; releasing it allows the commit, and a fresh
+verified owner sees the later history. Reads do not alter schema or journal mode.
+
+R14-C2 adds `capture_session::finish_for_acceptance()` beside the existing render
+`finish()`. Successful sealing transfers the original root descriptors, file
+receipts, registered tree membership and directory identities to an opaque,
+move-only `acceptance_capture`. The capability retains the exact immutable file
+snapshot and logical topology independently of the discovery session. A
+transferred session refuses further discovery or sealing; moved-from capabilities
+return `capture_changed`. Destruction and move assignment release owned roots.
+
+`acceptance_capture::verify()` repeats the native root, membership, directory and
+file comparisons without Lua, callbacks or replacing published values. It checks
+exact bytes, file identity and normalized executable mode (`0644` or `0755`), not
+raw permission equality across separate checks. Registered trees retain their
+existing exclusions; standalone registry inputs retain their file and parent
+identity without enumerating the parent's unrelated contents. The sealing seam
+is discarded before transfer. Both successful and failed verification preserve
+the original snapshot and topology; a failed check does not poison later retries.
+
+R14-D2 retains private directory identity receipts for the workspace-relative
+ancestors traversed by successful selected-file reads. Shared ancestors are keyed
+by logical root and portable path; inconsistent discovery reads refuse. Initial
+sealing and repeated verification compare these receipts through retained root
+descriptors with no-follow traversal. They inspect identity only, so unrelated
+sibling bytes, membership, types and permissions do not affect selected closure
+acceptance. No unrelated directory enumeration is needed. These receipts do not
+populate public directory topology; whole-tree capture keeps its separate full
+membership and topology checks. Receipt storage uses a separate instance of the
+existing 100,000-entry/64 MiB enumeration accounting and holds no ancestor file
+descriptors between operations. Verification does not mutate aliases or receipts.
+Host ancestors above registered roots retain the existing root-reopen contract.
+
+The native acceptance writer requires this capability and invokes its native
+check immediately before every commit attempt. Capability possession alone does
+not establish a current check. Capture itself adds no command. Cooperative
+changes detected during comparison produce `capture_changed` without host paths;
+it does not prevent writes after a check or guarantee detection of changes that
+are reverted before comparison.
+
+R14-C3-A places native discovery and retained acceptance receipts in
+`planar.engine.capture.native`, depending only on `planar.engine.value`. Both
+private receipt implementations and the full validating seal live in that module.
+The existing `planar.engine.capture` API re-exports native values and composes
+`native_capture_session`; it retains declaration loading and delegates capture
+operations. Native consumers can construct and verify real receipts without
+linking the declaration loader, Lua runtime, or ledger. This extraction changes
+no capture algorithms, refusal policy, seal seam, or public facade behavior.
+
+`acceptance.prepared` composes only native capture and the pure tree, provenance,
+interpretation and record codecs. Its move-only prepared owner selects nonempty
+unique portable paths from the sealed `workspace` snapshot, stores only those
+exact bytes and modes, and requires exactly `registry/input.json` for registry
+provenance. Additional logical roots are not declaration sources. External
+stdlib files and canonical interpretation/versions are reverified, including
+supported versions and stdlib digest agreement. Immutable owned data includes
+source/provenance digests and the structurally validated workspace identity;
+semantic declaration closure remains a higher service responsibility.
+
+Preparation performs no filesystem reads or receipt checks and remains possible
+after captured files change. A distinct `verify()` delegates to the retained
+native capability without replacing prepared data. The format module completes
+acceptance through the transaction described below; preparation itself exposes no
+writer. Immutable request intent separately
+validates explicit already absolute lexically normalized UTF-8 arguments,
+request/actor grammar and optional positive signed-64 head, retains exact fields,
+and encodes the fixed `load` body with the shared record codec. It performs no
+implicit cwd resolution or content capture. A future CLI must normalize arguments
+explicitly before creating intent.
+
+
+`ledger::complete_acceptance(path, intent, candidate)` and its identity-bound
+receipt overload compose atomic native acceptance. It acquires the existing validated writable opener and
+`BEGIN IMMEDIATE`, then rechecks identity and complete history under that lock.
+An exact saved request body returns the original result bytes before any candidate
+inspection or expected-head comparison. Different body bytes produce
+`request_conflict`. An unknown request checks the locked head first
+(`revision_conflict`), then the prepared owner and workspace (`invalid_argument`).
+The later public service must also look up replay before doing capture work.
+
+The transaction shares the record writer's private collision-safe interner and
+uses storage-independent `tree_core` for all three roots. Complete encoded records,
+including local directory child IDs, determine no-op equality. A no-op appends a
+new event/request but retains its revision and that revision's parent; restoring
+older content creates a new chronological revision. One guarded signed-64 allocator
+protects record, revision and event increments. A native timestamp is created once
+for the matching event/revision. Revision, event, request, saved canonical result
+and current projection commit together. Precommit refusals, exceptions and
+abandonment roll back tentative writes; failed COMMIT outcomes retain native evidence.
+
+The exact response is encoded and owned before complete pending-state verification.
+After that verification and metadata checks, the retained native receipt check runs
+immediately before SQLite commit, with no intervening SQL, capture or Lua work.
+A receipt refusal returns `capture_changed`. Response bytes remain buffered until
+commit succeeds. There is no callback, alternate commit method or bypass flag.
+Product format dependencies include native prepared/capture and pure codecs; Lua,
+the loader and higher interpretation wrappers remain outside that link graph.
+No public acceptance orchestration or CLI is added by this storage API.
+
+The R14-D7-A overload takes the prelude's expected ledger identity and an initially
+empty shared `completion_receipt`. It compares identity before locked request lookup,
+refusing replacement with `unsafe_path`. Exact replay moves saved bytes into the
+receipt and sets `replayed` before allocating the independent returned response.
+Fresh accepted/noop results own saved bytes before COMMIT. The receipt enters
+`commit_uncertain` immediately before COMMIT and becomes `committed` only on success.
+The SQLite commit overload publishes confirmed noncommit without allocating: a
+still-active failed COMMIT followed by successful explicit rollback proves noncommit;
+automatic return to autocommit after failure alone remains uncertain. SQLite-owned
+COMMIT diagnostics survive rollback and are converted to C++ errors only after that
+observation. A stack guard reflects confirmed rollback in the receipt even if error
+allocation throws. Retained phases/bytes survive every later error or exception.
+Receipt reuse refuses while preserving its existing evidence; callers use a fresh
+owner for a new attempt. The three-argument API retains its single response owner.
+
+`planar.engine.capture.host_path` depends only on value diagnostics. Its explicit
+file and directory resolvers share the renderer's existing physical traversal:
+canonical file parents, no final file links, and no final-root link aliases,
+including trailing slash/dot and child/.. spellings. Render passes original option
+bytes; intermediate links and physical link/.. semantics remain unchanged.
+Filesystem exceptions become the same redacted capture I/O diagnostic; allocation
+failures propagate to the caller's boundary. Resolution remains cooperative.
+
+The separate `normalize_intent_path(argument, explicit_cwd)` is a pure lexical
+boundary for future load request identity. It requires nonempty non-NUL UTF-8 and
+an absolute already normalized explicit cwd, normalizes absolute arguments or
+joins relative arguments to that cwd, and bounds input, joined spelling and output
+to 64 MiB before joining. It performs no filesystem or implicit cwd lookup.
+Load must use the returned spelling both in request intent and actual capture;
+render does not use this normalizer. The request factory still bounds the complete
+encoded record separately. This extraction adds no load service or membership
+policy.
+
+The init handler passes the explicit target directly to `initialize_new`; it does
+not use capture's existing-file resolver or normalize away parent components.
+Native storage owns validation, staging, commit, no-replace publication and sync.
+Only returned committed metadata enters the small init envelope. No SQL escapes
+into command code. The shared response module depends on `ledger.types` for typed
+redacted error mapping, without depending on the storage owner or SQL wrapper.
+CLI11 owns required scalar options and duplicate refusal; the existing long-equals
+preflight and parsed binding accounting preserve separate-token grammar for both
+commands. Init only initializes a ledger; history and export are separate handlers.
+No load service or CLI is exposed.
+
+
+`history.read` composes public page/revision/request/state projections above
+`ledger.format`, retaining one verified `format_file` snapshot for all reads.
+Pure metadata and event conversion performs no I/O; the read service calls only
+opaque typed snapshot methods and existing history/interpretation codecs. Its
+imports exclude runtime, Lua, current policy and embedded code; format transitively
+depends on native prepared capture types. Revision reads decode complete stored
+values; request reads project only saved public results. CLI11 history bindings
+live in `handlers/history/`; Glaze buffers the complete envelope with room reserved
+for LF before stdout is written. Storage, schema and capture implementations are
+unchanged by this command addition.
+
+`planar.engine.source_export` reconstructs the selected revision's complete source
+from one verified read-only `ledger.format` snapshot through `history.tree`, before
+creating target-side entries. Its only product dependency is the immutable tree
+wrapper and its lower native graph. Unsupported recorded interpretation policy
+remains exportable; neither current Lua nor registry/stdlib injection participates.
+`export_source` takes explicit ledger/revision/new-target arguments and returns
+native identity fields. The CLI export adapter is implemented as described below.
+
+Export retains a real no-follow target-parent descriptor, preallocates a bounded
+ancestor/file plan and identity receipts, and creates an unpredictable exclusive
+sibling stage. Files use exclusive no-follow creation, exact writes, normalized
+0644/0755 modes and fsync; directories become 0755 and sync child before parent.
+Traversal reopens and verifies recorded ancestors with descriptors bounded by tree
+depth, rather than retaining one per entry. Source ceilings remain 64 MiB, 4096
+files, 8192 directories, depth 64 and 1024-byte paths. The valid empty root is
+supported. Original parent components are traversed before normalization, so
+missing/.. cannot hide a missing directory.
+
+Publication uses macOS `renameatx_np(RENAME_EXCL)` or guarded Linux
+`renameat2(RENAME_NOREPLACE)` through the syscall interface. Missing platform or
+filesystem capability refuses without an overwrite fallback. After rename, a
+publication flag precedes parent sync and descriptor closure; any subsequent
+failure reports publication uncertainty and preserves the complete target.
+Before publication, cleanup removes only identity-matching invocation entries
+through verified ancestor descriptors. Replaced/unrecognized entries remain;
+cleanup-incomplete errors expose only the generated stage basename. Crash stages
+are never adopted or deleted by later exports. This is a cooperative directory
+ownership contract, without hostile-owner or hardware power-loss guarantees.
+
+The `handlers/export/` command module (`planar.cmd.planar.handlers.source_export`)
+attaches invocation-owned CLI11 options and passes their original path spellings
+to the native source-export service. It projects only the returned ledger,
+revision and source identities through the shared Glaze codec. The command owns
+redacted export diagnostics and validates the generated cleanup-location basename
+before exposing it. Storage refusals retain the shared ledger mapping.
+
+The buffered response has an optional prebuilt stdout-write diagnostic. Export
+prepares both this buffer and a post-publication uncertainty response before
+calling the native service. Only successful export attaches the stdout context;
+`main` writes these existing bytes when stdout fails. Encoding or allocation
+failure after native success returns the prebuilt uncertainty response by move.
+Other commands retain the existing stdout failure behavior.
+
+
+## V5 architecture alignment pending
+
+[V5](vernacular/planar-design-spec-v5.md) retains the engine/trusted-Lua/job trust
+split and extends the intended Lua semantic/verb surface. Current command
+registration is native CLI11 and current product Lua is embedded; no stdlib.d
+host extension loader or orchestrator projection is implemented. V5-02 must review
+exact bindings, registration, extension trust/provenance/identity, diagnostics and
+workspace naming before load resumes. CLI11 parsing and thin handlers, Glaze JSON,
+engine naming, product code under src and unbypassable native capture/conditional-
+storage invariants remain operator requirements.
+
+[Alignment](vernacular/v5-alignment.md) records unresolved mechanics and v5's
+internal inconsistencies. RA01 adds reviewed authoring/observe contracts and initial
+orchestrator graph/shape rendering after R14; R15–R18 extend guidance with actual
+state/actions. R19 proves usable external-driver execution and the full applicable
+[acceptance map](vernacular/acceptance-matrix.md). Incremental reconciliation must
+distinguish semantic inputs, output-vector applicability and prerequisite quality;
+Planar does not schedule sessions or manage checkouts. Composition, impact/roadmap
+and controlled measurements remain after R19.
+
+The internal `command_vm` registers exactly five shipped command callables from
+`planar/commands.lua`, copies and validates the complete catalog, and seals its
+canonical descriptors, handler/module identities and exact embedded bundle digest.
+It retains callable registry references in the same VM. Registration is pure;
+execution receives typed native intent with opaque path userdata and only its
+ordered family services. Native providers retain storage/capture authority and
+exact error/fact ownership. Every terminal invocation releases its Lua state,
+references, handles and private option strings. Export publication state remains
+available so composition can apply its preallocated uncertainty fallback.
+
+This engine API is exercised with test-only providers and altered embedded bundles.
+The CLI composes the retained command VM through independently approved V5-02-B2.
+The [V5-02-C workspace-name/snapshot implementation](vernacular/rounds/V5-02-C-review.md)
+is independently approved; load and external profiles remain pending. Fresh fixed-export VMs have no registration capability, so the new
+module is inert there; its exact authored bytes participate in stdlib provenance.
+
+Registration sealing walks retained Lua callables and trusted globals, following
+Lua closure upvalues and table keys/values with memoized identity. Opaque C
+closure implementation state is excluded. A fixed 256-frame native walk checks
+live Lua stack space before pushes (2048 slots), charges every graph edge to the
+existing cumulative node/native-byte budget, and refuses depth beyond 256.
+The fixed trivial frames and Lua-owned memo/backing storage remain safe across
+protected Lua errors; Lua allocation remains under the registration ceiling.
+Tables retain their identity through private read-only backing tables. Native
+read wrappers are installed before registration, preserving captured next/rawget/
+pairs aliases, indexed reads, ipairs and length; native result/codec conversion
+reads those same backings while preserving original tags. Invocation-local
+scratch tables are created after sealing and remain mutable.
+
+The command bootstrap retains CLI11 bindings through registration, native services
+and encoding. Root help and usage refusals finish before registration. The complete
+sealed catalog is compared with the compiled bindings; its selected same-VM callable
+owns routing, policy and projection. `invocation.cppm` sits below all five handler
+families and bootstrap, composing existing capture and storage primitives without
+an upward dependency. Native services return typed values/errors directly; history
+facts are compared against verified native results. Write locks are released before
+Lua receives results. Export allocates both uncertainty diagnostics before invoking
+its service and retains publication state in both the adapter and VM, including
+allocation failure while preparing the first post-publication service result.
+
+
+C prepares selected private invocation paths after successful catalog
+admission and before native service creation. `capture.host_path` classifies the
+workspace selector and expands valid names using only the explicitly supplied
+absolute `PLANAR_WORKSPACE_DIR`; explicit files do not read it. Native invocation
+preparation validates every selected path, captures cwd once only if required,
+and makes every path absolute from that snapshot. No host spelling crosses into
+Lua options or portable/public identities. Pure preparation returns preserved
+absolute spelling for physical render traversal and a separate lexical target for
+future load request intent. Existing `normalize_intent_path` retains its explicit
+cwd contract. No load/replay service, runtime VM or storage format changes are
+part of C; request-intent equality tests exercise only pure native framing.
+Only render currently has a workspace selector.
+
+
+The [R14-D3 load amendment](vernacular/load-command-contract.md) is a documentation
+candidate pending independent review. It proposes the fifth mandatory catalog
+entry, native replay prelude, three finite fresh-load services, typed authoritative
+CAS/collision diagnostics and saved-byte transport. None of these load surfaces
+is implemented today; the existing native transaction/receipt and v1 codec
+boundaries remain the implementation foundation.
+
+
+Native ledger errors own an optional finite detail variant. The acceptance write
+transaction records expected/actual revision heads at its locked comparison,
+after request relookup. The interner records collision kind and public digest;
+request collisions retain only kind. Copies through tree callbacks and rollback
+retain these values. The shared response adapter validates category, positive
+heads and kind/digest pairing before canonical Glaze encoding; malformed detail
+becomes the fixed internal protocol refusal. Generic errors keep their existing
+bytes. No extra head read or native-message parsing supplies diagnostics.
+R14-D4 is independently approved; this adds no load service or CLI.
+
+R14-D5 introduces `planar.engine.acceptance.load`, an internal move-only owner
+above capture and pure preparation. `open_workspace` accepts explicit absolute
+lexically normalized workspace/registry paths, loads the workspace and referenced
+text, and returns an owner whose one-shot `workspace()` supplies `{file,workspace}`.
+`capture(route)` checks the fixed route, opened identity, sorted unique jobs and
+portable declaration paths before loading the spec, every job and their referenced
+text. The explicit registry is separately captured as `registry/input.json`.
+It never enumerates a workspace tree or opens source/base labels, observations or
+unrelated siblings. It seals with `finish_for_acceptance`, retaining the original
+root, selected ancestor, file, mode and registry receipts.
+
+`prepare(B,M,stdlib_files)` consumes the owner. It checks fixed interpretation
+structure with the existing codec, declaration header/job/file correspondence and
+all normalized text-reference paths/bytes against the retained closure. It derives
+all sorted unique workspace source paths from the sealed native snapshot; callers
+cannot supply source membership. Exact trusted-native stdlib provenance is
+reverified and copied, then pure `encode_interpretation` and `prepared_acceptance`
+produce immutable data with the original native verifier. No Lua or callback
+executes in preparation or receipt verification. A failed operation is terminal;
+consumption and moves leave the old owner unusable, while self-move preserves it.
+
+This candidate checks structural correspondence, not whether semantic code ran.
+The trusted caller still owns all defaults, normalization, schemas and graph
+policy. Product load orchestration does not call `run_trusted`, look up ambient
+embedded sources or supply a replacement semantic dispatcher. Tests invoke actual
+shipped routing/interpretation and pass actual embedded provenance, but do not
+prove same-VM binding. D6 must bind both actual handler execution and its original
+provenance to the retained command VM. Public load remains absent until D7.
+
+
+R14-D6 adds retained load protocol support behind private generated five-entry test
+catalogs. Production still requires exactly render/init/history/export, and the
+CLI admits no load. Pure registration seals bundle identity and retains immutable
+views of that imported bundle's exact original files, separator and assembly.
+Only a fresh accept_load call charges the provenance copies against the same
+cumulative conversion budget and invokes the pure provenance codec, before the
+native provider. Registration and ordinary families therefore bypass acceptance
+provenance assembly, preserving the future native early-replay ordering. The
+provider receives only a synchronous const span of those verified owned files;
+Lua supplies neither provenance nor source membership. R14-D6-C01 corrects this
+ordering and remains pending independent review.
+
+The finite load provider receives retained typed options and exactly ordered
+open_workspace, capture_load and accept_load calls. D5's native owner checks the
+route, complete closure and normalized B/M correspondence; the actual retained
+Lua handler calls route_workspace and interpret_bundle in its sealed VM.
+Providers own preparation and transaction locks, releasing them before any Lua
+result construction. Existing providers inherit fail-closed load methods.
+The shared dependency-free ledger.completion receipt owns saved JSON and one of
+not_completed/committed/replayed/commit_uncertain. Its owner survives terminal
+VM cleanup and moves; phase assignment and owned-string move require no
+allocation. Native providers must preserve receipt state on exceptions. The
+runtime checks exact saved-response equality and exposes the const native receipt
+to transport. D7-A produces real transaction receipts; native provider and public
+transport integration remain D7-B work.
+
+Private D6 test callables exercise real D5 capture/preparation with finite simulated
+completion outputs. An altered retained callable changes interpretation and carries
+its own exact commands.lua and provenance digest. These tests establish bundle
+binding and protocol behavior, not native semantic certification or atomic load
+integration. The D6 candidate still requires independent review.
+
+
+The D7-B public load candidate adds a mandatory fifth retained callable. After
+catalog validation, native code snapshots relevant environment/cwd once, frames
+immutable lexical request intent and performs a verified read-only request lookup.
+Exact replay bypasses capture and current policy; its read owner is released before
+fresh capture or writable acceptance. The native provider uses D5 capture and the
+same retained VM's D6 provenance, then passes the prelude ledger identity and the
+VM-owned completion receipt directly into D7-A atomic acceptance. Native saved
+bytes own the success transport. Preallocated load/stdout diagnostics and retained
+receipt phase survive postcommit Lua, codec, allocation and process-write failures.
+No Lua or adapter diagnostic encoding executes under the native write lock.
+
+
+X03-B1 adds a native-only format2 new-target initializer and exact schema1/schema2
+selection, retaining the verified format in ledger metadata through publication,
+backup and restore. Existing public init creates format1. This is partial lifecycle
+support independently approved for B1. B2-A independently approves codec1 and
+codec2 embedded recorded-history reads under the selected exact schema. The approved B2-B+C01
+implementation adds native format2 writes and explicit recovery with immutable
+request-v2 intent, full-byte comparison inside codec/kind/digest buckets, and
+locked saved-body replay before fresh-format/selector checks, CAS or candidate
+access. Request digests remain private in collision diagnostics. Fresh profile
+acceptance remains unsupported; no schema alteration or conversion is performed.
+
+
+X03-A, X03-B1, X03-B2-A and the combined X03-B2-B+C01 native implementation
+are independently approved; C01 closes B2B-R1. The independently approved [X03-B3 verification gate](vernacular/x03-format-evidence.md)
+runs full debug and RelWithDebInfo gates: 430/430 each, zero failures/errors/skips,
+pinned lint/Doxygen and no-work builds. [Independent B3 review](vernacular/rounds/V5-02-X03-B3-review.md) closes X03-B. Native format2 acceptance uses immutable request-v2 embedded
+intent, codec-aware exact interning and explicit recovery under retained limits.
+Public init still creates format1. Fresh format2 request-v1 and profile acceptance
+refuse; profile accepted history remains unsupported until X06 provenance/
+interpretation support. B2-A SQL reader fixtures provide no conversion tooling.
+The mandatory external-profile gate, public cutover, Linux and execution remain open.
+
+The [X03-B2-B-C01 correction candidate](vernacular/rounds/V5-02-X03-B2-B-C01.md) reuses complete metadata equality,
+including the selected ledger format, at locked transaction entry and both native
+precommit boundaries. Controlled verified-metadata fixtures exercise refusal and
+rollback in both formats; they do not reproduce an external format change.
+C01 independently approves the correction and combined B2-B candidate.
+The [X03-B3 review](vernacular/rounds/V5-02-X03-B3-review.md) independently approves the full
+430-case debug/release gate and closes X03-B; the external-profile gate remains open.
+
+The [X04-A1 review](vernacular/rounds/V5-02-X04-A1-review.md) independently approves native metadata
+admission and descriptor binding; its inventory is 451 (not a full 451-test run).
+The [X04-A2 review](vernacular/rounds/V5-02-X04-A2-review.md) independently approves strict bounded
+profile/ordered module capture and retained staged input receipts. The
+[X04-A3 integrated native gate](vernacular/x04-capture-evidence.md) is independently approved by the X04-A3 review: debug and RelWithDebInfo each pass 489/489 with zero
+failures/errors/skips, preserving all 488 prior names. No external Lua, public
+profile CLI, provenance acceptance or whole-invocation budget sharing is inferred;
+the mandatory external-profile gate remains open.
+
+The [X04-B1 prerequisite candidate](vernacular/rounds/V5-02-X04-B1.md) extracts
+the unchanged bounded profile decoder into the pure `capture/profile_codec` module
+and adds the distinct 32 MiB/8192-file `effective_provenance` tree budget.
+Focused debug verification passes 177/177 with zero failures/errors/skips; the
+497-name inventory preserves all 489 approved A3 names. The independent
+[X04-B1 review](vernacular/rounds/V5-02-X04-B1-review.md) approves these prerequisites.
+
+The pure X04-B1/B2/B3 slices are independently approved. B2 validates and
+immutably seals catalog-v2, including source owner ordinals, exact shipped native
+signatures and external static capabilities. B3 assembles and structurally verifies
+exact `effective_stdlib_v1` bytes, modes, ordered modules, old embedded assembly,
+catalog owners and full membership. The catalog-only 1 MiB ceiling and combined
+canonical manifest 1 MiB ceiling are separate checks. B1 tests the outer
+32 MiB/8192-file tree budget; valid complete B3 inputs reach at most 4162 files
+and remain below 32 MiB under the stricter component bounds.
+
+The [X04-B4 integrated provenance gate](vernacular/x04-provenance-evidence.md)
+is independently approved by the [B4 review](vernacular/rounds/V5-02-X04-B4-review.md): full Debug and
+RelWithDebInfo each pass 520/520 with zero failures/errors/skips/disabled cases,
+preserving all 520 prior names. Pinned formatting/Doxygen checks 113 active
+sources; vectors, exact source audits and no-work builds pass. No product or test
+bytes changed in B4, and tested sources remained fixed through both gates.
+This pure structural gate adds no live external registration/Lua, public profile
+CLI, storage/profile-history acceptance or history dispatch, whole-invocation
+shared budgets, or callability/semantic-honesty proof. The mandatory external-profile
+gate, public cutover, execution/RA01 and Linux remain open; public init creates
+format1. The independent B4 review closes integrated pure X04-B.
+
+
+The [combined X05-A0+C01 independent review](vernacular/rounds/V5-02-X05-A0-C01-review.md) approves bounded
+test-only lexical sealing feasibility and closes A0-R1. The
+[X05-A1 production foundation](../tests/native/v5-02-x05-a1-evidence/REPORT.md)
+is independently approved in the X05-A1 review. The embedded five-command VM audits
+original global/callable roots together before alias-preserving table freezing.
+The isolated `runtime/closure_guard` module reads pinned Lua compiler metadata,
+rejects retained upvalue writers and unknown reachable native identities, and
+permits invocation-local scratch. Exact strong native identity capture precedes
+module evaluation; the five native engine callbacks enroll immediately after
+native installation, without intervening module execution. Proxy natives are
+created only after this audit and are not claimed to pass a later raw audit.
+
+The protected sealing frame reserves 2048 slots before root pushes/native RAII;
+inspection entry and every traversal push use nonallocating active-frame checks.
+A shared identity/prototype memo preserves existing graph depth256 semantics;
+prototype entries include the inherited sealed-cell mask. PMR allocation requests
+charge the existing checked cumulative 512 MiB native conversion accounting before
+allocation, with no refund or root reset. Static metadata inspection has checked
+reported counters and is not charged as Lua instructions or converted nodes.
+The finite compiled input remains bounded by the registration Lua heap; no fresh
+4 MiB audit arena or public scan quota is introduced. Existing embedded invocation
+instruction reset remains unchanged.
+
+A1 does not execute external modules or admit public profile flags. Later X05-A
+rounds retain source-owner/ordered module admission, the three descriptor APIs,
+module-end audit/seal before later chunks, frozen global/API state, persistent
+frozen-identity memo, add-time snapshot versus retained mutation semantics, and
+whole-registration cumulative gates. The mandatory external-profile gate, public
+cutover, storage/profile history dispatch, execution/RA01 and Linux remain open;
+public init creates format1. No full milestone or release gate is claimed for A1.
+
+
+The [X05-A2 repeatable sealing foundation](../tests/native/v5-02-x05-a2-evidence/REPORT.md)
+is independently approved by the X05-A2 review. A private protected root-argument seam
+seals new retained roots after the initial embedded environment boundary. Its
+strong native-owned successful-identity set is distinct from each boundary's DFS
+memo: the guard treats prior sealed tables/Lua closures as immutable atoms and
+the freezer preserves their proxy backing and aliases. New identities publish
+only after complete audit/freeze success; any failure leaves the owner terminal,
+including partial freezing or publication failure. Direct native callable roots
+and unknown reachable native closures still refuse. `pairs` returns the exact
+stable global `next` closure captured before module execution; native snapshot
+never traverses C upvalues. Repeated sealing never writes frozen globals.
+
+The production public runtime interface and old invocation tail remain unchanged
+except that a failed sealing owner cannot invoke. Synthetic root bookkeeping adds
+no graph depth; every boundary shares existing cumulative native charges and
+inspection totals, without resets. Real private production probes exercise three
+successive boundaries, fresh retained roots, prior proxies/aliases, exact iterator
+identity across GC, scratch, writer/native refusal, resource failures and same-owner
+failed retry. A3 still owns captured ordered modules, owner frames, three exact
+registration descriptors and final catalog; final D is validated/copied at module
+end before sealing D/F. No external execution, public profile flags, profile
+storage/history acceptance or full registration gate is delivered by A2. The latest
+full gate candidate is A4 (582 per configuration); the mandatory external-profile gate,
+public cutover, execution/RA01 and Linux remain open. Public init creates format1.
+
+
+The [X05-A3 captured registration](../tests/native/v5-02-x05-a3-evidence/REPORT.md) adds native
+`command_vm::create(profile_snapshot)` with structurally checked, privately copied
+captured bytes and module order. Source-only zero-result chunks execute in one
+bounded VM with native owner ordinals. Three exact descriptor APIs retain D/F;
+final descriptors validate and seal with their callables at each module boundary.
+Catalog-v2 and exact effective provenance bind to the original captured bytes/modes.
+Selected-profile errors retain redacted native logical fields separately from
+existing embedded diagnostics. External `_ENV` is natively created before shipped
+evaluation with constructor-only engine, self `_G`, shared pure libraries and
+three exact registration functions; original globals and this environment freeze
+together before external execution. Embedded handlers retain their original engine.
+
+A3 is registration-only and independently approved with C01–C05 by the
+[C05 review](vernacular/rounds/V5-02-X05-A3-C05-review.md). Profile-owner invocation
+refuses before any provider action; retained alternate callable execution is
+verification through private reversible production copies. Shipped shape/projection
+IDs remain reserved; real adapters and semantics belong to B/C. No shipped Lua,
+public CLI admission, profile history/storage interpretation or acceptance changes
+are delivered. Native conversion/audit charges and explicit conservative pure-helper
+capacity reservations remain cumulative; these are not process RSS accounting.
+The mandatory external-profile gate, public cutover, execution/RA01 and Linux
+remain open. Public init creates format1; the latest full approved gate is A4
+(582 per build).
+
+
+The [X05-A3-C01 corrective](../tests/native/v5-02-x05-a3-c01-evidence/REPORT.md)
+preserves original entry fields before command-name/shape/projection sorting and
+propagates initial provenance preparation's typed resource refusal. Its final
+logical reservation enumerates six canonical/payload buffers with separate record
+framing/digest room, independently derived embedded metadata encoding/payload and
+graph passes, and unchanged eleven embedded/three external source payload passes.
+The existing cumulative 512 MiB charged native metric remains; this is not RSS
+accounting. A valid catalog near the 1 MiB ceiling and controlled remaining-budget
+probes exercise these reservations. Combined A3 through C05 is independently
+approved; A4 records the latest full approved gate. Profile CLI, B/C/X06, public
+cutover, execution/RA01 and Linux remain open; public init creates format1.
+
+
+The [X05-A3-C02 location correction](../tests/native/v5-02-x05-a3-c02-evidence/REPORT.md)
+retains the selected original root through the guard's single shared audit and
+maps module D/F pairs to one-based original catalog fields. Actual root freezing
+uses the same mapping; failures before root selection and during identity-set
+union use the active `profile.modules[N]` boundary. The existing enum-only guard
+API delegates to the detailed result. Initial embedded/environment sealing and
+private repeated-root sealing do not acquire external entry locations. Terminal
+module retries preserve the first location; the public constructor discards failed
+owners rather than retrying. Original C01 fixes and cumulative budgets remain.
+Controlled probes exercise actual pre-root, partial-freeze and union refusal,
+terminal state and cleanup; they do not claim natural resource exhaustion.
+Combined A3 through C05 is independently approved. A4 records the latest
+full gate candidate; public profile CLI, B/C/X06, mandatory external-profile
+gate, cutover, execution/RA01 and Linux remain open. Public init creates format1.
+
+
+The [X05-A3-C03 allocation-safe location](../tests/native/v5-02-x05-a3-c03-evidence/REPORT.md)
+selects seal locations with a trivial kind/index token. Root audit/freezing no
+longer formats fields. Every protected seal failure adapter renders the token
+outside Lua; a rendering allocation refusal returns the existing external resource
+diagnostic with the preinstalled active module field. Two independent module-field
+strings per module are staged before processing, charged cumulatively, and swapped
+without allocation after descriptor collection. Staging failure identifies profile;
+first-failure terminal retries retain their token. The shared audit, freeze order,
+depth, publication and embedded paths remain unchanged.
+Ordinary index10/64 and mixed-module controls, actual native allocation refusal,
+controlled Lua allocation/stack/status and throwing-allocator adapters verify these
+boundaries with cleanup. The throwing allocator is a controlled adapter probe,
+not a claim that realloc throws C++ exceptions or natural host exhaustion occurred.
+Combined A3 through C05 is independently approved. A4 records the latest
+full gate candidate; public profile CLI, B/C/X06, mandatory external
+profile gate, cutover, execution/RA01 and Linux remain open. Public init creates
+format1.
+
+
+The [X05-A3-C04 registration attribution](../tests/native/v5-02-x05-a3-c04-evidence/REPORT.md)
+extends the nonallocating original-location token across callback admission,
+reference retention, final descriptor collection and pure catalog error remapping.
+Successful callbacks clear their token; caught failures retain the first token,
+and catalog prevalidation clears completed entry ownership. Error adaptation
+renders only outside protected Lua calls. Rendering refusal retains the owned
+module fallback; unmatched canonical entries retain the truthful caller boundary.
+Pure global error fields move their owned storage. A separately charged/staged
+catalog fallback installs by swap before final provenance work as preventative
+consistency; no allocation failure at the previous short assignment is claimed.
+C03 module staging/sealing, shared audit and cumulative budgets remain intact.
+Controlled actual allocation probes distinguish removed zero-request operations,
+remaining projection rendering refusal, sticky callback failures and module/global
+phase work. Raw-reference status and unmatched pure errors use explicit controlled
+adapters. No new quota or public interface is added. Combined A3 through C05 is
+independently approved. A4 records the latest full approved gate; public profile
+CLI, B/C/X06, mandatory external-profile gate, cutover, execution/RA01 and Linux remain open. Public init creates
+format1.
+
+
+The [X05-A3-C05 caught-memory](../tests/native/v5-02-x05-a3-c05-evidence/REPORT.md) makes a completed
+restricted `lua_pcall` memory failure sticky in native state. The bit is set
+only after `LUA_ERRMEM`, preserving a successful emergency allocation retry;
+logical quota refusal remains separate. Outer restricted calls rethrow and host
+adapters retain the existing resource diagnostic and original entry token.
+Actual descriptor-reference allocation probes cover normal/later-error tails,
+three nested catches, direct host failure and successful retry after one null
+return. The function-reference-only control has zero actual growth requests;
+no function-reference allocation failure or natural host exhaustion is claimed.
+Ordinary caught Lua errors remain recoverable. Shared accounting, protected
+ownership and existing diagnostic priority are retained. The [C05 review](vernacular/rounds/V5-02-X05-A3-C05-review.md)
+independently approves combined A3 through C05 and closes R1–R7. A4 records the
+latest full approved gate; public profile CLI, B/C/X06, mandatory external
+profile gate, cutover, execution/RA01 and Linux remain open. Public init creates
+format1.
+
+
+The [X05-A4 integrated registration gate](vernacular/x05-registration-evidence.md)
+is independently approved by the X05-A4 review. Full Debug and
+release-preset RelWithDebInfo each pass 582/582, with zero failures/errors/skips/
+disabled cases, preserving all current 582 and prior 520 names. Pinned formatting/
+Doxygen checks 117 active C++ sources; common source vectors, per-configuration
+runtime/CLI and reversible variant audits, and no-work builds pass. Product/test
+bytes remain identical across both gates; only current status documentation is
+finalized afterward. Earlier private retained-callable/fault probes remain
+approved Debug evidence and are not claimed as release reruns. Profile-owner
+invocation refuses before provider effects. B/C semantics/adapters, X06 recorded
+history/interpretation/acceptance and receipt/whole-invocation orchestration,
+X07 public cutover, X08 mandatory external-profile acceptance, execution/RA01
+and Linux remain open. Public init creates format1.
+
+
+The [X05-B1 pure shape foundation](../tests/native/v5-02-x05-b1-evidence/REPORT.md) is independently approved by the X05-B1 review. An optional trusted internal context selects profile-only shape IDs and
+stages policy while retaining declaration version1 and the embedded default.
+Every job's mandatory policy and base phase cycles finish before custom shape
+callbacks; bounded additive unit obligations then join the original full graph.
+A distinct test-only exact-runtime adapter exercises the actual product Lua
+helpers. Its internal `shape_results` sidecar is not final selected-shape identity.
+B1 does not prove retained native F dispatch, immutable F input, exact source
+identity, the complete return's 16 MiB boundary, or whole-invocation accounting.
+B2–B4 retain those native/identity/W/render duties. Public profile admission,
+X06 history/acceptance, X08 mandatory acceptance, execution/RA01 and Linux remain
+open; public init still creates format1. Focused verification is not a full B gate.
+
+
+The [X05-B2-A native shape-definition foundation](../tests/native/v5-02-x05-b2-a-evidence/REPORT.md)
+received a request-changes review for early error adaptation; the combined
+B2-A+C01 correction is independently approved by the X05-B2-A-C01 review. The internal selected-profile VM
+resolves registered external shape IDs to owned ID, final revision and exact
+`shape_definition_v1` digest. Identity includes the final descriptor, native
+external logical module path and lowercase hex of that selected module's original
+captured bytes; module ordinal and unrelated modules do not enter this identity.
+Each lookup recomputes with cumulative checked native charges, without executing
+Lua or starting/resetting invocation budgets. Resource failures remain terminal.
+Generic profile invocation stays closed. Independently approved B2-B codec accounting precedes B2-C retained
+F dispatch/immutable input/complete-return transport, B3 selected identity/W and
+B4 rendering remain open, as do X06–X08, execution/RA01 and Linux. This focused
+foundation does not close B2 or the B milestone; public init creates format1.
+
+The [X05-B2-A-C01 error-boundary correction](../tests/native/v5-02-x05-b2-a-c01-evidence/REPORT.md)
+includes embedded, moved-from and already-exhausted lookup refusal construction
+inside the typed boundary. An actual one-shot native allocation refusal returns
+`resource_limit` at `catalog.shapes`; existing sticky conversion diagnostics keep
+their first message, limit and maximum. Profile owners remain terminal. Ordinary
+embedded/moved-from refusals retain protocol-first behavior on retry; a moved-to
+owner remains independent. This covers controlled one-shot failures, without a
+persistent exhausted-heap guarantee. Identity, cumulative reservation policy and
+public admission remain unchanged. The combined candidate is independently approved by the X05-B2-A-C01 review;
+B2-C and the mandatory external-profile gate remain open.
+
+
+The [X05-B2-B codec reservation candidate](../tests/native/v5-02-x05-b2-b-evidence/REPORT.md)
+adds optional native `codec_encode_reserved` without changing ordinary callers.
+One shared validator derives checked logical graph, string, workspace and fixed
+Glaze output capacity before the synchronous native charge hook. Successful
+validation uses a bounded active path without heap allocation; each copied
+container reserves its exact entry count. Input stability through the hook is a
+trusted C++ precondition. The moved output buffer is counted once; conservative
+workspace slots are not independent heap allocations or an RSS guarantee.
+Focused Debug evidence and independent allocation phase probes accompany the
+candidate; combined B2-B+C01 is independently approved by the X05-B2-B-C01 review. B2-C retains raw-return conversion
+charges, retained F execution, immutable input and invocation integration. B2/B,
+X06–X08, execution/RA01 and Linux remain open; public init creates format1.
+
+
+The [X05-B2-B-C01 encode diagnostic correction](../tests/native/v5-02-x05-b2-b-c01-evidence/REPORT.md)
+is independently approved by the combined X05-B2-B-C01 review. A shared outer
+allocation boundary protects the existing encode handlers' diagnostic construction,
+including validation refusals and callback exception adaptation. Controlled one-shot
+native diagnostic allocation refusal returns the existing `resource_limit` /
+`output_bytes` diagnostic; normal precedence and moved typed callback refusals
+remain unchanged. This is not a persistent exhausted-heap guarantee. Encoding,
+reservation math, decode and limits are unchanged. B2-C retained F dispatch and
+invocation integration, B3/B4, X06–X08, execution/RA01 and Linux remain open;
+public init creates format1. Focused correction evidence does not close B2/B.
+
+
+The [X05-B2-C retained shape bridge](../tests/native/v5-02-x05-b2-c-evidence/REPORT.md) is independently approved with C01/C02; their reviews close B2C-R1 and B2C-R2.
+Internal `command_vm::invoke_shape` binds owned final definition metadata before
+calling the actual retained F in its original selected-profile VM. Exact normalized
+five-field inputs preserve nested aliases and freeze transient proxies without
+publishing permanent sealed identities. Exact pre-invocation tag/backing membership
+survives cleanup after raw response conversion, including returned input aliases;
+invocation scratch/result tags are released. One actual JSON-compatible return
+passes separately charged raw conversion and reserved Glaze encoding with the
+complete 16 MiB ceiling. Padding transport fixtures do not prove shape semantics.
+Registration transitions once to cumulative invocation instructions; native/node
+charges never reset. Admission protocol errors are nonconsuming; execution/resource
+failures retain the first terminal original shape location. B1 Lua still owns shape
+success/refusal/obligation semantics. B3 selected identity/W and B4 rendering,
+X06–X08, public profile admission, execution/RA01 and Linux remain open. Generic
+profile command invocation stays closed; public init creates format1. This focused
+Debug slice is not a full B or release gate.
+
+The [X05-B2-C-C01 correction candidate](../tests/native/v5-02-x05-b2-c-c01-evidence/REPORT.md) stores transient
+snapshots under private immutable address keys, separate from every integer
+`luaL_ref`. Retained shipped F and external D/F bindings survive first/repeated
+shape calls, GC and failure cleanup in the owned reversible observer. The original
+reviewer regression is retained and reproduced. This correction preserves existing
+cleanup, cumulative budgets and public boundaries; the combined C02 review independently approves the bridge. No full milestone or release gate is claimed.
+
+The [X05-B2-C-C02 terminal diagnostic correction candidate](../tests/native/v5-02-x05-b2-c-c02-evidence/REPORT.md) shares the profile owner's first terminal error across definition lookup and shape invocation.
+A resource failure owns its original code, message, limit, maximum and field before
+fallible response copying; later ID/input guards and allocation adaptation preserve
+that error. Natural cumulative lookup exhaustion reproduces the prior masking and
+location change, then verifies missing/wrong-kind/valid IDs, invalid inputs and
+retries. Controlled one-shot native allocation probes cover ownership and copies;
+no persistent host-memory guarantee is claimed. C01 private registry keys remain.
+The combined independent B2-C+C01+C02 review approves this scope. The focused Debug gate adds
+one regression (620 registered names, 354 focused plus 11 supplemental); no full
+milestone or release gate, public profile admission, B3/B4, X06–X08, execution/RA01
+or Linux acceptance is claimed. Public init creates format1.
+
+
+The [X05-B3-A pure phase candidate](../tests/native/v5-02-x05-b3-a-evidence/REPORT.md) factors existing trusted validation into structural prepare/check-one/finish exports.
+Every mandatory/base-cycle check precedes custom requests; checked responses retain
+B1 exact obligations, guidance and count policy. Finish retains original graph edges
+and forms selected_shape only from explicitly supplied trusted request-corresponding
+definition metadata. The old embedded validator and B1 shape_results adapter remain.
+The [phase ABI](../tests/native/v5-02-x05-b3-a-support/phase-abi.md) records handoff requirements.
+The X05-B3-A review independently approves this pure slice. It does not prove native metadata
+authenticity, immutable F input, same-VM dispatch or cumulative phase conversion;
+B3-B owns those. B3-C W, B4 rendering, X06–X08, public profile admission/cutover,
+mandatory external-profile acceptance, execution/RA01 and Linux remain open.
+Public init creates format1; latest full approved gate remains A4 582/configuration.
+
+
+The original X05-B3-B incomplete prerequisite checkpoint is preserved in
+`tests/native/v5-02-x05-b3-b-evidence/REPORT.md`, including its actual request423
+regression and scoped sticky correction. The R01 integration candidate below
+supersedes that checkpoint's remaining accounting/lifetime status.
+
+
+The [X05-B3-B-D01-B production reserved decode candidate](../tests/native/v5-02-x05-b3-b-d01-b-evidence/REPORT.md) adds optional
+`codec_decode_reserved`: every actual parser/duplicate-check request charges before
+allocation, followed by one checked allocation-free immutable-conversion sizing
+pass and reservation before persistent ownership. Request-local Glaze wrappers
+retain original grammar/error ordering; returned values use ordinary allocators.
+Exact pinned control-block/tree-node/list/string recipes and the actual bounded
+workspace determine capacity. Typed supplied errors move unchanged, and outer
+allocation protection covers early/catch diagnostic construction in both decode
+entry points. Ordinary decode API/defaults and approved encoding remain unchanged.
+
+Independent D01-B review approves the reserved decoder prerequisite. The
+X05-B3-B-R01 native integration candidate consumes both decoder hooks only while
+profile semantic composition is active. Actual parser/checker allocation requests
+and immutable conversion capacity charge the existing cumulative native budget
+before allocation, without refunds. The inherited node and graph/transport charges
+remain deliberately conservative overlapping accounting. Embedded decode keeps
+its ordinary path. Semantic error-data staging also charges concrete pinned
+control blocks, map nodes and copied string buffers before allocation; successful
+encoded text separately charges its native wrapper while moving the already
+reserved output buffer. Direct in-place construction avoids initializer-list
+copies. Two narrowly scoped global-fragment libc++ headers expose only the pinned
+allocation type identities; product operations retain `import std`. Reserved
+encoding and first typed terminal diagnostics remain.
+
+The combined original B3-B plus R01 candidate retains audited private phase roots
+and native-owned request/result/definition values across sequential protected
+same-VM prepare/F/check/finish calls. Production coverage includes recoverable JSON
+refusal followed by healthy calls. Private reversible observers cover exact tag/
+backing key-value membership and all16 retained references in a mixed fixture
+(five shipped, three phases, four external descriptor/callable pairs), stable live
+Lua heap after warmup/GC, partial baseline setup and terminal cleanup. Controlled
+parser/conversion/node/Lua refusals prove no F dispatch; repeated real operations
+exercise cumulative instruction/native limits. Near-budget staging controls
+verify exact native error-graph requests and deny node/map/string/wrapper storage
+before allocation, retaining ordinary healthy schema diagnostics. These probes supplement actual
+production F and semantic execution.
+
+The frozen candidate gate targets642 registered names (all641 prior names
+preserved),376 focused Debug cases and11 supplemental history cases, production
+semantics, actual allocation sampling, request423 checkpoint/current controls,
+vectors, six exact source audits, pinned formatting/Doxygen and no-work builds.
+See `tests/native/v5-02-x05-b3-b-r01-evidence/REPORT.md` for executed results and
+limitations. The independent combined B3-B/R01 review approves this integration. No full B,
+release or Linux gate is claimed; latest full approval remains A4's582/config.
+B3-C W, B4 render, X06–X08, public profile admission/cutover, mandatory external
+profile acceptance, execution/RA01 and Linux remain open. Public init creates
+format1. Codec and original checkpoint artifacts remain unchanged.
+
+
+The independently approved X05-B3-C selection adds internal native `select_profile` over original
+bundle/capture/files/job/role intent. Its semantic phases run once, then a fourth
+privately retained trusted phase selects from that exact finalized same-call model.
+All four phase roots join the original pre-module audit/freeze; phase transport,
+codec work and repeated operations share cumulative accounting and cleanup. No
+caller model, shape definition or export selector is admitted. Generic profile
+invocation remains closed.
+
+Embedded `select_role` retains its original normalization and whole-bundle
+validation. Shipped selection remains exact with profiles. Custom W preserves old
+fields, appends `shape_selection_v1` and shape definition/revision plus synthetic-ID
+sorted unit obligations where selected work is either endpoint, and hashes
+`work_external_shape_v1`. Guidance is excluded. Selected source comments/revisions
+change every custom-job role; separate unselected/projection modules affect only
+provenance. Same-module visual source changes conservatively affect definition/W.
+The independently authored minimal-fixture W and complete canonical preimage live
+under `tests/native/v5-02-x05-b3-c-support/`; the candidate verification report is
+`tests/native/v5-02-x05-b3-c-evidence/REPORT.md`; the B3-C review independently approves this selection scope.
+This is selection infrastructure: B4 presentation, X06 history/acceptance, X07
+public cutover, X08 mandatory external-profile acceptance, execution/RA01 and Linux
+remain open. Public init creates format1; no full B/release gate is inferred.
+
+Selected-profile hash work additionally reserves conservative pinned-library
+cumulative string growth, owned source/domain copies, encoder scratch and digest
+storage before allocation. These byte charges do not add converted-node counts.
+Actual allocation probes retain typed first resource refusal; embedded digest
+behavior remains unchanged. The derivation and private aggregate measurements are
+recorded in `tests/native/v5-02-x05-b3-c-support/hash-accounting.md` and the C report.
+
+The X05-B4-A candidate factors the shared trusted render body and adds the private
+`render_profile_material({request,model,selected})` helper. Its caller must supply
+authentic finalized semantic and selection results; logical job/role/shape identity
+checks do not authenticate arbitrary tables. The helper normalizes render intent,
+reads retained observations, and renders without validation, selection, F dispatch
+or mutation of model/selection. Custom shapes add exact three-field identity,
+full scoped unverified prerequisites and mandatory `shape_policy` after dependencies;
+shipped shapes preserve the old envelope and presentation. B4-A verifies pure helper
+composition only. Native same-call retention, immutable transport, cumulative full
+render accounting and lifecycle proof are delivered by the B4-B candidate below; the full Debug/release B gate
+remains B4-C. Public profile CLI, X06–X08, execution/RA01 and Linux remain open;
+public init creates format1. Candidate evidence is
+`tests/native/v5-02-x05-b4-a-evidence/REPORT.md`; independent B4-A review requested
+the correspondence correction recorded below.
+
+
+The X05-B4-A-C01 corrective candidate requires complete positional one-to-one
+bundle/semantic job correspondence before reading any selected shape. Both arrays
+must have equal lengths, each row must carry a valid matching job ID, and IDs
+must be unique across the complete mapping. Reordered, missing, extra, duplicate,
+ambiguous and malformed identities refuse with the existing schema diagnostic at
+`render.selected`; there is no ID lookup fallback, revalidation or input mutation.
+Two new production cases reproduce same-shape/different-guidance substitution and
+exercise selected/unselected rows and malformed containers. The actual pre-edit
+baseline and red regression are retained in
+`tests/native/v5-02-x05-b4-a-c01-evidence/REPORT.md`. B4-A's independent review
+requested this correction (B4A-R1); the combined B4-A+C01 review independently approves the correction and closes B4A-R1.
+Pure helper correspondence does not establish native same-call authenticity;
+Combined B4-B+C01 native composition is independently approved; B4-C integrated evidence awaits independent review. Public init
+still creates format1; X06–X08, public cutover, execution/RA01 and Linux remain open.
+
+
+The X05-B4-B candidate adds internal native `render_profile` over original
+bundle/capture/files/job/role intent and optional budget. A trusted normalization-only
+preflight preserves full render schema then budget-stripped selection schema
+precedence before any semantics or F call. Six fixed trusted roots seal before
+external modules. Native-owned normalized intents, same-call finalized model and
+selection flow through sequential protected calls to the approved renderer; each
+custom job's F runs once. Existing selection behavior and public generic profile
+refusal remain. All phases, observation/presentation codecs, hashes and a final
+reserved complete-response encoding share cumulative limits; final output is
+bounded by the existing 16 MiB codec ceiling and lower role/render budget.
+
+B3-C and combined B4-A+C01 are independently approved. combined B4-B+C01 is independently approved; B4-C records the complete Debug/RelWithDebInfo gate candidate. Focused Debug
+coverage, exact root/reference and frozen-membership GC observations, preflight
+zero-F and valid once-per-job dispatch, actual native allocation refusals and
+controlled transport failures are recorded in
+`tests/native/v5-02-x05-b4-b-evidence/REPORT.md`; allocation derivation is in
+`tests/native/v5-02-x05-b4-b-support/transport-accounting.md`. This candidate adds
+no provider or public profile CLI, projection dispatch or storage interpretation.
+X06–X08, mandatory external-profile acceptance, public cutover, execution/RA01 and
+Linux remain open; public init creates format1. Latest full approved gate remains
+A4's 582 per configuration.
+
+
+The X05-B4-B-C01 correction candidate routes every ordinary native render
+response, including normalization, preparation, shape-check, finalization and
+selection errors, through the same existing reserved complete-response encoder.
+The unchanged 16 MiB output ceiling and cumulative native charges apply before
+returning the original native response pointer. Validation-only/selection-only
+transport and native unexpected failures retain their prior paths. The genuine
+oversized original unknown-key schema regression now returns terminal typed
+`output_bytes`/16777216; small ordinary errors retain their bytes and recovery.
+Production phase/lifetime controls and reversible exact writer/phase/F observers
+supplement focused Debug verification. The combined B4-B+C01 review independently approves this correction and closes
+B4B-R1. B4-C records the separate integrated macOS gate; Linux remains open.
+Public profile admission, X06–X08, mandatory external-profile acceptance,
+execution/RA01 and Linux remain open. Public init creates format1; latest full
+approved gate remains A4's582 cases per configuration.
+
+
+X05-C1 adds a private pure assembly seam within `src/stdlib/planar/render.lua`,
+shared by ordinary rendering with an empty custom list. Prepared headed base
+sections remain verbatim; already admitted custom bodies append with current
+heading/join framing. Assembly copies bookkeeping and supports immutable inputs.
+The private projection adapter emits exact `{id,bytes,included}` metadata without
+changing ordinary manifest fields. Native projection response admission, retained F
+execution and read/receipt orchestration remain separate future boundaries; the
+helper authenticates no caller data. The [focused candidate report](../tests/native/v5-02-x05-c1-evidence/REPORT.md)
+records verification; independent review is pending.
+
+
+The X05-C2-A candidate adds internal native projection-definition identity lookup
+without executing the retained projection callable. It hashes the exact final
+five-string descriptor, logical external owner without ordinal, and original
+privately captured selected module bytes under `projection_definition_v1`.
+Owned ID/revision/digest results survive VM destruction. Unknown IDs refuse
+nonterminally; resource failures retain the shared first owner error across shape,
+projection, validation, selection, render and moves. Prospective graph, string
+copies, cumulative canonical growth and encoder scratch charge existing native
+limits before allocation; no invocation starts or budget resets.
+Focused Debug evidence is in `tests/native/v5-02-x05-c2-a-evidence/REPORT.md`;
+fresh independent review is pending. Retained projection execution/native result
+admission remains C2-B. Read services, capability/receipt orchestration, public
+profile admission, X06–X08, execution/RA01 and Linux remain open. No full C or
+release gate is claimed; public init creates format1.
+
+
+The X05-C2-B1 candidate adds only a native exact projection JSON size prerequisite
+in `engine/json_codec`: stable borrowed section views, complete input preflight,
+one synchronous charge for fixed 6,325,248-byte scratch and actual fixed writer
+workspace, and pinned Glaze serialization without an AST copy or retained output.
+Encoded overflow is sticky and nonthrowing; bounded writing completes before
+refusal. Native invalid input, encoded ceiling, resource and scratch/internal
+failures remain distinct typed outcomes. Callback diagnostics move unchanged;
+independent nested/concurrent owners share no routing state. The operator's global
+18-name built-in reservation is now explicit in X-PROJ for both input kinds;
+semantic reserved-name admission remains the later native scanner's duty.
+Evidence is `tests/native/v5-02-x05-c2-b1-evidence/REPORT.md`; fresh independent
+review is pending. This prerequisite does not execute F, scan/root Lua results,
+open profile invocation or implement read services, public CLI, X06–X08,
+whole-invocation orchestration, execution/RA01 or Linux. Public init creates
+format1; no full or release gate is claimed.
+
+
+C2-B2 adds the internal typed retained-projection bridge and native raw-result
+admission candidate. Descriptor kind and immutable structural transport are checked
+before one retained F call; callers own authenticated selected-role/history data.
+The protected scanner enforces exact version1 section schema, the shared GLOBAL18
+reserved union and raw limits before borrowed-view exact encoded counting and
+native result copying. Original projection indices and shared first terminal errors
+survive retries and moves. This candidate awaits fresh independent review; native
+read services, rendering composition, CLI/provider/receipt integration and the
+mandatory external-profile gate remain open. See
+[the C2-B2 evidence](../tests/native/v5-02-x05-c2-b2-evidence/REPORT.md).
+
+
+The independently approved X05-C3-A adds `command_vm::prepare_extension_invocation` for an
+actual retained sealed external command. Borrowed parsed records use names without
+`--`; omitted records mean absent, explicit absent records have no token, present
+flags have no token, and present scalars have exactly one token. Native owned
+variants preserve every descriptor option and presence, exact history-ID strings,
+INT32 scalars and effective history query defaults. Capability-bound host options
+contain typed indices into a separate native-only pending-selector list; absent
+optional host options retain an empty index. Descriptor canonical order determines
+option and supplied-host order. Pending selectors have no filesystem normalization,
+admission, handle or receipt. Capability-free same-spelled text remains ordinary
+data under the approved X04-B2 contract.
+
+Preparation is reusable without starting/resetting invocation. Usage and protocol
+refusals leave a healthy owner usable; resource refusal preserves the shared first
+terminal diagnostic across APIs and moves. Embedded, moved, failed or consumed
+owners and unknown external commands refuse. Prospective vector storage and all
+owned string copies charge cumulative native accounting before allocation.
+No handler, provider, Lua invocation graph or argv parser is introduced. Native
+typed-result tests do not prove the future Lua string/presence ABI. C3-A itself adds no receipt-backed
+host admission, read services, capability/order/once-only/poisoning enforcement or
+response correspondence; the bounded C3-B2 admission candidate below leaves read
+services, handler dispatch, public CLI and X06–X08 open. Generic profile
+invocation stays closed; public init creates format1. Approved C3-A evidence is
+`tests/native/v5-02-x05-c3-a-evidence/REPORT.md`; its independent review is recorded
+in `docs/vernacular/rounds/V5-02-X05-C3-A-review.md`.
+No full milestone, release or Linux gate is claimed.
+
+
+X05-C3-B1 adds bounded metadata-only physical parent traversal to
+`capture/admission`. Each component is opened without following links before a
+parent component can exit it. Missing directories and non-directory components
+therefore cannot cancel away. Every visited name and upward edge retains its
+original descriptor receipt; only the final active ancestry determines physical
+containment. Replacing an exited directory still refuses verification. Existing
+file-role, alias, absent-target and original profile-owner policies remain.
+Focused native admission/profile/host-path/capture checks, regression red evidence
+and exact candidate identities are recorded in
+[the C3-B1 report](../tests/native/v5-02-x05-c3-b1-evidence/REPORT.md).
+This prerequisite introduces no runtime orchestration, read service, public profile
+CLI or dispatch. No full suite, release or Linux execution is claimed.
+
+
+X05-C3-B2 adds a bounded internal `extension_invocation` owner in the runtime
+module. Creation consumes the original `profile_capture` and constructs the VM
+from that capture's snapshot; no independently created VM or mutable C3-A result
+can enter admission. The sealed catalog is borrowed only while healthy. The owner
+retains final prepared scalars, mapping IDs and absolute host spelling/intent
+privately. Its single admission attempt prepares the actual sealed command,
+normalizes all supplied host slots before metadata checks, admits workspace root
+and selected file, source/base directories and registry/observation/ledger files,
+then verifies original profile/module and late-slot receipts. Every failure is
+terminal and retains its original typed diagnostic; moves transfer this state.
+Verification is available only after successful admission and authorizes no service
+or output by itself. Generic profile invocation remains closed.
+
+Relative paths use only the supplied cwd snapshot. Bare workspace names use the
+approved C lexical normalization of the supplied workspace-directory snapshot,
+then append the name and `workspace.lua`; explicit workspace paths and expanded
+results retain physical traversal spelling through `prepare_host_path.spelling`.
+First-equals mapping RHS normalization preserves later equals and parent steps.
+No ambient cwd/environment lookup, recapture, late-input content read, Lua handler,
+provider, userdata or read-service implementation is added. Capture subsystems keep
+their separate bounded metrics; whole-invocation shared capture/VM accounting stays
+open for X06. New wrapper/path staging charges the existing cumulative VM native
+metric before allocation, using pinned libc++ component/string bounds documented
+in [the accounting proof](../tests/native/v5-02-x05-c3-b2-support/accounting.md).
+This conservative metric is not process RSS accounting.
+
+Seventeen colocated C3-B2 cases exercise real scratch captures for pure, role and
+history commands, optional unused hosts, explicit snapshots, workspace expansion,
+physical parent traversal, overlap/alias and native path refusals, original receipt
+mutation, moves, poisoning and actual cumulative native reservation refusal.
+Three host-path preflight cases preserve text/size and lexical-cwd/join precedence.
+Controlled private allocation and inode-read probes use copied production objects;
+[the evidence report](../tests/native/v5-02-x05-c3-b2-evidence/REPORT.md) records
+commands, failed attempts, exact identities and limits. Focused Debug evidence does
+not establish later Lua ABI, services/dispatch, complete shared budgets, public
+profile admission, a full/release/Linux gate or mandatory X08 acceptance.
+
+## Native gated SQLite connection prerequisite
+
+`ledger/sqlite` owns a downward native `read_guard` interface without capture,
+profile or runtime dependencies. `open_gated` retains the caller's shared guard
+in stable per-connection VFS context. The verifier may throw; noexcept callback
+adapters translate allocation/length failures to resource refusal and other
+exceptions to verifier refusal. Only ready/refused/resource verifier results are
+recognized; other values fail closed. Original adapter diagnostics stay with the
+adapter. The connection's allocation-free `gate_status()` and trailing typed
+`sqlite_error::gate_status` preserve first-failure priority independently of SQLite
+error strings, including the null-handle open failure path.
+
+A fixed 64-byte address-derived VFS name, fixed context and fixed per-file wrapper
+introduce no growing application cache or buffer. The native allocations are one
+shared SQLite-state/control block and one context allocation, plus SQLite-owned
+`sizeof(file) + alignof(max_align_t) + base.szOsFile` file allocations, with checked
+integer size arithmetic. The caller's existing shared guard is retained without
+copying its receipts. This primitive does not charge or combine VM512MiB/capture
+budgets; X06 whole-invocation accounting remains open.
+
+The VFS is explicitly nondefault, carries direct stable pAppData, and forwards
+using the actual base VFS/file pointers. File method versions and optional null
+callbacks follow the base. It admits one read-only main open, gates main xRead and
+actual xFetch, refuses main writes/truncation, journal/WAL opens and shared-memory
+mapping before delegation, and forwards legitimate temporary-file operations.
+Gated SQL denies ATTACH/DETACH before alternate-file access. HAS_MOVED supports
+cooperative binding; it is not hostile substitution or change-and-revert proof.
+Original receipt and held-descriptor integration belongs to the following slice.
+
+Statements/transactions retain sqlite_state; each finalizes or rolls back before
+releasing it. A small online-backup RAII owner now also finishes the backup if
+copying its pre-finish diagnostic throws. Final state destruction closes SQLite
+before unregistering the VFS and releasing its guard. A BUSY close or unregister
+failure at that internal destructor is a fatal ownership invariant violation,
+not a supported retry protocol; concurrent SQLite shutdown is unsupported.
+No global routing, TLS, retirement queue, immutable URI or database copy is used.

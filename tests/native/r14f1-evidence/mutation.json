@@ -1,0 +1,6 @@
+{
+  "original_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d",
+  "mutant_sha256": "0c122d92506d2ee12dca5a200eabb5f5c1371099de4ab5edfe319212a665ccd3",
+  "test_exit": 42,
+  "restored_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d"
+}

@@ -1,0 +1,18 @@
+{
+  "CMakeLists.txt": "a855bcb3fb2858587c7dee5de43385590707b166f83997cdc3b1b7757a93197b",
+  "docs/architecture.md": "bfb8c5b7dacabeac0b2c1ff6228eb7c401b0f19ac60b664f0f6561a52a7d9b45",
+  "docs/cli-reference.md": "bdc4cbf7dade17974db06b0f6a2f8bb7a99af6a7a3676f0034498f4327a1ee8a",
+  "docs/testing.md": "d2de04f72f5c7e1a200f21de0225dbc624f979a232140705a4123684db6cc40a",
+  "src/cmd/planar/CMakeLists.txt": "281ac69ea718e86e551aabc2c5025d58b641300d5bf268b23c3078e2e94cafb4",
+  "src/cmd/planar/bootstrap.cpp": "fd477574d192a851dbc803bf326446aa2f0d59b45e62df141974e365ea737bbb",
+  "src/cmd/planar/bootstrap.t.cpp": "0614d2762c1c2fe94284a8479a9fa0861e1bccf54cbe2324e33083989323ed67",
+  "src/cmd/planar/handlers/export/command.cpp": "443f00e80e6ae93d0aedcd2e6c78a7bc43e10313865f497037cd4c604cd73ad6",
+  "src/cmd/planar/handlers/export/command.cppm": "49632fc4018f77d9237cd95e15ab95496022f19738cf2c04916ca773e7f8f4d0",
+  "src/cmd/planar/main.cpp": "226e16f197b136d6e8129bf7f4e9f87ad898e724f857be0b15d6c46522b7653c",
+  "src/cmd/planar/response.cpp": "97b857d5e4ad703cdef2f8432b1833cac8f9058a980cb9ee1fbf6dc96588bc15",
+  "src/cmd/planar/response.cppm": "e16989cd76a4490a38e710bceb8b6464a680d5eaf577813fa10d96ce8283df56",
+  "tests/acceptance/bootstrap_export.py": "90e083a346a497d72081ca803d65324bfdd4a336917efd13ec170015e50b5196",
+  "tests/acceptance/bootstrap_init.py": "a9536300d27d0490540a20c753df51ba38c3df599b9fd313bf6a0226eabdc440",
+  "tests/native/r14f2-support/boundary.t.cpp": "8c2a5965f674a7b0f67fa918dcede4322e5eab9a8ef27640a32d2be6334cdca3",
+  "tests/native/r14f2-support/generate.py": "3e1c0df89afdf4d0cbab6151a6b25c1a84e3853f5a7e8d93087c2dfbfd3430f4"
+}

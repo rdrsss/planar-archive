@@ -1,0 +1,22 @@
+{
+  "CMake_append_only": true,
+  "allowed_Debug_changed_paths": [
+    "build/rewrite-debug",
+    "build/rewrite-debug/.ninja_log",
+    "build/rewrite-debug/Testing/Temporary",
+    "build/rewrite-debug/Testing/Temporary/CTestCostData.txt",
+    "build/rewrite-debug/Testing/Temporary/LastTest.log"
+  ],
+  "baseline_members": 93879,
+  "baseline_sha256": "ddd31a50322cd2298b068933e5ca82fcd79373bcfc04a7be24b31f23465bf561",
+  "candidate_all25_hashes_rechecked": true,
+  "directory_metadata_changes": [],
+  "eight_historical_bodies_exact": true,
+  "final_members": 93879,
+  "final_sha256": "d86ec68e63e0bfab9060245ffc94b304e54ccce9b5f9a21c65fa1ef0a4928102",
+  "full_content_hash_boundaries": true,
+  "protected_membership_exact": true,
+  "release_install_release_prior_rounds_and_candidate_evidence_exact": true,
+  "root_dotfiles_and_symlink_identity_covered": true,
+  "unexpected_changes": []
+}

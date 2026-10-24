@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "--output-on-failure",
+    "-R",
+    "ledger|history|export|record|request|prepared|acceptance|publication",
+    "--output-junit",
+    "<repo>/tests/native/v5-02-x03-b2-a-review-evidence/focused.xml"
+  ],
+  "cwd": "<repo>",
+  "started_at": "2026-10-22T20:31:50.504549+00:00",
+  "ended_at": "2026-10-22T20:32:49.795775+00:00",
+  "exit_code": 0
+}

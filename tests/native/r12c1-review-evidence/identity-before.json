@@ -1,0 +1,28 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "candidate_manifest_sha256": "56fdd9f733c5fff1c99e1b9cbb1dfb7d3391535f147b383262250ff46d9a4699",
+  "evidence_manifest_sha256": "4d53bfbc2e8cfffd860b56d7f72da40c422435998c134f157f1b541824d68865",
+  "candidate_entries": 9,
+  "evidence_entries": 33,
+  "candidate_mismatch": [],
+  "evidence_mismatch": [],
+  "baseline_snapshot_mismatch": [],
+  "protected_baseline_count": 3345,
+  "missing": [],
+  "protected_changed": [
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/sqlite.cpp",
+    "src/engine/ledger/sqlite.cppm",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/sqlite.t.cpp",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "unexpected_changes": [],
+  "frozen_sections": {
+    "schema_sql": true,
+    "schema_and_state_verifier": true,
+    "ordinary_opener": true
+  }
+}

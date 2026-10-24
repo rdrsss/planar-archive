@@ -1,0 +1,12 @@
+{
+  "debug": {
+    "cli_processes": 158,
+    "native_assertions": 48229,
+    "native_cases": 118
+  },
+  "release": {
+    "cli_processes": 158,
+    "native_assertions": 48229,
+    "native_cases": 118
+  }
+}

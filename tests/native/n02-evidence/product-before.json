@@ -1,0 +1,11 @@
+{
+  "stdlib/planar/README.md": "f1a67a3900abb500b1fd88782423b2ff7e61b0c03ece406f085f708ec4eb25f6",
+  "stdlib/planar/bootstrap.lua": "f0443557e884583d822e13f4dbbb22cbb53d742e813e670cb0c0235f0c9b9886",
+  "stdlib/planar/json.lua": "06291c1d58c3a1ae6400d842c8789296bc1645c76b78701c001d910e4a199fa7",
+  "stdlib/planar/observations.lua": "dc530abaf8940e7f762e720541d8356c2191bff4fbe77ce743f198ae1359f3dc",
+  "stdlib/planar/presentation.lua": "0167366cd62ab7974f5d2dee9ebce87f0904b0d6bae5b29a500174e17e1ccf09",
+  "stdlib/planar/render.lua": "3d088b4cb994df6f1d4e1504eba10b768a25b3f514034c397aa5648a7a29b07b",
+  "stdlib/planar/schema.lua": "574fed2fe8cc0191a7659dd6b749cef289a8d427b13e900c8acb34101d4bc216",
+  "stdlib/planar/selection.lua": "45557f3aa3b5f31a11f4e13f68f6abb0f059d583e46b125d820aa07a7dab313e",
+  "stdlib/planar/semantic.lua": "81f685fc2cdc807ddd48660357e0b096b437e91e31f5f60a79c4e75cdf1f1ab4"
+}

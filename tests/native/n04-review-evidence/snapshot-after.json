@@ -1,0 +1,23 @@
+{
+  "candidate-sha256.txt": {
+    "manifest_sha256": "fcab277606183535abb39e9508990e319d7f65d251f932577f12566deea1bc41",
+    "files": 339,
+    "changed": []
+  },
+  "evidence-sha256.txt": {
+    "manifest_sha256": "6dafea98e92b25e7befec8160e7ac6a780606a60f7a186ba362e7bc4a1da2510",
+    "files": 29,
+    "changed": []
+  },
+  "protected": {
+    "count": 1998,
+    "changed": []
+  },
+  "cli11": {
+    "count": 321,
+    "changed": []
+  },
+  "new_deletions": [],
+  "render_body_identical": true,
+  "branch": "dev/planar-v2-vernacular"
+}

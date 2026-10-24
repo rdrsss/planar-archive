@@ -1,0 +1,9 @@
+{
+  "artifact_entries": 200,
+  "artifact_sha256": "5e8300dcab0d3fe05f474c28bba8d97f0d869dc2017f25b149bb9319772aa11c",
+  "candidate_entries": 236,
+  "candidate_sha256": "a0ce3d520a4dc5992bd2f1a04355a0ba7400bca9a4f7818cc0bda35d84b78c8e",
+  "changes": [],
+  "diff_sha256": "1467b53c526a0ed58b9b32f77ff0cf633db7fb0fee5eaabe17a289ec088ed92f",
+  "finalization_sha256": "99ce568049b28e2602f9bf33d64588f3601f1e67347bd605492fc30900e693ad"
+}

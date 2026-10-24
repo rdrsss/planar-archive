@@ -1,0 +1,20 @@
+{
+  "author_artifacts": 881,
+  "build_identities": 726,
+  "candidate_paths": 22,
+  "current_product_tests_cmake_match_passing_attempt05": true,
+  "disposition": "approve",
+  "independent_result": {
+    "effective_cases": 12,
+    "errors": 0,
+    "failures": 0,
+    "independent_probes": 4,
+    "skips": 0,
+    "source_unchanged": true
+  },
+  "ownership": "released after manifest; zero further reviewer edits",
+  "protected_entries": 17398,
+  "report_sha256": "42092bf3bbf8748f0fd246e384e7d1e861d51662eaab81a628941dd5f25ce357",
+  "source_freeze_sha256": "0d8981d0a9171dd85a3b01d09e338c48891df9e66fb861eafb64125221090134",
+  "source_unchanged": true
+}

@@ -1,0 +1,12 @@
+{
+  "baseline_regular_files": 14980,
+  "symlinks_preserved": true,
+  "deleted": [],
+  "unexpected_modified": [],
+  "candidate_source_unchanged_since_tests": true,
+  "owned_diff_sha256": "888a8b1f6e9f0d78f83f373f1eabebf8172209c18537e9acf0fd246918c98dbb",
+  "added_outside_evidence": [
+    "tests/native/v5-02-x03-b2-a-support/run.py"
+  ],
+  "head_unchanged": true
+}

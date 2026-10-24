@@ -1,0 +1,42 @@
+{
+  "247_invocations_and_historical_counts_unchanged": true,
+  "builds_or_tests_executed": false,
+  "candidate_identity": "82fdee63179c8d4eb8cc4417dbd5a08efb1546de2963df006ed212543415fbd8",
+  "coder_evidence_files": 8,
+  "diff_sha256": "1aee34812510a32202dc33219560db119617b7abe2bf7e8afa8aa9850f55bd12",
+  "existing_local_markdown_link_targets": [
+    "toolchain-parity.md",
+    "vernacular/rounds/R09.md",
+    "../tests/vectors/README.md"
+  ],
+  "frozen_counts": {
+    "debug": {
+      "native": 225,
+      "passed": 226,
+      "python": 1,
+      "registered": 226,
+      "skipped": 0
+    },
+    "release": {
+      "native": 225,
+      "passed": 226,
+      "python": 1,
+      "registered": 226,
+      "skipped": 0
+    }
+  },
+  "live_candidate_files": 13,
+  "other_candidate_files_unchanged": 12,
+  "prior_evidence_files": 107,
+  "prior_evidence_manifests": {
+    "r13c2-evidence": {
+      "entries": 61,
+      "sha256": "3f8db25abbaa7f7a6416167f606bd1eed2d4c06cf014fc6832eb9609fcdd51c5"
+    },
+    "r13c2-review-evidence": {
+      "entries": 44,
+      "sha256": "024201db5b6a1b8a6248fc1135ced319c46ad6900717b47454f4f69e28a7a543"
+    }
+  },
+  "sole_edit": "216 tests: 215 native -> 226 tests: 225 native"
+}

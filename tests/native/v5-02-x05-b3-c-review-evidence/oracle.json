@@ -1,0 +1,9 @@
+{
+  "independent_encoder": true,
+  "uses_product_selection_output": false,
+  "preimage_bytes": 3691,
+  "preimage_sha256": "ea8528771462bc50caa326ff210ee27f6a13707025651bd4a795c1e48700e26c",
+  "definition": "xxh3_128:b584d37bf5cf16b1507a72679f0e5845",
+  "work_digest": "xxh3_128:7f5365e3af50711f0d2f01336b97a8fe",
+  "wrong_domain_differs": true
+}

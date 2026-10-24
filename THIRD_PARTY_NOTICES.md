@@ -6,17 +6,15 @@ configured build does not touch the network. Each package's own license text
 travels with its source. Where a package ships no separate license file, the
 notice is given here or in the source header noted.
 
-| Package | License | Where the notice lives |
+| Package | License | Notice |
 | --- | --- | --- |
-| Catch2 | BSL-1.0 | `vendor/catch2/*/LICENSE.txt` |
-| CLI11 | BSD-3-Clause | `vendor/cli11/*/LICENSE` |
-| curl | curl license | `vendor/curl/*/COPYING` |
-| Glaze | MIT | `vendor/glaze/*/LICENSE` |
-| Lua | MIT | header of `vendor/lua/*/src/lua.h` (reproduced below) |
-| spdlog | MIT | `vendor/spdlog/*/LICENSE` |
-| SQLite | Public domain | none required (see below) |
-| Tree-sitter | MIT | `vendor/tree_sitter/*/LICENSE` |
-| tree-sitter-zig | MIT | `vendor/tree_sitter_zig/*/LICENSE` |
+| CLI11 2.7.2 | BSD-3-Clause | `vendor/cli11/9d6a/LICENSE` |
+| Catch2 3.15.3 (tests only) | BSL-1.0 | `vendor/catch2/c601/LICENSE.txt` |
+| Lua 5.5.0 | MIT | `vendor/lua/0b10/src/lua.h` (reproduced below) |
+| Glaze 8.1.0 | MIT | `vendor/glaze/a4a7/LICENSE` |
+| xxHash 0.8.3 | BSD-2-Clause | `vendor/xxhash/0.8.3/LICENSE` |
+
+Archive URLs and SHA256 pins are recorded in `cmake/dependencies.cmake`.
 
 ## Lua
 
@@ -39,8 +37,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## SQLite
-
-The SQLite amalgamation is in the public domain. See
-<https://sqlite.org/copyright.html>.

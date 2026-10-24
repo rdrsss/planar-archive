@@ -1,0 +1,311 @@
+[
+  {
+    "name": "valid_baseline",
+    "exit": 0,
+    "stdout_bytes": 51272,
+    "stderr_bytes": 0,
+    "seconds": 0.053
+  },
+  {
+    "name": "missing_workspace",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr_bytes": 138,
+    "seconds": 0.011,
+    "error": {
+      "error": {
+        "code": "io",
+        "details": {
+          "operation": "capture"
+        },
+        "field": "",
+        "message": "Cannot inspect confined input"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "missing_registry",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr_bytes": 138,
+    "seconds": 0.016,
+    "error": {
+      "error": {
+        "code": "io",
+        "details": {
+          "operation": "capture"
+        },
+        "field": "",
+        "message": "Cannot inspect confined input"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "missing_observations",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr_bytes": 138,
+    "seconds": 0.015,
+    "error": {
+      "error": {
+        "code": "io",
+        "details": {
+          "operation": "capture"
+        },
+        "field": "",
+        "message": "Cannot inspect confined input"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "duplicate_observations",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123,
+    "seconds": 0.011,
+    "error": {
+      "error": {
+        "code": "usage",
+        "field": "",
+        "message": "Expected render options or --help; see --help"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "base_mismatch",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123,
+    "seconds": 0.01,
+    "error": {
+      "error": {
+        "code": "usage",
+        "field": "",
+        "message": "Expected render options or --help; see --help"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "duplicate_budget",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123,
+    "seconds": 0.011,
+    "error": {
+      "error": {
+        "code": "usage",
+        "field": "",
+        "message": "Expected render options or --help; see --help"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "trailing_option",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123,
+    "seconds": 0.011,
+    "error": {
+      "error": {
+        "code": "usage",
+        "field": "",
+        "message": "Expected render options or --help; see --help"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "unsupported_equals",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123,
+    "seconds": 0.01,
+    "error": {
+      "error": {
+        "code": "usage",
+        "field": "",
+        "message": "Expected render options or --help; see --help"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "wrong_root_format",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 123,
+    "seconds": 0.01,
+    "error": {
+      "error": {
+        "code": "usage",
+        "field": "",
+        "message": "Expected render options or --help; see --help"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "context_workspace_root_overlap",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 105,
+    "seconds": 0.015,
+    "error": {
+      "error": {
+        "code": "path_denied",
+        "field": "",
+        "message": "Capture roots overlap"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "unselected_traversal_text_reference",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 111,
+    "seconds": 0.015,
+    "error": {
+      "error": {
+        "code": "path_denied",
+        "field": "",
+        "message": "Invalid file reference path"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "absolute_paths",
+    "exit": 0,
+    "stdout_bytes": 26795,
+    "stderr_bytes": 0,
+    "seconds": 0.04
+  },
+  {
+    "name": "relative_paths",
+    "exit": 0,
+    "stdout_bytes": 26795,
+    "stderr_bytes": 0,
+    "seconds": 0.038
+  },
+  {
+    "name": "dot_segments",
+    "exit": 0,
+    "stdout_bytes": 26795,
+    "stderr_bytes": 0,
+    "seconds": 0.038
+  },
+  {
+    "name": "registry_final_symlink",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 118,
+    "seconds": 0.016,
+    "error": {
+      "error": {
+        "code": "path_denied",
+        "field": "",
+        "message": "Only regular files can be captured"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "unowned_bytes_4194304",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 172,
+    "seconds": 2.38,
+    "error": {
+      "error": {
+        "code": "resource_limit",
+        "details": {
+          "limit": "instructions",
+          "maximum": 100000000
+        },
+        "field": "",
+        "message": "Lua instruction limit exceeded"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "unowned_bytes_7340032",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 172,
+    "seconds": 2.38,
+    "error": {
+      "error": {
+        "code": "resource_limit",
+        "details": {
+          "limit": "instructions",
+          "maximum": 100000000
+        },
+        "field": "",
+        "message": "Lua instruction limit exceeded"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "unowned_bytes_8388608",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 172,
+    "seconds": 2.392,
+    "error": {
+      "error": {
+        "code": "resource_limit",
+        "details": {
+          "limit": "instructions",
+          "maximum": 100000000
+        },
+        "field": "",
+        "message": "Lua instruction limit exceeded"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "name": "unowned_bytes_9437184",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 172,
+    "seconds": 2.388,
+    "error": {
+      "error": {
+        "code": "resource_limit",
+        "details": {
+          "limit": "instructions",
+          "maximum": 100000000
+        },
+        "field": "",
+        "message": "Lua instruction limit exceeded"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  }
+]

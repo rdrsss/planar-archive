@@ -1,0 +1,8 @@
+{
+  "src/engine/capture/profile.cpp": "0ce2d413bcebc60ec0ce66f7d4e61d7726bbfb7428db778a3d56b30f7837ccda",
+  "src/engine/capture/profile.cppm": "3ca62c4a7bb33d53fe444c5190c54d140a23e02e5eaae7d6a70d829c75b6ca1f",
+  "src/engine/capture/profile.t.cpp": "f9b987165878befe0562fde9514d87577ade4111791a1f046f50a54e02d29981",
+  "src/engine/capture/native.cppm": "5c7116c80e531ffad8cd1c57a63ba1173eb2c7627926cdb821a52d35efbad05c",
+  "src/engine/capture/native.cpp": "27c4144634461b3d8c9da8fe9a1774f260138017787af77fb0647e97e21cec12",
+  "src/engine/CMakeLists.txt": "2db2a62fa61139b97aa78e1995de7425bb141fd2c0ab3ae086869f62c67cb141"
+}

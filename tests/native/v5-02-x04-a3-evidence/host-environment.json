@@ -1,0 +1,8 @@
+{
+  "utc": "2026-10-22T22:41:03.106547+00:00",
+  "system": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.15.0",
+  "cmake": "cmake version 4.4.4\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+  "ninja": "1.13.2\n"
+}

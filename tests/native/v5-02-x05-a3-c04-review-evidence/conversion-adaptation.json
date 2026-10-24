@@ -1,0 +1,24 @@
+{
+  "original_sha256": "f7b57bfc416f3c27f7a25aa3610edcd0d8f9546430d8b42d8e5659a06ba7ed75",
+  "copy_sha256": "6a56080cd9cc57c3769e2d5b1c97c62faac3206fe3157e42f18d4da1065c7e67",
+  "substitutions": [
+    {
+      "before": "'tests/native/v5-02-x05-a3-c04-evidence'",
+      "after": "'tests/native/v5-02-x05-a3-c04-review-evidence'"
+    },
+    {
+      "before": "      c04_disarm();'''),",
+      "after": "      c04_disarm();\n      if(c04_phase(\"conversion\"))c04_window(\"conversion\",e.kind,indices[e.kind]);'''),"
+    },
+    {
+      "before": "||(mode()==s&&(s==\"global\"||s==\"global-install\"))",
+      "after": "||(c04_phase(\"conversion\")&&s==\"conversion\")||(mode()==s&&(s==\"global\"||s==\"global-install\"))"
+    },
+    {
+      "before": "if(mode()==\"unmatched\")return",
+      "after": "if(mode()==\"conversion\")return requests==1&&refused>0&&vm.error().detail.code==\"resource_limit\"&&vm.error().field==std::format(\"catalog.{}[{}]\",kind==0?\"commands\":kind==1?\"shapes\":\"projections\",index)?0:20;\nif(mode()==\"outer-conversion\")return requests==(kind==2?2:1)&&vm.error().detail.code==\"resource_limit\"&&vm.error().field==(kind==2?\"profile.modules[2]\":std::format(\"catalog.{}[{}]\",kind==0?\"commands\":\"shapes\",index))?0:21;\nif(mode()==\"unmatched\")return"
+    }
+  ],
+  "scenario_replacement": "only conversion/outer-conversion x kinds 0..2 x original index10/64",
+  "policy": "arms real global new immediately after collection token selection, before convert; no injected exception at selector. First real conversion request refuses; outer-conversion separately arms real diagnostic render. Command/shape output has zero render allocation on pinned libc++."
+}

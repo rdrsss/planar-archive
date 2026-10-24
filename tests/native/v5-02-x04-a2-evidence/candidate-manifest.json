@@ -1,0 +1,70 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "8b72bfc6951832a4293cf07bb8efd2c8beea3cfea7a4a8676b57e2b664b9703f"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "c3e863d8e8bda98b6809084e736d52883a6c6357f3e91765658933ca471fb38b"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "49c273f4edf119cb5b9e4c5a45cdccf99e49983a279d73004eb1d514a35854e0"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "a7363ab3cab22ccb87e51fa9e95d4e4c8f47365a723017e0f1df6632538ba75f"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "a35d12e498c57de4d9c538e39ed39a4240d132a0c50c16d213ba8aac2cc6e6ae"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "b156261058f65465ccb9824c6f8a6d8750290eccabaceec8966d6d06b56bf578"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "5fe83d70414fe2dc50b4c0fc05abbf7d0db853b3c92541a995bb2d926f282489"
+  },
+  "src/engine/CMakeLists.txt": {
+    "mode": 420,
+    "sha256": "2db2a62fa61139b97aa78e1995de7425bb141fd2c0ab3ae086869f62c67cb141"
+  },
+  "src/engine/capture/native.cpp": {
+    "mode": 420,
+    "sha256": "27c4144634461b3d8c9da8fe9a1774f260138017787af77fb0647e97e21cec12"
+  },
+  "src/engine/capture/native.cppm": {
+    "mode": 420,
+    "sha256": "5c7116c80e531ffad8cd1c57a63ba1173eb2c7627926cdb821a52d35efbad05c"
+  },
+  "src/engine/capture/native.t.cpp": {
+    "mode": 420,
+    "sha256": "31277d7d047f934602ff7740edf39dbc51ff75f78ce0dc874e41beff3b909c20"
+  },
+  "src/engine/capture/profile.cpp": {
+    "mode": 420,
+    "sha256": "241537732409e925ac64de289806df632e53562822e47288f86826dc8c5ea933"
+  },
+  "src/engine/capture/profile.cppm": {
+    "mode": 420,
+    "sha256": "3ca62c4a7bb33d53fe444c5190c54d140a23e02e5eaae7d6a70d829c75b6ca1f"
+  },
+  "src/engine/capture/profile.t.cpp": {
+    "mode": 420,
+    "sha256": "80ae9a2d5303eb8ca4ffebf1304416fa45828e17b7e7b5628521cc007a8d5be4"
+  },
+  "tests/native/v5-02-x04-a2-support/protect.py": {
+    "mode": 420,
+    "sha256": "93d1aa9bffb6aabded43f23e4800b20ddf3ba7ef2f5dad58011d807820d91bda"
+  },
+  "tests/native/v5-02-x04-a2-support/verify.py": {
+    "mode": 420,
+    "sha256": "031c9267933a3d57dd04dcc9fefa7db203fb4705bce105edb1da538879a22cae"
+  },
+  "tests/native/v5-02-x04-a2-support/verify_docs.py": {
+    "mode": 420,
+    "sha256": "7fa32e41fe72dc31619fbf01c6de74200c8fb9cb20428688ab2fd8490aa6e859"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "proposal_lines": 393,
+  "local_links": [
+    {
+      "target": "v5-alignment.md#authority-and-current-evidence",
+      "valid": true
+    },
+    {
+      "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+      "valid": true
+    },
+    {
+      "target": "declarations.md",
+      "valid": true
+    },
+    {
+      "target": "render-contract.md",
+      "valid": true
+    },
+    {
+      "target": "ledger-contract.md",
+      "valid": true
+    },
+    {
+      "target": "../../src/cmd/planar/bootstrap.cpp",
+      "valid": true
+    },
+    {
+      "target": "../../src/engine/runtime/runtime.cpp",
+      "valid": true
+    },
+    {
+      "target": "../../src/engine/history/provenance.cpp",
+      "valid": true
+    },
+    {
+      "target": "../../src/engine/history/provenance_codec.cpp",
+      "valid": true
+    },
+    {
+      "target": "../../src/engine/history/record.cppm",
+      "valid": true
+    },
+    {
+      "target": "../../src/engine/acceptance/prepared.cppm",
+      "valid": true
+    },
+    {
+      "target": "render-contract.md#invocation-and-trust",
+      "valid": true
+    },
+    {
+      "target": "../../src/cmd/planar/handlers/init/command.cpp",
+      "valid": true
+    },
+    {
+      "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+      "valid": true
+    },
+    {
+      "target": "planar-design-spec-v5.md#engine-surface-and-sandbox",
+      "valid": true
+    },
+    {
+      "target": "../../vendor/cli11/9d6a/README.md",
+      "valid": true
+    },
+    {
+      "target": "render-contract.md#errors-and-verification-boundary",
+      "valid": true
+    },
+    {
+      "target": "../../src/engine/capture/host_path.cpp",
+      "valid": true
+    },
+    {
+      "target": "declarations.md#paths-and-one-root",
+      "valid": true
+    },
+    {
+      "target": "render-contract.md#capture-boundary",
+      "valid": true
+    }
+  ],
+  "protected_checked": 12021,
+  "protected_changes": [],
+  "builds_and_tests": "Not run: docs-only proposal; no product changes",
+  "v5_matches_expected": true,
+  "agents_symlink": "CLAUDE.md",
+  "prior_draft": "draft-01/ retained before coordinator factual clarification"
+}

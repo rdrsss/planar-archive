@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "make",
+      "test-all",
+      "PRESET=debug"
+    ],
+    "started_utc": "2026-10-20T10:43:15.356397+00:00",
+    "elapsed_seconds": 63.43749437574297,
+    "exit_code": 0,
+    "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  },
+  {
+    "command": [
+      "make",
+      "test-all",
+      "PRESET=release"
+    ],
+    "started_utc": "2026-10-20T10:44:18.814587+00:00",
+    "elapsed_seconds": 56.56666420865804,
+    "exit_code": 0,
+    "host": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  }
+]

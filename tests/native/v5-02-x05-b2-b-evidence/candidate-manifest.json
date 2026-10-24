@@ -1,0 +1,62 @@
+{
+  "src/engine/json_codec/codec.cppm": {
+    "sha256": "96e2f16b0028d1d8751f5a4a9f423d3e042de2a105c10088093ac9576715711a",
+    "bytes": 4261,
+    "mode": 420
+  },
+  "src/engine/json_codec/codec.cpp": {
+    "sha256": "a58c162d62999fa92ae4a7e58370b9d297319dadc341a51a7436f447534822cd",
+    "bytes": 15691,
+    "mode": 420
+  },
+  "src/engine/json_codec/codec.t.cpp": {
+    "sha256": "c6b5208667a494e4dcf6261c471ebea5fd620ddb672b8dd39686d341cb2679b7",
+    "bytes": 15166,
+    "mode": 420
+  },
+  "CLAUDE.md": {
+    "sha256": "83163d570430690b411e8bd81449ff8763b4a0c8d16c2c4ef9b120e9dc4cde52",
+    "bytes": 34001,
+    "mode": 420
+  },
+  "docs/architecture.md": {
+    "sha256": "0333818d252a95745a9f054cec19a794ce1434287acabc11e7f0d951f17c8a22",
+    "bytes": 78784,
+    "mode": 420
+  },
+  "docs/testing.md": {
+    "sha256": "a0110ffed69ecc2512e164bc380c777b5ed0cfdd8ac9a389ab42e1ff44530b92",
+    "bytes": 83124,
+    "mode": 420
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "02d57245302a172aa6de758a1f6dcc54d3ffc62eddb7bf11b5f1fcdd4e60d94c",
+    "bytes": 43506,
+    "mode": 420
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "de31745ba447ecb9cd7a0594a85aa1ef326cebc99a2f08f604d377f3acc94df0",
+    "bytes": 49902,
+    "mode": 420
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "71bb1be19b85bfc3102d4d7cd275b8ea71de90a3f8387e07e67b9a5cfd986edf",
+    "bytes": 40600,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-b-support/gate.py": {
+    "sha256": "7b8e2c60bc1f6ca6c9436f6db7432d95ed3abc08d15b3f197fe499f532683010",
+    "bytes": 5784,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-b-support/phase.cpp": {
+    "sha256": "c7ac092dde310719be5a1e7a987a023346515f9c380a470d4b5cd96af01acf05",
+    "bytes": 3799,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-b-support/probes.py": {
+    "sha256": "3eae65040df22b952fcf04d1f4b27dcc62e42217e50ea9ee79c95d9cfd166250",
+    "bytes": 1349,
+    "mode": 420
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "protected": 5816,
+  "unchanged": 5815,
+  "authorized_changes": [
+    "src/engine/runtime/runtime.cpp"
+  ],
+  "coordinator_round_excluded_from_manifest": true,
+  "candidate_snapshots_verified": 29,
+  "existing_baselines_verified": 29,
+  "owned_diff_regenerated_exactly": true,
+  "exact_contract_body_unchanged": true,
+  "user_v5_unchanged": true,
+  "audit_setup_notes": [
+    "Initial reviewer assertion expected coordinator round in protected manifest; it is correctly excluded.",
+    "Initial baseline lookup assumed new files have manifest entries; they are correctly absent. Corrected reviewer inventory expectations only; no inputs edited."
+  ]
+}

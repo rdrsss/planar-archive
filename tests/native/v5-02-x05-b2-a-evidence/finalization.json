@@ -1,0 +1,12 @@
+{
+  "candidate_manifest_sha256": "b80a540b4c0db0a79b9acf560d039f2935e1c65c8d8ada9b6cfa98db36376a14",
+  "owned_diff_sha256": "edb204aca17f35691af73155e2f4de4ac18026d879991b1a4933de7064bc1959",
+  "artifact_manifest_sha256": "17aecdc1eb098b6949339a735aa14ca7554f446f120a3805b7b9c35e4bbaf21f",
+  "report_sha256": "20c88b35324c8825df0618c135ee3450cc6638244d5ee4df6dfb29088b76354c",
+  "owned_files": 12,
+  "artifact_files": 76,
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "single_pre_gate_freeze": true,
+  "source_edits_after_freeze": false,
+  "build_ownership_released": true
+}

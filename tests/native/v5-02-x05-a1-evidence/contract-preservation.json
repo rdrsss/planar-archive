@@ -1,0 +1,6 @@
+{
+  "embedded_invocation_implementation_byte_identical": true,
+  "invocation_sha256": "c7e08e83fdfaa3a624a9f2692f43a696b91ca4a5de3ea21b200b3768d4edff2a",
+  "shipped_commands_unchanged_from_baseline": true,
+  "native_limit_unchanged": true
+}

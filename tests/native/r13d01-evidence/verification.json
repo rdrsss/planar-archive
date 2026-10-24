@@ -1,0 +1,31 @@
+{
+  "after_candidate_identity": "82fdee63179c8d4eb8cc4417dbd5a08efb1546de2963df006ed212543415fbd8",
+  "after_sha256": "21291bfe17530c471189a2b597313bd36505c34e12c9e34ec50e324fc78ebf0d",
+  "before_candidate_identity": "37ad152cae2e7601a85761a6f23f9f8cc6213beafa9451ade67af05dbbba25e8",
+  "before_sha256": "efa6f15ec461b5c6bd79896ccad62f1e7842cb05bec75d18fd30edac88e94819",
+  "builds_or_tests_executed": false,
+  "checks": {
+    "247_invocation_and_historical_prose_unchanged": true,
+    "docs_testing_only_candidate_difference": true,
+    "only_bytes_replaced": "216 tests: 215 native -> 226 tests: 225 native",
+    "other_c2_candidate_files_unchanged": 12,
+    "prior_evidence_files_unchanged": 107
+  },
+  "diff_sha256": "1aee34812510a32202dc33219560db119617b7abe2bf7e8afa8aa9850f55bd12",
+  "frozen_registry_and_gate_counts": {
+    "debug": {
+      "native": 225,
+      "passed": 226,
+      "python": 1,
+      "registered": 226,
+      "skipped": 0
+    },
+    "release": {
+      "native": 225,
+      "passed": 226,
+      "python": 1,
+      "registered": 226,
+      "skipped": 0
+    }
+  }
+}

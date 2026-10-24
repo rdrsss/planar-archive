@@ -1,0 +1,10 @@
+{
+  "disposition": "approve",
+  "candidate_manifest_sha256": "0ac575d8d962a97733807a439d43cac866af5be1fb1c9d736a8fbf9e85d48094",
+  "owned_diff_sha256": "97362f82d1e2205cdd157ee7b29c909e923a07ff66bfff0d731e396f9d7c3b85",
+  "author_artifact_manifest_sha256": "30e81d989a21d124f030ed83954c6de663d89526a3566f16b0df22c5583a9b1d",
+  "report_sha256": "d4d64760c790f9a1d1af7b299d64339b23dd263ae9b931be1bdee80e6ee66faa",
+  "review_artifact_manifest_sha256": "e40ebb96ee34281d3d1245474ec8474793ccb68f0d47cf2ee03332b5b7d5f056",
+  "ownership": "Released; no further reviewer edits after this freeze",
+  "limits": "A1 native scope, macOS ARM64 debug; no Linux/release/full X04 or external-profile acceptance claim"
+}

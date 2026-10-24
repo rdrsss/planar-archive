@@ -1,0 +1,139 @@
+[
+  {
+    "label": "scope-before",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/scope_audit.py"
+    ],
+    "exit": 0,
+    "seconds": 0.19935989379882812
+  },
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "seconds": 0.2476673126220703
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "seconds": 0.08512997627258301
+  },
+  {
+    "label": "exact_red.py",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/exact_red.py",
+      "independent-exact_red"
+    ],
+    "exit": 0,
+    "seconds": 2.9793388843536377
+  },
+  {
+    "label": "exact_green.py",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/exact_green.py",
+      "independent-exact_green"
+    ],
+    "exit": 0,
+    "seconds": 2.456171989440918
+  },
+  {
+    "label": "registry.py",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/registry.py",
+      "independent-registry"
+    ],
+    "exit": 0,
+    "seconds": 2.601978063583374
+  },
+  {
+    "label": "probes.py",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/probes.py",
+      "independent-probes"
+    ],
+    "exit": 0,
+    "seconds": 9.301263093948364
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-evidence/final-gate/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/focused.xml"
+    ],
+    "exit": 0,
+    "seconds": 201.97807598114014
+  },
+  {
+    "label": "history-codec",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-evidence/final-gate/history-codec-selected.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/history-codec.xml"
+    ],
+    "exit": 0,
+    "seconds": 0.2669401168823242
+  },
+  {
+    "label": "lint",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit": 0,
+    "seconds": 1.5940921306610107
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "seconds": 0.24621105194091797
+  },
+  {
+    "label": "scope-after",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-b2-c-c01-review-evidence/scope_audit.py"
+    ],
+    "exit": 0,
+    "seconds": 0.16710305213928223
+  }
+]

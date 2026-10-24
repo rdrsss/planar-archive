@@ -1,0 +1,57 @@
+{
+  "starting_revision": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "files": {
+    "src/stdlib/planar/schema.lua": {
+      "sha256": "90232b88350765a5000fd1d6b00a8c0b9449f61aa4811b6c11633678aeade3d7",
+      "mode": 420
+    },
+    "src/stdlib/planar/semantic.lua": {
+      "sha256": "0235c3589e24972a008ce85373391396b4e8b5a49860581b809d7fc40e104c61",
+      "mode": 420
+    },
+    "src/engine/CMakeLists.txt": {
+      "sha256": "82cdd7ee6a20238b85092b42ec0d1e96cf651e2b85d820f03cac07779aab2f8e",
+      "mode": 420
+    },
+    "src/engine/runtime/shapes.t.cpp": {
+      "sha256": "68a95f393daadac0336a694f2ae8cfa8e6a6ea588d5db9fe7b064f063d68319e",
+      "mode": 420
+    },
+    "tests/stdlib/x05-shapes.lua": {
+      "sha256": "c5c685759c915675c81c8d71f027bb65e6079e5198d41da859cb227295a133fd",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b1-support/audit.py": {
+      "sha256": "8460da76e0c89a4640d967a0c836295c8f2ac1a2faef05b3bcb2edd66e40c858",
+      "mode": 420
+    },
+    "tests/native/v5-02-x05-b1-support/gate.py": {
+      "sha256": "faf3ea93115c3500167ffe7ccc91b465b472e9ab48bcf8746a533a723528ca38",
+      "mode": 420
+    },
+    "CLAUDE.md": {
+      "sha256": "01331f44df50364f155a1370908031296d0ae44dc88c9ef31252ddd32a798f1c",
+      "mode": 420
+    },
+    "docs/architecture.md": {
+      "sha256": "2ccb1b21b99b8a2d05d5c1a396feff0c0ce64700145df98edd3112919b40cc13",
+      "mode": 420
+    },
+    "docs/testing.md": {
+      "sha256": "acea86f2a791d42852216da8c39b59d3e7973c253e5493f0a6d88d2ea98af280",
+      "mode": 420
+    },
+    "docs/vernacular/implementation.md": {
+      "sha256": "9c7bb166cc5d045f3dd98cc1eab8c0bae332192299014007618f2c3fda7490cf",
+      "mode": 420
+    },
+    "docs/vernacular/roadmap.md": {
+      "sha256": "aeb0f54dd9faf8e2297256618abb7ddddd2e4aad397f976a1ad04158db3ccb28",
+      "mode": 420
+    },
+    "docs/vernacular/external-profile-implementation.md": {
+      "sha256": "ccf0983359cf4490a458ef6f511360c65fabbab4a0ca89e7fb12421783f599b2",
+      "mode": 420
+    }
+  }
+}

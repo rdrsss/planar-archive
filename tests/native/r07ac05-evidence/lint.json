@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "scripts/rewrite-check.py",
+    "lint",
+    "--build-dir",
+    "build/rewrite-debug"
+  ],
+  "returncode": 0,
+  "seconds": 0.2618197910487652
+}

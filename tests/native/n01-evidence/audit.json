@@ -1,0 +1,31 @@
+{
+  "protected_artifacts_changed": [],
+  "protected_exclusion": "docs/vernacular/rounds/N01.md is coordinator-owned live record",
+  "candidate_files_changed_since_freeze": [],
+  "old_native_directory_absent": true,
+  "agent_symlink_preserved": true,
+  "active_build_registry_checks": {
+    "debug": {
+      "compile_commands.json": {
+        "old_module_absent": true,
+        "old_path_absent": true
+      },
+      "build.ninja": {
+        "old_module_absent": true,
+        "old_path_absent": true
+      }
+    },
+    "release": {
+      "compile_commands.json": {
+        "old_module_absent": true,
+        "old_path_absent": true
+      },
+      "build.ninja": {
+        "old_module_absent": true,
+        "old_path_absent": true
+      }
+    }
+  },
+  "native_files_moved": 22,
+  "limitations": "macOS Apple Silicon only; Linux not executed."
+}

@@ -1,0 +1,71 @@
+[
+  {
+    "label": "debug-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "start": "2026-10-22T21:59:35.932208+00:00",
+    "seconds": 0.265443
+  },
+  {
+    "label": "debug-inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "start": "2026-10-22T21:59:36.198752+00:00",
+    "seconds": 0.073486
+  },
+  {
+    "label": "debug-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "replacement.*(capture|path|acceptance)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-a1-review-evidence/debug-focused.xml"
+    ],
+    "exit_code": 0,
+    "start": "2026-10-22T21:59:36.276333+00:00",
+    "seconds": 64.169332
+  },
+  {
+    "label": "pinned-lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "start": "2026-10-22T22:00:40.449448+00:00",
+    "seconds": 1.287866
+  },
+  {
+    "label": "debug-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "start": "2026-10-22T22:00:41.738312+00:00",
+    "seconds": 0.264596
+  }
+]

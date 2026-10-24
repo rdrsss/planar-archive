@@ -1,0 +1,22 @@
+[
+  {
+    "logical": "planar/json.lua",
+    "current": "93990893a3ca859891d36f9b57f70f3dee986f7ce0922c9e267e3351bf3eb26b",
+    "baseline": "93990893a3ca859891d36f9b57f70f3dee986f7ce0922c9e267e3351bf3eb26b"
+  },
+  {
+    "logical": "planar/schema.lua",
+    "current": "984177803407ba8cf8cfe207f80477fa380fede071c40a89638642a7bf4b813c",
+    "baseline": "90232b88350765a5000fd1d6b00a8c0b9449f61aa4811b6c11633678aeade3d7"
+  },
+  {
+    "logical": "planar/semantic.lua",
+    "current": "44b106477fae45c70bb525e1c7517d1a815b6b45569763eaf90869dca06e6cac",
+    "baseline": "0235c3589e24972a008ce85373391396b4e8b5a49860581b809d7fc40e104c61"
+  },
+  {
+    "logical": "tests/stdlib/x05-shapes.lua",
+    "current": "c5c685759c915675c81c8d71f027bb65e6079e5198d41da859cb227295a133fd",
+    "baseline": "c5c685759c915675c81c8d71f027bb65e6079e5198d41da859cb227295a133fd"
+  }
+]

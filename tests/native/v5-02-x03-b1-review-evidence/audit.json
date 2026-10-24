@@ -1,0 +1,56 @@
+{
+  "candidate_files": 16,
+  "author_artifacts": 78,
+  "candidate_manifest_sha256": "470b63c257154091e71a121f4a223676c7985a894c68cec0465f5c1b9617b165",
+  "owned_diff_sha256": "47b06d068a1e2a397ffbab461ffa947308ea76e2d43eae27ed662fdd2a131760",
+  "author_artifact_manifest_sha256": "2b96c283867328337f66a4bdfbb41b5e5284ec45e0998e636cc3bca63f1fce53",
+  "reconstructed_baseline_files": 14859,
+  "frozen_owned_baseline_files": [
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/types.cppm",
+    "src/engine/CMakeLists.txt",
+    "CLAUDE.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/architecture.md"
+  ],
+  "baseline_provenance": "Full current inventory reconstructed with exact frozen owned pre-edit snapshots; no unrelated editing concurrent per coordinator.",
+  "baseline_current_changes": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/format.cppm",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/v5-alignment.md"
+  ],
+  "baseline_missing": [],
+  "verification_input_changes": [
+    "tests/native/v5-02-x03-b1-support/old-binary.py"
+  ],
+  "baseline_test_names": 409,
+  "current_test_names": 416,
+  "removed_tests": [],
+  "added_tests": [
+    "replacement.ledger format2 backup restore preserve format identity and never overwrite",
+    "replacement.ledger format2 exact schema delta and native initialization retain format",
+    "replacement.ledger format2 publication faults retain complete target only after atomic publication",
+    "replacement.ledger format2 publication late sidecar refuses and preserves arriving sidecar",
+    "replacement.ledger format2 publication no replace preserves target arriving at link boundary",
+    "replacement.ledger format2 refuses mutation before writable access and preserves codec1 reads",
+    "replacement.ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged"
+  ],
+  "focused_pass_count": 167,
+  "focused_skips": 0,
+  "agents_symlink": "CLAUDE.md",
+  "pre_b1_binary_sha256": "be1c4cee1b358208831faa919707ce5fd01de3ea31bc63db333a027f8844464a"
+}

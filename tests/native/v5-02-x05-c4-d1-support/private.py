@@ -1,0 +1,52 @@
+"""Copy all compiled inputs, recursively expand response files, and run isolated native probes."""
+from pathlib import Path
+import json,shlex,shutil,subprocess,time,hashlib,stat
+R=Path(__file__).resolve().parents[3];B=R/'build/rewrite-debug';S=Path(__file__).parent;E=R/'tests/native/v5-02-x05-c4-d1-evidence';P=E/'private';D=E/'dependencies';P.mkdir(exist_ok=True)
+def write(p,x):p.write_text(json.dumps(x,sort_keys=True,indent=2)+'\n')
+def entry(p):return dict(mode=stat.S_IMODE(p.stat().st_mode),sha256=hashlib.file_digest(p.open('rb'),'sha256').hexdigest(),bytes=p.stat().st_size,mtime_ns=p.stat().st_mtime_ns)
+def compiled():return {str(p.resolve()):entry(p) for p in B.rglob('*') if p.is_file() and p.suffix in {'.o','.pcm','.a','.dylib'}}
+def expand(args):
+ out=[]
+ for a in args:
+  if a.startswith('@'):out+=expand(shlex.split((B/a[1:]).read_text()))
+  else:out.append(a)
+ return out
+cc=json.loads((B/'compile_commands.json').read_text())
+a=expand(shlex.split(next(x['command'] for x in cc if x['file'].endswith('capture/profile.t.cpp'))))
+line=subprocess.check_output(['ninja','-t','commands','planar_capture_profile_tests'],cwd=B,text=True).splitlines()[-1]
+link=expand(shlex.split(line.split(' && ')[1]));libs=link[link.index('src/engine/libplanar_capture_profile.a'):]
+before=compiled();members=dict(before);journals={n:entry(B/n) for n in ['.ninja_log','.ninja_deps']}
+write(P/'journals-before.json',journals)
+for v in a:
+ if v.startswith('-fmodule-file='):
+  p=(B/v[len('-fmodule-file='):].split('=',1)[1]).resolve();members[str(p)]=entry(p)
+for p in Path('/opt/homebrew/opt/llvm/lib/c++').glob('*.dylib'):members[str(p.resolve())]=entry(p.resolve())
+def dest(p):return D/str(Path(p).resolve()).lstrip('/')
+assert not D.exists(), 'preserve previous attempt; use fresh evidence prefix'
+write(P/'compiled-before.json',members)
+for k,v in members.items():
+ p=dest(k);p.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(k,p);assert entry(p)==v
+for source in ['private.py','private-probe.cpp','syscalls.cpp']:(P/source).write_bytes((S/source).read_bytes())
+commands=[]
+def run(label,args):
+ started=time.monotonic();p=subprocess.run(list(map(str,args)),cwd=B,capture_output=True,text=True)
+ (P/(label+'.log')).write_text(p.stdout+p.stderr);commands.append(dict(label=label,argv=list(map(str,args)),cwd=str(B),exit=p.returncode,seconds=time.monotonic()-started));write(P/'commands.json',commands);print(label,p.returncode,flush=True);assert p.returncode==0,(p.stdout+p.stderr)[-5000:]
+for i,v in enumerate(a):
+ if v.startswith('-fmodule-file='):
+  k,p=v[len('-fmodule-file='):].split('=',1);a[i]='-fmodule-file='+k+'='+str(dest(B/p))
+for flag,ext in [('-o','.o'),('-MF','.d'),('-MT','.o')]:
+ if flag in a:a[a.index(flag)+1]=str(P/('probe'+ext))
+a[a.index('-c')+1]=str(S/'private-probe.cpp');a+=['-fno-implicit-modules','-fno-implicit-module-maps']
+assert not any(v.startswith('@') for v in a)
+run('syscalls',[a[0],'-dynamiclib','-fno-implicit-modules','-fno-implicit-module-maps','-std=c++26','-stdlib=libc++',S/'syscalls.cpp','-install_name','@rpath/libd1_syscalls.dylib','-o',P/'libd1_syscalls.dylib'])
+run('compile',a)
+redirected=[str(dest(B/v)) if v.endswith(('.o','.a','.pcm','.dylib')) else v for v in libs if v!='src/engine/libplanar_admission_syscalls.dylib']
+common=[link[0],'-stdlib=libc++','-arch','arm64','-L'+str(dest('/opt/homebrew/opt/llvm/lib/c++/libc++.1.dylib').parent),'-Wl,-rpath,'+str(dest('/opt/homebrew/opt/llvm/lib/c++/libc++.1.dylib').parent)]
+run('link',common+['-Wl,-rpath,'+str(P),P/'probe.o',P/'libd1_syscalls.dylib',*redirected,'-o',P/'probe'])
+run('run',[P/'probe','[d1-private]','--reporter','junit','--out',P/'probe.xml'])
+assert compiled()==before
+assert {n:entry(B/n) for n in journals}==journals
+assert all(entry(Path(k))==v and entry(dest(k))==v for k,v in members.items())
+assert {str(p) for p in D.rglob('*') if p.is_file()}=={str(dest(k)) for k in members}
+write(P/'journals-final.json',dict(entries=journals,unchanged=True))
+write(P/'dependency-final.json',dict(members=len(members),shared_and_copied_unchanged=True,copied_membership_exact=True,recursive_responses=True,implicit_modules=False))

@@ -1,0 +1,24 @@
+[1/16] Scanning <repo>/src/cmd/planar/bootstrap.cpp for CXX dependencies
+[2/16] Scanning <repo>/src/cmd/planar/bootstrap.cppm for CXX dependencies
+[3/16] Scanning <repo>/src/cmd/planar/main.cpp for CXX dependencies
+[4/16] Scanning /opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm for CXX dependencies
+[5/16] Scanning /opt/homebrew/opt/llvm/share/libc++/v1/std.cppm for CXX dependencies
+[6/16] Generating CXX dyndep file 'src/cmd/planar/CMakeFiles/@cmake_cxx_std.dir/CXX.dd'
+[7/16] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command.dir/CXX.dd
+[8/16] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar.dir/CXX.dd
+[9/16] Building CXX object 'src/cmd/planar/CMakeFiles/@cmake_cxx_std.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm.o'
+/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm:163:15: warning: 'std' is a reserved name for a module [-Wreserved-module-identifier]
+  163 | export module std;
+      |               ^
+1 warning generated.
+[10/16] Building CXX object src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cppm.o
+[11/16] Building CXX object 'src/cmd/planar/CMakeFiles/@cmake_cxx_std.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm.o'
+/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm:80:15: warning: 'std' is a reserved name for a module [-Wreserved-module-identifier]
+   80 | export module std.compat;
+      |               ^
+1 warning generated.
+[12/16] Building CXX object src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cpp.o
+[13/16] Linking CXX static library src/cmd/planar/lib@cmake_cxx_std.a
+[14/16] Building CXX object src/cmd/planar/CMakeFiles/planar.dir/main.cpp.o
+[15/16] Linking CXX static library src/cmd/planar/libplanar_command.a
+[16/16] Linking CXX executable bin/planar

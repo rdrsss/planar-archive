@@ -1,0 +1,176 @@
+[
+  {
+    "name": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T19:28:13.803499+00:00",
+    "end": "2026-10-21T19:28:27.986366+00:00",
+    "exit": 1
+  },
+  {
+    "name": "build-2",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T19:28:35.160693+00:00",
+    "end": "2026-10-21T19:28:58.194728+00:00",
+    "exit": 0
+  },
+  {
+    "name": "build-3",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T19:29:03.652628+00:00",
+    "end": "2026-10-21T19:29:05.703043+00:00",
+    "exit": 0
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(atomic |ledger |acceptance |load capture |command |runtime |.*cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "tests/native/r14-d7-a-evidence/focused.xml"
+    ],
+    "start": "2026-10-21T19:29:12.318846+00:00",
+    "end": "2026-10-21T19:30:49.421932+00:00",
+    "exit": 0
+  },
+  {
+    "name": "final-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T19:31:35.579439+00:00",
+    "end": "2026-10-21T19:31:54.426410+00:00",
+    "exit": 0
+  },
+  {
+    "name": "focused-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement\\.(atomic |ledger |acceptance |load capture |command |runtime |.*cli$)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d7-a-evidence/focused-final.xml"
+    ],
+    "start": "2026-10-21T19:32:01.739587+00:00",
+    "end": "2026-10-21T19:33:44.822877+00:00",
+    "exit": 0
+  },
+  {
+    "name": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "start": "2026-10-21T19:33:57.714804+00:00",
+    "end": "2026-10-21T19:33:57.746776+00:00",
+    "exit": 0
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "start": "2026-10-21T19:33:57.865163+00:00",
+    "end": "2026-10-21T19:33:58.860483+00:00",
+    "exit": 0
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "start": "2026-10-21T19:34:06.606479+00:00",
+    "end": "2026-10-21T19:34:07.262897+00:00",
+    "exit": 0
+  },
+  {
+    "name": "historical-variants",
+    "argv": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-a-evidence/historical-variants.json"
+    ],
+    "start": "2026-10-21T19:34:07.455100+00:00",
+    "end": "2026-10-21T19:34:07.798169+00:00",
+    "exit": 0
+  },
+  {
+    "name": "d6-variants",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-a-evidence/d6-variants.json"
+    ],
+    "start": "2026-10-21T19:34:07.945383+00:00",
+    "end": "2026-10-21T19:34:08.153457+00:00",
+    "exit": 0
+  },
+  {
+    "name": "c01-variants",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d7-a-evidence/c01-variants.json"
+    ],
+    "start": "2026-10-21T19:34:08.282440+00:00",
+    "end": "2026-10-21T19:34:08.420536+00:00",
+    "exit": 0
+  },
+  {
+    "name": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-21T19:34:08.558178+00:00",
+    "end": "2026-10-21T19:34:08.663783+00:00",
+    "exit": 0
+  }
+]

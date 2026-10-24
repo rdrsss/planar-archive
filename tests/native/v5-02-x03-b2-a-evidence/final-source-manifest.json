@@ -1,0 +1,57 @@
+{
+  "path_base": "<repo>",
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "fceefc87c9b940c778139dd82e30cb493f1e6e41d8453ba1b604ebdfe552f454"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256": "d43b92a6c5b3ac75d1b78e0e2449f1c1e8f17c682249aca3cebe14c3839ec5eb"
+    },
+    {
+      "path": "docs/vernacular/acceptance-matrix.md",
+      "sha256": "0f4d99fa9236ea8955a5f5aa5245384363df6536d990c79a55c4fa1ff133b6d5"
+    },
+    {
+      "path": "docs/vernacular/external-profile-implementation.md",
+      "sha256": "983482b61c081e95e5732994be22ab53d1794196e0c577b6ce1d32256de9404d"
+    },
+    {
+      "path": "docs/vernacular/implementation.md",
+      "sha256": "9047eab124610e1f7c389adb906a947bd44a4960e8eaf504b24be0cab29b1788"
+    },
+    {
+      "path": "docs/vernacular/roadmap.md",
+      "sha256": "5d609d7475c9154dd2a07255030f4d11395536630e6480703bb223bc2e6d22f7"
+    },
+    {
+      "path": "docs/vernacular/v5-alignment.md",
+      "sha256": "4c102a971ab2832c1345ff772cf8856fe7fce8c881e573c8ae96fb3a46dd0bd7"
+    },
+    {
+      "path": "src/engine/CMakeLists.txt",
+      "sha256": "20ad1e4454007bde1c5d2a7597ec210387f104c79e95fd02b496df47d93e5415"
+    },
+    {
+      "path": "src/engine/ledger/format.cpp",
+      "sha256": "abe067dd2cdde55261526ff6a034e95e3226c974f4db9102773bc5b1b9d87412"
+    },
+    {
+      "path": "src/engine/ledger/format.cppm",
+      "sha256": "42e25df686f81892a848af22ee078d2091fcca46611079c0803f1825c1733b7e"
+    },
+    {
+      "path": "src/engine/ledger/format.t.cpp",
+      "sha256": "ac0bda3c3ea6b9cbbc91378b552cc2c0be2cda9433724345efaab0c4f36f5c3f"
+    },
+    {
+      "path": "src/engine/ledger/history_verification.t.cpp",
+      "sha256": "037699dbc64480d83fc747cdcf10538bfb9856727e06394b5298e2de8482ab24"
+    },
+    {
+      "path": "src/engine/ledger/types.cppm",
+      "sha256": "63840b7e1c21ec24cb8cac263b2348204003e066840333e1e1c1ffc4e5226e7e"
+    }
+  ]
+}

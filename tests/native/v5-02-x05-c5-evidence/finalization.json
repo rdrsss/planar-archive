@@ -1,0 +1,36 @@
+{
+  "artifact_entries": 795,
+  "artifact_manifest": {
+    "bytes": 144580,
+    "mode": 420,
+    "sha256": "c12187129cc85b21b12a9e8cb61c5bdac3b4cd12bab883b3c255b77c2d7fca98"
+  },
+  "builds_and_files_released": true,
+  "candidate": {
+    "bytes": 2843,
+    "mode": 420,
+    "sha256": "218370cd8fb7d3b40bc2d66f9fe363b61ffafda9ad7adfb0134b0e21a9e3b4a0"
+  },
+  "candidate_entries": 17,
+  "product_baseline": {
+    "bytes": 16029480,
+    "mode": 420,
+    "sha256": "bdd42946bf4306d5baac5eb009cd8eb93bba1bc306845e2d98b04e65e6f1b648"
+  },
+  "protection": {
+    "bytes": 177,
+    "mode": 420,
+    "sha256": "0e772868535fb8c682c1411064ce9c42a836eb6ed11d966927b8b9faca884f50"
+  },
+  "report": {
+    "bytes": 9526,
+    "mode": 420,
+    "sha256": "9b1f11163928d391d89cdf3af209af91fb65f33863adaf90df1e6f6bd103208d"
+  },
+  "review_pending": true,
+  "tested_source_manifest": {
+    "bytes": 109685,
+    "mode": 420,
+    "sha256": "4ed5447f7a09be3ad7737a6346a23e638dd91cb0cdf01eb98749bc9f727600e7"
+  }
+}

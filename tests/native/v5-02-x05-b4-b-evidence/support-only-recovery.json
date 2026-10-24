@@ -1,0 +1,14 @@
+{
+  "changed": [
+    "tests/native/v5-02-x05-b4-b-support/probes.py",
+    "tests/native/v5-02-x05-b4-b-support/semantic.cpp",
+    "tests/native/v5-02-x05-b4-b-support/transport-accounting.md"
+  ],
+  "added": [
+    "tests/native/v5-02-x05-b4-b-support/heap-observation.md"
+  ],
+  "product_test_prose_unchanged": true,
+  "failed_sources": "failed-support-snapshot",
+  "frozen_identity_before": "58d11e682a0dfb254f1ef921db84bfda0bf94d0e8ab6d3424ed12d4bc832bcb6",
+  "frozen_identity_after": "aef0b8aacaa9d2d3e90e772daee98ba0699f7b49e550aebe3ef8c9f5838c2fcf"
+}

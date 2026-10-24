@@ -1,0 +1,178 @@
+{
+  "REPORT.md": {
+    "file_sha256": "c817d85ef41c81ce60694b314758d63034434958751f10489d66626fa3c8a5af"
+  },
+  "artifact-manifest.json": {
+    "entries": 8283,
+    "file_sha256": "6d741370d33c49171852ac4c81fe184e7ac9bf3cf102a005033df2ce893072e0"
+  },
+  "candidate-manifest.json": {
+    "entries": 15,
+    "file_sha256": "ccdc2b51bf79fc939134c3a9b8a0336306b7c5d47b932e698c9db71ddb847e1a"
+  },
+  "candidate.diff": {
+    "file_sha256": "94848c19c6fa134e8faadd54be4b119a000ada635977863a09d42944e2b75052"
+  },
+  "frozen-candidate.json": {
+    "entries": 231,
+    "file_sha256": "0f10d1de1e900cff3a3d60497674a21db3b53b6a80f5491b7a0bae1812c5e2a2"
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/callback-memory/commands.json": {
+    "all_exit_zero": true,
+    "commands": 5
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/callback-memory/completed.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/callback-memory/retry.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-gate/codec-targeted.xml": {
+    "cases": 25,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-gate/commands.json": {
+    "all_exit_zero": true,
+    "commands": 25
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-gate/focused.xml": {
+    "cases": 440,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-gate/history-codec.xml": {
+    "cases": 11,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-gate/production-render.xml": {
+    "cases": 46,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-gate/projection-identity.xml": {
+    "cases": 9,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/alloc.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/commands.json": {
+    "all_exit_zero": true,
+    "commands": 12
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/instructions.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/lua.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/metatable.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/nodes.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/observer.xml": {
+    "cases": 2,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/partial.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/remaining.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-evidence/final-probes/workspace.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/allocation.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/commands.json": {
+    "all_exit_zero": true,
+    "commands": 7
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/independent.xml": {
+    "cases": 3,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/memory-completed.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/memory-retry.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/partial.xml": {
+    "cases": 1,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/production.xml": {
+    "cases": 17,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/raw-observer.xml": {
+    "cases": 2,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0
+  },
+  "tests/native/v5-02-x05-c2-b2-review-evidence/replay-commands.json": {
+    "all_exit_zero": true,
+    "commands": 5
+  }
+}

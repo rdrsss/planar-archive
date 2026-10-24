@@ -1,0 +1,74 @@
+{
+  "historical_red": {
+    "cases": 4,
+    "errors": 0,
+    "failed_cases": [
+      "C4 D4 role projection uses original role and exact shipped headed base",
+      "C4 D4 pair stays lazy and performed role DATA remains valid after project"
+    ],
+    "identity": {
+      "bytes": 1545,
+      "mode": 420,
+      "sha256": "cd1d45a3da60f796d98987b67ccf2be03f3ec097f91275c3b451f83f2de68ead"
+    },
+    "skipped": 0,
+    "suite_attributes": [
+      {
+        "errors": "0",
+        "failures": "2",
+        "hostname": "tbd",
+        "name": "planar_runtime_tests",
+        "skipped": "0",
+        "tests": "350",
+        "time": "1.492",
+        "timestamp": "2026-10-24T10:40:26Z"
+      }
+    ]
+  },
+  "independent_focused": {
+    "cases": 536,
+    "errors": 0,
+    "failed_cases": [],
+    "identity": {
+      "bytes": 324299,
+      "mode": 420,
+      "sha256": "1c4ba7bd0fc02209b90e17c336528f57042e3c805c39bfb39c343d00ce3718b1"
+    },
+    "skipped": 0,
+    "suite_attributes": [
+      {
+        "disabled": "0",
+        "failures": "0",
+        "hostname": "",
+        "name": "(empty)",
+        "skipped": "0",
+        "tests": "536",
+        "time": "181",
+        "timestamp": "2026-10-24T07:01:50"
+      }
+    ]
+  },
+  "independent_private": {
+    "cases": 16,
+    "errors": 0,
+    "failed_cases": [],
+    "identity": {
+      "bytes": 2976,
+      "mode": 420,
+      "sha256": "8d85a4c6a9767be1075f53ff92c477a7b3f27079fa40f5c04902bd2ffbf1a488"
+    },
+    "skipped": 0,
+    "suite_attributes": [
+      {
+        "errors": "0",
+        "failures": "0",
+        "hostname": "tbd",
+        "name": "green",
+        "skipped": "0",
+        "tests": "947",
+        "time": "3.601",
+        "timestamp": "2026-10-24T11:08:09Z"
+      }
+    ]
+  }
+}

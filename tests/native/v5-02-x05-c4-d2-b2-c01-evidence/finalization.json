@@ -1,0 +1,21 @@
+{
+  "artifact_entries": 129,
+  "artifact_manifest_sha256": "4f3606796d9c6f9456db9e4e8372f115f707847eddb360972bff6dcd5bdc88a3",
+  "candidate_entries": 28,
+  "candidate_sha256": "ca756141175a1b3772a946e1246a13f04204b4306e86be8ecfb46c190a725781",
+  "combined_diff_sha256": "27a12797a5a9c8c28b4ac81e3bdae95971e1aa43017d3004652a85173781132e",
+  "coordinator_round_exclusion": "docs/vernacular/rounds/V5-02-X05-C4-D2-B2-C01.md",
+  "copied_runtime_link_load_selection_proved": false,
+  "corrective_diff_sha256": "c0b4f14729a084ece8e9c126d8c95188eded707733264fb790d17bc5cef0b8c8",
+  "debug_released": true,
+  "disposable_cleanup_verified": true,
+  "files_released": true,
+  "final_tested_identity": true,
+  "full_gate_claimed": false,
+  "linux_gate_claimed": false,
+  "original_B2_identities_verified": true,
+  "release_gate_claimed": false,
+  "report_sha256": "b1b010088684e06e7ee17a6a7ee82f58eff88cbe67fe3aa2da927e7be4fa4380",
+  "review": "pending",
+  "schema": 1
+}

@@ -1,0 +1,48 @@
+{
+  "ledger-contract.md": {
+    "reviewed_sha256": "17bc6f2b36e97bd6dc5caf661effe134e6331d98ac1590fd03ada589811083fb",
+    "final_status_sha256": "0069b7ff09b49c62b5ef29193ac46597c8e7092f9b383e3b6c83967fe4ce8938",
+    "status_only_replacements": [
+      [
+        "Status: R11 candidate design, unimplemented and awaiting independent review.",
+        "Status: R11 design independently approved; persistence is unimplemented.\nSee [the review](rounds/R11-review.md) for scope and verification limits."
+      ]
+    ]
+  },
+  "implementation.md": {
+    "reviewed_sha256": "dd880f9f2c215485a7c9c285406670a19d42be40525ff0e0a22a498a97b5471a",
+    "final_status_sha256": "65659a01f8dac6dbece261f74db7776553101577925bfb6e988e48eb737274ab",
+    "status_only_replacements": [
+      [
+        "R10-P01. R11 now designs ledger/history storage before persistence code. See the",
+        "R10-P01. R11 ledger/history design is independently approved. See the"
+      ],
+      [
+        "R11 is a documentation-only design candidate for [ledger foundation v1](ledger-contract.md),",
+        "R11 is the independently approved documentation design for [ledger foundation v1](ledger-contract.md),"
+      ]
+    ]
+  },
+  "roadmap.md": {
+    "reviewed_sha256": "7d0e4702c946295b62b3d10b322100aa8e302a3b1bc89772fe590799d75d1c3f",
+    "final_status_sha256": "b28afc7cd46e1eafb92e80ecb4d07baa621d010588e5218488309d33afdd80f4",
+    "status_only_replacements": [
+      [
+        "approved. R11 ledger/history design is a documentation candidate awaiting independent review.",
+        "approved. R11 ledger/history design is independently approved; R12 is the next coding slice."
+      ],
+      [
+        "Status: documentation candidate, awaiting independent review.",
+        "Status: complete; [independent review approved](rounds/R11-review.md)."
+      ],
+      [
+        "and resolves that request. R11 provides a ledger/history design candidate for independent review.",
+        "and resolves that request. R11 ledger/history design is independently approved."
+      ],
+      [
+        "full gates passed 124 tests with zero skips. R11 now has a ledger/history\ncontract candidate for review before persistence implementation.",
+        "full gates passed 124 tests with zero skips. R11 ledger/history design is\nindependently approved; persistence remains unimplemented."
+      ]
+    ]
+  }
+}

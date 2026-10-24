@@ -1,0 +1,64 @@
+{
+  "a2_source_comparisons": 7,
+  "all_commands_serialized": true,
+  "author_artifacts": 240,
+  "candidate_paths": 10,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-capture-evidence.md",
+    "src/engine/capture/profile.t.cpp",
+    "tests/native/v5-02-x04-a3-support/verify.py"
+  ],
+  "configurations": {
+    "debug": {
+      "added": [
+        "replacement.profile capture staged module aliases refuse without reads and poison owner"
+      ],
+      "build_identities": 711,
+      "executed": 489,
+      "five_storage_families_exact": true,
+      "full_seconds": 319.134494,
+      "junit_zero_failures_errors_skips": true,
+      "last_test_passed": 489,
+      "pass_entries": 26,
+      "prior_preserved": 488,
+      "registered": 489
+    },
+    "release": {
+      "added": [
+        "replacement.profile capture staged module aliases refuse without reads and poison owner"
+      ],
+      "build_identities": 708,
+      "executed": 489,
+      "five_storage_families_exact": true,
+      "full_seconds": 211.043888,
+      "junit_zero_failures_errors_skips": true,
+      "last_test_passed": 489,
+      "pass_entries": 26,
+      "prior_preserved": 488,
+      "registered": 489
+    }
+  },
+  "documentation_changes_after_gate": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-capture-evidence.md"
+  ],
+  "nested_build_protected": true,
+  "phase": "after-verification",
+  "protected_final_entries": 15988,
+  "source_copies": 134,
+  "symlink_preserved": true,
+  "utc": "2026-10-22T22:56:43.832556+00:00"
+}

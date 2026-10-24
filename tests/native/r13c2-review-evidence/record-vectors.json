@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "python3",
+    "tests/vectors/records/generate.py",
+    "--check"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.7078652381896973
+}

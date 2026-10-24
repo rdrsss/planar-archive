@@ -1,0 +1,27 @@
+{
+  "r12c2-generated": {
+    "files": 2,
+    "forward_and_reverse_identical": true,
+    "manifest_sha256": "d2701c30fc227d1afcf004b0bbf80ccb94bc2e633ee0b7ebc8881ec3d7546900"
+  },
+  "r13b1-generated": {
+    "files": 2,
+    "forward_and_reverse_identical": true,
+    "manifest_sha256": "ac9eba131e8f32401fe134a88f190b6d479f44b8c311667e400a20033a76f99d"
+  },
+  "r14c3b2-generated": {
+    "files": 2,
+    "forward_and_reverse_identical": true,
+    "manifest_sha256": "95a58e4d2907c60571a2e68f85d1c8bdf758049eb5be841326f5a7c8348bcb8d"
+  },
+  "r14f1-generated": {
+    "files": 2,
+    "forward_and_reverse_identical": true,
+    "manifest_sha256": "0b44fb1a395dac3e726e252b65660095ce2e87e3a4c285dd6578c78a507fcfa8"
+  },
+  "v5-02-x03-b2-b-c01-generated": {
+    "files": 2,
+    "forward_and_reverse_identical": true,
+    "manifest_sha256": "854926574dd1c3bda1d4494337e2444e9cade075e904eaef49fbb09799b8e7ce"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "recovered_exact_preexisting_bytes": [
+    "src/cmd/planar/CMakeLists.txt",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "hash_only": [
+    "CMakeLists.txt",
+    "src/cmd/planar/bootstrap.cpp",
+    "src/cmd/planar/bootstrap.t.cpp",
+    "src/cmd/planar/response.cppm",
+    "src/cmd/planar/response.cpp",
+    "docs/cli-reference.md"
+  ]
+}

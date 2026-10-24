@@ -1,0 +1,77 @@
+{
+  "CLAUDE.md": {
+    "sha256": "658c5af30fc18818f6a568c7e1a9ac882a7b61ff7372a9ae4f251a7fe12c8827",
+    "bytes": 36237,
+    "mode": 420
+  },
+  "docs/architecture.md": {
+    "sha256": "9829793778b3aee17be36fc4d8ba0c746fab88977127d2ab653e75dec1616840",
+    "bytes": 81026,
+    "mode": 420
+  },
+  "docs/testing.md": {
+    "sha256": "3a9f3e7907add3fd0c342c327c8983b341e973280971bba4a8e2d028a76da5fb",
+    "bytes": 85366,
+    "mode": 420
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "f3cf4b2598fc390dd93ff172afd7fe2f84f9f2d8038372250be8a49cfd00fb3b",
+    "bytes": 42848,
+    "mode": 420
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "a367c408ff11580f1d181fb450a500ed6a2808ed78ce488cc8605519c654d56d",
+    "bytes": 45754,
+    "mode": 420
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "6bf2127b42a3a4691e2e547239f83a3978d8b21edf6970ae81bc554ced5b7121",
+    "bytes": 52150,
+    "mode": 420
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "6f93366cc78522b0674bf2152291ac8e125f3f165f49620c2ef83039e78ce41a",
+    "bytes": 42022,
+    "mode": 420
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "sha256": "123c785e971e9a81a4adf36d985f30b90d6dadc1c3fb9c7df3df7b273c45fc7f",
+    "bytes": 114113,
+    "mode": 420
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "sha256": "91e80d2525672d767ca2c7b8c1b169341586c6a4c8233d44ea70bbd831aebf45",
+    "bytes": 14470,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-c-evidence/REPORT.md": {
+    "sha256": "9b7360b0bade465d0693fef30766478b4923b38936a3c21786832be6cf5b62d9",
+    "bytes": 9498,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-c-support/allocation.cpp": {
+    "sha256": "c4cdea12431c6d09d25d355a15d35a31daa5496ae928dca79616b3c65bee1e4a",
+    "bytes": 4753,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-c-support/finalize.py": {
+    "sha256": "3963e92fef7c0979165347eddc5c463911df7241dd1dd50df32e0d2f91ef4c14",
+    "bytes": 2801,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-c-support/gate.py": {
+    "sha256": "69df113f31816ee0f9597cd07da4dfdec4d853d206d555f004239302a581333f",
+    "bytes": 7005,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-c-support/lifetime.cpp": {
+    "sha256": "4b32a96a4bc764d732ab2903d0dfdf72e5d5e5d8abca5956fb9e1a89bf01ffd1",
+    "bytes": 3115,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b2-c-support/probes.py": {
+    "sha256": "569378191fea7723aa5817406e8cb03fdeef64e12eb811cbc1668c3cdcd596d6",
+    "bytes": 5363,
+    "mode": 420
+  }
+}

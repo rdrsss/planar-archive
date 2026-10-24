@@ -1,0 +1,38 @@
+{
+  "archived_sources": 143,
+  "author_artifacts": 245,
+  "author_hashes": {
+    "artifact-manifest.json": "b5bedf8c5f6e280afa99b996c162139199e8182ab727016b5bfa946b975a356f",
+    "candidate-manifest.json": "d6978ce61bb48d202476f9799ab5bb7fe84cf496e35d09eab8477b87805bc557",
+    "owned.diff": "d52cf977d48a3a5e0a55726c9778d89f7c460deb4a139e562915cb95b4e19706"
+  },
+  "baseline_entries": 18308,
+  "build_identities": {
+    "debug": 726,
+    "release": 723
+  },
+  "candidate_paths": 9,
+  "owned_changes": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-provenance-evidence.md",
+    "tests/native/v5-02-x04-b4-support/verify.py"
+  ],
+  "post_gate_doc_delta": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x04-provenance-evidence.md"
+  ],
+  "protected_filesystem_entries": 18310,
+  "tested_freeze_entries": 18309
+}

@@ -1,85 +1,37 @@
-# ============================================================================
-# Compiled object artifacts
-# ============================================================================
-
-# The Zig build artifact rules (zig-out/, zig-pkg/, .zig-cache/, zig-cache/)
-# were removed at the M10 cutover (task 6045) along with the tree that
-# produced them; the 18GB of cache they covered was deleted at task 6569.
-# Nothing in this repo runs `zig` any more.
-#
-# These stay: CMake keeps its objects under build/<preset>/, but a stray
-# in-tree compile still lands them here, and ignoring them is cheap.
+# Build products and local historical outputs; no source build installs here.
+/build/
+/bin/
+/dist/
 *.o
 *.obj
 *.a
 *.lib
+/compile_commands.json
+/doxygen-lint-output/
 
-# ============================================================================
-# Repo-local install destinations
-# ============================================================================
-
-# `make build` writes the production binaries here from the CMake build.
-/bin/
-
-# Workspace-local install destinations for vendor harnesses. Source files
-# live under commands/, skills/, copilot/, agents/. These directories hold
-# symlinks (or copies) populated by install.sh.
+# Local agent settings and caches are not authored product surfaces.
 .claude/
 .codex/
 .copilot/
+.cache/
+.pytest_cache/
+__pycache__/
+.worktrees/
 
-# ============================================================================
-# Database + scratch data
-# ============================================================================
-
-# Local SQLite databases, if any (including WAL + shm sidecars).
+# Operator scratch data, never product inputs discovered implicitly.
 *.db
 *.db-journal
 *.db-wal
 *.db-shm
 
-# ============================================================================
-# Editor / OS clutter
-# ============================================================================
-
+# Editor and OS clutter.
 .DS_Store
 *.swp
 *.swo
 .idea/
 .vscode/
 
-# ============================================================================
-# CMake (C++26 rewrite, plan 996)
-# ============================================================================
-
-# Out-of-source CMake build trees (CMakePresets.json: build/<preset>).
-/build/
-
-# clangd convenience symlink, recreated by CMakeLists.txt on every configure
-# — always points at whichever build/<preset> tree was configured most
-# recently.
-/compile_commands.json
-
-# Doxyfile.lint's OUTPUT_DIRECTORY.
-/doxygen-lint-output/
-
-# ============================================================================
-# Worktrees
-# ============================================================================
-
-# Local git worktrees for feature branches.
-.worktrees/
-
-# Parity gap reports — the audit is retired (task 5623); these patterns
-# remain so any stale locally-generated report stays untracked.
-# Previously regenerated on every `make parity-check` /
-# `make test-all` run with fresh timestamp + live in-flight task
-# count from the operator's local Planar DB. The hand-curated
-# companion at scripts/parity-data/parity-triage.md stays tracked.
-scripts/parity-data/parity-gap-report.json
-scripts/parity-data/parity-gap-report.md
-
-__pycache__/
-
-# Owned release bundle outputs; foreign source dirt still refuses tagged cuts.
-/dist/
+# Round evidence is committed selectively: each folder's REPORT.md/README.md and
+# small top-level .md/.json manifests (<=100 KB). Bulky artifacts stay local; the
+# committed manifests record their hashes. Add new reports with `git add -f`.
+/tests/native/*-evidence/

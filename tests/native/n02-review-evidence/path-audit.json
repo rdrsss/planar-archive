@@ -1,0 +1,17 @@
+{
+  "active_files_checked": 65,
+  "old_active_stdlib_references": [],
+  "local_links_checked": 45,
+  "missing_local_links": [],
+  "external_first_party_cpp_lua": [
+    "scripts/toolchain-probes/probe_cxx2c.cpp",
+    "scripts/toolchain-probes/probe_embed.cpp",
+    "tests/stdlib/harness.cppm",
+    "tests/stdlib/bridge.lua",
+    "fixtures/render/quota/workspace/split.lua",
+    "fixtures/render/quota/workspace/workspace.lua",
+    "fixtures/render/quota/workspace/combined.lua",
+    "fixtures/render/quota/workspace/spec.lua"
+  ],
+  "outside_src_classification": "test-only bridge/harness, toolchain probes, sample external-workspace declarations"
+}

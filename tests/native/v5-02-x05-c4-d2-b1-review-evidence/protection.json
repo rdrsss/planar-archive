@@ -1,0 +1,9 @@
+{
+  "baseline_entries": 75023,
+  "changed": [],
+  "exact_exclusions": [
+    "docs/vernacular/rounds/V5-02-X05-C4-D2-B1-review.md",
+    "docs/vernacular/rounds/V5-02-X05-C4-D2-B1.md"
+  ],
+  "release_absent": true
+}

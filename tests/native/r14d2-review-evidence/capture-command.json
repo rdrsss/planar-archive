@@ -1,0 +1,15 @@
+{
+  "command": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-R",
+    "replacement.capture",
+    "--output-on-failure",
+    "--output-junit",
+    "<repo>/tests/native/r14d2-review-evidence/capture.xml"
+  ],
+  "started_epoch": 1792587937.254774,
+  "ended_epoch": 1792587977.181219,
+  "exit": 0
+}

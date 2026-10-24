@@ -1,0 +1,24 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/capture/host_path.cppm": "114efac609480a6de376c10869d2b708dc5da9c389983b98e117dbb31b9fce01",
+    "src/engine/capture/host_path.cpp": "23f569736b3e684ecc657e69228353dbd86615e0cb66bae67d05854f08ea67fd",
+    "src/engine/capture/host_path.t.cpp": "f1268f9ee28d87a3a4148b4cbbf56d3bdf441fc98c9357a5db6c124c63628f6c",
+    "src/engine/CMakeLists.txt": "b288bcce2b3d5e8083613ea92d0afb6188972f23400378a1aa302568f2428138",
+    "src/engine/acceptance/prepared.t.cpp": "04e7a1fdb97645b35396b3874f1e7aab36b4ea84cbf1bd4a7d971f21e95bf087",
+    "src/cmd/planar/invocation.cppm": "16f412df73e25361d25912b18925387bf01356abc9f05fbcd14f48b2d6fcafb4",
+    "src/cmd/planar/invocation.cpp": "746b62e00f96eb7b3af0b123f6c8446361fd299b5a927c42bc35393fabedb601",
+    "src/cmd/planar/bootstrap.t.cpp": "af1b7aa744649ae56b4ab63df1c36c48bb2f2aa921d960c5c03ed4ac514c22f7",
+    "src/cmd/planar/CMakeLists.txt": "187faed0def7367d9ae7bc7875535aae5426a9ab1dda22d20e033d0d4c4cc719",
+    "docs/architecture.md": "90b5912ba52189d3602d3d84a23ed96a12dbedbc834b3b8d1d80d30505689304",
+    "docs/testing.md": "255664f32c2840e796639b15896adfcaa651d7e8a879a1dcc9306799bda9b9a6",
+    "docs/cli-reference.md": "2ee3e721cf2f07d0635831062b25299e13ba3e4a45d6561b693fa58675b4d7df",
+    "CLAUDE.md": "b2f7834c0ac21303da97478ad0b0547bd01ab136ce6821d88c62ee92f79892e8",
+    "docs/vernacular/implementation.md": "3f0bcafccd317bd1a7320dca3a1726a93381189c6bb124a0364efba2aeae14ca",
+    "docs/vernacular/roadmap.md": "bc1c1cf403356146df95e07dddc9050f4d31e716960123cd5f53920a2c6fbb25",
+    "docs/vernacular/v5-alignment.md": "1c4ab75febea0fda9af24409bbd44cea45220a49a932448b27f77fe1c1887488",
+    "docs/vernacular/acceptance-matrix.md": "a351d3af9812156e4e40ca5013ea835b67d8111bc550a7e1816ecd9b760e7d95",
+    "docs/vernacular/command-contract.md": "c5f2bae1a6e1285aecb924efb7d7527683b6d35308bdf46e81d7327b0446e7e4",
+    "tests/acceptance/bootstrap_paths.py": "880fdc75e6792cea23a23f6991db81128b74ba5e58a38b71abcc900d81bd270b"
+  }
+}

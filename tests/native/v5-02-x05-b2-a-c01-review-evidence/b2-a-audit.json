@@ -1,0 +1,7 @@
+{
+  "native_only_lookup": true,
+  "no_invocation_budget_reset": true,
+  "no_callable_or_provider_access": true,
+  "ordinal_absent_from_identity": true,
+  "generic_profile_invocation_closed": true
+}

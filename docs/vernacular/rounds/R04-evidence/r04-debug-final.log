@@ -1,0 +1,52 @@
+cmake --preset debug
+-- Configuring done (0.4s)
+CMake Warning (experimental) in src/cmd/planar/CMakeLists.txt:
+  CMake's support for `import std;` in C++23 and newer is experimental.  It
+  is meant only for experimentation and feedback to CMake developers.
+This warning is for project developers.  Use -Wno-author or -Wno-experimental
+to suppress it.
+
+-- Generating done (0.0s)
+-- Build files have been written to: <repo>/build/rewrite-debug
+python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug
++ cmake --build <repo>/build/rewrite-debug --target all planar_tests
+[1/127] Generating CXX dyndep file 'src/cmd/planar/CMakeFiles/@cmake_cxx_std.dir/CXX.dd'
+[2/124] Generating CXX dyndep file vendor/catch2/src/CMakeFiles/Catch2WithMain.dir/CXX.dd
+[3/122] Generating CXX dyndep file vendor/catch2/src/CMakeFiles/Catch2.dir/CXX.dd
+[4/15] Scanning <repo>/src/cmd/planar/bootstrap.cpp for CXX dependencies
+[5/15] Scanning <repo>/src/cmd/planar/bootstrap.cppm for CXX dependencies
+[6/15] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command.dir/CXX.dd
+[7/15] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command_tests.dir/CXX.dd
+[8/15] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar.dir/CXX.dd
+[9/15] Building CXX object src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cppm.o
+[10/15] Building CXX object src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cpp.o
+[11/15] Building CXX object src/cmd/planar/CMakeFiles/planar.dir/main.cpp.o
+[12/15] Linking CXX static library src/cmd/planar/libplanar_command.a
+[13/15] Linking CXX executable bin/planar
+[14/15] Building CXX object src/cmd/planar/CMakeFiles/planar_command_tests.dir/bootstrap.t.cpp.o
+[15/15] Linking CXX executable src/cmd/planar/planar_command_tests
++ ctest --test-dir <repo>/build/rewrite-debug --show-only=json-v1
++ ctest --test-dir <repo>/build/rewrite-debug --output-on-failure --output-junit /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-ctest-ldedqqkb/tests.xml
+Test project <repo>/build/rewrite-debug
+    Start 1: replacement.cli
+1/4 Test #1: replacement.cli ..................................................   Passed    0.50 sec
+    Start 2: replacement.help is explicit and buffered
+2/4 Test #2: replacement.help is explicit and buffered ........................   Passed    0.02 sec
+    Start 3: replacement.legacy commands and implicit discovery are refused
+3/4 Test #3: replacement.legacy commands and implicit discovery are refused ...   Passed    0.02 sec
+    Start 4: replacement.render cannot claim success before implementation
+4/4 Test #4: replacement.render cannot claim success before implementation ....   Passed    0.02 sec
+
+100% tests passed out of 4
+
+Label Time Summary:
+acceptance    =   0.50 sec*proc (1 test)
+unit          =   0.05 sec*proc (3 tests)
+
+Total Test time (real) =   0.56 sec
+Executed 4 registered tests; zero skips
++ /opt/homebrew/opt/llvm/bin/clang-format --dry-run --Werror <repo>/src/cmd/planar/bootstrap.cpp <repo>/src/cmd/planar/bootstrap.cppm <repo>/src/cmd/planar/bootstrap.t.cpp <repo>/src/cmd/planar/main.cpp
++ bash <repo>/scripts/cpp-lint-doxygen.sh /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-doxygen-nju_3vrj/Doxyfile
+Formatting and Doxygen checked 4 active source files
++ cmake --build <repo>/build/rewrite-debug --target all planar_tests
+ninja: no work to do.

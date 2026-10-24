@@ -1,0 +1,38 @@
+{
+  "author": {
+    "cases": 218,
+    "unit": 211,
+    "acceptance": 7,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0,
+    "disabled": 0,
+    "seconds": "96"
+  },
+  "reviewer": {
+    "cases": 218,
+    "unit": 211,
+    "acceptance": 7,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0,
+    "disabled": 0,
+    "seconds": "93"
+  },
+  "independent_probes": {
+    "cases": 3,
+    "junit_assertion_total": "181",
+    "seconds": "0.194",
+    "names": [
+      "Independent B1 mixed shipped and custom jobs preserve the shipped graph",
+      "Independent B1 distinct jobs may reuse their shape obligation IDs",
+      "Independent B1 malformed scalar fields and exact refusal records"
+    ]
+  },
+  "inventory": {
+    "current": 600,
+    "a4_preserved": 582,
+    "added": 18
+  },
+  "owned_diff_reconstructed": true
+}

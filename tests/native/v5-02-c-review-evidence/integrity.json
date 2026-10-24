@@ -1,0 +1,32 @@
+{
+  "identities": {
+    "candidate.json": "ce208885657cf57697259de2b64cda250020121a5151e49ba980c8678df06fb0",
+    "owned.diff": "ad338ce56d68719d65d065a3f7911b04bb490fb56d9a9933e7fd39a8db7bb708",
+    "artifacts.json": "d07dba43bca93f06eb64a5230129cab31730fa429e7b3645fb36ec6ce0248802"
+  },
+  "counts": {
+    "candidate": 23,
+    "baseline": 19,
+    "artifacts": 105,
+    "handoff-identities": 7,
+    "build-binaries": 12
+  },
+  "protected_unchanged": 3948,
+  "exact_diff": true,
+  "exact_contract_body": true,
+  "agents_symlink": "CLAUDE.md",
+  "raw_final_gates": {
+    "debug": {
+      "cases": 370,
+      "preserved_baseline_names": 361,
+      "failures": 0,
+      "skips": 0
+    },
+    "release": {
+      "cases": 370,
+      "preserved_baseline_names": 361,
+      "failures": 0,
+      "skips": 0
+    }
+  }
+}

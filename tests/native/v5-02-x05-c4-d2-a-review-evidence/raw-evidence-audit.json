@@ -1,0 +1,14 @@
+{
+  "author_candidate_entries": 26,
+  "author_artifact_entries": 296,
+  "source_diff_exact": true,
+  "current_candidate_exact": true,
+  "tested_product_test_prose_exact": true,
+  "first_gate_product_test_prose_exact": true,
+  "author_focused": 159,
+  "author_private": 3,
+  "baseline_expected_failure": true,
+  "author_protection_entries": 74378,
+  "author_unrelated_changes": [],
+  "finalization_sha256": "98c2f0bec16cf1eaa94804d4994a576ce465442d1a829874e2124d8006bbe23f"
+}

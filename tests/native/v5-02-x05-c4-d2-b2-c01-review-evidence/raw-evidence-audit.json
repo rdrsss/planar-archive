@@ -1,0 +1,81 @@
+{
+  "actual_prefix_source_matches_B2_candidate": true,
+  "all_dependency_and_cleanup_records_verified": true,
+  "author_Doxygen_first_attempt_SIGBUS_preserved": true,
+  "author_pre_fix_regression_exit": 42,
+  "combined_diff_reconstructed": true,
+  "combined_diff_sha256": "27a12797a5a9c8c28b4ac81e3bdae95971e1aa43017d3004652a85173781132e",
+  "independent_unique_private_cases": 16,
+  "original_B2_identities_verified": true,
+  "review_final_lint_pass": true,
+  "xml": {
+    "review-attempt1-fresh": {
+      "cases": 3,
+      "failed_assertions": 2
+    },
+    "review-final-fresh": {
+      "cases": 3,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/focused.xml": {
+      "cases": 187,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/pre-fix/private/author-replay.xml": {
+      "cases": 6,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/pre-fix/private/positive.xml": {
+      "cases": 1,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/pre-fix/private/regression.xml": {
+      "cases": 1,
+      "failed_assertions": 8
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/private/author-replay.xml": {
+      "cases": 6,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/private/c01.xml": {
+      "cases": 3,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/private/controlled.xml": {
+      "cases": 2,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/private/positive.xml": {
+      "cases": 1,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-evidence/private/regression.xml": {
+      "cases": 1,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-review-evidence/attempt1/private/author-replay.xml": {
+      "cases": 6,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-review-evidence/attempt1/private/c01.xml": {
+      "cases": 3,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-review-evidence/attempt1/private/controlled.xml": {
+      "cases": 2,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-review-evidence/attempt1/private/positive.xml": {
+      "cases": 1,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-review-evidence/attempt1/private/regression.xml": {
+      "cases": 1,
+      "failed_assertions": 0
+    },
+    "tests/native/v5-02-x05-c4-d2-b2-c01-review-evidence/focused.xml": {
+      "cases": 187,
+      "failed_assertions": 0
+    }
+  }
+}

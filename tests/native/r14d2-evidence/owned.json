@@ -1,0 +1,12 @@
+[
+  "src/engine/capture/native.cpp",
+  "src/engine/capture/native.cppm",
+  "src/engine/capture/native.t.cpp",
+  "docs/architecture.md",
+  "docs/testing.md",
+  "CLAUDE.md",
+  "README.md",
+  "CONTRIBUTING.md",
+  "docs/cli-reference.md",
+  "docs/vernacular/implementation.md"
+]

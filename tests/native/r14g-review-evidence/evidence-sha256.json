@@ -1,0 +1,11 @@
+{
+  "audit-final.log": "a57da139b7b7e255ae3243cbf71295f4f79a9f947ce641a74d447bb85bf1886d",
+  "audit-initial-expectation.txt": "238f35a0f56d7acf0ad3c0537542c2e4758dc8bba4630c7177ff543fdcc00ab5",
+  "audit-results.json": "a57da139b7b7e255ae3243cbf71295f4f79a9f947ce641a74d447bb85bf1886d",
+  "audit.log": "a57da139b7b7e255ae3243cbf71295f4f79a9f947ce641a74d447bb85bf1886d",
+  "audit.py": "eb90c49672d6968959c08cb8b1f8f9fb0a83b1269724323c02aee239ce9a7544",
+  "debug-inventory.json": "35d0a5d35d32a58487daf76f2c58af68035345ed09b722cbb563034cc8ec3b3a",
+  "debug-no-work.log": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+  "release-inventory.json": "89748ca3fcec0c21d3fec3b0849c08e7b5bf0821244a9e7d672270fccb6c4eb7",
+  "release-no-work.log": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794"
+}

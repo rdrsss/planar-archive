@@ -1,0 +1,30 @@
+{
+  "additional_adversarial_boundaries": 3,
+  "artifact_entries": 101,
+  "artifact_manifest_sha256": "7c1587668c1d9b2d8471074a0e9f1e462867bce2e85f2969500094493b615fbc",
+  "artifact_schema": "review-evidence-relative path => SHA256; excludes artifact-manifest.json and finalization.json",
+  "author_artifacts": 222,
+  "baseline_inventory": 535,
+  "blocking_findings": 0,
+  "build_identities": 747,
+  "candidate_diff_sha256": "c85838281aca49c545706e4dc865b24f4d856c84fd21a0ea72d573906ec614a4",
+  "disabled": 0,
+  "disposition": "approve",
+  "errors": 0,
+  "failures": 0,
+  "focused_executed": 137,
+  "inventory": 552,
+  "limits": [
+    "No full552/release/RelWithDebInfo/Linux gate",
+    "Only embedded five-command production sealing foundation; X05-A and mandatory external-profile gate remain open"
+  ],
+  "production_probes": 8,
+  "review_report": "docs/vernacular/rounds/V5-02-X05-A1-review.md",
+  "review_report_sha256": "8e6cfc678c34960f19d39f15add0116ff47c51d53db04cb72c5d79688d7def72",
+  "serialized_build_ownership": "released",
+  "skips": 0,
+  "source_author_build_current": true,
+  "source_entries": 18999,
+  "source_manifest_sha256": "959facccc82fa81be0b3e0acfaaf5c1e9bb77a5da8f51e2062129de792a48f5e",
+  "utc": "2026-10-23T01:49:00.537121+00:00"
+}

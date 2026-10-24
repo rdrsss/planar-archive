@@ -1,0 +1,14 @@
+[
+  "src/engine/acceptance/load.cppm",
+  "src/engine/acceptance/load.cpp",
+  "src/engine/acceptance/load.t.cpp",
+  "src/engine/CMakeLists.txt",
+  "docs/architecture.md",
+  "docs/testing.md",
+  "CLAUDE.md",
+  "docs/vernacular/implementation.md",
+  "docs/vernacular/roadmap.md",
+  "docs/vernacular/v5-alignment.md",
+  "docs/vernacular/acceptance-matrix.md",
+  "docs/vernacular/load-command-contract.md"
+]

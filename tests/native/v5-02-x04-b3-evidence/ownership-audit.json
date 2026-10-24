@@ -1,0 +1,31 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/history/effective_provenance.cpp",
+    "src/engine/history/effective_provenance.cppm",
+    "src/engine/history/effective_provenance.t.cpp",
+    "tests/native/v5-02-x04-b3-support/audit.py",
+    "tests/native/v5-02-x04-b3-support/final_gate.py",
+    "tests/native/v5-02-x04-b3-support/finalize.py",
+    "tests/native/v5-02-x04-b3-support/verify.py",
+    "tests/vectors/effective-provenance/catalog.bin",
+    "tests/vectors/effective-provenance/description.json",
+    "tests/vectors/effective-provenance/digest.txt",
+    "tests/vectors/effective-provenance/files.tsv",
+    "tests/vectors/effective-provenance/generate.py",
+    "tests/vectors/effective-provenance/manifest.bin"
+  ],
+  "root_only_exclusions": [
+    ".git",
+    "build"
+  ],
+  "symlink_preserved": true,
+  "unowned_changes": []
+}

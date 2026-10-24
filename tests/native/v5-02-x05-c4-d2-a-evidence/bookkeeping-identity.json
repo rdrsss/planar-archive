@@ -1,0 +1,15 @@
+{
+  "copied_runtime_link_load_selection_proved": false,
+  "final_vs_tested_changed": [
+    "tests/native/v5-02-x05-c4-d2-a-evidence/REPORT.md",
+    "tests/native/v5-02-x05-c4-d2-a-support/finalize.py"
+  ],
+  "first_gate_vs_tested_owned_identical": true,
+  "new_build_or_tests_for_bookkeeping": false,
+  "owned_product_test_prose_unchanged": true,
+  "platform_runtime_original_hash_mtime_protected": true,
+  "protected_unrelated_changes": [],
+  "runtime_copy_aliases_preserved": false,
+  "tested_snapshot_sha256": "f94a42f6cd6687f9ecde0b691e4b4ab5783fe89a72de5c161a25b91665c04ba6",
+  "unowned_source_test_build_inputs_protected": true
+}

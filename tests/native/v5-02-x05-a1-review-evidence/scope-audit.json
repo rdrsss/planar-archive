@@ -1,0 +1,34 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/engine/CMakeLists.txt",
+    "src/engine/runtime/closure_guard/closure_guard.cpp",
+    "src/engine/runtime/closure_guard/closure_guard.cppm",
+    "src/engine/runtime/closure_guard/closure_guard.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/runtime.cppm",
+    "tests/native/v5-02-x05-a1-support/probe.py",
+    "tests/native/v5-02-x05-a1-support/verify.py"
+  ],
+  "originals_match_baseline": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/engine/CMakeLists.txt",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/runtime.cppm"
+  ],
+  "owned_diff_exact": true,
+  "invocation_tail_byte_identical": true,
+  "historical_support_evidence_vendor_shipped_lua_oldtests_unchanged": true
+}

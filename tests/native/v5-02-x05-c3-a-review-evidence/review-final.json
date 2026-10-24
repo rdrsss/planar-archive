@@ -1,0 +1,18 @@
+{
+  "all888_compiled_dependencies_unchanged": true,
+  "all_review_edits_released": true,
+  "candidate_sha256": "c8dd36cd6d7dffef2139211be017529587f59f8ceb11af0027837fd30f92b138",
+  "debug_released": true,
+  "disposition": "approve",
+  "entries": 933,
+  "errors": 0,
+  "failures": 0,
+  "independent_cases": 5,
+  "no_further_edits_planned": true,
+  "production_cases": 10,
+  "protected_unchanged": true,
+  "review_manifest_sha256": "78cbc1edf0f431a70ea16fad9a41a8b2f0f8f989194e062ae8216f52ce3f8670",
+  "review_report_sha256": "b523b38731eb24ac1b48e99c27c0ae29deba173ecc4e283e4acbd6cc968f47dd",
+  "skips": 0,
+  "utc": "2026-10-23T22:56:05.106544+00:00"
+}

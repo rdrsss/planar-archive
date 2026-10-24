@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.15/bin/python3.15",
+    "-c",
+    "from pathlib import Path\nimport json,re\nroot=Path.cwd();report=root/'docs/vernacular/x03-format-evidence.md'\nlinks=[]\nfor value in re.findall(r\"\\]\\(([^)]+)\\)\",report.read_text()):\n if value.startswith(('https:','http:','#')):continue\n target=(report.parent/value.split('#',1)[0]).resolve()\n assert target.exists(),value\n links.append(dict(link=value,target=str(target)))\nPath('tests/native/v5-02-x03-b3-evidence/report-links.json').write_text(json.dumps(links,indent=2)+'\\n')\nprint('Validated',len(links),'local report links')\n"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:29:47.959618+00:00",
+  "exit_code": 0,
+  "seconds": 0.035241127014160156,
+  "start_utc": "2026-10-22T21:29:47.924238+00:00"
+}

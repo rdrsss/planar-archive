@@ -1,0 +1,17 @@
+{
+  "method": "Actual pre-edit byte capture",
+  "sha256": {
+    "src/engine/runtime/runtime.cppm": "35d987a759f4e3220884ef661f941183ecd9e0b2ec72ed38b92fdcb80510cac2",
+    "src/engine/runtime/runtime.cpp": "523692fd0945ea2e94e14032106362e26c41be13c830e69b419b7374ec071b1a",
+    "src/engine/runtime/external_registration.t.cpp": "690fb1b34ac0954e751391c4c5f299f6c57b3e76f3958134f4dddbad5e9485f5",
+    "src/stdlib/planar/selection.lua": "097fa32f4ed530b634309b520db6063f0e38729c39148a0662c943d8a620cbf0",
+    "src/stdlib/planar/render.lua": "d862c5f6acd0cf1b687b60272458f011f81715c87ccd4a38c2312795184b632d",
+    "src/stdlib/planar/bootstrap.lua": "54d13632cc585b603781ccf4eda2fbb8394d82b12ed088ee7539f799270d1dd8",
+    "CLAUDE.md": "c83c06eae3a3d7c9ba85cfa5dce21558818746443717fab1be3a75ed2fc84ed5",
+    "docs/architecture.md": "51298dda0e688b43f970e040b7b9ca26d3d6abc12c37e57bafdf911ac6be9897",
+    "docs/testing.md": "87aa9223eaeda4185cfac680c6b1e7196417326568568f17d2e6d7405a86d2ee",
+    "docs/vernacular/implementation.md": "812cb20cc366d32637cfb33085275d31b40c49ac47926cbb169b9669f367d2f7",
+    "docs/vernacular/roadmap.md": "32436b2fa28540107a1ab5e8788259bfca731c839a6ee7fa427a0689f647a0ab",
+    "docs/vernacular/external-profile-implementation.md": "3c9c9265a9f1ac367e2925cf41cfb0d1d08c5cf24b31d395d9b3b7c4460550df"
+  }
+}

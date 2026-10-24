@@ -1,0 +1,509 @@
+[
+  {
+    "name": "build-focused",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_format_tests"
+    ],
+    "start": "2026-10-22T18:37:59.790216+00:00",
+    "end": "2026-10-22T18:38:08.245998+00:00",
+    "exit": 0
+  },
+  {
+    "name": "native-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^D8 ",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/native-focused.xml"
+    ],
+    "start": "2026-10-22T18:38:14.320139+00:00",
+    "end": "2026-10-22T18:38:14.341842+00:00",
+    "exit": 0
+  },
+  {
+    "name": "native-focused-02",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "D8 complete",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/native-focused-02.xml"
+    ],
+    "start": "2026-10-22T18:38:24.425692+00:00",
+    "end": "2026-10-22T18:38:26.702604+00:00",
+    "exit": 8
+  },
+  {
+    "name": "build-focused-02",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_format_tests"
+    ],
+    "start": "2026-10-22T18:39:00.134122+00:00",
+    "end": "2026-10-22T18:39:01.980517+00:00",
+    "exit": 0
+  },
+  {
+    "name": "process-boundaries",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "D8 complete acceptance process",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/process-boundaries.xml"
+    ],
+    "start": "2026-10-22T18:39:36.678874+00:00",
+    "end": "2026-10-22T18:39:36.904939+00:00",
+    "exit": 8
+  },
+  {
+    "name": "public-focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.load_cli$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/public-focused.xml"
+    ],
+    "start": "2026-10-22T18:39:37.072627+00:00",
+    "end": "2026-10-22T18:39:38.881942+00:00",
+    "exit": 8
+  },
+  {
+    "name": "build-focused-03",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_format_tests"
+    ],
+    "start": "2026-10-22T18:39:55.871324+00:00",
+    "end": "2026-10-22T18:39:56.894465+00:00",
+    "exit": 1
+  },
+  {
+    "name": "public-focused-02",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.load_cli$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/public-focused-02.xml"
+    ],
+    "start": "2026-10-22T18:39:54.774307+00:00",
+    "end": "2026-10-22T18:40:02.453809+00:00",
+    "exit": 0
+  },
+  {
+    "name": "build-focused-04",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_format_tests"
+    ],
+    "start": "2026-10-22T18:40:03.308476+00:00",
+    "end": "2026-10-22T18:40:05.242876+00:00",
+    "exit": 0
+  },
+  {
+    "name": "process-diagnostics",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "D8 complete acceptance process",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/process-diagnostics.xml"
+    ],
+    "start": "2026-10-22T18:40:14.896759+00:00",
+    "end": "2026-10-22T18:40:15.126775+00:00",
+    "exit": 8
+  },
+  {
+    "name": "build-focused-05",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_ledger_format_tests"
+    ],
+    "start": "2026-10-22T18:41:15.265207+00:00",
+    "end": "2026-10-22T18:41:17.289026+00:00",
+    "exit": 0
+  },
+  {
+    "name": "build-all-debug",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:41:31.411287+00:00",
+    "end": "2026-10-22T18:41:41.504445+00:00",
+    "exit": 0
+  },
+  {
+    "name": "native-focused-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "D8 complete",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/native-focused-final.xml"
+    ],
+    "start": "2026-10-22T18:41:39.919431+00:00",
+    "end": "2026-10-22T18:41:42.731181+00:00",
+    "exit": 0
+  },
+  {
+    "name": "build-debug-final",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:42:16.361872+00:00",
+    "end": "2026-10-22T18:42:18.309098+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:42:40.403360+00:00",
+    "end": "2026-10-22T18:42:40.518257+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-full",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/debug-full.xml"
+    ],
+    "start": "2026-10-22T18:42:40.557687+00:00",
+    "end": "2026-10-22T18:45:54.261416+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "start": "2026-10-22T18:45:54.338825+00:00",
+    "end": "2026-10-22T18:45:55.461713+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-support-format",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--dry-run",
+      "--Werror",
+      "tests/native/r14-d8-support/acceptance_fault.t.cpp"
+    ],
+    "start": "2026-10-22T18:45:55.502041+00:00",
+    "end": "2026-10-22T18:45:55.541534+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-historical-audit",
+    "argv": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d8-evidence/debug-historical-audit.json"
+    ],
+    "start": "2026-10-22T18:45:55.581154+00:00",
+    "end": "2026-10-22T18:45:55.938952+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-d6-audit",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d8-evidence/debug-d6-audit.json"
+    ],
+    "start": "2026-10-22T18:45:55.978645+00:00",
+    "end": "2026-10-22T18:45:56.190412+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-c01-audit",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d8-evidence/debug-c01-audit.json"
+    ],
+    "start": "2026-10-22T18:45:56.231309+00:00",
+    "end": "2026-10-22T18:45:56.369645+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-d7b-audit",
+    "argv": [
+      "python3",
+      "tests/native/r14-d7-b-support/audit.py",
+      "build/rewrite-debug",
+      "<repo>/tests/native/r14-d8-evidence/debug-d7b-audit.json"
+    ],
+    "start": "2026-10-22T18:45:56.408989+00:00",
+    "end": "2026-10-22T18:45:56.521553+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "start": "2026-10-22T18:45:56.560254+00:00",
+    "end": "2026-10-22T18:45:57.215365+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "start": "2026-10-22T18:45:57.267954+00:00",
+    "end": "2026-10-22T18:45:57.917733+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:45:57.972729+00:00",
+    "end": "2026-10-22T18:45:59.937836+00:00",
+    "exit": 0
+  },
+  {
+    "name": "debug-no-work-repeat",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:46:13.407537+00:00",
+    "end": "2026-10-22T18:46:13.521895+00:00",
+    "exit": 0
+  },
+  {
+    "name": "build-release-final",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:46:13.560288+00:00",
+    "end": "2026-10-22T18:46:37.131279+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:46:44.946046+00:00",
+    "end": "2026-10-22T18:46:45.117727+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-full",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d8-evidence/release-full.xml"
+    ],
+    "start": "2026-10-22T18:46:45.157042+00:00",
+    "end": "2026-10-22T18:48:25.267559+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-release"
+    ],
+    "start": "2026-10-22T18:48:25.341733+00:00",
+    "end": "2026-10-22T18:48:26.383751+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-support-format",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--dry-run",
+      "--Werror",
+      "tests/native/r14-d8-support/acceptance_fault.t.cpp"
+    ],
+    "start": "2026-10-22T18:48:26.422959+00:00",
+    "end": "2026-10-22T18:48:26.462476+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-historical-audit",
+    "argv": [
+      "python3",
+      "tests/native/v5-02-b2-support/audit-variants.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d8-evidence/release-historical-audit.json"
+    ],
+    "start": "2026-10-22T18:48:26.502863+00:00",
+    "end": "2026-10-22T18:48:26.874722+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-d6-audit",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-support/audit.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d8-evidence/release-d6-audit.json"
+    ],
+    "start": "2026-10-22T18:48:26.913991+00:00",
+    "end": "2026-10-22T18:48:27.123913+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-c01-audit",
+    "argv": [
+      "python3",
+      "tests/native/r14-d6-c01-support/audit.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d8-evidence/release-c01-audit.json"
+    ],
+    "start": "2026-10-22T18:48:27.163592+00:00",
+    "end": "2026-10-22T18:48:27.301624+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-d7b-audit",
+    "argv": [
+      "python3",
+      "tests/native/r14-d7-b-support/audit.py",
+      "build/rewrite-release",
+      "<repo>/tests/native/r14-d8-evidence/release-d7b-audit.json"
+    ],
+    "start": "2026-10-22T18:48:27.342022+00:00",
+    "end": "2026-10-22T18:48:27.451875+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "start": "2026-10-22T18:48:27.492486+00:00",
+    "end": "2026-10-22T18:48:28.136974+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "start": "2026-10-22T18:48:28.190696+00:00",
+    "end": "2026-10-22T18:48:28.845404+00:00",
+    "exit": 0
+  },
+  {
+    "name": "release-no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "start": "2026-10-22T18:48:28.903112+00:00",
+    "end": "2026-10-22T18:48:29.020104+00:00",
+    "exit": 0
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "prior_evidence_checked": 54,
+  "prior_evidence_changed": [],
+  "correction_baseline_snapshots_checked": 9,
+  "modified_candidate_files": [
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.t.cpp",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "other_candidate_files_unchanged": [
+    "src/engine/CMakeLists.txt",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/sqlite.cpp",
+    "src/engine/ledger/sqlite.cppm",
+    "src/engine/ledger/sqlite.t.cpp"
+  ]
+}

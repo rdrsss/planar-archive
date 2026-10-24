@@ -1,0 +1,8 @@
+{
+  "candidate_manifest_sha256": "90ef44013b3031783bd8f54681c16e6a670673bdf8f155a18359917eb999871d",
+  "debug_pass_manifest_sha256": "9766a540e7d797e00ed5bcf8a15f4a3c40f15fc176ca74b35f5e7aa40a3d7f8b",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "owned_diff_sha256": "824f7b82f35e3329c88a83118bf98aa04fa297d0ff5c9380519f0c092f7de2cb",
+  "release_pass_manifest_sha256": "1ba1cf6c25920d08cf29deb88e8d23f6310b25238fe84b9647c4b592bfad3c8a",
+  "source_freeze_sha256": "d5aa29591c76c5efc7130fec4bbf0eb64a97699f419579336e5f338e69c24b47"
+}

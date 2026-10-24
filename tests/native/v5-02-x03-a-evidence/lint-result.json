@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python3",
+    "scripts/rewrite-check.py",
+    "lint",
+    "--build-dir",
+    "build/rewrite-debug"
+  ],
+  "cwd": "repository root",
+  "start_utc": "2026-10-22T19:53:52.773559+00:00",
+  "end_utc": "2026-10-22T19:53:53.938713+00:00",
+  "exit": 0
+}

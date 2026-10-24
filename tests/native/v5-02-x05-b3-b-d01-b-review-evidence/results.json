@@ -1,0 +1,70 @@
+{
+  "gate/focused.xml": {
+    "cases": 375,
+    "reported_tests": 375,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "189"
+  },
+  "gate/history-codec.xml": {
+    "cases": 11,
+    "reported_tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "0"
+  },
+  "gate/codec.xml": {
+    "cases": 18,
+    "reported_tests": 413,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "2.702"
+  },
+  "attempt01/probes.xml": {
+    "cases": 10,
+    "reported_tests": 455117,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "14.538"
+  },
+  "isolated-reruns/review.xml": {
+    "cases": 5,
+    "reported_tests": 299167,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "2.663"
+  },
+  "isolated-reruns/author.xml": {
+    "cases": 5,
+    "reported_tests": 155950,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "12.093"
+  },
+  "baseline-red-corrected/red.xml": {
+    "cases": 1,
+    "reported_tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": "0.000"
+  },
+  "inventory": {
+    "current": 641,
+    "prior": 637,
+    "removed": [],
+    "added": [
+      "replacement.codec reserved decode callback exceptions and early guards remain typed",
+      "replacement.codec reserved decode charges exact output components and preserves owned first refusal",
+      "replacement.codec reserved decode preserves graphs and exact ordinary refusals",
+      "replacement.codec reserved decode supports independent nested concurrent and cumulative contexts"
+    ]
+  },
+  "shared_build_no_work": true
+}

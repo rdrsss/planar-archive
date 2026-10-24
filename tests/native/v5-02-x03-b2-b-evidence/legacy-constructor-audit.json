@@ -1,0 +1,6 @@
+{
+  "baseline_original_copy": "tests/native/r14c3b1-evidence/candidate/src/engine/acceptance/prepared.cpp",
+  "baseline_hash_matches": true,
+  "create_function_byte_identical": true,
+  "function_sha256": "e1a0d52e19181b1ed8f85e8a9ead02049b8d8c59a188b03530ef6fcfc0c9c89d"
+}

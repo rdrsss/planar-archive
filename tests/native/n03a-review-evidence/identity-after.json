@@ -1,0 +1,123 @@
+{
+  "candidate-sha256.txt": {
+    "manifest_sha256": "be91023a004e95f84438bef200dec496f3d4afb98f2bb61e0d82c77df6e65131",
+    "files": [
+      {
+        "file": "cmake/dependencies.cmake",
+        "match": true
+      },
+      {
+        "file": "THIRD_PARTY_NOTICES.md",
+        "match": true
+      },
+      {
+        "file": "src/engine/CMakeLists.txt",
+        "match": true
+      },
+      {
+        "file": "src/engine/json_codec/codec.cpp",
+        "match": true
+      },
+      {
+        "file": "src/engine/json_codec/codec.cppm",
+        "match": true
+      },
+      {
+        "file": "src/engine/json_codec/codec.t.cpp",
+        "match": true
+      }
+    ]
+  },
+  "coordinator-evidence-sha256.txt": {
+    "manifest_sha256": "fb2ced609623048e81a0eb7aa1b82d11f0349200e9f560a5e273c126bbfee5f7",
+    "files": [
+      {
+        "file": "tests/native/n03a-evidence/README.md",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/build-affected.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/build-diagnostics.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/build-final.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/build-first.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/build-second.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/build-third.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/candidate-sha256.txt",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/configure.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/lint-final.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/lint.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/no-change.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/offset-regression.txt",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/owned-tracked.diff",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/registered-tests.json",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/restored-vendor-inventory.txt",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/tests-diagnostics.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/tests-final.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/tests-first.log",
+        "match": true
+      },
+      {
+        "file": "tests/native/n03a-evidence/vendor-exact.log",
+        "match": true
+      }
+    ]
+  },
+  "vendor_diff": {
+    "exit": 0,
+    "output": ""
+  },
+  "vendor_files": 663,
+  "branch": "dev/planar-v2-vernacular",
+  "HEAD": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a"
+}

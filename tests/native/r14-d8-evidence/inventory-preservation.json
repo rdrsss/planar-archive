@@ -1,0 +1,11 @@
+{
+  "baseline": "tests/native/r14-d7-b-review-evidence/debug-inventory.log",
+  "path_base": "repository",
+  "prior_count": 400,
+  "debug_count": 402,
+  "removed": [],
+  "added": [
+    "replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request",
+    "replacement.D8 complete acceptance process death at write sync and returned completion stays atomic"
+  ]
+}

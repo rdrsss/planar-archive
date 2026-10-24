@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-22T20:31:31.798823+00:00",
+  "path_base": "<repo>",
+  "candidate_manifest_sha256": "eb22abd8b7a33a16213cfb5a5579d01c4a206e2166dd6a9ff5acd9923740da6b",
+  "owned_diff_sha256": "888a8b1f6e9f0d78f83f373f1eabebf8172209c18537e9acf0fd246918c98dbb",
+  "author_artifact_manifest_sha256": "963feff0e3f6a075818b612dcd9b5ff306750421356b400ac518958b4aed13f0",
+  "candidate_mismatches": [],
+  "author_artifact_mismatches": []
+}

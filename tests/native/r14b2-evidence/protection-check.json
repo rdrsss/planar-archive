@@ -1,0 +1,6 @@
+{
+  "authorized_expansion": [
+    "src/engine/ledger/format.cppm"
+  ],
+  "unexpected_changes": []
+}

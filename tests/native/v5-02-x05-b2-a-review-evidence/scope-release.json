@@ -1,0 +1,31 @@
+{
+  "candidate_files": 12,
+  "author_artifacts": 76,
+  "frozen_entries": 378,
+  "preserved_b1_membership": 375,
+  "existing_changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/runtime.cppm"
+  ],
+  "new_support": [
+    "tests/native/v5-02-x05-b2-a-support/audit.py",
+    "tests/native/v5-02-x05-b2-a-support/gate.py",
+    "tests/native/v5-02-x05-b2-a-support/vector.py"
+  ],
+  "archived_originals_match": true,
+  "owned_diff_reconstructed": true,
+  "whole_tree_freeze_claimed": false,
+  "identities": {
+    "candidate-manifest.json": "b80a540b4c0db0a79b9acf560d039f2935e1c65c8d8ada9b6cfa98db36376a14",
+    "owned.diff": "edb204aca17f35691af73155e2f4de4ac18026d879991b1a4933de7064bc1959",
+    "artifact-manifest.json": "17aecdc1eb098b6949339a735aa14ca7554f446f120a3805b7b9c35e4bbaf21f",
+    "REPORT.md": "20c88b35324c8825df0618c135ee3450cc6638244d5ee4df6dfb29088b76354c"
+  }
+}

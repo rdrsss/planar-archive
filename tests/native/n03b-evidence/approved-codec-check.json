@@ -1,0 +1,7 @@
+{
+  "THIRD_PARTY_NOTICES.md": "2593b4000c08abe92ce75f4e3f3909c41892fa51e92cb453ed36fec731527bce",
+  "cmake/dependencies.cmake": "ec5514edefa5b29f36e89b9c1406156faf7897733e5d6f736a489fa9ddc55dd3",
+  "src/engine/json_codec/codec.cpp": "43a0465a3b5c41ea90584836260d94c3fc3123641aec099a980be88759905f4a",
+  "src/engine/json_codec/codec.cppm": "fe4caca4cacb0010541aa9d353e8394340f2521684a70aec1fe6a622973733a0",
+  "src/engine/json_codec/codec.t.cpp": "d9e7c78c072b6b8a9e9904ddf610a4154964f1b6e5ddd869a0dc8f0c5b7f7674"
+}

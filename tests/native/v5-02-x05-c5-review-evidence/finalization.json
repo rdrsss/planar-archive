@@ -1,0 +1,40 @@
+{
+  "author_artifact_manifest": {
+    "bytes": 144580,
+    "mode": 420,
+    "sha256": "c12187129cc85b21b12a9e8cb61c5bdac3b4cd12bab883b3c255b77c2d7fca98"
+  },
+  "author_candidate": {
+    "bytes": 2843,
+    "mode": 420,
+    "sha256": "218370cd8fb7d3b40bc2d66f9fe363b61ffafda9ad7adfb0134b0e21a9e3b4a0"
+  },
+  "author_finalization": {
+    "bytes": 987,
+    "mode": 420,
+    "sha256": "7f01725d075fa13aa428bf317dba2b8fdfbf8c396da8a7d4d23681e3b6752b5f"
+  },
+  "author_report": {
+    "bytes": 9526,
+    "mode": 420,
+    "sha256": "9b1f11163928d391d89cdf3af209af91fb65f33863adaf90df1e6f6bd103208d"
+  },
+  "both_build_directories_and_reviewer_files_released": true,
+  "current_build_identity_entries_per_configuration": 940,
+  "disposition": "approve",
+  "full_suites_independently_rerun": false,
+  "private_suites_independently_rerun": false,
+  "protected_entries": 77470,
+  "protection_changes": [],
+  "review_artifact_entries": 55,
+  "review_artifact_manifest": {
+    "bytes": 8095,
+    "mode": 420,
+    "sha256": "9f60ba043f98d10f780feb56440f619e5f44cab12eb60e3a60705ff62c73d4e8"
+  },
+  "review_report": {
+    "bytes": 12146,
+    "mode": 420,
+    "sha256": "c15baa09bd6e41a2bdcdb248e51e768d0dd05680d6db792a561c28b351a2c42f"
+  }
+}

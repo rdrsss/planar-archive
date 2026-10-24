@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "--tests-from-file",
+    "<repo>/tests/native/v5-02-x05-c4-c2-evidence/adapter-selected.txt",
+    "--output-on-failure",
+    "--output-junit",
+    "<repo>/tests/native/v5-02-x05-c4-c2-evidence/adapter-ctest.xml"
+  ],
+  "cwd": "<repo>",
+  "exit": 0,
+  "seconds": 1.2816440844908357,
+  "cases": 17,
+  "candidate_sha256": "a1d740bfd479717e53adce99496db896051c26a2a2aaf71c06f841e5b2e34987",
+  "counts": {
+    "planar_ledger_fault_test_tests": 6,
+    "planar_record_format_test_tests": 3,
+    "planar_atomic_format_test_tests": 5,
+    "planar_metadata_format_test_tests": 3
+  }
+}

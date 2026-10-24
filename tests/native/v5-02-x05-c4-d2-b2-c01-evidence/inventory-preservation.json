@@ -1,0 +1,11 @@
+{
+  "added": [
+    "replacement.D2 B2 C01 exact original pre-cache receipt survives all owned rereads",
+    "replacement.D2 B2 C01 first retained reads require original root selection",
+    "replacement.D2 B2 C01 initial borrowed and cached replacement modes refuse"
+  ],
+  "baseline": 851,
+  "current": 854,
+  "focused": 187,
+  "preserved": 851
+}

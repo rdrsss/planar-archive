@@ -1,0 +1,59 @@
+[
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.41801712568849325,
+    "expected_exit": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "src/(lib|engine|tools)|migrations/|CPM|planar-agent|scaffold|unimplemented.render",
+      "README.md",
+      "INSTALL.md",
+      "CONTRIBUTING.md",
+      "CLAUDE.md",
+      "SECURITY.md",
+      "THIRD_PARTY_NOTICES.md",
+      "docs/architecture.md",
+      "docs/cli-reference.md",
+      "docs/testing.md",
+      "cmake/dependencies.cmake",
+      "cmake/rewrite.cmake",
+      "CMakeLists.txt",
+      "CMakePresets.json",
+      "Makefile",
+      ".github"
+    ],
+    "exit": 1,
+    "elapsed_seconds": 0.01517470832914114,
+    "expected_exit": 1
+  },
+  {
+    "command": [
+      "build/rewrite-debug/bin/planar",
+      "render",
+      "--workspace",
+      "fixtures/render/quota/workspace/workspace.lua",
+      "--registry",
+      "fixtures/render/quota/registry/quota-tools.json",
+      "--root",
+      "source=fixtures/render/quota/current",
+      "--capture-outputs",
+      "--base-root",
+      "source=fixtures/render/quota/base",
+      "--job",
+      "combined",
+      "--role",
+      "builder"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.05853091739118099,
+    "expected_exit": 0
+  }
+]

@@ -1,0 +1,8 @@
+[
+  "src/engine/ledger/history_codec.cppm",
+  "src/engine/ledger/history_codec.cpp",
+  "src/engine/ledger/history_codec.t.cpp",
+  "src/engine/CMakeLists.txt",
+  "docs/architecture.md",
+  "docs/testing.md"
+]

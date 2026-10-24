@@ -1,0 +1,31 @@
+[
+  {
+    "label": "frozen-counting",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b0-evidence/final-corrected/counting"
+    ],
+    "exit": 0,
+    "seconds": 13.068372011184692
+  },
+  {
+    "label": "format",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--dry-run",
+      "--Werror",
+      "tests/native/v5-02-x05-c2-b0-support/counting.cpp"
+    ],
+    "exit": 0,
+    "seconds": 0.0654909610748291
+  },
+  {
+    "label": "protected",
+    "argv": [
+      "python3",
+      "tests/native/v5-02-x05-c2-b0-support/protect.py",
+      "verify"
+    ],
+    "exit": 0,
+    "seconds": 14.048866748809814
+  }
+]

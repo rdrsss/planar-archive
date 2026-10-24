@@ -1,0 +1,1159 @@
+[
+  {
+    "name": "--root canonical oracle",
+    "option": "--root",
+    "value": "source=/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root lexical oracle",
+    "option": "--root",
+    "value": "source=current",
+    "status": 0,
+    "payload_sha256": "b38e8426dc0de44726665bde0d3148b5199e34686a4ed0e5d2b9a89fce46895b",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:60135fd5458f7be6f4579a9f7f55654a",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root relative/../current",
+    "option": "--root",
+    "value": "source=relative/../current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root absolute/../current",
+    "option": "--root",
+    "value": "source=absolute/../current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root nested/../../current",
+    "option": "--root",
+    "value": "source=nested/../../current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root target-parent/../current",
+    "option": "--root",
+    "value": "source=target-parent/../current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root target-nested/../current",
+    "option": "--root",
+    "value": "source=target-nested/../current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--base-root canonical oracle",
+    "option": "--base-root",
+    "value": "source=/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--base-root lexical oracle",
+    "option": "--base-root",
+    "value": "source=base",
+    "status": 0,
+    "payload_sha256": "b38e8426dc0de44726665bde0d3148b5199e34686a4ed0e5d2b9a89fce46895b",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:60135fd5458f7be6f4579a9f7f55654a",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--base-root relative/../base",
+    "option": "--base-root",
+    "value": "source=relative/../base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--base-root absolute/../base",
+    "option": "--base-root",
+    "value": "source=absolute/../base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--base-root nested/../../base",
+    "option": "--base-root",
+    "value": "source=nested/../../base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--base-root target-parent/../base",
+    "option": "--base-root",
+    "value": "source=target-parent/../base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--base-root target-nested/../base",
+    "option": "--base-root",
+    "value": "source=target-nested/../base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--workspace canonical oracle",
+    "option": "--workspace",
+    "value": "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "cd96ee854ac33d1dbf107370810ef0c89b05cfaa2faf5dcfcedd2e63dab4b007",
+    "identities": {
+      "work": "xxh3_128:9e0977ea1345468b07194bdbcfb9ade1",
+      "render": "xxh3_128:503e325bbbdd7e0f599d85a5e054d707",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--workspace lexical oracle",
+    "option": "--workspace",
+    "value": "workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "b38e8426dc0de44726665bde0d3148b5199e34686a4ed0e5d2b9a89fce46895b",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:60135fd5458f7be6f4579a9f7f55654a",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--workspace relative/../workspace/workspace.lua",
+    "option": "--workspace",
+    "value": "relative/../workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "cd96ee854ac33d1dbf107370810ef0c89b05cfaa2faf5dcfcedd2e63dab4b007",
+    "identities": {
+      "work": "xxh3_128:9e0977ea1345468b07194bdbcfb9ade1",
+      "render": "xxh3_128:503e325bbbdd7e0f599d85a5e054d707",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--workspace absolute/../workspace/workspace.lua",
+    "option": "--workspace",
+    "value": "absolute/../workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "cd96ee854ac33d1dbf107370810ef0c89b05cfaa2faf5dcfcedd2e63dab4b007",
+    "identities": {
+      "work": "xxh3_128:9e0977ea1345468b07194bdbcfb9ade1",
+      "render": "xxh3_128:503e325bbbdd7e0f599d85a5e054d707",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--workspace nested/../../workspace/workspace.lua",
+    "option": "--workspace",
+    "value": "nested/../../workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "cd96ee854ac33d1dbf107370810ef0c89b05cfaa2faf5dcfcedd2e63dab4b007",
+    "identities": {
+      "work": "xxh3_128:9e0977ea1345468b07194bdbcfb9ade1",
+      "render": "xxh3_128:503e325bbbdd7e0f599d85a5e054d707",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--workspace target-parent/../workspace/workspace.lua",
+    "option": "--workspace",
+    "value": "target-parent/../workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "cd96ee854ac33d1dbf107370810ef0c89b05cfaa2faf5dcfcedd2e63dab4b007",
+    "identities": {
+      "work": "xxh3_128:9e0977ea1345468b07194bdbcfb9ade1",
+      "render": "xxh3_128:503e325bbbdd7e0f599d85a5e054d707",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--workspace target-nested/../workspace/workspace.lua",
+    "option": "--workspace",
+    "value": "target-nested/../workspace/workspace.lua",
+    "status": 0,
+    "payload_sha256": "cd96ee854ac33d1dbf107370810ef0c89b05cfaa2faf5dcfcedd2e63dab4b007",
+    "identities": {
+      "work": "xxh3_128:9e0977ea1345468b07194bdbcfb9ade1",
+      "render": "xxh3_128:503e325bbbdd7e0f599d85a5e054d707",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry canonical oracle",
+    "option": "--registry",
+    "value": "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "ad1f074209ace50512b0f8f287ab5f9941e13629c60fe44ccd66b3206a4f09e4",
+    "identities": {
+      "work": "xxh3_128:31cf7f23ab42126d399625a847fde9b7",
+      "render": "xxh3_128:b0138a9165faa156f5e7b1cbf3860e8e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry lexical oracle",
+    "option": "--registry",
+    "value": "registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "b38e8426dc0de44726665bde0d3148b5199e34686a4ed0e5d2b9a89fce46895b",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:60135fd5458f7be6f4579a9f7f55654a",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry relative/../registry/quota-tools.json",
+    "option": "--registry",
+    "value": "relative/../registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "ad1f074209ace50512b0f8f287ab5f9941e13629c60fe44ccd66b3206a4f09e4",
+    "identities": {
+      "work": "xxh3_128:31cf7f23ab42126d399625a847fde9b7",
+      "render": "xxh3_128:b0138a9165faa156f5e7b1cbf3860e8e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry absolute/../registry/quota-tools.json",
+    "option": "--registry",
+    "value": "absolute/../registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "ad1f074209ace50512b0f8f287ab5f9941e13629c60fe44ccd66b3206a4f09e4",
+    "identities": {
+      "work": "xxh3_128:31cf7f23ab42126d399625a847fde9b7",
+      "render": "xxh3_128:b0138a9165faa156f5e7b1cbf3860e8e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry nested/../../registry/quota-tools.json",
+    "option": "--registry",
+    "value": "nested/../../registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "ad1f074209ace50512b0f8f287ab5f9941e13629c60fe44ccd66b3206a4f09e4",
+    "identities": {
+      "work": "xxh3_128:31cf7f23ab42126d399625a847fde9b7",
+      "render": "xxh3_128:b0138a9165faa156f5e7b1cbf3860e8e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry target-parent/../registry/quota-tools.json",
+    "option": "--registry",
+    "value": "target-parent/../registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "ad1f074209ace50512b0f8f287ab5f9941e13629c60fe44ccd66b3206a4f09e4",
+    "identities": {
+      "work": "xxh3_128:31cf7f23ab42126d399625a847fde9b7",
+      "render": "xxh3_128:b0138a9165faa156f5e7b1cbf3860e8e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--registry target-nested/../registry/quota-tools.json",
+    "option": "--registry",
+    "value": "target-nested/../registry/quota-tools.json",
+    "status": 0,
+    "payload_sha256": "ad1f074209ace50512b0f8f287ab5f9941e13629c60fe44ccd66b3206a4f09e4",
+    "identities": {
+      "work": "xxh3_128:31cf7f23ab42126d399625a847fde9b7",
+      "render": "xxh3_128:b0138a9165faa156f5e7b1cbf3860e8e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations canonical oracle",
+    "option": "--observations",
+    "value": "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "498d145ea8c2a6037d47175b09701b64eab2a79225eb142b223002fae415db7d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:9bb11299f2c4fb48684a52794926e04e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations lexical oracle",
+    "option": "--observations",
+    "value": "observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "b38e8426dc0de44726665bde0d3148b5199e34686a4ed0e5d2b9a89fce46895b",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:60135fd5458f7be6f4579a9f7f55654a",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations relative/../observations/recovery.json",
+    "option": "--observations",
+    "value": "relative/../observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "498d145ea8c2a6037d47175b09701b64eab2a79225eb142b223002fae415db7d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:9bb11299f2c4fb48684a52794926e04e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations absolute/../observations/recovery.json",
+    "option": "--observations",
+    "value": "absolute/../observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "498d145ea8c2a6037d47175b09701b64eab2a79225eb142b223002fae415db7d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:9bb11299f2c4fb48684a52794926e04e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations nested/../../observations/recovery.json",
+    "option": "--observations",
+    "value": "nested/../../observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "498d145ea8c2a6037d47175b09701b64eab2a79225eb142b223002fae415db7d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:9bb11299f2c4fb48684a52794926e04e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations target-parent/../observations/recovery.json",
+    "option": "--observations",
+    "value": "target-parent/../observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "498d145ea8c2a6037d47175b09701b64eab2a79225eb142b223002fae415db7d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:9bb11299f2c4fb48684a52794926e04e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--observations target-nested/../observations/recovery.json",
+    "option": "--observations",
+    "value": "target-nested/../observations/recovery.json",
+    "status": 0,
+    "payload_sha256": "498d145ea8c2a6037d47175b09701b64eab2a79225eb142b223002fae415db7d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:9bb11299f2c4fb48684a52794926e04e",
+      "observation": "xxh3_128:0e3a8cc3ccfddc9884b7b0b4955e8a9c",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root final alias direct",
+    "option": "--root",
+    "value": "source=direct",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias direct/child/../.",
+    "option": "--root",
+    "value": "source=direct/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias relative-final",
+    "option": "--root",
+    "value": "source=relative-final",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias relative-final/child/../.",
+    "option": "--root",
+    "value": "source=relative-final/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias nested-final",
+    "option": "--root",
+    "value": "source=nested-final",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias nested-final/child/../.",
+    "option": "--root",
+    "value": "source=nested-final/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias dot-target",
+    "option": "--root",
+    "value": "source=dot-target",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias dot-target/child/../.",
+    "option": "--root",
+    "value": "source=dot-target/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias parent-target",
+    "option": "--root",
+    "value": "source=parent-target",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root final alias parent-target/child/../.",
+    "option": "--root",
+    "value": "source=parent-target/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--root different-final oracle",
+    "option": "--root",
+    "value": "source=/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root child-link/.. allowed",
+    "option": "--root",
+    "value": "source=child-link/..",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--base-root final alias direct",
+    "option": "--base-root",
+    "value": "source=direct",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias direct/child/../.",
+    "option": "--base-root",
+    "value": "source=direct/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias relative-final",
+    "option": "--base-root",
+    "value": "source=relative-final",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias relative-final/child/../.",
+    "option": "--base-root",
+    "value": "source=relative-final/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias nested-final",
+    "option": "--base-root",
+    "value": "source=nested-final",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias nested-final/child/../.",
+    "option": "--base-root",
+    "value": "source=nested-final/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias dot-target",
+    "option": "--base-root",
+    "value": "source=dot-target",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias dot-target/child/../.",
+    "option": "--base-root",
+    "value": "source=dot-target/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias parent-target",
+    "option": "--base-root",
+    "value": "source=parent-target",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root final alias parent-target/child/../.",
+    "option": "--base-root",
+    "value": "source=parent-target/child/../.",
+    "status": 3,
+    "payload_sha256": "f9fe56615fa6e963f181ae907c761ff23962d10a60def0022fa0740b9dafe67b",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit root is a symbolic link target"
+    }
+  },
+  {
+    "name": "--base-root different-final oracle",
+    "option": "--base-root",
+    "value": "source=/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/base",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "--base-root child-link/.. allowed",
+    "option": "--base-root",
+    "value": "source=child-link/..",
+    "status": 0,
+    "payload_sha256": "6747531506900f8171bc4f07f470d0371715444091b2af3191370b82a44d1581",
+    "identities": {
+      "work": "xxh3_128:affae845cdef039fc97eb13988e32be5",
+      "render": "xxh3_128:f6848b80e42737292851b475744d6cd6",
+      "observation": "xxh3_128:8ab9274140fbf75408d21958bf119a37",
+      "base": "xxh3_128:294e51a7b955890c26430f040c7576cd"
+    }
+  },
+  {
+    "name": "chain canonical oracle",
+    "option": "--root",
+    "value": "source=/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r08bc01-review-8ynyouey/external/current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "12-link ancestor chain",
+    "option": "--root",
+    "value": "source=chain0/current",
+    "status": 0,
+    "payload_sha256": "509be661bac743cf41e5cc719de3a307e028b36febe517b5bd3137fbe7d3c72d",
+    "identities": {
+      "work": "xxh3_128:915ccd272d476ba2c38828095cbb6442",
+      "render": "xxh3_128:366a47636634e9cc5c380c1971ef725e",
+      "observation": "xxh3_128:02ef111bb3910d82cefdbd7a0004d70a",
+      "base": "xxh3_128:dafc4277ed8a13e0c74fe7eda20bccc0"
+    }
+  },
+  {
+    "name": "--root loop-a parent",
+    "option": "--root",
+    "value": "source=loop-a/current",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--root dangling parent",
+    "option": "--root",
+    "value": "source=dangling/current",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--base-root loop-a parent",
+    "option": "--base-root",
+    "value": "source=loop-a/base",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--base-root dangling parent",
+    "option": "--base-root",
+    "value": "source=dangling/base",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--workspace loop-a parent",
+    "option": "--workspace",
+    "value": "loop-a/workspace/workspace.lua",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--workspace dangling parent",
+    "option": "--workspace",
+    "value": "dangling/workspace/workspace.lua",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--registry loop-a parent",
+    "option": "--registry",
+    "value": "loop-a/registry/quota-tools.json",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--registry dangling parent",
+    "option": "--registry",
+    "value": "dangling/registry/quota-tools.json",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--observations loop-a parent",
+    "option": "--observations",
+    "value": "loop-a/observations/recovery.json",
+    "status": 4,
+    "payload_sha256": "3f0a1981a62a4c35d96c933eb090cce19fbff38715dc4079a78371fbaa986135",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Cannot resolve explicit input path"
+    }
+  },
+  {
+    "name": "--observations dangling parent",
+    "option": "--observations",
+    "value": "dangling/observations/recovery.json",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--workspace final file-relative",
+    "option": "--workspace",
+    "value": "file-relative",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--workspace final file-absolute",
+    "option": "--workspace",
+    "value": "file-absolute",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--workspace final file-chain",
+    "option": "--workspace",
+    "value": "file-chain",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--workspace final dangling",
+    "option": "--workspace",
+    "value": "dangling",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--workspace special fifo",
+    "option": "--workspace",
+    "value": "fifo",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--workspace special socket",
+    "option": "--workspace",
+    "value": "socket",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--registry final file-relative",
+    "option": "--registry",
+    "value": "file-relative",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--registry final file-absolute",
+    "option": "--registry",
+    "value": "file-absolute",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--registry final file-chain",
+    "option": "--registry",
+    "value": "file-chain",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--registry final dangling",
+    "option": "--registry",
+    "value": "dangling",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--registry special fifo",
+    "option": "--registry",
+    "value": "fifo",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--registry special socket",
+    "option": "--registry",
+    "value": "socket",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--observations final file-relative",
+    "option": "--observations",
+    "value": "file-relative",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--observations final file-absolute",
+    "option": "--observations",
+    "value": "file-absolute",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--observations final file-chain",
+    "option": "--observations",
+    "value": "file-chain",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--observations final dangling",
+    "option": "--observations",
+    "value": "dangling",
+    "status": 3,
+    "payload_sha256": "37a91bae5b3466a2e59f562be7c67f1be8ceb38462e30af3f15aa64693922ab4",
+    "error": {
+      "code": "path_denied",
+      "field": "",
+      "message": "Explicit input file is a symbolic link"
+    }
+  },
+  {
+    "name": "--observations special fifo",
+    "option": "--observations",
+    "value": "fifo",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  },
+  {
+    "name": "--observations special socket",
+    "option": "--observations",
+    "value": "socket",
+    "status": 4,
+    "payload_sha256": "0eb53b6b0a67ba6cd1c242ff4b14c6c6be135f85fb22beded8cde885d52fad14",
+    "error": {
+      "code": "io",
+      "details": {
+        "operation": "capture"
+      },
+      "field": "",
+      "message": "Explicit input must be a regular file"
+    }
+  }
+]

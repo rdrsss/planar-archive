@@ -1,0 +1,14 @@
+{
+  "changed_existing_entries": [
+    "tests/native/v5-02-x05-c4-b2-evidence/REPORT.md",
+    "tests/native/v5-02-x05-c4-b2-support/audit.py",
+    "tests/native/v5-02-x05-c4-b2-support/freeze.py"
+  ],
+  "new_entries": [
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "product_test_cmake_entries": 9,
+  "product_test_cmake_unchanged": true,
+  "schema": 1
+}

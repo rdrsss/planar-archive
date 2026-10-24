@@ -1,0 +1,18 @@
+{
+  "path_base": "repository root",
+  "sha256": {
+    "CLAUDE.md": "6b736a9104cf7b9ab7d38b5fb3075382f3be6a0335f98491965ccb2aaf6f9da4",
+    "docs/vernacular/acceptance-matrix.md": "effac263d8c539f8dcddf6e2d0f3678d829949c01462c02f4e2dd8ef88805586",
+    "docs/vernacular/external-profile-contract.md": "3436fcc45580bc5f8b470c118807a8c106570aaa9c508d4fa0a90680850bf1a7",
+    "docs/vernacular/external-profile-implementation.md": "2e9f994ffe6988b1d71460fc768e95afc58abd2119abc840cf931eb17d633cc5",
+    "docs/vernacular/implementation.md": "07833f352d960f0b47bdfddce8ce8e822f3691a08b8ec8cf3910b3ea17eb8aa1",
+    "docs/vernacular/roadmap.md": "782b03279beb434f91b82626fd614ddb408954836368b4b5d8a94172ee2416a1",
+    "docs/vernacular/v5-alignment.md": "329ba0392358edce8c219fe6fff0c3732b0ba430782a37a8ab64aa4bc7d7232a",
+    "src/engine/CMakeLists.txt": "ec4530f4a859fcb3e2eab29b84a2dd57f511d54ac917a3b82631a9bdc1663900",
+    "src/engine/history/request_v2.cpp": "3d6caf0f8895f506f33b96407fb290fe78b91681383d1df0faf28aa56ba0e110",
+    "src/engine/history/request_v2.cppm": "0f666d1ffa0e70a690ceefee49f15dbec927da7cb22abe6ea57ec5f825b8869c",
+    "src/engine/history/request_v2.t.cpp": "83e21bda4d35a14e528f63dd6e88f411f5947921367bbd2002adb0e77ec81c17",
+    "tests/vectors/records/generate-request-v2.py": "127d2d88c95f9067bdfdcad91ab10a5ac7920e5c64898a6af1799d353638a619",
+    "tests/vectors/records/request-v2.tsv": "c2a693f63ddb9557d533bcd953bb2f502246382757df9cb8e6a73db35142698f"
+  }
+}

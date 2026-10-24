@@ -1,0 +1,66 @@
+# V5-02-X04-A3 — Integrated native profile capture gate
+
+Status: fresh search after independently approved A1 and A2. Shared checkout
+`dev/planar-v2-vernacular`, HEAD `3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a`.
+Preserve intentional rewrite and frozen evidence. No Planar tools/skills/queue,
+installed binaries/operator data, commits/install/publish/merge. Coordinator owns
+this round. Fresh Luna-high search, Sol-medium verification author, Sol-high reviewer.
+
+Close the integrated X04-A native gate by assessing combined A1/A2 coverage
+against exact X-CAP/X-LIMIT and performing serialized full debug/RelWithDebInfo
+verification, with actual JUnit/LastTest, nonzero counts and zero unexplained skips.
+Current inventory 488 preserves 430 pre-X04 names plus A1 21 and A2 37. The latest
+full suites were X03-B3 430/430 each; A2's 162-case focus is not a full gate.
+No public CLI/profile, Lua registration, effective provenance, acceptance wiring
+or whole-invocation shared capture-budget implementation belongs in this round.
+Those later obligations must remain explicit. Linux remains untested here.
+
+Fresh search is read-only, no builds or writes: map current native admission and
+profile coverage, exact gaps in combined composition, applicable inherited source
+variant/vector audits and direct gate commands. Recommend minimal verification-only
+ownership/support/new tests if materially missing; avoid redundant tests that mirror
+implementation or duplicate established coverage. Review A1/A2 raw evidence and
+limitations, especially read observer positive controls, bounded final rereads,
+fixed Glaze buffer/grammar policy, arbitrary-size integer versions and staged
+metadata checks. Return precise citations and coverage-to-obligation disposition.
+Do not reopen approved policies or extend integration scope. Any product defect
+requires a separate corrective search/coder/reviewer round before this gate closes.
+
+Expected author ownership after search: new tests/native/v5-02-x04-a3-support/
+and evidence/, a current native capture coverage document under docs/vernacular/
+and narrow current-status updates in CLAUDE.md, docs/architecture.md and existing
+implementation/roadmap/alignment/acceptance-matrix/external-profile-implementation.
+Exact test ownership, if needed, will be assigned after search. Historical reports,
+fixtures and evidence stay immutable. Full pre-edit baseline with root-only
+exclusions and owned snapshots, unique per-attempt source freezes/logs, unchanged
+source during commands, preserved test inventory, pinned lint and no-work builds
+are required. Freeze all artifacts before release; reviewer checks current hashes
+before coordinator approval. No repeated full suite without a new reason.
+
+## Search disposition and exact author ownership
+
+Search found no product defect. Add one focused composition test to existing
+`src/engine/capture/profile.t.cpp`: a listed module aliased by a staged registry
+or observation file must refuse through the profile owner, without content reads,
+and poison the owner. Create the hard link BEFORE capture; creating it afterward
+changes inode ctime and would exercise receipt change instead of initial alias
+policy. Establish a positive-controlled observer, then reset it after capture
+before the admission under test. Preserve every existing test and product byte.
+Expected inventory is 489 if exactly one Catch2 case is added, with both roles
+as sections/iterations. Coordinator corrects search's preset names: presets are
+`debug` and `release`; their build directories are `build/rewrite-debug` and
+`build/rewrite-release`. RelWithDebInfo is the release configuration.
+
+Author owns only that additional test, new A3 support/evidence, new
+`docs/vernacular/x04-capture-evidence.md`, and the narrow current-status docs
+listed above (including `v5-alignment.md`). Do not edit product implementation,
+CMake, vendors, historical reports or earlier evidence. Preserve raw failures;
+if a product defect appears, report and stop dependent gate work for correction.
+Run full suites once per configuration, with actual registry count and all prior
+488 names preserved; no source edits during either configuration. Freeze tested
+sources/support before commands; status docs can be finalized afterward with
+explicit product identity preservation. Full ownership baseline before any edits.
+Carry canonical/record/request vectors and applicable four runtime/CLI and five
+storage/export exact forward/reverse audits from A2 using new output directories.
+Run pinned lint and no-work both configurations. Retain JUnit, LastTest and
+CTestCostData immediately and parse actual cases/zero errors/failures/skips.

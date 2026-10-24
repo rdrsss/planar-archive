@@ -1,0 +1,41 @@
+[
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit": 0,
+    "label": "inventory",
+    "seconds": 0.08412341773509979
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--tests-from-file",
+      "<repo>/tests/native/v5-02-x05-c4-a-review-evidence/selected-tests.txt",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c4-a-review-evidence/focused.xml"
+    ],
+    "exit": 0,
+    "label": "focused",
+    "seconds": 8.884190334007144
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "label": "no-work",
+    "seconds": 0.26143312454223633
+  }
+]

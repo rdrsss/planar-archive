@@ -1,0 +1,19 @@
+{
+  "artifact_manifest_sha256": "cae4e13b1473d031d8ba6a5a697557d95e429810d3e8e1fd1a9a5c8ec05ae170",
+  "artifacts": 176,
+  "baseline": 555,
+  "build_entries": 931,
+  "build_identities_sha256": "0d8d0ff27c4216cc4ceaa5cdf9884bf678371a2d7eff9c25bbb478d186e3c313",
+  "build_ownership": "released after final hashing; no later edits",
+  "disabled": 0,
+  "errors": 0,
+  "failures": 0,
+  "focused": 197,
+  "inventory": 570,
+  "owned_diff_sha256": "0fad899cfdac93df1fa6438c9ecd6d63138af2fdfb66252d20360d30327bfe6b",
+  "release_source_sha256": "56cdefe4bae53ebccf8b3e28b436592acb15ea08aa16c5c5cadf7da125087130",
+  "report_sha256": "13f26a81cbca4067f4f14f1b50c5da2201303adca6e4828b50df5d4944c560cf",
+  "skips": 0,
+  "source_entries": 19663,
+  "source_sha256": "56cdefe4bae53ebccf8b3e28b436592acb15ea08aa16c5c5cadf7da125087130"
+}

@@ -1,0 +1,14 @@
+{
+  "baseline_path": "tests/native/v5-02-x03-b1-evidence/final-inventory.json",
+  "baseline_sha256": "c4e56587fa928ebae545bba04c91f9212c5ff8008dc178ed788ec8451c3b6655",
+  "baseline_count": 416,
+  "current_count": 421,
+  "removed": [],
+  "added": [
+    "replacement.ledger format2 mixed request codecs preserve recorded history export and privacy",
+    "replacement.ledger format2 reads native typed embedded request-v2 fixture",
+    "replacement.ledger format2 request-v2 malformed and mismatched rows refuse unchanged privately",
+    "replacement.ledger format2 structurally decodes private profile request without claiming acceptance",
+    "replacement.ledger request children of either codec refuse format2 directories"
+  ]
+}

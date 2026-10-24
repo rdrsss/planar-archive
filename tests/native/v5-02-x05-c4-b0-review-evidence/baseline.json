@@ -1,0 +1,22 @@
+{
+  "author_entries": 100,
+  "identities": {
+    "REPORT.md": {
+      "mode": 420,
+      "sha256": "b3d5eb3507300f3411be6f77f87a8057a6e660b26a30f6a299d6a35e6fcc597a"
+    },
+    "artifact-manifest.json": {
+      "mode": 420,
+      "sha256": "1d55cfc2f6a6f0b8f935c1193f8bad656994781f699d11317859d1b49dd57d95"
+    },
+    "finalization.json": {
+      "mode": 420,
+      "sha256": "1e0000acfd007991fb1d2faa7df2e591f9d80b5907884390753ef97ddee83ca7"
+    },
+    "frozen-support.json": {
+      "mode": 420,
+      "sha256": "990846d7c18eb7fdc16b697f585bd5ac642a0792933edb398194ebe2163af3fe"
+    }
+  },
+  "protected_entries": 72017
+}

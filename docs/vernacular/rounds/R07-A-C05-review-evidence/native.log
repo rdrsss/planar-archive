@@ -1,0 +1,92 @@
+Test project <repo>/build/rewrite-debug
+      Start  2: replacement.loader bounds native amplification of reused scalar strings
+ 1/42 Test  #2: replacement.loader bounds native amplification of reused scalar strings .....................   Passed    0.19 sec
+      Start  3: replacement.loader constructed nested records remain immutable and readable
+ 2/42 Test  #3: replacement.loader constructed nested records remain immutable and readable .................   Passed    0.02 sec
+      Start  4: replacement.loader denies ambient capabilities and all trusted mutation
+ 3/42 Test  #4: replacement.loader denies ambient capabilities and all trusted mutation .....................   Passed    0.01 sec
+      Start  5: replacement.loader enforces independent instruction allocation and structural bounds
+ 4/42 Test  #5: replacement.loader enforces independent instruction allocation and structural bounds ........   Passed    0.19 sec
+      Start  6: replacement.loader preserves structural constructor tags
+ 5/42 Test  #6: replacement.loader preserves structural constructor tags ....................................   Passed    0.02 sec
+      Start  7: replacement.loader rejects unsupported structures
+ 6/42 Test  #7: replacement.loader rejects unsupported structures ...........................................   Passed    0.02 sec
+      Start  8: replacement.loader retains table identities across garbage collection
+ 7/42 Test  #8: replacement.loader retains table identities across garbage collection .......................   Passed    0.06 sec
+      Start  9: replacement.capture bounds text raw files totals and exclusions
+ 8/42 Test  #9: replacement.capture bounds text raw files totals and exclusions .............................   Passed    0.03 sec
+      Start 10: replacement.capture classifies retained binary growth beyond quota as changed
+ 9/42 Test #10: replacement.capture classifies retained binary growth beyond quota as changed ...............   Passed    0.02 sec
+      Start 11: replacement.capture classifies retained text growth beyond quota as changed
+10/42 Test #11: replacement.capture classifies retained text growth beyond quota as changed .................   Passed    0.02 sec
+      Start 12: replacement.capture declaration references join final retained snapshot
+11/42 Test #12: replacement.capture declaration references join final retained snapshot .....................   Passed    0.02 sec
+      Start 13: replacement.capture deterministic seam detects bytes mode identity and membership changes
+12/42 Test #13: replacement.capture deterministic seam detects bytes mode identity and membership changes ...   Passed    0.02 sec
+      Start 14: replacement.capture enforces aggregate bytes and count before retention
+13/42 Test #14: replacement.capture enforces aggregate bytes and count before retention .....................   Passed    1.03 sec
+      Start 15: replacement.capture refuses portable paths aliases and unsafe file types
+14/42 Test #15: replacement.capture refuses portable paths aliases and unsafe file types ....................   Passed    0.02 sec
+      Start 16: replacement.capture rejects overlapping roots and cross-root hardlinks
+15/42 Test #16: replacement.capture rejects overlapping roots and cross-root hardlinks ......................   Passed    0.02 sec
+      Start 17: replacement.capture retains sorted bytes and discovered references
+16/42 Test #17: replacement.capture retains sorted bytes and discovered references ..........................   Passed    0.02 sec
+      Start 18: replacement.capture standalone inputs share physical workspace without tree authority
+17/42 Test #18: replacement.capture standalone inputs share physical workspace without tree authority .......   Passed    0.02 sec
+      Start 19: replacement.canonical bounds depth nodes and bytes without declaration string caps
+18/42 Test #19: replacement.canonical bounds depth nodes and bytes without declaration string caps ..........   Passed    0.02 sec
+      Start 20: replacement.canonical distinguishes typed empty values and integer boundaries
+19/42 Test #20: replacement.canonical distinguishes typed empty values and integer boundaries ...............   Passed    0.01 sec
+      Start 21: replacement.canonical preserves raw strings and unsigned UTF8 key order
+20/42 Test #21: replacement.canonical preserves raw strings and unsigned UTF8 key order .....................   Passed    0.01 sec
+      Start 22: replacement.canonical refuses null private malformed cyclic and out of range input
+21/42 Test #22: replacement.canonical refuses null private malformed cyclic and out of range input ..........   Passed    0.01 sec
+      Start 23: replacement.hash matches independent hand canonical and domain vectors
+22/42 Test #23: replacement.hash matches independent hand canonical and domain vectors ......................   Passed    0.03 sec
+      Start 24: replacement.hash selected captured base observation unit and role recipes remain separate
+23/42 Test #24: replacement.hash selected captured base observation unit and role recipes remain separate ...   Passed    0.02 sec
+      Start 25: replacement.hash validates published upstream seed zero XXH3 length vectors
+24/42 Test #25: replacement.hash validates published upstream seed zero XXH3 length vectors .................   Passed    0.02 sec
+      Start 26: replacement.runtime bounds Lua execution allocation and native amplification
+25/42 Test #26: replacement.runtime bounds Lua execution allocation and native amplification ................   Passed    0.88 sec
+      Start 27: replacement.runtime enforces immaterial text payloads on both boundaries
+26/42 Test #27: replacement.runtime enforces immaterial text payloads on both boundaries ....................   Passed    0.02 sec
+      Start 28: replacement.runtime exposes only the selected bounded table helpers
+27/42 Test #28: replacement.runtime exposes only the selected bounded table helpers .........................   Passed    0.02 sec
+      Start 29: replacement.runtime identifies the diagnostic actually escaping Lua
+28/42 Test #29: replacement.runtime identifies the diagnostic actually escaping Lua .........................   Passed    2.80 sec
+      Start 30: replacement.runtime makes caught quota terminal before protected calls return
+29/42 Test #30: replacement.runtime makes caught quota terminal before protected calls return ...............   Passed    1.90 sec
+      Start 31: replacement.runtime mutations cannot affect captured native input
+30/42 Test #31: replacement.runtime mutations cannot affect captured native input ...........................   Passed    0.02 sec
+      Start 32: replacement.runtime native hash primitives match direct canonical identities
+31/42 Test #32: replacement.runtime native hash primitives match direct canonical identities ................   Passed    0.02 sec
+      Start 33: replacement.runtime preserves ordinary protected call arity errors and nesting
+32/42 Test #33: replacement.runtime preserves ordinary protected call arity errors and nesting ..............   Passed    0.02 sec
+      Start 34: replacement.runtime preserves private declaration tags and raw captured bytes
+33/42 Test #34: replacement.runtime preserves private declaration tags and raw captured bytes ...............   Passed    0.02 sec
+      Start 35: replacement.runtime prevents finalizers from bypassing instruction limits
+34/42 Test #35: replacement.runtime prevents finalizers from bypassing instruction limits ...................   Passed    0.03 sec
+      Start 36: replacement.runtime refuses native count paths within a subprocess bound
+35/42 Test #36: replacement.runtime refuses native count paths within a subprocess bound ....................   Passed    0.06 sec
+      Start 37: replacement.runtime refuses native sparse table range helpers
+36/42 Test #37: replacement.runtime refuses native sparse table range helpers ...............................   Passed    0.02 sec
+      Start 38: replacement.runtime refuses native string pattern paths within a subprocess bound
+37/42 Test #38: replacement.runtime refuses native string pattern paths within a subprocess bound ...........   Passed    0.13 sec
+      Start 39: replacement.runtime refuses unsupported trusted returns and malformed native inputs
+38/42 Test #39: replacement.runtime refuses unsupported trusted returns and malformed native inputs .........   Passed    0.03 sec
+      Start 40: replacement.runtime repairs traversal state after caught conversion failures
+39/42 Test #40: replacement.runtime repairs traversal state after caught conversion failures ................   Passed    0.05 sec
+      Start 41: replacement.runtime retains deterministic nonpattern string operations
+40/42 Test #41: replacement.runtime retains deterministic nonpattern string operations ......................   Passed    0.02 sec
+      Start 42: replacement.runtime retains rich stdlib diagnostics as structural data
+41/42 Test #42: replacement.runtime retains rich stdlib diagnostics as structural data ......................   Passed    0.02 sec
+      Start 43: replacement.runtime states are fresh deterministic and separated from declarations
+42/42 Test #43: replacement.runtime states are fresh deterministic and separated from declarations ..........   Passed    0.02 sec
+
+100% tests passed out of 42
+
+Label Time Summary:
+unit    =   7.89 sec*proc (42 tests)
+
+Total Test time (real) =   7.91 sec

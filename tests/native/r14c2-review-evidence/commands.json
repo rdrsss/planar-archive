@@ -1,0 +1,87 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "log": "build.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.capture",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c2-review-evidence/capture.xml"
+    ],
+    "cwd": "<repo>",
+    "log": "capture.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c2-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "log": "focused.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r14c2-review-evidence/cli.xml"
+    ],
+    "cwd": "<repo>",
+    "log": "cli.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "log": "lint.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "log": "no-work.txt",
+    "exit": 0
+  }
+]

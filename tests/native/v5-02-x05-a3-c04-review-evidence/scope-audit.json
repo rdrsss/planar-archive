@@ -1,0 +1,40 @@
+{
+  "allowed": [
+    "docs/vernacular/rounds/V5-02-X05-A3-C04.md",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/external_registration.t.cpp",
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/external-profile-implementation.md"
+  ],
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "tests/native/v5-02-x05-a3-c04-support/adaptations.json",
+    "tests/native/v5-02-x05-a3-c04-support/allocations.py",
+    "tests/native/v5-02-x05-a3-c04-support/budget.py",
+    "tests/native/v5-02-x05-a3-c04-support/fields.py",
+    "tests/native/v5-02-x05-a3-c04-support/locations.py",
+    "tests/native/v5-02-x05-a3-c04-support/probe.py",
+    "tests/native/v5-02-x05-a3-c04-support/reachable.py",
+    "tests/native/v5-02-x05-a3-c04-support/regressions.py",
+    "tests/native/v5-02-x05-a3-c04-support/repeat.py",
+    "tests/native/v5-02-x05-a3-c04-support/verify.py"
+  ],
+  "diff_sha256": "8c104bd45f9b32c9851fb1ff39cf452b753f4cb96cc3ba400bd2d850a1305462",
+  "embedded_invocation_tail_identical_except_profile_refusal": true,
+  "guard_api_build_codec_vendor_unchanged": true,
+  "historical_unchanged": true,
+  "independently_reconstructed_owned_diff": true,
+  "shipped_lua_unchanged": true,
+  "symlink": "CLAUDE.md"
+}

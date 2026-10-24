@@ -1,0 +1,257 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:28.108343+00:00",
+    "exit_code": 0,
+    "label": "debug-build",
+    "seconds": 0.303366,
+    "start_utc": "2026-10-22T22:56:27.804977+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:28.195806+00:00",
+    "exit_code": 0,
+    "label": "debug-inventory",
+    "seconds": 0.083413,
+    "start_utc": "2026-10-22T22:56:28.112393+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement[.]profile capture staged module aliases refuse without reads and poison owner$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/debug-newcase.xml"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:28.282005+00:00",
+    "exit_code": 0,
+    "label": "debug-newcase",
+    "seconds": 0.081638,
+    "start_utc": "2026-10-22T22:56:28.200367+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/debug-historical-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:29.098171+00:00",
+    "exit_code": 0,
+    "label": "debug-historical",
+    "seconds": 0.815128,
+    "start_utc": "2026-10-22T22:56:28.283043+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/debug-d6-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:29.456058+00:00",
+    "exit_code": 0,
+    "label": "debug-d6",
+    "seconds": 0.356146,
+    "start_utc": "2026-10-22T22:56:29.099912+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/debug-d6-c01-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:29.696274+00:00",
+    "exit_code": 0,
+    "label": "debug-d6-c01",
+    "seconds": 0.238847,
+    "start_utc": "2026-10-22T22:56:29.457427+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-debug",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/debug-d7-b-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:29.868073+00:00",
+    "exit_code": 0,
+    "label": "debug-d7-b",
+    "seconds": 0.17038,
+    "start_utc": "2026-10-22T22:56:29.697693+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:30.035567+00:00",
+    "exit_code": 0,
+    "label": "debug-no-work",
+    "seconds": 0.166045,
+    "start_utc": "2026-10-22T22:56:29.869522+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:30.359010+00:00",
+    "exit_code": 0,
+    "label": "release-build",
+    "seconds": 0.322325,
+    "start_utc": "2026-10-22T22:56:30.036685+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-release",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:30.439867+00:00",
+    "exit_code": 0,
+    "label": "release-inventory",
+    "seconds": 0.079694,
+    "start_utc": "2026-10-22T22:56:30.360173+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-release",
+      "-R",
+      "^replacement[.]profile capture staged module aliases refuse without reads and poison owner$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/release-newcase.xml"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:30.502765+00:00",
+    "exit_code": 0,
+    "label": "release-newcase",
+    "seconds": 0.05444,
+    "start_utc": "2026-10-22T22:56:30.448325+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/release-historical-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:31.103537+00:00",
+    "exit_code": 0,
+    "label": "release-historical",
+    "seconds": 0.599634,
+    "start_utc": "2026-10-22T22:56:30.503903+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/release-d6-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:31.448714+00:00",
+    "exit_code": 0,
+    "label": "release-d6",
+    "seconds": 0.342889,
+    "start_utc": "2026-10-22T22:56:31.105825+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d6-c01-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/release-d6-c01-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:31.666868+00:00",
+    "exit_code": 0,
+    "label": "release-d6-c01",
+    "seconds": 0.21449,
+    "start_utc": "2026-10-22T22:56:31.452378+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/r14-d7-b-support/audit.py",
+      "<repo>/build/rewrite-release",
+      "<repo>/tests/native/v5-02-x04-a3-review-evidence/release-d7-b-report.json"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:31.869183+00:00",
+    "exit_code": 0,
+    "label": "release-d7-b",
+    "seconds": 0.200603,
+    "start_utc": "2026-10-22T22:56:31.668580+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-release",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:32.064650+00:00",
+    "exit_code": 0,
+    "label": "release-no-work",
+    "seconds": 0.188749,
+    "start_utc": "2026-10-22T22:56:31.875901+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "end_utc": "2026-10-22T22:56:34.391610+00:00",
+    "exit_code": 0,
+    "label": "debug-lint",
+    "seconds": 2.324538,
+    "start_utc": "2026-10-22T22:56:32.067072+00:00"
+  }
+]

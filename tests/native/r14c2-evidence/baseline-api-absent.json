@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "--preset",
+    "debug",
+    "--target",
+    "planar_capture_tests"
+  ],
+  "exit": 1,
+  "note": "Additive tests against exact pre-round capture API; expected compile failure. Candidate restored in finally."
+}

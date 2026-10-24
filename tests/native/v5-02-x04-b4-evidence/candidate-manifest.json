@@ -1,0 +1,38 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "572e36b95dbe6fdae6b5b74ef8437e3416db4882654899e927a027e69e85f688"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "0e4c8d87f381fd89c5c4f984e0d60ed26f03157df946cf49f2f53a3bb47d1cfc"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "mode": 420,
+    "sha256": "5c35e26975eaf636599b712336dd32c5671f979189fcd47110708dd6b3fdc5dc"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "6d4abcf73b896a1e651bc7c868896194479aaf137ee8719e49ea477534f28755"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "7a6fd97093e8cb6fcd9a4491126acb48521928e2dbc1ed5c377b71a6eb985771"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "1149eef24d0c5475345c91d38650b9beae6a062439e50e8a765e278b9864bb90"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "mode": 420,
+    "sha256": "a76e4cab14a90f4fdc6e8bb17a5cfbd2f650125728bbcbc812b5172326c5bebc"
+  },
+  "docs/vernacular/x04-provenance-evidence.md": {
+    "mode": 420,
+    "sha256": "dd2004998c4a4e4789720c2ad13c9e0d4f097dee0a93e2907682bfe5ffd39fdc"
+  },
+  "tests/native/v5-02-x04-b4-support/verify.py": {
+    "mode": 420,
+    "sha256": "4b7ce0d2af584252df612b67a50c1bca81c56b581510bfdef2d0dd87bee31a44"
+  }
+}

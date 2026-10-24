@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "checks": [],
+  "findings": [],
+  "checkpoint": {
+    "progress": "CLI parser and output formatting are present in the supplied checkout.",
+    "next": "Inspect actual library/CLI integration and independently verify selected tests.",
+    "unresolved": "No native render, check receipt, producer completion or review approval exists.",
+    "files": [
+      "src/cli/main.py",
+      "tests/cli/test_integration.py"
+    ]
+  }
+}

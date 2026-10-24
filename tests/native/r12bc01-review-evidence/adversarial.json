@@ -1,0 +1,483 @@
+[
+  {
+    "case": "orphan_sidecar_-journal_regular",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-journal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-journal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-journal_symlink",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-journal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-journal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-journal_directory",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-journal": {
+        "directory": true
+      },
+      "ledger-journal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-journal": {
+        "directory": true
+      },
+      "ledger-journal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-wal_regular",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-wal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-wal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-wal_symlink",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-wal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-wal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-wal_directory",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-wal": {
+        "directory": true
+      },
+      "ledger-wal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-wal": {
+        "directory": true
+      },
+      "ledger-wal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-shm_regular",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-shm": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-shm": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-shm_symlink",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-shm": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-shm": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-shm_directory",
+    "passed": true,
+    "init": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:1:Cannot open explicit regular ledger",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-shm": {
+        "directory": true
+      },
+      "ledger-shm/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger-shm": {
+        "directory": true
+      },
+      "ledger-shm/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "regular_init_mode_and_cleanup",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "ok:0278dd139278b43deac21dfd55edcff8:review_workspace:2026-10-20T16:36:18.588Z",
+      "stderr": ""
+    },
+    "entries": {
+      "ledger": {
+        "sha256": "f1a89d70745304ff4bd01a89d3a5ecb5f9d4202463bbdf9270f898d1994ce55c",
+        "mode": 384
+      }
+    }
+  },
+  {
+    "case": "valid_ro",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "ok:0278dd139278b43deac21dfd55edcff8:review_workspace:2026-10-20T16:36:18.588Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "valid_rw",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "ok:0278dd139278b43deac21dfd55edcff8:review_workspace:2026-10-20T16:36:18.588Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "valid_snapshot",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "snapshot_commit_code:5\nok:0278dd139278b43deac21dfd55edcff8:review_workspace:2026-10-20T16:36:18.588Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "independent_random_identities",
+    "passed": true,
+    "first": {
+      "returncode": 0,
+      "stdout": "ok:0278dd139278b43deac21dfd55edcff8:review_workspace:2026-10-20T16:36:18.588Z",
+      "stderr": ""
+    },
+    "second": {
+      "returncode": 0,
+      "stdout": "ok:27af5963802eef6dc244d79ec1e79ed2:review_workspace:2026-10-20T16:36:18.648Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "open_symlink",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:3:Cannot open explicit regular ledger",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:3:Cannot open explicit regular ledger",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "open_directory",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "open_fifo",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "open_missing",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:1:Cannot open explicit regular ledger",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:1:Cannot open explicit regular ledger",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "extra_event",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event count is inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event count is inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "event_json",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "event_time",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "missing_meta",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Ledger singleton rows are inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Ledger singleton rows are inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "wrong_metadata_type",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Invalid ledger metadata",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Invalid ledger metadata",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "nul_metadata_refuses",
+    "passed": true,
+    "sqlite_character_length": 32,
+    "actual_byte_length": 33554465,
+    "result": {
+      "returncode": 1,
+      "stdout": "error:6:Invalid ledger metadata",
+      "stderr": ""
+    }
+  }
+]

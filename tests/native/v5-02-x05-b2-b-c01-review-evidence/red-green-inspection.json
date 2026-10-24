@@ -1,0 +1,50 @@
+{
+  "red/adversarial.xml": {
+    "name": "adversarial",
+    "errors": "0",
+    "failures": "7",
+    "skipped": "0",
+    "tests": "3179",
+    "hostname": "tbd",
+    "time": "0.021",
+    "timestamp": "2026-10-23T07:29:53Z",
+    "cases": 5,
+    "failed_cases": 2
+  },
+  "red/controls.xml": {
+    "name": "controls",
+    "errors": "0",
+    "failures": "2",
+    "skipped": "0",
+    "tests": "45",
+    "hostname": "tbd",
+    "time": "0.001",
+    "timestamp": "2026-10-23T07:29:54Z",
+    "cases": 2,
+    "failed_cases": 1
+  },
+  "green/adversarial.xml": {
+    "name": "adversarial",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "3205",
+    "hostname": "tbd",
+    "time": "0.027",
+    "timestamp": "2026-10-23T07:30:29Z",
+    "cases": 5,
+    "failed_cases": 0
+  },
+  "final-probes/adversarial.xml": {
+    "name": "adversarial",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "3205",
+    "hostname": "tbd",
+    "time": "0.033",
+    "timestamp": "2026-10-23T07:34:35Z",
+    "cases": 5,
+    "failed_cases": 0
+  }
+}

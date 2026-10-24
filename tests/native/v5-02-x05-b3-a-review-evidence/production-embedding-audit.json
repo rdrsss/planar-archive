@@ -1,0 +1,15 @@
+{
+  "originals_exact": [
+    "planar/json.lua",
+    "planar/schema.lua",
+    "planar/semantic.lua",
+    "planar/selection.lua",
+    "planar/presentation.lua",
+    "planar/observations.lua",
+    "planar/render.lua",
+    "planar/acceptance.lua",
+    "planar/commands.lua",
+    "planar/bootstrap.lua"
+  ],
+  "assembly_exact": true
+}

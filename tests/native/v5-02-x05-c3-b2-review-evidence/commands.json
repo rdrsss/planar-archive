@@ -1,0 +1,119 @@
+[
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/review.py",
+      "before"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/check_identities.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-N",
+      "-R",
+      "(C3 B2|host path|profile capture|capture admission)"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--output-on-failure",
+      "-R",
+      "(C3 B2|host path|profile capture|capture admission)",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/focused.xml"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/private_review.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/verify_tokens.py"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-c3-b2-support/audit.py",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/current-boundary-audit.json"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "<repo>/tests/native/v5-02-x05-c3-b2-review-evidence/review.py",
+      "after"
+    ],
+    "cwd": "<repo>",
+    "exit": 0
+  }
+]

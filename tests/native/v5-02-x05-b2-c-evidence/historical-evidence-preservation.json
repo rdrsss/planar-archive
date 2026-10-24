@@ -1,0 +1,42 @@
+{
+  "v5-02-x05-a4-review-evidence": {
+    "verified_entries": 36,
+    "artifact_manifest_sha256": "bb1a6443498529564ea07170e7734017c5f0fb01e3da28de86942b673ff38238",
+    "unchanged": true
+  },
+  "v5-02-x05-b1-review-evidence": {
+    "verified_entries": 32,
+    "artifact_manifest_sha256": "b25654b01d57e464243c6e81bdc642229b405351201b5257f3ba3516c5c678b9",
+    "unchanged": true
+  },
+  "v5-02-x05-b2-a-c01-evidence": {
+    "verified_entries": 104,
+    "artifact_manifest_sha256": "9a3924201089542da140f5d522ec976aa88de46f473ede6c1dcfd03dada52a57",
+    "unchanged": true
+  },
+  "v5-02-x05-b2-a-c01-review-evidence": {
+    "verified_entries": 61,
+    "artifact_manifest_sha256": "3b6f9c3fdf905af4fd77b3ab66c42e1b54105b73fe1144ce7a0a9cac3fb5075d",
+    "unchanged": true
+  },
+  "v5-02-x05-b2-b-evidence": {
+    "verified_entries": 90,
+    "artifact_manifest_sha256": "2f3991abd0d0ab2ee852c35fce355ddd1a7592ee20b8b316807a402389ceb394",
+    "unchanged": true
+  },
+  "v5-02-x05-b2-b-review-evidence": {
+    "verified_entries": 74,
+    "artifact_manifest_sha256": "316c1b8987b0452e0f2dbceac0ae3d6160def19fde9d122a03934246e1191aa8",
+    "unchanged": true
+  },
+  "v5-02-x05-b2-b-c01-evidence": {
+    "verified_entries": 126,
+    "artifact_manifest_sha256": "2425f942948717e711e16234c705c01b892bbb82da7a2f1889689da3316e483b",
+    "unchanged": true
+  },
+  "v5-02-x05-b2-b-c01-review-evidence": {
+    "verified_entries": 82,
+    "artifact_manifest_sha256": "4f4b36b862fea2a6e087eac4f717b29bd7bb78011380502ecd81beeb9f465880",
+    "unchanged": true
+  }
+}

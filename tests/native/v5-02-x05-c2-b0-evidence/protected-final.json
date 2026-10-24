@@ -1,0 +1,12 @@
+{
+  "agents_symlink_preserved": true,
+  "bytes_and_membership_unchanged": true,
+  "counts": {
+    "compiled": 888,
+    "rewrite-debug": 701,
+    "rewrite-release": 3492,
+    "source": 2286,
+    "tests": 20807
+  },
+  "support_frozen": true
+}

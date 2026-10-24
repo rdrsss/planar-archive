@@ -1,0 +1,44 @@
+[
+  {
+    "name": "repeat.py",
+    "original_sha256": "49a856c373644fbf7e1fcf2c3174e894f0b2d13c8c3d1fc8f0e42f5cae5faaa9",
+    "copy_sha256": "1ba35af415ff4e9239e992d4473667d6fcf1d5248f0f4c5eab78c640110accc3",
+    "changes": "Output root only"
+  },
+  {
+    "name": "locations.py",
+    "original_sha256": "df230ac886652057c4ac3d5320def880c16a753eb0344ace6b96d001aa7e4465",
+    "copy_sha256": "5b63aca60e87f5fca01c5b03a76a85348afaced8ced7f82b81b4d69b417b3164",
+    "changes": "Output/support roots, C03 577-to-578 inventory; locations private token condition and changed indentation; new allocation runner gate"
+  },
+  {
+    "name": "probe.py",
+    "original_sha256": "bfddea5de753f1dd4d7cf7035303b9b17a77029b43bab9c2f0799f98c7dff157",
+    "copy_sha256": "0bbed3bd3169c4e6db2ac817dd6a5451b8b64241dc1fd1bd7440f5b0307bb4ed",
+    "changes": "Output root only"
+  },
+  {
+    "name": "reachable.py",
+    "original_sha256": "ad1fe8684da894579dc758ca95752f2b9b9dc05aed06574b5b0fa58383eb3be4",
+    "copy_sha256": "f674d699f37bbf455882299e1a2859381e542f306b00ccc08c5618b5c47080c0",
+    "changes": "Output root only"
+  },
+  {
+    "name": "regressions.py",
+    "original_sha256": "3dffa3d015b35e76316d5da171bd639315ee8c8bbfb2fac963264c8f32971785",
+    "copy_sha256": "fd0f6f21b8bea1a7408926f7725a56286a788ec50e555ce0a1b542b509bfe291",
+    "changes": "Output root only"
+  },
+  {
+    "name": "budget.py",
+    "original_sha256": "7211bdc0145aef4de6e885f81daf3c478946eafddde30e16c94f9960c5020dda",
+    "copy_sha256": "1cafefbaea0e9eebfcf828442172aba14492e7793532218e7256408e551847bf",
+    "changes": "Output root only"
+  },
+  {
+    "name": "verify.py",
+    "original_sha256": "4b75a92044211c3a65a042dae3c0fb4e811a2a4b485fd5e61b6c806064f3a996",
+    "copy_sha256": "65ab63ef4dfdfa4f6dd08dc27f92dd9fa2e38ec0fc0ec24c41bf9fec7531e43e",
+    "changes": "Output/support roots, C03 577-to-578 inventory; locations private token condition and changed indentation; new allocation runner gate"
+  }
+]

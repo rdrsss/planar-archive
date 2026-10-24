@@ -1,0 +1,46 @@
+{
+  "all_buildtrees_protected": {
+    "build/install-release": {
+      "file_bytes": 1016430379,
+      "members": 8247
+    },
+    "build/rewrite-debug": {
+      "file_bytes": 2120054654,
+      "members": 4305
+    },
+    "build/rewrite-release": {
+      "file_bytes": 1516584369,
+      "members": 4239
+    }
+  },
+  "all_other_entries_exact_attributes": true,
+  "allowed_changed_files": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/profile-preparation-architecture.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/x06-implementation.md"
+  ],
+  "baseline_members": 94187,
+  "baseline_sha256": "c7828499e3e0a87627d67871d79357d04e9bc36604fa65e2f296c21c1175d294",
+  "candidate_sha256": "eec7fe7ff64bcdc46f52993491e3ddfcaaa82938be52b71fecff108a3121deb5",
+  "diff_sha256": "fcc7366fa05d666c7874ca55dbd3ef852838f190509f18a86c16b4b609921fb7",
+  "directory_metadata_only_changes": [
+    "docs/vernacular"
+  ],
+  "exclusions": [
+    ".git",
+    "tests/native/v5-02-x06-a4-evidence",
+    "tests/native/v5-02-x06-a4-support",
+    "docs/vernacular/rounds/V5-02-X06-A4.md"
+  ],
+  "final_members": 94188,
+  "final_sha256": "35834cb5266e718098db5025d66629992a83b679b6a84392ae93e229ee88ce5c",
+  "root_dotfiles_symlinks_and_prior_evidence_protected": true,
+  "unexpected_changes": []
+}

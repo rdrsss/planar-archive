@@ -1,0 +1,62 @@
+{
+  "ctest.xml": {
+    "records": 76,
+    "suites": [
+      {
+        "name": "(empty)",
+        "tests": "76",
+        "failures": "0",
+        "disabled": "0",
+        "skipped": "0",
+        "hostname": "",
+        "time": "16",
+        "timestamp": "2026-10-20T06:06:23"
+      }
+    ]
+  },
+  "original-edge-probes.xml": {
+    "records": 2,
+    "suites": [
+      {
+        "name": "probes",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "41",
+        "hostname": "tbd",
+        "time": "0.078",
+        "timestamp": "2026-10-20T10:06:14Z"
+      }
+    ]
+  },
+  "original-probes.xml": {
+    "records": 4,
+    "suites": [
+      {
+        "name": "probes",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "237",
+        "hostname": "tbd",
+        "time": "0.397",
+        "timestamp": "2026-10-20T10:06:14Z"
+      }
+    ]
+  },
+  "corrective-probes.xml": {
+    "records": 6,
+    "suites": [
+      {
+        "name": "probes",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "329",
+        "hostname": "tbd",
+        "time": "0.528",
+        "timestamp": "2026-10-20T10:06:14Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "files": {
+    "CLAUDE.md": "ab62fe2bfc6f88ec936a5c89e55cf51a7db25ccc6a5a0fb8d69c609e5ad04217",
+    "docs/architecture.md": "5ffa06cb6335f200f5249c45831ea05b09efdedc289b5a68578d5d6d69bf49c7",
+    "docs/testing.md": "b354f70c949240cd311ca0872f54538964f2af22b83e8f6433ff79f7c6ad1adf",
+    "docs/vernacular/acceptance-matrix.md": "57a110c068495598ab66c6ea9370d234e5941ca5dc25054549afc02f97979b4b",
+    "docs/vernacular/external-profile-implementation.md": "f4bddb1c6b7faf9ff8ca4b19fe4664921efbfbc0096fb7977219e90944cfcf87",
+    "docs/vernacular/implementation.md": "b85077bc15ebcd042c8f9c37d080daa7cef43937cb35ba831af84cd127b3babd",
+    "docs/vernacular/roadmap.md": "534523a64a0d83489248e4b931ac4beb517e6e4eb3061b885a140adb3175d59e",
+    "docs/vernacular/v5-alignment.md": "941f772009ab6dbbb9e5506eb3dfa50820aa801c6749e64159040e4cddf354e2",
+    "docs/vernacular/x03-format-evidence.md": "9ac4698204e0d4c2ac1622c4d6df572d613463969cbeb0617c59a55b3a0f28e3",
+    "tests/native/v5-02-x03-b3-support/audits.py": "058462630cd8fc0bba9ae76cdcd4f6f9bca600f29310cfb7a4605d30e642d60b",
+    "tests/native/v5-02-x03-b3-support/freeze.py": "0eb3d5328a09c96bf9bbbc52e967da87be4362a3f915d3d7bc0820c075cdb40d",
+    "tests/native/v5-02-x03-b3-support/results.py": "2be5cffe74caad113dc0783c8dc82b28371a5f36ddaf0f40b4dd6987812023a0",
+    "tests/native/v5-02-x03-b3-support/verify.py": "fb9082706fb47017568d67b8ce7039468d253ab7669b5815c31aa2d06b443f4c"
+  },
+  "path_base": "<repo>"
+}

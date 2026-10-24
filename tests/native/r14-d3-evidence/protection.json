@@ -1,0 +1,20 @@
+{
+  "path_base": "repository root",
+  "checked": 6124,
+  "symlinks_checked": 1,
+  "changed": [],
+  "AGENTS.md": "symlink -> CLAUDE.md",
+  "excluded": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/load-command-contract.md",
+    "docs/vernacular/command-contract.md",
+    "docs/vernacular/ledger-contract.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/rounds/R14-D3.md",
+    "tests/native/r14-d3-evidence/**"
+  ]
+}

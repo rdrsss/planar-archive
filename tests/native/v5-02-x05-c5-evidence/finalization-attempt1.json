@@ -1,0 +1,8 @@
+{
+  "stage": "seal after full cryptographic protection passed",
+  "failure": "AssertionError: docs/vernacular/implementation.md target Planar%20design%20spec%20-%20v4.md",
+  "cause": "Checker did not URL-decode an existing Markdown link",
+  "correction": "Decode Markdown path with urllib.parse.unquote before filesystem existence check",
+  "product_or_document_link_change": false,
+  "product_tests_repeated": false
+}

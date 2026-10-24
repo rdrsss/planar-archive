@@ -1,0 +1,86 @@
+{
+  "CLAUDE.md": {
+    "sha256": "5cb4d69e7d588102c2d89f8e2f079b5017f2da8f6106a54c6c6a4e53b5495991",
+    "bytes": 43403
+  },
+  "docs/architecture.md": {
+    "sha256": "9725a598dc565f2f7aa634dc5ff16393254455fc92c85870fd75ea9d3e3c23b0",
+    "bytes": 87509
+  },
+  "docs/testing.md": {
+    "sha256": "8e5299e0af80ba88d6131cae2fda773d046ac2169546e445bf09d7bba8837938",
+    "bytes": 92550
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "3a6ac000f59a0acf4e676c43d15cf8d9a3550ed11c63e1532e1ccefb99a918b0",
+    "bytes": 50050
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "6ee0b5118a5607c34b28627e9033528bcdd62abb15ef6c02c0cd1c0e181b686d",
+    "bytes": 52956
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "0c68e9046b048b7f0860fdfca6f978dbecb0daa329f9bf8132cc412a25a0edda",
+    "bytes": 59352
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "1c4659d235a50a8bbd7896bdb41d0fa9325ecb949cd3880ce18dff4f1838c229",
+    "bytes": 58698
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "sha256": "ef932b2a4946e586dcd3c3f9503a63cbbdec0bc33a98b066002ead6489629fc0",
+    "bytes": 131091
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "sha256": "b6c00b2f89a217aacf6733bca8169860dada448493b2b2763e532685d543265b",
+    "bytes": 14966
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/allocation.cpp": {
+    "sha256": "0e82e050d2dbf246660c4199967c5abd3d9536b0fd4115d515bd644b282a7615",
+    "bytes": 2541
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/allocation.py": {
+    "sha256": "bf5cd1afb0c522207d738887b5400a44e131f4266d5324541834a11011e8906e",
+    "bytes": 2638
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/finalize.py": {
+    "sha256": "ac9d1ab6c066e91769fe411e6f5c5c840828f02cfc35438e3529b4d0abf51318",
+    "bytes": 3720
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/gate.py": {
+    "sha256": "8992b4b8e8e2802a972d776db93b50c3ee7e5acebc7a4ecbff66db1ae5155bfe",
+    "bytes": 4064
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/history-codec-selected.txt": {
+    "sha256": "d7e9e120d11cd26cd32e084330a68a14c82d72e3e697bff1d7341b046e5e1652",
+    "bytes": 981
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/probes.py": {
+    "sha256": "88bee4dc01af9f804002d6248c1e51934a57080fb8a55e9b7fd0650426681047",
+    "bytes": 10209
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/regression.py": {
+    "sha256": "c3ffb60ea90510b07aef1d60e46a811c0d32fdbf62e8c42084e16d48aed038af",
+    "bytes": 3183
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/selected-tests.txt": {
+    "sha256": "cc0765a68b65cd36c350fa0537233b6a9e248ec06e3841ed488cfa7d3403b7d2",
+    "bytes": 31646
+  },
+  "tests/native/v5-02-x05-b3-b-r01-support/semantic.cpp": {
+    "sha256": "49b92580db008187f0c04eb0291850305ffd0f93fda705bfd6b3e9a6630f6d9b",
+    "bytes": 7831
+  },
+  "tests/native/v5-02-x05-b3-b-support/allocation.cpp": {
+    "sha256": "e3dc209cba78bcdcff76d7e16009184aad6e5d4982f68bd34c4cf6396c0e11a7",
+    "bytes": 2205
+  },
+  "tests/native/v5-02-x05-b3-b-support/allocation.py": {
+    "sha256": "81034ec1125ea2cbe98bdd05a21d2641153f3bbd2e0e2876b790592b4b309a33",
+    "bytes": 2630
+  },
+  "tests/native/v5-02-x05-b3-b-support/finalize.py": {
+    "sha256": "e0e005a294c51c7f60257a7b7f2b1bc660435f418cdaa906e05e3811445209d8",
+    "bytes": 3608
+  }
+}

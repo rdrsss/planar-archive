@@ -1,0 +1,62 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "log": "red-build.log",
+    "purpose": "build regression against unchanged production helper"
+  },
+  {
+    "argv": [
+      "build/rewrite-debug/src/engine/planar_runtime_tests",
+      "[profile-render-correspondence]",
+      "--reporter",
+      "junit",
+      "--out",
+      "tests/native/v5-02-x05-b4-a-c01-evidence/red.xml"
+    ],
+    "log": "red.log",
+    "result": "one expected failing error-envelope assertion; actual process exit was not separately captured because following inspection command supplied shell exit"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "log": "green-build.log",
+    "purpose": "build correspondence fix and full new matrix"
+  },
+  {
+    "argv": [
+      "build/rewrite-debug/src/engine/planar_runtime_tests",
+      "[profile-render]",
+      "--reporter",
+      "junit",
+      "--out",
+      "tests/native/v5-02-x05-b4-a-c01-evidence/development-green.xml"
+    ],
+    "log": "development-green.log",
+    "result": "12 cases / 824 assertions, zero failures/errors/skips"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--preset",
+      "debug",
+      "--show-only=json-v1"
+    ],
+    "output": "development-inventory.json",
+    "result": "667 names, baseline 665 retained"
+  }
+]

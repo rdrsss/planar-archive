@@ -1,0 +1,12 @@
+{
+  "candidate_diff_sha256": "753408bc7641c721f4019a71c22e82940f38b8ef141bd3b3a8cba03f1ed07588",
+  "source_unchanged": true,
+  "inventory": 665,
+  "prior_names_preserved": 655,
+  "focused": 399,
+  "supplemental": 11,
+  "independent_review_required": true,
+  "full_milestone_gate": false,
+  "private_compilation": false,
+  "debug_released": true
+}

@@ -1,0 +1,17 @@
+{
+  "path_base": "evidence root",
+  "baseline_path": "baseline-inventory.json",
+  "candidate_path": "final-inventory.json",
+  "baseline_count": 409,
+  "candidate_count": 416,
+  "removed": [],
+  "added": [
+    "replacement.ledger format2 backup restore preserve format identity and never overwrite",
+    "replacement.ledger format2 exact schema delta and native initialization retain format",
+    "replacement.ledger format2 publication faults retain complete target only after atomic publication",
+    "replacement.ledger format2 publication late sidecar refuses and preserves arriving sidecar",
+    "replacement.ledger format2 publication no replace preserves target arriving at link boundary",
+    "replacement.ledger format2 refuses mutation before writable access and preserves codec1 reads",
+    "replacement.ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged"
+  ]
+}

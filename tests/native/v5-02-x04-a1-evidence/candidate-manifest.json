@@ -1,0 +1,16 @@
+{
+  "files": {
+    "docs/architecture.md": "b9eb515e2de7a247bdea24847c8a0df7870d973b739658dd20585d27a9e0d2d2",
+    "src/engine/CMakeLists.txt": "23537d29f95a99be96736aa1c61430e7496c5c9835e2279a6cb4d93eb6b0d2c0",
+    "src/engine/capture/admission.cpp": "d46ef3738a6a42ba8264ef3038c0a8d2a137aa3720ffe0a023d96bc5260d7ed7",
+    "src/engine/capture/admission.cppm": "39c0d7760c9c3c8d8436c6908b9eb39f1b54fd5cad3061bf6f402e60a5e34c50",
+    "src/engine/capture/admission.t.cpp": "0c45f28e24a1587954a5bf6e732e78445a25658e9b1c1be8129baac5475cce36",
+    "src/engine/capture/native.cpp": "bfead8eabedfe90e225c3f5ce35f3b0dafdf99fb979976c021f61866d59deb6c",
+    "src/engine/capture/native.cppm": "fa8460efa96d7c2d35617e0841b9c04f2b4051c541980408e21125bbad3f54a2",
+    "src/engine/capture/native.t.cpp": "31277d7d047f934602ff7740edf39dbc51ff75f78ce0dc874e41beff3b909c20",
+    "tests/native/v5-02-x04-a1-support/sensitivity.py": "3b441140885b3c71b83c1ee8c7bcbc2a3da93003fb40a959ba742d2eb82e7069",
+    "tests/native/v5-02-x04-a1-support/syscalls.cpp": "c637501bec86fa869ca818cd981f3b24a901631be6e0d5b8c94a2dfd3174a41b",
+    "tests/native/v5-02-x04-a1-support/verify.py": "a8492b16f8c8a0c9dd14d9a069d654484754694dfd1790bc389119c974a18cbc"
+  },
+  "path_base": "<repo>"
+}

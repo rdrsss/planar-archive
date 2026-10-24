@@ -1,0 +1,36 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit": 0,
+    "log": "build.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r13b1-review-evidence/focused.xml"
+    ],
+    "exit": 0,
+    "log": "focused.log"
+  },
+  {
+    "command": [
+      "python3",
+      "tests/native/r13b1-support/audit.py"
+    ],
+    "exit": 0,
+    "log": "generation-audit.log"
+  }
+]

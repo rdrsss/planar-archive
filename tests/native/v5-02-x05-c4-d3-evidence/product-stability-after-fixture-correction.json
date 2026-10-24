@@ -1,0 +1,18 @@
+{
+  "corrected_focused": 12,
+  "initial_focused": 525,
+  "initial_passed": 524,
+  "only_test_fixture_and_private_member_comment_changed": true,
+  "unchanged_product": [
+    "src/engine/capture/capture.cppm",
+    "src/engine/capture/capture.cpp",
+    "src/engine/capture/profile.cppm",
+    "src/engine/capture/profile.cpp",
+    "src/engine/runtime/runtime.cppm",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/CMakeLists.txt",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/stdlib/planar/render.lua",
+    "src/stdlib/planar/bootstrap.lua"
+  ]
+}

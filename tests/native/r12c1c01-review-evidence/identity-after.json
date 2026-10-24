@@ -1,0 +1,37 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "candidate_manifest_sha256": "2a90623073df705d33b4c4db0cd37cd933f31e8bae48e9456e0cec5bba81202f",
+  "evidence_manifest_sha256": "cc0a1878354709f85dad48a5a4c45b6cb972d7f2051d8267f5e9e0670ee8094a",
+  "candidate_entries": 9,
+  "evidence_entries": 35,
+  "candidate_mismatch": [],
+  "evidence_mismatch": [],
+  "correction_baseline_snapshot_mismatch": [],
+  "original_baseline_snapshot_mismatch": [],
+  "protected_baseline_count": 3345,
+  "missing": [],
+  "prior_evidence_entries": 54,
+  "prior_evidence_mismatch": [],
+  "protected_changed": [
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/sqlite.cpp",
+    "src/engine/ledger/sqlite.cppm",
+    "src/engine/ledger/format.t.cpp",
+    "src/engine/ledger/format.cppm",
+    "src/engine/ledger/sqlite.t.cpp",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "unexpected_changes": [],
+  "correction_changed": [
+    "src/engine/ledger/format.cpp",
+    "src/engine/ledger/format.t.cpp",
+    "docs/architecture.md",
+    "docs/testing.md"
+  ],
+  "frozen_sections": {
+    "schema_sql": true,
+    "schema_and_state_verifier": true,
+    "ordinary_opener": true
+  }
+}

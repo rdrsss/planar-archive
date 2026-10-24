@@ -1,0 +1,96 @@
+[
+  {
+    "label": "before-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/audit.py",
+      "before-tests.json"
+    ],
+    "exit_code": 0,
+    "seconds": 5.701718833297491
+  },
+  {
+    "label": "build",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.24647599924355745
+  },
+  {
+    "label": "inventory",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "seconds": 0.07937233243137598
+  },
+  {
+    "label": "focused",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "^replacement.(X05 A[01]|command |runtime |interpretation |load |acceptance |cli|.*_cli|CLI11|help |invocation |workspace )",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/focused.xml"
+    ],
+    "exit_code": 0,
+    "seconds": 85.96793320868164
+  },
+  {
+    "label": "production-probes",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/run-probes.py",
+      "production-probes"
+    ],
+    "exit_code": 0,
+    "seconds": 12.661062750034034
+  },
+  {
+    "label": "lint",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "<repo>/build/rewrite-debug"
+    ],
+    "exit_code": 0,
+    "seconds": 1.3871371252462268
+  },
+  {
+    "label": "no-work",
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "seconds": 0.22532529197633266
+  },
+  {
+    "label": "after-audit",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "<repo>/tests/native/v5-02-x05-a1-review-evidence/audit.py",
+      "after-tests.json"
+    ],
+    "exit_code": 0,
+    "seconds": 5.704584083519876
+  }
+]

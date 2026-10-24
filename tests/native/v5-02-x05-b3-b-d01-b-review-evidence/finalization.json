@@ -1,0 +1,16 @@
+{
+  "disposition": "approve",
+  "scope": "production reserved decode codec prerequisite only",
+  "report": "docs/vernacular/rounds/V5-02-X05-B3-B-D01-B-review.md",
+  "report_sha256": "572b2938deb3c512a5482348910f17e4174a21318ab8ec233c398a94acd78616",
+  "artifact_manifest_sha256": "1965e22ec6796d8216b081cba45c729225ceaad420429debc05dd62633d4620e",
+  "review_artifacts": 64,
+  "candidate_manifest_sha256": "e4c0f606852b51128aabb08614aa5efd19d5a4b99a57c50f3d50c7952eaffd89",
+  "scope_verification_sha256": "aa58115247e92acc3048a9a69728b909a9c599745594ed069a8ede7a3bce3945",
+  "protected_entries": 6312,
+  "candidate_members": 16,
+  "author_artifacts": 98,
+  "debug_released": true,
+  "no_later_reviewer_edits": true,
+  "runtime_integration_request423_b3b_open": true
+}

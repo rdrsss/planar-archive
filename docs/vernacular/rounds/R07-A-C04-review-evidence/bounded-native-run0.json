@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "seconds": 0.3394634583964944,
+  "stdout": "operation=insert length=65536 stored_initially=17 status=0 vm_instructions=0 peak_lua_bytes=11600\noperation=remove length=65536 stored_initially=17 status=0 vm_instructions=0 peak_lua_bytes=11600\noperation=sort length=65536 stored_initially=17 status=2 vm_instructions=0 peak_lua_bytes=11716 error=invalid order function for sorting\n",
+  "stderr": ""
+}

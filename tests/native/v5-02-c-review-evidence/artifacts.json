@@ -1,0 +1,24 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "docs/vernacular/rounds/V5-02-C-review.md": "3bc48446aceefde5cf63a25702541c794e8a3faa769dec39c0a240a01d207148",
+    "tests/native/v5-02-c-review-evidence/debug-LastTest.log": "b164649b07a0f42c00a2c4ef30bcbfe5e9e2b6785486adc0ccd5623a310c6b16",
+    "tests/native/v5-02-c-review-evidence/debug-focused.log": "6497e66cb332af7de99b6e991ea9ac590d519da7c33b2651b57d01434c95a753",
+    "tests/native/v5-02-c-review-evidence/debug-focused.xml": "68b79c38207691d8bd062d018c1a99cddce420146dbe62198e886426f468df7a",
+    "tests/native/v5-02-c-review-evidence/debug-inventory.json": "4113d015edb8922ec1094289c3c4fcf6a1c9028b1cc63706705e77f6eb5e3e35",
+    "tests/native/v5-02-c-review-evidence/debug-no-work.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+    "tests/native/v5-02-c-review-evidence/debug-variants.json": "5408c46231fecea10a649f688b01524e47dd18aa2e1f1b1799dc14e383235e5a",
+    "tests/native/v5-02-c-review-evidence/debug-variants.log": "8af60f3b6d2b4ce04127b52618585bdbac72e818e64fb7d11d33b097d468f153",
+    "tests/native/v5-02-c-review-evidence/integrity.json": "84876783009bd2e4d2b944248b74b67700fee95f4b87ac3119f611580f795894",
+    "tests/native/v5-02-c-review-evidence/release-LastTest.log": "be7fa51a012cdc5cd4c6d467251c79bc0850d82fcbca32db339ca0f02ac62ddd",
+    "tests/native/v5-02-c-review-evidence/release-focused.log": "aeaf66b65440ee16960b507520bba7eae842249d92593442b93a3fab407ebc6c",
+    "tests/native/v5-02-c-review-evidence/release-focused.xml": "43205e07ba5287b65eb6ed2f83fed25eee56e464ca623dff268c690a8fc4c7ab",
+    "tests/native/v5-02-c-review-evidence/release-inventory.json": "2782f006c33fe695a19b3b37f54153d44013edc6942e94426f09680c485cbae9",
+    "tests/native/v5-02-c-review-evidence/release-no-work.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+    "tests/native/v5-02-c-review-evidence/release-variants.json": "5408c46231fecea10a649f688b01524e47dd18aa2e1f1b1799dc14e383235e5a",
+    "tests/native/v5-02-c-review-evidence/release-variants.log": "8af60f3b6d2b4ce04127b52618585bdbac72e818e64fb7d11d33b097d468f153",
+    "tests/native/v5-02-c-review-evidence/review.py": "1387033aa2df55487096316a337c625c748e6116aa1b26c5797acd0bb6148b87",
+    "tests/native/v5-02-c-review-evidence/summary.json": "3b99565888aa502da25a14976cdd3810de79492b50676204ff65f32b2f4dd7b8",
+    "tests/native/v5-02-c-review-evidence/vectors.log": "6642b7c9c2a89bec52b0555a60c260cbfa95a547923c6102848e093ed7192eba"
+  }
+}

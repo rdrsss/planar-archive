@@ -1,0 +1,7 @@
+{
+  "report_path": "docs/vernacular/rounds/R14-D6-C01-review.md",
+  "report_sha256": "ff4552b366f5ac445730d09cd6b7e5e52e69ef20c02194644555f2101f8a3f8a",
+  "artifacts_path": "tests/native/r14-d6-c01-review-evidence/artifacts.json",
+  "artifacts_sha256": "61778b94f5795cb187f5e890454919226fe8eb66b5c7b8204d951ebfee7edee1",
+  "artifact_count": 16
+}

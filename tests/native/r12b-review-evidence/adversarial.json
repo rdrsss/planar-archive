@@ -1,0 +1,519 @@
+[
+  {
+    "case": "orphan_sidecar_-journal_regular",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:6f4eb48da4f16061277cf8796f87c609:review_workspace:2026-10-20T16:27:17.738Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-journal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "19618af497e83a0d2615f30a5530a90dc9dd86adbfd6341f183f4b50277d72aa",
+        "mode": 384
+      },
+      "ledger-journal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-journal_symlink",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:f0e3b59bba08de36150f1f5db069ed1a:review_workspace:2026-10-20T16:27:17.773Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-journal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "789af612d32266b36b218132b071e20ae2ee48a616f96a6ce4e38a3c4ba00c89",
+        "mode": 384
+      },
+      "ledger-journal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-journal_directory",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:3ff48c2e6a1da9567c95e261e585f56f:review_workspace:2026-10-20T16:27:17.802Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-journal": {
+        "directory": true
+      },
+      "ledger-journal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "b0881654ffb6e680567e6bc7b325c1f395b95c6b2ece457d61042fd7d0c670bf",
+        "mode": 384
+      },
+      "ledger-journal": {
+        "directory": true
+      },
+      "ledger-journal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-wal_regular",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:e6efa79ced60a42ec3045256c7914c3b:review_workspace:2026-10-20T16:27:17.832Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-wal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "4478cb54366213318a59e5d1db4f692d981d79ccc299ccc8f1170aea5f08ff12",
+        "mode": 384
+      },
+      "ledger-wal": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-wal_symlink",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:9b741a9417ba85d71173a44e294bdd9b:review_workspace:2026-10-20T16:27:17.863Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-wal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "76cc08f14fa691002f7a2b9b9e2b9443f59c9a8244aea1bff78b6dfa051af553",
+        "mode": 384
+      },
+      "ledger-wal": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-wal_directory",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:c91b96f648d7be838d286abf437ca82d:review_workspace:2026-10-20T16:27:17.892Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-wal": {
+        "directory": true
+      },
+      "ledger-wal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "9498b66b34648df472dd4e08a43e0dd663c0774e1fcda303a07740b951275b03",
+        "mode": 384
+      },
+      "ledger-wal": {
+        "directory": true
+      },
+      "ledger-wal/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-shm_regular",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:71cebb4b0c451e74e8163fcced213780:review_workspace:2026-10-20T16:27:17.923Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-shm": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "073fed2b4e8a71b7e947bae0c380c1dc6829b44374b994b825b92ac3f3d1e5dc",
+        "mode": 384
+      },
+      "ledger-shm": {
+        "sha256": "956543b977d76131b28d77477ecd1981ca7808addac14c7f88661e82968596d4",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-shm_symlink",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:a8ad8c6215f7e334dacdf612041080a2:review_workspace:2026-10-20T16:27:17.953Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-shm": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "88e1bc09ff949faf5034a1b956192c67f44b061f63da5e7cccf1d6269305e03c",
+        "mode": 384
+      },
+      "ledger-shm": {
+        "link": "sentinel"
+      },
+      "sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "orphan_sidecar_-shm_directory",
+    "passed": false,
+    "init": {
+      "returncode": 0,
+      "stdout": "ok:d30b05c8ed3bb39e7b3073396f968b2b:review_workspace:2026-10-20T16:27:17.985Z",
+      "stderr": ""
+    },
+    "open_after": {
+      "returncode": 1,
+      "stdout": "error:8:Ledger sidecar requires separately audited recovery",
+      "stderr": ""
+    },
+    "before": {
+      "ledger-shm": {
+        "directory": true
+      },
+      "ledger-shm/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    },
+    "after": {
+      "ledger": {
+        "sha256": "a3d0f5bb47601971313d6dcac5722e4ab814e554ea76d7fc0af6a686f8ae1b27",
+        "mode": 384
+      },
+      "ledger-shm": {
+        "directory": true
+      },
+      "ledger-shm/sentinel": {
+        "sha256": "fd3277756caf2462a423e7ee98e545102002e604e0383129e8a8c6b84b823254",
+        "mode": 420
+      }
+    }
+  },
+  {
+    "case": "regular_init_mode_and_cleanup",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "ok:b26a51eea6a66b87edcbd3c9d85f5878:review_workspace:2026-10-20T16:27:18.015Z",
+      "stderr": ""
+    },
+    "entries": {
+      "ledger": {
+        "sha256": "163e774f87bb8df165df93af054aa6857811998249d804696b78ad3437ae9a59",
+        "mode": 384
+      }
+    }
+  },
+  {
+    "case": "valid_ro",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "ok:b26a51eea6a66b87edcbd3c9d85f5878:review_workspace:2026-10-20T16:27:18.015Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "valid_rw",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "ok:b26a51eea6a66b87edcbd3c9d85f5878:review_workspace:2026-10-20T16:27:18.015Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "valid_snapshot",
+    "passed": true,
+    "result": {
+      "returncode": 0,
+      "stdout": "snapshot_commit_code:5\nok:b26a51eea6a66b87edcbd3c9d85f5878:review_workspace:2026-10-20T16:27:18.015Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "independent_random_identities",
+    "passed": true,
+    "first": {
+      "returncode": 0,
+      "stdout": "ok:b26a51eea6a66b87edcbd3c9d85f5878:review_workspace:2026-10-20T16:27:18.015Z",
+      "stderr": ""
+    },
+    "second": {
+      "returncode": 0,
+      "stdout": "ok:62b5d256c7c12be74e384047a2c8a071:review_workspace:2026-10-20T16:27:18.078Z",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "open_symlink",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:3:Cannot open explicit regular ledger",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:3:Cannot open explicit regular ledger",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "open_directory",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "open_fifo",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:3:Ledger must be a regular file",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "open_missing",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:1:Cannot open explicit regular ledger",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:1:Cannot open explicit regular ledger",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "extra_event",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event count is inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event count is inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "event_json",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "event_time",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Initialization event is inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "missing_meta",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Ledger singleton rows are inconsistent",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Ledger singleton rows are inconsistent",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "wrong_metadata_type",
+    "passed": true,
+    "results": [
+      {
+        "returncode": 1,
+        "stdout": "error:6:Invalid ledger metadata",
+        "stderr": ""
+      },
+      {
+        "returncode": 1,
+        "stdout": "error:6:Invalid ledger metadata",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "case": "nul_metadata_refuses",
+    "passed": true,
+    "sqlite_character_length": 32,
+    "actual_byte_length": 33554465,
+    "result": {
+      "returncode": 1,
+      "stdout": "error:6:Invalid ledger metadata values",
+      "stderr": ""
+    }
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "sticky-red.xml": {
+    "cases": 1,
+    "failures": 1,
+    "errors": 0,
+    "skips": 0
+  },
+  "sticky-green.xml": {
+    "cases": 7,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "final-gate/focused.xml": {
+    "cases": 353,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "final-gate/history-codec.xml": {
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "final-probes/allocation.xml": {
+    "cases": 2,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  }
+}

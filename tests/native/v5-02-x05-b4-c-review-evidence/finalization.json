@@ -1,0 +1,16 @@
+{
+  "author_artifact_manifest_sha256": "4580cb4c4de8daff699d3459b0d91924627e18177a02e3dd260f8557d626eedf",
+  "author_candidate_manifest_sha256": "6daa92dde43907bab1a4df060e532a29c41f5031d9f6a8eddcd88d172f83438c",
+  "disposition": "approve",
+  "final_source_check_sha256": "251b176af76241494d562d57dcc74e26132de10e316bdef90dc6d0a1fbc752f5",
+  "no_later_reviewer_edits": true,
+  "released": [
+    "build/rewrite-debug",
+    "build/rewrite-release",
+    "all reviewer edits"
+  ],
+  "review_artifact_entries": 43,
+  "review_artifact_manifest_sha256": "6702e0cc4ff78421df5b2819e52cae56088be912a1b0deda72f7d39fa35b26cb",
+  "review_report_sha256": "c4bc7e3a52040ba3d00a0c54db00b5c6766e82125d79ad4c7263a9e04078365e",
+  "utc": "2026-10-23T19:32:24.900190+00:00"
+}

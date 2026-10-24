@@ -1,0 +1,240 @@
+{
+  "debug": {
+    "comparisons": 11,
+    "packets": {
+      "combined-builder.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "combined-reviewer.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "notes-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "notes-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "own-output-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "own-output-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "requirement-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "requirement-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-cli_worker-recovery.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-cli_worker-repeat.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-cli_worker.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-library_worker.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-reviewer.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-after-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-after-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-before-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-before-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "upstream-complete-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "upstream-complete-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      }
+    }
+  },
+  "release": {
+    "comparisons": 11,
+    "packets": {
+      "combined-builder.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "combined-reviewer.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "notes-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "notes-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "own-output-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "own-output-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "requirement-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "requirement-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-cli_worker-recovery.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-cli_worker-repeat.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-cli_worker.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-library_worker.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "split-reviewer.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-after-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-after-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-before-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "start-before-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "upstream-complete-command.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      },
+      "upstream-complete-library.json": {
+        "outputs_stable": true,
+        "parsed_envelope_stable": true,
+        "render_stable": true,
+        "work_stable": true
+      }
+    }
+  }
+}

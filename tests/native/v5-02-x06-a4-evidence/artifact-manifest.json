@@ -1,0 +1,101 @@
+{
+  "candidate": {
+    "diff_sha256": "fcc7366fa05d666c7874ca55dbd3ef852838f190509f18a86c16b4b609921fb7",
+    "files": {
+      "CLAUDE.md": "8174361cbcc44116ddc5cfa5aef95b13c5bba8e9492c8cf65522ca1681ede6f1",
+      "docs/architecture.md": "45b9edc08cb3f29aa56c978e67588e1cfbdbccc4364e7ab9fba46cbb4fdc9388",
+      "docs/testing.md": "01fc6e2b01c2edd0ad6d3b309c20e2fdd7d8a11dd53d6733ec9b754925002cf4",
+      "docs/vernacular/acceptance-matrix.md": "bc85a552c6fd203ba1b4ad1fd8bc62c2f1d30a499e2ea0976898c3693291118d",
+      "docs/vernacular/external-profile-implementation.md": "843442bd3cf9a5ce210da6800537cce2b2e18f3902884cb9ddfc247fd65dc0dc",
+      "docs/vernacular/implementation.md": "009f3c3ab74a0164c0c7619a4de516dee85f52f1f673b0f7a17c09494524a6da",
+      "docs/vernacular/profile-preparation-architecture.md": "b18ab3ffe0b667dec77f8ccec448398f0bf3c32d1e948ce9ab43974b503a8f6d",
+      "docs/vernacular/roadmap.md": "7b5692fa4b6cded0d5dc3b713a2de8016a445d19d09ae199d153c6b8e83f89af",
+      "docs/vernacular/v5-alignment.md": "892b7e685d797ec19602476fde3038fd29bdb4e84fd5b85f64a391269ce0ff7b",
+      "docs/vernacular/x06-implementation.md": "519ee0221859bf083dc0d31ee0ffeee5a740717c7cf7e1a7406b32ff6ee3a0cc"
+    }
+  },
+  "evidence": {
+    "REPORT.md": {
+      "sha256": "e9e98b2c295817feb211fecf7c7baf1106cae6d151cd60f76b74d801aaf0a664",
+      "size": 4003
+    },
+    "baseline.json": {
+      "sha256": "c7828499e3e0a87627d67871d79357d04e9bc36604fa65e2f296c21c1175d294",
+      "size": 33068034
+    },
+    "candidate.diff": {
+      "sha256": "fcc7366fa05d666c7874ca55dbd3ef852838f190509f18a86c16b4b609921fb7",
+      "size": 57748
+    },
+    "candidate.json": {
+      "sha256": "eec7fe7ff64bcdc46f52993491e3ddfcaaa82938be52b71fecff108a3121deb5",
+      "size": 1173
+    },
+    "final.json": {
+      "sha256": "35834cb5266e718098db5025d66629992a83b679b6a84392ae93e229ee88ce5c",
+      "size": 33068359
+    },
+    "link-audit.json": {
+      "sha256": "8f117036f29d0aa3245ded2e21ef89c142587cdac0cc9b6ea512e466cc18bd9e",
+      "size": 69
+    },
+    "preedit/CLAUDE.md": {
+      "sha256": "67c0e165cf4ddf1b5c84d4831c47ebbe8474004a497033cbd00108aa9cac5224",
+      "size": 69844
+    },
+    "preedit/docs/architecture.md": {
+      "sha256": "05ddf6458df8aea316ed94ea1e0fe0e3f6aa04441c6f4a77492347a2f9f3deaf",
+      "size": 123902
+    },
+    "preedit/docs/testing.md": {
+      "sha256": "19401449f987b9be7485ff0313da7d1e187cfe20934443e0725efb68c75158b4",
+      "size": 127839
+    },
+    "preedit/docs/vernacular/acceptance-matrix.md": {
+      "sha256": "51b038c1b8b26c348411006abda5a8635b35833cdacb6daee9dc8f9eb288feb8",
+      "size": 34078
+    },
+    "preedit/docs/vernacular/external-profile-implementation.md": {
+      "sha256": "ac4c2820827d8e73bb37cbc86c1955ada87b34d22dd35747de6f5bce171f1a7a",
+      "size": 76188
+    },
+    "preedit/docs/vernacular/implementation.md": {
+      "sha256": "33eaa2e12347f3c645b7211a586f09927edefa8c58868da7f32492b87eafefe0",
+      "size": 78905
+    },
+    "preedit/docs/vernacular/roadmap.md": {
+      "sha256": "14987d59417285e009753cf693eed6bc1f05bc28286d6c11df70d1a050d6dbfe",
+      "size": 85127
+    },
+    "preedit/docs/vernacular/v5-alignment.md": {
+      "sha256": "bdc5669e75dc9f16d4a9e47af8207da1a0e5ba2dfd96716e64c8eecdfb2db2d8",
+      "size": 25931
+    },
+    "preedit/docs/vernacular/x06-implementation.md": {
+      "sha256": "b72b4ae8756a4777389788e670c2215bd60422572a4114bf4d5375c797df3fb6",
+      "size": 15941
+    },
+    "protection-result.json": {
+      "sha256": "4a2e1b8348247c584e49add044a641e93e9e778d6b7ab3f89af5943d5b9a2f1a",
+      "size": 1505
+    },
+    "source-audit.json": {
+      "sha256": "ac9546db8d5719bc92721acaa75fd9443dfae29c4022e88d9f90c5afa52285e8",
+      "size": 274
+    }
+  },
+  "support": {
+    "tests/native/v5-02-x06-a4-support/audit.py": {
+      "sha256": "ee4ef48507f8e5b7d6772b914634cb15f504b330a1359a7446a741bc7e5f3b26",
+      "size": 2148
+    },
+    "tests/native/v5-02-x06-a4-support/finalize.py": {
+      "sha256": "d0e386b1fffffd8f572c7035555279446f6b9e5d33e42c639bcd4f0ad9dacdd4",
+      "size": 6479
+    },
+    "tests/native/v5-02-x06-a4-support/protect.py": {
+      "sha256": "298a5d80d81c4b45c3704fe219252ae14272f84ca8cc2fc88c4196240c94c22e",
+      "size": 1489
+    }
+  }
+}

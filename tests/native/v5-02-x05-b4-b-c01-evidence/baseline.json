@@ -1,0 +1,13 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "sha256": {
+    "src/engine/runtime/runtime.cpp": "a47808849ce0aad7e99840f9469db44241c17ea6f4967d08d64ab06a9d9c10d6",
+    "src/engine/runtime/external_registration.t.cpp": "00575819206b264c5dad2ec706f28106dbb9a7a07b3950693062b11cb8168c71",
+    "CLAUDE.md": "ae5594853638da492ac9b08221978dfefec6756b15a9e8e52cb1eaf156ab7a4d",
+    "docs/architecture.md": "d55902bc0c22ff34bbbb96d00626413f961c366885abd09642235eb131212b4d",
+    "docs/testing.md": "c4850ea830a5d45cbfb6756ef1601e138e29fb8e94a31331b1120bd5a4511cc0",
+    "docs/vernacular/implementation.md": "81764488262381a3385a71873084bcd2cc47d5c3b54933a8537409f2260606da",
+    "docs/vernacular/roadmap.md": "55c16462a0271f33627d43fa7d96d0bef2c668b6e938b2dea20c79c87a20f688",
+    "docs/vernacular/external-profile-implementation.md": "560105e473616d8acc27f015f984c09320ef2164b669cbf822502e51a07818d8"
+  }
+}

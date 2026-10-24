@@ -1,0 +1,168 @@
+[
+  {
+    "label": "development-build-1",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 1,
+    "start_utc_log_birthtime": "2026-10-24T05:53:04.659396+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T05:53:19.686989+00:00",
+    "output_interval_seconds": 15.027592897415161,
+    "counts_as_verification": false,
+    "overlap_invalid": false
+  },
+  {
+    "label": "development-build-2",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 1,
+    "start_utc_log_birthtime": "2026-10-24T05:53:32.171022+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T05:54:28.348136+00:00",
+    "output_interval_seconds": 56.177114486694336,
+    "counts_as_verification": false,
+    "overlap_invalid": true
+  },
+  {
+    "label": "development-build-3",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T05:54:14.945232+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T05:54:30.359060+00:00",
+    "output_interval_seconds": 15.413828372955322,
+    "counts_as_verification": false,
+    "overlap_invalid": true
+  },
+  {
+    "label": "development-build-4",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T05:55:23.511543+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T05:55:36.794908+00:00",
+    "output_interval_seconds": 13.283365249633789,
+    "counts_as_verification": false,
+    "overlap_invalid": false
+  },
+  {
+    "label": "development-build-5",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T05:56:10.913094+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T05:57:07.157357+00:00",
+    "output_interval_seconds": 56.244263887405396,
+    "counts_as_verification": false,
+    "overlap_invalid": false
+  },
+  {
+    "label": "development-build-6",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T05:58:13.163189+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T05:59:09.356052+00:00",
+    "output_interval_seconds": 56.19286322593689,
+    "counts_as_verification": false,
+    "overlap_invalid": false
+  },
+  {
+    "label": "development-build-7",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T05:59:29.151324+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:00:13.941415+00:00",
+    "output_interval_seconds": 44.7900915145874,
+    "counts_as_verification": false,
+    "overlap_invalid": false
+  },
+  {
+    "label": "clean-first-build",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--clean-first",
+      "--target",
+      "all",
+      "planar_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 1,
+    "start_utc_log_birthtime": "2026-10-24T06:03:01.440120+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:04:52.994442+00:00",
+    "output_interval_seconds": 111.55432271957397,
+    "counts_as_verification": false,
+    "overlap_invalid": false
+  },
+  {
+    "label": "clean-first-build-2",
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--clean-first",
+      "--target",
+      "all",
+      "planar_tests",
+      "-j",
+      "2"
+    ],
+    "exit": 0,
+    "start_utc_log_birthtime": "2026-10-24T06:07:25.531430+00:00",
+    "last_output_utc_log_mtime": "2026-10-24T06:10:13.753454+00:00",
+    "output_interval_seconds": 168.22202467918396,
+    "counts_as_verification": true,
+    "overlap_invalid": false
+  }
+]

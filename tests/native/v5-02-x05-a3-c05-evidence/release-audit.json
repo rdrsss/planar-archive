@@ -1,0 +1,18 @@
+{
+  "actual_memory_modes": 10,
+  "actual_refused_requests": [
+    24,
+    24
+  ],
+  "build_identities": 931,
+  "build_mismatches": [],
+  "first_memory_failure_location": "catalog.projections[2]",
+  "function_only_growth_requests": 0,
+  "source_entries": 23267,
+  "source_mismatches": [],
+  "successful_retry_requests": [
+    24,
+    24
+  ],
+  "symlink": "CLAUDE.md"
+}

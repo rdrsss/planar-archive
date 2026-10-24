@@ -1,0 +1,13 @@
+{
+  "unchanged": true,
+  "entries": 19331,
+  "source_manifest": "attempt02/source-freeze.json",
+  "source_manifest_sha256": "05caa65f7723a15331961db474d1f2bdde1c7680310d94643dfe79906f7e6d40",
+  "schema": "repository-relative path -> {sha256,mode} for regular files or {symlink,mode} for links; mode decimal POSIX permission bits",
+  "root_only_exclusions": [
+    ".git",
+    "build"
+  ],
+  "evidence_root_excluded": "tests/native/v5-02-x05-a2-evidence",
+  "build_identities_unchanged": 747
+}

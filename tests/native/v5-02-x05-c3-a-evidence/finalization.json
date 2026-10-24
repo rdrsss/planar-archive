@@ -1,0 +1,19 @@
+{
+  "all_checks_pass": true,
+  "all_owned_edits_released": true,
+  "candidate_entries": 227,
+  "candidate_manifest": "tests/native/v5-02-x05-c3-a-evidence/frozen-candidate.json",
+  "candidate_sha256": "c8dd36cd6d7dffef2139211be017529587f59f8ceb11af0027837fd30f92b138",
+  "debug_released": true,
+  "diff_sha256": "8a0d0357b17022a117dd91b6933f2aac0eb57f4cc95a8779fea349123c6f9c17",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "independent_review_pending": true,
+  "no_full_gate": true,
+  "no_private_compilation": true,
+  "no_release_run": true,
+  "no_self_approval": true,
+  "protected_final_sha256": "60d7ca08d3b359a9e0fd9a463dca4fe99cda0dfbad99c7afb5a6596af49daee1",
+  "report_sha256": "56d6cc7f48a370af964a5b1cb417500e095d9241d99acb93c055c5058ac3f6e0",
+  "source_support_prose_frozen": true,
+  "utc": "2026-10-23T22:49:28.724782+00:00"
+}

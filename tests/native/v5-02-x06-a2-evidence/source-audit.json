@@ -1,0 +1,14 @@
+{
+  "owned_files": 14,
+  "old_codec_single_resource_adapter": true,
+  "old_v1_interface_tests_unchanged": true,
+  "approved_A1_and_provenance_unchanged": true,
+  "storage_read_export_contract_runtime_Lua_unchanged": true,
+  "CMake_append_only": true,
+  "historical_status_bodies_unchanged": 8,
+  "x06_historical_body_unchanged": true,
+  "pure_imports": true,
+  "AGENTS_symlink": "CLAUDE.md",
+  "previous_names_preserved": 892,
+  "new_cases": 18
+}

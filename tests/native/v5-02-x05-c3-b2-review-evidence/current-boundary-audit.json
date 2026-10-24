@@ -1,0 +1,12 @@
+{
+  "all_original_b2a_invariants": true,
+  "exact_shape_lookup_boundary": true,
+  "no_ambient_reacquisition": true,
+  "no_handler_provider_lua_dispatch": true,
+  "normalized_all_before_metadata": true,
+  "original_capture_vm_pair": true,
+  "original_receipts_verified": true,
+  "private_prepared_state": true,
+  "published_first_failure_preserved": true,
+  "pure_preflight_and_old_normalization_join_order": true
+}

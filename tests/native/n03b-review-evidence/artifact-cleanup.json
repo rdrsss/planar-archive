@@ -1,0 +1,12 @@
+{
+  "bridge_source_copy_diff": "only import planar.engine.runtime_source replaced with reviewer-owned fixed source module",
+  "bridge_original_sha256": "e5ceaaeb5800d9c24842534135231abc6434b26af2a809bbc4493624ee92ccdb",
+  "artifacts": {
+    "probe": "5660072a2bfe2eb0be15f98d66222ab77b05601726882ee6dd2854659d02846a",
+    "custom-probe": "52a1327b7ca00dcdbe6c4fbd28034a6640d93b80b72925166e80df01f8be2bc9",
+    "custom-source.pcm": "46334ab8845916413a8271609a8971c37dbbdef179889ad4f647fc33a4d995de",
+    "custom-source.o": "3111782d14164cd1c3d40f6b80402f0d443377fdf878d9028c3a7db2455ed6a6",
+    "runtime-copy.o": "17149bde31c08849f989c46f7c19ea2d09bfd3b9b9a5ca38dc7402b93ec4c4b6"
+  },
+  "compiled_artifacts_removed": true
+}

@@ -1,0 +1,13 @@
+{
+  "artifact_entries": 380,
+  "artifact_manifest_sha256": "483f40062b10318027ee3fe2b2b967f4df31d08d6a72183b5e6ad8d076d6faad",
+  "candidate_entries": 233,
+  "candidate_manifest_sha256": "5f381b822ce94d5f3585052362525ffc2d4e9323469a545cf3f3a00d79d371a8",
+  "debug_and_all_edits_released": true,
+  "diff_sha256": "525225af6a809c7d99628716d5aef26bfcb54e6b3a4ae9094093ebd4b6b3f65a",
+  "filesystem_sha256": "d586dc0b533123608b1b1c2119042bd1c7df9e08ebbc811dd1d12e939460c27c",
+  "no_subsequent_edits": true,
+  "report_sha256": "fac8cd9e334f411abee0afcc3d96575ad42452cdb2f8287ee774644ce12ed19b",
+  "review_pending": true,
+  "timestamp_utc": "2026-10-23T20:16:16.686295+00:00"
+}

@@ -1,0 +1,59 @@
+{
+  "allowed": [
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/external_registration.t.cpp",
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/external-profile-implementation.md"
+  ],
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "tests/native/v5-02-x05-a3-c01-support/budget.py",
+    "tests/native/v5-02-x05-a3-c01-support/probe.py",
+    "tests/native/v5-02-x05-a3-c01-support/reachable.py",
+    "tests/native/v5-02-x05-a3-c01-support/regressions.py",
+    "tests/native/v5-02-x05-a3-c01-support/verify.py"
+  ],
+  "diff_sha256": "efa84f690b7c4f1392ac629fc4894b703ef9e4f537a8a6c2399b313afd2341ab",
+  "exact_c01_diff": true,
+  "historical_unchanged": true,
+  "invocation_tail_only_profile_guard": true,
+  "runner_copies": [
+    {
+      "copy_sha256": "b82301d38f70f872eee0488a73b667cb19f171ed745c763dad8a845177d7890b",
+      "name": "probe.py",
+      "original_sha256": "8731c8d9460ca95ed72d04c2bdb0c92697b195b10e5785527c6abe5749e8e877",
+      "reverse_identical": true
+    },
+    {
+      "copy_sha256": "0efff204b435378eaed227de955aab2d6c0fbe088f5bcd50f44b2473046395e4",
+      "name": "reachable.py",
+      "original_sha256": "52091f984aa73486733f78fb289c7c862ffdd6a6bc09dec6d100bf4655c3ef32",
+      "reverse_identical": true
+    },
+    {
+      "copy_sha256": "99a0176798345862418da33878db3458e7c87612b025a845691fe4684f0cab92",
+      "name": "regressions.py",
+      "original_sha256": "75d91d7a8697571fdc25572894d3871ff24540c19f4b1751d31d545ef98c9329",
+      "reverse_identical": true
+    },
+    {
+      "copy_sha256": "cc744185f6bfbe0618a45524b3ce82a3ad405a11b57928fb5aff8eac604ec954",
+      "name": "budget.py",
+      "original_sha256": "9f4c43725396c0fd080089cef027d879d87e8e44091cb1970d224bb8ef635502",
+      "reverse_identical": true
+    }
+  ],
+  "shipped_lua_unchanged": true,
+  "symlink": "CLAUDE.md"
+}

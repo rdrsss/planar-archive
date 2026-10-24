@@ -1,0 +1,19 @@
+{
+  "disposition": "approve",
+  "scope": "D01-A TEST-ONLY feasibility; D01-B production implementation not approved",
+  "report_path": "docs/vernacular/rounds/V5-02-X05-B3-B-D01-A-review.md",
+  "report_sha256": "f822745bc71cc7cc3b54af339b27eeeb6424daec1aa4017bd7fc97417c499cd3",
+  "artifact_manifest_sha256": "f07ecb1683b4cdbed238bd7dc9619146ecc5064bcf6675aa86339c59f77202df",
+  "artifact_members": 37,
+  "protected_before_sha256": "7483c9391b89a63d3a71e612af23f02d7b46d8ad6500b9a802047cb8296d09b0",
+  "protected_final_sha256": "7483c9391b89a63d3a71e612af23f02d7b46d8ad6500b9a802047cb8296d09b0",
+  "protected_rehash_equal": true,
+  "compiled_rehash_equal": true,
+  "checkpoint_rehash_equal": true,
+  "candidate_manifest_sha256": "24c39ea1945bb7ed1d12446ca560d54a76ca5122a4a242712d6ae54a93796cbf",
+  "candidate_diff_sha256": "667640d86da888595ca4e451f7a80a5392920eb1cdf7bdda6cc00eeefaab8161",
+  "author_artifact_manifest_sha256": "f0f8a7417d4c64273b2e900ddaa06ef3aca62bb840d95652e92ec7eadf0ec1c9",
+  "author_report_sha256": "dad67275e270df6a42fffd6cd52bcb41ca3f65ac28c85ec0189f426c86f7d9c0",
+  "debug_ownership_released": true,
+  "no_further_edits": true
+}

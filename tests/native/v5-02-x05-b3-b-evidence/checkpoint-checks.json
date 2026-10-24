@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "checkpoint-production.xml": {
+      "cases": 10,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "checkpoint-allocation/allocation.xml": {
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  },
+  "inventory": 637,
+  "prior_names_preserved": 627,
+  "full_gate": false,
+  "approval": false,
+  "decoder_accounting": "pending B3-B-D01",
+  "remaining_proofs": [
+    "complete semantic registry/live-GC stability",
+    "partial setup/resource lifetime probes",
+    "frozen focused gate and independent review"
+  ]
+}

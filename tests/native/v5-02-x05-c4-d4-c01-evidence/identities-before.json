@@ -1,0 +1,52 @@
+{
+  "d3_artifacts": {
+    "changed": [],
+    "entries": 253,
+    "expected_status_only_changes": [],
+    "manifest": {
+      "bytes": 42566,
+      "mode": 420,
+      "sha256": "cb2834a7c9c5da37b8d6210427a299a23b82feccee4c1558685c483d39df04b9"
+    }
+  },
+  "d3_candidate": {
+    "changed": [],
+    "entries": 4,
+    "expected_status_only_changes": [],
+    "manifest": {
+      "bytes": 4068,
+      "mode": 420,
+      "sha256": "d554bccb9b1f2d65418abebf934addb6d55b4f2bf8bb8918bddb00b8ff55efee"
+    }
+  },
+  "d4_artifacts": {
+    "changed": [],
+    "entries": 153,
+    "expected_status_only_changes": [],
+    "manifest": {
+      "bytes": 24780,
+      "mode": 420,
+      "sha256": "8c046afeb672623c2e03b0fde3994c1aadad005dc8c29410a3300905f03f8bd0"
+    }
+  },
+  "d4_candidate": {
+    "changed": [],
+    "entries": 20,
+    "expected_status_only_changes": [],
+    "manifest": {
+      "bytes": 2957,
+      "mode": 420,
+      "sha256": "875be93d599299846396174e059bdc1f543ad5fb029bb341d23b1ca4648bfed0"
+    }
+  },
+  "review_artifacts": {
+    "changed": [],
+    "entries": 107,
+    "expected_status_only_changes": [],
+    "manifest": {
+      "bytes": 16273,
+      "mode": 420,
+      "sha256": "3249a70cec9cd44c4e3a561aabbd5ef8e15d0ae0e3df50eb02da7fd6a7da981d"
+    }
+  }
+}

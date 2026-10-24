@@ -1,0 +1,13 @@
+{
+  "candidate_manifest": "c2079360e46668aa3b4bda634bcbeaeca895ced1893fac63340cd91026feaff0",
+  "candidate_diff": "34e6442a62a2e742b92a42216b89cdee69deb751c3df7e2c4d8db96b3ee2a048",
+  "artifact_manifest": "08afead3b8f159862013c393485e5b6ca0e511012be6c416f37394662863ef1b",
+  "report": "ef9d076b9c15a983639f0db7d49e9ea9b503c35e6510b4044e7ce358e341c784",
+  "frozen_source_unchanged": true,
+  "protected_and_historical_unchanged": 23116,
+  "release_untouched": true,
+  "AGENTS": "CLAUDE.md symlink preserved",
+  "debug_released": true,
+  "no_later_edits": true,
+  "independent_combined_review_required": true
+}

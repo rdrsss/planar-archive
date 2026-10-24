@@ -1,0 +1,29 @@
+{
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/capture/profile.cpp",
+    "src/engine/capture/profile.cppm",
+    "src/engine/capture/profile_codec.cpp",
+    "src/engine/capture/profile_codec.cppm",
+    "src/engine/capture/profile_codec.t.cpp",
+    "src/engine/history/tree_core.cpp",
+    "src/engine/history/tree_core.cppm",
+    "src/engine/history/tree_core.t.cpp",
+    "tests/native/v5-02-x04-b1-support/finalize.py",
+    "tests/native/v5-02-x04-b1-support/verify.py",
+    "tests/native/v5-02-x04-b1-support/verify_docs.py"
+  ],
+  "root_only_exclusions": [
+    ".git",
+    "build"
+  ],
+  "symlink_preserved": true,
+  "unowned_changes": []
+}

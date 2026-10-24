@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "--preset",
+    "debug",
+    "--target",
+    "all",
+    "planar_tests"
+  ],
+  "exit": 0,
+  "seconds": 0.25429296493530273
+}

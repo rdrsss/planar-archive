@@ -1,0 +1,10 @@
+{
+  "debug": {
+    "review_audit_matches_frozen_coder_audit": true,
+    "variant_families": 7
+  },
+  "release": {
+    "review_audit_matches_frozen_coder_audit": true,
+    "variant_families": 7
+  }
+}

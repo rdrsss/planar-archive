@@ -1,0 +1,88 @@
+[
+  {
+    "name": "focused-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.(ledger|canonical|hash|record|tree|provenance|interpretation)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c3b1-evidence/focused-final.xml"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "capture-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.capture",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c3b1-evidence/capture-final.xml"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "acceptance-final",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "replacement.acceptance",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c3b1-evidence/acceptance-final.xml"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement.cli$",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14c3b1-evidence/cli.xml",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/generate.py",
+      "--check"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "record-vectors",
+    "argv": [
+      "python3",
+      "tests/vectors/records/generate.py",
+      "--check"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "lint",
+    "argv": [
+      "python3",
+      "scripts/rewrite-check.py",
+      "lint",
+      "--build-dir",
+      "build/rewrite-debug"
+    ],
+    "exit": 1
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "identity": "32decfef27b4453d44f705aaac1cfc108ffc6abd3af7d6763353a5084619f07a",
+  "files": {
+    "src/engine/ledger/format.cppm": "b7be18221fd9a2c8f8372ea420b915784ec65cb6974929ca3b823847ab9d68a7",
+    "src/engine/ledger/format.cpp": "717518cbf3591c7c9f00d905a5d5c509f37833dcab8a25cbc148496c6a6e9059",
+    "src/engine/ledger/history_verification.t.cpp": "2e059e6c0ea2be4b989735a5fe0926313b1778c944906812074db610108e01e6",
+    "src/engine/CMakeLists.txt": "88921291fdc639fb29526498cce78f31d6eb450d804bcdd8135514700e09d6f8",
+    "docs/architecture.md": "001852779a42b2fc0909bdccaeea0b7083ac677ab691cff0790255a64c814ba7",
+    "docs/testing.md": "4f62961a12a354839b13be1230ae0295c47d7ad815d09de3d84c51ca86116153"
+  }
+}

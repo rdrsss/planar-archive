@@ -1,0 +1,20 @@
+{
+  "path_base": "repository root",
+  "contemporaneous_protected_count": 14143,
+  "changed_outside_owned": [],
+  "new_outside_scope": [],
+  "coordinator_exception": "docs/vernacular/rounds/R14-D6-C01.md",
+  "contract_body_preserved": true,
+  "symlink_preserved": true,
+  "baseline_count": 390,
+  "current_count": 391,
+  "preserved_names": true,
+  "new_names": [
+    "replacement.command load defers provenance refusal until fresh acceptance"
+  ],
+  "focused_cases": 134,
+  "focused_cli_suites": 6,
+  "failures": 0,
+  "skips": 0,
+  "red_source_matches_contemporaneous_runtime": true
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-c4-c2-review-evidence/raw-audit-attempt1.py"
+    ],
+    "exit": 1,
+    "explanation": "Review parser assumption; preserved expected failure, no candidate mutation"
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "tests/native/v5-02-x05-c4-c2-review-evidence/raw-audit-attempt2.py"
+    ],
+    "exit": 1,
+    "explanation": "Review parser assumption; preserved expected failure, no candidate mutation"
+  }
+]

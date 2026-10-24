@@ -1,0 +1,15 @@
+{
+  "all_directory_snapshots_equal": true,
+  "executable_sha256": "be1c4cee1b358208831faa919707ce5fd01de3ea31bc63db333a027f8844464a",
+  "proof_sha256": "981e5b6e8f2bbc305cf12f6aa92a9ea6f6024a4162dc5459f19ab826f83d3517",
+  "reused_not_rerun": true,
+  "runs": 8,
+  "source": "tests/native/v5-02-x03-b1-evidence/old-binary-results.json",
+  "source_provenance": {
+    "docs/vernacular/rounds/V5-02-X03-B1-review.md": "d5f3586fc5a8c33802811faec0755c9ff04eb0df11a54dfb3fa06a855262c170",
+    "tests/native/v5-02-x03-b1-evidence/README.md": "918b2b3ceffa0052e619537556ad3d2d79178300daf2f920a429d512bd4809de",
+    "tests/native/v5-02-x03-b1-evidence/baseline-build.log": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+    "tests/native/v5-02-x03-b1-evidence/pre-b1-dependencies.txt": "bb2f3a0ff6c1810e9f0dc6a3733e25072794d82352774cf2c3997b96098569bb",
+    "tests/native/v5-02-x03-b1-evidence/pre-b1-planar.sha256": "3881b4315720176056cf1e9559610c4803966639bc0dfd392eaf3bf4d5b30c9f"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-R",
+    "replacement.interpretation",
+    "--output-on-failure",
+    "--output-junit",
+    "<repo>/tests/native/r13c2-review-evidence/interpretation.xml"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.5145361423492432
+}

@@ -1,0 +1,940 @@
+{
+  "backtraceGraph" : 
+  {
+    "commands" : 
+    [
+      "add_test"
+    ],
+    "files" : 
+    [
+      "<repo>/CMakeLists.txt",
+      "<repo>/src/cmd/planar/CMakeLists.txt"
+    ],
+    "nodes" : 
+    [
+      {
+        "file" : 0
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 57,
+        "parent" : 0
+      },
+      {
+        "file" : 0
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 60,
+        "parent" : 2
+      },
+      {
+        "file" : 0
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 64,
+        "parent" : 4
+      },
+      {
+        "file" : 0
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 68,
+        "parent" : 6
+      },
+      {
+        "file" : 1
+      },
+      {
+        "command" : 0,
+        "file" : 1,
+        "line" : 98,
+        "parent" : 8
+      }
+    ]
+  },
+  "kind" : "ctestInfo",
+  "tests" : 
+  [
+    {
+      "backtrace" : 1,
+      "command" : 
+      [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15",
+        "<repo>/tests/acceptance/bootstrap_cli.py",
+        "<repo>/build/rewrite-release/bin/planar"
+      ],
+      "name" : "replacement.cli",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "acceptance"
+          ]
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release"
+        }
+      ]
+    },
+    {
+      "backtrace" : 3,
+      "command" : 
+      [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15",
+        "<repo>/tests/acceptance/bootstrap_init.py",
+        "<repo>/build/rewrite-release/bin/planar"
+      ],
+      "name" : "replacement.init_cli",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "acceptance"
+          ]
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release"
+        }
+      ]
+    },
+    {
+      "backtrace" : 5,
+      "command" : 
+      [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15",
+        "<repo>/tests/acceptance/bootstrap_history.py",
+        "<repo>/build/rewrite-release/bin/planar",
+        "<repo>/build/rewrite-release/src/engine/planar_history_fixture"
+      ],
+      "name" : "replacement.history_cli",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "acceptance"
+          ]
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release"
+        }
+      ]
+    },
+    {
+      "backtrace" : 7,
+      "command" : 
+      [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15",
+        "<repo>/tests/acceptance/bootstrap_export.py",
+        "<repo>/build/rewrite-release/bin/planar",
+        "<repo>/build/rewrite-release/src/engine/planar_history_fixture"
+      ],
+      "name" : "replacement.export_cli",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "acceptance"
+          ]
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command captured direct nested transitive and table key state refuses writes"
+      ],
+      "name" : "replacement.command captured direct nested transitive and table key state refuses writes",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command caught execution depth stack and instruction exhaustion are terminal"
+      ],
+      "name" : "replacement.command caught execution depth stack and instruction exhaustion are terminal",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command execution caught live allocation exhaustion stays terminal"
+      ],
+      "name" : "replacement.command execution caught live allocation exhaustion stays terminal",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command export publication state survives invalid projection and caught exhaustion"
+      ],
+      "name" : "replacement.command export publication state survives invalid projection and caught exhaustion",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command family order exact argument maps missing service and manufactured success are refused"
+      ],
+      "name" : "replacement.command family order exact argument maps missing service and manufactured success are refused",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command frozen returned module table converts private backing without changing its tag"
+      ],
+      "name" : "replacement.command frozen returned module table converts private backing without changing its tag",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command frozen shared cyclic and callable keys preserve reads and local scratch"
+      ],
+      "name" : "replacement.command frozen shared cyclic and callable keys preserve reads and local scratch",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command history selects exact typed decimal strings and defaults without Lua number conversion"
+      ],
+      "name" : "replacement.command history selects exact typed decimal strings and defaults without Lua number conversion",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command initialization semantic policy refuses invalid workspace IDs before publication"
+      ],
+      "name" : "replacement.command initialization semantic policy refuses invalid workspace IDs before publication",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command native sealing accepts depth boundary and refuses next node with typed resource"
+      ],
+      "name" : "replacement.command native sealing accepts depth boundary and refuses next node with typed resource",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command native service failure wins over suppression retry and manufactured success"
+      ],
+      "name" : "replacement.command native service failure wins over suppression retry and manufactured success",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command opaque path slots reject forged wrong-type reused extra-field and out-of-order calls"
+      ],
+      "name" : "replacement.command opaque path slots reject forged wrong-type reused extra-field and out-of-order calls",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command real callable replacement is effective and private binding survives later lexical replacement"
+      ],
+      "name" : "replacement.command real callable replacement is effective and private binding survives later lexical replacement",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command registration and execution transfers share one cumulative conversion budget"
+      ],
+      "name" : "replacement.command registration and execution transfers share one cumulative conversion budget",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command registration caught exhaustion is terminal without native services"
+      ],
+      "name" : "replacement.command registration caught exhaustion is terminal without native services",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command registry rejects malformed catalog owner callable ABI duplicate and missing entries atomically"
+      ],
+      "name" : "replacement.command registry rejects malformed catalog owner callable ABI duplicate and missing entries atomically",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command registry seals mandatory embedded families without services"
+      ],
+      "name" : "replacement.command registry seals mandatory embedded families without services",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command retained initialization and export handlers project exact native facts after moving VM"
+      ],
+      "name" : "replacement.command retained initialization and export handlers project exact native facts after moving VM",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command retained render runs real routing validation selection and projection with unchanged fixed export result"
+      ],
+      "name" : "replacement.command retained render runs real routing validation selection and projection with unchanged fixed export result",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command sealed globals libraries and engine cannot be altered by retained callable"
+      ],
+      "name" : "replacement.command sealed globals libraries and engine cannot be altered by retained callable",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/engine/planar_runtime_tests",
+        "command typed native invocation rejects structural option invariants before services"
+      ],
+      "name" : "replacement.command typed native invocation rejects structural option invariants before services",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/engine"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_command_tests",
+        "render mapping refusal precedes missing routed inputs"
+      ],
+      "name" : "replacement.render mapping refusal precedes missing routed inputs",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/cmd/planar"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_export_response_fault_tests",
+        "export postpublication encoding refusal returns prebuilt uncertainty"
+      ],
+      "name" : "replacement.export postpublication encoding refusal returns prebuilt uncertainty",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/cmd/planar"
+        }
+      ]
+    },
+    {
+      "command" : 
+      [
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_export_response_fault_tests",
+        "export service facts allocation failure retains adapter publication"
+      ],
+      "name" : "replacement.export service facts allocation failure retains adapter publication",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "unit"
+          ]
+        },
+        {
+          "name" : "SKIP_RETURN_CODE",
+          "value" : 4
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 30.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/cmd/planar"
+        }
+      ]
+    },
+    {
+      "backtrace" : 9,
+      "command" : 
+      [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.15/bin/python3.15",
+        "<repo>/tests/native/v5-02-b2-support/cli.py",
+        "<repo>/build/rewrite-release/bin/planar",
+        "<repo>/build/rewrite-release/src/engine/planar_history_fixture",
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_cli_variant_0",
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_cli_variant_1",
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_cli_variant_2",
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_cli_variant_3",
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_cli_variant_4",
+        "<repo>/build/rewrite-release/src/cmd/planar/planar_cli_variant_5"
+      ],
+      "name" : "replacement.retained_cli",
+      "properties" : 
+      [
+        {
+          "name" : "LABELS",
+          "value" : 
+          [
+            "acceptance"
+          ]
+        },
+        {
+          "name" : "TIMEOUT",
+          "value" : 120.0
+        },
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "<repo>/build/rewrite-release/src/cmd/planar"
+        }
+      ]
+    }
+  ],
+  "version" : 
+  {
+    "major" : 1,
+    "minor" : 0
+  }
+}

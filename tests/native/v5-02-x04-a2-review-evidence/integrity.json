@@ -1,0 +1,302 @@
+{
+  "all_matched": true,
+  "author_artifacts": 183,
+  "candidate_files": 17,
+  "comment_tokens_identical": true,
+  "growth_regression": {
+    "failed": 1,
+    "fixed": 1
+  },
+  "ownership_changes": 16,
+  "protected_files": 15780,
+  "raw": {
+    "09-final": {
+      "commands": [
+        {
+          "argv": [
+            "cmake",
+            "--build",
+            "<repo>/build/rewrite-debug",
+            "--target",
+            "all",
+            "planar_tests"
+          ],
+          "exit_code": 0,
+          "label": "debug-build",
+          "seconds": 26.811409,
+          "start": "2026-10-22T22:20:12.874519+00:00"
+        },
+        {
+          "argv": [
+            "ctest",
+            "--test-dir",
+            "<repo>/build/rewrite-debug",
+            "--show-only=json-v1"
+          ],
+          "exit_code": 0,
+          "label": "debug-inventory",
+          "seconds": 0.073513,
+          "start": "2026-10-22T22:20:39.689391+00:00"
+        },
+        {
+          "argv": [
+            "ctest",
+            "--test-dir",
+            "<repo>/build/rewrite-debug",
+            "-R",
+            "replacement.*(profile|capture|path|acceptance)",
+            "--output-on-failure",
+            "--output-junit",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/09-final/debug-focused.xml"
+          ],
+          "exit_code": 0,
+          "label": "debug-focused",
+          "seconds": 56.129162,
+          "start": "2026-10-22T22:20:39.767632+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "tests/vectors/generate.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "label": "vectors",
+          "seconds": 0.900255,
+          "start": "2026-10-22T22:21:35.901353+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "tests/vectors/records/generate.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "label": "record-vectors",
+          "seconds": 0.727277,
+          "start": "2026-10-22T22:21:36.803054+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "tests/vectors/records/generate-request-v2.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "label": "request-v2-vectors",
+          "seconds": 0.691904,
+          "start": "2026-10-22T22:21:37.531668+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/09-final/historical-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "historical-audit",
+          "seconds": 0.428646,
+          "start": "2026-10-22T22:21:38.224944+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/r14-d6-support/audit.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/09-final/d6-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "d6-audit",
+          "seconds": 0.23297,
+          "start": "2026-10-22T22:21:38.655044+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/r14-d6-c01-support/audit.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/09-final/d6-c01-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "d6-c01-audit",
+          "seconds": 0.161305,
+          "start": "2026-10-22T22:21:38.889186+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/r14-d7-b-support/audit.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/09-final/d7-b-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "d7-b-audit",
+          "seconds": 0.126482,
+          "start": "2026-10-22T22:21:39.051776+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "scripts/rewrite-check.py",
+            "lint",
+            "--build-dir",
+            "<repo>/build/rewrite-debug"
+          ],
+          "exit_code": 1,
+          "label": "pinned-lint",
+          "seconds": 1.306836,
+          "start": "2026-10-22T22:21:39.185723+00:00"
+        }
+      ],
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "tests": 162
+    },
+    "10-final": {
+      "commands": [
+        {
+          "argv": [
+            "cmake",
+            "--build",
+            "<repo>/build/rewrite-debug",
+            "--target",
+            "all",
+            "planar_tests"
+          ],
+          "exit_code": 0,
+          "label": "debug-build",
+          "seconds": 3.617339,
+          "start": "2026-10-22T22:22:34.545174+00:00"
+        },
+        {
+          "argv": [
+            "ctest",
+            "--test-dir",
+            "<repo>/build/rewrite-debug",
+            "--show-only=json-v1"
+          ],
+          "exit_code": 0,
+          "label": "debug-inventory",
+          "seconds": 0.075028,
+          "start": "2026-10-22T22:22:38.164097+00:00"
+        },
+        {
+          "argv": [
+            "ctest",
+            "--test-dir",
+            "<repo>/build/rewrite-debug",
+            "-R",
+            "replacement.*(profile|capture|path|acceptance)",
+            "--output-on-failure",
+            "--output-junit",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/10-final/debug-focused.xml"
+          ],
+          "exit_code": 0,
+          "label": "debug-focused",
+          "seconds": 56.828662,
+          "start": "2026-10-22T22:22:38.243557+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "tests/vectors/generate.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "label": "vectors",
+          "seconds": 0.754285,
+          "start": "2026-10-22T22:23:35.076673+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "tests/vectors/records/generate.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "label": "record-vectors",
+          "seconds": 0.650669,
+          "start": "2026-10-22T22:23:35.832136+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "tests/vectors/records/generate-request-v2.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "label": "request-v2-vectors",
+          "seconds": 0.673199,
+          "start": "2026-10-22T22:23:36.484576+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/v5-02-b2-support/audit-variants.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/10-final/historical-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "historical-audit",
+          "seconds": 0.400574,
+          "start": "2026-10-22T22:23:37.159885+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/r14-d6-support/audit.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/10-final/d6-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "d6-audit",
+          "seconds": 0.2204,
+          "start": "2026-10-22T22:23:37.561659+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/r14-d6-c01-support/audit.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/10-final/d6-c01-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "d6-c01-audit",
+          "seconds": 0.186084,
+          "start": "2026-10-22T22:23:37.783215+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "<repo>/tests/native/r14-d7-b-support/audit.py",
+            "<repo>/build/rewrite-debug",
+            "<repo>/tests/native/v5-02-x04-a2-evidence/passes/10-final/d7-b-audit-report.json"
+          ],
+          "exit_code": 0,
+          "label": "d7-b-audit",
+          "seconds": 0.119372,
+          "start": "2026-10-22T22:23:37.970671+00:00"
+        },
+        {
+          "argv": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "scripts/rewrite-check.py",
+            "lint",
+            "--build-dir",
+            "<repo>/build/rewrite-debug"
+          ],
+          "exit_code": 1,
+          "label": "pinned-lint",
+          "seconds": 1.273247,
+          "start": "2026-10-22T22:23:38.097553+00:00"
+        }
+      ],
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "tests": 162
+    }
+  }
+}

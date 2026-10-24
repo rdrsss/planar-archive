@@ -1,0 +1,36 @@
+{
+  "debug": {
+    "final_registered": 400,
+    "final_affected_executed": 69,
+    "final_failures": [],
+    "final_skips": [],
+    "prior_names_preserved": 396,
+    "new_names": [
+      "replacement.load handler attaches six required text bindings",
+      "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "replacement.load invocation snapshots one cwd and environment with lexical targets",
+      "replacement.load_cli"
+    ],
+    "pre_mapping_full_executed": 399,
+    "full_gate_sources": "final-gate-source.json",
+    "final_focused_sources": "final-source.json",
+    "full_gate_not_claimed_for_final_mapping_or_new_regression": true
+  },
+  "release": {
+    "final_registered": 400,
+    "final_affected_executed": 69,
+    "final_failures": [],
+    "final_skips": [],
+    "prior_names_preserved": 396,
+    "new_names": [
+      "replacement.load handler attaches six required text bindings",
+      "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "replacement.load invocation snapshots one cwd and environment with lexical targets",
+      "replacement.load_cli"
+    ],
+    "pre_mapping_full_executed": 399,
+    "full_gate_sources": "final-gate-source.json",
+    "final_focused_sources": "final-source.json",
+    "full_gate_not_claimed_for_final_mapping_or_new_regression": true
+  }
+}

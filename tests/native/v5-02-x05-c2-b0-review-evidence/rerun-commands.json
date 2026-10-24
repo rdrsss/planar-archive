@@ -1,0 +1,68 @@
+[
+  {
+    "label": "adversarial-corrected-compile",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/glaze/a4a7/include",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fmodule-file=std=<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/private/src/engine/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-file=planar.engine.json_codec=<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/private/src/engine/CMakeFiles/planar_json_codec.dir/planar.engine.json_codec.pcm",
+      "-fmodule-file=planar.engine.value=<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/private/src/engine/CMakeFiles/planar_value.dir/planar.engine.value.pcm",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/adversarial.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/adversarial.cpp",
+      "-fno-implicit-modules",
+      "-fno-implicit-module-maps"
+    ],
+    "exit": 0,
+    "seconds": 2.196012020111084
+  },
+  {
+    "label": "adversarial-link",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/adversarial.o",
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/private/src/engine/libplanar_json_codec.a",
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/private/src/engine/libplanar_value.a",
+      "-o",
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/adversarial"
+    ],
+    "exit": 0,
+    "seconds": 0.1189429759979248
+  },
+  {
+    "label": "adversarial",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/adversarial"
+    ],
+    "exit": 0,
+    "seconds": 8.298243999481201
+  },
+  {
+    "label": "throw-flush",
+    "argv": [
+      "<repo>/tests/native/v5-02-x05-c2-b0-review-evidence/submitted",
+      "--throw-flush"
+    ],
+    "exit": -6,
+    "seconds": 0.019216060638427734
+  }
+]

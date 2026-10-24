@@ -1,0 +1,17 @@
+{
+  "artifact_entries": 49,
+  "artifact_manifest_sha256": "33448b7d83a5b8b18b9473dd3f22ffb1f5b7c4b55e4687649d5853c39095889c",
+  "author_artifact_manifest_sha256": "483f40062b10318027ee3fe2b2b967f4df31d08d6a72183b5e6ad8d076d6faad",
+  "author_report_sha256": "fac8cd9e334f411abee0afcc3d96575ad42452cdb2f8287ee774644ce12ed19b",
+  "candidate_diff_sha256": "525225af6a809c7d99628716d5aef26bfcb54e6b3a4ae9094093ebd4b6b3f65a",
+  "candidate_manifest_sha256": "5f381b822ce94d5f3585052362525ffc2d4e9323469a545cf3f3a00d79d371a8",
+  "debug_and_all_reviewer_edits_released": true,
+  "disposition": "approve",
+  "no_full_suite": true,
+  "no_release_run": true,
+  "no_subsequent_reviewer_edits": true,
+  "protected_final_sha256": "6c1ff83732189b3107b8a005aa2ccb0200ced4a7fd3bfcd121bab704ed08c846",
+  "report_sha256": "96b954c3291c05a4fd7bc522b489744149d2ed4cbf7a336520f808ffb05c85ee",
+  "source_final_sha256": "a16bc595fdfc1a672997b857dcdf9dc7aa457a78e039a01552dd59911ee3fad9",
+  "timestamp_utc": "2026-10-23T20:25:30.545858+00:00"
+}

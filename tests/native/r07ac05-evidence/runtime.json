@@ -1,0 +1,8 @@
+{
+  "command": [
+    "build/rewrite-debug/src/kernel/planar_runtime_tests",
+    "[runtime]"
+  ],
+  "returncode": 0,
+  "seconds": 5.934944042004645
+}

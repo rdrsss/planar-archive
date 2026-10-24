@@ -1,0 +1,8 @@
+{
+  "after_sha256": "404cc6e643923d8a30e6fa803b6ec18d5a419174cdd1e289bcd1e070997d62ec",
+  "all_noncomment_tokens_exact": true,
+  "before_sha256": "a19e154cb52f3b8194ab8ce05ed6b5d4bc69a548451afb332ffddc0777878979",
+  "method": "libclang lexical token kind+spelling, excluding only CXToken_Comment; literals preserved",
+  "token_sha256": "6505bef1eb8ea3b69fe3873894a696bd3f8cc9751ab950010fc4821ff5e39b47",
+  "tokens": 35742
+}

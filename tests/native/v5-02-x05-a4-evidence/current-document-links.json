@@ -1,0 +1,202 @@
+[
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "CLAUDE.md",
+    "target": "docs/vernacular/x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "vernacular/rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "vernacular/rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "vernacular/rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "vernacular/rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/architecture.md",
+    "target": "vernacular/x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "vernacular/rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "vernacular/rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "vernacular/rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/testing.md",
+    "target": "vernacular/x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "target": "rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "target": "rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/implementation.md",
+    "target": "x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "target": "rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "target": "rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/roadmap.md",
+    "target": "x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/external-profile-implementation.md",
+    "target": "x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "target": "rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "target": "rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/v5-alignment.md",
+    "target": "x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "target": "rounds/V5-02-X04-B4-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "target": "rounds/V5-02-X05-A0-C01-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/acceptance-matrix.md",
+    "target": "x05-registration-evidence.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/x05-registration-evidence.md",
+    "target": "rounds/V5-02-X05-A1-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/x05-registration-evidence.md",
+    "target": "rounds/V5-02-X05-A2-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/x05-registration-evidence.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/x05-registration-evidence.md",
+    "target": "rounds/V5-02-X05-A3-C05-review.md",
+    "exists": true
+  },
+  {
+    "source": "docs/vernacular/x05-registration-evidence.md",
+    "target": "../../tests/native/v5-02-x05-a4-evidence/REPORT.md",
+    "exists": true
+  }
+]

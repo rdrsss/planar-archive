@@ -1,0 +1,31 @@
+{
+  "cwd": "<repo>/build/rewrite-debug",
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang++",
+    "-stdlib=libc++",
+    "-nostdinc++",
+    "-isystem",
+    "/opt/homebrew/opt/llvm/include/c++/v1",
+    "-g",
+    "-std=c++26",
+    "-arch",
+    "arm64",
+    "@src/engine/CMakeFiles/planar_runtime_tests.dir/runtime/runtime.t.cpp.o.modmap",
+    "<repo>/tests/native/n03b-review-evidence/custom-probe.cpp",
+    "<repo>/tests/native/n03b-review-evidence/runtime-copy.o",
+    "<repo>/tests/native/n03b-review-evidence/custom-source.o",
+    "src/engine/libplanar_lua_loader.a",
+    "src/engine/libplanar_hash.a",
+    "src/engine/libplanar_canonical.a",
+    "libplanar_xxhash.a",
+    "src/engine/libplanar_json_codec.a",
+    "src/engine/libplanar_lua_trusted_libs.a",
+    "libplanar_lua.a",
+    "src/engine/libplanar_value.a",
+    "src/engine/lib@cmake_cxx_std.a",
+    "-L/opt/homebrew/opt/llvm/lib/c++",
+    "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+    "-o",
+    "<repo>/tests/native/n03b-review-evidence/custom-probe"
+  ]
+}

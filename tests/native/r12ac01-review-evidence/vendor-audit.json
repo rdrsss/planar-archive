@@ -1,0 +1,9 @@
+{
+  "vendor/sqlite/b9c7.hash": true,
+  "vendor/sqlite/b9c7.lock": true,
+  "vendor/sqlite/b9c7/shell.c": true,
+  "vendor/sqlite/b9c7/sqlite3.c": true,
+  "vendor/sqlite/b9c7/sqlite3.h": true,
+  "vendor/sqlite/b9c7/sqlite3ext.h": true,
+  "vendor/sqlite/cmake.lock": true
+}

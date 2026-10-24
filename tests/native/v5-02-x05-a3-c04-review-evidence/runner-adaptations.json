@@ -1,0 +1,58 @@
+[
+  {
+    "copy_sha256": "8730cdecb80962c60171b8fa37b5bb3719ad641a28fd22077e75d2b10d778824",
+    "reverse_identical": true,
+    "script": "fields",
+    "source_sha256": "f7b57bfc416f3c27f7a25aa3610edcd0d8f9546430d8b42d8e5659a06ba7ed75",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "a32952c8d39c6a096fbf5cf967e8692bf749e9347585fc774d2e48901ee82eca",
+    "reverse_identical": true,
+    "script": "allocations",
+    "source_sha256": "4b44b1a4e9ba5f13e51613171c4fd3f216a4ea8f43af2102ee3cbc8cf9eaaabd",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "48edacbbc0ec751082dc3eea13b5b21689a842d4002b549ff6c30ed6fc8702b8",
+    "reverse_identical": true,
+    "script": "repeat",
+    "source_sha256": "eff4ceecd7371a8b3110192e7919450c719a23eaadc1491518ca899ba5d64de1",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "e2c6c3cb97f66dbe4cac97e1f11a5e67639af6888c9dc8e6acf48857b3c8a386",
+    "reverse_identical": true,
+    "script": "locations",
+    "source_sha256": "073ad94527fb83d1cb8d9405a57eb966c89ec94a8c7602bed95cfbbf7da3f6ae",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "6f40d2b603dd5da9d2393c54c6462c7e4621bde9282b3dadbc1e8214d303ec91",
+    "reverse_identical": true,
+    "script": "probe",
+    "source_sha256": "b6c4fb5349082903b7d8f6eeedc991d0c6a06cf7ded150ee575a91780692a0c0",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "21efe8476008d4928ea7618fc4533c360d09c129d256340a8b1eb12008b87017",
+    "reverse_identical": true,
+    "script": "reachable",
+    "source_sha256": "200bc9d3963832d1a7e5dd41ee3a3682d8350040e2d7efd7364e0450031415b0",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "2ca9982316454e57d6cc87d936dd930991bf2f5f921ed3ad00c1ba532817a5be",
+    "reverse_identical": true,
+    "script": "regressions",
+    "source_sha256": "9e77f9c9cf326a0cf21068de3533e875ed6728461bdfdaacc468961f786398f1",
+    "substitutions": 1
+  },
+  {
+    "copy_sha256": "1dae2d878e204379975b78dd5efc0e487036b8bb011aae83fdddbaee6da00f7d",
+    "reverse_identical": true,
+    "script": "budget",
+    "source_sha256": "ea978fbf7338f663c6f1664cf1ed04988ccfcafa32618b7a4720a28e3edc91ff",
+    "substitutions": 1
+  }
+]

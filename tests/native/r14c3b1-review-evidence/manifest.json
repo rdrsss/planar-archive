@@ -1,0 +1,17 @@
+{
+  "../../../docs/vernacular/rounds/R14-C3-B1-review.md": "d7daeb633a7d7c891f38ea168e6542b81640d88f74257a634e5336631ae01af2",
+  "acceptance.txt": "ea2bae51666b0f28bbc52575fa341a634c0d6a752abdc341206d565c44d60faa",
+  "acceptance.xml": "8162716268d8f9905309a200670acead1baf0edd383eee6629e4f055a30a893d",
+  "adversarial.cpp": "d03a586485662dd3dd9edb4fd53293b738bf77e280e45b0ba591e7858ba95692",
+  "adversarial.txt": "7db5d58dd30c8444eb8a8ed1cb5762221c7f054e4bdd809a25d83891f1a29d79",
+  "build-artifact-hashes.json": "26d92b9a2ce1dead312cc5fcce422bcf3cdb3e076511b6ace208448f56665bba",
+  "compile-argv.json": "c43b46e45700c38bf99c8a6bff92dd30a4a360a34b40ad5f4d442015f8dde9b7",
+  "compile.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "link-argv.json": "aed79aa7d27299f0d0e8eac0caeed7640023a7d8c88657276fdc5625e0f58b80",
+  "link.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "no-work.txt": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794",
+  "omitted-comparison.json": "bfd19c18dc3f358f4b395cc1bafaf60b6516faf79b57803d600533f667cd1fe7",
+  "protection-comparison.json": "d689896932385f710a65c9a74519f44d7052feace36e1bb44daa81fb46bdd132",
+  "verify.py": "16e1722e57a39ac5cfbdee3e0b92606b3f51af36aabb11630c634e53866e8510",
+  "verify.txt": "e0af5e331ab804d905eeb0216527705ae2762a57e0fa568167669d39007bd77c"
+}

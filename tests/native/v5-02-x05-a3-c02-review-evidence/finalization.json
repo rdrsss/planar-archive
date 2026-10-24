@@ -1,0 +1,15 @@
+{
+  "artifact_count": 202,
+  "artifact_manifest_sha256": "f1ad217fd9e781de75f070cd8b1e23dcaf9227e093e94dd6b1b6afee6b02ea7e",
+  "author_artifact_mismatches": 0,
+  "build_identities_sha256": "8fb391b2dd86317d7e80a801962334126752f9d098479ab47c5400950766da8c",
+  "build_mismatches": 0,
+  "build_ownership_released": true,
+  "disposition": "request-changes",
+  "finding": "A3-C02-R5",
+  "no_full_or_release_gate": true,
+  "owned_diff_sha256": "a749522841f12e0e5eb90b99023807eefe18ebcc3055dba47d5f5615033cbece",
+  "report_sha256": "10a3c5b5113adc7fbc3c7ee350548167941b8d5dbdf6049c88ebacb8a6ba62c9",
+  "source_manifest_sha256": "8beb5181756f4fc31f603c3eceda489f835b736c91b076abbc6ffd6bebfeac46",
+  "source_mismatches": 0
+}

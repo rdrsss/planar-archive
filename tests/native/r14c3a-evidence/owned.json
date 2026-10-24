@@ -1,0 +1,10 @@
+[
+  "src/engine/capture/capture.cppm",
+  "src/engine/capture/capture.cpp",
+  "src/engine/capture/native.cppm",
+  "src/engine/capture/native.cpp",
+  "src/engine/capture/native.t.cpp",
+  "src/engine/CMakeLists.txt",
+  "docs/architecture.md",
+  "docs/testing.md"
+]

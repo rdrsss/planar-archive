@@ -1,0 +1,18 @@
+{
+  "existing_documents": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md"
+  ],
+  "historical_and_product_unchanged": true,
+  "new_owned": [
+    "docs/vernacular/x05-registration-evidence.md",
+    "tests/native/v5-02-x05-a4-support/verify.py"
+  ],
+  "source_freeze_sha256": "2b25473281360b2527c52d027dedcc52daac633948b6953543e7b48cb08b8608"
+}

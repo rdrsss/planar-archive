@@ -1,0 +1,43 @@
+{
+  "anchors": {
+    "artifact-manifest.json": "f35b19c06748ec4eade16343f96d48d7ed09cbf03f0a09770ba9ef1eedfe0e7d",
+    "candidate-manifest.json": "19160aa0c14307b9db56979534bb10e57043b7a6e6275e4b810d837b10423d4b",
+    "owned.diff": "8fe36e59720778b6bd061a83b1f91752ae92ba198df2793ec3ffc51c5a07a97a"
+  },
+  "archived_sources": {
+    "attempt01": 150,
+    "attempt02": 150,
+    "attempt03-oracle": 150,
+    "attempt04-oracle-tests": 150,
+    "attempt05-oracle-tests": 150,
+    "attempt06-final": 0
+  },
+  "author_artifacts": 881,
+  "candidate_paths": 22,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt",
+    "src/engine/history/effective_provenance.cpp",
+    "src/engine/history/effective_provenance.cppm",
+    "src/engine/history/effective_provenance.t.cpp",
+    "tests/native/v5-02-x04-b3-support/audit.py",
+    "tests/native/v5-02-x04-b3-support/final_gate.py",
+    "tests/native/v5-02-x04-b3-support/finalize.py",
+    "tests/native/v5-02-x04-b3-support/verify.py",
+    "tests/vectors/effective-provenance/catalog.bin",
+    "tests/vectors/effective-provenance/description.json",
+    "tests/vectors/effective-provenance/digest.txt",
+    "tests/vectors/effective-provenance/files.tsv",
+    "tests/vectors/effective-provenance/generate.py",
+    "tests/vectors/effective-provenance/manifest.bin"
+  ],
+  "debug_build_identities": 726,
+  "protected_entries": 17398,
+  "symlink_preserved": true
+}

@@ -1,0 +1,17 @@
+{
+  "candidate-manifest.json": {
+    "count": 15,
+    "bad": [],
+    "sha256": "16e33d80d5379fcd0c3838b6b26ac24701556631bc08ac6ef852d8129d646f02"
+  },
+  "artifact-manifest.json": {
+    "count": 153,
+    "bad": [],
+    "sha256": "2bb7859199f905f212ec1e2eefb931da9134c5dda55d58c2e93a0b48f55a2ac9"
+  },
+  "final-gate/source-freeze.json": {
+    "count": 392,
+    "bad": [],
+    "sha256": "1b0ded4e16e920afefc9838d8a1b9c3953d56f4c9c956029f5a5973745a8b68a"
+  }
+}

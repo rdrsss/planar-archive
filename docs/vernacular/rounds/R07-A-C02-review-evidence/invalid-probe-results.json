@@ -1,0 +1,258 @@
+[
+  {
+    "mode": "caught",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.37290775030851364
+  },
+  {
+    "mode": "caught",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.016913624480366707
+  },
+  {
+    "mode": "repeated",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.012202792800962925
+  },
+  {
+    "mode": "repeated",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.012452875263988972
+  },
+  {
+    "mode": "handler",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.011862457729876041
+  },
+  {
+    "mode": "handler",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.011121207848191261
+  },
+  {
+    "mode": "deep",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010324208065867424
+  },
+  {
+    "mode": "deep",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010673458687961102
+  },
+  {
+    "mode": "close_loop",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010734790936112404
+  },
+  {
+    "mode": "close_loop",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010241041891276836
+  },
+  {
+    "mode": "close_catch",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.011976375244557858
+  },
+  {
+    "mode": "close_catch",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010490542277693748
+  },
+  {
+    "mode": "close_on_quota",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.009937167167663574
+  },
+  {
+    "mode": "close_on_quota",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010560959577560425
+  },
+  {
+    "mode": "ordinary",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010604041628539562
+  },
+  {
+    "mode": "ordinary",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.01073229219764471
+  },
+  {
+    "mode": "oldtoken",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.01030262466520071
+  },
+  {
+    "mode": "oldtoken",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.01002679206430912
+  },
+  {
+    "mode": "repair",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010124499909579754
+  },
+  {
+    "mode": "repair",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010704250074923038
+  },
+  {
+    "mode": "memory",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.011305791325867176
+  },
+  {
+    "mode": "memory",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010384082794189453
+  },
+  {
+    "mode": "memory_caught",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010382750071585178
+  },
+  {
+    "mode": "memory_caught",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010199417360126972
+  },
+  {
+    "mode": "finalizer",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010223666206002235
+  },
+  {
+    "mode": "finalizer",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010081415995955467
+  },
+  {
+    "mode": "returnzero",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.01020512543618679
+  },
+  {
+    "mode": "returnzero",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010117624886333942
+  },
+  {
+    "mode": "returnmany",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.0103797921910882
+  },
+  {
+    "mode": "returnmany",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010617416352033615
+  },
+  {
+    "mode": "pattern",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.010834082961082458
+  },
+  {
+    "mode": "pattern",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.009886333718895912
+  }
+]

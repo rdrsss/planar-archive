@@ -1,0 +1,67 @@
+{
+  "CLAUDE.md": {
+    "sha256": "1ea1d1c9de7b56060bbe962f5d1dd1c69de27134eb90092714627b32272e3b79",
+    "bytes": 39779,
+    "mode": 420
+  },
+  "docs/architecture.md": {
+    "sha256": "5335dcf7d690d9c8b619a132a8f021cdba2900a590a0efc8107aece81f5f6c87",
+    "bytes": 84580,
+    "mode": 420
+  },
+  "docs/testing.md": {
+    "sha256": "3c17ab18054f11706b59c15d31e54266ef374779cb9a39c7c591a6d433ad9a50",
+    "bytes": 88920,
+    "mode": 420
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "43f6f3146fe7e3892d944aa355e560d452200fac5d8556e76be45a73fde83cbd",
+    "bytes": 46414,
+    "mode": 420
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "8d1c1a1977838d5d7f9e03f750e4f7011b058b46080692f7a512e290d28863bc",
+    "bytes": 49320,
+    "mode": 420
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "6c30a505eb3a5f9bb09507fdfd7ce5a3e689521eb547195e0dae25b5e0dd6b60",
+    "bytes": 55716,
+    "mode": 420
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "sha256": "50d6f92e8d357d85e84e82ff130ef16e8ec820b04b3b879cacde5fb374eea8f7",
+    "bytes": 57767,
+    "mode": 420
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "sha256": "3615554c9d4304fe3a14bbfa1abf9324b5ead5780c368d7035af92bf78853188",
+    "bytes": 126046,
+    "mode": 420
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "sha256": "b6c00b2f89a217aacf6733bca8169860dada448493b2b2763e532685d543265b",
+    "bytes": 14966,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-evidence/REPORT.md": {
+    "sha256": "85eec08f081459e65b64b4b7acb10ef761149b148048099bee67ac76f24e0207",
+    "bytes": 7912,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-support/allocation.cpp": {
+    "sha256": "e3dc209cba78bcdcff76d7e16009184aad6e5d4982f68bd34c4cf6396c0e11a7",
+    "bytes": 2205,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-support/allocation.py": {
+    "sha256": "81034ec1125ea2cbe98bdd05a21d2641153f3bbd2e0e2876b790592b4b309a33",
+    "bytes": 2630,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-support/finalize.py": {
+    "sha256": "e0e005a294c51c7f60257a7b7f2b1bc660435f418cdaa906e05e3811445209d8",
+    "bytes": 3608,
+    "mode": 420
+  }
+}

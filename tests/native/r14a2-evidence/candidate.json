@@ -1,0 +1,19 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/history/provenance_codec.cppm": "96c933ccbfb4263073aaf72305d096a2c9dc94b04b85ed30f7c673a0b09ced58",
+    "src/engine/history/provenance_codec.cpp": "b662a2584362b5da853ea2581d678934b9d0974c0c789ad83974d7c399f7532c",
+    "src/engine/history/provenance_codec.t.cpp": "f84214747f8ab9ccf2d3bbbc4720d5e242abff81e4f51780c8feba7f1a32b7b0",
+    "src/engine/history/interpretation_codec.cppm": "31155c9305d6a6f2f2c28b8a7d6b213655cb07420434cde127b5bad71b05b387",
+    "src/engine/history/interpretation_codec.cpp": "08c995a8b62ee2c4f26a42d4c4d5f685572563db023f3f3d5ced73c226682497",
+    "src/engine/history/interpretation_codec.t.cpp": "8bddba9615e233333cdd65d182e8d15b26f2ed20a0b33005d36ba0dc8a2c154d",
+    "src/engine/history/provenance.cppm": "42924b442c8f7e4687161e81be76f7e16cfdc0b11ab24fa31bce5fe7a0dce39b",
+    "src/engine/history/provenance.cpp": "5f5a51fae6af34cd1cba59671b4b90f9f014239735c0c1a88bea5dfb710cef26",
+    "src/engine/history/interpretation.cppm": "0024ee5efa1a209ce7c56f59c789678e385030f9664d6cabdd47b2771cb3793f",
+    "src/engine/history/interpretation.cpp": "d352c96f3dd19092fdc8f59f173656a98c515afc42395ff0e8979a9d6a9709ee",
+    "src/engine/CMakeLists.txt": "df52242f603d3a7f63c6787d07e705a6b76934013842312539d4a3f795292f03",
+    "docs/architecture.md": "60d0786a4cabfa2dbec28fb5bd4bb024c1d832795d79a63909391852ffe74b2b",
+    "docs/testing.md": "71da7267edaa441ecb769dc227426b8d3f783edea5532bd5e6aa849715173f6b"
+  },
+  "identity": "281dbab2c65e9b67d35a3db47fb2afc290a7971ac63aff409667fa7532262cb2"
+}

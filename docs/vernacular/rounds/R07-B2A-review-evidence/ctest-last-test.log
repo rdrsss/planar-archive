@@ -1,0 +1,526 @@
+Start testing: Oct 19 15:07 EDT
+----------------------------------------------------------
+2/69 Testing: replacement.loader bounds native amplification of reused scalar strings
+2/69 Test: replacement.loader bounds native amplification of reused scalar strings
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader bounds native amplification of reused scalar strings"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader bounds native amplification of reused scalar strings" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader bounds native amplification of reused scalar strings"
+Randomness seeded to: 1823801872
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.22 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader bounds native amplification of reused scalar strings" end time: Oct 19 15:07 EDT
+"replacement.loader bounds native amplification of reused scalar strings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/69 Testing: replacement.loader constructed nested records remain immutable and readable
+3/69 Test: replacement.loader constructed nested records remain immutable and readable
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader constructed nested records remain immutable and readable"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader constructed nested records remain immutable and readable" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader constructed nested records remain immutable and readable"
+Randomness seeded to: 2749393444
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader constructed nested records remain immutable and readable" end time: Oct 19 15:07 EDT
+"replacement.loader constructed nested records remain immutable and readable" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/69 Testing: replacement.loader denies ambient capabilities and all trusted mutation
+4/69 Test: replacement.loader denies ambient capabilities and all trusted mutation
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader denies ambient capabilities and all trusted mutation"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader denies ambient capabilities and all trusted mutation" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader denies ambient capabilities and all trusted mutation"
+Randomness seeded to: 3471341263
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader denies ambient capabilities and all trusted mutation" end time: Oct 19 15:07 EDT
+"replacement.loader denies ambient capabilities and all trusted mutation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/69 Testing: replacement.loader enforces independent instruction allocation and structural bounds
+5/69 Test: replacement.loader enforces independent instruction allocation and structural bounds
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader enforces independent instruction allocation and structural bounds"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader enforces independent instruction allocation and structural bounds" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader enforces independent instruction allocation and structural bounds"
+Randomness seeded to: 3652585889
+===============================================================================
+All tests passed (10 assertions in 1 test case)
+
+<end of output>
+Test time =   0.20 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader enforces independent instruction allocation and structural bounds" end time: Oct 19 15:07 EDT
+"replacement.loader enforces independent instruction allocation and structural bounds" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/69 Testing: replacement.loader preserves structural constructor tags
+6/69 Test: replacement.loader preserves structural constructor tags
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader preserves structural constructor tags"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader preserves structural constructor tags" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader preserves structural constructor tags"
+Randomness seeded to: 2224083008
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader preserves structural constructor tags" end time: Oct 19 15:07 EDT
+"replacement.loader preserves structural constructor tags" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/69 Testing: replacement.loader rejects unsupported structures
+7/69 Test: replacement.loader rejects unsupported structures
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader rejects unsupported structures"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader rejects unsupported structures" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader rejects unsupported structures"
+Randomness seeded to: 2878193340
+===============================================================================
+All tests passed (34 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader rejects unsupported structures" end time: Oct 19 15:07 EDT
+"replacement.loader rejects unsupported structures" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/69 Testing: replacement.loader retains table identities across garbage collection
+8/69 Test: replacement.loader retains table identities across garbage collection
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_lua_loader_tests" "loader retains table identities across garbage collection"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.loader retains table identities across garbage collection" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "loader retains table identities across garbage collection"
+Randomness seeded to: 4013370364
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.loader retains table identities across garbage collection" end time: Oct 19 15:07 EDT
+"replacement.loader retains table identities across garbage collection" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/69 Testing: replacement.capture bounds name staging across trees and both passes
+9/69 Test: replacement.capture bounds name staging across trees and both passes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture bounds name staging across trees and both passes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture bounds name staging across trees and both passes" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture bounds name staging across trees and both passes"
+Randomness seeded to: 1497040115
+===============================================================================
+All tests passed (20 assertions in 1 test case)
+
+<end of output>
+Test time =  32.24 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture bounds name staging across trees and both passes" end time: Oct 19 15:07 EDT
+"replacement.capture bounds name staging across trees and both passes" time elapsed: 00:00:32
+----------------------------------------------------------
+
+10/69 Testing: replacement.capture bounds path metadata before staging on both passes
+10/69 Test: replacement.capture bounds path metadata before staging on both passes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture bounds path metadata before staging on both passes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture bounds path metadata before staging on both passes" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture bounds path metadata before staging on both passes"
+Randomness seeded to: 3292684387
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+<end of output>
+Test time =   7.82 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture bounds path metadata before staging on both passes" end time: Oct 19 15:07 EDT
+"replacement.capture bounds path metadata before staging on both passes" time elapsed: 00:00:07
+----------------------------------------------------------
+
+11/69 Testing: replacement.capture bounds text raw files totals and exclusions
+11/69 Test: replacement.capture bounds text raw files totals and exclusions
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture bounds text raw files totals and exclusions"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture bounds text raw files totals and exclusions" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture bounds text raw files totals and exclusions"
+Randomness seeded to: 3216507252
+===============================================================================
+All tests passed (12 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture bounds text raw files totals and exclusions" end time: Oct 19 15:07 EDT
+"replacement.capture bounds text raw files totals and exclusions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/69 Testing: replacement.capture classifies retained binary growth beyond quota as changed
+12/69 Test: replacement.capture classifies retained binary growth beyond quota as changed
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture classifies retained binary growth beyond quota as changed"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture classifies retained binary growth beyond quota as changed" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture classifies retained binary growth beyond quota as changed"
+Randomness seeded to: 1269785790
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture classifies retained binary growth beyond quota as changed" end time: Oct 19 15:07 EDT
+"replacement.capture classifies retained binary growth beyond quota as changed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/69 Testing: replacement.capture classifies retained text growth beyond quota as changed
+13/69 Test: replacement.capture classifies retained text growth beyond quota as changed
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture classifies retained text growth beyond quota as changed"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture classifies retained text growth beyond quota as changed" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture classifies retained text growth beyond quota as changed"
+Randomness seeded to: 754452142
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture classifies retained text growth beyond quota as changed" end time: Oct 19 15:07 EDT
+"replacement.capture classifies retained text growth beyond quota as changed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/69 Testing: replacement.capture declaration references join final retained snapshot
+14/69 Test: replacement.capture declaration references join final retained snapshot
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture declaration references join final retained snapshot"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture declaration references join final retained snapshot" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture declaration references join final retained snapshot"
+Randomness seeded to: 2847161767
+===============================================================================
+All tests passed (12 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture declaration references join final retained snapshot" end time: Oct 19 15:07 EDT
+"replacement.capture declaration references join final retained snapshot" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/69 Testing: replacement.capture detects empty directory membership and identity changes
+15/69 Test: replacement.capture detects empty directory membership and identity changes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture detects empty directory membership and identity changes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture detects empty directory membership and identity changes" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture detects empty directory membership and identity changes"
+Randomness seeded to: 3900517276
+===============================================================================
+All tests passed (12 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture detects empty directory membership and identity changes" end time: Oct 19 15:07 EDT
+"replacement.capture detects empty directory membership and identity changes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/69 Testing: replacement.capture deterministic seam detects bytes mode identity and membership changes
+16/69 Test: replacement.capture deterministic seam detects bytes mode identity and membership changes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture deterministic seam detects bytes mode identity and membership changes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture deterministic seam detects bytes mode identity and membership changes" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture deterministic seam detects bytes mode identity and membership changes"
+Randomness seeded to: 1824715314
+===============================================================================
+All tests passed (20 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture deterministic seam detects bytes mode identity and membership changes" end time: Oct 19 15:07 EDT
+"replacement.capture deterministic seam detects bytes mode identity and membership changes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/69 Testing: replacement.capture empty directories leave file provenance unchanged
+17/69 Test: replacement.capture empty directories leave file provenance unchanged
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture empty directories leave file provenance unchanged"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture empty directories leave file provenance unchanged" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture empty directories leave file provenance unchanged"
+Randomness seeded to: 530270851
+===============================================================================
+All tests passed (16 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture empty directories leave file provenance unchanged" end time: Oct 19 15:07 EDT
+"replacement.capture empty directories leave file provenance unchanged" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/69 Testing: replacement.capture enforces aggregate bytes and count before retention
+18/69 Test: replacement.capture enforces aggregate bytes and count before retention
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture enforces aggregate bytes and count before retention"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture enforces aggregate bytes and count before retention" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture enforces aggregate bytes and count before retention"
+Randomness seeded to: 4285764487
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   1.21 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture enforces aggregate bytes and count before retention" end time: Oct 19 15:07 EDT
+"replacement.capture enforces aggregate bytes and count before retention" time elapsed: 00:00:01
+----------------------------------------------------------
+
+19/69 Testing: replacement.capture exposes sealed logical topology independently of file snapshots
+19/69 Test: replacement.capture exposes sealed logical topology independently of file snapshots
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture exposes sealed logical topology independently of file snapshots"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture exposes sealed logical topology independently of file snapshots" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture exposes sealed logical topology independently of file snapshots"
+Randomness seeded to: 534747036
+===============================================================================
+All tests passed (19 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture exposes sealed logical topology independently of file snapshots" end time: Oct 19 15:07 EDT
+"replacement.capture exposes sealed logical topology independently of file snapshots" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/69 Testing: replacement.capture refuses portable paths aliases and unsafe file types
+20/69 Test: replacement.capture refuses portable paths aliases and unsafe file types
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture refuses portable paths aliases and unsafe file types"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture refuses portable paths aliases and unsafe file types" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture refuses portable paths aliases and unsafe file types"
+Randomness seeded to: 674461802
+===============================================================================
+All tests passed (87 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture refuses portable paths aliases and unsafe file types" end time: Oct 19 15:07 EDT
+"replacement.capture refuses portable paths aliases and unsafe file types" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/69 Testing: replacement.capture rejects overlapping roots and cross-root hardlinks
+21/69 Test: replacement.capture rejects overlapping roots and cross-root hardlinks
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture rejects overlapping roots and cross-root hardlinks"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture rejects overlapping roots and cross-root hardlinks" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture rejects overlapping roots and cross-root hardlinks"
+Randomness seeded to: 226072368
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture rejects overlapping roots and cross-root hardlinks" end time: Oct 19 15:07 EDT
+"replacement.capture rejects overlapping roots and cross-root hardlinks" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/69 Testing: replacement.capture retains sorted bytes and discovered references
+22/69 Test: replacement.capture retains sorted bytes and discovered references
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture retains sorted bytes and discovered references"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture retains sorted bytes and discovered references" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture retains sorted bytes and discovered references"
+Randomness seeded to: 1616473851
+===============================================================================
+All tests passed (9 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture retains sorted bytes and discovered references" end time: Oct 19 15:07 EDT
+"replacement.capture retains sorted bytes and discovered references" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/69 Testing: replacement.capture standalone inputs share physical workspace without tree authority
+23/69 Test: replacement.capture standalone inputs share physical workspace without tree authority
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture standalone inputs share physical workspace without tree authority"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture standalone inputs share physical workspace without tree authority" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture standalone inputs share physical workspace without tree authority"
+Randomness seeded to: 1778769264
+===============================================================================
+All tests passed (9 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture standalone inputs share physical workspace without tree authority" end time: Oct 19 15:07 EDT
+"replacement.capture standalone inputs share physical workspace without tree authority" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/69 Testing: replacement.capture withholds topology after unsuccessful verification
+24/69 Test: replacement.capture withholds topology after unsuccessful verification
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_capture_tests" "capture withholds topology after unsuccessful verification"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.capture withholds topology after unsuccessful verification" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "capture withholds topology after unsuccessful verification"
+Randomness seeded to: 1298063920
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.capture withholds topology after unsuccessful verification" end time: Oct 19 15:07 EDT
+"replacement.capture withholds topology after unsuccessful verification" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/69 Testing: replacement.hash matches independent hand canonical and domain vectors
+29/69 Test: replacement.hash matches independent hand canonical and domain vectors
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_hash_tests" "hash matches independent hand canonical and domain vectors"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.hash matches independent hand canonical and domain vectors" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "hash matches independent hand canonical and domain vectors"
+Randomness seeded to: 194807016
+===============================================================================
+All tests passed (349 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.hash matches independent hand canonical and domain vectors" end time: Oct 19 15:07 EDT
+"replacement.hash matches independent hand canonical and domain vectors" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/69 Testing: replacement.hash selected captured base observation unit and role recipes remain separate
+30/69 Test: replacement.hash selected captured base observation unit and role recipes remain separate
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_hash_tests" "hash selected captured base observation unit and role recipes remain separate"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.hash selected captured base observation unit and role recipes remain separate" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "hash selected captured base observation unit and role recipes remain separate"
+Randomness seeded to: 3643838039
+===============================================================================
+All tests passed (256 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.hash selected captured base observation unit and role recipes remain separate" end time: Oct 19 15:07 EDT
+"replacement.hash selected captured base observation unit and role recipes remain separate" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/69 Testing: replacement.hash validates published upstream seed zero XXH3 length vectors
+31/69 Test: replacement.hash validates published upstream seed zero XXH3 length vectors
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_hash_tests" "hash validates published upstream seed zero XXH3 length vectors"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.hash validates published upstream seed zero XXH3 length vectors" start time: Oct 19 15:07 EDT
+Output:
+----------------------------------------------------------
+Filters: "hash validates published upstream seed zero XXH3 length vectors"
+Randomness seeded to: 3102807482
+===============================================================================
+All tests passed (62 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.hash validates published upstream seed zero XXH3 length vectors" end time: Oct 19 15:07 EDT
+"replacement.hash validates published upstream seed zero XXH3 length vectors" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 19 15:07 EDT
+
+unit =  42.17 sec*proc
+

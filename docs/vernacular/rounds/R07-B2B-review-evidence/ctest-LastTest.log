@@ -1,0 +1,1026 @@
+Start testing: Oct 20 05:21 EDT
+----------------------------------------------------------
+32/85 Testing: replacement.runtime bounds Lua execution allocation and native amplification
+32/85 Test: replacement.runtime bounds Lua execution allocation and native amplification
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime bounds Lua execution allocation and native amplification"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime bounds Lua execution allocation and native amplification" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime bounds Lua execution allocation and native amplification"
+Randomness seeded to: 1810101770
+===============================================================================
+All tests passed (19 assertions in 1 test case)
+
+<end of output>
+Test time =   1.06 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime bounds Lua execution allocation and native amplification" end time: Oct 20 05:21 EDT
+"replacement.runtime bounds Lua execution allocation and native amplification" time elapsed: 00:00:01
+----------------------------------------------------------
+
+33/85 Testing: replacement.runtime enforces immaterial text payloads on both boundaries
+33/85 Test: replacement.runtime enforces immaterial text payloads on both boundaries
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime enforces immaterial text payloads on both boundaries"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime enforces immaterial text payloads on both boundaries" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime enforces immaterial text payloads on both boundaries"
+Randomness seeded to: 4146950283
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime enforces immaterial text payloads on both boundaries" end time: Oct 20 05:21 EDT
+"replacement.runtime enforces immaterial text payloads on both boundaries" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/85 Testing: replacement.runtime exposes only the selected bounded table helpers
+34/85 Test: replacement.runtime exposes only the selected bounded table helpers
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime exposes only the selected bounded table helpers"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime exposes only the selected bounded table helpers" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime exposes only the selected bounded table helpers"
+Randomness seeded to: 2300400920
+===============================================================================
+All tests passed (8 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime exposes only the selected bounded table helpers" end time: Oct 20 05:21 EDT
+"replacement.runtime exposes only the selected bounded table helpers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/85 Testing: replacement.runtime identifies the diagnostic actually escaping Lua
+35/85 Test: replacement.runtime identifies the diagnostic actually escaping Lua
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime identifies the diagnostic actually escaping Lua"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime identifies the diagnostic actually escaping Lua" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime identifies the diagnostic actually escaping Lua"
+Randomness seeded to: 2123825032
+===============================================================================
+All tests passed (15 assertions in 1 test case)
+
+<end of output>
+Test time =   2.88 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime identifies the diagnostic actually escaping Lua" end time: Oct 20 05:21 EDT
+"replacement.runtime identifies the diagnostic actually escaping Lua" time elapsed: 00:00:02
+----------------------------------------------------------
+
+36/85 Testing: replacement.runtime makes caught quota terminal before protected calls return
+36/85 Test: replacement.runtime makes caught quota terminal before protected calls return
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime makes caught quota terminal before protected calls return"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime makes caught quota terminal before protected calls return" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime makes caught quota terminal before protected calls return"
+Randomness seeded to: 1181063645
+===============================================================================
+All tests passed (16 assertions in 1 test case)
+
+<end of output>
+Test time =   1.96 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime makes caught quota terminal before protected calls return" end time: Oct 20 05:21 EDT
+"replacement.runtime makes caught quota terminal before protected calls return" time elapsed: 00:00:01
+----------------------------------------------------------
+
+37/85 Testing: replacement.runtime mutations cannot affect captured native input
+37/85 Test: replacement.runtime mutations cannot affect captured native input
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime mutations cannot affect captured native input"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime mutations cannot affect captured native input" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime mutations cannot affect captured native input"
+Randomness seeded to: 47651689
+===============================================================================
+All tests passed (33 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime mutations cannot affect captured native input" end time: Oct 20 05:21 EDT
+"replacement.runtime mutations cannot affect captured native input" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/85 Testing: replacement.runtime native hash primitives match direct canonical identities
+38/85 Test: replacement.runtime native hash primitives match direct canonical identities
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime native hash primitives match direct canonical identities"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime native hash primitives match direct canonical identities" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime native hash primitives match direct canonical identities"
+Randomness seeded to: 341048541
+===============================================================================
+All tests passed (13 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime native hash primitives match direct canonical identities" end time: Oct 20 05:21 EDT
+"replacement.runtime native hash primitives match direct canonical identities" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/85 Testing: replacement.runtime preserves ordinary protected call arity errors and nesting
+39/85 Test: replacement.runtime preserves ordinary protected call arity errors and nesting
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime preserves ordinary protected call arity errors and nesting"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime preserves ordinary protected call arity errors and nesting" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime preserves ordinary protected call arity errors and nesting"
+Randomness seeded to: 14168106
+===============================================================================
+All tests passed (9 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime preserves ordinary protected call arity errors and nesting" end time: Oct 20 05:21 EDT
+"replacement.runtime preserves ordinary protected call arity errors and nesting" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/85 Testing: replacement.runtime preserves private declaration tags and raw captured bytes
+40/85 Test: replacement.runtime preserves private declaration tags and raw captured bytes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime preserves private declaration tags and raw captured bytes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime preserves private declaration tags and raw captured bytes" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime preserves private declaration tags and raw captured bytes"
+Randomness seeded to: 3689236691
+===============================================================================
+All tests passed (124 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime preserves private declaration tags and raw captured bytes" end time: Oct 20 05:21 EDT
+"replacement.runtime preserves private declaration tags and raw captured bytes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/85 Testing: replacement.runtime prevents finalizers from bypassing instruction limits
+41/85 Test: replacement.runtime prevents finalizers from bypassing instruction limits
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime prevents finalizers from bypassing instruction limits"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime prevents finalizers from bypassing instruction limits" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime prevents finalizers from bypassing instruction limits"
+Randomness seeded to: 1374876674
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime prevents finalizers from bypassing instruction limits" end time: Oct 20 05:21 EDT
+"replacement.runtime prevents finalizers from bypassing instruction limits" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/85 Testing: replacement.runtime refuses native count paths within a subprocess bound
+42/85 Test: replacement.runtime refuses native count paths within a subprocess bound
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime refuses native count paths within a subprocess bound"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime refuses native count paths within a subprocess bound" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime refuses native count paths within a subprocess bound"
+Randomness seeded to: 733506799
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime refuses native count paths within a subprocess bound" end time: Oct 20 05:21 EDT
+"replacement.runtime refuses native count paths within a subprocess bound" time elapsed: 00:00:00
+----------------------------------------------------------
+
+43/85 Testing: replacement.runtime refuses native sparse table range helpers
+43/85 Test: replacement.runtime refuses native sparse table range helpers
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime refuses native sparse table range helpers"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime refuses native sparse table range helpers" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime refuses native sparse table range helpers"
+Randomness seeded to: 3761806206
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime refuses native sparse table range helpers" end time: Oct 20 05:21 EDT
+"replacement.runtime refuses native sparse table range helpers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+44/85 Testing: replacement.runtime refuses native string pattern paths within a subprocess bound
+44/85 Test: replacement.runtime refuses native string pattern paths within a subprocess bound
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime refuses native string pattern paths within a subprocess bound"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime refuses native string pattern paths within a subprocess bound" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime refuses native string pattern paths within a subprocess bound"
+Randomness seeded to: 3187494831
+===============================================================================
+All tests passed (32 assertions in 1 test case)
+
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime refuses native string pattern paths within a subprocess bound" end time: Oct 20 05:21 EDT
+"replacement.runtime refuses native string pattern paths within a subprocess bound" time elapsed: 00:00:00
+----------------------------------------------------------
+
+45/85 Testing: replacement.runtime refuses unsupported trusted returns and malformed native inputs
+45/85 Test: replacement.runtime refuses unsupported trusted returns and malformed native inputs
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime refuses unsupported trusted returns and malformed native inputs"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime refuses unsupported trusted returns and malformed native inputs" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime refuses unsupported trusted returns and malformed native inputs"
+Randomness seeded to: 3726048598
+===============================================================================
+All tests passed (23 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime refuses unsupported trusted returns and malformed native inputs" end time: Oct 20 05:21 EDT
+"replacement.runtime refuses unsupported trusted returns and malformed native inputs" time elapsed: 00:00:00
+----------------------------------------------------------
+
+46/85 Testing: replacement.runtime repairs traversal state after caught conversion failures
+46/85 Test: replacement.runtime repairs traversal state after caught conversion failures
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime repairs traversal state after caught conversion failures"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime repairs traversal state after caught conversion failures" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime repairs traversal state after caught conversion failures"
+Randomness seeded to: 1686458915
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime repairs traversal state after caught conversion failures" end time: Oct 20 05:21 EDT
+"replacement.runtime repairs traversal state after caught conversion failures" time elapsed: 00:00:00
+----------------------------------------------------------
+
+47/85 Testing: replacement.runtime retains deterministic nonpattern string operations
+47/85 Test: replacement.runtime retains deterministic nonpattern string operations
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime retains deterministic nonpattern string operations"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime retains deterministic nonpattern string operations" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime retains deterministic nonpattern string operations"
+Randomness seeded to: 3726467815
+===============================================================================
+All tests passed (11 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime retains deterministic nonpattern string operations" end time: Oct 20 05:21 EDT
+"replacement.runtime retains deterministic nonpattern string operations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+48/85 Testing: replacement.runtime retains rich stdlib diagnostics as structural data
+48/85 Test: replacement.runtime retains rich stdlib diagnostics as structural data
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime retains rich stdlib diagnostics as structural data"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime retains rich stdlib diagnostics as structural data" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime retains rich stdlib diagnostics as structural data"
+Randomness seeded to: 3083446419
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime retains rich stdlib diagnostics as structural data" end time: Oct 20 05:21 EDT
+"replacement.runtime retains rich stdlib diagnostics as structural data" time elapsed: 00:00:00
+----------------------------------------------------------
+
+49/85 Testing: replacement.runtime states are fresh deterministic and separated from declarations
+49/85 Test: replacement.runtime states are fresh deterministic and separated from declarations
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "runtime states are fresh deterministic and separated from declarations"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.runtime states are fresh deterministic and separated from declarations" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "runtime states are fresh deterministic and separated from declarations"
+Randomness seeded to: 1214919732
+===============================================================================
+All tests passed (89 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.runtime states are fresh deterministic and separated from declarations" end time: Oct 20 05:21 EDT
+"replacement.runtime states are fresh deterministic and separated from declarations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+50/85 Testing: replacement.schema ID record normalization sorts collections and preserves ordered lists
+50/85 Test: replacement.schema ID record normalization sorts collections and preserves ordered lists
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema ID record normalization sorts collections and preserves ordered lists"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema ID record normalization sorts collections and preserves ordered lists" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema ID record normalization sorts collections and preserves ordered lists"
+Randomness seeded to: 1462802535
+===============================================================================
+All tests passed (108 assertions in 1 test case)
+
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema ID record normalization sorts collections and preserves ordered lists" end time: Oct 20 05:21 EDT
+"replacement.schema ID record normalization sorts collections and preserves ordered lists" time elapsed: 00:00:00
+----------------------------------------------------------
+
+51/85 Testing: replacement.schema JSON counts container entries for empty and nonempty terminals
+51/85 Test: replacement.schema JSON counts container entries for empty and nonempty terminals
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema JSON counts container entries for empty and nonempty terminals"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema JSON counts container entries for empty and nonempty terminals" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema JSON counts container entries for empty and nonempty terminals"
+Randomness seeded to: 3996137686
+===============================================================================
+All tests passed (54 assertions in 1 test case)
+
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema JSON counts container entries for empty and nonempty terminals" end time: Oct 20 05:21 EDT
+"replacement.schema JSON counts container entries for empty and nonempty terminals" time elapsed: 00:00:00
+----------------------------------------------------------
+
+52/85 Testing: replacement.schema JSON node limit and request envelopes refuse deterministically
+52/85 Test: replacement.schema JSON node limit and request envelopes refuse deterministically
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema JSON node limit and request envelopes refuse deterministically"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema JSON node limit and request envelopes refuse deterministically" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema JSON node limit and request envelopes refuse deterministically"
+Randomness seeded to: 731463650
+===============================================================================
+All tests passed (31 assertions in 1 test case)
+
+<end of output>
+Test time =   0.44 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema JSON node limit and request envelopes refuse deterministically" end time: Oct 20 05:21 EDT
+"replacement.schema JSON node limit and request envelopes refuse deterministically" time elapsed: 00:00:00
+----------------------------------------------------------
+
+53/85 Testing: replacement.schema diagnostics choose logical file field code deterministically
+53/85 Test: replacement.schema diagnostics choose logical file field code deterministically
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema diagnostics choose logical file field code deterministically"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema diagnostics choose logical file field code deterministically" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema diagnostics choose logical file field code deterministically"
+Randomness seeded to: 2903628875
+===============================================================================
+All tests passed (93 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema diagnostics choose logical file field code deterministically" end time: Oct 20 05:21 EDT
+"replacement.schema diagnostics choose logical file field code deterministically" time elapsed: 00:00:00
+----------------------------------------------------------
+
+54/85 Testing: replacement.schema enforces job intrinsic policy budgets preferences and sorted sets
+54/85 Test: replacement.schema enforces job intrinsic policy budgets preferences and sorted sets
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema enforces job intrinsic policy budgets preferences and sorted sets"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema enforces job intrinsic policy budgets preferences and sorted sets" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema enforces job intrinsic policy budgets preferences and sorted sets"
+Randomness seeded to: 483942348
+===============================================================================
+All tests passed (73 assertions in 1 test case)
+
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema enforces job intrinsic policy budgets preferences and sorted sets" end time: Oct 20 05:21 EDT
+"replacement.schema enforces job intrinsic policy budgets preferences and sorted sets" time elapsed: 00:00:00
+----------------------------------------------------------
+
+55/85 Testing: replacement.schema enforces registry descriptor types bounds enums and uniqueness
+55/85 Test: replacement.schema enforces registry descriptor types bounds enums and uniqueness
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema enforces registry descriptor types bounds enums and uniqueness"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema enforces registry descriptor types bounds enums and uniqueness" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema enforces registry descriptor types bounds enums and uniqueness"
+Randomness seeded to: 62790992
+===============================================================================
+All tests passed (93 assertions in 1 test case)
+
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema enforces registry descriptor types bounds enums and uniqueness" end time: Oct 20 05:21 EDT
+"replacement.schema enforces registry descriptor types bounds enums and uniqueness" time elapsed: 00:00:00
+----------------------------------------------------------
+
+56/85 Testing: replacement.schema enforces workspace intrinsic constraints and declaration constructors
+56/85 Test: replacement.schema enforces workspace intrinsic constraints and declaration constructors
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema enforces workspace intrinsic constraints and declaration constructors"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema enforces workspace intrinsic constraints and declaration constructors" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema enforces workspace intrinsic constraints and declaration constructors"
+Randomness seeded to: 2204859288
+===============================================================================
+All tests passed (65 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema enforces workspace intrinsic constraints and declaration constructors" end time: Oct 20 05:21 EDT
+"replacement.schema enforces workspace intrinsic constraints and declaration constructors" time elapsed: 00:00:00
+----------------------------------------------------------
+
+57/85 Testing: replacement.schema final text uses exact text identity and wrapped provenance
+57/85 Test: replacement.schema final text uses exact text identity and wrapped provenance
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema final text uses exact text identity and wrapped provenance"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema final text uses exact text identity and wrapped provenance" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema final text uses exact text identity and wrapped provenance"
+Randomness seeded to: 1860950501
+===============================================================================
+All tests passed (30 assertions in 1 test case)
+
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema final text uses exact text identity and wrapped provenance" end time: Oct 20 05:21 EDT
+"replacement.schema final text uses exact text identity and wrapped provenance" time elapsed: 00:00:00
+----------------------------------------------------------
+
+58/85 Testing: replacement.schema production exports normalize every quota job and defaults
+58/85 Test: replacement.schema production exports normalize every quota job and defaults
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema production exports normalize every quota job and defaults"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema production exports normalize every quota job and defaults" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema production exports normalize every quota job and defaults"
+Randomness seeded to: 797380888
+===============================================================================
+All tests passed (31 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema production exports normalize every quota job and defaults" end time: Oct 20 05:21 EDT
+"replacement.schema production exports normalize every quota job and defaults" time elapsed: 00:00:00
+----------------------------------------------------------
+
+59/85 Testing: replacement.schema refuses malformed constructors fields lists wrappers and versions
+59/85 Test: replacement.schema refuses malformed constructors fields lists wrappers and versions
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema refuses malformed constructors fields lists wrappers and versions"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema refuses malformed constructors fields lists wrappers and versions" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema refuses malformed constructors fields lists wrappers and versions"
+Randomness seeded to: 2532085177
+===============================================================================
+All tests passed (77 assertions in 1 test case)
+
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema refuses malformed constructors fields lists wrappers and versions" end time: Oct 20 05:21 EDT
+"replacement.schema refuses malformed constructors fields lists wrappers and versions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+60/85 Testing: replacement.schema resolves retained text from declaring directory with exact bytes
+60/85 Test: replacement.schema resolves retained text from declaring directory with exact bytes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema resolves retained text from declaring directory with exact bytes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema resolves retained text from declaring directory with exact bytes" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema resolves retained text from declaring directory with exact bytes"
+Randomness seeded to: 1844522914
+===============================================================================
+All tests passed (37 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema resolves retained text from declaring directory with exact bytes" end time: Oct 20 05:21 EDT
+"replacement.schema resolves retained text from declaring directory with exact bytes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+61/85 Testing: replacement.schema resolves text in every job relative to that job declaration
+61/85 Test: replacement.schema resolves text in every job relative to that job declaration
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema resolves text in every job relative to that job declaration"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema resolves text in every job relative to that job declaration" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema resolves text in every job relative to that job declaration"
+Randomness seeded to: 61149844
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema resolves text in every job relative to that job declaration" end time: Oct 20 05:21 EDT
+"replacement.schema resolves text in every job relative to that job declaration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+62/85 Testing: replacement.schema sorted records retain declaration indexes for intrinsic diagnostics
+62/85 Test: replacement.schema sorted records retain declaration indexes for intrinsic diagnostics
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema sorted records retain declaration indexes for intrinsic diagnostics"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema sorted records retain declaration indexes for intrinsic diagnostics" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema sorted records retain declaration indexes for intrinsic diagnostics"
+Randomness seeded to: 4134560574
+===============================================================================
+All tests passed (30 assertions in 1 test case)
+
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema sorted records retain declaration indexes for intrinsic diagnostics" end time: Oct 20 05:21 EDT
+"replacement.schema sorted records retain declaration indexes for intrinsic diagnostics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+63/85 Testing: replacement.schema strict JSON preserves container Unicode and integer identities
+63/85 Test: replacement.schema strict JSON preserves container Unicode and integer identities
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema strict JSON preserves container Unicode and integer identities"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema strict JSON preserves container Unicode and integer identities" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema strict JSON preserves container Unicode and integer identities"
+Randomness seeded to: 1610192551
+===============================================================================
+All tests passed (8 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema strict JSON preserves container Unicode and integer identities" end time: Oct 20 05:21 EDT
+"replacement.schema strict JSON preserves container Unicode and integer identities" time elapsed: 00:00:00
+----------------------------------------------------------
+
+64/85 Testing: replacement.schema strict JSON refuses malformed syntax text duplicates and bounds
+64/85 Test: replacement.schema strict JSON refuses malformed syntax text duplicates and bounds
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema strict JSON refuses malformed syntax text duplicates and bounds"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema strict JSON refuses malformed syntax text duplicates and bounds" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema strict JSON refuses malformed syntax text duplicates and bounds"
+Randomness seeded to: 1368200290
+===============================================================================
+All tests passed (282 assertions in 1 test case)
+
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema strict JSON refuses malformed syntax text duplicates and bounds" end time: Oct 20 05:21 EDT
+"replacement.schema strict JSON refuses malformed syntax text duplicates and bounds" time elapsed: 00:00:00
+----------------------------------------------------------
+
+65/85 Testing: replacement.schema validates joined declaration and text paths before diagnostics
+65/85 Test: replacement.schema validates joined declaration and text paths before diagnostics
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema validates joined declaration and text paths before diagnostics"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema validates joined declaration and text paths before diagnostics" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema validates joined declaration and text paths before diagnostics"
+Randomness seeded to: 1761110009
+===============================================================================
+All tests passed (123 assertions in 1 test case)
+
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema validates joined declaration and text paths before diagnostics" end time: Oct 20 05:21 EDT
+"replacement.schema validates joined declaration and text paths before diagnostics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+66/85 Testing: replacement.schema validates unselected jobs registry and exact workspace routes
+66/85 Test: replacement.schema validates unselected jobs registry and exact workspace routes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "schema validates unselected jobs registry and exact workspace routes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.schema validates unselected jobs registry and exact workspace routes" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "schema validates unselected jobs registry and exact workspace routes"
+Randomness seeded to: 385335845
+===============================================================================
+All tests passed (57 assertions in 1 test case)
+
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.schema validates unselected jobs registry and exact workspace routes" end time: Oct 20 05:21 EDT
+"replacement.schema validates unselected jobs registry and exact workspace routes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+67/85 Testing: replacement.semantic additions retain per-unit applicability even when definition unions match
+67/85 Test: replacement.semantic additions retain per-unit applicability even when definition unions match
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic additions retain per-unit applicability even when definition unions match"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic additions retain per-unit applicability even when definition unions match" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic additions retain per-unit applicability even when definition unions match"
+Randomness seeded to: 3243783614
+===============================================================================
+All tests passed (27 assertions in 1 test case)
+
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic additions retain per-unit applicability even when definition unions match" end time: Oct 20 05:21 EDT
+"replacement.semantic additions retain per-unit applicability even when definition unions match" time elapsed: 00:00:00
+----------------------------------------------------------
+
+68/85 Testing: replacement.semantic captured file ancestors cannot satisfy file facets
+68/85 Test: replacement.semantic captured file ancestors cannot satisfy file facets
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic captured file ancestors cannot satisfy file facets"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic captured file ancestors cannot satisfy file facets" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic captured file ancestors cannot satisfy file facets"
+Randomness seeded to: 1231495146
+===============================================================================
+All tests passed (21 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic captured file ancestors cannot satisfy file facets" end time: Oct 20 05:21 EDT
+"replacement.semantic captured file ancestors cannot satisfy file facets" time elapsed: 00:00:00
+----------------------------------------------------------
+
+69/85 Testing: replacement.semantic checks trusted allowed definitions conformance and per-unit additions
+69/85 Test: replacement.semantic checks trusted allowed definitions conformance and per-unit additions
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic checks trusted allowed definitions conformance and per-unit additions"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic checks trusted allowed definitions conformance and per-unit additions" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic checks trusted allowed definitions conformance and per-unit additions"
+Randomness seeded to: 853127958
+===============================================================================
+All tests passed (74 assertions in 1 test case)
+
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic checks trusted allowed definitions conformance and per-unit additions" end time: Oct 20 05:21 EDT
+"replacement.semantic checks trusted allowed definitions conformance and per-unit additions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+70/85 Testing: replacement.semantic consumes sealed real quota topology after source trees are removed
+70/85 Test: replacement.semantic consumes sealed real quota topology after source trees are removed
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic consumes sealed real quota topology after source trees are removed"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic consumes sealed real quota topology after source trees are removed" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic consumes sealed real quota topology after source trees are removed"
+Randomness seeded to: 863086815
+===============================================================================
+All tests passed (20 assertions in 1 test case)
+
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic consumes sealed real quota topology after source trees are removed" end time: Oct 20 05:21 EDT
+"replacement.semantic consumes sealed real quota topology after source trees are removed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+71/85 Testing: replacement.semantic contract complete dependencies allow only availability and still need start contract
+71/85 Test: replacement.semantic contract complete dependencies allow only availability and still need start contract
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic contract complete dependencies allow only availability and still need start contract"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic contract complete dependencies allow only availability and still need start contract" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic contract complete dependencies allow only availability and still need start contract"
+Randomness seeded to: 3392351973
+===============================================================================
+All tests passed (32 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic contract complete dependencies allow only availability and still need start contract" end time: Oct 20 05:21 EDT
+"replacement.semantic contract complete dependencies allow only availability and still need start contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+72/85 Testing: replacement.semantic distinguishes captured empty directories and current base boundary topology
+72/85 Test: replacement.semantic distinguishes captured empty directories and current base boundary topology
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic distinguishes captured empty directories and current base boundary topology"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic distinguishes captured empty directories and current base boundary topology" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic distinguishes captured empty directories and current base boundary topology"
+Randomness seeded to: 966451673
+===============================================================================
+All tests passed (73 assertions in 1 test case)
+
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic distinguishes captured empty directories and current base boundary topology" end time: Oct 20 05:21 EDT
+"replacement.semantic distinguishes captured empty directories and current base boundary topology" time elapsed: 00:00:00
+----------------------------------------------------------
+
+73/85 Testing: replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier
+73/85 Test: replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier"
+Randomness seeded to: 2384921892
+===============================================================================
+All tests passed (66 assertions in 1 test case)
+
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier" end time: Oct 20 05:21 EDT
+"replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier" time elapsed: 00:00:00
+----------------------------------------------------------
+
+74/85 Testing: replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries
+74/85 Test: replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic ownership covers excluded lists and work with frozen and excluded boundaries"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic ownership covers excluded lists and work with frozen and excluded boundaries"
+Randomness seeded to: 224817079
+===============================================================================
+All tests passed (64 assertions in 1 test case)
+
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries" end time: Oct 20 05:21 EDT
+"replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries" time elapsed: 00:00:00
+----------------------------------------------------------
+
+75/85 Testing: replacement.semantic phase cycles report actual deterministic closed traces
+75/85 Test: replacement.semantic phase cycles report actual deterministic closed traces
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic phase cycles report actual deterministic closed traces"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic phase cycles report actual deterministic closed traces" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic phase cycles report actual deterministic closed traces"
+Randomness seeded to: 589836581
+===============================================================================
+All tests passed (29 assertions in 1 test case)
+
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic phase cycles report actual deterministic closed traces" end time: Oct 20 05:21 EDT
+"replacement.semantic phase cycles report actual deterministic closed traces" time elapsed: 00:00:00
+----------------------------------------------------------
+
+76/85 Testing: replacement.semantic pipeline derives adjacent cross products and validates every stage
+76/85 Test: replacement.semantic pipeline derives adjacent cross products and validates every stage
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic pipeline derives adjacent cross products and validates every stage"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic pipeline derives adjacent cross products and validates every stage" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic pipeline derives adjacent cross products and validates every stage"
+Randomness seeded to: 4182604249
+===============================================================================
+All tests passed (48 assertions in 1 test case)
+
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic pipeline derives adjacent cross products and validates every stage" end time: Oct 20 05:21 EDT
+"replacement.semantic pipeline derives adjacent cross products and validates every stage" time elapsed: 00:00:00
+----------------------------------------------------------
+
+77/85 Testing: replacement.semantic pipeline expands full adjacent stage work cross products before scope
+77/85 Test: replacement.semantic pipeline expands full adjacent stage work cross products before scope
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic pipeline expands full adjacent stage work cross products before scope"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic pipeline expands full adjacent stage work cross products before scope" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic pipeline expands full adjacent stage work cross products before scope"
+Randomness seeded to: 1793271924
+===============================================================================
+All tests passed (57 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic pipeline expands full adjacent stage work cross products before scope" end time: Oct 20 05:21 EDT
+"replacement.semantic pipeline expands full adjacent stage work cross products before scope" time elapsed: 00:00:00
+----------------------------------------------------------
+
+78/85 Testing: replacement.semantic production validates both quota jobs and preserves grouped unit obligations
+78/85 Test: replacement.semantic production validates both quota jobs and preserves grouped unit obligations
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic production validates both quota jobs and preserves grouped unit obligations"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic production validates both quota jobs and preserves grouped unit obligations" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic production validates both quota jobs and preserves grouped unit obligations"
+Randomness seeded to: 1613697038
+===============================================================================
+All tests passed (41 assertions in 1 test case)
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic production validates both quota jobs and preserves grouped unit obligations" end time: Oct 20 05:21 EDT
+"replacement.semantic production validates both quota jobs and preserves grouped unit obligations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+79/85 Testing: replacement.semantic refuses all union boundary overlaps and segment aliases
+79/85 Test: replacement.semantic refuses all union boundary overlaps and segment aliases
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic refuses all union boundary overlaps and segment aliases"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic refuses all union boundary overlaps and segment aliases" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic refuses all union boundary overlaps and segment aliases"
+Randomness seeded to: 1999540878
+===============================================================================
+All tests passed (153 assertions in 1 test case)
+
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic refuses all union boundary overlaps and segment aliases" end time: Oct 20 05:21 EDT
+"replacement.semantic refuses all union boundary overlaps and segment aliases" time elapsed: 00:00:00
+----------------------------------------------------------
+
+80/85 Testing: replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs
+80/85 Test: replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs"
+Randomness seeded to: 2688211136
+===============================================================================
+All tests passed (69 assertions in 1 test case)
+
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs" end time: Oct 20 05:21 EDT
+"replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs" time elapsed: 00:00:00
+----------------------------------------------------------
+
+81/85 Testing: replacement.semantic schema refusal precedes policy and diagnostics retain author indexes
+81/85 Test: replacement.semantic schema refusal precedes policy and diagnostics retain author indexes
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic schema refusal precedes policy and diagnostics retain author indexes"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic schema refusal precedes policy and diagnostics retain author indexes" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic schema refusal precedes policy and diagnostics retain author indexes"
+Randomness seeded to: 679929215
+===============================================================================
+All tests passed (31 assertions in 1 test case)
+
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic schema refusal precedes policy and diagnostics retain author indexes" end time: Oct 20 05:21 EDT
+"replacement.semantic schema refusal precedes policy and diagnostics retain author indexes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+82/85 Testing: replacement.semantic validates references and namespaces before selecting any job
+82/85 Test: replacement.semantic validates references and namespaces before selecting any job
+Command: "<repo>/build/rewrite-debug/src/kernel/planar_runtime_tests" "semantic validates references and namespaces before selecting any job"
+Directory: <repo>/build/rewrite-debug/src/kernel
+"replacement.semantic validates references and namespaces before selecting any job" start time: Oct 20 05:21 EDT
+Output:
+----------------------------------------------------------
+Filters: "semantic validates references and namespaces before selecting any job"
+Randomness seeded to: 1243864336
+===============================================================================
+All tests passed (111 assertions in 1 test case)
+
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"replacement.semantic validates references and namespaces before selecting any job" end time: Oct 20 05:21 EDT
+"replacement.semantic validates references and namespaces before selecting any job" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 20 05:21 EDT
+
+unit =   9.21 sec*proc
+

@@ -1,0 +1,14 @@
+{
+  "CMakeLists.txt": "5e26f9bd6255c16eb751860149d54961058192bb637182ccb481f2915ad7fb7d",
+  "src/cmd/planar/CMakeLists.txt": "e84e9a5bed2891239ac44e4acde50c0ee33c199f09fe84df4d5b1e066e200635",
+  "src/cmd/planar/bootstrap.cpp": "defa81894a22a74c87bc36d722a4a04cfea315399915d20ba9de44594df1e568",
+  "src/cmd/planar/bootstrap.t.cpp": "4917a28617cb7d65f2a9b86f55838d42136a4080aa518586925146bfef89b125",
+  "src/cmd/planar/response.cppm": "f2a25b85f0aed31cd4c24c35f49fbdde1dcc634ddd0a6c33c730fdfc6bcca13b",
+  "src/cmd/planar/response.cpp": "ca72b1a585058ac77e3674bab176f19b573333e729ad94d824b2adf4e3ee6823",
+  "src/cmd/planar/handlers/init/command.cppm": null,
+  "src/cmd/planar/handlers/init/command.cpp": null,
+  "tests/acceptance/bootstrap_init.py": null,
+  "docs/cli-reference.md": "ad74e55c4656ee804b714cf85144b50b9644133338ef85c251d7d4d59b9323c3",
+  "docs/architecture.md": "f0172c0a27dc9f632b7f1a3b3ebbff29230d38628a4da7b6304f6de8cbee5043",
+  "docs/testing.md": "d8579215cb460061a4199820a565036c9937ad09ca0918e76f429d8c2cba24eb"
+}

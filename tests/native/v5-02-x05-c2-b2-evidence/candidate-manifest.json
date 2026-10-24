@@ -1,0 +1,62 @@
+{
+  "CLAUDE.md": {
+    "mode": 420,
+    "sha256": "f6608140a749cf0fc107b511b09d3bfae2dbea9507b6eef23306022ac7f23b7b"
+  },
+  "docs/architecture.md": {
+    "mode": 420,
+    "sha256": "932181bfaf7424bf231f432695a567d1fc4e0192dab445bde3f9e6edfee301f0"
+  },
+  "docs/testing.md": {
+    "mode": 420,
+    "sha256": "08687f8a9c455d34a89f052329d3590f00024814d72c7c3c16f5343aa546281a"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "mode": 420,
+    "sha256": "a792c946c8fa962dcf5b3584a3d0be391d4eb9c9554de22b11d6fa234c0f2568"
+  },
+  "docs/vernacular/implementation.md": {
+    "mode": 420,
+    "sha256": "286e135a6a8bd1ed2bd1d2a6c466161035ccb59461c5587f5a4b4197577a38ee"
+  },
+  "docs/vernacular/roadmap.md": {
+    "mode": 420,
+    "sha256": "59c8a98df2de1b7cb53e17d1515174083fa31dae639c099650d2fe28869c5bae"
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "mode": 420,
+    "sha256": "7d7b9e2c85e0913051aeb554cc4e28d5ef3957cb4892e7875d53b95ded5de8f2"
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "mode": 420,
+    "sha256": "b3a6b426b29de2f3ea030695d41820ca55fbfb279bf148e48718296c8b073d83"
+  },
+  "src/engine/runtime/runtime.cppm": {
+    "mode": 420,
+    "sha256": "427c8b63eec42f39ea8110a271a3b8f14a65f3aa440a8562f5a216dfd2f361b2"
+  },
+  "tests/native/v5-02-x05-c2-b2-support/accounting.md": {
+    "mode": 420,
+    "sha256": "73054570fdc78e4fe6c26ff1eb09f969c992c77aa642a0806a212ecb91a6c8ed"
+  },
+  "tests/native/v5-02-x05-c2-b2-support/freeze.py": {
+    "mode": 420,
+    "sha256": "d8cd7d2018ec1b934a1cb26f47f7ae0ee905a8726fa552484f0ee696d188b3b1"
+  },
+  "tests/native/v5-02-x05-c2-b2-support/gate.py": {
+    "mode": 420,
+    "sha256": "bcb54ee6a653d723197f92922dea5c7aeecacb70fddf712d5b5c9d116df2b846"
+  },
+  "tests/native/v5-02-x05-c2-b2-support/observer.cpp": {
+    "mode": 420,
+    "sha256": "92715cee04b3c71d024f8b3ed5c5d0ddf9a8e488aa4a69a30701972e5b31ba88"
+  },
+  "tests/native/v5-02-x05-c2-b2-support/policy.py": {
+    "mode": 420,
+    "sha256": "8b151bbd4194d75fa2113dbf4bd745e319d4663f7a5816c3d725863951760523"
+  },
+  "tests/native/v5-02-x05-c2-b2-support/probes.py": {
+    "mode": 420,
+    "sha256": "82d70cae31d74cfc5cf6f7f573684623515eb07a5d3eb6519fe434f86e4116e7"
+  }
+}

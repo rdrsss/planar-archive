@@ -1,0 +1,13 @@
+{
+  "build_exit": 0,
+  "configure_exit": 0,
+  "historical_exact_names": true,
+  "inventory": 723,
+  "missing_rewrite_builds_reconstructed_debug_only": true,
+  "protected": {
+    "protected_entries": 62770,
+    "release_entries": 8248,
+    "unchanged": true
+  },
+  "source_mutation_started": false
+}

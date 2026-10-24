@@ -1,0 +1,15 @@
+{
+  "diff_sha256": "e8cb96b9f0049eca26d63500542ae874f25ffc0097215a424123c5303887d345",
+  "files": {
+    "CLAUDE.md": "dd016d9f76ed2da344925d1aab6f7ea96b1e4a516bd4e4a6e493b38b43ac2cd1",
+    "docs/architecture.md": "3976d3e2490eb11806d6255cf10e867b097bceb1a86b4bb57c0dc2472759c0ea",
+    "docs/testing.md": "b14f558cc1a260de4d528b365ac7318101572f88dc5c31f920444ba66646bf43",
+    "docs/vernacular/acceptance-matrix.md": "a265e6d90a2c8fed0177d8216ed9c8936c778e0b1bfe3e0097be88544bf9d4e1",
+    "docs/vernacular/external-profile-implementation.md": "bac0613c788622deea881a472de9e756b6ad57b572a095921d6adcc3eee1e75a",
+    "docs/vernacular/implementation.md": "1fca65ed86f87642ce98adbd1a5c75ff527c9f3b59052d8a867de8f9e475bba9",
+    "docs/vernacular/profile-preparation-architecture.md": "bdd832ca043f9cd2f2b354ce79f4bc87b276842d4ad0fa7b635281c6b5a1c440",
+    "docs/vernacular/roadmap.md": "fd74e90456bd0e66eb3f5092e3a2dfd8cdccbcfd83b06a214f7f989449053bc7",
+    "docs/vernacular/v5-alignment.md": "43adc301bc11b45ee930c5aaf25dd055c786f4c4eb4039b360850e300d30a842",
+    "docs/vernacular/x06-implementation.md": "97e5f8c36159644ced2528da8db20ae51aedd0026262388c9554d308aa13e7c0"
+  }
+}

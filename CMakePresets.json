@@ -21,33 +21,19 @@
     {
       "name": "debug",
       "inherits": "base",
-      "displayName": "Debug",
-      "description": "Unoptimized build with debug info and warnings-as-errors",
+      "binaryDir": "${sourceDir}/build/rewrite-debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "PLANAR_WARNINGS_AS_ERRORS": "ON",
-        "PLANAR_TEST_BINARY": "ON"
+        "PLANAR_WARNINGS_AS_ERRORS": "ON"
       }
     },
     {
       "name": "release",
       "inherits": "base",
-      "displayName": "Release",
-      "description": "Optimized build with debug info",
+      "binaryDir": "${sourceDir}/build/rewrite-release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-      }
-    },
-    {
-      "name": "dist",
-      "inherits": "release",
-      "displayName": "Distribution",
-      "description": "Portable release bundle build with static C++ runtime and version metadata; override PLANAR_RELEASE_VERSION for a tagged cut.",
-      "cacheVariables": {
-        "PLANAR_PORTABLE": "ON",
-        "PLANAR_VERSION_META": "ON",
-        "PLANAR_RELEASE_VERSION": "$penv{PLANAR_RELEASE_VERSION}",
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "26.0"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "PLANAR_WARNINGS_AS_ERRORS": "ON"
       }
     }
   ],
@@ -59,10 +45,6 @@
     {
       "name": "release",
       "configurePreset": "release"
-    },
-    {
-      "name": "dist",
-      "configurePreset": "dist"
     }
   ],
   "testPresets": [
@@ -76,13 +58,6 @@
     {
       "name": "release",
       "configurePreset": "release",
-      "output": {
-        "outputOnFailure": true
-      }
-    },
-    {
-      "name": "dist",
-      "configurePreset": "dist",
       "output": {
         "outputOnFailure": true
       }

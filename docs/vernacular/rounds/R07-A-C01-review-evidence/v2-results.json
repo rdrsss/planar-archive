@@ -1,0 +1,88 @@
+[
+  {
+    "cmd": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-fmodule-file=std=src/kernel/CMakeFiles/@cmake_cxx_std.dir/std.pcm",
+      "-fmodule-output=/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac01-review-xk8s1dk4/source_v2.pcm",
+      "-c",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac01-review-xk8s1dk4/source_v2.cppm",
+      "-o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac01-review-xk8s1dk4/source_v2.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac01-review-xk8s1dk4/probe.o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac01-review-xk8s1dk4/source_v2.o",
+      "src/kernel/libplanar_runtime.a",
+      "src/kernel/lib@cmake_cxx_std.a",
+      "src/kernel/libplanar_hash.a",
+      "src/kernel/libplanar_canonical.a",
+      "libplanar_xxhash.a",
+      "src/kernel/libplanar_lua_trusted_libs.a",
+      "src/kernel/libplanar_value.a",
+      "libplanar_lua.a",
+      "-o",
+      "/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07ac01-review-xk8s1dk4/probe_v2"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "mode": "caught",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nboolean=false\n",
+    "stderr": ""
+  },
+  {
+    "mode": "caught",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nboolean=false\n",
+    "stderr": ""
+  },
+  {
+    "mode": "handler",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "handler",
+    "run": 2,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "repeated",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "repeated",
+    "run": 2,
+    "timeout_seconds": 4
+  }
+]

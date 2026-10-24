@@ -1,0 +1,82 @@
+{
+  "status": "candidate ready for independent review; not self-approved",
+  "candidate_identity": "d9fd285dcc331c80a752f93aa3cb749bf95e3307d2159b0c30cf48e6bd9c75d9",
+  "candidate_manifest_sha256": "01baa127d64345eb29efb01f82f40babe045fadad70330fa8a259c0573f639e0",
+  "identity_note": "Candidate identity hashes the compact sorted file-hash map without LF; manifest SHA256 hashes candidate-files.json bytes including metadata/formatting. They are deliberately different.",
+  "revision": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "owned_files": [
+    "CMakeLists.txt",
+    "docs/architecture.md",
+    "docs/cli-reference.md",
+    "docs/testing.md",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/cmd/planar/bootstrap.cpp",
+    "src/cmd/planar/bootstrap.t.cpp",
+    "src/cmd/planar/handlers/init/command.cpp",
+    "src/cmd/planar/handlers/init/command.cppm",
+    "src/cmd/planar/response.cpp",
+    "src/cmd/planar/response.cppm",
+    "tests/acceptance/bootstrap_init.py"
+  ],
+  "changes": [
+    "Added handlers/init CLI11 bindings for required explicit ledger/workspace-id scalars; initialization passes unchanged path spelling directly into reviewed initialize_new.",
+    "Bootstrap retains both option owners, counts command selection and parsed CLI11 bindings across both, dispatches exactly one, preserves sole long-equals preflight and root-only help.",
+    "Added shared typed ledger error adapter depending on ledger.types, stable redacted messages, ledger I/O details and safe uncertain-publication/recovery guidance; status changes add corrupt/busy/full only.",
+    "After native publication succeeds, Glaze encodes exact committed-metadata init envelope plus LF; failures have empty stdout.",
+    "Added separate real CLI suite, two bootstrap tests and additive root registration; updated CLI/architecture/testing references."
+  ],
+  "verification": {
+    "full_registered_cases": 312,
+    "prior_registered_cases_retained": 309,
+    "new_registered_cases": 3,
+    "skips": 0,
+    "final_command_cases": 8,
+    "bootstrap_unit_cases": 7,
+    "init_cli_processes": 60,
+    "prior_render_cli_processes_retained": 247,
+    "total_cli_processes_across_two_suites": 307,
+    "storage_error_categories": 17,
+    "active_cpp_format_doxygen_files": 76,
+    "helper_cpp_format_doxygen_files": 7,
+    "protected_files_unchanged": 4836,
+    "hand_vectors": 12,
+    "upstream_hashes": 20,
+    "canonical_domain_vectors": 41,
+    "record_vectors": 10,
+    "exact_generated_variants": [
+      "r12c2",
+      "r13b1",
+      "r14c3b2"
+    ],
+    "no_work_build": true
+  },
+  "commands": [
+    "cmake --build build/rewrite-debug --target all planar_tests",
+    "/opt/homebrew/opt/llvm/bin/clang-format -i src/cmd/planar/handlers/init/command.cppm src/cmd/planar/handlers/init/command.cpp src/cmd/planar/bootstrap.cpp src/cmd/planar/response.cppm src/cmd/planar/response.cpp src/cmd/planar/bootstrap.t.cpp",
+    "python3 tests/acceptance/bootstrap_init.py build/rewrite-debug/bin/planar",
+    "python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug",
+    "python3 tests/acceptance/bootstrap_cli.py build/rewrite-debug/bin/planar",
+    "python3 tests/vectors/generate.py --check",
+    "python3 tests/vectors/records/generate.py --check",
+    "ctest --test-dir build/rewrite-debug -R 'replacement\\.(init_cli|help is|missing explicit|legacy commands|render handler|CLI11 rejects|init handler|ledger error)' --output-on-failure --output-junit tests/native/r14e1-evidence/command-final.xml",
+    "python3 tests/native/r14e1-evidence/audit.py",
+    "python3 tests/native/r14e1-evidence/helper-lint.py",
+    "python3 tests/native/r14e1-evidence/freeze.py",
+    "cmake --build build/rewrite-debug --target all planar_tests"
+  ],
+  "initial_findings": [
+    "Prebuild acceptance stopped on the expected changed usage wording (before-init-test.log). This is new command coverage rather than a bug-regression claim.",
+    "First postbuild suite reached success but used the wrong test-only meta table name; corrected oracle to ledger_meta and added exact current state/event checks (init-cli-first.log). Product initialization required no correction.",
+    "Changed a cleanup assertion from an unused .planar-stage- prefix to actual .planar-init-; final standalone CLI and eight-case CTest run cover the frozen script. Full 312-case gate had already passed before this assertion-only correction."
+  ],
+  "limits": [
+    "macOS Apple Silicon debug only. Linux and integrated R14 release verification remain outstanding.",
+    "Publication fault behavior is covered by retained native ledger suites and exact byte-reversible generated variants, not fake CLI injection. No new process-termination/power-loss claim.",
+    "Future load conflict/collision structured details remain later integration work. No load, membership, history or export surface is exposed.",
+    "An independent duplicate render CLI run and final standalone init run overlapped immutable CTest execution using separate scratch roots; no builds overlapped and no native product sources changed during the gate.",
+    "Before.json freezes every preexisting scoped/protected digest. Baseline-recovery.json identifies the three preexisting owned files recoverable from older evidence snapshots; six other original owned contents are hash-only. Current owned bytes are all frozen under candidate/.",
+    "No native ledger/capture/schema/Lua/vendor/old helper or prior evidence changes; no Planar tools, installed binaries, operator state, commits, installation or publication."
+  ],
+  "debug_directory": "released; no running builds or tests"
+}

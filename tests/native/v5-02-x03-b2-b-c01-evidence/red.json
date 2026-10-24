@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-R",
+    "replacement.metadata continuity",
+    "--output-on-failure",
+    "-V",
+    "--output-junit",
+    "<repo>/tests/native/v5-02-x03-b2-b-c01-evidence/red.xml"
+  ],
+  "cwd": "<repo>",
+  "start": 1792703149.6760352,
+  "end": 1792703149.9631171,
+  "exit_code": 8
+}

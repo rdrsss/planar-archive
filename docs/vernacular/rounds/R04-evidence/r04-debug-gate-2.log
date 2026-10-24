@@ -1,0 +1,66 @@
+cmake --preset debug
+-- Configuring done (0.4s)
+CMake Warning (experimental) in src/cmd/planar/CMakeLists.txt:
+  CMake's support for `import std;` in C++23 and newer is experimental.  It
+  is meant only for experimentation and feedback to CMake developers.
+This warning is for project developers.  Use -Wno-author or -Wno-experimental
+to suppress it.
+
+-- Generating done (0.0s)
+-- Build files have been written to: <repo>/build/rewrite-debug
+python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug
++ cmake --build <repo>/build/rewrite-debug --target all planar_tests
+[1/127] Generating CXX dyndep file 'src/cmd/planar/CMakeFiles/@cmake_cxx_std.dir/CXX.dd'
+[2/124] Generating CXX dyndep file vendor/catch2/src/CMakeFiles/Catch2WithMain.dir/CXX.dd
+[3/122] Generating CXX dyndep file vendor/catch2/src/CMakeFiles/Catch2.dir/CXX.dd
+[4/15] Scanning <repo>/src/cmd/planar/bootstrap.cpp for CXX dependencies
+[5/15] Scanning <repo>/src/cmd/planar/main.cpp for CXX dependencies
+[6/15] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command.dir/CXX.dd
+[7/14] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar_command_tests.dir/CXX.dd
+[8/13] Generating CXX dyndep file src/cmd/planar/CMakeFiles/planar.dir/CXX.dd
+[9/13] Building CXX object src/cmd/planar/CMakeFiles/planar_command.dir/bootstrap.cpp.o
+[10/13] Building CXX object src/cmd/planar/CMakeFiles/planar.dir/main.cpp.o
+[11/13] Linking CXX static library src/cmd/planar/libplanar_command.a
+[12/13] Linking CXX executable bin/planar
+[13/13] Linking CXX executable src/cmd/planar/planar_command_tests
++ ctest --test-dir <repo>/build/rewrite-debug --show-only=json-v1
++ ctest --test-dir <repo>/build/rewrite-debug --output-on-failure --output-junit /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-ctest-2dldxq7l/tests.xml
+Test project <repo>/build/rewrite-debug
+    Start 1: replacement.cli
+1/4 Test #1: replacement.cli ..................................................   Passed    0.50 sec
+    Start 2: replacement.help is explicit and buffered
+2/4 Test #2: replacement.help is explicit and buffered ........................   Passed    0.02 sec
+    Start 3: replacement.legacy commands and implicit discovery are refused
+3/4 Test #3: replacement.legacy commands and implicit discovery are refused ...   Passed    0.02 sec
+    Start 4: replacement.render cannot claim success before implementation
+4/4 Test #4: replacement.render cannot claim success before implementation ....   Passed    0.02 sec
+
+100% tests passed out of 4
+
+Label Time Summary:
+acceptance    =   0.50 sec*proc (1 test)
+unit          =   0.05 sec*proc (3 tests)
+
+Total Test time (real) =   0.55 sec
+Executed 4 registered tests; zero skips
++ /opt/homebrew/opt/llvm/bin/clang-format --dry-run --Werror <repo>/src/cmd/planar/bootstrap.cpp <repo>/src/cmd/planar/bootstrap.cppm <repo>/src/cmd/planar/bootstrap.t.cpp <repo>/src/cmd/planar/main.cpp
++ bash <repo>/scripts/cpp-lint-doxygen.sh /var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-doxygen-lptb4xof/Doxyfile
+<repo>/src/cmd/planar/bootstrap.cppm:13: error: parameters of member planar::cmd::invoke are not documented
+<repo>/src/cmd/planar/bootstrap.cppm:13: error: return type of member planar::cmd::invoke is not documented
+<repo>/src/cmd/planar/bootstrap.cppm:13: error: argument arguments from the argument list of planar::cmd::invoke has multiple @param documentation sections
+<repo>/src/cmd/planar/bootstrap.cppm:13: error: too many @param commands for function planar::cmd::invoke. Found 2 while function has 1 parameter
+Traceback (most recent call last):
+  File "<repo>/scripts/rewrite-check.py", line 64, in <module>
+    lint(build)
+    ~~~~^^^^^^^
+  File "<repo>/scripts/rewrite-check.py", line 38, in lint
+    run(["bash", ROOT / "scripts/cpp-lint-doxygen.sh", config])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/scripts/rewrite-check.py", line 14, in run
+    return subprocess.run(list(map(str, command)), cwd=ROOT, check=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/subprocess.py", line 692, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['bash', '<repo>/scripts/cpp-lint-doxygen.sh', '/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-doxygen-lptb4xof/Doxyfile']' returned non-zero exit status 1.
+make: *** [test-all] Error 1

@@ -1,0 +1,22 @@
+{
+  "logs_preserved": [
+    "attempt01-driver.log",
+    "build-fifth.log",
+    "build-fourth.log",
+    "build-initial.log",
+    "build-second.log",
+    "build-sixth.log",
+    "build-third.log",
+    "configure-initial.log",
+    "configure-second.log",
+    "configure-third.log",
+    "initial-focused.log",
+    "lint-preflight.log",
+    "lint-preflight2.log",
+    "probes-initial-driver.log",
+    "second-focused.log",
+    "third-focused.log"
+  ],
+  "intermediate_edit_diagnostic": "ValueError: substring not found; guard API edited before formatted runtime helper replacement; corrected before frozen verification",
+  "final_candidate_attempt": "attempt01"
+}

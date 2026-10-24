@@ -1,0 +1,9 @@
+{
+  "report_sha256": "f06049ffe8ad8ca8d8758dccb0eb584264d051432a35383016e3a1a4105608ff",
+  "review_artifacts_sha256": "f71bd1ede006d6ee3b1f8bf2fc4780002e65128687dffee82d387f4ff383d19b",
+  "artifact_count": 10,
+  "candidate_sha256": "d5b39b5f92411b6bce0cd26ec26b67974c4eea10c2663066a5f19242b0946e4f",
+  "disposition": "approve",
+  "debug": "released and idle",
+  "release": "untouched and idle"
+}

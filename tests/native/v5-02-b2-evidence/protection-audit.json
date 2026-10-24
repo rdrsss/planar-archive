@@ -1,0 +1,12 @@
+{
+  "checked": 5816,
+  "unchanged": 5815,
+  "authorized_runtime_amendment": [
+    "src/engine/runtime/runtime.cpp"
+  ],
+  "AGENTS_symlink": "CLAUDE.md",
+  "exact_contract_body_unchanged": true,
+  "user_v5_sha256": "c3d37e0e28407a9066eb51c515982ef6c93d82795eb56f97dea4a780b66fe08e",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular"
+}

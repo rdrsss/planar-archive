@@ -1,0 +1,14 @@
+{
+  "artifact_entries": 366,
+  "artifact_manifest_sha256": "b483c5b4107fe05b7482e86513b2c3a2aaf5087715788f936b3ef6f92e40ead1",
+  "candidate_entries": 229,
+  "candidate_manifest_sha256": "492e4d8cd34c8d23e40e9fb3b9709f1c02432e5b71ba165ce605900b34e6c88d",
+  "debug_compiled": 888,
+  "debug_compiled_identical": true,
+  "diff_sha256": "5b381d9779e1215ec0fde2297e9333793946750697d2aecfc64dc0553694f1b0",
+  "full_source_membership_bytes_modes_symlinks_identical": true,
+  "release_all_files_identical": true,
+  "release_files": 3492,
+  "report_sha256": "7e93c911e40f5d83cdbf6420d0e8187606fe90de151678c9d99255d6f55b5cf3",
+  "source_entries": 30295
+}

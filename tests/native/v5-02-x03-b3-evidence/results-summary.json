@@ -1,0 +1,1292 @@
+{
+  "approved_candidate_sources": {
+    "b2-b": {
+      "manifest_sha256": "b924e8f31db8b6749f6e8297f2be15f3af94cd6041e2880d592d721f8f3cdfde",
+      "source_members": {
+        "src/engine/CMakeLists.txt": "1962cdd383f1480f6e6835c3e0bc26f1444a631bb6aec8f995b5a1d5ba9a8ea2",
+        "src/engine/acceptance/prepared.cpp": "e957e4be894fc54a64784ea6362a7c94ec33a4040828d26b8686ad0e0f4f2c08",
+        "src/engine/acceptance/prepared.cppm": "770fdfa36e577f8009cf7a619baf4feb8b736a177b47c0973121297abd2209b9",
+        "src/engine/acceptance/prepared.t.cpp": "c2a54de573cb2701ca80a5e3b66f542c4287de7535b3169b34c0f2b97eef8389",
+        "src/engine/ledger/acceptance.t.cpp": "754824601a3ddaf3127af2ddf850deeca10c0045d2feaec379bee1d918ce1fd5",
+        "src/engine/ledger/format.cpp": "c14a0ad92394c67e17280a65daa9e9aba70ccd5f72b3ee9b949a876341102d9b",
+        "src/engine/ledger/format.cppm": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+        "src/engine/ledger/format.t.cpp": "7bd19b8af5a2324949b1b1845b824c87152eecbafa29c98e10cb58a686b9bbcb",
+        "src/engine/ledger/history_verification.t.cpp": "f4dc9377d5b45b36114effec6416c95447ecc5db5b7764805f7683b75aa94020",
+        "tests/native/r14-d8-support/acceptance_fault.t.cpp": "ef7e2df263f439808593b74d4205c4bc8ce7a053a5798857957d23f3bbca803e",
+        "tests/native/r14c3b2-support/atomic.t.cpp": "5fdd0b997d71c8b0e9e4ec7fd5b2a9642b9c37f2b49b7d773b206777fbb9938a",
+        "tests/native/r14c3b2-support/digest.cppm": "fd61b65df0692b123bcd52cac61cc2bee68a394ac72dac125f132a796ba43ca2",
+        "tests/native/r14c3b2-support/generate.py": "2ac3647d5133c782bb0c7e52b2638ae2b37d806882b2e6f6834b69bde5d7d30a",
+        "tests/native/v5-02-x03-b2-b-support/freeze.py": "1af52d2cdde63ff4d2b2b03e7e1e3ddd52e44de53c528274381eb09fa3c99af0",
+        "tests/native/v5-02-x03-b2-b-support/run.py": "f9292aedeb6004b10ab19adc1dd0f6de204e3a9be5792f356c38a9b631f720cd"
+      }
+    },
+    "b2-b-c01": {
+      "manifest_sha256": "6497c9c720369653b60f38b180dae32465ab7468ccdab3685ac10827522490a6",
+      "source_members": {
+        "src/engine/CMakeLists.txt": "220af1f8a23a958d629334c5ac133e57b526640fec26ec88b1f2f22f49d35aae",
+        "src/engine/ledger/format.cpp": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+        "tests/native/v5-02-x03-b2-b-c01-support/fixture.cppm": "741fed3d10de5f70b3a620d5f688004a8960b2d7199a5b7a063264280af96090",
+        "tests/native/v5-02-x03-b2-b-c01-support/generate.py": "b53b305538446cdb8bb7916709eaff7a7e4f49d3f738249c938d879ae39dcb5e",
+        "tests/native/v5-02-x03-b2-b-c01-support/metadata.t.cpp": "ca5f6f02dd2e9dbf1bd82c38b0745ebe089ca0c79aa3cd8937cc2111f26cd4fa"
+      }
+    }
+  },
+  "baseline405": {
+    "missing": [],
+    "retained": 405
+  },
+  "configurations": {
+    "debug": "Debug",
+    "release": "RelWithDebInfo"
+  },
+  "faults": {
+    "debug": {
+      "1": {
+        "database": {
+          "faults": 15,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              0,
+              true
+            ]
+          ]
+        },
+        "journal": {
+          "faults": 38,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              1,
+              false
+            ],
+            [
+              16,
+              1,
+              false
+            ],
+            [
+              17,
+              1,
+              false
+            ],
+            [
+              18,
+              1,
+              false
+            ],
+            [
+              19,
+              1,
+              false
+            ],
+            [
+              20,
+              1,
+              false
+            ],
+            [
+              21,
+              1,
+              false
+            ],
+            [
+              22,
+              1,
+              false
+            ],
+            [
+              23,
+              1,
+              false
+            ],
+            [
+              24,
+              1,
+              false
+            ],
+            [
+              25,
+              1,
+              false
+            ],
+            [
+              26,
+              1,
+              false
+            ],
+            [
+              27,
+              1,
+              false
+            ],
+            [
+              28,
+              1,
+              false
+            ],
+            [
+              29,
+              1,
+              false
+            ],
+            [
+              30,
+              1,
+              false
+            ],
+            [
+              31,
+              1,
+              false
+            ],
+            [
+              32,
+              1,
+              false
+            ],
+            [
+              33,
+              1,
+              false
+            ],
+            [
+              34,
+              1,
+              false
+            ],
+            [
+              35,
+              1,
+              false
+            ],
+            [
+              36,
+              1,
+              false
+            ],
+            [
+              37,
+              1,
+              false
+            ],
+            [
+              38,
+              0,
+              true
+            ]
+          ]
+        },
+        "unique_process_boundaries": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "2": {
+        "database": {
+          "faults": 15,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              0,
+              true
+            ]
+          ]
+        },
+        "journal": {
+          "faults": 38,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              1,
+              false
+            ],
+            [
+              16,
+              1,
+              false
+            ],
+            [
+              17,
+              1,
+              false
+            ],
+            [
+              18,
+              1,
+              false
+            ],
+            [
+              19,
+              1,
+              false
+            ],
+            [
+              20,
+              1,
+              false
+            ],
+            [
+              21,
+              1,
+              false
+            ],
+            [
+              22,
+              1,
+              false
+            ],
+            [
+              23,
+              1,
+              false
+            ],
+            [
+              24,
+              1,
+              false
+            ],
+            [
+              25,
+              1,
+              false
+            ],
+            [
+              26,
+              1,
+              false
+            ],
+            [
+              27,
+              1,
+              false
+            ],
+            [
+              28,
+              1,
+              false
+            ],
+            [
+              29,
+              1,
+              false
+            ],
+            [
+              30,
+              1,
+              false
+            ],
+            [
+              31,
+              1,
+              false
+            ],
+            [
+              32,
+              1,
+              false
+            ],
+            [
+              33,
+              1,
+              false
+            ],
+            [
+              34,
+              1,
+              false
+            ],
+            [
+              35,
+              1,
+              false
+            ],
+            [
+              36,
+              1,
+              false
+            ],
+            [
+              37,
+              1,
+              false
+            ],
+            [
+              38,
+              0,
+              true
+            ]
+          ]
+        },
+        "unique_process_boundaries": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    "release": {
+      "1": {
+        "database": {
+          "faults": 15,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              0,
+              true
+            ]
+          ]
+        },
+        "journal": {
+          "faults": 38,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              1,
+              false
+            ],
+            [
+              16,
+              1,
+              false
+            ],
+            [
+              17,
+              1,
+              false
+            ],
+            [
+              18,
+              1,
+              false
+            ],
+            [
+              19,
+              1,
+              false
+            ],
+            [
+              20,
+              1,
+              false
+            ],
+            [
+              21,
+              1,
+              false
+            ],
+            [
+              22,
+              1,
+              false
+            ],
+            [
+              23,
+              1,
+              false
+            ],
+            [
+              24,
+              1,
+              false
+            ],
+            [
+              25,
+              1,
+              false
+            ],
+            [
+              26,
+              1,
+              false
+            ],
+            [
+              27,
+              1,
+              false
+            ],
+            [
+              28,
+              1,
+              false
+            ],
+            [
+              29,
+              1,
+              false
+            ],
+            [
+              30,
+              1,
+              false
+            ],
+            [
+              31,
+              1,
+              false
+            ],
+            [
+              32,
+              1,
+              false
+            ],
+            [
+              33,
+              1,
+              false
+            ],
+            [
+              34,
+              1,
+              false
+            ],
+            [
+              35,
+              1,
+              false
+            ],
+            [
+              36,
+              1,
+              false
+            ],
+            [
+              37,
+              1,
+              false
+            ],
+            [
+              38,
+              0,
+              true
+            ]
+          ]
+        },
+        "unique_process_boundaries": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "2": {
+        "database": {
+          "faults": 15,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              0,
+              true
+            ]
+          ]
+        },
+        "journal": {
+          "faults": 38,
+          "rows": [
+            [
+              0,
+              1,
+              false
+            ],
+            [
+              1,
+              1,
+              false
+            ],
+            [
+              2,
+              1,
+              false
+            ],
+            [
+              3,
+              1,
+              false
+            ],
+            [
+              4,
+              1,
+              false
+            ],
+            [
+              5,
+              1,
+              false
+            ],
+            [
+              6,
+              1,
+              false
+            ],
+            [
+              7,
+              1,
+              false
+            ],
+            [
+              8,
+              1,
+              false
+            ],
+            [
+              9,
+              1,
+              false
+            ],
+            [
+              10,
+              1,
+              false
+            ],
+            [
+              11,
+              1,
+              false
+            ],
+            [
+              12,
+              1,
+              false
+            ],
+            [
+              13,
+              1,
+              false
+            ],
+            [
+              14,
+              1,
+              false
+            ],
+            [
+              15,
+              1,
+              false
+            ],
+            [
+              16,
+              1,
+              false
+            ],
+            [
+              17,
+              1,
+              false
+            ],
+            [
+              18,
+              1,
+              false
+            ],
+            [
+              19,
+              1,
+              false
+            ],
+            [
+              20,
+              1,
+              false
+            ],
+            [
+              21,
+              1,
+              false
+            ],
+            [
+              22,
+              1,
+              false
+            ],
+            [
+              23,
+              1,
+              false
+            ],
+            [
+              24,
+              1,
+              false
+            ],
+            [
+              25,
+              1,
+              false
+            ],
+            [
+              26,
+              1,
+              false
+            ],
+            [
+              27,
+              1,
+              false
+            ],
+            [
+              28,
+              1,
+              false
+            ],
+            [
+              29,
+              1,
+              false
+            ],
+            [
+              30,
+              1,
+              false
+            ],
+            [
+              31,
+              1,
+              false
+            ],
+            [
+              32,
+              1,
+              false
+            ],
+            [
+              33,
+              1,
+              false
+            ],
+            [
+              34,
+              1,
+              false
+            ],
+            [
+              35,
+              1,
+              false
+            ],
+            [
+              36,
+              1,
+              false
+            ],
+            [
+              37,
+              1,
+              false
+            ],
+            [
+              38,
+              0,
+              true
+            ]
+          ]
+        },
+        "unique_process_boundaries": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    }
+  },
+  "protected_v1_W_fixtures": {
+    "files": {
+      "fixtures/render/quota/README.md": "24aeeeca90c8dfbeec59f8a7069e31c1991c7a764042ca8e06f667ed8f83bb87",
+      "fixtures/render/quota/base/src/core/quota.py": "daaca196ac1ed5eb80e88ee09cf2216103a1cf31660386037f175f85314e1fca",
+      "fixtures/render/quota/base/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+      "fixtures/render/quota/base/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+      "fixtures/render/quota/coverage.md": "07c4f3862ac7fe99b68e7537b1391775dbc7128f4b2ecd74601ba643adc35914",
+      "fixtures/render/quota/current/src/cli/main.py": "fe3f0f3164b01a9e61e50800595813cbb02e1c33ff61d5a6c0100365a358912b",
+      "fixtures/render/quota/current/src/core/quota.py": "34abf0bb16524b1eb58891bf5e5eae163186a71569c6a1540b1c2b207d3ec3f4",
+      "fixtures/render/quota/current/tests/cli/__init__.py": "865fd3786c7da10e39f5cc97a75446847da6fc25a62a96f95c6d4bb9da57391e",
+      "fixtures/render/quota/current/tests/cli/test_contract.py": "8e03e65d1bd4579263c04c0502e3a89d38956766cbb293f4dbacd765657d924a",
+      "fixtures/render/quota/current/tests/cli/test_integration.py": "0deec819a7dd514500d16775b2fdced84049b49cace326de94f6d04bcdec5338",
+      "fixtures/render/quota/current/tests/core/__init__.py": "d971c3e8f2c6c5d3f142437836eab1603ba6ac7f75062fd7cc01245d2175b164",
+      "fixtures/render/quota/current/tests/core/test_contract.py": "3d8fb07fd5a11bc813f731594bf1893753705ce066c00a5f36f9cd13d28942d0",
+      "fixtures/render/quota/expected/combined-builder.md": "2141a5fd892b5e83c36e9ef2550541fe47bdbdac45b2611cf0b9d4a666cefdd7",
+      "fixtures/render/quota/expected/combined-reviewer.md": "717cd9b4e81b8e9974193b85913559521d8e06e5b8e71fb293092f898a4feb35",
+      "fixtures/render/quota/expected/split-cli_worker-recovery.md": "4f4ae994f1f603e19b75f32a0f81d9b122a1ff8d215b5b483b7f961469d91ade",
+      "fixtures/render/quota/expected/split-cli_worker.md": "854944cd926aeb7db7d2ef961085eaf8aa2298d9c34e3206859e6beb7f52ea6d",
+      "fixtures/render/quota/expected/split-library_worker.md": "e5da49ecc16cf624ec10cefc440b35bbf56e77b131237559ae6f1634ceec0d6a",
+      "fixtures/render/quota/expected/split-reviewer.md": "7c05fa07184bc4ad6f85d9928e9f8bb3d46c4719cbe112b1525fbda2be1b271a",
+      "fixtures/render/quota/manifests/combined-builder.symbolic.json": "87167ff14dab7569ffa63bd05bfa81897c3cd7fed98aac0ab58b62b47101ac4d",
+      "fixtures/render/quota/manifests/combined-reviewer.symbolic.json": "6507eb3302c48914519da1dfde11d094dd1395475317b2faed7292e2a785de93",
+      "fixtures/render/quota/manifests/split-cli_worker-recovery.symbolic.json": "5bded175275b31240ec66cf4c46dca9c39a61a1e3e3cdb5d96429a629f1c743e",
+      "fixtures/render/quota/manifests/split-cli_worker.symbolic.json": "6971f1b07ecdfb453ed784a242a34c7840fb9b6f1b330813491fef2bb357efe9",
+      "fixtures/render/quota/manifests/split-library_worker.symbolic.json": "12e90da89bd0c2c945d2402a67757fbcf784ae85194e33de8f5edf6b87cc2912",
+      "fixtures/render/quota/manifests/split-reviewer.symbolic.json": "7fb0f44270398a741643378487ecc595222cbabf2a2a9aab510092d9d17742c3",
+      "fixtures/render/quota/mutations.md": "4be91148b9d823234b0066c8c6316c72f068c665f4ec560d96452bdf5cf153d8",
+      "fixtures/render/quota/native/README.md": "299eaeb789fd7a067f034260e4a0a897465a0467981d44472b9116f7a267fff9",
+      "fixtures/render/quota/native/combined-builder.json": "963b91210dbacd437e0fe3f5c3b23ad1e42435e43da19438569dcea8de019d59",
+      "fixtures/render/quota/native/combined-builder.md": "9b66af925d18392317629d86f4f9de79a2e5678b2a0b4921717e8c1a324dbc75",
+      "fixtures/render/quota/native/combined-reviewer.json": "dc967b5651c2ad57a04a296be7d26c246394ca9486226d883dae64be2a65d075",
+      "fixtures/render/quota/native/combined-reviewer.md": "ab4af2bb750af5f4fb20961425a49c4d3c5530e01cf048dfbffd7b44691e3d03",
+      "fixtures/render/quota/native/reviewer-resolved.json": "30fd5c3891c9fb9d7c32f00b6dc70d2b6b2f1bebdd810eb4a864e62dd4f42550",
+      "fixtures/render/quota/native/split-cli_worker-recovery.json": "085dc686dd142e1587858b3594df1a7ff0b5088ad2092cd1d2e541c4edbfbdb9",
+      "fixtures/render/quota/native/split-cli_worker-recovery.md": "90ad646e802a92ceb5e6c11f98bc435f1df91c47cb4dd88793799ad04089afd8",
+      "fixtures/render/quota/native/split-cli_worker.json": "53e8650de5b588c4564d631bcd59bbc2871dface2ae48017d2eef1681beea60d",
+      "fixtures/render/quota/native/split-cli_worker.md": "6ff9e2c8c72c3231e8d718d961b4c54540619e9cc75ee31efa377b83540880c4",
+      "fixtures/render/quota/native/split-library_worker.json": "a8149d30a6fb403fe4f8fa435cfc8428e962c2664e9fa5e77f1afaf3857f4a34",
+      "fixtures/render/quota/native/split-library_worker.md": "cc2e6edb7d094e7262738118c3669fea0dd64878537c5aee438a4fbc6203c166",
+      "fixtures/render/quota/native/split-reviewer.json": "25373e03f4f30112424012fb4d90f7955da1db6ddd907e9c5799e6cd3fca7476",
+      "fixtures/render/quota/native/split-reviewer.md": "c8edc7de42d9d425748389ecbe4e0cce4f938d8a2aa979f6486137d634cfee37",
+      "fixtures/render/quota/observations/empty.json": "5fcbdafdf5d58ac06c32ebb1323b96863662b837442cac8e3d82cfc6fc6e33f0",
+      "fixtures/render/quota/observations/recovery.json": "78f5d5e9dfaf76792f09fa7f28070d2ce8148d85e3ed0c31265476c39db25d41",
+      "fixtures/render/quota/observations/reviewer.symbolic.json": "c7337596b6c20871e6021bd710de5b8f5c566dee3913b23f8b09f4204fc20708",
+      "fixtures/render/quota/registry/quota-tools.json": "4894e5684d1574d8abd37b875d71c66704b34293af3f094b4f1bf036da87eb43",
+      "fixtures/render/quota/workspace/combined.lua": "462be3ceadfae3ef50dca7a3a245dee23dae22ddadfd7d1328052d0c8da95602",
+      "fixtures/render/quota/workspace/spec.lua": "e0d488603bf98845dc3e05240c4df16b19aedc86f9b913b9bd3ca618d9948207",
+      "fixtures/render/quota/workspace/split.lua": "6d3e2d2e981ec4507f27970a550f8074b0f4e0dfffc8b9cd02cf3641fc119c56",
+      "fixtures/render/quota/workspace/text/quota-api.md": "345af7f2c3662cbf956f9cf01f15cb03a4461cb4b256eeb6274e46ef2a2257d8",
+      "fixtures/render/quota/workspace/text/shared.md": "0b9e5252625357561ad686366c0551305efac1d79e4b271d65a46d3a178c2d65",
+      "fixtures/render/quota/workspace/workspace.lua": "b2fc8fd2f5f4b588203c5d9179817e1d3744f5ce804b491d62ac978396aed08a",
+      "src/engine/history/record.cpp": "466d89f3b7dea435df1e00a2aa79c0447a39f5de1e13b85f4224c84a95ffd97c",
+      "src/engine/history/record.cppm": "9a98729430ce08b3ec0f65918849b9454601f04174c0b04267f52e140bd89239",
+      "src/stdlib/planar/README.md": "49bdc0ab80a62933e70e679be94f205abce0014637f77a469ab126f78fe449a2",
+      "src/stdlib/planar/acceptance.lua": "c87833c0d59b5ba6fa7b3a4658b36e5bbe9d43cf0b354ab4038e7ebb1c3dd014",
+      "src/stdlib/planar/bootstrap.lua": "b15092f3ae0989b1c09dbaa401c1657c93d1abf9a68703cb9cf7b0a5551b4b32",
+      "src/stdlib/planar/commands.lua": "cf663703ceed18bf2c8204eda5e69dfa3aa7f76e4b7fe5ae84fb2274cc725da4",
+      "src/stdlib/planar/json.lua": "93990893a3ca859891d36f9b57f70f3dee986f7ce0922c9e267e3351bf3eb26b",
+      "src/stdlib/planar/observations.lua": "dc530abaf8940e7f762e720541d8356c2191bff4fbe77ce743f198ae1359f3dc",
+      "src/stdlib/planar/presentation.lua": "eef82d304189464f71e27d4ef0e659a7864835c64fd66f44c63a497667c22fd5",
+      "src/stdlib/planar/render.lua": "4466309435ed41a0db44b7dacc407d5980803e0a81d23d5bbb126e65c27ae364",
+      "src/stdlib/planar/schema.lua": "574fed2fe8cc0191a7659dd6b749cef289a8d427b13e900c8acb34101d4bc216",
+      "src/stdlib/planar/selection.lua": "45557f3aa3b5f31a11f4e13f68f6abb0f059d583e46b125d820aa07a7dab313e",
+      "src/stdlib/planar/semantic.lua": "81f685fc2cdc807ddd48660357e0b096b437e91e31f5f60a79c4e75cdf1f1ab4"
+    },
+    "path_base": "<repo>",
+    "source_manifest": "tests/native/v5-02-x03-a-evidence/baseline-manifest.json"
+  }
+}

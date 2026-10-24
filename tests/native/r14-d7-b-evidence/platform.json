@@ -1,0 +1,15 @@
+{
+  "captured_utc": "2026-10-22T18:22:21.033578+00:00",
+  "system": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "compiler_path": "/opt/homebrew/opt/llvm/bin/clang++",
+  "compiler_version": "Homebrew clang version 23.1.4\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /opt/homebrew/Cellar/llvm/23.1.4/bin\nConfiguration file: /opt/homebrew/Cellar/llvm/23.1.4/etc/clang/arm64-apple-darwin25.cfg\n",
+  "cmake_version": "cmake version 4.4.4\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+  "configurations": {
+    "debug": "build/rewrite-debug Debug",
+    "release": "build/rewrite-release RelWithDebInfo -O2 -DNDEBUG"
+  },
+  "no_linux_or_hardware_power_loss_claim": true
+}

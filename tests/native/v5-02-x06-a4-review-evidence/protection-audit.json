@@ -1,0 +1,34 @@
+{
+  "all_buildtrees_exact": {
+    "build/install-release": {
+      "file_bytes": 1016430379,
+      "members": 8247
+    },
+    "build/rewrite-debug": {
+      "file_bytes": 2120054654,
+      "members": 4305
+    },
+    "build/rewrite-release": {
+      "file_bytes": 1516584369,
+      "members": 4239
+    }
+  },
+  "all_file_link_attributes_and_hashes_exact": true,
+  "author_artifacts_rechecked": true,
+  "baseline_members": 94214,
+  "baseline_sha256": "76ee477beed5a6380cbbe492b18ebdc18ccc501b0dd15ac5fff78c48ca55d6c7",
+  "candidate_rechecked": true,
+  "directory_identity_mode_and_membership_exact": true,
+  "directory_metadata_only_changes": [],
+  "exclusions": [
+    ".git",
+    "docs/vernacular/rounds/V5-02-X06-A4.md",
+    "docs/vernacular/rounds/V5-02-X06-A4-review.md",
+    "tests/native/v5-02-x06-a4-review-evidence"
+  ],
+  "final_members": 94214,
+  "final_sha256": "76ee477beed5a6380cbbe492b18ebdc18ccc501b0dd15ac5fff78c48ca55d6c7",
+  "report_links_resolved": 13,
+  "root_dotfiles_symlinks_author_artifacts_and_prior_evidence_protected": true,
+  "unexpected_changes": []
+}

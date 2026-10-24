@@ -1,0 +1,6 @@
+{
+  "tests/acceptance/bootstrap_export.py": {
+    "gate": "99c8a444bb49fd06863dd80ab46d0ccdf058c89fb0838d61bcc0ae945b420660",
+    "final": "90e083a346a497d72081ca803d65324bfdd4a336917efd13ec170015e50b5196"
+  }
+}

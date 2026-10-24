@@ -1,0 +1,27 @@
+Filters: [independent]
+Randomness seeded to: 385149192
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+review is a Catch2 v3.15.3 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+independent registry nested exact fields and all supplied jobs validated
+-------------------------------------------------------------------------------
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1c01-review-ukoj5zhn/review.cpp:711
+...............................................................................
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1c01-review-ukoj5zhn/review.cpp:68: FAILED:
+  CHECK( error->fields.at("code")->string == code )
+with expansion:
+  "reference" == "schema"
+
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/r07b1c01-review-ukoj5zhn/review.cpp:720: FAILED:
+  CHECK( e->fields.at("field")->string=="job.budget_bytes" )
+with expansion:
+  "job" == "job.budget_bytes"
+
+===============================================================================
+test cases:   5 |   4 passed | 1 failed
+assertions: 336 | 334 passed | 2 failed
+

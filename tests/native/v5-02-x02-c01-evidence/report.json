@@ -1,0 +1,11 @@
+{
+  "method": "Docs-only link/text/preservation and byte-arithmetic checks; no builds/tests/runtime or schema execution",
+  "baseline_files": 14740,
+  "changed": 2,
+  "additions_outside_evidence": 0,
+  "links": 31,
+  "text_checks": 57,
+  "vector_length_checks": 8,
+  "candidate_sha256": "be85178f268816d082df3d9c1ecee09398a74e1b60cb6a7c7a059a79a9e9155f",
+  "owned_diff_sha256": "abe6c97cb57c6c1721f896e22b8b32813eedc9d425aa5c008329ac672bc410d7"
+}

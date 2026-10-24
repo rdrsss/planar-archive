@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.15/bin/python3.15",
+    "scripts/rewrite-check.py",
+    "lint",
+    "--build-dir",
+    "<repo>/build/rewrite-debug"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:24:10.605797+00:00",
+  "exit_code": 0,
+  "seconds": 1.3707189559936523,
+  "start_utc": "2026-10-22T21:24:09.235112+00:00"
+}

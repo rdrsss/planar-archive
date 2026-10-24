@@ -1,0 +1,18 @@
+{
+  "kind": "documentation assertions only; no runtime test claims",
+  "checks": {
+    "six_required_options": true,
+    "five_entry_gate": true,
+    "finite_three_call_protocol": true,
+    "native_early_and_late_replay": true,
+    "same_bundle_all_job_semantics": true,
+    "native_final_receipts": true,
+    "typed_private_redaction": true,
+    "native_saved_bytes_completion_phase": true,
+    "frozen_matrix_A_rows": true,
+    "current_four_commands": true,
+    "pending_review": true
+  },
+  "passed": 11,
+  "total": 11
+}

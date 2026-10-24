@@ -1,0 +1,1088 @@
+[
+  {
+    "id": "ordered-extension",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p.json",
+      "inspect",
+      "--text",
+      "value",
+      "--flag"
+    ],
+    "outcome": "accepted",
+    "profile": "p.json",
+    "consumed": [
+      3,
+      0,
+      4
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "value",
+      "--flag"
+    ]
+  },
+  {
+    "id": "shipped-history",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p.json",
+      "history",
+      "--ledger",
+      "missing"
+    ],
+    "outcome": "accepted",
+    "profile": "p.json",
+    "consumed": [
+      3,
+      3,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "history",
+      "--ledger",
+      "missing"
+    ]
+  },
+  {
+    "id": "no-selector",
+    "argv": [
+      "with-profile",
+      "inspect",
+      "--text",
+      "value"
+    ],
+    "outcome": "prefix:RequiredError",
+    "profile": "",
+    "consumed": [
+      1,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "inspect",
+      "--text",
+      "value"
+    ]
+  },
+  {
+    "id": "no-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile"
+    ],
+    "outcome": "prefix:ArgumentMismatch",
+    "profile": "",
+    "consumed": [
+      1,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "empty-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "",
+      "inspect",
+      "--text",
+      "value"
+    ],
+    "outcome": "prefix:metadata",
+    "profile": "",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "inspect",
+      "--text",
+      "value"
+    ]
+  },
+  {
+    "id": "verb-as-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "inspect",
+      "--text",
+      "value"
+    ],
+    "outcome": "final:ExtrasError",
+    "profile": "inspect",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": true,
+    "tail": [
+      "--text",
+      "value"
+    ]
+  },
+  {
+    "id": "duplicate-selector",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--stdlib-profile",
+      "q",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "prefix:ArgumentMismatch",
+    "profile": "",
+    "consumed": [
+      5,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "unknown-option-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "--bogus",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "accepted",
+    "profile": "--bogus",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "known-option-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "--help",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "accepted",
+    "profile": "--help",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "missing-help-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "--help"
+    ],
+    "outcome": "prefix:empty-tail",
+    "profile": "--help",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "extra-prefix-option",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--bogus",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "final:ExtrasError",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "--bogus",
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "option-before-selector",
+    "argv": [
+      "with-profile",
+      "--bogus",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "prefix:RequiredError",
+    "profile": "",
+    "consumed": [
+      1,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "--bogus",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "unknown-verb",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "absent",
+      "--text",
+      "v"
+    ],
+    "outcome": "final:ExtrasError",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": true,
+    "tail": [
+      "absent",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "profile-as-tail-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "--stdlib-profile"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "--stdlib-profile"
+    ]
+  },
+  {
+    "id": "tail-selector",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--stdlib-profile",
+      "q",
+      "--text",
+      "v"
+    ],
+    "outcome": "final:ExtrasError",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--stdlib-profile",
+      "q",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "tail-option-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "--bogus"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "--bogus"
+    ]
+  },
+  {
+    "id": "tail-known-option-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "--flag"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "--flag"
+    ]
+  },
+  {
+    "id": "no-tail",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p"
+    ],
+    "outcome": "prefix:empty-tail",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "prefix-terminator",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "final:metadata",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": true,
+    "tail": [
+      "--",
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "tail-terminator",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "v",
+      "--"
+    ],
+    "outcome": "final:metadata",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "v",
+      "--"
+    ]
+  },
+  {
+    "id": "terminator-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "--",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "accepted",
+    "profile": "--",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "selected-help",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--help"
+    ],
+    "outcome": "selected-help",
+    "profile": "p",
+    "consumed": [
+      4,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "help-before-selector",
+    "argv": [
+      "with-profile",
+      "--help",
+      "--stdlib-profile",
+      "p"
+    ],
+    "outcome": "selected-help",
+    "profile": "p",
+    "consumed": [
+      4,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "help-with-tail",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--help",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "prefix:help-tail",
+    "profile": "p",
+    "consumed": [
+      4,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "help-after-verb",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--help"
+    ],
+    "outcome": "final:RequiredError",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      1
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--help"
+    ]
+  },
+  {
+    "id": "duplicate-help",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--help",
+      "--help"
+    ],
+    "outcome": "prefix:ArgumentMismatch",
+    "profile": "p",
+    "consumed": [
+      5,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "shipped-missing",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "history"
+    ],
+    "outcome": "probe:RequiredError",
+    "profile": "p",
+    "consumed": [
+      3,
+      1,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "history"
+    ]
+  },
+  {
+    "id": "shipped-duplicate",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "history",
+      "--ledger",
+      "a",
+      "--ledger",
+      "b"
+    ],
+    "outcome": "probe:ArgumentMismatch",
+    "profile": "p",
+    "consumed": [
+      3,
+      5,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "history",
+      "--ledger",
+      "a",
+      "--ledger",
+      "b"
+    ]
+  },
+  {
+    "id": "shipped-extra",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "history",
+      "--ledger",
+      "a",
+      "--bogus",
+      "b"
+    ],
+    "outcome": "probe:ExtrasError",
+    "profile": "p",
+    "consumed": [
+      3,
+      3,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "history",
+      "--ledger",
+      "a",
+      "--bogus",
+      "b"
+    ]
+  },
+  {
+    "id": "shipped-terminator",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "history",
+      "--ledger",
+      "a",
+      "--"
+    ],
+    "outcome": "probe:metadata",
+    "profile": "p",
+    "consumed": [
+      3,
+      3,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "history",
+      "--ledger",
+      "a",
+      "--"
+    ]
+  },
+  {
+    "id": "name-equals",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile=p",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "syntax",
+    "profile": "",
+    "consumed": [
+      0,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "tail-name-equals",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text=v"
+    ],
+    "outcome": "syntax",
+    "profile": "",
+    "consumed": [
+      0,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": []
+  },
+  {
+    "id": "root-terminator",
+    "argv": [
+      "--",
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "prefix:metadata",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "inspect",
+      "--text",
+      "v"
+    ]
+  },
+  {
+    "id": "shipped-init",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "init",
+      "--ledger",
+      "a",
+      "--workspace-id",
+      "w"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      5,
+      5
+    ],
+    "final_attempted": true,
+    "tail": [
+      "init",
+      "--ledger",
+      "a",
+      "--workspace-id",
+      "w"
+    ]
+  },
+  {
+    "id": "shipped-export",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "export",
+      "--ledger",
+      "a",
+      "--revision",
+      "1",
+      "--target",
+      "out"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      7,
+      7
+    ],
+    "final_attempted": true,
+    "tail": [
+      "export",
+      "--ledger",
+      "a",
+      "--revision",
+      "1",
+      "--target",
+      "out"
+    ]
+  },
+  {
+    "id": "shipped-load",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "load",
+      "--ledger",
+      "a",
+      "--workspace",
+      "w",
+      "--registry",
+      "r",
+      "--expect-revision",
+      "none",
+      "--request-id",
+      "k",
+      "--actor",
+      "a"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      13,
+      13
+    ],
+    "final_attempted": true,
+    "tail": [
+      "load",
+      "--ledger",
+      "a",
+      "--workspace",
+      "w",
+      "--registry",
+      "r",
+      "--expect-revision",
+      "none",
+      "--request-id",
+      "k",
+      "--actor",
+      "a"
+    ]
+  },
+  {
+    "id": "shipped-render",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "render",
+      "--workspace",
+      "w",
+      "--registry",
+      "r",
+      "--root",
+      "s=src",
+      "--job",
+      "j",
+      "--role",
+      "r"
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      11,
+      11
+    ],
+    "final_attempted": true,
+    "tail": [
+      "render",
+      "--workspace",
+      "w",
+      "--registry",
+      "r",
+      "--root",
+      "s=src",
+      "--job",
+      "j",
+      "--role",
+      "r"
+    ]
+  },
+  {
+    "id": "init-missing",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "init",
+      "--ledger",
+      "a"
+    ],
+    "outcome": "probe:RequiredError",
+    "profile": "p",
+    "consumed": [
+      3,
+      3,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "init",
+      "--ledger",
+      "a"
+    ]
+  },
+  {
+    "id": "export-malformed",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "export",
+      "--ledger",
+      "a",
+      "--revision",
+      "bad",
+      "--target",
+      "out"
+    ],
+    "outcome": "probe:ValidationError",
+    "profile": "p",
+    "consumed": [
+      3,
+      7,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "export",
+      "--ledger",
+      "a",
+      "--revision",
+      "bad",
+      "--target",
+      "out"
+    ]
+  },
+  {
+    "id": "load-missing",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "load",
+      "--ledger",
+      "a"
+    ],
+    "outcome": "probe:RequiredError",
+    "profile": "p",
+    "consumed": [
+      3,
+      3,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "load",
+      "--ledger",
+      "a"
+    ]
+  },
+  {
+    "id": "render-missing",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "render",
+      "--workspace",
+      "w"
+    ],
+    "outcome": "probe:RequiredError",
+    "profile": "p",
+    "consumed": [
+      3,
+      3,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "render",
+      "--workspace",
+      "w"
+    ]
+  },
+  {
+    "id": "help-terminator",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "--help",
+      "--"
+    ],
+    "outcome": "prefix:help-tail",
+    "profile": "p",
+    "consumed": [
+      4,
+      0,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "--"
+    ]
+  },
+  {
+    "id": "empty-tail-value",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "inspect",
+      "--text",
+      ""
+    ],
+    "outcome": "accepted",
+    "profile": "p",
+    "consumed": [
+      3,
+      0,
+      3
+    ],
+    "final_attempted": true,
+    "tail": [
+      "inspect",
+      "--text",
+      ""
+    ]
+  },
+  {
+    "id": "second-command",
+    "argv": [
+      "with-profile",
+      "--stdlib-profile",
+      "p",
+      "history",
+      "--ledger",
+      "a",
+      "inspect",
+      "--text",
+      "v"
+    ],
+    "outcome": "probe:ExtrasError",
+    "profile": "p",
+    "consumed": [
+      3,
+      3,
+      0
+    ],
+    "final_attempted": false,
+    "tail": [
+      "history",
+      "--ledger",
+      "a",
+      "inspect",
+      "--text",
+      "v"
+    ]
+  }
+]

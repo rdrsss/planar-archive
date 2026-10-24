@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "python3",
+    "<repo>/tests/native/v5-02-x03-b3-review-evidence/audit.py",
+    "final-audit.json"
+  ],
+  "cwd": "<repo>",
+  "start_utc": "2026-10-22T21:35:24.983896+00:00",
+  "end_utc": "2026-10-22T21:35:29.494300+00:00",
+  "seconds": 4.510468416847289,
+  "exit_code": 0
+}

@@ -1,0 +1,21 @@
+{
+  "baseline_files": 11401,
+  "changed": [
+    "docs/testing.md",
+    "docs/vernacular/rounds/R12.md",
+    "src/engine/CMakeLists.txt"
+  ],
+  "added": [
+    "src/engine/ledger/publication_fault.t.cpp",
+    "src/engine/ledger/reliability.t.cpp",
+    "tests/native/r12c2-support/generate.py",
+    "tests/native/r12c2-support/posix.cpp",
+    "tests/native/r12c2-support/posix.cppm"
+  ],
+  "missing": [],
+  "coordinator_changes": [
+    "docs/vernacular/rounds/R12.md"
+  ],
+  "unexpected": [],
+  "protected_product_vendor_history_unchanged": true
+}

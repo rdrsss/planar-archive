@@ -1,0 +1,21 @@
+{
+  "artifact_entries": 221,
+  "candidate": {
+    "mode": 420,
+    "sha256": "b2569f339ad872b5a8dc9ac92aa881b976c75e0fee30e09878676b3361ffc2ba"
+  },
+  "candidate_entries": 23,
+  "manifest": {
+    "mode": 420,
+    "sha256": "93ead0bc5ab4645b8c6594c7947092389858fb719a8a92777e8f8d82ed331c19"
+  },
+  "report": {
+    "mode": 420,
+    "sha256": "61ea33a4366733eb5f332003c24d88d75b22f8d5b39ff584de6942f3accc99b3"
+  },
+  "schema": 1,
+  "tested_candidate": {
+    "mode": 420,
+    "sha256": "b447e9905068056364c109b885a40b1e2e154de1369d31a14536190051047622"
+  }
+}

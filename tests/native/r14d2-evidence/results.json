@@ -1,0 +1,32 @@
+{
+  "red": {
+    "matched": 1,
+    "failed": 1,
+    "ctest_exit": 8
+  },
+  "full_debug": {
+    "matched": 337,
+    "passed": 337,
+    "skipped": 0,
+    "gate_exit": 0,
+    "format_doxygen_sources": 86
+  },
+  "focused": {
+    "capture": 31,
+    "dependent": 28
+  },
+  "cli_processes": {
+    "render": 247,
+    "init": 60,
+    "history": 115,
+    "export": 55
+  },
+  "candidate_manifest_sha256": "3da96db6f13b830b48d05bb024aa810e403f3cd5a0caa8f79b7358a2e74d7936",
+  "release": "not run; unchanged",
+  "limitations": [
+    "macOS ARM64 debug only",
+    "No hardware power loss",
+    "No load service or CLI",
+    "Brief initial focused/gate test-only overlap recorded in README"
+  ]
+}

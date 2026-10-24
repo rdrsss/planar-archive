@@ -1,0 +1,36 @@
+{
+  "debug": {
+    "commands": 23,
+    "disabled": 0,
+    "errors": 0,
+    "failures": 0,
+    "full": 876,
+    "private_assertions": 709,
+    "private_cases": 10,
+    "seconds": 284.01021790504456,
+    "skips": 0,
+    "source": {
+      "coordinator_round_exemption": "docs/vernacular/rounds/V5-02-X05-C5.md",
+      "entries": 76510,
+      "product_test_vendor_tooling_unchanged": true,
+      "unauthorized_changes": []
+    }
+  },
+  "release": {
+    "commands": 16,
+    "disabled": 0,
+    "errors": 0,
+    "failures": 0,
+    "full": 876,
+    "private_assertions": 709,
+    "private_cases": 10,
+    "seconds": 132.6977322101593,
+    "skips": 0,
+    "source": {
+      "coordinator_round_exemption": "docs/vernacular/rounds/V5-02-X05-C5.md",
+      "entries": 76510,
+      "product_test_vendor_tooling_unchanged": true,
+      "unauthorized_changes": []
+    }
+  }
+}

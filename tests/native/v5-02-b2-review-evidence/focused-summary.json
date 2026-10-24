@@ -1,0 +1,17 @@
+{
+  "debug": {
+    "passed": 29,
+    "skips": 0,
+    "retained_cli_processes": 99,
+    "fixture_helpers": 1,
+    "no_work": true
+  },
+  "release": {
+    "passed": 29,
+    "skips": 0,
+    "retained_cli_processes": 99,
+    "fixture_helpers": 1,
+    "no_work": true
+  },
+  "candidate_rechecked_at_handoff": true
+}

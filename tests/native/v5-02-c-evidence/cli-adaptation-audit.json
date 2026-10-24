@@ -1,0 +1,11 @@
+{
+  "path_base": "repository root",
+  "path": "tests/acceptance/bootstrap_paths.py",
+  "exact_single_substitution": true,
+  "before": "lambda: refused(options(option, parent), 4, \"io\", \"Explicit input must be a regular file\"))",
+  "after": "lambda: refused(options(option, \"./\" + parent if option == \"--workspace\" else parent), 4, \"io\", \"Explicit input must be a regular file\"))",
+  "source_sha256": "880fdc75e6792cea23a23f6991db81128b74ba5e58a38b71abcc900d81bd270b",
+  "candidate_sha256": "48954d8c63716397565d6dc030397626ec423e8ffe933ac9a16f465ab4690158",
+  "retained_host_path_checks": 60,
+  "retained_render_cli_processes": 247
+}

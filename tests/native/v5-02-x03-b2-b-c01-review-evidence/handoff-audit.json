@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python3",
+    "tests/native/v5-02-x03-b2-b-c01-review-evidence/audit.py",
+    "handoff-audit-summary"
+  ],
+  "cwd": "<repo>",
+  "start": 1792703718.942646,
+  "end": 1792703722.397722,
+  "exit_code": 0
+}

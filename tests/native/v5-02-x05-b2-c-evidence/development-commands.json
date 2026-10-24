@@ -1,0 +1,42 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "sticky_regression": {
+    "red_build": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "planar_runtime_tests"
+    ],
+    "red_build_exit": 0,
+    "red_test": [
+      "build/rewrite-debug/src/engine/planar_runtime_tests",
+      "[shape-sticky]",
+      "--reporter",
+      "junit",
+      "--out",
+      "tests/native/v5-02-x05-b2-c-evidence/sticky-red.xml"
+    ],
+    "red_test_exit": 42,
+    "green_test": [
+      "build/rewrite-debug/src/engine/planar_runtime_tests",
+      "[shape-call]",
+      "--reporter",
+      "junit",
+      "--out",
+      "tests/native/v5-02-x05-b2-c-evidence/sticky-green.xml"
+    ],
+    "green_test_exit": 0,
+    "green_cases": 7
+  },
+  "superseded_gate": {
+    "directory": "attempt01-gate",
+    "reason": "Deliberately interrupted focused CTest with SIGINT after discovering missing sticky callback bridge_error adaptation. No passing gate claimed. Product correction followed preserved red production regression.",
+    "ctest_exit": -2
+  },
+  "development_limitations": [
+    "Preliminary first-probes compile began while fourth build was finishing; it failed at a fixture expected-type mismatch before linking or executing. It is not final verification.",
+    "Preliminary builds are retained development attempts; only final-gate frozen manifest and commands bind final candidate."
+  ]
+}

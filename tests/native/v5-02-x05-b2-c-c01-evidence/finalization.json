@@ -1,0 +1,26 @@
+{
+  "source_unchanged": true,
+  "frozen_entries": 399,
+  "checks": {
+    "final-gate/focused.xml": {
+      "cases": 353,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "final-gate/history-codec.xml": {
+      "cases": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "final-probes/allocation.xml": {
+      "cases": 2,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  },
+  "candidate_manifest_sha256": "1f907aad8583fb4f1bcb0680659d8c7e37dcbdf7d5768ade54c2f069a4702130",
+  "candidate_diff_sha256": "eda0f0c996b61fe795f76bd448fdedb91660b964f0af8d65122198f3f2def150"
+}

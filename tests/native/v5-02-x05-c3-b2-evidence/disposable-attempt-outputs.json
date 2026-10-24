@@ -1,0 +1,42 @@
+{
+  "private-attempt1/probes.o": {
+    "mode": 420,
+    "sha256": "178f6a13f13d72915bdd533a810fe024b6d926cd798f08788ee5308302b6a447",
+    "size": 5952336
+  },
+  "private-attempt3/probes": {
+    "mode": 493,
+    "sha256": "761ca80d6a6324a0373a8eb784976635fe1a6f9930402b1f49e337df68a57e38",
+    "size": 14462344
+  },
+  "private-attempt3/probes.o": {
+    "mode": 420,
+    "sha256": "178f6a13f13d72915bdd533a810fe024b6d926cd798f08788ee5308302b6a447",
+    "size": 5952336
+  },
+  "private-attempt4/libpre-hardening-runtime.a": {
+    "mode": 420,
+    "sha256": "a8cd62f39155ee7ecf4237faa17b45c9ddf16a8c0ac46550b16542814d9381fc",
+    "size": 6755784
+  },
+  "private-attempt4/pre-hardening-probes": {
+    "mode": 493,
+    "sha256": "615805b97d4f79f831c9fef6a7f6799fd9b2011afae23d863cf5af53d35dd9ef",
+    "size": 14457928
+  },
+  "private-attempt4/pre-hardening-runtime.o": {
+    "mode": 420,
+    "sha256": "6813b683b396a9d598778043ad171140ef7393efe1298a08c81ffb0a9a09a300",
+    "size": 5794680
+  },
+  "private-attempt4/probes": {
+    "mode": 493,
+    "sha256": "af4b532bed31abc0943180adeddf56d89ffead22b7bb9f4ca3166e4935da7911",
+    "size": 14459416
+  },
+  "private-attempt4/probes.o": {
+    "mode": 420,
+    "sha256": "178f6a13f13d72915bdd533a810fe024b6d926cd798f08788ee5308302b6a447",
+    "size": 5952336
+  }
+}

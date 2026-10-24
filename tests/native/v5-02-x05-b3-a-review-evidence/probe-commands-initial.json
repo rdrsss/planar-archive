@@ -1,0 +1,12 @@
+[
+  {
+    "label": "restoration-pcm-info",
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-module-file-info",
+      "<repo>/build/rewrite-debug/src/engine/CMakeFiles/planar_runtime_source.dir/planar.engine.runtime_source.pcm"
+    ],
+    "exit": 1,
+    "seconds": 0.042
+  }
+]

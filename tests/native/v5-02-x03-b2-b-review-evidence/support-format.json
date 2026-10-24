@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/llvm/bin/clang-format",
+    "--dry-run",
+    "--Werror",
+    "tests/native/r14c3b2-support/digest.cppm",
+    "tests/native/r14c3b2-support/atomic.t.cpp",
+    "tests/native/r14-d8-support/acceptance_fault.t.cpp"
+  ],
+  "cwd": "<repo>",
+  "start": 1792702461.982534,
+  "end": 1792702462.1575072,
+  "exit_code": 0
+}

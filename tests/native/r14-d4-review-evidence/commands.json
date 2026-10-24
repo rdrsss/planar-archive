@@ -1,0 +1,28 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "exit_code": 0,
+    "log": "build.log"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement\\.(atomic conflict retains|ledger forced collisions refuse|atomic targeted collisions|ledger authoritative diagnostics|ledger diagnostic malformed typed|ledger error adapter)",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/r14-d4-review-evidence/focused.xml"
+    ],
+    "exit_code": 0,
+    "log": "focused.log"
+  }
+]

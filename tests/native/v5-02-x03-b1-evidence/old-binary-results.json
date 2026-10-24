@@ -1,0 +1,229 @@
+{
+  "executable": "tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+  "executable_sha256": "be1c4cee1b358208831faa919707ce5fd01de3ea31bc63db333a027f8844464a",
+  "fixture_executable": "build/rewrite-debug/src/engine/planar_format2_fixture",
+  "fixture_sha256": "62c8d83af0ccbc107026365180672aee9fa95835c86de1e5922bf277eb5f72d3",
+  "baseline_build_log": "baseline-build.log",
+  "runs": [
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger"
+      ],
+      "sidecar": null,
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/workspace",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/registry.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "old-proof",
+        "--actor",
+        "driver"
+      ],
+      "sidecar": null,
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger"
+      ],
+      "sidecar": "-journal",
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-journal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-journal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/workspace",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/registry.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "old-proof",
+        "--actor",
+        "driver"
+      ],
+      "sidecar": "-journal",
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-journal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-journal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger"
+      ],
+      "sidecar": "-wal",
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-wal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-wal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/workspace",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/registry.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "old-proof",
+        "--actor",
+        "driver"
+      ],
+      "sidecar": "-wal",
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-wal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-wal": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "history",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger"
+      ],
+      "sidecar": "-shm",
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-shm": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-shm": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "unchanged": true
+    },
+    {
+      "argv": [
+        "<repo>/tests/native/v5-02-x03-b1-evidence/pre-b1-planar",
+        "load",
+        "--ledger",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/ledger",
+        "--workspace",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/workspace",
+        "--registry",
+        "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-b1-old-4nqi1jlz/registry.json",
+        "--expect-revision",
+        "none",
+        "--request-id",
+        "old-proof",
+        "--actor",
+        "driver"
+      ],
+      "sidecar": "-shm",
+      "exit_code": 3,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"unsupported_ledger_version\",\"field\":\"\",\"message\":\"Ledger version or state is unsupported\"},\"kind\":\"error\",\"version\":1}\n",
+      "before": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-shm": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "after": {
+        "home": "directory",
+        "ledger": "3b37171c7a074b49abdf9f146ecf2a25d76b762c48deffd44ce982e76a75654b",
+        "ledger-shm": "b8ebe9055b3aace96946453907cb4355ab65d3719c98a0b8b10d599782ce800e"
+      },
+      "unchanged": true
+    }
+  ]
+}

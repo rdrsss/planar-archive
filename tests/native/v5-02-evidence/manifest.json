@@ -1,0 +1,12 @@
+{
+  "baseline.json": "72d7921631c75cde6c015dcad55d5ab467eb8f986f5982622b93cf96c028f258",
+  "candidate.diff": "dae9cdafdd746222113b28abd6ce330c36d9b3fe7e35ec4e552e60f3c8d8fd5f",
+  "candidate.md.snapshot": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+  "docs/vernacular/v5-command-workspace-proposal.md": "c16cf5d4aefa7b947fdb176c93ce8753a9ffd83ecd0db6f1559c0f9fa55b8b66",
+  "draft-01/candidate.diff": "e6b724701168167e32b2623d3cfe236e9594aa8b7b57633cda536fb18a19664a",
+  "draft-01/candidate.md.snapshot": "45e4e688b0e648c90cba27b87402bb2c7d3e5faa95b5c119b3193adeaa3854c9",
+  "draft-01/manifest.json": "e667b37ccd67b602b2521acf5cb045852568ad8065b4b72dd74194a08597639d",
+  "draft-01/verification.json": "be8281bd79710b510b0b51f8fbda37444aaaa846c3e7fefb0266bee617e633b7",
+  "protected-before.json": "fd1ed46f371518b8c6bb157d5617e4d9fda05b1e55eb6595405b5ea3343b6e36",
+  "verification.json": "fd76b1486d0fd2c033a33825987136d45d11fb1b608652a8e5efd867f9fff41b"
+}

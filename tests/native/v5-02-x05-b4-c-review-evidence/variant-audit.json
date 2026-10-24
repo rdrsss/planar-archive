@@ -1,0 +1,912 @@
+{
+  "debug": {
+    "a0": {
+      "lua": {
+        "after": "  local x05_retained_scalar=0\n  local function init_command(invocation,context)\n    x05_retained_scalar=x05_retained_scalar+1",
+        "altered_sha256": "eeee1dbfbdc5609385e9d5762901c8f73bef2de2281c15e56c35cffdcb7abb67",
+        "before": "  local function init_command(invocation,context)",
+        "count": 1,
+        "reverse_identical": true,
+        "source_sha256": "cf663703ceed18bf2c8204eda5e69dfa3aa7f76e4b7fe5ae84fb2274cc725da4",
+        "variant0_exact_shipped_commands": true,
+        "variant1_retained_scalar_write_only": true
+      },
+      "x05_a0_0_runtime.cpp": {
+        "generated_sha256": "78659497362aaa9c89370feddcc3d04383ec7ec71c73026786a7b626d27994c5",
+        "reverse_identical": true,
+        "source_sha256": "0cd67a98887ca76667b76b0a97f52261ab8e07edb6bd1e6a60fd1169719ec80c",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_0;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "import planar.engine.x05_a0_0_source;\nimport planar.engine.x05_closure_audit;\n",
+            "before": "import planar.engine.runtime_source;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_0 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          },
+          {
+            "after": "int seal_environment(lua_State* l) {\n  // Reserve in this active protected C frame, before pushes or native RAII.\n  if (!lua_checkstack(l, x05_closure_audit::audit_stack_slots)) {\n    context(l).stack_exhausted = true;\n    return 0;\n  }\n  // X05-A0 only: inspect every original root before any proxy freezing.\n  bool x05_ok = false;\n  lua_pushglobaltable(l);\n  {\n    auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n    x05_ok = result.has_value();\n  }\n  lua_pop(l, 1);\n  if (!x05_ok)\n    return luaL_error(l, \"x05_lexical_refusal\");\n  for (const auto& entry : commands(l).entries) {\n    lua_rawgeti(l, LUA_REGISTRYINDEX, entry.reference);\n    {\n      auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n      x05_ok = result.has_value();\n    }\n    lua_pop(l, 1);\n    if (!x05_ok)\n      return luaL_error(l, \"x05_lexical_refusal\");\n  }\n",
+            "before": "int seal_environment(lua_State* l) {\n",
+            "count": 1
+          },
+          {
+            "after": "  x05_closure_audit::snapshot_curated_natives(l, LUA_RIDX_LAST + 3);\n  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "before": "  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, digest, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i == 0 ?",
+            "before": "    lua_pushcclosure(l, digest, 1);\n    lua_setfield(l, -2, i == 0 ?",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, json_codec, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "before": "    lua_pushcclosure(l, json_codec, 1);\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "count": 1
+          }
+        ]
+      },
+      "x05_a0_0_runtime.cppm": {
+        "generated_sha256": "04d3bb3a0e4db6291e23233a222da74baa6391a3da653398df0cd6742567f41d",
+        "reverse_identical": true,
+        "source_sha256": "3f6f297aae5e56f6f5426482713a6ef1d64588ef9a97420fbefc6df25eac935d",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_0;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_0 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          }
+        ]
+      },
+      "x05_a0_1_runtime.cpp": {
+        "generated_sha256": "e667865c6e3743cdbae07b49ba8d885c55deb7c40daa76c1955239269feb8113",
+        "reverse_identical": true,
+        "source_sha256": "0cd67a98887ca76667b76b0a97f52261ab8e07edb6bd1e6a60fd1169719ec80c",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_1;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "import planar.engine.x05_a0_1_source;\nimport planar.engine.x05_closure_audit;\n",
+            "before": "import planar.engine.runtime_source;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_1 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          },
+          {
+            "after": "int seal_environment(lua_State* l) {\n  // Reserve in this active protected C frame, before pushes or native RAII.\n  if (!lua_checkstack(l, x05_closure_audit::audit_stack_slots)) {\n    context(l).stack_exhausted = true;\n    return 0;\n  }\n  // X05-A0 only: inspect every original root before any proxy freezing.\n  bool x05_ok = false;\n  lua_pushglobaltable(l);\n  {\n    auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n    x05_ok = result.has_value();\n  }\n  lua_pop(l, 1);\n  if (!x05_ok)\n    return luaL_error(l, \"x05_lexical_refusal\");\n  for (const auto& entry : commands(l).entries) {\n    lua_rawgeti(l, LUA_REGISTRYINDEX, entry.reference);\n    {\n      auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n      x05_ok = result.has_value();\n    }\n    lua_pop(l, 1);\n    if (!x05_ok)\n      return luaL_error(l, \"x05_lexical_refusal\");\n  }\n",
+            "before": "int seal_environment(lua_State* l) {\n",
+            "count": 1
+          },
+          {
+            "after": "  x05_closure_audit::snapshot_curated_natives(l, LUA_RIDX_LAST + 3);\n  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "before": "  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, digest, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i == 0 ?",
+            "before": "    lua_pushcclosure(l, digest, 1);\n    lua_setfield(l, -2, i == 0 ?",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, json_codec, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "before": "    lua_pushcclosure(l, json_codec, 1);\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "count": 1
+          }
+        ]
+      },
+      "x05_a0_1_runtime.cppm": {
+        "generated_sha256": "9efc7a2c59f11f691261811f870d2ca230d5799d5e2c77afcf8e22680b2d394d",
+        "reverse_identical": true,
+        "source_sha256": "3f6f297aae5e56f6f5426482713a6ef1d64588ef9a97420fbefc6df25eac935d",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_1;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_1 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "shipped_commands_exact": true,
+    "storage_export": {
+      "r12c2-generated": {
+        "format.cpp": {
+          "generated_sha256": "e61f7d7f1ab9529f262959099ebbea403e89e512bffbbbbab6eba14193bd9aa9",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.ledger_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::ledger_fault {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.sqlite;\nimport planar.test.ledger_posix;",
+              "before": "import planar.engine.ledger.sqlite;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::ledger_fault {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::ledger_fault {",
+              "count": 1
+            },
+            {
+              "after": "planar::test::ledger_posix::fsync(",
+              "before": "::fsync(",
+              "count": 8
+            },
+            {
+              "after": "planar::test::ledger_posix::linkat(",
+              "before": "::linkat(",
+              "count": 1
+            },
+            {
+              "after": "planar::test::ledger_posix::unlinkat(",
+              "before": "::unlinkat(",
+              "count": 2
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "720183915187f65e16aab11600174379301a94f137c3c6379470224ec336c57b",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.ledger_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::ledger_fault {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "r13b1-generated": {
+        "format.cpp": {
+          "generated_sha256": "fecadadae0eb7355288113e0580c8c566a700f611e78ba0b1437c0e7f4d08cbf",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.record_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::record_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.sqlite;\nimport planar.test.record_digest;",
+              "before": "import planar.engine.ledger.sqlite;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::record_test {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::record_test {",
+              "count": 1
+            },
+            {
+              "after": "planar::test::forced_digest(",
+              "before": "digest_record(",
+              "count": 2
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "46f27c7e86a7ea13748f2c6e22979396847243084f88394eb0680ae18f39b619",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.record_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::record_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "r14c3b2-generated": {
+        "format.cpp": {
+          "generated_sha256": "090b92f46e18d8bcae2a48e2c74ce16fb1b9d5046444bcdf8360db6fc3c93cd3",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.atomic_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::atomic_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.sqlite;\nimport planar.test.atomic_digest;",
+              "before": "import planar.engine.ledger.sqlite;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::atomic_test {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::atomic_test {",
+              "count": 1
+            },
+            {
+              "after": "planar::test::atomic_digest::digest(",
+              "before": "digest_record(",
+              "count": 2
+            },
+            {
+              "after": "planar::test::atomic_digest::digest_v2(",
+              "before": "digest_request_v2(",
+              "count": 2
+            },
+            {
+              "after": "\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum) {\n  return next_identifier(maximum);\n}\n#undef LEDGER_TRY",
+              "before": "\n#undef LEDGER_TRY",
+              "count": 1
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "b10c52a385b6ea3048285cb22169b3bf41dbe5c28678782c9a1257dcf1d03265",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.atomic_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::atomic_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "/// @brief Invoke the unchanged private allocator boundary in the isolated test variant.\n/// @param maximum Exact currently allocated signed-64 maximum.\n/// @return Next ID or the production exhaustion refusal.\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum);\nstruct format_state;",
+              "before": "struct format_state;",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "r14f1-generated": {
+        "source_export.cpp": {
+          "generated_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d",
+          "reverse_identical": true,
+          "source_sha256": "f0a79bfd69559b9aac348c11fa0b5a79080d170c4b56d44a761e5ed0fa85623c",
+          "substitutions": [
+            {
+              "after": "planar.test.source_export;",
+              "before": "planar.engine.source_export;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::source_export_fault {",
+              "before": "namespace planar::engine::source_export {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.format;\nimport planar.test.export_posix;",
+              "before": "import planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "planar::test::export_posix::mkdirat(",
+              "before": "::mkdirat(",
+              "count": 2
+            },
+            {
+              "after": "planar::test::export_posix::openat(",
+              "before": "::openat(",
+              "count": 7
+            },
+            {
+              "after": "planar::test::export_posix::write(",
+              "before": "::write(",
+              "count": 1
+            },
+            {
+              "after": "planar::test::export_posix::fchmod(",
+              "before": "::fchmod(",
+              "count": 4
+            },
+            {
+              "after": "planar::test::export_posix::fsync(",
+              "before": "::fsync(",
+              "count": 3
+            },
+            {
+              "after": "planar::test::export_posix::close(",
+              "before": "::close(",
+              "count": 3
+            },
+            {
+              "after": "planar::test::export_posix::unlinkat(",
+              "before": "::unlinkat(",
+              "count": 2
+            },
+            {
+              "after": "int publish(int parent, const char* stage, const char* target) {\n  if (auto result = planar::test::export_posix::before_publish(parent, stage, target)) return *result;",
+              "before": "int publish(int parent, const char* stage, const char* target) noexcept {",
+              "count": 1
+            }
+          ]
+        },
+        "source_export.cppm": {
+          "generated_sha256": "349810626e88df24e03acfa85538615b54b385fd871129d125406d70a5dca335",
+          "reverse_identical": true,
+          "source_sha256": "b5106b48b69383097b5d1443d2e03845b595dfcb9e5adfd7c3410407e06fd7d4",
+          "substitutions": [
+            {
+              "after": "planar.test.source_export;",
+              "before": "planar.engine.source_export;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::source_export_fault {",
+              "before": "namespace planar::engine::source_export {",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "v5-02-x03-b2-b-c01-generated": {
+        "format.cpp": {
+          "generated_sha256": "f07f45464294b2a9c8cb10922c9c264c025040b0a4858d753afe5ce8fde78b99",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.metadata_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::metadata_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import std;\nimport planar.test.metadata_fixture;",
+              "before": "import std;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::metadata_test {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::metadata_test {",
+              "count": 1
+            },
+            {
+              "after": "  auto checked    = verify(state->db);\n  checked = ::planar::test::metadata_fixture::supply(std::move(checked), ::planar::test::metadata_fixture::boundary::begin);",
+              "before": "  auto checked    = verify(state->db);",
+              "count": 1
+            },
+            {
+              "after": "  auto checked = verify(state->db);\n  checked = ::planar::test::metadata_fixture::supply(std::move(checked), ::planar::test::metadata_fixture::boundary::writer_commit);",
+              "before": "  auto checked = verify(state->db);",
+              "count": 1
+            },
+            {
+              "after": "  auto checked = verify(db);\n  checked = ::planar::test::metadata_fixture::supply(std::move(checked), ::planar::test::metadata_fixture::boundary::acceptance_commit);",
+              "before": "  auto checked = verify(db);",
+              "count": 1
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "b798b7fc39e1ac66cc8d244347d8af38a40e2646c375a12c7f2c75de8aaf4f0e",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.metadata_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::metadata_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "release": {
+    "a0": {
+      "lua": {
+        "after": "  local x05_retained_scalar=0\n  local function init_command(invocation,context)\n    x05_retained_scalar=x05_retained_scalar+1",
+        "altered_sha256": "eeee1dbfbdc5609385e9d5762901c8f73bef2de2281c15e56c35cffdcb7abb67",
+        "before": "  local function init_command(invocation,context)",
+        "count": 1,
+        "reverse_identical": true,
+        "source_sha256": "cf663703ceed18bf2c8204eda5e69dfa3aa7f76e4b7fe5ae84fb2274cc725da4",
+        "variant0_exact_shipped_commands": true,
+        "variant1_retained_scalar_write_only": true
+      },
+      "x05_a0_0_runtime.cpp": {
+        "generated_sha256": "78659497362aaa9c89370feddcc3d04383ec7ec71c73026786a7b626d27994c5",
+        "reverse_identical": true,
+        "source_sha256": "0cd67a98887ca76667b76b0a97f52261ab8e07edb6bd1e6a60fd1169719ec80c",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_0;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "import planar.engine.x05_a0_0_source;\nimport planar.engine.x05_closure_audit;\n",
+            "before": "import planar.engine.runtime_source;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_0 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          },
+          {
+            "after": "int seal_environment(lua_State* l) {\n  // Reserve in this active protected C frame, before pushes or native RAII.\n  if (!lua_checkstack(l, x05_closure_audit::audit_stack_slots)) {\n    context(l).stack_exhausted = true;\n    return 0;\n  }\n  // X05-A0 only: inspect every original root before any proxy freezing.\n  bool x05_ok = false;\n  lua_pushglobaltable(l);\n  {\n    auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n    x05_ok = result.has_value();\n  }\n  lua_pop(l, 1);\n  if (!x05_ok)\n    return luaL_error(l, \"x05_lexical_refusal\");\n  for (const auto& entry : commands(l).entries) {\n    lua_rawgeti(l, LUA_REGISTRYINDEX, entry.reference);\n    {\n      auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n      x05_ok = result.has_value();\n    }\n    lua_pop(l, 1);\n    if (!x05_ok)\n      return luaL_error(l, \"x05_lexical_refusal\");\n  }\n",
+            "before": "int seal_environment(lua_State* l) {\n",
+            "count": 1
+          },
+          {
+            "after": "  x05_closure_audit::snapshot_curated_natives(l, LUA_RIDX_LAST + 3);\n  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "before": "  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, digest, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i == 0 ?",
+            "before": "    lua_pushcclosure(l, digest, 1);\n    lua_setfield(l, -2, i == 0 ?",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, json_codec, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "before": "    lua_pushcclosure(l, json_codec, 1);\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "count": 1
+          }
+        ]
+      },
+      "x05_a0_0_runtime.cppm": {
+        "generated_sha256": "04d3bb3a0e4db6291e23233a222da74baa6391a3da653398df0cd6742567f41d",
+        "reverse_identical": true,
+        "source_sha256": "3f6f297aae5e56f6f5426482713a6ef1d64588ef9a97420fbefc6df25eac935d",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_0;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_0 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          }
+        ]
+      },
+      "x05_a0_1_runtime.cpp": {
+        "generated_sha256": "e667865c6e3743cdbae07b49ba8d885c55deb7c40daa76c1955239269feb8113",
+        "reverse_identical": true,
+        "source_sha256": "0cd67a98887ca76667b76b0a97f52261ab8e07edb6bd1e6a60fd1169719ec80c",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_1;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "import planar.engine.x05_a0_1_source;\nimport planar.engine.x05_closure_audit;\n",
+            "before": "import planar.engine.runtime_source;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_1 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          },
+          {
+            "after": "int seal_environment(lua_State* l) {\n  // Reserve in this active protected C frame, before pushes or native RAII.\n  if (!lua_checkstack(l, x05_closure_audit::audit_stack_slots)) {\n    context(l).stack_exhausted = true;\n    return 0;\n  }\n  // X05-A0 only: inspect every original root before any proxy freezing.\n  bool x05_ok = false;\n  lua_pushglobaltable(l);\n  {\n    auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n    x05_ok = result.has_value();\n  }\n  lua_pop(l, 1);\n  if (!x05_ok)\n    return luaL_error(l, \"x05_lexical_refusal\");\n  for (const auto& entry : commands(l).entries) {\n    lua_rawgeti(l, LUA_REGISTRYINDEX, entry.reference);\n    {\n      auto result = x05_closure_audit::audit_retained(l, lua_gettop(l), LUA_RIDX_LAST + 3);\n      x05_ok = result.has_value();\n    }\n    lua_pop(l, 1);\n    if (!x05_ok)\n      return luaL_error(l, \"x05_lexical_refusal\");\n  }\n",
+            "before": "int seal_environment(lua_State* l) {\n",
+            "count": 1
+          },
+          {
+            "after": "  x05_closure_audit::snapshot_curated_natives(l, LUA_RIDX_LAST + 3);\n  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "before": "  if (luaL_loadbufferx(l, embedded::source().data(), embedded::source().size(), \"trusted\", \"t\"))",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, digest, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i == 0 ?",
+            "before": "    lua_pushcclosure(l, digest, 1);\n    lua_setfield(l, -2, i == 0 ?",
+            "count": 1
+          },
+          {
+            "after": "    lua_pushcclosure(l, json_codec, 1);\n    x05_closure_audit::remember_installed_callback(l, LUA_RIDX_LAST + 3, lua_gettop(l));\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "before": "    lua_pushcclosure(l, json_codec, 1);\n    lua_setfield(l, -2, i ? \"json_encode\" : \"json_decode\");\n  }\n  lua_pop(l, 1);\n  return 0;\n}\nbool token",
+            "count": 1
+          }
+        ]
+      },
+      "x05_a0_1_runtime.cppm": {
+        "generated_sha256": "9efc7a2c59f11f691261811f870d2ca230d5799d5e2c77afcf8e22680b2d394d",
+        "reverse_identical": true,
+        "source_sha256": "3f6f297aae5e56f6f5426482713a6ef1d64588ef9a97420fbefc6df25eac935d",
+        "substitutions": [
+          {
+            "after": "module planar.engine.x05_a0_1;",
+            "before": "module planar.engine.runtime;",
+            "count": 1
+          },
+          {
+            "after": "namespace planar::engine::x05_a0_1 {",
+            "before": "namespace planar::engine {",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "shipped_commands_exact": true,
+    "storage_export": {
+      "r12c2-generated": {
+        "format.cpp": {
+          "generated_sha256": "e61f7d7f1ab9529f262959099ebbea403e89e512bffbbbbab6eba14193bd9aa9",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.ledger_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::ledger_fault {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.sqlite;\nimport planar.test.ledger_posix;",
+              "before": "import planar.engine.ledger.sqlite;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::ledger_fault {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::ledger_fault {",
+              "count": 1
+            },
+            {
+              "after": "planar::test::ledger_posix::fsync(",
+              "before": "::fsync(",
+              "count": 8
+            },
+            {
+              "after": "planar::test::ledger_posix::linkat(",
+              "before": "::linkat(",
+              "count": 1
+            },
+            {
+              "after": "planar::test::ledger_posix::unlinkat(",
+              "before": "::unlinkat(",
+              "count": 2
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "720183915187f65e16aab11600174379301a94f137c3c6379470224ec336c57b",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.ledger_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::ledger_fault {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "r13b1-generated": {
+        "format.cpp": {
+          "generated_sha256": "fecadadae0eb7355288113e0580c8c566a700f611e78ba0b1437c0e7f4d08cbf",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.record_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::record_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.sqlite;\nimport planar.test.record_digest;",
+              "before": "import planar.engine.ledger.sqlite;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::record_test {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::record_test {",
+              "count": 1
+            },
+            {
+              "after": "planar::test::forced_digest(",
+              "before": "digest_record(",
+              "count": 2
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "46f27c7e86a7ea13748f2c6e22979396847243084f88394eb0680ae18f39b619",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.record_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::record_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "r14c3b2-generated": {
+        "format.cpp": {
+          "generated_sha256": "090b92f46e18d8bcae2a48e2c74ce16fb1b9d5046444bcdf8360db6fc3c93cd3",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.atomic_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::atomic_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.sqlite;\nimport planar.test.atomic_digest;",
+              "before": "import planar.engine.ledger.sqlite;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::atomic_test {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::atomic_test {",
+              "count": 1
+            },
+            {
+              "after": "planar::test::atomic_digest::digest(",
+              "before": "digest_record(",
+              "count": 2
+            },
+            {
+              "after": "planar::test::atomic_digest::digest_v2(",
+              "before": "digest_request_v2(",
+              "count": 2
+            },
+            {
+              "after": "\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum) {\n  return next_identifier(maximum);\n}\n#undef LEDGER_TRY",
+              "before": "\n#undef LEDGER_TRY",
+              "count": 1
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "b10c52a385b6ea3048285cb22169b3bf41dbe5c28678782c9a1257dcf1d03265",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.atomic_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::atomic_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "/// @brief Invoke the unchanged private allocator boundary in the isolated test variant.\n/// @param maximum Exact currently allocated signed-64 maximum.\n/// @return Next ID or the production exhaustion refusal.\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum);\nstruct format_state;",
+              "before": "struct format_state;",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "r14f1-generated": {
+        "source_export.cpp": {
+          "generated_sha256": "e113529e7ab9519f9b964adadb2286fddcf3ae6841dde3282604bf7100e1501d",
+          "reverse_identical": true,
+          "source_sha256": "f0a79bfd69559b9aac348c11fa0b5a79080d170c4b56d44a761e5ed0fa85623c",
+          "substitutions": [
+            {
+              "after": "planar.test.source_export;",
+              "before": "planar.engine.source_export;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::source_export_fault {",
+              "before": "namespace planar::engine::source_export {",
+              "count": 1
+            },
+            {
+              "after": "import planar.engine.ledger.format;\nimport planar.test.export_posix;",
+              "before": "import planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "planar::test::export_posix::mkdirat(",
+              "before": "::mkdirat(",
+              "count": 2
+            },
+            {
+              "after": "planar::test::export_posix::openat(",
+              "before": "::openat(",
+              "count": 7
+            },
+            {
+              "after": "planar::test::export_posix::write(",
+              "before": "::write(",
+              "count": 1
+            },
+            {
+              "after": "planar::test::export_posix::fchmod(",
+              "before": "::fchmod(",
+              "count": 4
+            },
+            {
+              "after": "planar::test::export_posix::fsync(",
+              "before": "::fsync(",
+              "count": 3
+            },
+            {
+              "after": "planar::test::export_posix::close(",
+              "before": "::close(",
+              "count": 3
+            },
+            {
+              "after": "planar::test::export_posix::unlinkat(",
+              "before": "::unlinkat(",
+              "count": 2
+            },
+            {
+              "after": "int publish(int parent, const char* stage, const char* target) {\n  if (auto result = planar::test::export_posix::before_publish(parent, stage, target)) return *result;",
+              "before": "int publish(int parent, const char* stage, const char* target) noexcept {",
+              "count": 1
+            }
+          ]
+        },
+        "source_export.cppm": {
+          "generated_sha256": "349810626e88df24e03acfa85538615b54b385fd871129d125406d70a5dca335",
+          "reverse_identical": true,
+          "source_sha256": "b5106b48b69383097b5d1443d2e03845b595dfcb9e5adfd7c3410407e06fd7d4",
+          "substitutions": [
+            {
+              "after": "planar.test.source_export;",
+              "before": "planar.engine.source_export;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::source_export_fault {",
+              "before": "namespace planar::engine::source_export {",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "v5-02-x03-b2-b-c01-generated": {
+        "format.cpp": {
+          "generated_sha256": "f07f45464294b2a9c8cb10922c9c264c025040b0a4858d753afe5ce8fde78b99",
+          "reverse_identical": true,
+          "source_sha256": "682797915315e910dd7d6b6398909f2bfa34fbbd5af04de8c4d6ec272639fa68",
+          "substitutions": [
+            {
+              "after": "planar.test.metadata_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::metadata_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            },
+            {
+              "after": "import std;\nimport planar.test.metadata_fixture;",
+              "before": "import std;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::metadata_test {\nusing namespace planar::engine::ledger;",
+              "before": "namespace planar::engine::metadata_test {",
+              "count": 1
+            },
+            {
+              "after": "  auto checked    = verify(state->db);\n  checked = ::planar::test::metadata_fixture::supply(std::move(checked), ::planar::test::metadata_fixture::boundary::begin);",
+              "before": "  auto checked    = verify(state->db);",
+              "count": 1
+            },
+            {
+              "after": "  auto checked = verify(state->db);\n  checked = ::planar::test::metadata_fixture::supply(std::move(checked), ::planar::test::metadata_fixture::boundary::writer_commit);",
+              "before": "  auto checked = verify(state->db);",
+              "count": 1
+            },
+            {
+              "after": "  auto checked = verify(db);\n  checked = ::planar::test::metadata_fixture::supply(std::move(checked), ::planar::test::metadata_fixture::boundary::acceptance_commit);",
+              "before": "  auto checked = verify(db);",
+              "count": 1
+            }
+          ]
+        },
+        "format.cppm": {
+          "generated_sha256": "b798b7fc39e1ac66cc8d244347d8af38a40e2646c375a12c7f2c75de8aaf4f0e",
+          "reverse_identical": true,
+          "source_sha256": "20b5291716d7ec71e28365f960c29cbce2b837c3621d3ac762f3c39acaf7c76f",
+          "substitutions": [
+            {
+              "after": "planar.test.metadata_format;",
+              "before": "planar.engine.ledger.format;",
+              "count": 1
+            },
+            {
+              "after": "namespace planar::engine::metadata_test {",
+              "before": "namespace planar::engine::ledger {",
+              "count": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

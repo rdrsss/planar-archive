@@ -1,0 +1,12 @@
+{
+  "cases": 60,
+  "skips": 0,
+  "failures": 0,
+  "groups": {
+    "runtime": 18,
+    "schema": 17,
+    "semantic": 16,
+    "selection": 9
+  },
+  "selection_assertions": 17265
+}

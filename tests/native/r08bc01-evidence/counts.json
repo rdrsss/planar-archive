@@ -1,0 +1,11 @@
+{
+  "ctest": 83,
+  "ctest_failed": 0,
+  "ctest_skipped": 0,
+  "acceptance_processes": 150,
+  "acceptance_original_processes": 71,
+  "host_path_processes": 79,
+  "host_path_checks": 60,
+  "baseline_host_path_failures": 39,
+  "native_golden_comparisons": 6
+}

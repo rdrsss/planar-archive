@@ -1,0 +1,12 @@
+{
+  "build_identities": 931,
+  "build_mismatches": [],
+  "final_1_to_2_changed": [
+    "tests/native/v5-02-x05-a3-c04-support/adaptations.json",
+    "tests/native/v5-02-x05-a3-c04-support/allocations.py"
+  ],
+  "product_bytes_unchanged_between_gates": true,
+  "source_entries": 21700,
+  "source_mismatches": [],
+  "symlink": "CLAUDE.md"
+}

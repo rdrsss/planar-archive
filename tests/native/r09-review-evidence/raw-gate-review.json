@@ -1,0 +1,60 @@
+{
+  "independently_compared_protected_files": 1117,
+  "changed": [],
+  "gates": {
+    "debug": {
+      "registered": 113,
+      "acceptance_cases": 1,
+      "test_pass_lines": 113,
+      "registered_execution": [
+        "Executed 113 registered tests; zero skips"
+      ],
+      "test_summary": [
+        "100% tests passed out of 113"
+      ],
+      "lint_summary": [
+        "Formatting and Doxygen checked 25 active source files"
+      ],
+      "no_work_lines": 1,
+      "acceptance_last_log": [
+        "All tests passed (111 assertions in 1 test case)",
+        "All tests passed (2 assertions in 1 test case)",
+        "All tests passed (8 assertions in 1 test case)",
+        "All tests passed (9 assertions in 1 test case)",
+        "All tests passed (12 assertions in 1 test case)",
+        "All tests passed (3 assertions in 1 test case)",
+        "All tests passed (5 assertions in 1 test case)",
+        "All tests passed (3 assertions in 1 test case)"
+      ],
+      "skip_lines": [],
+      "acceptance_processes_150": true
+    },
+    "release": {
+      "registered": 113,
+      "acceptance_cases": 1,
+      "test_pass_lines": 113,
+      "registered_execution": [
+        "Executed 113 registered tests; zero skips"
+      ],
+      "test_summary": [
+        "100% tests passed out of 113"
+      ],
+      "lint_summary": [
+        "Formatting and Doxygen checked 25 active source files"
+      ],
+      "no_work_lines": 1,
+      "acceptance_last_log": [
+        "All tests passed (111 assertions in 1 test case)",
+        "All tests passed (2 assertions in 1 test case)",
+        "All tests passed (8 assertions in 1 test case)",
+        "All tests passed (9 assertions in 1 test case)",
+        "All tests passed (12 assertions in 1 test case)",
+        "All tests passed (3 assertions in 1 test case)",
+        "All tests passed (5 assertions in 1 test case)",
+        "All tests passed (3 assertions in 1 test case)"
+      ],
+      "skip_lines": [],
+      "acceptance_processes_150": true
+    }
+  }
+}

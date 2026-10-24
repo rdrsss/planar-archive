@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "codec-baseline.xml": {
+      "cases": 14,
+      "assertions": 219,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "final-prototype/prototype.xml": {
+      "cases": 8,
+      "assertions": 21280,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  },
+  "inventory": 637,
+  "preserved_approved_names": 627,
+  "compiled_members": 888,
+  "compiled_membership_and_hashes_unchanged": true,
+  "protected_entries": 5391,
+  "operational_log_changes": {
+    "build/rewrite-debug/.ninja_log": {
+      "before": "e8e6d50a7ca8a270d7cdb0f518cfdb74224ef1dd6b2a997504f9af2c2cb65d4c",
+      "after": "b8edd9404000c2d3b6187fc2af37797811f6fc24fd15d07246237d88311f4552"
+    },
+    "build/rewrite-debug/Testing/Temporary/LastTest.log": {
+      "before": "799d07851409179ad615cce487c7902627b63d5fb33aaeb44543dc6d797a358e",
+      "after": "1fc0285197d0c76e0d94e35695f9cd10e72be68a4d97a955828455f31b1f3537"
+    }
+  },
+  "checkpoint_members": 53,
+  "checkpoint_unchanged": true,
+  "full_gate": false,
+  "production_api": false,
+  "independent_review": "pending"
+}

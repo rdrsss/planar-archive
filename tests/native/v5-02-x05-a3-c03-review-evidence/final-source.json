@@ -1,0 +1,11 @@
+{
+  "artifact_entries": 284,
+  "artifact_manifest_sha256": "b428790057cccda22dd869b3b2f515a1c989a953b1bf32d3b8762bac8a3d13f0",
+  "artifact_mismatches": [],
+  "build_entries": 931,
+  "build_manifest_sha256": "68d4f3375c744266173946a66ba16becb645fa8e3c4e486e9785b0289be8fe37",
+  "build_mismatches": [],
+  "source_entries": 21172,
+  "source_manifest_sha256": "00aedef73482d57d51b3578faf51edb2f0702bc3fb5d66d76bfdf03430416fdb",
+  "source_mismatches": []
+}

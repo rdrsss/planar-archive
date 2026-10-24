@@ -1,0 +1,60 @@
+[
+  {
+    "fixture": [
+      "<repo>/build/rewrite-debug/src/engine/planar_history_fixture",
+      "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-history-wire-s40jjzjk/unknown",
+      "unknown"
+    ],
+    "command": [
+      "<repo>/build/rewrite-debug/bin/planar",
+      "history",
+      "--ledger",
+      "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-history-wire-s40jjzjk/unknown/ledger",
+      "--revision",
+      "1"
+    ],
+    "status": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 135,
+    "error": {
+      "error": {
+        "code": "unsupported_interpretation",
+        "field": "",
+        "message": "Recorded history view is unavailable"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  },
+  {
+    "fixture": [
+      "<repo>/build/rewrite-debug/src/engine/planar_history_fixture",
+      "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-history-wire-s40jjzjk/oversize",
+      "oversize"
+    ],
+    "command": [
+      "<repo>/build/rewrite-debug/bin/planar",
+      "history",
+      "--ledger",
+      "/private/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-history-wire-s40jjzjk/oversize/ledger",
+      "--revision",
+      "1"
+    ],
+    "status": 3,
+    "stdout_bytes": 0,
+    "stderr_bytes": 165,
+    "error": {
+      "error": {
+        "code": "resource_limit",
+        "details": {
+          "limit": "output_bytes",
+          "maximum": 16777216
+        },
+        "field": "",
+        "message": "JSON codec refused input"
+      },
+      "kind": "error",
+      "version": 1
+    }
+  }
+]

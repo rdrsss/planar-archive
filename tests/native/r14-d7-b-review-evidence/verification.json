@@ -1,0 +1,102 @@
+{
+  "debug": {
+    "registered": 400,
+    "prior_names_preserved": 396,
+    "new_names": [
+      "replacement.load handler attaches six required text bindings",
+      "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "replacement.load invocation snapshots one cwd and environment with lexical targets",
+      "replacement.load_cli"
+    ],
+    "executed": 30,
+    "failures": 0,
+    "skips": 0,
+    "junit_names": [
+      "replacement.command load altered retained callable carries its own original bytes and digest",
+      "replacement.command load caught resource exhaustion is terminal before and after native completion",
+      "replacement.command load defers provenance refusal until fresh acceptance",
+      "replacement.command load malformed bundle semantic and captured result fail before completion",
+      "replacement.command load native failure poisons caught subsequent services and wins",
+      "replacement.command load private admission refuses missing duplicate capability and signature variants",
+      "replacement.command load private catalog routes and interprets in retained VM with exact provenance",
+      "replacement.command load refuses forged family order skipped duplicate and malformed arguments",
+      "replacement.command load retains completion through altered malformed caught and throwing returns",
+      "replacement.command load retains exact native receipt for replay uncertain and ordinary completion",
+      "replacement.command load validates retained token head request and actor before services",
+      "replacement.atomic final native receipt refusal rolls back all tentative history",
+      "replacement.atomic identity bound receipt busy commit proves rollback and preserves proposed saved bytes",
+      "replacement.atomic identity bound receipt capture and unavailable candidate refusals retain noncompletion",
+      "replacement.atomic identity bound receipt late replay owns bytes before stale CAS and unusable candidate",
+      "replacement.atomic identity bound receipt refuses replacement before exact replay",
+      "replacement.atomic variant final receipt mutation cannot publish changed capture",
+      "replacement.load capture prepares complete multi-job closure and exact trusted provenance without source trees",
+      "replacement.load capture refuses B M membership headers and captured reference mismatches",
+      "replacement.load capture rejects malformed and mismatched routes before routed reads",
+      "replacement.load capture retains original selected receipts and ignores unrelated siblings",
+      "replacement.load capture seals original workspace and refuses missing linked or oversized references",
+      "replacement.load capture state moves failures paths aliases provenance and bounds are terminal",
+      "replacement.load capture trusted all-job validation preserves unselected and duplicate logical diagnostics",
+      "replacement.load handler attaches six required text bindings",
+      "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "replacement.load invocation snapshots one cwd and environment with lexical targets",
+      "replacement.retained_cli",
+      "replacement.workspace_selector_cli",
+      "replacement.load_cli"
+    ],
+    "load_cli_checked_invocations": 119,
+    "concurrency_transient_lines": [
+      "concurrency conflict attempt 1: {\"error\":{\"code\":\"io\",\"details\":{\"operation\":\"ledger\"},\"field\":\"\",\"message\":\"Explicit ledger recovery is required\"},\"kind\":\"error\",\"version\":1}"
+    ]
+  },
+  "release": {
+    "registered": 400,
+    "prior_names_preserved": 396,
+    "new_names": [
+      "replacement.load handler attaches six required text bindings",
+      "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "replacement.load invocation snapshots one cwd and environment with lexical targets",
+      "replacement.load_cli"
+    ],
+    "executed": 30,
+    "failures": 0,
+    "skips": 0,
+    "junit_names": [
+      "replacement.command load altered retained callable carries its own original bytes and digest",
+      "replacement.command load caught resource exhaustion is terminal before and after native completion",
+      "replacement.command load defers provenance refusal until fresh acceptance",
+      "replacement.command load malformed bundle semantic and captured result fail before completion",
+      "replacement.command load native failure poisons caught subsequent services and wins",
+      "replacement.command load private admission refuses missing duplicate capability and signature variants",
+      "replacement.command load private catalog routes and interprets in retained VM with exact provenance",
+      "replacement.command load refuses forged family order skipped duplicate and malformed arguments",
+      "replacement.command load retains completion through altered malformed caught and throwing returns",
+      "replacement.command load retains exact native receipt for replay uncertain and ordinary completion",
+      "replacement.command load validates retained token head request and actor before services",
+      "replacement.atomic final native receipt refusal rolls back all tentative history",
+      "replacement.atomic identity bound receipt busy commit proves rollback and preserves proposed saved bytes",
+      "replacement.atomic identity bound receipt capture and unavailable candidate refusals retain noncompletion",
+      "replacement.atomic identity bound receipt late replay owns bytes before stale CAS and unusable candidate",
+      "replacement.atomic identity bound receipt refuses replacement before exact replay",
+      "replacement.atomic variant final receipt mutation cannot publish changed capture",
+      "replacement.load capture prepares complete multi-job closure and exact trusted provenance without source trees",
+      "replacement.load capture refuses B M membership headers and captured reference mismatches",
+      "replacement.load capture rejects malformed and mismatched routes before routed reads",
+      "replacement.load capture retains original selected receipts and ignores unrelated siblings",
+      "replacement.load capture seals original workspace and refuses missing linked or oversized references",
+      "replacement.load capture state moves failures paths aliases provenance and bounds are terminal",
+      "replacement.load capture trusted all-job validation preserves unselected and duplicate logical diagnostics",
+      "replacement.load handler attaches six required text bindings",
+      "replacement.load intent aggregate record bound remains a resource refusal before ledger access",
+      "replacement.load invocation snapshots one cwd and environment with lexical targets",
+      "replacement.retained_cli",
+      "replacement.workspace_selector_cli",
+      "replacement.load_cli"
+    ],
+    "load_cli_checked_invocations": 119,
+    "concurrency_transient_lines": [
+      "concurrency equal attempt 1: {\"error\":{\"code\":\"io\",\"details\":{\"operation\":\"ledger\"},\"field\":\"\",\"message\":\"Explicit ledger recovery is required\"},\"kind\":\"error\",\"version\":1}",
+      "concurrency conflict attempt 1: {\"error\":{\"code\":\"io\",\"details\":{\"operation\":\"ledger\"},\"field\":\"\",\"message\":\"Explicit ledger recovery is required\"},\"kind\":\"error\",\"version\":1}",
+      "concurrency cas attempt 1: {\"error\":{\"code\":\"io\",\"details\":{\"operation\":\"ledger\"},\"field\":\"\",\"message\":\"Explicit ledger recovery is required\"},\"kind\":\"error\",\"version\":1}"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "identity": "6c7c61e8bb02b5ca25dc123bc52bdb92ecdbb98575779fc02976ade6afa5fc6d",
+    "manifest_sha256": "df2f75b1c1a5b4e1426c85b2947a331b2d927b94796933971d6de3b3945fd958",
+    "files": 6
+  },
+  "evidence": {
+    "identity": "9ad4d2a8ac0e53552bb09b51508275eb835219e6839ca8eb1eb6c9d0533ff256",
+    "manifest_sha256": "6e7f6906f13a03332f114c0671965e7eea217a9aa2bd844434fbaa15edda2fa5",
+    "files": 43
+  },
+  "protected_files": 12213,
+  "focused": {
+    "matched": 133,
+    "failures": 0,
+    "skips": 0
+  },
+  "codec": {
+    "matched": 11,
+    "failures": 0,
+    "skips": 0
+  },
+  "cli": {
+    "matched": 1,
+    "failures": 0,
+    "skips": 0
+  },
+  "baseline_cases_preserved": 122,
+  "cli_processes": 247
+}

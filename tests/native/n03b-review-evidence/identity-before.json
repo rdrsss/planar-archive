@@ -1,0 +1,52 @@
+{
+  "tests/native/n03b-evidence/candidate-sha256.txt": {
+    "sha256": "28efeb946c429af57490264cc1f95f4ebaef08a56b538c96e89d65db2f7579db",
+    "entries": 25,
+    "mismatches": []
+  },
+  "tests/native/n03b-evidence/evidence-sha256.txt": {
+    "sha256": "274ad6bb470c0897eaea7de0d0b2db7ff0410ef5adb017c2ceae901006160022",
+    "entries": 236,
+    "mismatches": []
+  },
+  "tests/native/n03b-evidence/historical-evidence-sha256.txt": {
+    "sha256": "12e4c8b1c6d8669c95cc41f3e1191416b2ab704a13d040afd021d41237db90ca",
+    "entries": 824,
+    "mismatches": []
+  },
+  "tests/native/n03ac01-evidence/evidence-sha256.txt": {
+    "sha256": "3afc8e2be48fbd7a48d85a3c13fcaf36f5a4a86530d8db730f6070ff941c15ec",
+    "entries": 37,
+    "mismatches": []
+  },
+  "tests/native/n03ac01-review-evidence/evidence-sha256.txt": {
+    "sha256": "cf4d4776fe204cdb0213f08861deecf41320341aa44bfb3d9d1ed8725e5599db",
+    "entries": 19,
+    "mismatches": []
+  },
+  "tests/native/r10-evidence/evidence.sha256": {
+    "sha256": "37f236eb24bf30e2f81f6122cc53703952264736e29081acebf1ce7ba97f6275",
+    "entries": 166,
+    "mismatches": []
+  },
+  "tests/native/n03a-evidence/coordinator-evidence-sha256.txt": {
+    "sha256": "fb2ced609623048e81a0eb7aa1b82d11f0349200e9f560a5e273c126bbfee5f7",
+    "entries": 20,
+    "mismatches": []
+  },
+  "approved_codec": {
+    "THIRD_PARTY_NOTICES.md": true,
+    "cmake/dependencies.cmake": true,
+    "src/engine/json_codec/codec.cpp": true,
+    "src/engine/json_codec/codec.cppm": true,
+    "src/engine/json_codec/codec.t.cpp": true
+  },
+  "deleted": {
+    "src/engine/json/json.cpp": true,
+    "src/engine/json/json.cppm": true,
+    "src/engine/json/json.t.cpp": true
+  },
+  "snapshots_equal": true,
+  "vendor_head_exact": true,
+  "vendor_files": 663
+}

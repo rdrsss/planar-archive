@@ -1,0 +1,24 @@
+Filters: [reviewer]
+Randomness seeded to: 616445492
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+probe is a Catch2 v3.15.3 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+review scoped arrays blocking questions and accepted obligations
+-------------------------------------------------------------------------------
+/var/folders/mk/x25369kn6yz4xr2lcl6n73qh0000gn/T/planar-r07b2c-review-1x09cvws/probe.cpp:12
+...............................................................................
+
+<repo>/src/kernel/runtime/schema.t.cpp:60: FAILED:
+explicitly with messages:
+  combined.lua
+  job
+  Unsatisfiable dependency phases
+  Unexpected schema refusal
+
+===============================================================================
+test cases:   3 |   2 passed | 1 failed
+assertions: 294 | 293 passed | 1 failed
+

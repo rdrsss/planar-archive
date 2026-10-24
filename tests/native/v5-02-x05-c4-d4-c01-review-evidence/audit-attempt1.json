@@ -1,0 +1,7 @@
+{
+  "command": "python3 tests/native/v5-02-x05-c4-d4-c01-review-evidence/audit.py",
+  "result": "checker path error before original preedit audit",
+  "error": "FileNotFoundError: preedit-runtime.cpp; actual preserved name is preedit-src_engine_runtime_runtime.cpp",
+  "correction": "derive exact preedit filename from full source relative path; no candidate or prior artifact modified",
+  "earlier_checks": "C01 seals/manifests, D3/D4/review artifact entries, four-source baseline/diff/coverage and eight status diffs completed before checker stopped"
+}

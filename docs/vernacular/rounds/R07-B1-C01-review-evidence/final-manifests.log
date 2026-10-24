@@ -1,0 +1,35 @@
+$ shasum -a 256 -c tests/native/r07b1c01-evidence/candidate.sha256
+stdlib/planar/schema.lua: OK
+stdlib/planar/json.lua: OK
+stdlib/planar/README.md: OK
+src/kernel/runtime/schema.t.cpp: OK
+
+$ shasum -a 256 -c tests/native/r07b1c01-evidence/evidence.sha256
+tests/native/r07b1c01-evidence/README.md: OK
+tests/native/r07b1c01-evidence/beforefix-json.lua: OK
+tests/native/r07b1c01-evidence/beforefix-schema.lua: OK
+tests/native/r07b1c01-evidence/candidate.sha256: OK
+tests/native/r07b1c01-evidence/exact-red-build.log: OK
+tests/native/r07b1c01-evidence/exact-red-tests.log: OK
+tests/native/r07b1c01-evidence/final-bridge.log: OK
+tests/native/r07b1c01-evidence/final-build.log: OK
+tests/native/r07b1c01-evidence/final-ctest.log: OK
+tests/native/r07b1c01-evidence/final-lint.log: OK
+tests/native/r07b1c01-evidence/final-nochange.log: OK
+tests/native/r07b1c01-evidence/final-schema.log: OK
+tests/native/r07b1c01-evidence/green-build-2.log: OK
+tests/native/r07b1c01-evidence/green-build-3.log: OK
+tests/native/r07b1c01-evidence/green-build.log: OK
+tests/native/r07b1c01-evidence/green-schema-2.log: OK
+tests/native/r07b1c01-evidence/green-schema.log: OK
+tests/native/r07b1c01-evidence/red-build.log: OK
+tests/native/r07b1c01-evidence/red-commands.json: OK
+tests/native/r07b1c01-evidence/red-tests.log: OK
+tests/native/r07b1c01-evidence/regression-schema.t.cpp: OK
+tests/native/r07b1c01-evidence/restored-build.log: OK
+
+a924cbb62e326d8005748132a3dd26581de69d7bf23538dc476fdf9766690ee4  cmake/embed_lua.cmake (matches original B1)
+
+4824c1c4a42188ed5cb25f6f429b507699bef245d79a05bec69dbfbec9ea2c15  src/kernel/CMakeLists.txt (matches original B1)
+
+5a1bf749b8bf08042cdf4e2a070214c79864b8cb94b33da35bb0dcf41123b4fc  stdlib/planar/bootstrap.lua (matches original B1)

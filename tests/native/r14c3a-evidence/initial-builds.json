@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--preset",
+      "debug"
+    ],
+    "log": "configure.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "log": "build-first.txt",
+    "exit": 0
+  }
+]

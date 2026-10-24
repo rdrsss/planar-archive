@@ -1,0 +1,9 @@
+[
+  {
+    "argv": [
+      "python3",
+      "tests/native/v5-02-x05-b2-a-c01-review-evidence/raw-audit.py"
+    ],
+    "exit_code": 0
+  }
+]

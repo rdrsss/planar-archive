@@ -1,0 +1,32 @@
+{
+  "candidate-manifest.json": {
+    "entries": 211,
+    "mismatches": [],
+    "sha256": "2e6b3e9beac951f9f7269fdbe0441ff0c1009ed8893df8c48c37857bcb160a2b"
+  },
+  "artifact-manifest.json": {
+    "entries": 734,
+    "mismatches": [],
+    "sha256": "d586eade82564b24a533d3257a5d8669b1ee448a21af2acd268ce326c454eb80"
+  },
+  "frozen-source.json": {
+    "entries": 211,
+    "mismatches": [],
+    "sha256": "aef0b8aacaa9d2d3e90e772daee98ba0699f7b49e550aebe3ef8c9f5838c2fcf"
+  },
+  "protected-start.json": {
+    "entries": 21492,
+    "mismatches": [],
+    "sha256": "58b760aff6f9c3b72eef8b51ad563de5779e155834f1ceec226cbbdd2fe73c3f"
+  },
+  "protected-unowned.json": {
+    "entries": 7,
+    "mismatches": [],
+    "sha256": "2bf53fc5a791167fc9ab24cca85c2a2292189374b89d9475e48da2c035921cfb"
+  },
+  "diff": {
+    "reconstructs_exactly": true,
+    "sha256": "abb009633070b7cdca1a18e349e233a9f3ade8bd32957b869f721126ae9ed446"
+  },
+  "review_protected_entries": 24430
+}

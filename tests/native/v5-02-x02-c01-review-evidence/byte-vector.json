@@ -1,0 +1,36 @@
+{
+  "method": "Document-extracted UTF-8 strings and independent assembly arithmetic; no Lua/product execution",
+  "sizes": [
+    87,
+    94,
+    59
+  ],
+  "budget": 60,
+  "omitted": [
+    "b",
+    "a"
+  ],
+  "final_text": "## base\n\nB\n\n## omissions\n\nOptional sections omitted: b, a.\n",
+  "sections": [
+    {
+      "id": "base",
+      "bytes": 11,
+      "included": true
+    },
+    {
+      "id": "a",
+      "bytes": 37,
+      "included": false
+    },
+    {
+      "id": "b",
+      "bytes": 37,
+      "included": false
+    },
+    {
+      "id": "omissions",
+      "bytes": 48,
+      "included": true
+    }
+  ]
+}

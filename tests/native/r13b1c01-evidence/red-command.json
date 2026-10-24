@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "build/rewrite-debug/src/engine/planar_ledger_format_tests",
+    "[snapshot]"
+  ],
+  "exit_code": 42
+}

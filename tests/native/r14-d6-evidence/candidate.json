@@ -1,0 +1,22 @@
+{
+  "path_base": "repository root; snapshots under tests/native/r14-d6-evidence/candidate",
+  "files": {
+    "CLAUDE.md": "a421b637a4599cce7dc112f97821f95f246e76fac1bc98f2a197ba7fd8a059a0",
+    "docs/architecture.md": "7af2736ba1b5f7716f26bee83ab493254959d28a2d8e682c7f57a0f48926021f",
+    "docs/testing.md": "17d8a47fd4f051dce69c4461cb4a10db76b7b14fd49046a9b83caf753d2daa43",
+    "docs/vernacular/acceptance-matrix.md": "b94af4fb69200ed08a282a85bf23a896284f8a2771807ee736b874cfcc23080e",
+    "docs/vernacular/implementation.md": "951cec86a41a597458fc2b44b98041a5df889c8459dfb3e55472f8e7165dc522",
+    "docs/vernacular/load-command-contract.md": "a659bfd50dbe3f8ecfcb4a44628ab1a193f86d6a667c174c371e416420866ee5",
+    "docs/vernacular/roadmap.md": "6e63d8cf6a67e639a4d4f6404c2afd153e72fde25aa8f56f5f04a87d70009e97",
+    "docs/vernacular/v5-alignment.md": "15526178f6e891ce0ae54f8b618d0a5066592c0931c50a17a4a8b5a42d03129b",
+    "src/cmd/planar/CMakeLists.txt": "8dc9673b0b6217b3a593975788184971ad97c1a8a36a29c64a0e4c56ad76fca6",
+    "src/engine/CMakeLists.txt": "c09c9a33f0caa2573838b4f241ee76824038d8b3cff1042b19b59b5d683e28ad",
+    "src/engine/ledger/completion.cppm": "047ba39a8a9dc5b1608555dd5eddd164b55bc1bc5df184b48e4e925b45b6cab1",
+    "src/engine/runtime/commands.t.cpp": "ec17a05f0194edccbe5169a32f4e6be98f4ee40231028ae5fffe030f8dc96f88",
+    "src/engine/runtime/runtime.cpp": "20679c1d957647ab83f77b4eda5331eff2483828235f5c7e3a5bd5f2d2efedbf",
+    "src/engine/runtime/runtime.cppm": "602bf5c761a36abc7b94dfa13a5a0cc3e1dee0c7ba2de6613ebefc9d5920e000",
+    "tests/native/r14-d6-support/audit.py": "c88c2ced8eec0c8d1468f301bcc617471bb73642b63e213d83686d823727ba48",
+    "tests/native/r14-d6-support/generate.py": "d40580af13aa23925aba1f883dda512ae47474694f52b1724034246801743d1e",
+    "tests/native/r14-d6-support/load.lua": "2e2cc67c287d6231e5fe8f50457204791184415603cc767a9597da23e5ac1076"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "--output-on-failure",
+    "-R",
+    "native write transaction opens",
+    "--output-junit",
+    "<repo>/tests/native/v5-02-x03-b2-b-evidence/red.xml"
+  ],
+  "cwd": "<repo>",
+  "start": 1792701629.214258,
+  "end": 1792701629.296417,
+  "exit_code": 8
+}

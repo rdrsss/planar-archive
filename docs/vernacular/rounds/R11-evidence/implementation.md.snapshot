@@ -1,0 +1,273 @@
+# Planar rewrite implementation plan
+
+Status: R01–R09 are complete and independently approved. The replacement CLI
+renders worker, reviewer and recovery packets from captured inputs. Engine naming,
+product Lua under `src/`, Glaze serialization and CLI11 handlers are restored and
+independently reviewed. R10 presentation feedback is resolved by approved
+R10-P01. R11 now designs ledger/history storage before persistence code. See the
+roadmap for round status.
+
+## Authority and working arrangement
+
+The operator approved a complete, breaking rewrite with no migration or upgrade
+path from existing Planar versions. Work uses the current checkout on
+`dev/planar-v2-vernacular`. The operator has stopped other Planar work; this
+checkout is the shared implementation directory. No additional worktree is
+required by default.
+
+The product baseline is [the v4 design spec](Planar%20design%20spec%20-%20v4.md).
+This plan and the [roadmap](roadmap.md) record implementation scope, sequencing,
+and the operator's subsequent decisions. The design's legacy coexistence and
+rollback requirements are superseded by the approved clean rewrite. Git retains
+the old implementation. No legacy database conversion, compatibility CLI, or
+permanent legacy source tree is required. This does not authorize deleting an
+operator's installed binaries or data.
+
+Planning and orchestration live in this directory and in the coordinating
+session. Do not invoke existing Planar tools for tasks, claims, heartbeats,
+planning, documentation bookkeeping, build coordination, or finalization. The
+operator's instruction supersedes the old repository workflow requirements.
+Builds and tests run directly and serially per build directory. Before code work,
+update the repository instructions to make this exception durable and remove
+instructions that would route agents back into the old operational system.
+
+Retain applicable engineering conventions: C++ modules, explicit error
+boundaries, pinned vendored dependencies, meaningful tests, and signed-off
+commits when commits are made. The current task does not authorize publishing,
+installing, or merging the replacement.
+
+## Product boundary
+
+Planar compiles restricted Lua declarations and captured observations into scoped
+role context. Trusted Lua owns schemas, shapes, input selection, materiality and
+projections. A small native engine owns isolation, captured file access,
+canonical encoding, hashing and output. Later cuts add finite evidence and
+ledger operations. An external driver owns sessions and scheduling.
+
+The first release of implementation work is render-only: one spec, one source
+root, manually selected job grouping, and explicit observation inputs. It does
+not create a ledger, claim work, execute checks, call models, schedule sessions,
+manage worktrees, or install a replacement over existing Planar.
+
+## Agent protocol
+
+The coordinator scopes rounds, dispatches agents, maintains this plan and the
+roadmap, and checks evidence. Implementation and independent review use fresh
+subagents for each round.
+
+| Role | Model | Reasoning | Responsibility |
+| --- | --- | --- | --- |
+| Search | `gpt-6-luna` | high | Read-only repository mapping for the exact round |
+| Coder | `gpt-6.1-sol` | medium | Implement the assigned scope and verify it |
+| Reviewer | `gpt-6.1-sol` | high | Independently review changes and acceptance evidence |
+
+The operator explicitly approved `gpt-6-luna` with high reasoning in place of the
+initially requested, unavailable `gpt-6.1-luna`. Do not substitute other models
+silently. Use ordinary subagents with explicit briefs; existing Planar-managed
+agent roles and skills are not this rewrite's orchestration mechanism.
+
+Each round follows this sequence:
+
+1. The coordinator records the objective, dependencies, owned files, acceptance
+   criteria and verification commands in a round record.
+2. A fresh search agent maps relevant source, build wiring, tests and hazards.
+   It cites paths and symbols and identifies what can be reused or removed.
+   It does not implement changes. Its report becomes part of the round record.
+3. A fresh coder receives the bounded brief and search report. It implements in
+   the shared checkout, runs the agreed checks, and reports the exact changes,
+   results and limitations. It may not approve its own work.
+4. A fresh reviewer examines the candidate diff and raw evidence against the
+   acceptance criteria. It may run verification but does not implement fixes.
+   It returns `approve`, `request-changes`, or `blocked`, with cited findings.
+5. On `request-changes`, start a fresh corrective round with new search, coder
+   and reviewer agents. Carry forward the findings and existing candidate;
+   do not erase previous evidence. Search can be narrow but is not skipped.
+6. On `approve`, the coordinator verifies that the approved candidate is still
+   the current candidate, records completion, and proceeds to the next round.
+   A subsequent edit affecting that scope requires renewed review.
+
+Completed agents are not reused for later rounds. Once their reports are saved
+and the round disposition is recorded, stop any remaining activity and retire
+them from dispatch. If the harness offers termination, terminate them at that
+point; otherwise leave completed agents idle and never redispatch them. Do not
+claim a termination operation occurred when the harness only supports stopping
+activity.
+
+Use one search agent, one coder and one reviewer sequentially by default. The
+coordinator plus these roles fits the available four slots. Parallel coding
+requires a documented reason and disjoint file ownership; it is not assumed.
+Every brief states that the checkout is shared, names permitted writes, and
+forbids reverting another agent's changes. Fresh agents receive a self-contained
+brief rather than depending on inherited conversation context.
+
+Review approval advances ordinary rounds without repeated operator permission.
+Unresolved product choices return to the operator. At the render evaluation
+gate, inspect the actual fragments with the operator before extending into
+persistence. Planning approval is not approval to skip that evaluation.
+
+## Durable work records
+
+Use these repository files:
+
+- `implementation.md`: product boundary, architectural decisions and protocol.
+- `roadmap.md`: ordered rounds, dependencies, status and acceptance gates.
+- `declarations.md`: exact workspace/spec/job constructors and validation rules.
+- `render-contract.md`: render invocation, observations, identities, diagnostics
+  and budget behavior.
+- `ledger-contract.md`: proposed new-format declaration/history storage, acceptance,
+  replay and exact export; implementation begins only after independent R11 review.
+- `rounds/<id>.md`: brief, search findings, implementation evidence, reviewer
+  disposition and any unresolved questions for one round.
+
+The last three surfaces are created as their rounds begin. Do not fabricate
+completed evidence or reviewer approval. A round record identifies its starting
+revision and existing working changes, candidate files, executed commands and
+results, and reviewer findings. Until commits exist, preserve a candidate diff
+identity or equivalent exact snapshot reference so later edits cannot be
+mistaken for the approved candidate.
+
+## First slice: declarations and useful packets
+
+Finalize a real constructor API before native implementation. Specify required
+and optional fields, defaults, schema versions, stable IDs, prose/file values,
+materiality wrappers, supported dependency combinations, ownership semantics,
+review separation, checks and toolchain descriptors. Specify the supported path
+grammar rather than accidentally promising arbitrary glob overlap analysis.
+
+Author the quota fixture with role-independent `library` and `command` work
+units, their contracts, acceptance requirements, path boundaries and dependency.
+Both jobs use byte-identical spec inputs:
+
+- Combined: one builder implements both units; an independent reviewer reviews
+  both.
+- Split: separate library and command workers; an independent reviewer reviews
+  both.
+
+The fixture referenced by v4 is absent at its linked location in this checkout.
+Search for an available copy during the first round. If unavailable, author the
+new fixture from the specified behavior and label its provenance accurately.
+Do not treat an absent historical trace as executed evidence.
+
+Write expected worker, reviewer and recovery packets before building the native
+pipeline. Initially these are reviewed examples; they become executable goldens
+when the renderer is implemented. Include identity-manifest examples with a
+specified format; do not invent computed digest values as native test vectors.
+
+Reviewer packets consume explicitly captured output observations with exact
+target identities. Before outputs exist, report their absence. Render-only
+packets do not assert that checks passed or approval was granted. Recovery
+examples carry a bounded checkpoint and labeled observations, explicitly state
+that no run is active, and make no claim of durable execution history.
+
+## Native render implementation
+
+Implement a new thin `planar` command with no dependency on the old planning
+database. Finalize command syntax in `render-contract.md`; example syntax is
+`planar render --workspace <path> --job split --role library_worker`.
+
+Capture declaration and referenced-file bytes before projection. The same
+captured set drives validation, identity and rendering; projections perform no
+fresh filesystem reads. Logical root/path identities must be distinguished from
+host checkout locations. Define deterministic ordering and interpretation
+versions explicitly.
+
+The native loader exposes only the curated declaration surface. Bound memory,
+instructions, input size and conversion depth. Refuse forbidden capabilities,
+unsupported values, mutable trusted tables and bytecode loading. Verify confined
+reads, traversal and symlink behavior now, because render already reads files.
+Do not defer native security checks to the later execution cut.
+
+Canonical encoding distinguishes maps and arrays, including empty values, and
+pins string, integer, ordering, absence and invalid-value behavior. Specify and
+test seed-zero XXH3_128bits output representation and encoding/hash versions.
+Native golden vectors are separate from any fake-engine identities.
+
+Trusted Lua validates and resolves the graph, derives ownership and requirement
+coverage, selects material inputs and renders role packets. Job configuration
+cannot drop mandatory checks or broaden ownership. Grouping dependent units
+preserves internal obligations without creating role self-waits. Reject actual
+unsatisfiable phase dependencies with actionable diagnostics.
+
+Budget handling counts bytes exactly, labels any token estimate, and never
+silently truncates mandatory context. Optional omissions follow declared
+priorities and appear in the output. Errors distinguish syntax, schema,
+capability, resource, filesystem and budget failures.
+
+## Repository destination
+
+The current approved render implementation has this structure:
+
+```text
+src/cmd/planar/                 thin CLI, bootstrap, response, handlers/render/
+src/engine/{value,lua,capture,canonical,hash,runtime,json_codec}/
+src/stdlib/planar/              embedded schema, semantic, selection, observations,
+                               presentation, render, JSON and bootstrap Lua
+fixtures/render/quota/          declarations, source, observations and goldens
+tests/{stdlib,native}/          test-only Lua/harnesses and CLI acceptance evidence
+docs/vernacular/                implementation planning and round evidence
+docs/                          current product reference
+cmake/, vendor/, scripts/       replacement build and verification support
+```
+
+Native unit tests are colocated with their modules. R09 removed legacy sources,
+migrations, operational commands and distribution scripts; Git retains them.
+There is no permanent legacy source tree or current `src/lib/` layer. Future
+ledger/history/acceptance engine modules and trusted acceptance Lua remain under
+`src/`, with CLI11 command families under `handlers/<family>/`. Their proposed
+boundaries and exact format are in [ledger foundation v1](ledger-contract.md).
+Do not reintroduce legacy openers, implicit database paths or automatic migration.
+
+Review reusable libraries and dependencies individually. Lua 5.5.0 is already
+vendored in this checkout; the historical inventory in v4 is not a current source
+map. Existing sandbox or process code is useful evidence, not automatically a
+trusted implementation. Remove unused dependencies and obsolete installation
+paths only after checking references. Do not leave a runnable installer that
+ships the wrong product or implies an upgrade path.
+
+## Render acceptance gate
+
+Required evidence includes fresh-process deterministic renders, canonical/hash
+vectors, native isolation tests and the v4 render cases A01–A05, A07–A08,
+A30–A32. A05 covers separate output identity at this gate; execution evidence
+invalidation remains a later obligation. Add confined-read cases now even though
+the broader A18 boundary-check case belongs to execution.
+
+For both groupings prove complete requirement/check coverage, exclusive path
+ownership, independent review and correct dependency resolution. Changes to
+scoped material inputs move only applicable fingerprints. Optional prose and
+checkpoints change renders without changing work identity. Own implementation
+edits change output identity without changing producer input identity.
+
+Run targeted checks per round and one complete replacement gate on the integrated
+render candidate. Record selected test counts and reject zero-match success.
+The obsolete product's full gate is not automatically the replacement gate;
+define the new gate during build bootstrap and document its coverage.
+
+Finally, evaluate the actual worker, reviewer and recovery packets with the
+operator. Passing deterministic tests alone does not establish useful context.
+Persistence work begins only after that evaluation resolves required changes.
+
+## Next slice: accepted declarations and recorded history
+
+R10 evaluation and the independently approved R10-P01 presentation correction
+satisfied the operator's request to improve presentation before continuing.
+R11 is a documentation-only design candidate for [ledger foundation v1](ledger-contract.md),
+not an implemented persistence claim. It bounds R12 dependency/schema/transaction
+work, R13 immutable complete trees and interpretation records, then R14 finite
+acceptance/history/export. Existing render remains read-only and database-free.
+
+The proposed ledger has an explicit new format, complete captured declaration
+closure, exact trusted registry/stdlib provenance, versioned interpreted state,
+chronological revisions distinct from immutable content IDs, append-only typed
+events and atomic current-state projections. Exact no-op retains the revision;
+a revert after changes creates a new revision that may reuse an old tree.
+Explicit request parameters identify an original intent: replay returns its saved
+result before capture/CAS, while a fresh ID is required to accept new draft bytes.
+Digests index exact records; unequal equal-digest candidates refuse atomically.
+
+These concrete decisions implement v4 A20, storage/format parts of A23, and
+A25–A29 without prematurely adding execution state. Later contracts separately
+cover role generations, runs/fencing, refresh/recovery, checks and review/repair;
+only their integrated gate enables observed-state execution. Accepted-revision
+rendering and draft status/impact also require bounded read-workflow design.
+No legacy migration, installation, publication or merge is authorized.

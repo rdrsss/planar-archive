@@ -1,0 +1,12 @@
+{
+  "path_base": "repository root",
+  "files": {
+    "src/engine/ledger/history_codec.cppm": "8383c317e083ec128513f2faa69fa96f3eb33f60615ad64504771390abb74235",
+    "src/engine/ledger/history_codec.cpp": "017eff4f12b3c0cfdd62a7e52235b4551d19771896664ba716c62b0a3b810782",
+    "src/engine/ledger/history_codec.t.cpp": "98ae2ddfd07bf7bb9ae2cf2955c2d3453695ac647df7fea61a53aca9fadc69dc",
+    "src/engine/CMakeLists.txt": "62b8e32409e1320199476e03669ced759453bf1b1fcb4573776ba9c1558b037d",
+    "docs/architecture.md": "2a3f88393ada60767f1f7528c9e79425ebc514a817a9052a0aceac4ae4e90601",
+    "docs/testing.md": "a394fa7331d67c3f4d2e6773bf67db600d7b5a5325010c29dafc0d8bad1e4cac"
+  },
+  "identity": "6c7c61e8bb02b5ca25dc123bc52bdb92ecdbb98575779fc02976ade6afa5fc6d"
+}

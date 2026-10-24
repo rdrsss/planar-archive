@@ -1,0 +1,7 @@
+{
+  "reason": "Debug passed676; raw cost677 contains one obsolete cache row; exact current registered intersection676",
+  "coordinator_instruction": "Accept explicit reconciliation: raw cost file is historical scheduler cache, not execution log. Preserve raw677 with identified stale row, prove registered intersection exactly676 and no missing/duplicate current names, while inventory/JUnit/LastTest remain exact676 authoritative execution. No rerun and no fresh product round. Use new evidence-local continuation, original frozen support unchanged. For release preserve pre-run cost cache then remove only that build-local scheduler cache before full suite.",
+  "continuation_sha256": "6984fddf79e13c1ab2663d4ae18511673e0a11881c4fc098025ef91c2146fb8b",
+  "original_frozen_support_sha256": "8952010a872fe1367e4a631ea4bf76d7203db50dbfd2e5f6335ea5a2ff52b7bf",
+  "support_unchanged": true
+}

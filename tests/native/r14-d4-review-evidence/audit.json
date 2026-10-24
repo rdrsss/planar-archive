@@ -1,0 +1,19 @@
+{
+  "identities": {
+    "candidate.json": "d5b39b5f92411b6bce0cd26ec26b67974c4eea10c2663066a5f19242b0946e4f",
+    "owned.diff": "08f9790ab662b25d608b307136476bebfb96d5567aacc1762c4c9df1f609a0be",
+    "artifacts.json": "7c4faf40d4b657aee6feeb9c750c3106622585c2752086cd0ff315167f2facd7"
+  },
+  "verified_current_candidate_and_baseline_snapshots": 17,
+  "verified_author_artifacts": 69,
+  "protection_inventory_entries": 13867,
+  "verified_protected_files_outside_owned": 13866,
+  "new_files_outside_authorized_scope": [],
+  "agents_symlink_and_v5_and_approved_contract_body_preserved": true,
+  "prior_test_names_retained": 370,
+  "current_test_names": 373,
+  "final_author_tests": 153,
+  "author_failures": 0,
+  "author_skips": 0,
+  "red_missing_detail_assertions": 2
+}

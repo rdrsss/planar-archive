@@ -1,0 +1,252 @@
+[
+  {
+    "mode": "caught",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.9091029576957226
+  },
+  {
+    "mode": "caught",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6331115830689669
+  },
+  {
+    "mode": "repeated",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6248655002564192
+  },
+  {
+    "mode": "repeated",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6240422083064914
+  },
+  {
+    "mode": "handler",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.011279124766588211
+  },
+  {
+    "mode": "handler",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export failed\n",
+    "stderr": "",
+    "seconds": 0.01096558291465044
+  },
+  {
+    "mode": "deep",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6232447922229767
+  },
+  {
+    "mode": "deep",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6238907082006335
+  },
+  {
+    "mode": "close_loop",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.8246776256710291
+  },
+  {
+    "mode": "close_loop",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.625451541505754
+  },
+  {
+    "mode": "close_catch",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6434586243703961
+  },
+  {
+    "mode": "close_catch",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.6479320842772722
+  },
+  {
+    "mode": "close_on_quota",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.626520125195384
+  },
+  {
+    "mode": "close_on_quota",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=instructions message=Lua instruction limit exceeded\n",
+    "stderr": "",
+    "seconds": 0.623113582842052
+  },
+  {
+    "mode": "ordinary",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.01080454234033823
+  },
+  {
+    "mode": "ordinary",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.01074904203414917
+  },
+  {
+    "mode": "oldtoken",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=schema limit= message=Invalid fragment text\n",
+    "stderr": "",
+    "seconds": 0.012981542386114597
+  },
+  {
+    "mode": "oldtoken",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=schema limit= message=Invalid fragment text\n",
+    "stderr": "",
+    "seconds": 0.010885999538004398
+  },
+  {
+    "mode": "repair",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=2 boolean=false string=xxh3_128:a57c46c208bbb37e98ed0d9491021d4f\n",
+    "stderr": "",
+    "seconds": 0.011403875425457954
+  },
+  {
+    "mode": "repair",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=2 boolean=false string=xxh3_128:a57c46c208bbb37e98ed0d9491021d4f\n",
+    "stderr": "",
+    "seconds": 0.010711374692618847
+  },
+  {
+    "mode": "memory",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=lua_bytes message=Lua allocation exceeded\n",
+    "stderr": "",
+    "seconds": 0.010287917219102383
+  },
+  {
+    "mode": "memory",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=resource_limit limit=lua_bytes message=Lua allocation exceeded\n",
+    "stderr": "",
+    "seconds": 0.009996499866247177
+  },
+  {
+    "mode": "memory_caught",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.010338458232581615
+  },
+  {
+    "mode": "memory_caught",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.010264749638736248
+  },
+  {
+    "mode": "finalizer",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.009932833723723888
+  },
+  {
+    "mode": "finalizer",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.010430333204567432
+  },
+  {
+    "mode": "returnzero",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export must return exactly one value\n",
+    "stderr": "",
+    "seconds": 0.010834917426109314
+  },
+  {
+    "mode": "returnzero",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export must return exactly one value\n",
+    "stderr": "",
+    "seconds": 0.011032207868993282
+  },
+  {
+    "mode": "returnmany",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export must return exactly one value\n",
+    "stderr": "",
+    "seconds": 0.010052666999399662
+  },
+  {
+    "mode": "returnmany",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=false\ncode=internal limit= message=Trusted export must return exactly one value\n",
+    "stderr": "",
+    "seconds": 0.010025874711573124
+  },
+  {
+    "mode": "pattern",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "pattern",
+    "run": 2,
+    "timeout_seconds": 4
+  }
+]

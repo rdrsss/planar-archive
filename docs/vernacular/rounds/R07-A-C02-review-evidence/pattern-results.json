@@ -1,0 +1,74 @@
+[
+  {
+    "mode": "find50",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=false string=\n",
+    "stderr": "",
+    "seconds": 0.8793952912092209
+  },
+  {
+    "mode": "find50",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=false string=\n",
+    "stderr": "",
+    "seconds": 0.5493972916156054
+  },
+  {
+    "mode": "find100",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "find100",
+    "run": 2,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "match",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "match",
+    "run": 2,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "gmatch",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "gmatch",
+    "run": 2,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "gsub",
+    "run": 1,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "gsub",
+    "run": 2,
+    "timeout_seconds": 4
+  },
+  {
+    "mode": "plain",
+    "run": 1,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.011144916526973248
+  },
+  {
+    "mode": "plain",
+    "run": 2,
+    "returncode": 0,
+    "stdout": "accepted=true\nkind=0 boolean=true string=\n",
+    "stderr": "",
+    "seconds": 0.011933541856706142
+  }
+]

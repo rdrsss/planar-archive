@@ -1,0 +1,16 @@
+{
+  "candidate_files": 21,
+  "protected_files_verified_current": 3032,
+  "python_syntax": "pass",
+  "candidate_trailing_whitespace": "none",
+  "debug_gate_tests": 124,
+  "release_gate_tests": 124,
+  "skips": 0,
+  "format_doxygen_files": 29,
+  "no_change_builds": "no work to do",
+  "evaluation_invocations_each": 19,
+  "goldens_each": 6,
+  "identity_comparisons_each": 11,
+  "focused_projection_cases": 18,
+  "focused_projection_assertions": 28070
+}

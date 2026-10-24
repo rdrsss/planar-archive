@@ -1,0 +1,80 @@
+{
+  "combined-builder.json": {
+    "markdown_stable": true,
+    "new_bytes": 50168,
+    "new_sha256": "1139ee6fac441e57244b806f51e236eb4833acda1ca2bdf8c418768410bdc48c",
+    "observation_stable": true,
+    "old_bytes": 51528,
+    "old_sha256": "37cf82120e78ef9774bea68020f5a47180021fd2eecb8590c2203b4f26626a93",
+    "outputs_stable": true,
+    "parsed_envelope_stable": true,
+    "render_stable": true,
+    "role_output_stable": true,
+    "work_stable": true
+  },
+  "combined-reviewer.json": {
+    "markdown_stable": true,
+    "new_bytes": 53811,
+    "new_sha256": "9201b6087a8ddcb7e440da270e31c1030718718c439defd4f9f59dfde2f0615b",
+    "observation_stable": true,
+    "old_bytes": 55211,
+    "old_sha256": "dca10718df97a7c297897d4b0c7f57341cbf8eaa39e15c342440785de29c4ced",
+    "outputs_stable": true,
+    "parsed_envelope_stable": true,
+    "render_stable": true,
+    "role_output_stable": true,
+    "work_stable": true
+  },
+  "split-cli_worker-recovery.json": {
+    "markdown_stable": true,
+    "new_bytes": 49334,
+    "new_sha256": "09879f2d44ff2f9b9706af5d1ddf62c1726e0b08fc5c767aa5c95eb3294cca49",
+    "observation_stable": true,
+    "old_bytes": 50506,
+    "old_sha256": "b38e8426dc0de44726665bde0d3148b5199e34686a4ed0e5d2b9a89fce46895b",
+    "outputs_stable": true,
+    "parsed_envelope_stable": true,
+    "render_stable": true,
+    "role_output_stable": true,
+    "work_stable": true
+  },
+  "split-cli_worker.json": {
+    "markdown_stable": true,
+    "new_bytes": 47458,
+    "new_sha256": "85e12c73a6cfcc572602fd182ee1e479f2b8d50be0c565b05fee3d24f0049937",
+    "observation_stable": true,
+    "old_bytes": 48594,
+    "old_sha256": "41c66bf51136e1ce952b338950e4a470daca0e5417c9c20bee0d3fb4502f892c",
+    "outputs_stable": true,
+    "parsed_envelope_stable": true,
+    "render_stable": true,
+    "role_output_stable": true,
+    "work_stable": true
+  },
+  "split-library_worker.json": {
+    "markdown_stable": true,
+    "new_bytes": 42276,
+    "new_sha256": "5776dfc2f7aa7ea4e55efa5699f937486e1a01c1dc370fa52d6da16203ed26de",
+    "observation_stable": true,
+    "old_bytes": 43176,
+    "old_sha256": "05497d9e21f4e6913e7b2451b0d0e81cecc450f62e54f88e3659ed4192bd6015",
+    "outputs_stable": true,
+    "parsed_envelope_stable": true,
+    "render_stable": true,
+    "role_output_stable": true,
+    "work_stable": true
+  },
+  "split-reviewer.json": {
+    "markdown_stable": true,
+    "new_bytes": 53836,
+    "new_sha256": "c1d03ba6035c5d4e724c34f6f1a46a152dcbc7fbb1254a095a88f512bf45dc41",
+    "observation_stable": true,
+    "old_bytes": 55236,
+    "old_sha256": "43c498b3224af87c0a953d81cab36ff8e8c2f3d84309425c267a6c80a0cbdd68",
+    "outputs_stable": true,
+    "parsed_envelope_stable": true,
+    "render_stable": true,
+    "role_output_stable": true,
+    "work_stable": true
+  }
+}

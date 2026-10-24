@@ -1,0 +1,17 @@
+{
+  "cli_cases": 7,
+  "current_inventory": 790,
+  "focused_cases": {
+    "planar_history_read_tests": 3,
+    "planar_ledger_format_tests": 82,
+    "planar_ledger_sqlite_tests": 33,
+    "planar_runtime_tests": 304
+  },
+  "original_inventory": 786,
+  "preserved_all": true,
+  "private_green_cases": 13,
+  "production_red_failures": 1,
+  "reviewer_baseline_failing_cases": 2,
+  "skips": 0,
+  "total": 429
+}

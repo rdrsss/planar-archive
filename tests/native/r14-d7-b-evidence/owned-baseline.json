@@ -1,0 +1,85 @@
+{
+  "path_base": "repository; snapshots under evidence/baseline",
+  "files": {
+    "CLAUDE.md": {
+      "sha256": "7f2ea065fc38537f47c264a4aa41113e7eb60bd23176684eaf01735162bc376b",
+      "symlink": null
+    },
+    "docs/architecture.md": {
+      "sha256": "c5646154cb76554a592bdc960345f678ee20f396e96e1ba3f1851ef2ba947697",
+      "symlink": null
+    },
+    "docs/testing.md": {
+      "sha256": "bb057bb55667d8cb3045aff7ee40fd57f39334375d8e7f8ea09992bea3026d75",
+      "symlink": null
+    },
+    "docs/cli-reference.md": {
+      "sha256": "31a7494c41f04e9510d54e4c6aca017a85b67328b32385bf5671cf00b9c4a4ae",
+      "symlink": null
+    },
+    "src/engine/runtime/commands.t.cpp": {
+      "sha256": "117faa302a8ed52aed2db0f6d8b1724238ac63dec0ae6791a1e0f0936e171b80",
+      "symlink": null
+    },
+    "src/engine/runtime/runtime.cpp": {
+      "sha256": "9c59fd760f16460fe549857cff2e1b1a10f54e28362eef4c7bf2c972b828cff8",
+      "symlink": null
+    },
+    "src/stdlib/planar/commands.lua": {
+      "sha256": "764934cd6b32d153671df524b588f5203b4a2c0be463af63cf5562e3749ab773",
+      "symlink": null
+    },
+    "src/cmd/planar/bootstrap.t.cpp": {
+      "sha256": "00788fbe027dadaef5261408b5fc784d37269167db2d250744173d85d4057f37",
+      "symlink": null
+    },
+    "src/cmd/planar/CMakeLists.txt": {
+      "sha256": "8dc9673b0b6217b3a593975788184971ad97c1a8a36a29c64a0e4c56ad76fca6",
+      "symlink": null
+    },
+    "src/cmd/planar/invocation.cpp": {
+      "sha256": "cc6b29f9a46f1d9d50317785fe6326d4b4ae1a60f6ee1993c8c044540728df2a",
+      "symlink": null
+    },
+    "src/cmd/planar/bootstrap.cpp": {
+      "sha256": "5881dd92ed0a7f794abd053bb21c5dd6d5daacfc5d49cac3d4f2645031ac8b8c",
+      "symlink": null
+    },
+    "docs/vernacular/acceptance-matrix.md": {
+      "sha256": "1b86b44950e0bd03092a135e8ca50b8d7c69f70ff0c85751fc5d8f05879bd8b8",
+      "symlink": null
+    },
+    "docs/vernacular/load-command-contract.md": {
+      "sha256": "834d986ed80a9c98dfd5a92bb7cbea319e3750e329a1ab4c21d6b5ba5009a413",
+      "symlink": null
+    },
+    "docs/vernacular/implementation.md": {
+      "sha256": "4be92422e58e0a5b391a53ffddf4dcdd7bf4bcee6ab91ce046e6d264a5bd10f1",
+      "symlink": null
+    },
+    "docs/vernacular/roadmap.md": {
+      "sha256": "b114cc5e965693df80c1dad0aa47a59623fb88df5a1b6df59b76c37831065456",
+      "symlink": null
+    },
+    "docs/vernacular/v5-alignment.md": {
+      "sha256": "ad53bf36fdda36aec1fe46acf835580adbb5b12ea22ef2d3a357cd3ec71bb28f",
+      "symlink": null
+    },
+    "tests/native/r14-d6-c01-support/audit.py": {
+      "sha256": "dffefdd7de5475e4ebf0f6d65abbbb7382f0e96eaa3015620e0f0e5598047758",
+      "symlink": null
+    },
+    "tests/native/r14-d6-support/audit.py": {
+      "sha256": "c88c2ced8eec0c8d1468f301bcc617471bb73642b63e213d83686d823727ba48",
+      "symlink": null
+    },
+    "tests/native/r14-d6-support/generate.py": {
+      "sha256": "d40580af13aa23925aba1f883dda512ae47474694f52b1724034246801743d1e",
+      "symlink": null
+    },
+    "tests/native/v5-02-b2-support/generate.py": {
+      "sha256": "386faca492bbc759890629bf82cb650fd4026211b6cc499ad9a129eab7ad1a9a",
+      "symlink": null
+    }
+  }
+}

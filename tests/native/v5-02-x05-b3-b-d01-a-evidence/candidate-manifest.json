@@ -1,0 +1,52 @@
+{
+  "CLAUDE.md": {
+    "sha256": "ecbf8d211407dadc9dd0e28c6a6ee84817f17078eb3c0f3cf50719022cf3c862",
+    "bytes": 40460,
+    "mode": 420
+  },
+  "docs/testing.md": {
+    "sha256": "32c33104a4f7bc12ec04db553aa5951a9891806868c764393e22c9070902979f",
+    "bytes": 89604,
+    "mode": 420
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "sha256": "14a91a58a307f420ec5ec10e88426b4fca3d7839a35b4531218244ddb8615659",
+    "bytes": 47101,
+    "mode": 420
+  },
+  "docs/vernacular/implementation.md": {
+    "sha256": "a9a8a7a7fe4e5d840d6a14f5dce8389d8d5578fceb2bffb2644f4883506f3269",
+    "bytes": 50007,
+    "mode": 420
+  },
+  "docs/vernacular/roadmap.md": {
+    "sha256": "e335ff9a474788b911385e613a4cd3f0d18be8c71cb39871c9a9b4dde3c8341f",
+    "bytes": 56403,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-a-evidence/REPORT.md": {
+    "sha256": "dad67275e270df6a42fffd6cd52bcb41ca3f65ac28c85ec0189f426c86f7d9c0",
+    "bytes": 9209,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-a-support/finalize.py": {
+    "sha256": "3d9673c6ec3c37a79447fa294be50e718e121f976d14e2ab22d4e2e09659d517",
+    "bytes": 4863,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-a-support/prototype.cpp": {
+    "sha256": "82327075caa6d6ead6fb121a058b410c308ebd28400020b780fda6bbe71ffb48",
+    "bytes": 25793,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-a-support/run.py": {
+    "sha256": "cc96a65a54aba658bc4a24554af8684ed48c3d2947cbc62ba42d232c0c4b6970",
+    "bytes": 2515,
+    "mode": 420
+  },
+  "tests/native/v5-02-x05-b3-b-d01-a-support/source-and-conversion.md": {
+    "sha256": "e8bd169b7021932c44db3d1a46cf7cfbee0410892b894498485f54ae34b3e8f4",
+    "bytes": 9958,
+    "mode": 420
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "b3_artifact_entries": 166,
+  "b3_artifact_sha256": "8cd9069f84100de6afd887214c05bd601afc9409890e1da331bc552298e9b8af",
+  "b3_candidate_sha256": "65c517516840505ee603ece2f28899830f19a0c036864aa37a852c126973eb7d",
+  "combined_current_identity": true,
+  "untouched_b3_candidate_entries": {
+    "src/engine/runtime/runtime.cppm": {
+      "mode": 420,
+      "sha256": "a85fdc6a937811966bbc9df32bbbd1ee48b7399066a9b53987a585bc474f3cb3"
+    },
+    "src/engine/runtime/runtime.t.cpp": {
+      "mode": 420,
+      "sha256": "c133cdb72dfbf14c71528cdde5fca9029010113ca11153a1abc769a90c929ba2"
+    },
+    "tests/native/v5-02-x05-c4-b3-evidence/REPORT.md": {
+      "mode": 420,
+      "sha256": "e42cf175003dbdc28a2afea1f06cb11b970fe77ccc7e1974c96ce1a3145c8507"
+    },
+    "tests/native/v5-02-x05-c4-b3-support/audit.py": {
+      "mode": 420,
+      "sha256": "a5cec27c5372673bb9ee58fd44003495cb6d5c603339530ca140c07a8184a1d0"
+    },
+    "tests/native/v5-02-x05-c4-b3-support/freeze.py": {
+      "mode": 420,
+      "sha256": "a4a8a04629945d3f4f718ddb515de996b3424ba0e086733e2bba16729e9821c2"
+    },
+    "tests/native/v5-02-x05-c4-b3-support/gate.py": {
+      "mode": 420,
+      "sha256": "2099ecc37ff6f9cba0cdf0cf151dd56da39347d5b9d23bbf09de34de10a9db4e"
+    },
+    "tests/native/v5-02-x05-c4-b3-support/observer.inc": {
+      "mode": 420,
+      "sha256": "5b5cbbb296924dd8d2d2bc26301fab33257e7bcb765d836e4a09db77e9b6f6a0"
+    },
+    "tests/native/v5-02-x05-c4-b3-support/private-probe.cpp": {
+      "mode": 420,
+      "sha256": "969331c56d6de0c01f460e940ce2871137774f3876f620755b274397d8020dc4"
+    },
+    "tests/native/v5-02-x05-c4-b3-support/private.py": {
+      "mode": 420,
+      "sha256": "cb012b9129177129a47e4c7ba75876e1beabb47cf4e4d5270fc26a54646885e6"
+    }
+  }
+}

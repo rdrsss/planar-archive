@@ -1,0 +1,29 @@
+{
+  "broader_to_final_product_change": "only invalid grammar error classification",
+  "counts": {
+    "attempt02": {
+      "failures": [
+        "replacement.replacement.effective catalog external descriptors and reserved namespaces"
+      ],
+      "skips": [],
+      "tests": 98
+    },
+    "attempt03-classification-regression": {
+      "failures": [
+        "replacement.replacement.effective catalog closed schemas and scalar kinds"
+      ],
+      "skips": [],
+      "tests": 1
+    },
+    "attempt04-final": {
+      "failures": [],
+      "skips": [],
+      "tests": 11
+    }
+  },
+  "generated_families": 5,
+  "inventory": 508,
+  "old_sources_unchanged": true,
+  "preserved": 497,
+  "raw_final_passes": 11
+}

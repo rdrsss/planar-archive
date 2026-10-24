@@ -1,0 +1,15 @@
+{
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "owned": [
+    "docs/vernacular/command-contract.md",
+    "docs/vernacular/render-contract.md",
+    "docs/vernacular/ledger-contract.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "CLAUDE.md"
+  ],
+  "agents_link": "CLAUDE.md"
+}

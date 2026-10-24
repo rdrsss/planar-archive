@@ -1,0 +1,24 @@
+{
+  "baseline_originals_match": true,
+  "candidate_copies_match": true,
+  "changed": [
+    "CLAUDE.md",
+    "docs/architecture.md",
+    "docs/testing.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "src/cmd/planar/CMakeLists.txt",
+    "src/engine/CMakeLists.txt",
+    "src/engine/runtime/external_registration.t.cpp",
+    "src/engine/runtime/runtime.cpp",
+    "src/engine/runtime/runtime.cppm",
+    "tests/native/v5-02-x05-a3-support/probe.py",
+    "tests/native/v5-02-x05-a3-support/verify.py"
+  ],
+  "diff_sha256": "0fad899cfdac93df1fa6438c9ecd6d63138af2fdfb66252d20360d30327bfe6b",
+  "historical_unchanged": true,
+  "invocation_tail_only_profile_guard": true,
+  "shipped_unchanged": true,
+  "symlink": "CLAUDE.md"
+}

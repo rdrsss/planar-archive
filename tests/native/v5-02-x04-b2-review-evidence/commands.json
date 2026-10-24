@@ -1,0 +1,139 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-22T23:35:55.635145+00:00",
+    "exit_code": 0,
+    "label": "build",
+    "start": "2026-10-22T23:35:55.355578+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "--show-only=json-v1"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-22T23:35:59.359872+00:00",
+    "exit_code": 0,
+    "label": "inventory",
+    "start": "2026-10-22T23:35:59.282564+00:00"
+  },
+  {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "<repo>/build/rewrite-debug",
+      "-R",
+      "effective catalog",
+      "--output-on-failure",
+      "--output-junit",
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/catalog.xml"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-22T23:36:04.069028+00:00",
+    "exit_code": 0,
+    "label": "catalog-cases",
+    "start": "2026-10-22T23:36:03.559463+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-isystem",
+      "<repo>/vendor/catch2/c601/src/catch2/..",
+      "-isystem",
+      "<repo>/build/rewrite-debug/vendor/catch2/generated-includes",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-std=c++26",
+      "-arch",
+      "arm64",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "@src/engine/CMakeFiles/planar_history_effective_catalog_tests.dir/history/effective_catalog.t.cpp.o.modmap",
+      "-o",
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/probes.o",
+      "-c",
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/probes.cpp"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "end": "2026-10-22T23:36:09.332385+00:00",
+    "exit_code": 0,
+    "label": "probe-compile",
+    "start": "2026-10-22T23:36:07.807128+00:00"
+  },
+  {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "-stdlib=libc++",
+      "-nostdinc++",
+      "-isystem",
+      "/opt/homebrew/opt/llvm/include/c++/v1",
+      "-g",
+      "-arch",
+      "arm64",
+      "-Wl,-search_paths_first",
+      "-Wl,-headerpad_max_install_names",
+      "-stdlib=libc++",
+      "-L/opt/homebrew/opt/llvm/lib/c++",
+      "-Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++",
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/probes.o",
+      "-o",
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/probes",
+      "src/engine/libplanar_history_effective_catalog.a",
+      "vendor/catch2/src/libCatch2Maind.a",
+      "src/engine/lib@cmake_cxx_std.a",
+      "src/engine/libplanar_canonical.a",
+      "src/engine/libplanar_value.a",
+      "vendor/catch2/src/libCatch2d.a"
+    ],
+    "cwd": "<repo>/build/rewrite-debug",
+    "end": "2026-10-22T23:36:13.312532+00:00",
+    "exit_code": 0,
+    "label": "probe-link",
+    "start": "2026-10-22T23:36:13.114555+00:00"
+  },
+  {
+    "argv": [
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/probes",
+      "reviewer.*",
+      "--reporter",
+      "junit",
+      "--out",
+      "<repo>/tests/native/v5-02-x04-b2-review-evidence/probes.xml"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-22T23:36:18.330776+00:00",
+    "exit_code": 0,
+    "label": "reviewer-probes",
+    "start": "2026-10-22T23:36:18.006312+00:00"
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "<repo>/build/rewrite-debug",
+      "--target",
+      "all",
+      "planar_tests"
+    ],
+    "cwd": "<repo>",
+    "end": "2026-10-22T23:36:22.263297+00:00",
+    "exit_code": 0,
+    "label": "no-work",
+    "start": "2026-10-22T23:36:22.047084+00:00"
+  }
+]

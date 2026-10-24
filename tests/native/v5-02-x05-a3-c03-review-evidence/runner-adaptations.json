@@ -1,0 +1,44 @@
+[
+  {
+    "copy_sha256": "27fedf56470f96e3c7fc8cafbffe9a609fd10380481946639aadcb6b765b67cf",
+    "original_sha256": "9c5dc509fdceba4f5a359f9086045e4488d7f5a2751490a7b2e04a78645d7d69",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/allocations.py"
+  },
+  {
+    "copy_sha256": "b888889c660244abd493e55613e910153c5218db4be3eae9b4894e9f501ef50c",
+    "original_sha256": "1ba35af415ff4e9239e992d4473667d6fcf1d5248f0f4c5eab78c640110accc3",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/repeat.py"
+  },
+  {
+    "copy_sha256": "13985abde5bb85799b0f17656cf66e1ca56085e4840f0f30d48f193ffaf4d382",
+    "original_sha256": "5b63aca60e87f5fca01c5b03a76a85348afaced8ced7f82b81b4d69b417b3164",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/locations.py"
+  },
+  {
+    "copy_sha256": "88aa99ec2cb604c050ee67c620d41ca2cc88f4883736f801343885e16cb6cb05",
+    "original_sha256": "0bbed3bd3169c4e6db2ac817dd6a5451b8b64241dc1fd1bd7440f5b0307bb4ed",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/probe.py"
+  },
+  {
+    "copy_sha256": "951253eb1f2443a60aedbafe43e158889667cff1c5725beeef703b57eade96ed",
+    "original_sha256": "f674d699f37bbf455882299e1a2859381e542f306b00ccc08c5618b5c47080c0",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/reachable.py"
+  },
+  {
+    "copy_sha256": "2621fb1c067e49ddf7df5fda3570947ad82b7d97883d01c586499dbc51c56dbf",
+    "original_sha256": "fd0f6f21b8bea1a7408926f7725a56286a788ec50e555ce0a1b542b509bfe291",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/regressions.py"
+  },
+  {
+    "copy_sha256": "d42fec7c14d805732492a12239df16383f180d5a95f81c26fafacd68c926f7d4",
+    "original_sha256": "1cafefbaea0e9eebfcf828442172aba14492e7793532218e7256408e551847bf",
+    "reverse_identical": true,
+    "source": "tests/native/v5-02-x05-a3-c03-support/budget.py"
+  }
+]

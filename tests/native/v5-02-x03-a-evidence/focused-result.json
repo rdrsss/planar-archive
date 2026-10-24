@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build/rewrite-debug",
+    "-R",
+    "replacement.(record|request v2|prepared)",
+    "--output-on-failure",
+    "--output-junit",
+    "<repo>/tests/native/v5-02-x03-a-evidence/focused.xml"
+  ],
+  "cwd": "repository root",
+  "start_utc": "2026-10-22T19:53:49.721789+00:00",
+  "end_utc": "2026-10-22T19:53:51.419949+00:00",
+  "exit": 0
+}

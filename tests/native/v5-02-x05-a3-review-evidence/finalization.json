@@ -1,0 +1,30 @@
+{
+  "artifact_manifest_sha256": "be6b1f8f82bd9bf2f083cdb90e53afdfa80295dadccc376354ab5ad95e5fbab3",
+  "artifacts": 111,
+  "author_artifact_manifest_sha256": "cae4e13b1473d031d8ba6a5a697557d95e429810d3e8e1fd1a9a5c8ec05ae170",
+  "author_artifacts": 176,
+  "author_owned_diff_sha256": "0fad899cfdac93df1fa6438c9ecd6d63138af2fdfb66252d20360d30327bfe6b",
+  "author_report_sha256": "13f26a81cbca4067f4f14f1b50c5da2201303adca6e4828b50df5d4944c560cf",
+  "author_source_sha256": "56cdefe4bae53ebccf8b3e28b436592acb15ea08aa16c5c5cadf7da125087130",
+  "baseline": 555,
+  "build_entries": 931,
+  "build_ownership": "released after final hashing; no subsequent reviewer edits",
+  "disposition": "request-changes",
+  "findings": [
+    "A3-R1",
+    "A3-R2",
+    "A3-R3"
+  ],
+  "focused": 197,
+  "focused_errors": 0,
+  "focused_failures": 0,
+  "focused_skips": 0,
+  "inventory": 570,
+  "report_sha256": "768ba9f05182c53a32dbc2f9380088e1ad9d0d485074169f337f459743e5d0a3",
+  "review_finding_detectors": {
+    "caught_badalloc_mapping": 1,
+    "typed_resource_mapping": 1,
+    "wrong_original_field": 2
+  },
+  "source_entries": 19663
+}

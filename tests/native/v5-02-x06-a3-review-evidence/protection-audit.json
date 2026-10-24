@@ -1,0 +1,26 @@
+{
+  "allowed_Debug_changed_paths": [
+    "build/rewrite-debug",
+    "build/rewrite-debug/.ninja_log",
+    "build/rewrite-debug/Testing/Temporary",
+    "build/rewrite-debug/Testing/Temporary/CTestCostData.txt",
+    "build/rewrite-debug/Testing/Temporary/LastTest.log"
+  ],
+  "baseline_members": 94149,
+  "baseline_sha256": "f587e90ce4708e87bebc314ecf23a56d9f1b78e4fad1622c18f71319c6da9853",
+  "candidate_all13_hashes_rechecked": true,
+  "directory_metadata_changes": [],
+  "exemptions": [
+    ".git",
+    "tests/native/v5-02-x06-a3-review-evidence",
+    "docs/vernacular/rounds/V5-02-X06-A3-review.md",
+    "docs/vernacular/rounds/V5-02-X06-A3.md"
+  ],
+  "final_members": 94149,
+  "final_sha256": "a5fee333a8444bc7fd588c49384561caed2f1bb7180aee0e084011bcaf531fa6",
+  "full_content_hash_boundaries": true,
+  "protected_membership_exact": true,
+  "release_install_release_prior_rounds_author_evidence_and_support_exact": true,
+  "root_dotfiles_and_symlink_identity_covered": true,
+  "unexpected_changes": []
+}

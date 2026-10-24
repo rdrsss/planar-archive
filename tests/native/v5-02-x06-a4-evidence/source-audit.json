@@ -1,0 +1,9 @@
+{
+  "documentation_files": 10,
+  "historical_bodies_unchanged": 9,
+  "preedit_matches_original_baseline": true,
+  "AGENTS_symlink": "CLAUDE.md",
+  "compile_commands_symlink_preserved": true,
+  "no_builds_or_product_tests": true,
+  "architecture_sketch_not_compiled": true
+}

@@ -1,0 +1,14 @@
+{
+  "source_count": 19961,
+  "source_mismatches": [],
+  "artifact_count": 293,
+  "artifact_mismatches": [],
+  "build_count": 931,
+  "build_mismatches": [],
+  "source_release_equal": true,
+  "report_sha256": "343514d3e0dcb5ef984821fcbfe4cbca0fa0469b79e5febbb77f7ccd3f47a14e",
+  "source_manifest_sha256": "b0c54d9e17b121747aaa17e19ad03f4c46e1e48fd05ec17da80c0f3caf838049",
+  "artifact_manifest_sha256": "868a6c6153f7ef533da726d7923bbe76252499f0cf2e41c6d8c1dd7e962f5b4a",
+  "build_manifest_sha256": "ec0e697b2d8ddcdc42cb759e2bdd70a30b260c7b4a1d278322bb8013ef3812e3",
+  "diff_sha256": "efa84f690b7c4f1392ac629fc4894b703ef9e4f537a8a6c2399b313afd2341ab"
+}

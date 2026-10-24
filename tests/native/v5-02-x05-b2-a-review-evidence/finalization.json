@@ -1,0 +1,24 @@
+{
+  "disposition": "request-changes",
+  "blocking_findings": [
+    "B2A-R1"
+  ],
+  "report": "docs/vernacular/rounds/V5-02-X05-B2-A-review.md",
+  "report_sha256": "bd5cac0bb597f293632484ed916b8721e7df5419873ac62278bc7266a68e8ce7",
+  "artifact_manifest_sha256": "5113ce2e55e89c8115c261888597f92ed7bc57488125f457baa1c10802a7f151",
+  "artifact_files": 57,
+  "author_identities": {
+    "candidate-manifest.json": "b80a540b4c0db0a79b9acf560d039f2935e1c65c8d8ada9b6cfa98db36376a14",
+    "owned.diff": "edb204aca17f35691af73155e2f4de4ac18026d879991b1a4933de7064bc1959",
+    "artifact-manifest.json": "17aecdc1eb098b6949339a735aa14ca7554f446f120a3805b7b9c35e4bbaf21f",
+    "REPORT.md": "20c88b35324c8825df0618c135ee3450cc6638244d5ee4df6dfb29088b76354c"
+  },
+  "scoped_entries": 378,
+  "candidate_unchanged": true,
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "focused_cases": 252,
+  "passing_independent_cases": 3,
+  "failing_adapter_cases": 3,
+  "build_ownership_released": true,
+  "review_edits_after_release": false
+}

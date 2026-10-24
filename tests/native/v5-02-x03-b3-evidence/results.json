@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.15/bin/python3.15",
+    "tests/native/v5-02-x03-b3-support/results.py"
+  ],
+  "cwd": "<repo>",
+  "end_utc": "2026-10-22T21:29:24.708001+00:00",
+  "exit_code": 0,
+  "seconds": 0.07194375991821289,
+  "start_utc": "2026-10-22T21:29:24.635907+00:00"
+}

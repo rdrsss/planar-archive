@@ -1,0 +1,20 @@
+{
+  "CMakePresets_includes_external_files": false,
+  "CMakeUserPresets_exists": false,
+  "active_omitted_formatter_input": ".clang-format",
+  "clang_tidy": "Advisory; not invoked by recorded gate",
+  "git_metadata": "No live Git version input enabled; actual compile/build identities and no-work verified",
+  "limitation": "Host tools and environment are observed by commands, not completely archived.",
+  "other_dot_roots": "Git attributes/ignores, agent/configuration directories and caches are not read by these direct configured build/test/lint commands as product/build inputs",
+  "root_dotfiles_and_directories": [
+    ".cache",
+    ".clang-format",
+    ".clang-tidy",
+    ".claude",
+    ".git",
+    ".gitattributes",
+    ".github",
+    ".gitignore",
+    ".pytest_cache"
+  ]
+}

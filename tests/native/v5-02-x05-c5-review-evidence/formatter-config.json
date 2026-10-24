@@ -1,0 +1,9 @@
+{
+  "author_root_snapshot_includes_dotfile": false,
+  "bytes": 905,
+  "equal_HEAD": true,
+  "file": ".clang-format",
+  "mtime_ns": 1789001269242734951,
+  "scope": "Current tracked formatting configuration verified; not an archived historical formatter/environment-input claim.",
+  "sha256": "0ee76e5c1925fdea532e9991c14e99b43accacc36de10f8e862cf9a6e74c5920"
+}

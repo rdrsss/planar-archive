@@ -1,0 +1,16 @@
+{
+  "candidate": {
+    "candidate-manifest.json": "5bd96ff593119c05bb9683ed159b97ff091e270dcdd4ed953a5ef35ece8ff427",
+    "candidate.diff": "26f03ff16e78320538305d9cc8031888395953d3a3bbf54eaca702cfe504bb15",
+    "artifact-manifest.json": "f6ba8a1700fb1a866c2ab52fa586e41d73d4ea4191746e6319655707be34d3af",
+    "REPORT.md": "07a42d3153f8b8d13b5fe2ce7827183af3ac58260c932361226e144ae03477e9",
+    "candidate-manifest.json-entries": 25,
+    "artifact-manifest.json-entries": 391,
+    "frozen-entries": 164
+  },
+  "incremental_diff_reconstructed": true,
+  "pinned_hash_sources_unchanged": true,
+  "protected_entries": 5682,
+  "membership_and_hashes_unchanged": true,
+  "agents_symlink_preserved": true
+}

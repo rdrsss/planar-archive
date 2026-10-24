@@ -1,0 +1,85 @@
+{
+  "snapshot": "a159ac473640184f7b61561ec96834acdb54ccf38423bd8f2bf777ab7049940f",
+  "checks": [
+    {
+      "path": "stdlib/planar/semantic.lua",
+      "match": true
+    },
+    {
+      "path": "stdlib/planar/bootstrap.lua",
+      "match": true
+    },
+    {
+      "path": "stdlib/planar/README.md",
+      "match": true
+    },
+    {
+      "path": "src/kernel/CMakeLists.txt",
+      "match": true
+    },
+    {
+      "path": "src/kernel/runtime/schema.t.cpp",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/README.md",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-expanded-tests.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-final.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-green.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/build-initial-corrections.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/counts.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/ctest.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/ctest.xml",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/initial-tests.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/lint.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/no-change-build.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-expanded-red.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-final.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-green.log",
+      "match": true
+    },
+    {
+      "path": "tests/native/r07b2b-evidence/tests-initial-corrections.log",
+      "match": true
+    }
+  ]
+}

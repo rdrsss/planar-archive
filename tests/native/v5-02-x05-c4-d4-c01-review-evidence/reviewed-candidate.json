@@ -1,0 +1,82 @@
+{
+  "CLAUDE.md": {
+    "bytes": 70048,
+    "mode": 420,
+    "sha256": "2d99d7e1b03f89ba4622d6d996b00d3eb9e536d3e4499128f143df4d45b7a380"
+  },
+  "docs/architecture.md": {
+    "bytes": 124121,
+    "mode": 420,
+    "sha256": "b6a720fb0ec437c2a6a277396862c1dbf7a7e672e70258b6336cc24b8e32ffd3"
+  },
+  "docs/testing.md": {
+    "bytes": 128058,
+    "mode": 420,
+    "sha256": "4e8fa4d5c843396bf043724dd7b8247a4e36b10caa14bf76ac67a92fffac95ca"
+  },
+  "docs/vernacular/acceptance-matrix.md": {
+    "bytes": 34330,
+    "mode": 420,
+    "sha256": "3abb6cc8bd3e7b8500127ce33d2109ac5e35195ca5d295df15fd27966ab53375"
+  },
+  "docs/vernacular/external-profile-implementation.md": {
+    "bytes": 76440,
+    "mode": 420,
+    "sha256": "17c8f6c78cbc224fc74428b5418e036fbe80c96a37364a44ec08aca7d7165d00"
+  },
+  "docs/vernacular/implementation.md": {
+    "bytes": 79157,
+    "mode": 420,
+    "sha256": "c78d217de8c142e3e7a8191b55d3ad78f3606e10e24ee7326fc7374b57f442fd"
+  },
+  "docs/vernacular/roadmap.md": {
+    "bytes": 85379,
+    "mode": 420,
+    "sha256": "31c57d009762214c87bb1ce22caa6578d5c70b40e4c6846597d56cf1a21ba290"
+  },
+  "docs/vernacular/v5-alignment.md": {
+    "bytes": 26183,
+    "mode": 420,
+    "sha256": "a4b770ba14cc107d4c7061cda45f7bc98895863e5e406d59fe1b23cd11741c56"
+  },
+  "src/engine/runtime/external_registration.t.cpp": {
+    "bytes": 231467,
+    "mode": 420,
+    "sha256": "38f92794f5f3ed146959cb7350acfb24934ec12829c2a77a1bb5b9d54de187c1"
+  },
+  "src/engine/runtime/runtime.cpp": {
+    "bytes": 248080,
+    "mode": 420,
+    "sha256": "4ca7ca5075b104ca2496db7d663e29ac9eef7216aaab465e7060412597e3c854"
+  },
+  "src/stdlib/planar/bootstrap.lua": {
+    "bytes": 1712,
+    "mode": 420,
+    "sha256": "3d0f18fb8bdb41d390c826cf109c320d800e569c47cd3098e77646e51333d504"
+  },
+  "src/stdlib/planar/render.lua": {
+    "bytes": 22713,
+    "mode": 420,
+    "sha256": "b11b3643dd18a1479059b8514dc23505bdcd0713324b3a5abce7d5e7a1c9c228"
+  },
+  "tests/native/v5-02-x05-c4-d4-c01-evidence/REPORT.md": {
+    "bytes": 7455,
+    "mode": 420,
+    "sha256": "c5aa9f660b8db3c8a836eef7a9313459382975e5237f0f3dc356098c7018da88"
+  },
+  "tests/native/v5-02-x05-c4-d4-c01-evidence/coverage.json": {
+    "bytes": 5251,
+    "mode": 420,
+    "sha256": "6885628ed65b76e00896a15cab6aa281f42630c3666429ac4b321b2766e1693b"
+  },
+  "tests/native/v5-02-x05-c4-d4-c01-evidence/subsequently-sourced-D3-to-D4.diff": {
+    "bytes": 31784,
+    "mode": 420,
+    "sha256": "2d557d26a158ffc1ae730d12d907d2b8e2815cc0a6c5b01fe3267a246996e83b"
+  },
+  "tests/native/v5-02-x05-c4-d4-c01-evidence/verify.py": {
+    "bytes": 7064,
+    "mode": 420,
+    "sha256": "024c7edc150ae37de0424360a0835f157eddf2eedd9c666d98b624d0c9aa205a"
+  }
+}

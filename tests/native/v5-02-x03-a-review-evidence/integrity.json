@@ -1,0 +1,33 @@
+{
+  "expected": {
+    "candidate-manifest.json": "3a1054b716f1542127d44abea62c37e7bc52dd79802d72d10f2630ebeeefc5b5",
+    "owned.diff": "a553608bad5e526abff3d3a2b0242b10eebad68299cdd2b77b2088dbd0944a23",
+    "artifact-manifest.json": "430f11c862d4666a9958dfbe39f1941ccae8134a5f2b6b8b8512df9f4bd52828"
+  },
+  "candidate_files": 13,
+  "author_artifacts": 63,
+  "baseline_files": 14764,
+  "missing": [],
+  "changed": [
+    "CLAUDE.md",
+    "docs/vernacular/acceptance-matrix.md",
+    "docs/vernacular/external-profile-contract.md",
+    "docs/vernacular/external-profile-implementation.md",
+    "docs/vernacular/implementation.md",
+    "docs/vernacular/roadmap.md",
+    "docs/vernacular/v5-alignment.md",
+    "src/engine/CMakeLists.txt"
+  ],
+  "added": [
+    "src/engine/history/request_v2.cpp",
+    "src/engine/history/request_v2.cppm",
+    "src/engine/history/request_v2.t.cpp",
+    "tests/vectors/records/generate-request-v2.py",
+    "tests/vectors/records/request-v2.tsv"
+  ],
+  "unexpected": [],
+  "head": "3171c49e7b92d3abda01bfbb8bfb0c6b29d4c67a",
+  "branch": "dev/planar-v2-vernacular",
+  "agents_symlink": "CLAUDE.md",
+  "diff_reconstructed": true
+}
