@@ -36,7 +36,8 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    a later wave.
 3. Coders implement their packages wave by wave. Within a wave they run in
    parallel only when owned files are disjoint (search's split is the documented
-   reason); otherwise sequentially. Package coders do not build.
+   reason); otherwise sequentially. Coders build only when no other coder is
+   running (alone in their wave, or sequential); parallel coders never build.
 4. The gate runner builds and tests once all packages finish. On failure, one
    repair coder (Sonnet 5.5, medium) that owns the round's files may build and
    iterate on the debug tree alone, then the gate reruns; a second failure stops
