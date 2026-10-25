@@ -1,0 +1,66 @@
+/// @file storage_types.cppm
+/// @brief Inert verified-ledger metadata, access and owned row values shared by native storage, format and acceptance; no functions or ownership.
+export module planar.engine.ledger.storage_types;
+import std;
+export import planar.engine.ledger.types;
+export import planar.engine.ledger.history_codec;
+export namespace planar::engine::ledger {
+/// Exact shared ledger failure category.
+using format_error_code = ::planar::engine::ledger::types::format_error_code;
+/// Exact shared redacted ledger failure.
+using format_error = ::planar::engine::ledger::types::format_error;
+/// @brief Exact supported on-disk schema discriminator.
+enum class ledger_format { v1 = 1, v2 = 2 };
+/// @brief Verified initialization metadata; identifiers remain strings at JSON boundaries.
+struct ledger_metadata {
+  std::string   identity;                   ///< Thirty-two lowercase hexadecimal digits from sixteen OS-random bytes.
+  std::string   workspace_id;               ///< Declaration identifier grammar.
+  std::string   created_at;                 ///< UTC RFC3339 timestamp with milliseconds.
+  ledger_format format = ledger_format::v1; ///< Exact verified schema, retained independently of request codecs.
+};
+/// @brief Requested access after independent read-only verification.
+enum class ledger_access { read_only, read_write };
+/// Exact shared native immutable record identity.
+using record_reference = ::planar::engine::ledger::types::record_reference;
+/// Exact shared owned bounded record.
+using stored_record = ::planar::engine::ledger::types::stored_record;
+/// Owned current projection from the pinned snapshot.
+struct history_head {
+  std::optional<std::int64_t> revision;      ///< Active revision, absent before the first acceptance.
+  std::int64_t                last_sequence; ///< Last committed event sequence.
+};
+/// Owned immutable revision metadata; all five references are database local.
+struct revision_row {
+  std::int64_t                               id;          ///< Positive revision identity.
+  std::optional<std::int64_t>                parent;      ///< Older revision, absent for initial acceptance.
+  ::planar::engine::ledger::event_references references;  ///< Complete captured roots.
+  std::string                                actor;       ///< Bounded UTF-8 native assertion.
+  std::string                                accepted_at; ///< Contextual UTC time, never a causal clock.
+};
+/// Owned event row retaining exact saved canonical payload bytes.
+struct event_row {
+  std::int64_t                sequence;    ///< Positive event sequence.
+  std::string                 type;        ///< Fixed event type.
+  std::int64_t                version;     ///< Event row version.
+  std::optional<std::int64_t> revision;    ///< Absent only at initialization.
+  std::optional<std::string>  request_id;  ///< Absent only at initialization.
+  std::string                 actor;       ///< Bounded UTF-8 native assertion.
+  std::string                 occurred_at; ///< Contextual UTC time.
+  std::string                 payload;     ///< Exact canonical event bytes; decode with the pure history codec.
+};
+/// Owned private replay data. Host argument bytes must never appear in public history output.
+struct request_row {
+  std::string                                       request_id;     ///< Bounded replay key.
+  ::planar::engine::ledger::types::record_reference body_reference; ///< Validated request record identity.
+  std::string                            body_encoded;   ///< Exact stored request codec bytes, including private host arguments.
+  std::int64_t                           event_sequence; ///< Saved successful operation event.
+  std::int64_t                           revision;       ///< Returned revision.
+  ::planar::engine::ledger::load_outcome outcome;        ///< Accepted or unchanged result.
+  std::string                            result;         ///< Exact saved canonical result bytes.
+};
+/// One bounded ascending event page from the pinned snapshot.
+struct event_page {
+  std::vector<event_row>      events;     ///< At most the explicitly requested limit.
+  std::optional<std::int64_t> next_after; ///< Last returned sequence only when this snapshot has more events.
+};
+} // namespace planar::engine::ledger

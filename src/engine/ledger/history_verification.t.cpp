@@ -6,6 +6,8 @@
 #include <unistd.h>
 import std;
 import planar.engine.ledger.format;
+import planar.engine.acceptance.prepared;
+import planar.engine.ledger.acceptance;
 import planar.engine.ledger.history_codec;
 import planar.engine.history.tree_core;
 import planar.engine.history.provenance;

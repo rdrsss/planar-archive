@@ -12,31 +12,48 @@ import sys
 source, output = map(Path, sys.argv[1:3])
 output.mkdir(parents=True, exist_ok=True)
 manifest = {'purpose': __doc__, 'files': {}}
-for name in ('format.cppm', 'format.cpp'):
+# Relocated declarations live in the real storage_types and history_codec modules; the cloned namespace re-exports them by name,
+# and aliases the real types namespace used by the cloned storage declarations.
+INJECTED = ('read_guard', 'read_gate_status', 'ledger_format', 'ledger_metadata', 'ledger_access', 'history_head',
+            'revision_row', 'event_row', 'request_row', 'event_page', 'format_error_code', 'format_error',
+            'record_reference', 'stored_record', 'event_references', 'connection')
+USING = ''.join(f'\nusing ::planar::engine::ledger::{n};' for n in INJECTED) + '\nnamespace types = ::planar::engine::ledger::types;'
+fixture = '::planar::test::metadata_fixture::'
+# Clone storage, format and acceptance; no variant file imports the real storage/format/acceptance modules.
+for name in ('storage.cppm', 'storage.cpp', 'format.cppm', 'format.cpp', 'acceptance.cppm', 'acceptance.cpp'):
     original = (source / name).read_text()
-    substitutions = [
-        ('planar.engine.ledger.format;', 'planar.test.metadata_format;', 1),
+    substitutions = []
+    if name.startswith('format'):
+        substitutions.append(('planar.engine.ledger.format;', 'planar.test.metadata_format;', 1))
+    if name.startswith('acceptance'):
+        substitutions.append(('planar.engine.ledger.acceptance;', 'planar.test.metadata_acceptance;', 1))
+    substitutions += [
+        ('planar.engine.ledger.storage;', 'planar.test.metadata_storage;', 1),
         ('namespace planar::engine::ledger {', 'namespace planar::engine::metadata_test {', 1),
     ]
     if name.endswith('.cppm'):
-        substitutions += [('namespace planar::engine::metadata_test {', 'namespace planar::engine::metadata_test {\nusing ::planar::engine::ledger::read_guard;\nusing ::planar::engine::ledger::read_gate_status;', 1)]
-    if name == 'format.cpp':
+        substitutions += [('namespace planar::engine::metadata_test {', 'namespace planar::engine::metadata_test {' + USING, 1)]
+        if name == 'storage.cppm':
+            # The cloned helper namespace must match the cpp definitions, which the general rename places in metadata_test::native.
+            substitutions += [
+                ('export namespace planar::engine::ledger::native {', 'export namespace planar::engine::metadata_test::native {', 1),
+                ('} // namespace planar::engine::ledger::native', '} // namespace planar::engine::metadata_test::native', 1),
+            ]
+    else:
+        substitutions += [('namespace planar::engine::metadata_test {',
+                           'namespace planar::engine::metadata_test {\nusing namespace planar::engine::ledger;', 1)]
+    if name == 'storage.cpp':
         substitutions += [
             ('import std;', 'import std;\nimport planar.test.metadata_fixture;', 1),
-            ('namespace planar::engine::metadata_test {',
-             'namespace planar::engine::metadata_test {\nusing namespace planar::engine::ledger;', 1),
+            # begin_write: metadata verified under the new write snapshot.
             ('  auto checked    = verify(state->db);',
              '  auto checked    = verify(state->db);\n'
-             '  checked = ::planar::test::metadata_fixture::supply(std::move(checked), '
-             '::planar::test::metadata_fixture::boundary::begin);', 1),
-            ('  auto checked = verify(state->db);',
-             '  auto checked = verify(state->db);\n'
-             '  checked = ::planar::test::metadata_fixture::supply(std::move(checked), '
-             '::planar::test::metadata_fixture::boundary::writer_commit);', 1),
-            ('  auto checked = verify(db);',
-             '  auto checked = verify(db);\n'
-             '  checked = ::planar::test::metadata_fixture::supply(std::move(checked), '
-             '::planar::test::metadata_fixture::boundary::acceptance_commit);', 1),
+             f'  checked = {fixture}supply(std::move(checked), {fixture}boundary::begin);', 1),
+            # verify_before_commit: one site serves both record-writer and acceptance commits.
+            ('    auto checked = verify(state.db);',
+             '    auto checked = verify(state.db);\n'
+             f'    checked = {fixture}supply(std::move(checked), site == commit_site::acceptance ? '
+             f'{fixture}boundary::acceptance_commit : {fixture}boundary::writer_commit);', 1),
         ]
     generated = original
     records = []
@@ -46,6 +63,8 @@ for name in ('format.cppm', 'format.cpp'):
             raise SystemExit(f'{name}: expected {expected} substitutions, found {count}: {before}')
         generated = generated.replace(before, after)
         records.append({'before': before, 'after': after, 'count': count})
+    if name.endswith('.cppm') and 'using ::planar::engine::ledger::event_references;' not in generated:
+        raise SystemExit(f'Missing event_references injection: {name}')
     restored = generated
     for before, after, _ in reversed(substitutions):
         if restored.count(after) != 1:

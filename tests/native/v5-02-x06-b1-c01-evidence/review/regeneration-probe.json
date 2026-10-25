@@ -1,0 +1,17 @@
+{
+ "method": "Copy of the candidate source tree (src, vendor, cmake, fixtures, tests without bulky evidence folders) under <scratch>/regen/src; configure-only Debug preset into <scratch>/regen/build; settle with `ninja build.ninja`; then append a distinct comment marker to one ledger source at a time in the scratch copy and run `ninja -d explain build.ninja`. The gated build/rewrite-debug tree and checkout sources were not touched.",
+ "configure_exit": 0,
+ "baseline_after_settle": {"exit": 0, "rerun_cmake_lines": 0},
+ "candidate_cmakelists": {
+  "storage.cpp": {"exit": 0, "rerun_cmake_lines": 1, "marker_regenerated_in": ["r13b1-generated/storage.cpp", "r14c3b2-generated/storage.cpp", "v5-02-x03-b2-b-c01-generated/storage.cpp"]},
+  "storage.cppm": {"exit": 0, "rerun_cmake_lines": 1, "marker_regenerated_in": ["r13b1-generated/storage.cppm", "r14c3b2-generated/storage.cppm", "v5-02-x03-b2-b-c01-generated/storage.cppm"]},
+  "acceptance.cpp": {"exit": 0, "rerun_cmake_lines": 1, "marker_regenerated_in": ["r14c3b2-generated/acceptance.cpp", "v5-02-x03-b2-b-c01-generated/acceptance.cpp"]},
+  "acceptance.cppm": {"exit": 0, "rerun_cmake_lines": 1, "marker_regenerated_in": ["r14c3b2-generated/acceptance.cppm", "v5-02-x03-b2-b-c01-generated/acceptance.cppm"]}
+ },
+ "negative_control_b1_cmakelists": {
+  "cmakelists_sha256": "1d439dfd6290a54b566eb44e1a4e8d95516ab73e3b84fad58f695904d38e2622",
+  "note": "Scratch CMakeLists with the four C01 lines removed (byte-identical to the B1-reviewed file); reconfigured, settled, then storage.cpp edited.",
+  "storage.cpp": {"exit": 0, "rerun_cmake_lines": 0, "marker_regenerated_in": []}
+ },
+ "logs": "regen-probe/ (local, unredacted)"
+}

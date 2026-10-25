@@ -12,6 +12,7 @@ import std;
 import planar.engine.acceptance.prepared;
 import planar.engine.canonical;
 import planar.engine.ledger.format;
+import planar.engine.ledger.acceptance;
 using namespace planar::engine;
 using namespace planar::engine::history;
 using namespace planar::engine::acceptance;

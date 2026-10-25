@@ -1,0 +1,16 @@
+{
+ "note": "All commands run serially and unpiped from <repo>; exit codes read directly into *.exit files.",
+ "commands": [
+  {"cmd": "cmake --build build/rewrite-debug --target planar_tests", "exit": 0, "result": "ninja: no work to do", "log": "build-tests.log"},
+  {"cmd": "cmake --build build/rewrite-debug", "exit": 0, "result": "ninja: no work to do (full default target)", "log": "build-full.log"},
+  {"cmd": "cmake --build build/rewrite-debug", "exit": 0, "result": "ninja: no work to do (separately recorded second build)", "log": "build-nochange.log"},
+  {"cmd": "ctest --test-dir build/rewrite-debug --no-tests=error --output-on-failure -j6", "exit": 0, "result": "100% tests passed out of 928; 928 Passed lines; no failed, not run, skipped or disabled", "log": "ctest-full.log"},
+  {"cmd": "ctest --test-dir build/rewrite-debug --show-only=json-v1", "exit": 0, "result": "928 names; vs X06-A3 918: missing 0, added 10, disabled 0", "log": "inventory.json, inventory-preservation.json"},
+  {"cmd": "python3 scripts/rewrite-check.py lint --build-dir build/rewrite-debug", "exit": 0, "result": "Formatting and Doxygen checked 133 active source files", "log": "lint.log"},
+  {"cmd": "ninja -C build/rewrite-debug -t query build.ninja", "exit": 0, "result": "RERUN_CMAKE inputs include ledger/acceptance.cpp, acceptance.cppm, format.cpp, format.cppm, storage.cpp, storage.cppm", "log": "regeneration-inputs-query.log"},
+  {"cmd": "cmake --graphviz=<scratch>/graph/graph.dot -S . -B <scratch>/graph/build --preset debug", "exit": 0, "result": "254 nodes, 1321 edges; gated build.ninja and CMakeCache.txt mtimes unchanged", "log": "graph-configure.log"},
+  {"cmd": "python3 -I graph-audit.py <scratch>/graph/graph.dot (and the author's raw/target-graph.dot)", "exit": 0, "result": "no multi-node SCC; 41 self-loops all *_tests; 21 forbidden-reachability checks false; identical result on author graph", "log": "target-graph-audit.json"},
+  {"cmd": "scratch regeneration probe (see regeneration-probe.json)", "exit": 0, "result": "each of the four files triggers Re-running CMake and regenerates its clones; B1 CMakeLists negative control does not", "log": "regen-probe/"},
+  {"cmd": "python3 scripts/redact-local-paths.py check --repo-path <repo> --home <home> <C01 REPORT.md, dependency-cycle-manifest.md, round record, src/engine/CMakeLists.txt>", "exit": 0, "result": "no local paths"}
+ ]
+}

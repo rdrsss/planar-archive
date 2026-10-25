@@ -7,6 +7,8 @@ import std;
 import planar.engine.acceptance.prepared;
 import planar.engine.canonical;
 import planar.test.atomic_format;
+import planar.test.atomic_storage;
+import planar.test.atomic_acceptance;
 import planar.test.atomic_digest;
 using namespace planar::engine;
 using namespace planar::engine::history;

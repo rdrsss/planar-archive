@@ -1,0 +1,190 @@
+{
+ "author_artifacts": {
+  "REPORT.md": {
+   "bytes": 2678,
+   "sha256": "be7bf1a7a8c717b551b788af6b67c2078d26814ee939ec8f31085622d466bf78"
+  },
+  "citations-verified.txt": {
+   "bytes": 2826,
+   "sha256": "c7fcaf2dc4203700a43b07b760d69e571a9f9eda0949e870e08dda94778a67b7"
+  },
+  "dependency-cycle-manifest.md": {
+   "bytes": 5413,
+   "sha256": "3cca4ce97695742880b6d904c25b109dfb49b4226cd0323491c828dcd821f414"
+  },
+  "inventory-added-sources.txt": {
+   "bytes": 715,
+   "sha256": "b947c960a892c163a12da8b33e64ace6a0ed49f17a8a0664aa8b80379cf401df"
+  },
+  "inventory-added.txt": {
+   "bytes": 639,
+   "sha256": "68828dd1577ddd5f075eb4a62b79b30b6e1e547e2979a8f786d53928cf73c3bd"
+  },
+  "inventory-current-928.txt": {
+   "bytes": 79618,
+   "sha256": "d7085218b4301a9fb8bb49ad03a2edd42be662cd87a3fdff2418059b8ef76112"
+  },
+  "inventory-diff.txt": {
+   "bytes": 683,
+   "sha256": "eed6cc4c459b811d683e60e5d3b74b0e6d02a82afd55c8258798f20501be6c78"
+  },
+  "inventory-missing.txt": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "inventory-prior-918.txt": {
+   "bytes": 78979,
+   "sha256": "484a6e25b0d259e9c818c04e57fde3ad2681ee11a4d81bda8e459341a91aee73"
+  },
+  "inventory.txt": {
+   "bytes": 79618,
+   "sha256": "d7085218b4301a9fb8bb49ad03a2edd42be662cd87a3fdff2418059b8ef76112"
+  },
+  "raw/1-build-tests.log": {
+   "bytes": 63,
+   "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "raw/1.exit": {
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "raw/2-ctest.log": {
+   "bytes": 254329,
+   "sha256": "498ae08e541b6bb00b15b15c69c2e14ef69d6643d584e576529996a492b86893"
+  },
+  "raw/2.exit": {
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "raw/3-lint.log": {
+   "bytes": 10337,
+   "sha256": "18aa9986afa1a440e96921e5a2c709ada348a2872843e1d203b7d2b5c8ef7c4e"
+  },
+  "raw/3.exit": {
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "raw/4-build.log": {
+   "bytes": 63,
+   "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "raw/4.exit": {
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "raw/5-nochange.log": {
+   "bytes": 63,
+   "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "raw/5.exit": {
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "raw/b1-original-build.log": {
+   "bytes": 63,
+   "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "raw/b1-original-ctest.log": {
+   "bytes": 67960,
+   "sha256": "6eaaec0d3da951c41f1536131e4981c40555ec8b73ac59bb1c1020d2233d887c"
+  },
+  "raw/b1-original-lint.log": {
+   "bytes": 10337,
+   "sha256": "9b3c12e984cf59912ec7f1d14054772e9252e62e73a779ab7a5c8e21f45800ff"
+  },
+  "raw/b1-original-nochange.log": {
+   "bytes": 158,
+   "sha256": "b523889846fca6e3ba3017d724fd67cce9baed7e3d65dc62b43594294fa581c2"
+  },
+  "raw/build.log": {
+   "bytes": 56862,
+   "sha256": "7d7e1ca893f9abe4aa4beba16b6225c0f4489f5dec305190a13bde4b047a2f80"
+  },
+  "raw/check_graph.out": {
+   "bytes": 1995,
+   "sha256": "a593242d3e4c332ba64576bd2b443b22f734193f6b50ebf04f23a76441e03364"
+  },
+  "raw/check_graph.py": {
+   "bytes": 3995,
+   "sha256": "c2f96c0479a060b142d3e34c47c4e0bfa261d40244f812567df720d0e4d54d5d"
+  },
+  "raw/ctest-N.log": {
+   "bytes": 91773,
+   "sha256": "971940a2c8c8b3162c288657dd03a0a498edabaaa0ab907fa8f2c02b680ef692"
+  },
+  "raw/ctest-inventory.err": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/ctest-inventory.json": {
+   "bytes": 753220,
+   "sha256": "56bce967272c3bfdfa4f28eb630eca50c2bdc4b7b12b741807a2f15a729d355e"
+  },
+  "raw/diff.sha256": {
+   "bytes": 68,
+   "sha256": "45a822d28d17d9f434d430ac184f3247ed0c74510722bd314ef1bf6cb9e9772c"
+  },
+  "raw/gate-build-full.log": {
+   "bytes": 118,
+   "sha256": "5fa313444842faf4d3c2e8152cbacaefe07010f32cb88d7fb642ceb984b90875"
+  },
+  "raw/gate-build-tests.log": {
+   "bytes": 63,
+   "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "raw/gate-ctest.exit": {
+   "bytes": 7,
+   "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+  },
+  "raw/gate-ctest.log": {
+   "bytes": 254329,
+   "sha256": "db13727bd67a7d5d5cce76230607d3388e95222f4f5f8e216b2517d705816ed3"
+  },
+  "raw/gate-lint.log": {
+   "bytes": 10337,
+   "sha256": "61511606e074413a5a532596d498e5bb2f21a2111f4a060799b0e76919c854ef"
+  },
+  "raw/gate-nochange.log": {
+   "bytes": 63,
+   "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e"
+  },
+  "raw/graph-configure.log": {
+   "bytes": 2350,
+   "sha256": "6b3dfa6c001066158dd686249dd71eb2410eacdc130a721076b5fe21232e258c"
+  },
+  "raw/head.txt": {
+   "bytes": 41,
+   "sha256": "6b02f8086bbd4f81fb4e37889623fb1f1514eac761eb9dd295d49ffe488ef156"
+  },
+  "raw/regen-rule-after-line.txt": {
+   "bytes": 12811,
+   "sha256": "ad1042904af633e39c1595ee0347089529375250e21f27aa72d17a15180a1c82"
+  },
+  "raw/regen-rule-after.txt": {
+   "bytes": 12817,
+   "sha256": "078b196583cfd4f880dc8218559f6cc2cbdb1d49c54c4246a090669adc13570b"
+  },
+  "raw/regen-rule-before-line.txt": {
+   "bytes": 12523,
+   "sha256": "1496d87380940239adfa007d0a20a6a9744885f11b11018e390740173992c29a"
+  },
+  "raw/regen-rule-before.txt": {
+   "bytes": 12529,
+   "sha256": "eda5b72d8792b66ae3fe04769a83c98367363ca3b212d553f2e89eeea128ed9e"
+  },
+  "raw/target-graph.dot": {
+   "bytes": 130279,
+   "sha256": "f4c778bf8c34da57a5c008d2faa6f5fbf234a82258bd25f8049b9ac78ccf6cbd"
+  },
+  "regen-inputs.txt": {
+   "bytes": 1912,
+   "sha256": "9470f40261f239e8c40f87a59821be88e6709d6315c7983b8cf3ed0f4a471d43"
+  }
+ },
+ "relocated_b1_logs_match_b1_review_hashes": {
+  "b1-original-build.log": true,
+  "b1-original-ctest.log": true,
+  "b1-original-lint.log": true,
+  "b1-original-nochange.log": true
+ }
+}

@@ -31,12 +31,17 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
 1. The coordinator records the round's objective, dependencies, owned files,
    acceptance criteria, starting revision, pre-existing changes and verification
    in `rounds/<id>.md`.
-2. Search maps the scope and splits it into packages with exclusive file ownership.
-3. Coders implement their packages. They run in parallel only when owned files are
-   disjoint (search's split is the documented reason); otherwise sequentially.
-   Coders do not build.
-4. The gate runner builds and tests once all packages finish. One repair pass is
-   allowed; a second failure stops the run.
+2. Search maps the scope and splits it into packages with exclusive file ownership,
+   each assigned an execution wave; a package that needs another's output goes in
+   a later wave.
+3. Coders implement their packages wave by wave. Within a wave they run in
+   parallel only when owned files are disjoint (search's split is the documented
+   reason); otherwise sequentially. Package coders do not build.
+4. The gate runner builds and tests once all packages finish. On failure, one
+   repair coder (Sonnet 5.5, medium) that owns the round's files may build and
+   iterate on the debug tree alone, then the gate reruns; a second failure stops
+   the run. A round whose changes are applied but whose gate failed resumes as a
+   `repair` run: no new mapping, just the repair coder and the gate.
 5. The reviewer returns `approve`, `request-changes` or `blocked`, writing
    `rounds/<id>-review.md`.
 6. The coordinator records the outcome, updates the roadmap's current status and,
@@ -69,7 +74,15 @@ Evidence folders (`tests/native/*-evidence/`) are gitignored. Commit only each
 folder's `REPORT.md`/`README.md` and top-level `.md`/`.json` manifests of 100 KB or
 less, staged by explicit path with `git add -f`; bulky artifacts stay local and
 the committed manifests record their hashes. Support folders and frozen snapshots
-are committed normally. Never commit unreviewed or `request-changes` candidates.
+are committed normally.
+
+Committed files must not contain machine-local absolute paths. Before staging,
+run `python3 scripts/redact-local-paths.py redact --repo-path "$PWD" --home "$HOME"`
+on the files to be committed, then the same command with `check` on the staged
+files; it must exit 0. Redaction replaces the repository root with `<repo>` and the
+home directory with `<home>` and records original/redacted SHA-256 values in
+`tests/native/path-redaction.json`, so `verify` can recheck hashes pinned before
+redaction. Never commit unreviewed or `request-changes` candidates.
 Pushing, merging and installing remain unauthorized.
 
 ## Status records

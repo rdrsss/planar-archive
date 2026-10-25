@@ -1,0 +1,23 @@
+{
+ "baseline": "tests/native/v5-02-x06-a3-evidence/inventory.json",
+ "baseline_sha256": "bad3e9fe3baaacabe8dd620025b55c9b5d282afeaf1d94bf19513eb99f863f68",
+ "baseline_equals_a3_review_inventory": true,
+ "prior": 918,
+ "prior_unique": 918,
+ "current": 928,
+ "current_unique": 928,
+ "missing": [],
+ "added": [
+  "replacement.intent create refuses invalid arguments",
+  "replacement.intent create returns exact immutable legacy data",
+  "replacement.intent create_v2 carries the optional profile selector",
+  "replacement.intent moved-from data refuses",
+  "replacement.storage abort and destruction roll back",
+  "replacement.storage begin_write refuses a missing ledger",
+  "replacement.storage entry and precommit identity checks are separate and site specific",
+  "replacement.storage failed operation poisons and rolls back the transaction",
+  "replacement.storage request miss does not poison the transaction",
+  "replacement.storage write transaction matches the record writer byte for byte"
+ ],
+ "disabled": []
+}

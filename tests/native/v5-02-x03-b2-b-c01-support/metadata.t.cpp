@@ -8,6 +8,8 @@ import std;
 import planar.engine.acceptance.prepared;
 import planar.engine.canonical;
 import planar.test.metadata_format;
+import planar.test.metadata_storage;
+import planar.test.metadata_acceptance;
 import planar.test.metadata_fixture;
 import planar.engine.json_codec;
 using namespace planar::engine;

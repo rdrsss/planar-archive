@@ -14,14 +14,15 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 `tests/native/*-evidence/` are authoritative.
 
 - **Approved through:** R01-R14 (D8), V5-01, V5-02 A/B/C, X01-X05 (C5),
-  X06-A1/A2/A3 and the [X06-A4 architecture plus C01](profile-preparation-architecture.md)
-  documentation ([review](rounds/V5-02-X06-A4-C01-review.md); X06A4-R1 closed).
-  Recorded profile histories verify and replay saved accepted/noop requests;
-  fresh profile acceptance still refuses.
-- **Pending review:** none.
+  X06-A1/A2/A3, the [X06-A4 architecture plus C01](profile-preparation-architecture.md)
+  documentation, and [X06-B1](rounds/V5-02-X06-B1.md) native completion dependency
+  extraction with [C01](rounds/V5-02-X06-B1-C01.md) ([review](rounds/V5-02-X06-B1-C01-review.md)),
+  committed. Recorded profile histories verify and replay saved accepted/noop
+  requests; fresh profile acceptance still refuses.
+- **Pending:** nothing awaiting review.
 - **Latest complete approved gate:** macOS Debug and RelWithDebInfo, **876/876**
   each, zero failures/errors/skips/disabled ([X05-C5 review](rounds/V5-02-X05-C5-review.md)).
-  Current registered inventory is 918.
+  Registered inventory is 928 (B1 Debug 928/928, macOS Debug only).
 - **Unchanged limits:** public `init` creates format1; no RSS guarantee; Linux
   acceptance has not run.
 
@@ -29,10 +30,10 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 
 | Step | Scope |
 | --- | --- |
-| X06 code rounds (next) | Per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates): native completion dependency extraction, original source capture, authentic runtime preparation, native profile transactions, whole-invocation budgets, then the integrated X06 gate |
+| X06 remaining code rounds | Per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates): original source capture, authentic runtime preparation, native profile transactions, whole-invocation budgets, then the integrated X06 gate |
 | X07 | Public cutover: CLI11 envelope/parser integration and service/CLI admission; format2 init ([rows](external-profile-implementation.md#source-seams-and-bounded-implementation-rounds)) |
 | X08 | Mandatory full external-profile acceptance gate |
-| RA01, R15–R19 | Authoring/driver prompts, then observed-state execution (Phase 2 below) |
+| RA01, R15-R19 | Authoring/driver prompts, then observed-state execution (Phase 2 below) |
 | Linux | Actual Linux gate |
 
 ## Round protocol

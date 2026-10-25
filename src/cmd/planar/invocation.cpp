@@ -4,6 +4,7 @@ import planar.engine.capture;
 import planar.engine.acceptance.load;
 import planar.engine.capture.host_path;
 import planar.engine.ledger.format;
+import planar.engine.ledger.acceptance;
 import planar.engine.history.read;
 import planar.engine.source_export;
 namespace planar::cmd {

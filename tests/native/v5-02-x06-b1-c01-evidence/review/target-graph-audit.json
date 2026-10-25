@@ -1,0 +1,98 @@
+{
+ "nodes": 254,
+ "edges": 1321,
+ "multi_node_sccs": [],
+ "self_loops": 41,
+ "self_loops_all_tests": true,
+ "non_test_dependents_of_planar_ledger_acceptance": [
+  "planar_cli_invocation_0",
+  "planar_cli_invocation_1",
+  "planar_cli_invocation_2",
+  "planar_cli_invocation_3",
+  "planar_cli_invocation_4",
+  "planar_cli_invocation_5",
+  "planar_command_invocation",
+  "planar_history_fixture",
+  "planar_load_cli_probe_invocation"
+ ],
+ "direct": {
+  "planar_ledger_storage": [
+   "@cmake_cxx_std",
+   "planar_canonical",
+   "planar_history_interpretation_codec",
+   "planar_history_provenance_codec",
+   "planar_history_recorded_interpretation",
+   "planar_history_tree_core",
+   "planar_json_codec",
+   "planar_ledger_history_codec",
+   "planar_ledger_sqlite",
+   "planar_ledger_storage_types",
+   "planar_ledger_types"
+  ],
+  "planar_ledger_storage_types": [
+   "@cmake_cxx_std",
+   "planar_ledger_history_codec",
+   "planar_ledger_types"
+  ],
+  "planar_ledger_format": [
+   "@cmake_cxx_std",
+   "planar_json_codec",
+   "planar_ledger_completion",
+   "planar_ledger_history_codec",
+   "planar_ledger_sqlite",
+   "planar_ledger_storage",
+   "planar_ledger_storage_types",
+   "planar_ledger_types"
+  ],
+  "planar_ledger_acceptance": [
+   "@cmake_cxx_std",
+   "planar_acceptance_intent",
+   "planar_acceptance_prepared",
+   "planar_ledger_completion",
+   "planar_ledger_history_codec",
+   "planar_ledger_storage",
+   "planar_ledger_storage_types",
+   "planar_ledger_types"
+  ],
+  "planar_acceptance_intent": [
+   "@cmake_cxx_std",
+   "planar_history_record",
+   "planar_history_request_v2",
+   "planar_value"
+  ],
+  "planar_acceptance_prepared": [
+   "@cmake_cxx_std",
+   "planar_acceptance_intent",
+   "planar_capture_native",
+   "planar_history_interpretation_codec",
+   "planar_history_provenance_codec",
+   "planar_history_record",
+   "planar_history_request_v2",
+   "planar_history_tree_core"
+  ]
+ },
+ "checks": {
+  "planar_ledger_storage reaches planar_ledger_format": false,
+  "planar_ledger_storage reaches planar_ledger_acceptance": false,
+  "planar_ledger_storage reaches planar_acceptance_prepared": false,
+  "planar_ledger_storage reaches planar_runtime": false,
+  "planar_ledger_storage reaches planar_acceptance_intent": false,
+  "planar_ledger_storage_types reaches planar_ledger_format": false,
+  "planar_ledger_storage_types reaches planar_ledger_acceptance": false,
+  "planar_ledger_storage_types reaches planar_acceptance_prepared": false,
+  "planar_ledger_storage_types reaches planar_ledger_storage": false,
+  "planar_ledger_storage_types reaches planar_runtime": false,
+  "planar_ledger_format reaches planar_ledger_acceptance": false,
+  "planar_ledger_format reaches planar_acceptance_prepared": false,
+  "planar_ledger_format reaches planar_runtime": false,
+  "planar_ledger_format reaches planar_acceptance_intent": false,
+  "planar_ledger_acceptance reaches planar_runtime": false,
+  "planar_ledger_acceptance reaches planar_ledger_format": false,
+  "planar_acceptance_intent reaches planar_ledger_storage": false,
+  "planar_acceptance_intent reaches planar_ledger_format": false,
+  "planar_acceptance_intent reaches planar_ledger_acceptance": false,
+  "planar_acceptance_intent reaches planar_acceptance_prepared": false,
+  "planar_acceptance_intent reaches planar_runtime": false
+ },
+ "violations": []
+}

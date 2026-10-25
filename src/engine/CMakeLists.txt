@@ -152,10 +152,32 @@ planar_rewrite_module(planar_ledger_sqlite
 planar_rewrite_module(planar_ledger_types
   INTERFACE ledger/types.cppm DEPENDS planar_history_record planar_history_request_v2)
 
+planar_rewrite_module(planar_ledger_storage_types
+  INTERFACE ledger/storage_types.cppm
+  DEPENDS planar_ledger_types planar_ledger_history_codec)
+
+planar_rewrite_module(planar_ledger_storage
+  INTERFACE ledger/storage.cppm SOURCES ledger/storage.cpp
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical
+  TESTS ledger/storage.t.cpp)
+# Test-only edge: the storage tests exercise the public format surface.
+target_link_libraries(planar_ledger_storage_tests PRIVATE planar_ledger_format)
+
+planar_rewrite_module(planar_acceptance_intent
+  INTERFACE acceptance/intent.cppm SOURCES acceptance/intent.cpp
+  DEPENDS planar_value planar_history_record planar_history_request_v2 TESTS acceptance/intent.t.cpp)
+
+planar_rewrite_module(planar_ledger_acceptance
+  INTERFACE ledger/acceptance.cppm SOURCES ledger/acceptance.cpp
+  DEPENDS planar_ledger_storage planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec)
+
 planar_rewrite_module(planar_ledger_format
   INTERFACE ledger/format.cppm SOURCES ledger/format.cpp
   DEPENDS planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
-    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_acceptance_prepared TESTS ledger/format.t.cpp ledger/snapshot.t.cpp ledger/history_verification.t.cpp ledger/acceptance.t.cpp)
+    planar_ledger_storage planar_ledger_storage_types TESTS ledger/format.t.cpp ledger/snapshot.t.cpp ledger/history_verification.t.cpp ledger/acceptance.t.cpp)
+# Test-only: fixtures prepare and complete acceptances; the format library itself links none of it.
+target_link_libraries(planar_ledger_format_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared)
 target_compile_definitions(planar_ledger_format_tests PRIVATE
   PLANAR_LEDGER_SCHEMA="${PROJECT_SOURCE_DIR}/tests/native/r12b-evidence/expected-schema.sql")
 
@@ -173,6 +195,10 @@ set(r12c2_generated "${CMAKE_CURRENT_BINARY_DIR}/r12c2-generated")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/ledger/format.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ledger/format.cppm"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ledger/storage.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ledger/storage.cppm"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ledger/acceptance.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ledger/acceptance.cppm"
   "${r12c2_support}/generate.py")
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 execute_process(COMMAND "${Python3_EXECUTABLE}" "${r12c2_support}/generate.py"
@@ -183,7 +209,7 @@ planar_rewrite_module(planar_ledger_posix_test
 planar_rewrite_module(planar_ledger_fault_test
   INTERFACE "${r12c2_generated}/format.cppm" SOURCES "${r12c2_generated}/format.cpp"
   DEPENDS planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
-    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_acceptance_prepared planar_ledger_posix_test
+    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_ledger_storage planar_ledger_storage_types planar_ledger_posix_test
   TESTS ledger/publication_fault.t.cpp)
 set_target_properties(planar_ledger_posix_test planar_ledger_fault_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
@@ -196,12 +222,16 @@ execute_process(COMMAND "${Python3_EXECUTABLE}" "${r13b1_support}/generate.py"
   COMMAND_ERROR_IS_FATAL ANY)
 planar_rewrite_module(planar_record_digest_test
   INTERFACE "${r13b1_support}/digest.cppm" DEPENDS planar_history_record)
+planar_rewrite_module(planar_record_storage_test
+  INTERFACE "${r13b1_generated}/storage.cppm" SOURCES "${r13b1_generated}/storage.cpp"
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_record_digest_test)
 planar_rewrite_module(planar_record_format_test
   INTERFACE "${r13b1_generated}/format.cppm" SOURCES "${r13b1_generated}/format.cpp"
-  DEPENDS planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
-    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_acceptance_prepared planar_record_digest_test
+  DEPENDS planar_record_storage_test planar_ledger_storage_types planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_record_digest_test
   TESTS "${r13b1_support}/collision.t.cpp")
-set_target_properties(planar_record_digest_test planar_record_format_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(planar_record_digest_test planar_record_storage_test planar_record_format_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 planar_rewrite_module(planar_history_provenance_codec
   INTERFACE history/provenance_codec.cppm SOURCES history/provenance_codec.cpp
@@ -243,7 +273,7 @@ target_compile_definitions(planar_ledger_format_tests PRIVATE
 planar_rewrite_module(planar_acceptance_prepared
   INTERFACE acceptance/prepared.cppm SOURCES acceptance/prepared.cpp
   DEPENDS planar_capture_native planar_history_tree_core planar_history_provenance_codec
-    planar_history_interpretation_codec planar_history_record planar_history_request_v2 TESTS acceptance/prepared.t.cpp)
+    planar_history_interpretation_codec planar_history_record planar_history_request_v2 planar_acceptance_intent TESTS acceptance/prepared.t.cpp)
 target_link_libraries(planar_acceptance_prepared_tests PRIVATE planar_capture_host_path)
 target_compile_definitions(planar_acceptance_prepared_tests PRIVATE
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
@@ -257,15 +287,22 @@ execute_process(COMMAND "${Python3_EXECUTABLE}" "${r14c3b2_support}/generate.py"
   COMMAND_ERROR_IS_FATAL ANY)
 planar_rewrite_module(planar_atomic_digest_test
   INTERFACE "${r14c3b2_support}/digest.cppm" DEPENDS planar_history_record planar_history_request_v2)
+planar_rewrite_module(planar_atomic_storage_test
+  INTERFACE "${r14c3b2_generated}/storage.cppm" SOURCES "${r14c3b2_generated}/storage.cpp"
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_atomic_digest_test)
+planar_rewrite_module(planar_atomic_acceptance_test
+  INTERFACE "${r14c3b2_generated}/acceptance.cppm" SOURCES "${r14c3b2_generated}/acceptance.cpp"
+  DEPENDS planar_atomic_storage_test planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec)
 planar_rewrite_module(planar_atomic_format_test
   INTERFACE "${r14c3b2_generated}/format.cppm" SOURCES "${r14c3b2_generated}/format.cpp"
-  DEPENDS planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
-    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical
-    planar_acceptance_prepared planar_atomic_digest_test
+  DEPENDS planar_atomic_storage_test planar_ledger_storage_types planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_atomic_digest_test
   TESTS "${r14c3b2_support}/atomic.t.cpp")
+target_link_libraries(planar_atomic_format_test_tests PRIVATE planar_atomic_acceptance_test planar_atomic_storage_test planar_acceptance_prepared)
 target_compile_definitions(planar_atomic_format_test_tests PRIVATE
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
-set_target_properties(planar_atomic_digest_test planar_atomic_format_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(planar_atomic_digest_test planar_atomic_storage_test planar_atomic_acceptance_test planar_atomic_format_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 planar_rewrite_module(planar_history_read
   INTERFACE history/read.cppm SOURCES history/read.cpp
@@ -275,7 +312,7 @@ planar_rewrite_module(planar_history_read
 add_executable(planar_history_fixture EXCLUDE_FROM_ALL
   "${PROJECT_SOURCE_DIR}/tests/native/r14e2-support/fixture.cpp")
 planar_native_target(planar_history_fixture)
-target_link_libraries(planar_history_fixture PRIVATE planar_ledger_format planar_history_provenance_codec planar_canonical planar_sqlite)
+target_link_libraries(planar_history_fixture PRIVATE planar_ledger_format planar_ledger_acceptance planar_acceptance_prepared planar_history_provenance_codec planar_canonical planar_sqlite)
 target_compile_definitions(planar_history_fixture PRIVATE
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
 add_dependencies(planar_tests planar_history_fixture)
@@ -283,7 +320,7 @@ add_dependencies(planar_tests planar_history_fixture)
 planar_rewrite_module(planar_source_export
   INTERFACE export/source_export.cppm SOURCES export/source_export.cpp
   DEPENDS planar_history_tree TESTS export/source_export.t.cpp TEST_TIMEOUT 120)
-target_link_libraries(planar_source_export_tests PRIVATE planar_history_provenance_codec planar_canonical)
+target_link_libraries(planar_source_export_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared planar_history_provenance_codec planar_canonical)
 target_compile_definitions(planar_source_export_tests PRIVATE
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures"
   PLANAR_EXPORT_FIXTURE="$<TARGET_FILE:planar_history_fixture>")
@@ -305,7 +342,7 @@ planar_rewrite_module(planar_export_fault_test
   DEPENDS planar_history_tree planar_export_posix_test TESTS export/source_export.t.cpp)
 target_compile_definitions(planar_export_fault_test_tests PRIVATE PLANAR_EXPORT_FAULT_TEST
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
-target_link_libraries(planar_export_fault_test_tests PRIVATE planar_history_provenance_codec planar_canonical)
+target_link_libraries(planar_export_fault_test_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared planar_history_provenance_codec planar_canonical)
 set_target_properties(planar_export_posix_test planar_export_fault_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 planar_rewrite_module(planar_acceptance_load
@@ -405,15 +442,22 @@ execute_process(COMMAND "${Python3_EXECUTABLE}" "${x03b2bc01_support}/generate.p
   COMMAND_ERROR_IS_FATAL ANY)
 planar_rewrite_module(planar_metadata_fixture
   INTERFACE "${x03b2bc01_support}/fixture.cppm")
+planar_rewrite_module(planar_metadata_storage_test
+  INTERFACE "${x03b2bc01_generated}/storage.cppm" SOURCES "${x03b2bc01_generated}/storage.cpp"
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_metadata_fixture)
+planar_rewrite_module(planar_metadata_acceptance_test
+  INTERFACE "${x03b2bc01_generated}/acceptance.cppm" SOURCES "${x03b2bc01_generated}/acceptance.cpp"
+  DEPENDS planar_metadata_storage_test planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec)
 planar_rewrite_module(planar_metadata_format_test
   INTERFACE "${x03b2bc01_generated}/format.cppm" SOURCES "${x03b2bc01_generated}/format.cpp"
-  DEPENDS planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
-    planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical
-    planar_acceptance_prepared planar_metadata_fixture
+  DEPENDS planar_metadata_storage_test planar_ledger_storage_types planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+    planar_metadata_fixture
   TESTS "${x03b2bc01_support}/metadata.t.cpp")
+target_link_libraries(planar_metadata_format_test_tests PRIVATE planar_metadata_acceptance_test planar_metadata_storage_test planar_acceptance_prepared)
 target_compile_definitions(planar_metadata_format_test_tests PRIVATE
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
-set_target_properties(planar_metadata_fixture planar_metadata_format_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(planar_metadata_fixture planar_metadata_storage_test planar_metadata_acceptance_test planar_metadata_format_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 planar_rewrite_module(planar_history_effective_provenance
   INTERFACE history/effective_provenance.cppm SOURCES history/effective_provenance.cpp

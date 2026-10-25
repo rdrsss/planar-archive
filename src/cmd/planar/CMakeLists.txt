@@ -4,7 +4,7 @@ planar_rewrite_module(planar_command_response
   DEPENDS planar_json_codec planar_ledger_types)
 planar_rewrite_module(planar_command_invocation
   INTERFACE invocation.cppm SOURCES invocation.cpp
-  DEPENDS planar_command_response planar_runtime planar_capture planar_capture_host_path planar_ledger_format planar_history_read planar_source_export planar_acceptance_load)
+  DEPENDS planar_command_response planar_runtime planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
 planar_rewrite_module(planar_render_command
   INTERFACE handlers/render/command.cppm
   SOURCES handlers/render/command.cpp
@@ -82,7 +82,7 @@ foreach(variant RANGE 0 5)
     DEPENDS planar_history_read planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_cli_bundle_source_${variant})
   planar_rewrite_module(planar_cli_invocation_${variant}
     INTERFACE "${generated}/invocation.cppm" SOURCES "${generated}/invocation.cpp"
-    DEPENDS planar_command_response planar_cli_runtime_${variant} planar_capture planar_capture_host_path planar_ledger_format planar_history_read planar_source_export planar_acceptance_load)
+    DEPENDS planar_command_response planar_cli_runtime_${variant} planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
   foreach(family render init history export load)
     planar_rewrite_module(planar_cli_${family}_${variant}
       INTERFACE "${generated}/handlers/${family}/command.cppm" SOURCES "${generated}/handlers/${family}/command.cpp"
@@ -138,7 +138,7 @@ planar_rewrite_module(planar_load_cli_probe_runtime
   DEPENDS planar_history_read planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_cli_probe_source)
 planar_rewrite_module(planar_load_cli_probe_invocation
   INTERFACE "${d7b_generated}/invocation.cppm" SOURCES "${d7b_generated}/invocation.cpp"
-  DEPENDS planar_command_response planar_load_cli_probe_runtime planar_capture planar_capture_host_path planar_ledger_format planar_history_read planar_source_export planar_acceptance_load)
+  DEPENDS planar_command_response planar_load_cli_probe_runtime planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
 foreach(family render init history export load)
   planar_rewrite_module(planar_load_cli_probe_${family}
     INTERFACE "${d7b_generated}/handlers/${family}/command.cppm" SOURCES "${d7b_generated}/handlers/${family}/command.cpp"

@@ -6,101 +6,11 @@ export import planar.engine.ledger.types;
 export import planar.engine.ledger.sqlite;
 export import planar.engine.ledger.completion;
 export import planar.engine.ledger.history_codec;
-export import planar.engine.acceptance.prepared;
+export import planar.engine.ledger.storage_types;
+import planar.engine.ledger.storage;
 export namespace planar::engine::ledger {
-/// Exact shared ledger failure category.
-using format_error_code = ::planar::engine::ledger::types::format_error_code;
-/// Exact shared redacted ledger failure.
-using format_error = ::planar::engine::ledger::types::format_error;
-/// @brief Exact supported on-disk schema discriminator.
-enum class ledger_format { v1 = 1, v2 = 2 };
-/// @brief Verified initialization metadata; identifiers remain strings at JSON boundaries.
-struct ledger_metadata {
-  std::string   identity;                   ///< Thirty-two lowercase hexadecimal digits from sixteen OS-random bytes.
-  std::string   workspace_id;               ///< Declaration identifier grammar.
-  std::string   created_at;                 ///< UTC RFC3339 timestamp with milliseconds.
-  ledger_format format = ledger_format::v1; ///< Exact verified schema, retained independently of request codecs.
-};
-/// @brief Requested access after independent read-only verification.
-enum class ledger_access { read_only, read_write };
-/// Exact shared native immutable record identity.
-using record_reference = ::planar::engine::ledger::types::record_reference;
-/// Exact shared owned bounded record.
-using stored_record = ::planar::engine::ledger::types::stored_record;
-/// Owned current projection from the pinned snapshot.
-struct history_head {
-  std::optional<std::int64_t> revision;      ///< Active revision, absent before the first acceptance.
-  std::int64_t                last_sequence; ///< Last committed event sequence.
-};
-/// Owned immutable revision metadata; all five references are database local.
-struct revision_row {
-  std::int64_t                               id;          ///< Positive revision identity.
-  std::optional<std::int64_t>                parent;      ///< Older revision, absent for initial acceptance.
-  ::planar::engine::ledger::event_references references;  ///< Complete captured roots.
-  std::string                                actor;       ///< Bounded UTF-8 native assertion.
-  std::string                                accepted_at; ///< Contextual UTC time, never a causal clock.
-};
-/// Owned event row retaining exact saved canonical payload bytes.
-struct event_row {
-  std::int64_t                sequence;    ///< Positive event sequence.
-  std::string                 type;        ///< Fixed event type.
-  std::int64_t                version;     ///< Event row version.
-  std::optional<std::int64_t> revision;    ///< Absent only at initialization.
-  std::optional<std::string>  request_id;  ///< Absent only at initialization.
-  std::string                 actor;       ///< Bounded UTF-8 native assertion.
-  std::string                 occurred_at; ///< Contextual UTC time.
-  std::string                 payload;     ///< Exact canonical event bytes; decode with the pure history codec.
-};
-/// Owned private replay data. Host argument bytes must never appear in public history output.
-struct request_row {
-  std::string                                       request_id;     ///< Bounded replay key.
-  ::planar::engine::ledger::types::record_reference body_reference; ///< Validated request record identity.
-  std::string                            body_encoded;   ///< Exact stored request codec bytes, including private host arguments.
-  std::int64_t                           event_sequence; ///< Saved successful operation event.
-  std::int64_t                           revision;       ///< Returned revision.
-  ::planar::engine::ledger::load_outcome outcome;        ///< Accepted or unchanged result.
-  std::string                            result;         ///< Exact saved canonical result bytes.
-};
-/// One bounded ascending event page from the pinned snapshot.
-struct event_page {
-  std::vector<event_row>      events;     ///< At most the explicitly requested limit.
-  std::optional<std::int64_t> next_after; ///< Last returned sequence only when this snapshot has more events.
-};
-/// Exact committed response bytes, buffered until commit succeeds.
-struct acceptance_result {
-  std::string result;   ///< Original canonical saved JSON bytes.
-  bool        replayed; ///< True only for an exact previously committed request.
-};
-/// @brief Complete one prepared acceptance atomically, resolving exact replay before inspecting the candidate.
-/// @param path Explicit existing ledger path.
-/// @param intent Immutable validated request and expected revision.
-/// @param candidate Immutable prepared input retaining native capture receipts.
-/// @return Exact saved result after commit, or a redacted refusal with all tentative writes rolled back.
-/// @note Thread-confined per call; native receipts are verified immediately before SQLite commit.
-std::expected<acceptance_result, format_error>
-complete_acceptance(const std::filesystem::path& path, const ::planar::engine::acceptance::request_intent& intent,
-                    const ::planar::engine::acceptance::prepared_acceptance& candidate);
-/// @brief Complete against the ledger identity retained by a native prelude, retaining authoritative completion evidence.
-/// @param path Explicit existing ledger path.
-/// @param intent Immutable validated request and expected revision.
-/// @param candidate Immutable prepared input; exact replay does not inspect it.
-/// @param expected_ledger_identity Native prelude identity, checked before locked request lookup.
-/// @param receipt Initially empty thread-confined output; saved bytes and phase survive errors and exceptions.
-/// @return Exact saved result or typed refusal; an uncertain receipt never promises rollback.
-std::expected<acceptance_result, format_error>
-complete_acceptance(const std::filesystem::path& path, const ::planar::engine::acceptance::request_intent& intent,
-                    const ::planar::engine::acceptance::prepared_acceptance& candidate, std::string_view expected_ledger_identity,
-                    ::planar::engine::ledger::completion_receipt& receipt);
-/// @brief Trusted read guard bound to the actual no-follow descriptor before any ledger header access.
-/// @note Thread-confined; bind must not read content, run Lua or recursively call SQLite. The same object gates SQLite.
-class format_read_guard : public read_guard {
-public:
-  /// @brief Bind the actual held regular-file descriptor to original native admission evidence.
-  /// @param descriptor Borrowed descriptor; valid through the complete format owner lifetime.
-  /// @return ready, refused or resource; any other value or exception fails closed.
-  virtual read_gate_status bind(int descriptor) = 0;
-};
-struct format_state;
+/// @brief Trusted read guard alias; bind the actual no-follow descriptor before any ledger header access.
+using format_read_guard = storage_read_guard;
 class record_writer;
 /// @brief Opaque thread-confined owner of a verified ledger and pinned read snapshot.
 /// @note No SQL or SQLite handle escapes. Cooperative directory ownership is required; hostile swapping is unsupported.
@@ -148,15 +58,12 @@ public:
   std::expected<event_page, format_error> read_events_after(std::uint64_t cursor, std::size_t limit) const;
 
 private:
-  friend std::expected<record_writer, format_error>   begin_records(const std::filesystem::path&);
   friend std::expected<format_file, format_error>     open_existing(const std::filesystem::path&, ledger_access);
   friend std::expected<ledger_metadata, format_error> backup_new(const std::filesystem::path&, const std::filesystem::path&);
   friend std::expected<format_file, format_error>     open_existing_gated(const std::filesystem::path&,
                                                                           std::shared_ptr<format_read_guard>);
-  static std::expected<format_file, format_error>     open_impl(const std::filesystem::path&, ledger_access,
-                                                                std::shared_ptr<format_read_guard>);
-  explicit format_file(std::shared_ptr<format_state> state);
-  std::shared_ptr<format_state> _state;
+  explicit format_file(read_snapshot snapshot);
+  read_snapshot _snapshot;
 };
 /// @brief Independently owned, move-only thread-confined record write transaction.
 /// @note No raw handles escape. Every failed operation or abandonment rolls back the entire transaction and invalidates it.
@@ -190,19 +97,8 @@ public:
 
 private:
   friend std::expected<record_writer, format_error> begin_records(const std::filesystem::path&);
-  friend std::expected<acceptance_result, format_error>
-  complete_acceptance(const std::filesystem::path&, const ::planar::engine::acceptance::request_intent&,
-                      const ::planar::engine::acceptance::prepared_acceptance&);
-  friend std::expected<acceptance_result, format_error>
-  complete_acceptance(const std::filesystem::path&, const ::planar::engine::acceptance::request_intent&,
-                      const ::planar::engine::acceptance::prepared_acceptance&, std::string_view,
-                      ::planar::engine::ledger::completion_receipt&);
-  static std::expected<acceptance_result, format_error>
-  complete_acceptance_impl(const std::filesystem::path&, const ::planar::engine::acceptance::request_intent&,
-                           const ::planar::engine::acceptance::prepared_acceptance&, std::optional<std::string_view>,
-                           ::planar::engine::ledger::completion_receipt&);
-  explicit record_writer(std::shared_ptr<format_state> state);
-  std::shared_ptr<format_state> _state;
+  explicit record_writer(write_transaction transaction);
+  std::optional<write_transaction> _transaction;
 };
 /// @brief Independently verify an explicit ledger and acquire a record write transaction with BEGIN IMMEDIATE.
 /// @param path Existing no-follow quiescent ledger, verified read-only before writable access.

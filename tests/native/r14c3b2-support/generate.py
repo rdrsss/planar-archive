@@ -9,29 +9,49 @@ source, output = map(Path, sys.argv[1:3])
 mutation = "--mutate-final-receipt" in sys.argv[3:]
 output.mkdir(parents=True, exist_ok=True)
 manifest = {}
-for name in ('format.cppm', 'format.cpp'):
+# Relocated declarations live in the real storage_types and history_codec modules; the cloned namespace re-exports them by name,
+# and aliases the real types namespace used by the cloned storage declarations.
+INJECTED = ('read_guard', 'read_gate_status', 'ledger_format', 'ledger_metadata', 'ledger_access', 'history_head',
+            'revision_row', 'event_row', 'request_row', 'event_page', 'format_error_code', 'format_error',
+            'record_reference', 'stored_record', 'event_references', 'connection')
+USING = ''.join(f'\nusing ::planar::engine::ledger::{n};' for n in INJECTED) + '\nnamespace types = ::planar::engine::ledger::types;'
+# Clone storage, format and acceptance; no variant file imports the real storage/format/acceptance modules.
+for name in ('storage.cppm', 'storage.cpp', 'format.cppm', 'format.cpp', 'acceptance.cppm', 'acceptance.cpp'):
     original = (source / name).read_text()
-    changes = [
-        ('planar.engine.ledger.format;', 'planar.test.atomic_format;'),
+    changes = []
+    if name.startswith('format'):
+        changes.append(('planar.engine.ledger.format;', 'planar.test.atomic_format;'))
+    if name.startswith('acceptance'):
+        changes.append(('planar.engine.ledger.acceptance;', 'planar.test.atomic_acceptance;'))
+    changes += [
+        ('planar.engine.ledger.storage;', 'planar.test.atomic_storage;'),
         ('namespace planar::engine::ledger {', 'namespace planar::engine::atomic_test {'),
     ]
     if name.endswith('.cppm'):
-        changes += [('namespace planar::engine::atomic_test {', 'namespace planar::engine::atomic_test {\nusing ::planar::engine::ledger::read_guard;\nusing ::planar::engine::ledger::read_gate_status;')]
-    if name.endswith('.cpp'):
+        changes += [('namespace planar::engine::atomic_test {', 'namespace planar::engine::atomic_test {' + USING)]
+        if name == 'storage.cppm':
+            # The cloned helper namespace must match the cpp definitions, which the general rename places in atomic_test::native.
+            changes += [
+                ('export namespace planar::engine::ledger::native {', 'export namespace planar::engine::atomic_test::native {'),
+                ('} // namespace planar::engine::ledger::native', '} // namespace planar::engine::atomic_test::native'),
+            ]
+    else:
+        changes += [('namespace planar::engine::atomic_test {', 'namespace planar::engine::atomic_test {\nusing namespace planar::engine::ledger;')]
+    if name == 'storage.cpp':
         changes += [
             ('import planar.engine.ledger.sqlite;', 'import planar.engine.ledger.sqlite;\nimport planar.test.atomic_digest;'),
-            ('namespace planar::engine::atomic_test {', 'namespace planar::engine::atomic_test {\nusing namespace planar::engine::ledger;'),
             ('digest_record(', 'planar::test::atomic_digest::digest('),
             ('digest_request_v2(', 'planar::test::atomic_digest::digest_v2('),
             ('\n#undef LEDGER_TRY', '\nstd::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum) {\n  return next_identifier(maximum);\n}\n#undef LEDGER_TRY'),
         ]
-    else:
-        changes += [('struct format_state;', '''/// @brief Invoke the unchanged private allocator boundary in the isolated test variant.
+    if name == 'storage.cppm':
+        changes += [('struct storage_state;\nclass write_transaction;', '''/// @brief Invoke the unchanged private allocator boundary in the isolated test variant.
 /// @param maximum Exact currently allocated signed-64 maximum.
 /// @return Next ID or the production exhaustion refusal.
 std::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum);
-struct format_state;''')]
-    if mutation and name.endswith(".cpp"):
+struct storage_state;
+class write_transaction;''')]
+    if mutation and name == 'acceptance.cpp':
         changes.append(("if (!candidate.verify())", "if (false)"))
     generated = original
     counts = []
@@ -43,6 +63,8 @@ struct format_state;''')]
             raise SystemExit(f'Missing exact substitution: {name}: {before}')
         counts.append(count)
         generated = generated.replace(before, after)
+    if name.endswith('.cppm') and 'using ::planar::engine::ledger::event_references;' not in generated:
+        raise SystemExit(f'Missing event_references injection: {name}')
     restored = generated
     for before, after in reversed(changes):
         restored = restored.replace(after, before)
