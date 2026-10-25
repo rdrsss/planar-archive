@@ -7,7 +7,7 @@ export import planar.engine.capture;
 export namespace planar::engine::acceptance {
 /// Source capture boundary categories; load maps them onto its public vocabulary.
 enum class source_error_code {
-  invalid_state, ///< Consumed, moved-from, terminal or out-of-order owner.
+  invalid_state, ///< Consumed, terminal or out-of-order owner, or a moved-from receipt supplied to open_bound.
   invalid_path,  ///< Host path or declaration file name is not an absolute normalized intent path.
   invalid_route, ///< Trusted route does not match the opened declaration.
   capture,       ///< Native discovery, admission or sealing refused; detail carries the diagnostic.
@@ -22,12 +22,17 @@ struct source_error {
 
 /// @brief Adapt a selected-declaration admission refusal to the existing load-family capture diagnostic.
 /// Intended for the future known-load factory, which admits the declaration before registration and
-/// passes profile_error::detail. A missing declaration (io, "Cannot open confined input") becomes the
-/// embedded open's capture diagnostic (io, "Cannot inspect confined input", no field). Every other
-/// diagnostic maps exactly as the source boundary maps native diagnostics.
+/// passes profile_error::detail together with profile_capture::last_admission_refusal_was_absent().
+/// Absence is taken only from that internal signal (ENOENT of the selected final component), never from message
+/// text: when it is set and the diagnostic is io, "Cannot open confined input", the result is the embedded open's
+/// capture diagnostic (io, "Cannot inspect confined input", no field). Permission refusals such as EACCES share
+/// that message but are never reported as missing. Platform note: on macOS the metadata open (O_EVTONLY) refuses
+/// an unreadable present file at admission; on Linux O_PATH admits it and the content read fails later.
+/// Every other diagnostic maps exactly as the source boundary maps native diagnostics.
 /// @param admission Raw admission diagnostic for the selected declaration.
+/// @param absent Internal absence signal from the failed admission.
 /// @return Owned source refusal with the existing capture or resource_limit category.
-source_error known_declaration_error(const diagnostic& admission);
+source_error known_declaration_error(const diagnostic& admission, bool absent);
 
 /// Move-only declaration capture owner. Not thread-safe; returned structural values are immutable.
 /// Every operation after opening is one-shot. Any failure terminates the owner and
@@ -56,8 +61,10 @@ public:
   static std::expected<source_capture, source_error> open_embedded(std::string_view workspace, std::string_view registry);
 
   /// @brief Open the workspace declaration through original supplied-root and declaration authority.
-  /// Construction refuses receipts that are moved-from, poisoned or not all from one original admission,
-  /// before any consumption or content read. Every refusal, including after consumption, poisons the
+  /// Construction first refuses any moved-from receipt as invalid_state, then poisoned, foreign-admission or
+  /// wrong-role receipts (declaration slot must carry role declaration, registry slot role registry) as
+  /// capture/capture_changed, before any consumption or content read. The root receipt needs no role check:
+  /// retain_root only issues supplied-root slots. Every refusal, including after consumption, poisons the
   /// single shared original admission, reached through the registry receipt after consumption.
   /// @param workspace Absolute lexically normalized workspace declaration intent path.
   /// @param registry Absolute lexically normalized registry intent path, bound as standalone input at capture.

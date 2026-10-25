@@ -835,3 +835,71 @@ TEST_CASE("D2 B2 caller file slots exclude private ordinal namespace in either o
   REQUIRE(::close(fd) == 0);
   CHECK_FALSE(admission.healthy());
 }
+namespace {
+struct permission_guard {
+  std::filesystem::path path;
+  ~permission_guard() {
+    std::error_code ec;
+    std::filesystem::permissions(path, std::filesystem::perms::owner_all, std::filesystem::perm_options::replace, ec);
+  }
+};
+} // namespace
+TEST_CASE("capture admission reports only final-component ENOENT as absence", "[capture][admission][absent]") {
+  temporary  t;
+  const auto role = admission_file_role::declaration;
+  SECTION("present file admits and reports no absence") {
+    auto admission = t.admitted();
+    CHECK_FALSE(admission.last_refusal_was_absent());
+    REQUIRE(admission.admit_file("declaration", (t.path / "workspace/workspace.lua").string(), role));
+    CHECK_FALSE(admission.last_refusal_was_absent());
+  }
+  SECTION("missing final component reports absence with the unchanged message and resets on the next admission") {
+    auto admission = t.admitted();
+    auto missing   = admission.admit_file("declaration", (t.path / "workspace/missing.lua").string(), role);
+    REQUIRE_FALSE(missing);
+    CHECK(missing.error().code == "io");
+    CHECK(missing.error().message == "Cannot open confined input");
+    CHECK(admission.last_refusal_was_absent());
+    CHECK_FALSE(admission.healthy());
+    auto next = admission.admit_file("other", (t.path / "workspace/workspace.lua").string(), role);
+    REQUIRE_FALSE(next);
+    CHECK_FALSE(admission.last_refusal_was_absent());
+  }
+  SECTION("missing intermediate directory is not absence of the selected file") {
+    auto admission = t.admitted();
+    auto missing   = admission.admit_file("declaration", (t.path / "no-such-dir/workspace.lua").string(), role);
+    REQUIRE_FALSE(missing);
+    CHECK(missing.error().message == "Cannot open confined input");
+    CHECK_FALSE(admission.last_refusal_was_absent());
+  }
+  SECTION("hard-link refusal is not absence") {
+    std::filesystem::create_hard_link(t.path / "trusted/modules/a.lua", t.path / "alias");
+    auto admission = t.admitted();
+    unsafe(admission.admit_file("alias", (t.path / "alias").string(), role));
+    CHECK_FALSE(admission.last_refusal_was_absent());
+  }
+  SECTION("permission-denied directory is not absence") {
+    if (::geteuid() == 0)
+      SUCCEED("root bypasses directory permissions");
+    else {
+      auto locked = t.path / "locked";
+      t.put("locked/workspace.lua", "return 3");
+      permission_guard guard{locked};
+      std::filesystem::permissions(
+          locked, std::filesystem::perms::owner_read | std::filesystem::perms::group_read | std::filesystem::perms::others_read,
+          std::filesystem::perm_options::replace);
+      auto admission = t.admitted();
+      auto denied    = admission.admit_file("declaration", (locked / "workspace.lua").string(), role);
+      REQUIRE_FALSE(denied);
+      CHECK(denied.error().code == "io");
+      CHECK(denied.error().message == "Cannot open confined input");
+      CHECK_FALSE(admission.last_refusal_was_absent());
+    }
+  }
+  SECTION("moved-from admission reports no absence") {
+    auto admission = t.admitted();
+    auto moved     = std::move(admission);
+    CHECK_FALSE(admission.last_refusal_was_absent()); // NOLINT(bugprone-use-after-move)
+    CHECK_FALSE(moved.last_refusal_was_absent());
+  }
+}

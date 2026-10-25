@@ -1,6 +1,7 @@
 // Native trusted runtime boundary and separately embedded adversarial exports.
 #include <catch2/catch_test_macros.hpp>
 #include <signal.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 import std;
@@ -8,6 +9,8 @@ import planar.engine.runtime;
 import planar.engine.runtime_test;
 import planar.engine.lua;
 import planar.engine.hash;
+import planar.engine.acceptance.intent;
+import planar.engine.json_codec;
 using namespace planar::engine;
 namespace {
 value_ptr text(std::string bytes) {
@@ -979,4 +982,445 @@ TEST_CASE("C4 C2 first service protocol refusal survives later instruction exhau
   auto owner = f.owner();
   f.admit(owner);
   history_protocol(owner.execute());
+}
+
+extern "C" void          planar_admission_watch(std::uint64_t device, std::uint64_t inode);
+extern "C" std::uint64_t planar_admission_read_attempts();
+namespace {
+template <class T>
+concept has_prepare_load = requires(T& p) { p.prepare_load(0); };
+template <class T>
+concept has_prepared = requires(T& p) { p.prepared(); };
+template <class T>
+concept has_vm_accessor = requires(T& p) { p.vm(); };
+template <class T>
+concept has_upgrade = requires(T& p) { p.upgrade(); };
+template <class... A>
+concept can_open_known = requires(A&&... a) { profile_invocation::open_known_load(std::forward<A>(a)...); };
+template <class... A>
+concept can_open_opaque = requires(A&&... a) { profile_invocation::open_opaque(std::forward<A>(a)...); };
+static_assert(!std::is_copy_constructible_v<profile_invocation>);
+static_assert(!std::is_copy_assignable_v<profile_invocation>);
+static_assert(!std::is_default_constructible_v<profile_invocation>);
+static_assert(std::is_nothrow_move_constructible_v<profile_invocation>);
+static_assert(std::is_nothrow_move_assignable_v<profile_invocation>);
+static_assert(can_open_known<const acceptance::request_intent&, std::string_view>);
+static_assert(!can_open_known<const acceptance::request_intent&>);
+static_assert(!can_open_known<const acceptance::request_intent&, std::string_view, std::string_view>);
+static_assert(!can_open_known<std::string_view, std::string_view>);
+static_assert(can_open_opaque<std::string_view>);
+static_assert(!can_open_opaque<std::string_view, std::string_view>);
+static_assert(!can_open_opaque<const acceptance::request_intent&, std::string_view>);
+static_assert(!has_prepare_load<profile_invocation>);
+static_assert(!has_prepared<profile_invocation>);
+static_assert(!has_vm_accessor<profile_invocation>);
+static_assert(!has_upgrade<profile_invocation>);
+
+void watch_path(const std::filesystem::path& p) {
+  struct stat s{};
+  REQUIRE(::stat(p.c_str(), &s) == 0);
+  planar_admission_watch(s.st_dev, s.st_ino);
+}
+void put(const std::filesystem::path& p, std::string_view bytes) {
+  std::ofstream f(p, std::ios::binary | std::ios::trunc);
+  f << bytes;
+  REQUIRE(f.good());
+}
+struct b3a_fixture {
+  mutable native_history_fixture inner;
+  std::filesystem::path          root, workspace_dir, declaration, registry, ledger, profile, module;
+  b3a_fixture() : inner(false), root(inner.root) {
+    workspace_dir = root / "workspace";
+    declaration   = workspace_dir / "workspace.lua";
+    registry      = root / "registry.json";
+    ledger        = root / "ledger";
+    profile       = root / "trusted/profile.json";
+    module        = root / "trusted/module.lua";
+    std::filesystem::create_directory(workspace_dir);
+    put(declaration, "-- never read by known load admission");
+    put(registry, "{}");
+  }
+  acceptance::request_intent intent() const {
+    auto r = acceptance::request_intent::create_v2("req-1", "actor", std::nullopt, declaration.string(), registry.string(),
+                                                   profile.string());
+    REQUIRE(r);
+    return std::move(*r);
+  }
+  std::expected<profile_invocation, registration_error> open(std::string_view ledger_path = {}) const {
+    auto i = intent();
+    return profile_invocation::open_known_load(i, ledger_path.empty() ? ledger.string() : std::string(ledger_path));
+  }
+  profile_invocation clean() const {
+    auto o = open();
+    if (!o)
+      INFO(o.error().detail.code << " " << o.error().detail.message << " " << o.error().field);
+    REQUIRE(o);
+    return std::move(*o);
+  }
+  void admit(extension_invocation& owner) const {
+    inner.admit(owner);
+  }
+};
+void expect_denied(const std::expected<profile_invocation, registration_error>& r, std::string_view field = "profile") {
+  REQUIRE_FALSE(r);
+  CHECK(r.error().detail.code == "unsafe_path");
+  CHECK(r.error().field == field);
+}
+} // namespace
+TEST_CASE("X06 B3 A profile invocation static surface offers no prepare, vm or upgrade access", "[runtime][x06b3a]") {
+  SUCCEED("compile-time properties asserted at namespace scope");
+}
+TEST_CASE("X06 B3 A known load opens once with original receipts and no frame", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        owner = f.clean();
+  auto        seen  = owner.observe();
+  CHECK(seen.live);
+  CHECK(seen.known_load);
+  CHECK_FALSE(seen.frame_begun);
+  CHECK_FALSE(seen.consumed);
+  CHECK_FALSE(owner.effective_catalog().empty());
+  CHECK(owner.catalog());
+}
+TEST_CASE("X06 B3 A known load reads no declaration or registry content and admits metadata before registration",
+          "[runtime][x06b3a]") {
+  b3a_fixture f;
+  for (auto path : {f.declaration, f.registry, f.ledger}) {
+    watch_path(path);
+    auto owner = f.clean();
+    CHECK(planar_admission_read_attempts() == 0);
+  }
+  // Positive control: the harness counts the trusted module read.
+  watch_path(f.module);
+  auto owner = f.clean();
+  CHECK(planar_admission_read_attempts() > 0);
+}
+TEST_CASE("X06 B3 A supplied slot aliasing a trusted module refuses with unsafe_path and no partial owner", "[runtime][x06b3a]") {
+  for (auto which : {"declaration", "registry", "ledger"}) {
+    b3a_fixture f;
+    auto        alias = std::string_view(which) == "declaration" ? f.declaration
+                        : std::string_view(which) == "registry"  ? f.registry
+                                                                 : f.root / "ledger-alias";
+    std::filesystem::remove(alias);
+    std::filesystem::create_hard_link(f.module, alias);
+    auto r = std::string_view(which) == "ledger" ? f.open(alias.string()) : f.open();
+    INFO(which);
+    expect_denied(r);
+    std::filesystem::remove(alias);
+    if (std::string_view(which) != "ledger") {
+      put(alias, "{}");
+    }
+    auto again = f.open();
+    CHECK(again);
+  }
+}
+TEST_CASE("X06 B3 A admission precedes registration so an invalid module never executes", "[runtime][x06b3a]") {
+  b3a_fixture   f;
+  std::ifstream in(f.module, std::ios::binary);
+  std::string   valid{std::istreambuf_iterator<char>(in), {}};
+  in.close();
+  put(f.module, "this is not lua (((");
+  std::filesystem::remove(f.declaration);
+  std::filesystem::create_hard_link(f.module, f.declaration);
+  auto r = f.open();
+  expect_denied(r);
+  // With the alias removed the same invalid module is a registration refusal, proving the order above is observable.
+  std::filesystem::remove(f.declaration);
+  put(f.declaration, "-- declaration");
+  auto invalid = f.open();
+  REQUIRE_FALSE(invalid);
+  CHECK(invalid.error().detail.code != "unsafe_path");
+  put(f.module, valid);
+  CHECK(f.open());
+}
+TEST_CASE("X06 B3 A missing declaration refuses with the declaration adapter and leaves no owner", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  std::filesystem::remove(f.declaration);
+  auto r = f.open();
+  REQUIRE_FALSE(r);
+  CHECK(r.error().detail.code == "io");
+  CHECK(r.error().detail.message == "Cannot inspect confined input");
+  CHECK(r.error().field == "profile");
+  put(f.declaration, "-- declaration");
+  CHECK(f.open());
+}
+namespace {
+/// Restores directory permissions on scope exit.
+struct mode_guard {
+  std::filesystem::path path;
+  ::mode_t              original;
+  mode_guard(std::filesystem::path p, ::mode_t restricted) : path(std::move(p)) {
+    struct stat s{};
+    REQUIRE(::stat(path.c_str(), &s) == 0);
+    original = s.st_mode & 07777;
+    REQUIRE(::chmod(path.c_str(), restricted) == 0);
+  }
+  mode_guard(const mode_guard&)            = delete;
+  mode_guard& operator=(const mode_guard&) = delete;
+  ~mode_guard() {
+    ::chmod(path.c_str(), original);
+  }
+};
+std::uint64_t capture_reads(const std::filesystem::path& watched, const std::filesystem::path& profile) {
+  watch_path(watched);
+  auto capture = profile_capture::open(profile.string());
+  REQUIRE(capture);
+  // Each factory verifies its original capture once after registration; that reverification is part of one capture.
+  REQUIRE(capture->verify());
+  return planar_admission_read_attempts();
+}
+} // namespace
+TEST_CASE("X06 B3 A declaration in an unsearchable directory refuses as open, not inspect", "[runtime][x06b3a]") {
+  if (::geteuid() == 0) {
+    SUCCEED("permission denial is not observable as root");
+    return;
+  }
+  b3a_fixture f;
+  {
+    mode_guard guard(f.workspace_dir, 0444);
+    auto       r = f.open();
+    REQUIRE_FALSE(r);
+    CHECK(r.error().detail.code == "io");
+    CHECK(r.error().detail.message == "Cannot open confined input");
+    CHECK(r.error().detail.message != "Cannot inspect confined input");
+    CHECK(r.error().field == "profile");
+  }
+  CHECK(f.open());
+}
+TEST_CASE("X06 B3 A factories capture exactly once and adoption reads nothing", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  const auto  module_reads  = capture_reads(f.module, f.profile);
+  const auto  profile_reads = capture_reads(f.profile, f.profile);
+  REQUIRE(module_reads > 0);
+  {
+    watch_path(f.module);
+    auto owner = f.clean();
+    CHECK(planar_admission_read_attempts() == module_reads);
+  }
+  {
+    watch_path(f.profile);
+    auto owner = f.clean();
+    CHECK(planar_admission_read_attempts() == profile_reads);
+  }
+  {
+    watch_path(f.module);
+    auto owner = profile_invocation::open_opaque(f.profile.string());
+    REQUIRE(owner);
+    CHECK(planar_admission_read_attempts() == module_reads);
+  }
+  {
+    watch_path(f.profile);
+    auto owner = profile_invocation::open_opaque(f.profile.string());
+    REQUIRE(owner);
+    CHECK(planar_admission_read_attempts() == profile_reads);
+  }
+  for (bool known : {true, false}) {
+    watch_path(f.module);
+    std::optional<profile_invocation> owner;
+    if (known)
+      owner.emplace(f.clean());
+    else {
+      auto o = profile_invocation::open_opaque(f.profile.string());
+      REQUIRE(o);
+      owner.emplace(std::move(*o));
+    }
+    const auto created = planar_admission_read_attempts();
+    CHECK(created == module_reads);
+    auto bytes     = owner->effective_catalog().data();
+    auto extension = std::move(*owner).into_extension();
+    REQUIRE(extension);
+    CHECK(planar_admission_read_attempts() == created);
+    CHECK(extension->effective_catalog().data() == bytes);
+    f.admit(*extension);
+    REQUIRE(extension->prepare_history());
+    REQUIRE(extension->verify());
+    CHECK(extension->effective_catalog().data() == bytes);
+  }
+}
+TEST_CASE("X06 B3 A factory registration counters are deterministic across factories", "[runtime][x06b3a]") {
+  // Equal instructions/native_bytes only show deterministic cumulative work; they CANNOT detect a second register_vm,
+  // because each call builds a fresh VM. The registrations observable (kept on the capture) is what detects it.
+  b3a_fixture f;
+  auto        known  = f.clean();
+  auto        opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  auto again = f.clean();
+  CHECK(known.observe().instructions > 0);
+  CHECK(known.observe().native_bytes > 0);
+  CHECK(known.observe().instructions == opaque->observe().instructions);
+  CHECK(known.observe().native_bytes == opaque->observe().native_bytes);
+  CHECK(known.observe().instructions == again.observe().instructions);
+  CHECK(known.observe().native_bytes == again.observe().native_bytes);
+  CHECK(known.observe().registrations == 1);
+  CHECK(opaque->observe().registrations == 1);
+  CHECK(again.observe().registrations == 1);
+}
+TEST_CASE("X06 B3 A registration count stays one across into_extension", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        owner = f.clean();
+  CHECK(owner.observe().registrations == 1);
+  auto adopted = std::move(owner).into_extension();
+  REQUIRE(adopted);
+  CHECK(owner.observe().registrations == 1);
+  CHECK(owner.observe().consumed);
+  auto opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  CHECK(opaque->observe().registrations == 1);
+  auto adopted_opaque = std::move(*opaque).into_extension();
+  REQUIRE(adopted_opaque);
+  CHECK(opaque->observe().registrations == 1);
+  CHECK(opaque->observe().consumed);
+}
+TEST_CASE("X06 B3 A request intents without a codec2 profile selector refuse", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        embedded =
+      acceptance::request_intent::create_v2("req-1", "actor", std::nullopt, f.declaration.string(), f.registry.string());
+  REQUIRE(embedded);
+  auto r = profile_invocation::open_known_load(*embedded, f.ledger.string());
+  REQUIRE_FALSE(r);
+  CHECK(r.error().field == "profile");
+  auto legacy = acceptance::request_intent::create("req-1", "actor", std::nullopt, f.declaration.string(), f.registry.string());
+  REQUIRE(legacy);
+  auto l = profile_invocation::open_known_load(*legacy, f.ledger.string());
+  REQUIRE_FALSE(l);
+  CHECK(l.error().field == "profile");
+  auto moved_from = f.intent();
+  auto sink       = std::move(moved_from);
+  auto m          = profile_invocation::open_known_load(moved_from, f.ledger.string());
+  REQUIRE_FALSE(m);
+  CHECK(m.error().field == "profile");
+  CHECK(f.open());
+}
+TEST_CASE("X06 B3 A opaque open needs no supplied slots, reads none and is never known load", "[runtime][x06b3a]") {
+  b3a_fixture missing;
+  std::filesystem::remove_all(missing.workspace_dir);
+  std::filesystem::remove(missing.registry);
+  std::filesystem::remove(missing.ledger);
+  auto none = profile_invocation::open_opaque(missing.profile.string());
+  REQUIRE(none);
+  CHECK_FALSE(none->observe().known_load);
+  CHECK(none->observe().live);
+  CHECK_FALSE(none->effective_catalog().empty());
+  b3a_fixture f;
+  for (auto path : {f.declaration, f.registry, f.ledger}) {
+    watch_path(path);
+    auto owner = profile_invocation::open_opaque(f.profile.string());
+    REQUIRE(owner);
+    CHECK(planar_admission_read_attempts() == 0);
+  }
+  auto bad = profile_invocation::open_opaque((f.root / "trusted/absent.json").string());
+  REQUIRE_FALSE(bad);
+  CHECK_FALSE(bad.error().detail.code.empty());
+}
+TEST_CASE("X06 B3 A owner moves preserve address and counters and moved-from owners refuse", "[runtime][x06b3a]") {
+  b3a_fixture        f;
+  auto               a      = f.clean();
+  auto               bytes  = a.effective_catalog().data();
+  auto               before = a.observe();
+  profile_invocation b(std::move(a));
+  CHECK(b.effective_catalog().data() == bytes);
+  auto after = b.observe();
+  CHECK(after.live);
+  CHECK(after.instructions == before.instructions);
+  CHECK(after.native_bytes == before.native_bytes);
+  CHECK(after.known_load == before.known_load);
+  CHECK_FALSE(a.observe().live);
+  CHECK_FALSE(a.catalog());
+  CHECK(a.effective_catalog().empty());
+  auto frame = a.begin_frame();
+  REQUIRE_FALSE(frame);
+  CHECK(frame.error().field == "profile");
+  auto ext = std::move(a).into_extension();
+  REQUIRE_FALSE(ext);
+  CHECK(ext.error().field == "profile");
+  auto c = f.clean();
+  c      = std::move(b);
+  CHECK(c.effective_catalog().data() == bytes);
+  CHECK(c.observe().instructions == before.instructions);
+  CHECK_FALSE(b.observe().live);
+  auto& self = c;
+  c          = std::move(self);
+  CHECK(c.effective_catalog().data() == bytes);
+  CHECK(c.observe().live);
+  CHECK(c.observe().instructions == before.instructions);
+  CHECK(c.observe().instructions == c.observe().instructions);
+}
+TEST_CASE("X06 B3 A begin_frame is once only and blocks adoption", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        owner = f.clean();
+  REQUIRE(owner.begin_frame());
+  auto begun = owner.observe();
+  CHECK(begun.frame_begun);
+  CHECK(begun.live);
+  auto second = owner.begin_frame();
+  REQUIRE_FALSE(second);
+  CHECK(second.error().field == "profile");
+  auto after = owner.observe();
+  CHECK(after.frame_begun);
+  CHECK(after.instructions == begun.instructions);
+  CHECK(after.native_bytes == begun.native_bytes);
+  auto ext = std::move(owner).into_extension();
+  REQUIRE_FALSE(ext);
+  CHECK(ext.error().field == "profile");
+  CHECK_FALSE(owner.observe().consumed);
+  CHECK(owner.observe().frame_begun);
+}
+TEST_CASE("X06 B3 A into_extension adopts the same VM and receipts without recapture", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        owner = f.clean();
+  auto        bytes = owner.effective_catalog().data();
+  std::string copy(owner.effective_catalog());
+  auto        extension = std::move(owner).into_extension();
+  REQUIRE(extension);
+  CHECK(extension->effective_catalog().data() == bytes);
+  CHECK(std::string(extension->effective_catalog()) == copy);
+  auto seen = owner.observe();
+  CHECK(seen.consumed);
+  CHECK_FALSE(seen.live);
+  CHECK_FALSE(owner.catalog());
+  CHECK(owner.effective_catalog().empty());
+  auto again = std::move(owner).into_extension();
+  REQUIRE_FALSE(again);
+  CHECK(again.error().field == "profile");
+  auto frame = owner.begin_frame();
+  REQUIRE_FALSE(frame);
+  f.admit(*extension);
+  REQUIRE(extension->prepare_history());
+  REQUIRE(extension->verify());
+}
+TEST_CASE("X06 B3 A opaque owner adopts into a working extension", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  auto bytes     = opaque->effective_catalog().data();
+  auto extension = std::move(*opaque).into_extension();
+  REQUIRE(extension);
+  CHECK(extension->effective_catalog().data() == bytes);
+  CHECK(opaque->observe().consumed);
+  f.admit(*extension);
+  REQUIRE(extension->prepare_history());
+  REQUIRE(extension->verify());
+}
+TEST_CASE("X06 B3 A public validate_profile keeps its cumulative public semantics on a fresh registration", "[runtime][x06b3a]") {
+  b3a_fixture f;
+  auto        capture = profile_capture::open(f.profile.string());
+  REQUIRE(capture);
+  auto snapshot = capture->snapshot();
+  REQUIRE(snapshot);
+  auto vm = command_vm::create(*snapshot);
+  REQUIRE(vm);
+  auto first = vm->validate_profile(object());
+  auto retry = vm->validate_profile(object());
+  REQUIRE(first.has_value() == retry.has_value());
+  if (first)
+    CHECK(*codec_encode(*first) == *codec_encode(*retry));
+  else
+    CHECK(first.error().detail.code == retry.error().detail.code);
+  // The owner exposes no VM accessor, so no public call can run inside its active frame.
+  static_assert(!has_vm_accessor<profile_invocation>);
+  auto owner = f.clean();
+  REQUIRE(owner.begin_frame());
+  auto before = owner.observe();
+  owner.observe();
+  auto moved = std::move(owner);
+  CHECK(moved.observe().instructions == before.instructions);
 }

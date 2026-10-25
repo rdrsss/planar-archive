@@ -47,6 +47,17 @@ public:
   /// @param role Supplied-file separation policy.
   /// @return Success or terminal admission refusal.
   std::expected<void, profile_error> admit_file(std::string_view slot, std::string_view file, admission_file_role role);
+  /// @brief Report whether the most recent admit_file refusal was genuine ENOENT of the selected declaration.
+  /// Forwards the original admission's internal signal; no filesystem access or allocation, valid on a failed
+  /// owner, false for moved-from owners and after any other refusal. Messages are never inspected.
+  /// @return True only for genuine absence of the selected supplied file.
+  bool last_admission_refusal_was_absent() const noexcept;
+  /// @brief Record one VM registration attempt made from this original capture; no-op for moved-from owners.
+  /// Single-thread confined like the rest of the owner; the count survives VM replacement and moves with the capture.
+  void note_registration() const noexcept;
+  /// @brief Report the cumulative registration attempts recorded by note_registration.
+  /// @return Attempt count; zero for moved-from owners.
+  std::size_t registration_count() const noexcept;
   /// @brief Admit a proposed export target before publication.
   /// @param slot Unique private receipt key.
   /// @param directory Explicit absolute proposed target directory.

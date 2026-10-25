@@ -137,7 +137,11 @@ struct capture_admission::implementation {
     receipts.push_back({std::move(fd), metadata, parent, std::string(name), directory});
     return receipts.size() - 1;
   }
+  // True only when the latest open() refused because the selected supplied file's final component was
+  // absent (ENOENT); an internal signal that never alters a diagnostic and survives poisoning.
+  bool      refused_absent = false;
   selection open(std::string_view slot, std::string_view host, kind type, bool directory, bool allow_absent = false) {
+    refused_absent = false;
     key(slot);
     // Host selectors use the existing native host-text ceiling, not portable module grammar.
     if (host.size() > max_storage)
@@ -183,6 +187,8 @@ struct capture_admission::implementation {
           result.absent_name = std::move(component);
           return result;
         }
+        // Capture errno before any other call; only genuine ENOENT of a supplied file's final component is absence.
+        refused_absent = errno == ENOENT && last && type == kind::supplied_file;
         io_error();
       }
       // A proposed target can itself alias a selected trusted file. Inspect
@@ -192,8 +198,10 @@ struct capture_admission::implementation {
       if (S_ISLNK(named.st_mode) || (is_directory ? !S_ISDIR(named.st_mode) : !S_ISREG(named.st_mode)))
         throw diagnostic{"path_denied", is_directory ? "Cannot open confined input" : "Only regular files can be captured"};
       descriptor fd(::openat(receipts[parent].fd.fd, component.c_str(), metadata_flags(is_directory)));
-      if (fd.fd < 0)
+      if (fd.fd < 0) {
+        refused_absent = errno == ENOENT && last && type == kind::supplied_file; // vanished after fstatat
         io_error();
+      }
       auto metadata = status(fd.fd);
       if (!(is_directory ? same_directory(named, metadata) : same_file(named, metadata)))
         changed();
@@ -339,6 +347,7 @@ std::expected<void, diagnostic> capture_admission::admit_file(std::string_view s
   try {
     if (!_impl)
       changed();
+    _impl->refused_absent = false;
     _impl->check();
     if (role != admission_file_role::registry && role != admission_file_role::ledger &&
         role != admission_file_role::observation && role != admission_file_role::declaration)
@@ -433,6 +442,9 @@ std::expected<void, diagnostic> capture_admission::verify_root(std::string_view 
   }
 }
 
+bool capture_admission::last_refusal_was_absent() const noexcept {
+  return _impl && _impl->refused_absent;
+}
 bool capture_admission::healthy() const noexcept {
   return _impl && !_impl->failed;
 }
@@ -481,6 +493,14 @@ void retained_file_receipt::poison() const noexcept {
 bool retained_file_receipt::same_selection(const retained_file_receipt& other) const noexcept {
   return _state && _state == other._state && _index == other._index;
 }
+bool retained_file_receipt::moved_from() const noexcept {
+  return !_state;
+}
+std::optional<admission_file_role> retained_file_receipt::role() const noexcept {
+  if (!_state || _index >= _state->selections.size())
+    return std::nullopt;
+  return _state->selections[_index].role;
+}
 bool retained_file_receipt::live() const noexcept {
   return _state && !_state->failed;
 }
@@ -489,6 +509,9 @@ bool retained_file_receipt::same_admission(const retained_file_receipt& other) c
 }
 bool retained_file_receipt::same_admission(const retained_root_receipt& other) const noexcept {
   return _state && _state == other._state;
+}
+bool retained_root_receipt::moved_from() const noexcept {
+  return !_state;
 }
 bool retained_root_receipt::live() const noexcept {
   return _state && !_state->failed;

@@ -31,10 +31,11 @@ void require(std::expected<void, diagnostic> result, const std::string& field = 
 } // namespace
 /// @cond
 struct profile_capture::implementation {
-  capture_admission  admission;
-  acceptance_capture content;
-  profile_snapshot   original;
-  mutable bool       failed = false;
+  capture_admission   admission;
+  acceptance_capture  content;
+  profile_snapshot    original;
+  mutable bool        failed        = false;
+  mutable std::size_t registrations = 0;
   struct operation {
     implementation& state;
     bool            complete = false;
@@ -135,6 +136,16 @@ std::expected<void, profile_error> profile_capture::admit_file(std::string_view 
   }
   guard.complete = true;
   return {};
+}
+bool profile_capture::last_admission_refusal_was_absent() const noexcept {
+  return _impl && _impl->admission.last_refusal_was_absent();
+}
+void profile_capture::note_registration() const noexcept {
+  if (_impl)
+    ++_impl->registrations;
+}
+std::size_t profile_capture::registration_count() const noexcept {
+  return _impl ? _impl->registrations : 0;
 }
 std::expected<void, profile_error> profile_capture::admit_target(std::string_view slot, std::string_view directory) {
   if (!_impl || _impl->failed || !_impl->admission.healthy())

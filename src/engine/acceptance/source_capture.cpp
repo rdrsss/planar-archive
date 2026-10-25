@@ -100,8 +100,11 @@ std::optional<source_error> validate_paths(std::string_view workspace, std::stri
   return std::nullopt;
 }
 } // namespace
-source_error known_declaration_error(const diagnostic& admission) {
-  if (admission.code == "io" && admission.message == "Cannot open confined input")
+// Absence comes only from the internal admission signal, never from message text: EACCES and other permission
+// refusals share the message but are never reported as missing. On macOS the metadata open (O_EVTONLY) refuses an
+// unreadable present file at admission; on Linux O_PATH admits it and the content read fails later.
+source_error known_declaration_error(const diagnostic& admission, bool absent) {
+  if (absent && admission.code == "io" && admission.message == "Cannot open confined input")
     return source_error{source_error_code::capture, diagnostic{"io", "Cannot inspect confined input"}};
   return to_source_error(admission);
 }
@@ -157,8 +160,13 @@ std::expected<source_capture, source_error> source_capture::open_bound(std::stri
     registry_file.poison();
     return std::unexpected(std::move(e));
   };
+  if (root.moved_from() || declaration_receipt.moved_from() || registry_file.moved_from())
+    return refuse_unconsumed(source_error{source_error_code::invalid_state});
   if (!root.live() || !declaration_receipt.live() || !registry_file.live() || !root.same_admission(declaration_receipt) ||
       !root.same_admission(registry_file))
+    return refuse_unconsumed(
+        source_error{source_error_code::capture, diagnostic{"capture_changed", "Captured external profile changed"}});
+  if (declaration_receipt.role() != admission_file_role::declaration || registry_file.role() != admission_file_role::registry)
     return refuse_unconsumed(
         source_error{source_error_code::capture, diagnostic{"capture_changed", "Captured external profile changed"}});
   if (auto refused = validate_paths(workspace, registry))

@@ -1,5 +1,6 @@
 // Source capture receipt binding, admission ordering, retained seals, moves and terminal refusals.
 #include <catch2/catch_test_macros.hpp>
+#include <cerrno>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -110,7 +111,7 @@ static_assert(
 TEST_CASE("source capture factories require three original receipts and refuse moved and poisoned authority",
           "[source_capture]") {
   fixture f;
-  SECTION("moved declaration receipt is refused as a capture error") {
+  SECTION("moved declaration receipt is refused as invalid_state") {
     auto p = open_profile(f);
     auto r = admit(p, f, f.workspace, f.registry);
     {
@@ -119,8 +120,8 @@ TEST_CASE("source capture factories require three original receipts and refuse m
     auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
                                              std::move(r.declaration), std::move(r.registry));
     REQUIRE_FALSE(source);
-    CHECK(source.error().code == source_error_code::capture);
-    CHECK(source.error().detail.code == "capture_changed");
+    CHECK(source.error().code == source_error_code::invalid_state);
+    CHECK(source.error().detail.code.empty());
     CHECK_FALSE(p.verify());
   }
   SECTION("poisoned declaration receipt is refused before any declaration read") {
@@ -144,8 +145,8 @@ TEST_CASE("source capture factories require three original receipts and refuse m
     auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
                                              std::move(r.declaration), std::move(r.registry));
     REQUIRE_FALSE(source);
-    CHECK(source.error().code == source_error_code::capture);
-    CHECK(source.error().detail.code == "capture_changed");
+    CHECK(source.error().code == source_error_code::invalid_state);
+    CHECK(source.error().detail.code.empty());
     CHECK(planar_admission_read_attempts() == 0);
     CHECK_FALSE(p.verify());
   }
@@ -185,8 +186,8 @@ TEST_CASE("source capture refuses receipts outside one original admission at con
     auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
                                              std::move(r.declaration), std::move(r.registry));
     REQUIRE_FALSE(source);
-    CHECK(source.error().code == source_error_code::capture);
-    CHECK(source.error().detail.code == "capture_changed");
+    CHECK(source.error().code == source_error_code::invalid_state);
+    CHECK(source.error().detail.code.empty());
     CHECK(planar_admission_read_attempts() == 0);
     CHECK_FALSE(p.verify());
   }
@@ -439,7 +440,8 @@ TEST_CASE("source capture vanished declaration reports admitted change beside em
     CHECK(absent.error().detail.code == "io");
     CHECK(absent.error().detail.message == "Cannot open confined input");
     CHECK(absent.error().field == "profile");
-    auto adapted = known_declaration_error(absent.error().detail);
+    CHECK(p.last_admission_refusal_was_absent());
+    auto adapted = known_declaration_error(absent.error().detail, p.last_admission_refusal_was_absent());
     CHECK(adapted.code == source_error_code::capture);
     CHECK(adapted.detail.code == "io");
     CHECK(adapted.detail.message == "Cannot inspect confined input");
@@ -452,11 +454,11 @@ TEST_CASE("source capture vanished declaration reports admitted change beside em
     CHECK(adapted.detail.maximum == embedded.error().detail.maximum);
   }
   SECTION("known declaration adapter passes other codes through unchanged") {
-    auto denied = known_declaration_error(diagnostic{"path_denied", "Hard-link input alias"});
+    auto denied = known_declaration_error(diagnostic{"path_denied", "Hard-link input alias"}, false);
     CHECK(denied.code == source_error_code::capture);
     CHECK(denied.detail.code == "path_denied");
     CHECK(denied.detail.message == "Hard-link input alias");
-    auto limited = known_declaration_error(diagnostic{"resource_limit", "Resource limit", "bytes", 16});
+    auto limited = known_declaration_error(diagnostic{"resource_limit", "Resource limit", "bytes", 16}, false);
     CHECK(limited.code == source_error_code::resource_limit);
     CHECK(limited.detail.code == "resource_limit");
     CHECK(limited.detail.limit == "bytes");
@@ -500,4 +502,219 @@ TEST_CASE("source capture terminal failure after capture refuses later operation
   auto verified = source->verify();
   REQUIRE_FALSE(verified);
   CHECK(verified.error().code == source_error_code::invalid_state);
+}
+
+namespace {
+struct permission_restore {
+  std::filesystem::path p;
+  ~permission_restore() {
+    std::error_code ec;
+    std::filesystem::permissions(p, std::filesystem::perms::owner_all, std::filesystem::perm_options::replace, ec);
+  }
+};
+} // namespace
+
+TEST_CASE("source capture absence is a signal from admission, not a message match", "[source_capture]") {
+  fixture f;
+  SECTION("a genuinely missing declaration signals absence and adapts to the embedded diagnostic") {
+    auto p      = open_profile(f);
+    auto absent = f.workspace_dir / "missing.lua";
+    REQUIRE(p.admit_root("workspace", f.workspace_dir.string()));
+    auto missing = p.admit_file("declaration", absent.string(), admission_file_role::declaration);
+    REQUIRE_FALSE(missing);
+    CHECK(missing.error().detail.code == "io");
+    CHECK(missing.error().detail.message == "Cannot open confined input");
+    CHECK(p.last_admission_refusal_was_absent());
+    auto adapted = known_declaration_error(missing.error().detail, p.last_admission_refusal_was_absent());
+    CHECK(adapted.code == source_error_code::capture);
+    CHECK(adapted.detail.code == "io");
+    CHECK(adapted.detail.message == "Cannot inspect confined input");
+    CHECK(adapted.detail.limit.empty());
+    CHECK(adapted.detail.maximum == 0);
+    // The same message without the signal is never reported as missing.
+    auto unsignalled = known_declaration_error(missing.error().detail, false);
+    CHECK(unsignalled.code == source_error_code::capture);
+    CHECK(unsignalled.detail.code == "io");
+    CHECK(unsignalled.detail.message == "Cannot open confined input");
+  }
+  SECTION("a present declaration in a permission-denied directory is not reported as missing") {
+    if (::geteuid() == 0) {
+      SUCCEED("root bypasses directory permissions");
+    } else {
+      auto locked = f.workspace_dir / "locked";
+      std::filesystem::create_directories(locked);
+      put_bytes(locked / "workspace.lua", "return {}");
+      permission_restore guard{locked};
+      std::filesystem::permissions(
+          locked, std::filesystem::perms::owner_read | std::filesystem::perms::group_read | std::filesystem::perms::others_read,
+          std::filesystem::perm_options::replace);
+      struct stat probe{};
+      errno = 0;
+      if (::stat((locked / "workspace.lua").c_str(), &probe) == 0 || errno != EACCES) {
+        SUCCEED("directory search is not denied on this platform");
+      } else {
+        auto p = open_profile(f);
+        REQUIRE(p.admit_root("workspace", f.workspace_dir.string()));
+        auto denied = p.admit_file("declaration", (locked / "workspace.lua").string(), admission_file_role::declaration);
+        REQUIRE_FALSE(denied);
+        CHECK(denied.error().detail.code == "io");
+        CHECK(denied.error().detail.message == "Cannot open confined input");
+        CHECK_FALSE(p.last_admission_refusal_was_absent());
+        auto adapted = known_declaration_error(denied.error().detail, p.last_admission_refusal_was_absent());
+        CHECK(adapted.code == source_error_code::capture);
+        CHECK(adapted.detail.code == "io");
+        CHECK(adapted.detail.message == "Cannot open confined input");
+        CHECK(adapted.detail.message != "Cannot inspect confined input");
+      }
+    }
+  }
+  SECTION("admission refusal messages for these cases are byte identical to the original strings") {
+    auto p = open_profile(f);
+    REQUIRE(p.admit_root("workspace", f.workspace_dir.string()));
+    auto missing = p.admit_file("declaration", (f.workspace_dir / "missing.lua").string(), admission_file_role::declaration);
+    REQUIRE_FALSE(missing);
+    CHECK(std::string_view(missing.error().detail.code) == "io");
+    CHECK(std::string_view(missing.error().detail.message) == "Cannot open confined input");
+    auto q       = open_profile(f);
+    auto through = q.admit_file("declaration", (f.workspace / "child.lua").string(), admission_file_role::declaration);
+    REQUIRE_FALSE(through);
+    CHECK(std::string_view(through.error().detail.code) == "path_denied");
+    CHECK(std::string_view(through.error().detail.message) == "Cannot open confined input");
+    CHECK_FALSE(q.last_admission_refusal_was_absent());
+  }
+}
+
+TEST_CASE("source capture N1 unreadable declaration is not reported as missing", "[source_capture]") {
+  fixture            f;
+  permission_restore guard{f.workspace};
+  auto               p = open_profile(f);
+  REQUIRE(p.admit_root("workspace", f.workspace_dir.string()));
+  std::filesystem::permissions(f.workspace, std::filesystem::perms::none);
+  auto admitted = p.admit_file("declaration", f.workspace.string(), admission_file_role::declaration);
+  if (::geteuid() == 0) {
+    CHECK(admitted.has_value());
+  } else {
+#ifdef __APPLE__
+    // O_EVTONLY metadata open is permission checked: admission itself refuses with EACCES.
+    REQUIRE_FALSE(admitted);
+    CHECK(admitted.error().detail.code == "io");
+    CHECK(admitted.error().detail.message == "Cannot open confined input");
+    CHECK_FALSE(p.last_admission_refusal_was_absent());
+    auto adapted = known_declaration_error(admitted.error().detail, p.last_admission_refusal_was_absent());
+    CHECK(adapted.code == source_error_code::capture);
+    CHECK(adapted.detail.code == "io");
+    CHECK(adapted.detail.message == "Cannot open confined input");
+#else
+    // O_PATH admits the file; the failure belongs to the later content read, never to absence.
+    REQUIRE(admitted.has_value());
+    CHECK_FALSE(p.last_admission_refusal_was_absent());
+#endif
+  }
+}
+
+TEST_CASE("source capture N2 refuses swapped receipt roles", "[source_capture]") {
+  fixture f;
+  auto    p = open_profile(f);
+  SECTION("registry receipt in the declaration position and vice versa") {
+    auto r = admit(p, f, f.workspace, f.registry);
+    watch(f.workspace);
+    auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root), std::move(r.registry),
+                                             std::move(r.declaration));
+    REQUIRE_FALSE(source);
+    CHECK(source.error().code == source_error_code::capture);
+    CHECK(source.error().detail.code == "capture_changed");
+    CHECK(planar_admission_read_attempts() == 0);
+    CHECK_FALSE(p.verify());
+  }
+  for (auto role : {admission_file_role::ledger, admission_file_role::observation}) {
+    auto pp = open_profile(f);
+    REQUIRE(pp.admit_root("workspace", f.workspace_dir.string()));
+    REQUIRE(pp.admit_file("declaration", f.workspace.string(), admission_file_role::declaration));
+    REQUIRE(pp.admit_file("registry", f.registry.string(), role));
+    auto root = pp.retain_root("workspace");
+    auto decl = pp.retain_file("declaration");
+    auto reg  = pp.retain_file("registry");
+    REQUIRE(root);
+    REQUIRE(decl);
+    REQUIRE(reg);
+    watch(f.workspace);
+    auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(*root), std::move(*decl),
+                                             std::move(*reg));
+    REQUIRE_FALSE(source);
+    CHECK(source.error().code == source_error_code::capture);
+    CHECK(source.error().detail.code == "capture_changed");
+    CHECK(planar_admission_read_attempts() == 0);
+    CHECK_FALSE(pp.verify());
+  }
+}
+
+TEST_CASE("source capture N3 moved-from receipt is invalid_state but poisoned and foreign stay capture_changed",
+          "[source_capture]") {
+  fixture f;
+  auto    p = open_profile(f);
+  auto    r = admit(p, f, f.workspace, f.registry);
+  watch(f.workspace);
+  SECTION("moved-from declaration") {
+    {
+      retained_file_receipt sink = std::move(r.declaration);
+    }
+  }
+  SECTION("moved-from registry") {
+    {
+      retained_file_receipt sink = std::move(r.registry);
+    }
+  }
+  SECTION("moved-from root") {
+    {
+      retained_root_receipt sink = std::move(r.root);
+    }
+  }
+  if (r.root.moved_from() || r.declaration.moved_from() || r.registry.moved_from()) {
+    auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
+                                             std::move(r.declaration), std::move(r.registry));
+    REQUIRE_FALSE(source);
+    CHECK(source.error().code == source_error_code::invalid_state);
+    CHECK(planar_admission_read_attempts() == 0);
+    CHECK_FALSE(p.verify());
+  }
+  SECTION("poisoned declaration") {
+    r.declaration.poison();
+    auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
+                                             std::move(r.declaration), std::move(r.registry));
+    REQUIRE_FALSE(source);
+    CHECK(source.error().code == source_error_code::capture);
+    CHECK(source.error().detail.code == "capture_changed");
+  }
+  SECTION("receipts from two different admissions") {
+    auto p2     = open_profile(f);
+    auto r2     = admit(p2, f, f.workspace, f.registry);
+    auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
+                                             std::move(r2.declaration), std::move(r.registry));
+    REQUIRE_FALSE(source);
+    CHECK(source.error().code == source_error_code::capture);
+    CHECK(source.error().detail.code == "capture_changed");
+  }
+}
+
+TEST_CASE("source capture receipt accessors report moved_from and role", "[source_capture]") {
+  fixture f;
+  auto    p = open_profile(f);
+  auto    r = admit(p, f, f.workspace, f.registry);
+  CHECK_FALSE(r.root.moved_from());
+  CHECK_FALSE(r.declaration.moved_from());
+  CHECK(r.declaration.role() == admission_file_role::declaration);
+  CHECK(r.registry.role() == admission_file_role::registry);
+  r.declaration.poison();
+  CHECK_FALSE(r.declaration.live());
+  CHECK_FALSE(r.declaration.moved_from());
+  CHECK(r.declaration.role() == admission_file_role::declaration);
+  CHECK_FALSE(r.root.live());
+  CHECK_FALSE(r.root.moved_from());
+  retained_file_receipt moved = std::move(r.declaration);
+  CHECK(r.declaration.moved_from());
+  CHECK_FALSE(r.declaration.role().has_value());
+  CHECK(moved.role() == admission_file_role::declaration);
+  retained_root_receipt moved_root = std::move(r.root);
+  CHECK(r.root.moved_from());
+  CHECK_FALSE(moved_root.moved_from());
 }

@@ -81,6 +81,20 @@ public:
   /// @param slot Original supplied-root receipt key.
   /// @return Move-only original authority, or terminal refusal.
   std::expected<retained_root_receipt, diagnostic> retain_root(std::string_view slot);
+  /// @brief Report whether the most recent admit_file refusal was genuine absence of the selected file.
+  /// No filesystem access and no allocation. True only if the most recent admit_file refusal was ENOENT of the
+  /// selected final path component (including a vanish race before the metadata open). False after success,
+  /// after any other refusal (EACCES, ENOTDIR, ELOOP, missing intermediate directory, alias, resource) and for
+  /// moved-from handles. Valid on a poisoned handle; the diagnostic text is never altered by this signal.
+  /// The value reflects only the most recent admission open attempt: admit_file clears it on entry and sets it
+  /// only for the absence above, and any later successful admit_file resets it. Root, target and trusted
+  /// admissions also begin by clearing it. Non-admission failures (retain_file/retain_root, poison, healthy)
+  /// never write it, so it persists unchanged across them on a poisoned handle.
+  /// Platform note: on macOS metadata_flags uses O_EVTONLY, so an unreadable (mode 000) present file fails
+  /// openat with EACCES at admission; on Linux O_PATH succeeds, the file is admitted and fails later at the
+  /// content read. Neither is absence.
+  /// @return True only for genuine absence of the selected supplied file.
+  bool last_refusal_was_absent() const noexcept;
   /// @brief Observe terminal state without filesystem access.
   /// @return True only while the original state remains usable.
   bool healthy() const noexcept;
@@ -117,6 +131,14 @@ public:
   /// @param other Authority proposed for a retained cache entry.
   /// @return True only for the same original supplied-file selection.
   bool same_selection(const retained_file_receipt& other) const noexcept;
+  /// @brief Report whether this handle was moved from and holds no admission.
+  /// No filesystem access and no allocation; a poisoned handle is not moved-from.
+  /// @return True only when no original state is retained.
+  bool moved_from() const noexcept;
+  /// @brief Report the admission role of the selected file.
+  /// No filesystem access and no allocation; poisoned handles still report their role.
+  /// @return The selection's role, or nullopt when moved-from or the index is out of range.
+  std::optional<admission_file_role> role() const noexcept;
   /// @brief Report whether this handle still refers to a usable original admission.
   /// No filesystem access and no allocation.
   /// @return True only when this handle is not moved-from and the shared original state is not poisoned.
@@ -164,6 +186,10 @@ public:
   /// @param path Portable root-relative file path; no host selector is accepted.
   /// @return Original owned file authority, without content reads or enumeration.
   std::expected<retained_file_receipt, diagnostic> discover(std::string_view path) const;
+  /// @brief Report whether this handle was moved from and holds no admission.
+  /// No filesystem access and no allocation; a poisoned handle is not moved-from.
+  /// @return True only when no original state is retained.
+  bool moved_from() const noexcept;
   /// @brief Report whether this handle still refers to a usable original admission.
   /// No filesystem access and no allocation.
   /// @return True only when this handle is not moved-from and the shared original state is not poisoned.

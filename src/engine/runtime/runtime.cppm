@@ -1,5 +1,7 @@
 /// @file
-/// @brief Bounded fresh exports and sealed invocation-local command VMs with typed native services and redacted failures.
+/// @brief Bounded fresh exports and sealed invocation-local command VMs with typed native services and redacted failures;
+/// also the profile_invocation owner (open_known_load/open_opaque capture and register once, begin_frame, into_extension,
+/// observe).
 export module planar.engine.runtime;
 import std;
 export import planar.engine.value;
@@ -7,6 +9,8 @@ export import planar.engine.capture.profile;
 export import planar.engine.history.provenance_codec;
 export import planar.engine.ledger.completion;
 export import planar.engine.history.read;
+import planar.engine.acceptance.intent;
+import planar.engine.acceptance.source_capture;
 export namespace planar::engine {
 /// @brief Evaluate one product-selected export in a fresh trusted state.
 /// @param entry Name in the embedded export table; never executable source or a path.
@@ -198,6 +202,7 @@ struct extension_preparation_error {
   registration_error            failure; ///< No supplied values or host selectors appear here.
 };
 class extension_invocation; ///< Original captured invocation owner, defined below.
+class profile_invocation;   ///< Original profile owner before final parsing, defined below.
 /// Move-only single-invocation retained trusted command VM; no global cache or job-facing API.
 /// @note Not concurrently callable. Moving preserves native ownership and Lua references; destruction releases all state.
 class command_vm {
@@ -300,17 +305,36 @@ public:
 
 private:
   friend class extension_invocation;
+  friend class profile_invocation;
+  /// Private active-frame token: one extension owner or one profile owner, never public and never both.
+  struct active_frame {
+    extension_invocation* extension;     ///< Original extension owner whose bridge checks apply.
+    const void*           profile_owner; ///< Identity of the profile_invocation that began the frame.
+    active_frame() noexcept : extension(nullptr), profile_owner(nullptr) {
+    }
+    /// @brief Build an extension frame; a null pointer is the public no-frame state.
+    /// @param owner Extension owner or null.
+    active_frame(extension_invocation* owner) noexcept : extension(owner), profile_owner(nullptr) {
+    }
+    /// @brief Report whether this frame runs inside an already begun invocation.
+    /// @return True for either an extension or a profile owner frame.
+    bool nested() const noexcept {
+      return extension != nullptr || profile_owner != nullptr;
+    }
+  };
   std::expected<projection_definition, registration_error>
-  resolve_projection_definition_impl(std::string_view id, std::size_t original_index, extension_invocation* active = nullptr,
+  resolve_projection_definition_impl(std::string_view id, std::size_t original_index, const active_frame& frame = {},
                                      registration_error* active_failure = nullptr);
-  std::expected<shape_definition, registration_error> resolve_shape_definition_impl(std::string_view      id,
-                                                                                    extension_invocation* active);
+  std::expected<shape_definition, registration_error> resolve_shape_definition_impl(std::string_view    id,
+                                                                                    const active_frame& frame);
   std::expected<shape_response, registration_error>   invoke_shape_impl(std::string_view id, const value_ptr& input,
-                                                                        extension_invocation* active);
+                                                                        const active_frame& frame);
   std::expected<value_ptr, registration_error> validate_profile_impl(const value_ptr& validation, const value_ptr& selection,
-                                                                     const value_ptr&      render = {},
-                                                                     extension_invocation* active = nullptr,
-                                                                     value_ptr*            basis  = nullptr);
+                                                                     const value_ptr& render = {}, const active_frame& frame = {},
+                                                                     value_ptr* basis = nullptr);
+  std::expected<value_ptr, registration_error> validate_profile_phases(value_ptr validation, value_ptr selection,
+                                                                       const value_ptr& render, const active_frame& frame,
+                                                                       value_ptr* basis);
   static std::expected<command_vm, registration_error> create_impl(profile_snapshot profile);
   explicit command_vm(std::unique_ptr<implementation> owner);
   std::unique_ptr<implementation> _owner;
@@ -358,9 +382,76 @@ public:
 
 private:
   struct implementation;
+  friend class profile_invocation;
   explicit extension_invocation(std::unique_ptr<implementation> owner);
+  explicit extension_invocation(profile_capture&& capture, command_vm&& vm);
+  static std::expected<command_vm, registration_error> register_vm(const profile_capture& capture);
+  std::expected<void, registration_error>              fail(registration_error error);
+  const value*                                         prepare_role();
+  std::unique_ptr<implementation>                      _owner;
+};
+/// Observational counters of a profile owner; carries no authority and no mutable VM access.
+struct profile_invocation_observation {
+  bool        live          = false; ///< True for an owner that has not been moved from, failed or consumed.
+  bool        consumed      = false; ///< True once into_extension consumed the owner.
+  bool        known_load    = false; ///< True only for open_known_load; false for open_opaque and moved-from owners.
+  bool        frame_begun   = false; ///< True once begin_frame started the single active invocation frame.
+  std::size_t instructions  = 0;     ///< Cumulative VM instructions (state::instructions).
+  std::size_t native_bytes  = 0;     ///< Cumulative charged native bytes (state::native_bytes).
+  std::size_t registrations = 0; ///< Cumulative register_vm calls made for this owner's original capture (1 after a successful
+                                 ///< factory; unchanged across into_extension).
+};
+/// Original profile capture paired with its sealed VM before final command parsing.
+/// Opaque and move-only: copying is deleted, there is no public default or pointer constructor, and moved-from
+/// operations refuse with a typed protocol diagnostic at field profile. Moving transfers the heap implementation, so
+/// addresses (including borrowed catalog bytes) and counters survive. Self-move preserves state.
+/// The known-load factory alone records the supplied workspace root, declaration, registry and ledger admissions; an opaque
+/// owner can never prepare built-in load, and there is intentionally no upgrade API.
+/// @note Thread-confined. Each factory captures the profile once and runs the shipped plus external registration chunks
+/// exactly once; into_extension never recaptures or re-registers, and no handler or command code runs.
+class profile_invocation {
+public:
+  /// @brief Capture the selected profile once, metadata-admit the supplied slots, register once and reverify.
+  /// @param request_intent Codec2 load intent carrying the profile selector, workspace and registry arguments.
+  /// @param ledger_path Native-only ledger selection used for alias admission; never added to request framing.
+  /// @return Owner with original receipts retained, or a typed failure with no partial owner; no source content is read.
+  static std::expected<profile_invocation, registration_error> open_known_load(const acceptance::request_intent& request_intent,
+                                                                               std::string_view                  ledger_path);
+  /// @brief Capture and register a selected profile with no supplied-slot knowledge.
+  /// @param profile_selector Absolute profile file selector.
+  /// @return Owner whose known_load is false, or a typed failure with no partial owner.
+  static std::expected<profile_invocation, registration_error> open_opaque(std::string_view profile_selector);
+  /// @brief Return the immutable sealed catalog metadata.
+  /// @return Exact catalog value, or null when moved-from, consumed or failed.
+  value_ptr catalog() const;
+  /// @brief Borrow canonical catalog-v2 bytes for final parsing.
+  /// @return Stable bytes (addresses survive moves), empty when moved-from, consumed or failed.
+  std::string_view effective_catalog() const;
+  /// @brief Begin the single active invocation frame (internal composition seam retained for B3-B prepare_load; no product caller exists yet).
+  /// @return Success once; second calls and calls on moved-from, failed or consumed owners refuse as protocol and publish nothing.
+  std::expected<void, registration_error> begin_frame();
+  /// @brief Transfer the original capture and VM into an extension owner without recapture or re-registration.
+  /// @return Extension owner; refuses on moved-from, consumed, failed or frame-begun owners and publishes nothing.
+  std::expected<extension_invocation, registration_error> into_extension() &&;
+  /// @brief Read counters without authority.
+  /// @return Snapshot; zeroed with live false when moved-from.
+  profile_invocation_observation observe() const noexcept;
+  profile_invocation(const profile_invocation&)            = delete;
+  profile_invocation& operator=(const profile_invocation&) = delete;
+  /// @brief Transfer the stable owner; the source thereafter refuses.
+  /// @param other Owner to consume.
+  profile_invocation(profile_invocation&& other) noexcept;
+  /// @brief Release this owner and transfer another; self-move preserves state.
+  /// @param other Owner to consume.
+  /// @return This owner.
+  profile_invocation& operator=(profile_invocation&& other) noexcept;
+  /// Release the VM and all original native receipts.
+  ~profile_invocation();
+
+private:
+  struct implementation;
+  explicit profile_invocation(std::unique_ptr<implementation> owner);
   std::expected<void, registration_error> fail(registration_error error);
-  const value*                            prepare_role();
   std::unique_ptr<implementation>         _owner;
 };
 } // namespace planar::engine
