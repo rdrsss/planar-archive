@@ -465,6 +465,15 @@ ownership and preserved candidate/evidence. No row is self-approved. The
 coordinator scopes builds and source ownership after search; future paths below
 are planned, not authorized edits in this documentation round.
 
+Operator amendment, 2026-10-25: to cut round count, **Whole-invocation
+composition** and **X06 integrated evidence** run as one round (budget work first,
+then the integrated X06 gates on that frozen candidate). X07-A and X07-B run as
+one round with two coder waves, consistent with the existing rule that the public
+switch ships only in one frozen candidate with its service and replay tests. The
+actual Linux gate runs inside X08 rather than as a separate round. Every
+acceptance obligation in the rows below and in the external-profile rows is
+unchanged; only the round boundaries merge.
+
 | Round boundary | Owned product scope and required acceptance |
 | --- | --- |
 | Native completion dependency extraction | New ledger/storage_types.cppm and ledger/storage.{cppm,cpp}; move native helpers and completion to ledger/acceptance.{cppm,cpp}; acceptance/intent.{cppm,cpp}; scoped format/prepared/read-consumer imports and engine CMake/test variants. No profile writer. Preserve exact embedded APIs after changed import, every native boundary/atomic/recovery case and A3 readers. Dependency audit must prove no target cycle, all generated variants build, no raw handle/callback escape. |

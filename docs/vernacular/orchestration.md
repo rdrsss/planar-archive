@@ -75,6 +75,14 @@ permission after checking that the reviewed candidate is still current. Edits
 affecting approved scope need renewed review. Unresolved product choices return
 to the operator.
 
+Records-only fast path (operator decision, 2026-10-25): when the reviewer marks a
+`request-changes` as records-only (every blocking finding is fixed by editing round
+records or evidence READMEs, with no change to source, tests or evidence data), the
+coordinator fixes the records in the same run and the reviewer re-checks only those
+edits; an approval then commits as usual. Anything else still starts a corrective
+round. On approval, the coordinator also applies records-only advisories before
+committing and carries code advisories into the next round's brief.
+
 ## Commits
 
 Operator authorization, 2026-10-24. After an `approve` review and the
