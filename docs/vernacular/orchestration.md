@@ -18,6 +18,7 @@ Operator decision, 2026-10-24. Every round uses fresh agents.
 | Search | Sonnet 5.5 | medium | Read-only map of the exact scope with source citations, split into work packages |
 | Coder | Haiku 5.5 | high | Implement only the assigned package's files |
 | Gate runner | Sonnet 5.5 | low | Run the agreed build/test commands serially and report raw results |
+| Mutation prober | Sonnet 5.5 | medium | Break each acceptance invariant in a scratch copy and report surviving mutants |
 | Reviewer | Opus 5.5 | high | Independently review candidate and raw evidence |
 
 Escalation: a round's coders use Sonnet 5.5 (medium) instead of Haiku when the
@@ -43,9 +44,13 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    iterate on the debug tree alone, then the gate reruns; a second failure stops
    the run. A round whose changes are applied but whose gate failed resumes as a
    `repair` run: no new mapping, just the repair coder and the gate.
-5. The reviewer returns `approve`, `request-changes` or `blocked`, writing
+5. A mutation prober (Sonnet 5.5, medium) breaks each acceptance invariant in a
+   scratch copy outside the checkout and records which mutants no test catches
+   (`tests/native/<round>-evidence/probes/PROBES.md`). Survivors go back to the
+   repair coder, then the gate and prober rerun once before review.
+6. The reviewer returns `approve`, `request-changes` or `blocked`, writing
    `rounds/<id>-review.md`.
-6. The coordinator records the outcome, updates the roadmap's current status and,
+7. The coordinator records the outcome, updates the roadmap's current status and,
    on approval, commits.
 
 All agents work in the main checkout on `dev/planar-v2-vernacular`; no separate
