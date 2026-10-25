@@ -83,6 +83,83 @@ TEST_CASE("capture admission selected hard links refuse every supplied file role
   auto admission = t.admitted();
   unsafe(admission.select_trusted("duplicate", (t.path / "trusted/alias.lua").string()));
 }
+TEST_CASE("capture admission receipts report same admission and liveness", "[capture][admission][receipts]") {
+  temporary t;
+  auto      admission = t.admitted();
+  REQUIRE(admission.admit_root("workspace", (t.path / "workspace").string()));
+  REQUIRE(admission.admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  auto root   = admission.retain_root("workspace");
+  auto file   = admission.retain_file("late");
+  auto second = admission.retain_file("late");
+  REQUIRE(root);
+  REQUIRE(file);
+  REQUIRE(second);
+  // Root and file receipts, and repeated file receipts, share one original admission.
+  CHECK(root->live());
+  CHECK(file->live());
+  CHECK(root->same_admission(*file));
+  CHECK(file->same_admission(*root));
+  CHECK(file->same_admission(*second));
+  CHECK(second->same_admission(*file));
+  CHECK(root->same_admission(*root));
+  // Receipts from an independent admission of the same paths do not match.
+  auto other = t.admitted();
+  REQUIRE(other.admit_root("workspace", (t.path / "workspace").string()));
+  REQUIRE(other.admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  auto other_root = other.retain_root("workspace");
+  auto other_file = other.retain_file("late");
+  REQUIRE(other_root);
+  REQUIRE(other_file);
+  CHECK(other_root->live());
+  CHECK(other_file->live());
+  CHECK_FALSE(root->same_admission(*other_root));
+  CHECK_FALSE(other_root->same_admission(*root));
+  CHECK_FALSE(file->same_admission(*other_file));
+  CHECK_FALSE(other_file->same_admission(*file));
+  CHECK_FALSE(file->same_admission(*other_root));
+  CHECK_FALSE(root->same_admission(*other_file));
+  // A moved-from receipt refuses liveness and identity; poisoning it is a harmless no-op.
+  auto sink = std::move(*file);
+  CHECK_FALSE(file->live());
+  CHECK_FALSE(file->same_admission(*root));
+  CHECK_FALSE(root->same_admission(*file));
+  CHECK_FALSE(file->same_admission(*second));
+  file->poison();
+  CHECK(sink.live());
+  CHECK(sink.same_admission(*root));
+  CHECK(sink.same_admission(*second));
+  auto root_sink = std::move(*root);
+  CHECK_FALSE(root->live());
+  CHECK_FALSE(root->same_admission(*file));
+  root->poison();
+  CHECK(root_sink.live());
+  // Admission or receipt poisoning makes every receipt of that admission non-live.
+  auto poisoned_by_admission = t.admitted();
+  REQUIRE(poisoned_by_admission.admit_root("workspace", (t.path / "workspace").string()));
+  REQUIRE(
+      poisoned_by_admission.admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  auto admission_root = poisoned_by_admission.retain_root("workspace");
+  auto admission_file = poisoned_by_admission.retain_file("late");
+  REQUIRE(admission_root);
+  REQUIRE(admission_file);
+  poisoned_by_admission.poison();
+  CHECK_FALSE(admission_root->live());
+  CHECK_FALSE(admission_file->live());
+  // Identity is the shared original state; poisoning alters liveness, not identity.
+  CHECK(admission_root->same_admission(*admission_file));
+  auto poisoned_by_receipt = t.admitted();
+  REQUIRE(poisoned_by_receipt.admit_root("workspace", (t.path / "workspace").string()));
+  REQUIRE(
+      poisoned_by_receipt.admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  auto receipt_root = poisoned_by_receipt.retain_root("workspace");
+  auto receipt_file = poisoned_by_receipt.retain_file("late");
+  REQUIRE(receipt_root);
+  REQUIRE(receipt_file);
+  receipt_file->poison();
+  CHECK_FALSE(receipt_root->live());
+  CHECK_FALSE(receipt_file->live());
+  CHECK_FALSE(poisoned_by_receipt.healthy());
+}
 TEST_CASE("capture admission staged trusted selections check earlier supplied aliases", "[capture][admission][alias]") {
   temporary t;
   std::filesystem::create_hard_link(t.path / "trusted/modules/a.lua", t.path / "alias");

@@ -117,6 +117,20 @@ public:
   /// @param other Authority proposed for a retained cache entry.
   /// @return True only for the same original supplied-file selection.
   bool same_selection(const retained_file_receipt& other) const noexcept;
+  /// @brief Report whether this handle still refers to a usable original admission.
+  /// No filesystem access and no allocation.
+  /// @return True only when this handle is not moved-from and the shared original state is not poisoned.
+  bool live() const noexcept;
+  /// @brief Compare shared original admission identity; ignores selection indices.
+  /// No filesystem access and no allocation.
+  /// @param other Receipt proposed for comparison.
+  /// @return True only when both handles retain the same non-null original admission state.
+  bool same_admission(const retained_file_receipt& other) const noexcept;
+  /// @brief Compare shared original admission identity with a root receipt.
+  /// No filesystem access and no allocation.
+  /// @param other Root receipt proposed for comparison.
+  /// @return True only when both handles retain the same non-null original admission state.
+  bool same_admission(const retained_root_receipt& other) const noexcept;
   /// @brief Permanently poison the shared original state without allocation.
   void poison() const noexcept;
 
@@ -150,11 +164,26 @@ public:
   /// @param path Portable root-relative file path; no host selector is accepted.
   /// @return Original owned file authority, without content reads or enumeration.
   std::expected<retained_file_receipt, diagnostic> discover(std::string_view path) const;
+  /// @brief Report whether this handle still refers to a usable original admission.
+  /// No filesystem access and no allocation.
+  /// @return True only when this handle is not moved-from and the shared original state is not poisoned.
+  bool live() const noexcept;
+  /// @brief Compare shared original admission identity; ignores selection indices.
+  /// No filesystem access and no allocation.
+  /// @param other Root receipt proposed for comparison.
+  /// @return True only when both handles retain the same non-null original admission state.
+  bool same_admission(const retained_root_receipt& other) const noexcept;
+  /// @brief Compare shared original admission identity with a file receipt.
+  /// No filesystem access and no allocation.
+  /// @param other File receipt proposed for comparison.
+  /// @return True only when both handles retain the same non-null original admission state.
+  bool same_admission(const retained_file_receipt& other) const noexcept;
   /// @brief Permanently poison shared authority without allocation.
   void poison() const noexcept;
 
 private:
   friend class capture_admission;
+  friend class retained_file_receipt;
   retained_root_receipt(std::shared_ptr<capture_admission::implementation> state, std::size_t index);
   std::shared_ptr<capture_admission::implementation> _state;
   std::size_t                                        _index;

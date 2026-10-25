@@ -481,6 +481,24 @@ void retained_file_receipt::poison() const noexcept {
 bool retained_file_receipt::same_selection(const retained_file_receipt& other) const noexcept {
   return _state && _state == other._state && _index == other._index;
 }
+bool retained_file_receipt::live() const noexcept {
+  return _state && !_state->failed;
+}
+bool retained_file_receipt::same_admission(const retained_file_receipt& other) const noexcept {
+  return _state && _state == other._state;
+}
+bool retained_file_receipt::same_admission(const retained_root_receipt& other) const noexcept {
+  return _state && _state == other._state;
+}
+bool retained_root_receipt::live() const noexcept {
+  return _state && !_state->failed;
+}
+bool retained_root_receipt::same_admission(const retained_root_receipt& other) const noexcept {
+  return _state && _state == other._state;
+}
+bool retained_root_receipt::same_admission(const retained_file_receipt& other) const noexcept {
+  return _state && _state == other._state;
+}
 std::expected<void, diagnostic> retained_file_receipt::verify(int descriptor) const {
   try {
     if (!_state)

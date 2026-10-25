@@ -17,12 +17,14 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
   X06-A1/A2/A3, the [X06-A4 architecture plus C01](profile-preparation-architecture.md)
   documentation, and [X06-B1](rounds/V5-02-X06-B1.md) native completion dependency
   extraction with [C01](rounds/V5-02-X06-B1-C01.md) ([review](rounds/V5-02-X06-B1-C01-review.md)),
+  committed, and [X06-B2](rounds/V5-02-X06-B2.md) original source capture with
+  C01 and [C02](rounds/V5-02-X06-B2-C02.md) ([review](rounds/V5-02-X06-B2-C02-review.md)),
   committed. Recorded profile histories verify and replay saved accepted/noop
   requests; fresh profile acceptance still refuses.
-- **Pending:** nothing awaiting review.
+- **Pending:** none. Next is the next X06 code round (authentic runtime preparation).
 - **Latest complete approved gate:** macOS Debug and RelWithDebInfo, **876/876**
   each, zero failures/errors/skips/disabled ([X05-C5 review](rounds/V5-02-X05-C5-review.md)).
-  Registered inventory is 928 (B1 Debug 928/928, macOS Debug only).
+  Registered inventory is 940 (B2+C01 Debug 940/940, macOS Debug only).
 - **Unchanged limits:** public `init` creates format1; no RSS guarantee; Linux
   acceptance has not run.
 
@@ -30,7 +32,7 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 
 | Step | Scope |
 | --- | --- |
-| X06 remaining code rounds | Per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates): original source capture, authentic runtime preparation, native profile transactions, whole-invocation budgets, then the integrated X06 gate |
+| X06 remaining code rounds | Per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates): authentic runtime preparation, native profile transactions, whole-invocation budgets, then the integrated X06 gate. Carried advisories for the next runtime round: N1 macOS O_EVTONLY EACCES on an unreadable (mode 000) declaration is rewritten by known_declaration_error to "Cannot inspect confined input" while the embedded path reports "Cannot open confined input" (detect absence specifically at admission or document); N2 the bound factory checks no receipt role (declaration vs registry); N3 construction refusal reports capture_changed for moved-from, poisoned and foreign receipts alike (moved-from may merit invalid_state); the known-load row must also apply known_declaration_error |
 | X07 | Public cutover: CLI11 envelope/parser integration and service/CLI admission; format2 init ([rows](external-profile-implementation.md#source-seams-and-bounded-implementation-rounds)) |
 | X08 | Mandatory full external-profile acceptance gate |
 | RA01, R15-R19 | Authoring/driver prompts, then observed-state execution (Phase 2 below) |
