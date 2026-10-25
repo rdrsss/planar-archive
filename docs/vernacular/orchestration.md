@@ -68,7 +68,13 @@ current-candidate check, the coordinator commits the round on
 `dev/planar-v2-vernacular`: explicit paths only (never `git add -A`),
 `git commit -s`, no Claude co-author trailer, and a subject naming the round (for
 example `V5-02-X06-A4: profile preparation architecture`). The baseline commit
-(`aa3f95d1`) holds everything through X06-A4+C01.
+(`897617fc`) holds everything through X06-A4+C01.
+
+On 2026-10-24 local history was rewritten once to redact machine-local paths
+(nothing had been pushed). Round records written before then cite the original
+SHAs: `aa3f95d1` → `897617fc` (baseline), `6c30ecdb` → `260d2fe1`,
+`ff672595` → `b5174145` (X06-B1+C01). Trees differ only by the redaction recorded
+in `tests/native/path-redaction.json`.
 
 Evidence folders (`tests/native/*-evidence/`) are gitignored. Commit only each
 folder's `REPORT.md`/`README.md` and top-level `.md`/`.json` manifests of 100 KB or
