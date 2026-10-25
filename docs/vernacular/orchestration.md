@@ -16,7 +16,8 @@ Operator decision, 2026-10-24. Every round uses fresh agents.
 | --- | --- | --- | --- |
 | Coordinator | Sonnet 5.5 | medium | Select the round, write its record, scope ownership, record outcomes and commit |
 | Search | Sonnet 5.5 | medium | Read-only map of the exact scope with source citations, split into work packages |
-| Coder | Haiku 5.5 | high | Implement only the assigned package's files |
+| Coder | Haiku 5.5 | high | Implement only the assigned package's files (test-first or implementation role) |
+| Red-check runner | Sonnet 5.5 | low | Prove test-first tests compile and fail on assertions before implementation |
 | Gate runner | Sonnet 5.5 | low | Run the agreed build/test commands serially and report raw results |
 | Mutation prober | Sonnet 5.5 | medium | Break each acceptance invariant in a scratch copy and report surviving mutants |
 | Reviewer | Opus 5.5 | high | Independently review candidate and raw evidence |
@@ -32,21 +33,30 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
 1. The coordinator records the round's objective, dependencies, owned files,
    acceptance criteria, starting revision, pre-existing changes and verification
    in `rounds/<id>.md`.
-2. Search maps the scope and splits it into packages with exclusive file ownership,
-   each assigned an execution wave; a package that needs another's output goes in
-   a later wave.
-3. Coders implement their packages wave by wave. Within a wave they run in
-   parallel only when owned files are disjoint (search's split is the documented
-   reason); otherwise sequentially. Coders build only when no other coder is
-   running (alone in their wave, or sequential); parallel coders never build.
+2. Search maps the scope and writes the round's **invariant table**: one row per
+   acceptance criterion and closed finding, each naming the exact mutant that
+   breaks it and the test that must fail under that mutant. Tests are designed
+   against their mutant; a row that cannot be observed without a new public
+   field or fault hook says so instead of getting a hollow test. Search then
+   splits the work into packages with exclusive file ownership per wave.
+3. Rounds that add new behaviour run **test-first**: test coders write the tests
+   from the contract and the table, plus compiling stubs (real declarations,
+   not-implemented bodies), and a red check proves each new-behaviour test
+   compiles and fails on an assertion (`red/RED.md`, with one raw log per test).
+   Implementation coders then replace the stubs with the test files read-only;
+   a test that looks wrong is reported, never edited. Rounds that only add tests
+   to existing code, or repair, skip the red check. Within a wave, coders run in
+   parallel only when their files are disjoint; coders build only when no other
+   coder is running.
 4. The gate runner builds and tests once all packages finish. On failure, one
    repair coder (Sonnet 5.5, medium) that owns the round's files may build and
    iterate on the debug tree alone, then the gate reruns; a second failure stops
    the run. A round whose changes are applied but whose gate failed resumes as a
    `repair` run: no new mapping, just the repair coder and the gate.
-5. A mutation prober (Sonnet 5.5, medium) breaks each acceptance invariant in a
-   scratch copy outside the checkout, names the mutant that fails each new test
-   (red-first), and records the results with one raw log per mutant
+5. A mutation prober (Sonnet 5.5, medium) applies each invariant-table mutant,
+   plus any invariant the table missed, in a scratch copy outside the checkout,
+   names the mutant that fails each new test (red-first), and records the
+   results with one raw log per mutant
    (`tests/native/<round>-evidence/probes/PROBES.md` and `probes/raw/`). Earlier
    probe generations move to `probes/superseded-<n>/`; raw logs are never deleted.
    Survivors go back to the repair coder, then the gate and prober rerun once.
@@ -56,7 +66,9 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
 6. Before review, the coordinator syncs the round record to the final candidate
    (identity hashes, test counts, probe results, repairs and amendments), so no
    section describes an earlier candidate.
-7. The reviewer returns `approve`, `request-changes` or `blocked`, writing
+7. The reviewer checks the invariant table (every criterion has a row, each
+   mutant breaks its invariant and is killed by its test, test-first rows were
+   red) and returns `approve`, `request-changes` or `blocked`, writing
    `rounds/<id>-review.md`.
 8. The coordinator records the outcome, updates the roadmap's current status and,
    on approval, commits.
