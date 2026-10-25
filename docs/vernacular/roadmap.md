@@ -21,13 +21,13 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
   C01 and [C02](rounds/V5-02-X06-B2-C02.md) ([review](rounds/V5-02-X06-B2-C02-review.md)),
   committed. Recorded profile histories verify and replay saved accepted/noop
   requests; fresh profile acceptance still refuses.
-- **Pending:** none. [X06-B3-A](rounds/V5-02-X06-B3.md) profile invocation owner with
-  [C01](rounds/V5-02-X06-B3-A-C01.md) and [C02](rounds/V5-02-X06-B3-A-C02.md) is approved
-  ([review](rounds/V5-02-X06-B3-A-C02-review.md)) and committed; three advisories
-  carry to B3-B.
+- **Just approved and committed:** [X06-B3-B](rounds/V5-02-X06-B3-B.md) bound capture,
+  route, seal and all-job validation with C01 to C04 ([C04 review](rounds/V5-02-X06-B3-B-C04-review.md)
+  approve; four records-only advisories accepted). Debug 987/987 (macOS Debug only).
+  B3-A is committed. Next is B3-C.
 - **Latest complete approved gate:** macOS Debug and RelWithDebInfo, **876/876**
   each, zero failures/errors/skips/disabled ([X05-C5 review](rounds/V5-02-X05-C5-review.md)).
-  Registered inventory is 963 (B3-A+C01+C02 Debug 963/963, macOS Debug only).
+  Committed inventory is 987 (B3-B+C04, macOS Debug only).
 - **Unchanged limits:** public `init` creates format1; no RSS guarantee; Linux
   acceptance has not run.
 
@@ -35,7 +35,7 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 
 | Step | Scope |
 | --- | --- |
-| X06-B3-B | Remaining authentic runtime preparation (carries B3-A N2-N4 and C02 advisories), then per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates): native profile transactions, whole-invocation budgets, integrated X06 gate |
+| X06-B3-C | Native v2 derivation, `prepared_profile`; then per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates): native profile transactions, whole-invocation budgets, integrated X06 gate |
 | X07 | Public cutover: CLI11 envelope/parser integration and service/CLI admission; format2 init ([rows](external-profile-implementation.md#source-seams-and-bounded-implementation-rounds)) |
 | X08 | Mandatory full external-profile acceptance gate |
 | RA01, R15-R19 | Authoring/driver prompts, then observed-state execution (Phase 2 below) |

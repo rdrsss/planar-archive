@@ -141,7 +141,7 @@ bool profile_capture::last_admission_refusal_was_absent() const noexcept {
   return _impl && _impl->admission.last_refusal_was_absent();
 }
 void profile_capture::note_registration() const noexcept {
-  if (_impl)
+  if (_impl && _impl->registrations != std::numeric_limits<std::size_t>::max())
     ++_impl->registrations;
 }
 std::size_t profile_capture::registration_count() const noexcept {

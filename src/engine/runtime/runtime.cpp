@@ -1122,23 +1122,24 @@ struct extension_history_bridge {
   bool         enabled = false, refused = false, resource_refusal = false;
 };
 struct command_state {
-  std::vector<command_entry>               entries;
-  profile_snapshot                         profile;
-  std::vector<external_entry>              external_entries;
-  std::vector<module_fields>               module_locations;
-  seal_location                            pending_seal_location;
-  std::array<std::size_t, 3>               registration_attempts{5, 0, 0};
-  std::size_t                              active_module = 0;
-  std::string                              effective_catalog_bytes, effective_digest_bytes, registration_field = "profile";
-  value_ptr                                pending_descriptor, catalog, invocation, response, native_error, facts, opened;
-  std::optional<diagnostic>                bridge_error;
-  std::optional<registration_error>        shape_failure;
-  std::array<int, 10>                      shape_phases{LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF,
-                                                        LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF};
-  int                                      shape_function     = LUA_NOREF;
-  bool                                     invocation_started = false, shape_baseline_ready = false, extension_execution = false;
-  std::string                              seal, name;
-  command_options                          options;
+  std::vector<command_entry>        entries;
+  profile_snapshot                  profile;
+  std::vector<external_entry>       external_entries;
+  std::vector<module_fields>        module_locations;
+  seal_location                     pending_seal_location;
+  std::array<std::size_t, 3>        registration_attempts{5, 0, 0};
+  std::size_t                       active_module = 0;
+  std::string                       effective_catalog_bytes, effective_digest_bytes, registration_field = "profile";
+  value_ptr                         pending_descriptor, catalog, invocation, response, native_error, facts, opened;
+  std::optional<diagnostic>         bridge_error;
+  std::optional<registration_error> shape_failure;
+  std::size_t                       shape_dispatch_count = 0; ///< Successful retained shape F dispatches in profile frames.
+  std::array<int, 10>               shape_phases{LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF,
+                                                 LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF};
+  int                               shape_function     = LUA_NOREF;
+  bool                              invocation_started = false, shape_baseline_ready = false, extension_execution = false;
+  std::string                       seal, name;
+  command_options                   options;
   std::vector<history::original_file_view> originals;
   std::string_view                         separator, assembly;
   std::vector<history::tree_file>          provenance;
@@ -1781,13 +1782,8 @@ int extension_context_index(lua_State* l) {
 int extension_opaque_string(lua_State* l) {
   return luaL_error(l, "opaque_slot");
 }
-// Temporary input proxies are never published into sealed_index. Their backing
-// entries remain available until raw response conversion has copied every alias.
-int execute_shape(lua_State* l) {
-  if (!lua_checkstack(l, closure_guard::audit_stack_slots)) {
-    context(l).stack_exhausted = true;
-    return 0;
-  }
+// Records the registration-time registry membership once; later release restores exactly this set.
+void ensure_shape_baseline(lua_State* l) {
   if (!commands(l).shape_baseline_ready) {
     for (int slot : {tags_index, backing_index}) {
       lua_newtable(l);
@@ -1806,6 +1802,24 @@ int execute_shape(lua_State* l) {
     }
     commands(l).shape_baseline_ready = true;
   }
+}
+// Protected-call form of ensure_shape_baseline: freezing may raise.
+int ensure_shape_baseline_protected(lua_State* l) {
+  if (!lua_checkstack(l, closure_guard::audit_stack_slots)) {
+    context(l).stack_exhausted = true;
+    return 0;
+  }
+  ensure_shape_baseline(l);
+  return 0;
+}
+// Temporary input proxies are never published into sealed_index. Their backing
+// entries remain available until raw response conversion has copied every alias.
+int execute_shape(lua_State* l) {
+  if (!lua_checkstack(l, closure_guard::audit_stack_slots)) {
+    context(l).stack_exhausted = true;
+    return 0;
+  }
+  ensure_shape_baseline(l);
   lua_newtable(l);
   context(l).push_memo          = lua_gettop(l);
   context(l).preserving_aliases = true;
@@ -1895,6 +1909,37 @@ void release_shape_temporaries(lua_State* l) {
     lua_pop(l, 2);
   }
   lua_settop(l, 0);
+}
+// Observation-only registry membership; raw traversal, no allocation, stack restored.
+struct registry_membership {
+  std::size_t tags = 0, backings = 0, temporaries = 0;
+};
+registry_membership measure_registry(lua_State* l) noexcept {
+  registry_membership out;
+  const int           top = lua_gettop(l);
+  if (!lua_checkstack(l, 8))
+    return out;
+  for (int slot : {tags_index, backing_index}) {
+    lua_rawgetp(l, LUA_REGISTRYINDEX, slot == tags_index ? &shape_tags_key : &shape_backings_key);
+    const int baseline = lua_gettop(l);
+    lua_rawgeti(l, LUA_REGISTRYINDEX, slot);
+    const int table = lua_gettop(l);
+    lua_pushnil(l);
+    while (lua_next(l, table)) {
+      lua_pop(l, 1);
+      (slot == tags_index ? out.tags : out.backings)++;
+      if (!lua_isnil(l, baseline)) {
+        lua_pushvalue(l, -1);
+        lua_rawget(l, baseline);
+        if (lua_isnil(l, -1))
+          out.temporaries++;
+        lua_pop(l, 1);
+      }
+    }
+    lua_settop(l, baseline - 1);
+  }
+  lua_settop(l, top);
+  return out;
 }
 // A synchronous call frame borrows the same sealed VM and cumulative owner. Only
 // its protected trampoline allocates Lua input/proxies or invokes retained Lua.
@@ -4614,6 +4659,7 @@ std::expected<value_ptr, registration_error> command_vm::validate_profile_phases
             c.shape_failure = std::move(response.error());
           return std::unexpected(*c.shape_failure);
         }
+        ++c.shape_dispatch_count;
         auto checked = phase(1, record({{"request", request}, {"response", response->result}, {"total", number(total)}}));
         if (checked->fields.contains("error"))
           return finish(checked);
@@ -4741,16 +4787,12 @@ struct extension_invocation::implementation {
   value_ptr                         authenticated_role;       ///< Exact private selected-role transport.
   value_ptr                         role_basis;   ///< Authentic same-call request/model/selection for future projection.
   value_ptr                         role_request; ///< Authentic captured request for later projection composition.
-  bool                              role_attempted = false; ///< Whether the one original-owner role preparation has started.
-  value_ptr                         authenticated_history;  ///< Private native result; no mutable authority escapes.
-  /// Original profile-owner receipts adopted unchanged by into_extension; kept alive and never used here.
-  std::optional<retained_root_receipt> adopted_root;        ///< Original supplied workspace root token.
-  std::optional<retained_file_receipt> adopted_declaration; ///< Original selected declaration token.
-  std::optional<retained_file_receipt> adopted_registry;    ///< Original registry token.
-  bool history_attempted = false;                           ///< Whether the one synchronous history preparation has started.
-  bool attempted         = false,                           ///< Whether the one admission attempt has started.
-      admitted           = false,                           ///< Whether original receipts passed final admission verification.
-      executed           = false;                           ///< Whether the single execution attempt has started.
+  bool                              role_attempted = false;    ///< Whether the one original-owner role preparation has started.
+  value_ptr                         authenticated_history;     ///< Private native result; no mutable authority escapes.
+  bool                              history_attempted = false; ///< Whether the one synchronous history preparation has started.
+  bool                              attempted         = false, ///< Whether the one admission attempt has started.
+      admitted                                        = false, ///< Whether original receipts passed final admission verification.
+      executed                                        = false; ///< Whether the single execution attempt has started.
   /// @brief Move the original capture and its internally registered VM into stable ownership.
   /// @param captured Original receipt owner, never recaptured or replaced.
   /// @param registered VM built from captured.snapshot() by the private factory.
@@ -4822,17 +4864,21 @@ std::expected<extension_invocation, registration_error> extension_invocation::cr
   }
 }
 /// Private stable owner of the original capture, its once-registered VM and the initial admission receipts.
+/// Metric: the owner allocation is charged once per owner as sizeof(implementation)+64 to the cumulative native_bytes,
+/// never refunded; this excludes receipts and capture, whose storage is charged by the admission/native layers.
 struct profile_invocation::implementation {
-  profile_capture                      capture;                       ///< Original capture; never recaptured.
-  command_vm                           vm;                            ///< VM registered once from this capture's snapshot.
-  std::optional<retained_root_receipt> root_receipt;                  ///< Original supplied workspace root token (known load).
-  std::optional<retained_file_receipt> declaration_receipt;           ///< Original selected declaration token (known load).
-  std::optional<retained_file_receipt> registry_receipt;              ///< Original registry token (known load).
-  std::size_t                          registrations_at_adoption = 0; ///< Capture registration count at adoption.
-  bool                                 known_load                = false; ///< Set only by open_known_load.
-  bool                                 frame_begun               = false; ///< Whether the single active frame has begun.
-  bool                                 consumed                  = false; ///< Whether into_extension took the capture and VM.
-  std::optional<registration_error>    first_failure;                     ///< First terminal diagnostic, preserved across moves.
+  profile_capture                                 capture;             ///< Original capture; never recaptured.
+  command_vm                                      vm;                  ///< VM registered once from this capture's snapshot.
+  std::optional<retained_root_receipt>            root_receipt;        ///< Original supplied workspace root token (known load).
+  std::optional<retained_file_receipt>            declaration_receipt; ///< Original selected declaration token (known load).
+  std::optional<retained_file_receipt>            registry_receipt;    ///< Original registry token (known load).
+  std::size_t                                     registrations_at_adoption = 0; ///< Capture registration count at adoption.
+  std::shared_ptr<const acceptance::request_data> bound_intent; ///< Immutable intent bound at open_known_load; null when opaque.
+  std::size_t                                     owner_charge = 0;     ///< Bytes charged for this allocation by the factory.
+  bool                                            known_load   = false; ///< Set only by open_known_load.
+  bool                                            frame_begun  = false; ///< Whether the single active frame has begun.
+  bool                                            consumed     = false; ///< Whether into_extension took the capture and VM.
+  std::optional<registration_error>               first_failure;        ///< First terminal diagnostic, preserved across moves.
   /// @param captured Original receipt owner.
   /// @param registered VM registered from captured.
   implementation(profile_capture captured, command_vm registered) : capture(std::move(captured)), vm(std::move(registered)) {
@@ -4889,11 +4935,16 @@ profile_invocation::open_known_load(const acceptance::request_intent& request_in
     auto vm = extension_invocation::register_vm(*capture);
     if (!vm)
       return std::unexpected(std::move(vm.error()));
-    auto owner                 = std::make_unique<implementation>(std::move(*capture), std::move(*vm));
+    const auto charged_before = vm->_owner->runtime.native_bytes;
+    charge(vm->_owner->runtime, sizeof(implementation) + 64);
+    const auto charged         = vm->_owner->runtime.native_bytes - charged_before;
+    auto       owner           = std::make_unique<implementation>(std::move(*capture), std::move(*vm));
+    owner->owner_charge        = charged;
     owner->root_receipt        = std::move(*root);
     owner->declaration_receipt = std::move(*declaration);
     owner->registry_receipt    = std::move(*registry);
     owner->known_load          = true;
+    owner->bound_intent        = *data;
     if (auto verified = owner->capture.verify(); !verified)
       return std::unexpected(from_profile_error(std::move(verified.error())));
     return profile_invocation(std::move(owner));
@@ -4913,7 +4964,11 @@ std::expected<profile_invocation, registration_error> profile_invocation::open_o
     auto vm = extension_invocation::register_vm(*capture);
     if (!vm)
       return std::unexpected(std::move(vm.error()));
-    auto owner = std::make_unique<implementation>(std::move(*capture), std::move(*vm));
+    const auto charged_before = vm->_owner->runtime.native_bytes;
+    charge(vm->_owner->runtime, sizeof(implementation) + 64);
+    const auto charged  = vm->_owner->runtime.native_bytes - charged_before;
+    auto       owner    = std::make_unique<implementation>(std::move(*capture), std::move(*vm));
+    owner->owner_charge = charged;
     if (auto verified = owner->capture.verify(); !verified)
       return std::unexpected(from_profile_error(std::move(verified.error())));
     return profile_invocation(std::move(owner));
@@ -4931,55 +4986,308 @@ value_ptr profile_invocation::catalog() const {
 std::string_view profile_invocation::effective_catalog() const {
   return _owner && !_owner->consumed && !_owner->first_failure ? _owner->vm.effective_catalog() : std::string_view{};
 }
-std::expected<void, registration_error> profile_invocation::fail(registration_error error) {
-  if (!_owner)
-    return std::unexpected(std::move(error));
-  if (!_owner->first_failure) {
-    if (_owner->vm._owner && _owner->vm._owner->command.shape_failure)
-      _owner->first_failure = std::move(_owner->vm._owner->command.shape_failure);
+std::expected<void, registration_error> profile_invocation::fail(implementation& owner, registration_error error) {
+  if (!owner.first_failure) {
+    if (owner.vm._owner && owner.vm._owner->command.shape_failure)
+      owner.first_failure = std::move(owner.vm._owner->command.shape_failure);
     else
-      _owner->first_failure = std::move(error);
+      owner.first_failure = std::move(error);
   }
-  return std::unexpected(*_owner->first_failure);
+  return std::unexpected(*owner.first_failure);
 }
-std::expected<void, registration_error> profile_invocation::begin_frame() {
-  if (!_owner || _owner->consumed || _owner->first_failure || _owner->frame_begun)
+std::expected<void, registration_error> profile_invocation::begin_frame(implementation& owner) {
+  if (owner.consumed || owner.first_failure || owner.frame_begun)
     return std::unexpected(profile_owner_protocol_error());
   try {
-    auto* vm = _owner->vm._owner.get();
+    auto* vm = owner.vm._owner.get();
     if (!vm)
-      return fail(profile_owner_protocol_error());
+      return fail(owner, profile_owner_protocol_error());
     auto& s = vm->runtime;
     auto& c = vm->command;
     if (!c.profile || c.registering || c.shape_failure || s.seal_failed || c.invoked || exhausted(s))
-      return fail(profile_owner_protocol_error());
+      return fail(owner, profile_owner_protocol_error());
     begin_invocation(s, c);
     c.invoked             = true;
-    c.profile_frame_owner = _owner.get();
-    _owner->frame_begun   = true;
+    c.profile_frame_owner = &owner;
+    owner.frame_begun     = true;
     return {};
   } catch (const diagnostic& error) {
-    return fail(registration_error{error, "profile"});
+    return fail(owner, registration_error{error, "profile"});
   } catch (...) {
-    return fail(registration_error{external_resource(), "profile"});
+    return fail(owner, registration_error{external_resource(), "profile"});
   }
 }
 std::expected<extension_invocation, registration_error> profile_invocation::into_extension() && {
-  if (!_owner || _owner->consumed || _owner->first_failure || _owner->frame_begun)
+  // Known-load owners are refused without being consumed: adoption cannot change mode.
+  if (!_owner || _owner->consumed || _owner->first_failure || _owner->frame_begun || _owner->known_load)
     return std::unexpected(profile_owner_protocol_error());
   try {
     extension_invocation adopted(std::move(_owner->capture), std::move(_owner->vm));
-    adopted._owner->adopted_root        = std::move(_owner->root_receipt);
-    adopted._owner->adopted_declaration = std::move(_owner->declaration_receipt);
-    adopted._owner->adopted_registry    = std::move(_owner->registry_receipt);
-    _owner->registrations_at_adoption   = adopted._owner->capture.registration_count();
-    _owner->consumed                    = true;
+    _owner->registrations_at_adoption = adopted._owner->capture.registration_count();
+    _owner->consumed                  = true;
     return adopted;
   } catch (const diagnostic& error) {
     return std::unexpected(registration_error{error, "profile"});
   } catch (...) {
     return std::unexpected(registration_error{external_resource(), "profile"});
   }
+}
+namespace {
+/// Written by the frame cleanup after it has released nested temporaries; observation only.
+struct cleanup_report {
+  bool        ran   = false; ///< Cleanup executed.
+  std::size_t peak  = 0;     ///< Temporary registry entries just before the release.
+  std::size_t after = 0;     ///< Temporary registry entries after the release.
+};
+} // namespace
+/// Private stage state: the consumed owner (VM, original capture and receipts), the sealed source capture, the normalized
+/// bundle B (field bundle of S) and the finalized model S. Metric: the allocation is charged once as
+/// sizeof(implementation)+64 to the cumulative native_bytes before it is made, never refunded.
+struct profile_load_stage::implementation {
+  std::unique_ptr<profile_invocation::implementation> owner;  ///< Original owner, frame begun, counters retained.
+  acceptance::source_capture                          source; ///< Sealed bound capture; destroyed before the owner.
+  value_ptr                                           bundle; ///< B: normalized bundle, never exposed.
+  value_ptr                                           model;  ///< S: finalized model, never exposed.
+  cleanup_report                                      report; ///< Result of the frame cleanup that ran before staging.
+  bool baseline_before_route = false;             ///< Observation-only: shape baseline existed just before the route call.
+  std::array<std::size_t, 4> instruction_marks{}; ///< Observation-only counter marks.
+  std::array<std::size_t, 4> native_byte_marks{}; ///< Observation-only counter marks.
+  /// @param o Consumed owner.
+  /// @param captured Sealed capture.
+  /// @param b Normalized bundle.
+  /// @param m Finalized model.
+  implementation(std::unique_ptr<profile_invocation::implementation> o, acceptance::source_capture captured, value_ptr b,
+                 value_ptr m)
+      : owner(std::move(o)), source(std::move(captured)), bundle(std::move(b)), model(std::move(m)) {
+  }
+};
+profile_load_stage::profile_load_stage(std::unique_ptr<implementation> state) : _impl(std::move(state)) {
+}
+profile_load_stage::profile_load_stage(profile_load_stage&& other) noexcept = default;
+profile_load_stage& profile_load_stage::operator=(profile_load_stage&& other) noexcept {
+  if (this != &other)
+    _impl = std::move(other._impl);
+  return *this;
+}
+profile_load_stage::~profile_load_stage() = default;
+profile_load_stage_observation profile_load_stage::observe() const noexcept {
+  profile_load_stage_observation out;
+  if (!_impl || !_impl->owner)
+    return out;
+  out.live            = true;
+  out.frame_begun     = _impl->owner->frame_begun;
+  out.sealed          = _impl->source.sealed_ready();
+  out.bundle_retained = static_cast<bool>(_impl->bundle);
+  out.model_retained  = static_cast<bool>(_impl->model);
+  if (_impl->model) {
+    if (auto it = _impl->model->fields.find("jobs"); it != _impl->model->fields.end() && it->second)
+      out.jobs = it->second->items.size();
+  }
+  out.registrations = _impl->owner->capture.registration_count();
+  if (const auto* vm = _impl->owner->vm._owner.get()) {
+    out.instructions      = vm->runtime.instructions;
+    out.native_bytes      = vm->runtime.native_bytes;
+    out.shape_dispatches  = vm->command.shape_dispatch_count;
+    const auto membership = measure_registry(vm->lua);
+    out.tag_entries       = membership.tags;
+    out.backing_entries   = membership.backings;
+    out.temporary_entries = membership.temporaries;
+  }
+  out.cleanup_ran            = _impl->report.ran;
+  out.peak_temporary_entries = _impl->report.peak;
+  out.baseline_before_route  = _impl->baseline_before_route;
+  out.instruction_marks      = _impl->instruction_marks;
+  out.native_byte_marks      = _impl->native_byte_marks;
+  return out;
+}
+namespace {
+registration_error from_source_error(acceptance::source_error error) {
+  if (error.code == acceptance::source_error_code::capture || error.code == acceptance::source_error_code::resource_limit)
+    return {std::move(error.detail), "profile"};
+  return profile_owner_protocol_error();
+}
+} // namespace
+std::expected<profile_load_stage, profile_preparation_error>
+profile_invocation::prepare_load(const acceptance::request_intent& final_intent) && {
+  cleanup_report report;
+  auto           run = [&]() -> std::expected<profile_load_stage, profile_preparation_error> {
+    try {
+      if (!_owner || _owner->consumed || _owner->first_failure || !_owner->known_load || _owner->frame_begun ||
+          !_owner->bound_intent)
+        return std::unexpected(profile_preparation_error{profile_owner_protocol_error(), {}});
+      // Consume first: every later failure, including error-copy allocation, leaves the caller's owner moved-from.
+      auto impl   = std::move(_owner);
+      auto refuse = [&](registration_error error) -> std::unexpected<profile_preparation_error> {
+        (void)fail(*impl, std::move(error));
+        return std::unexpected(profile_preparation_error{*impl->first_failure, {}});
+      };
+      auto semantic = [&](value_ptr inner) -> std::unexpected<profile_preparation_error> {
+        return std::unexpected(profile_preparation_error{registration_error{}, std::move(inner)});
+      };
+      auto final_data = final_intent.data();
+      if (!final_data || !*final_data)
+        return refuse(profile_owner_protocol_error());
+      {
+        const auto& now   = **final_data;
+        const auto& bound = *impl->bound_intent;
+        if (!now.version2 || !bound.version2 || now.request_id != bound.request_id || now.expected_head != bound.expected_head ||
+            now.encoded != bound.encoded || now.version2->workspace_argument != bound.version2->workspace_argument ||
+            now.version2->registry_argument != bound.version2->registry_argument ||
+            now.version2->profile_argument != bound.version2->profile_argument)
+          return refuse(profile_owner_protocol_error());
+      }
+      if (!impl->root_receipt || !impl->declaration_receipt || !impl->registry_receipt)
+        return refuse(profile_owner_protocol_error());
+      if (auto verified = impl->capture.verify(); !verified)
+        return refuse(from_profile_error(std::move(verified.error())));
+      const auto& bound_v2 = *impl->bound_intent->version2;
+      auto source = acceptance::source_capture::open_bound(bound_v2.workspace_argument, bound_v2.registry_argument,
+                                                           std::move(*impl->root_receipt), std::move(*impl->declaration_receipt),
+                                                           std::move(*impl->registry_receipt));
+      if (!source)
+        return refuse(from_source_error(std::move(source.error())));
+      if (auto begun = begin_frame(*impl); !begun)
+        return std::unexpected(profile_preparation_error{std::move(begun.error()), {}});
+      command_vm::active_frame frame;
+      frame.profile_owner = impl.get();
+      auto& vm            = *impl->vm._owner;
+      auto& s             = vm.runtime;
+      auto& c             = vm.command;
+      // Declared after impl so it runs first on every exit: success, refusal, native failure and exception.
+      // It never allocates or throws and is idempotent, so staging may run it early before ownership moves.
+      struct frame_cleanup {
+        lua_State*      lua;
+        state*          runtime;
+        cleanup_report* out;
+        bool            done = false;
+        void            run() noexcept {
+          if (done)
+            return;
+          done                        = true;
+          runtime->preserving_aliases = false;
+          runtime->push_memo          = 0;
+          runtime->input.reset();
+          lua_settop(lua, 0);
+          out->peak = measure_registry(lua).temporaries;
+          release_shape_temporaries(lua);
+          out->after = measure_registry(lua).temporaries;
+          out->ran   = true;
+        }
+        ~frame_cleanup() {
+          run();
+        }
+      } cleanup{vm.lua, &s, &report};
+      std::array<std::size_t, 4> instruction_marks{}, native_byte_marks{};
+      auto                       mark = [&](std::size_t index) {
+        instruction_marks[index] = s.instructions;
+        native_byte_marks[index] = s.native_bytes;
+      };
+      mark(0);
+      // The nested calls below never take the baseline themselves, so establish it before any temporary is created.
+      {
+        lua_pushcfunction(vm.lua, ensure_shape_baseline_protected);
+        const int status = lua_pcall(vm.lua, 0, 0, 0);
+        lua_settop(vm.lua, 0);
+        if (status == LUA_ERRMEM || exhausted(s))
+          return refuse(registration_error{command_resource(s), "profile"});
+        if (status || s.stack_exhausted || !c.shape_baseline_ready)
+          return refuse(registration_error{external_resource(), "profile"});
+      }
+      auto record = [&](std::initializer_list<std::pair<const std::string, value_ptr>> fields) {
+        visit(s, 1);
+        for (const auto& field : fields)
+          charge(s, 128 + field.first.size());
+        return command_record(std::map<std::string, value_ptr>(fields));
+      };
+      auto text = [&](std::string_view bytes) {
+        visit(s, 1);
+        charge(s, bytes.size() + 1);
+        return command_text(std::string(bytes));
+      };
+      // Strict envelope: exactly one of value or error.
+      auto envelope_ok = [](const value_ptr& envelope) {
+        return envelope && envelope->kind == value_kind::record && envelope->fields.size() == 1 &&
+               envelope->fields.contains("error") != envelope->fields.contains("value");
+      };
+      auto routed_input = source->workspace();
+      if (!routed_input)
+        return refuse(from_source_error(std::move(routed_input.error())));
+      if (!*routed_input || (*routed_input)->kind != value_kind::record || !(*routed_input)->fields.contains("file") ||
+          !(*routed_input)->fields.contains("workspace"))
+        return refuse(profile_owner_protocol_error());
+      auto route_input =
+          record({{"file", (*routed_input)->fields.at("file")}, {"workspace", (*routed_input)->fields.at("workspace")}});
+      const bool baseline_before_route = c.shape_baseline_ready;
+      auto       routed                = call_retained_value(vm.lua, c.shape_phases[8], route_input);
+      if (exhausted(s))
+        return refuse(registration_error{command_resource(s), "profile"});
+      if (c.bridge_error)
+        return refuse(registration_error{*c.bridge_error, "profile"});
+      mark(1);
+      if (!routed)
+        return refuse(registration_error{
+            routed.error().code == "resource_limit" ? std::move(routed.error()) : external_protocol(), "profile"});
+      if (!envelope_ok(*routed))
+        return refuse(profile_owner_protocol_error());
+      if ((*routed)->fields.contains("error"))
+        return semantic((*routed)->fields.at("error"));
+      auto bundle = source->capture((*routed)->fields.at("value"));
+      if (!bundle)
+        return refuse(from_source_error(std::move(bundle.error())));
+      if (auto verified = source->verify(); !verified)
+        return refuse(from_source_error(std::move(verified.error())));
+      if (auto verified = impl->capture.verify(); !verified)
+        return refuse(from_profile_error(std::move(verified.error())));
+      auto validation = record({{"bundle", *bundle}, {"capture", record({{"status", text("not_captured")}})}});
+      mark(2);
+      auto prepared = impl->vm.validate_profile_phases(validation, {}, {}, frame, nullptr);
+      if (!prepared)
+        return refuse(std::move(prepared.error()));
+      mark(3);
+      if (!envelope_ok(*prepared))
+        return refuse(profile_owner_protocol_error());
+      if ((*prepared)->fields.contains("error"))
+        return semantic((*prepared)->fields.at("error"));
+      auto model = (*prepared)->fields.at("value");
+      if (!model || model->kind != value_kind::record || !model->fields.contains("bundle") || !model->fields.contains("jobs") ||
+          !model->fields.at("bundle") || !model->fields.at("jobs") || model->fields.at("jobs")->kind != value_kind::list)
+        return refuse(profile_owner_protocol_error());
+      auto retained_bundle = model->fields.at("bundle");
+      charge(s, sizeof(profile_load_stage::implementation) + 64);
+      auto staged = std::make_unique<profile_load_stage::implementation>(std::move(impl), std::move(*source),
+                                                                         std::move(retained_bundle), std::move(model));
+      // Ownership of the VM moved into the stage: release the nested temporaries now, while it is certainly alive.
+      cleanup.run();
+      staged->report                = report;
+      staged->baseline_before_route = baseline_before_route;
+      staged->instruction_marks     = instruction_marks;
+      staged->native_byte_marks     = native_byte_marks;
+      if (auto verified = staged->source.verify(); !verified) {
+        (void)fail(*staged->owner, from_source_error(std::move(verified.error())));
+        return std::unexpected(profile_preparation_error{*staged->owner->first_failure, {}});
+      }
+      if (auto verified = staged->owner->capture.verify(); !verified) {
+        (void)fail(*staged->owner, from_profile_error(std::move(verified.error())));
+        return std::unexpected(profile_preparation_error{*staged->owner->first_failure, {}});
+      }
+      return profile_load_stage(std::move(staged));
+    } catch (const diagnostic& error) {
+      return std::unexpected(profile_preparation_error{registration_error{error, "profile"}, {}});
+    } catch (const std::bad_alloc&) {
+      return std::unexpected(profile_preparation_error{registration_error{external_resource(), "profile"}, {}});
+    } catch (const std::length_error&) {
+      return std::unexpected(profile_preparation_error{registration_error{external_resource(), "profile"}, {}});
+    } catch (...) {
+      return std::unexpected(profile_preparation_error{registration_error{external_resource(), "profile"}, {}});
+    }
+  };
+  auto result = run();
+  if (!result) {
+    result.error().cleanup_ran                     = report.ran;
+    result.error().peak_temporary_entries          = report.peak;
+    result.error().temporary_entries_after_release = report.after;
+  }
+  return result;
 }
 profile_invocation_observation profile_invocation::observe() const noexcept {
   profile_invocation_observation out;
@@ -4989,10 +5297,15 @@ profile_invocation_observation profile_invocation::observe() const noexcept {
   out.known_load    = _owner->known_load;
   out.frame_begun   = _owner->frame_begun;
   out.live          = !_owner->consumed && !_owner->first_failure;
+  out.owner_charge  = _owner->owner_charge;
   out.registrations = _owner->consumed ? _owner->registrations_at_adoption : _owner->capture.registration_count();
   if (const auto* vm = _owner->vm._owner.get()) {
-    out.instructions = vm->runtime.instructions;
-    out.native_bytes = vm->runtime.native_bytes;
+    out.instructions      = vm->runtime.instructions;
+    out.native_bytes      = vm->runtime.native_bytes;
+    const auto membership = measure_registry(vm->lua);
+    out.tag_entries       = membership.tags;
+    out.backing_entries   = membership.backings;
+    out.temporary_entries = membership.temporaries;
   }
   return out;
 }

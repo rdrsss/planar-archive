@@ -52,11 +52,16 @@ public:
   /// owner, false for moved-from owners and after any other refusal. Messages are never inspected.
   /// @return True only for genuine absence of the selected supplied file.
   bool last_admission_refusal_was_absent() const noexcept;
-  /// @brief Record one VM registration attempt made from this original capture; no-op for moved-from owners.
-  /// Single-thread confined like the rest of the owner; the count survives VM replacement and moves with the capture.
+  /// @brief Record one VM registration attempt made from this original capture.
+  /// Observational counter only: it carries no authority and never affects snapshot(), verify(), receipts,
+  /// admission or any error. Its sole intended caller is the runtime's single registration path (register_vm);
+  /// friendship cannot restrict it because the caller lives in a different named module. The counter saturates
+  /// at std::numeric_limits<std::size_t>::max() instead of wrapping, is a no-op for moved-from owners, is
+  /// single-thread confined like the rest of the owner, survives VM replacement and moves with the capture.
   void note_registration() const noexcept;
   /// @brief Report the cumulative registration attempts recorded by note_registration.
-  /// @return Attempt count; zero for moved-from owners.
+  /// Purely observational; valid on failed owners, which keep their count.
+  /// @return Attempt count (saturated at the maximum size_t); zero for moved-from owners.
   std::size_t registration_count() const noexcept;
   /// @brief Admit a proposed export target before publication.
   /// @param slot Unique private receipt key.

@@ -873,3 +873,54 @@ TEST_CASE("D2 B2 empty and unread roots retain metadata through profile destruct
   REQUIRE(::chmod((t.path / "workspace").c_str(), 0700) == 0);
   CHECK_FALSE(session.finish());
 }
+TEST_CASE("X06 B3 B note_registration is a pure counter that never affects authority", "[capture][profile][x06b3b]") {
+  temporary t;
+  auto      owner    = t.captured();
+  auto      original = *owner.snapshot();
+  REQUIRE(owner.registration_count() == 0);
+  for (std::size_t i = 1; i <= 5; ++i) {
+    owner.note_registration();
+    CHECK(owner.registration_count() == i);
+  }
+  auto after = owner.snapshot();
+  REQUIRE(after);
+  CHECK(*after == original);
+  CHECK((*after)->profile.bytes == original->profile.bytes);
+  CHECK((*after)->profile.mode == original->profile.mode);
+  CHECK(owner.verify());
+  REQUIRE(owner.admit_root("workspace", (t.path / "workspace").string()));
+  REQUIRE(owner.admit_file("file", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  owner.note_registration();
+  CHECK(owner.retain_root("workspace"));
+  CHECK(owner.retain_file("file"));
+  CHECK(owner.verify());
+  CHECK(owner.registration_count() == 6);
+  // A poisoned owner still reports its count, keeps refusing, and noting changes nothing else.
+  REQUIRE_FALSE(owner.admit_root("relative", "relative/path"));
+  refuses(owner.snapshot(), "capture_changed");
+  const auto before_failed = owner.registration_count();
+  owner.note_registration();
+  CHECK(owner.registration_count() == before_failed + 1);
+  refuses(owner.snapshot(), "capture_changed");
+  refuses(owner.verify(), "capture_changed");
+}
+TEST_CASE("X06 B3 B note_registration is a no-op on moved-from owners and the count moves with the capture",
+          "[capture][profile][x06b3b]") {
+  temporary t;
+  auto      owner = t.captured();
+  owner.note_registration();
+  owner.note_registration();
+  auto moved = std::move(owner);
+  CHECK(owner.registration_count() == 0);
+  owner.note_registration();
+  CHECK(owner.registration_count() == 0);
+  CHECK(moved.registration_count() == 2);
+  moved.note_registration();
+  CHECK(moved.registration_count() == 3);
+  auto replaced = t.captured();
+  replaced.note_registration();
+  replaced = std::move(moved);
+  CHECK(moved.registration_count() == 0);
+  CHECK(replaced.registration_count() == 3);
+  CHECK(replaced.verify());
+}

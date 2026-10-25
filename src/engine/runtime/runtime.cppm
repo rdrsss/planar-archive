@@ -1,6 +1,8 @@
 /// @file
 /// @brief Bounded fresh exports and sealed invocation-local command VMs with typed native services and redacted failures;
-/// also the profile_invocation owner (open_known_load/open_opaque capture and register once, begin_frame, into_extension,
+/// also the profile_invocation owner (open_known_load/open_opaque capture and register once; prepare_load consumes a
+/// known-load owner into a private profile_load_stage after bound capture, route, seal and all-job validation inside the
+/// one private active frame; begin_frame is private; into_extension adopts opaque owners and refuses known-load owners;
 /// observe).
 export module planar.engine.runtime;
 import std;
@@ -203,6 +205,7 @@ struct extension_preparation_error {
 };
 class extension_invocation; ///< Original captured invocation owner, defined below.
 class profile_invocation;   ///< Original profile owner before final parsing, defined below.
+class profile_load_stage;   ///< Private non-published product of prepare_load, defined below.
 /// Move-only single-invocation retained trusted command VM; no global cache or job-facing API.
 /// @note Not concurrently callable. Moving preserves native ownership and Lua references; destruction releases all state.
 class command_vm {
@@ -306,6 +309,7 @@ public:
 private:
   friend class extension_invocation;
   friend class profile_invocation;
+  friend class profile_load_stage;
   /// Private active-frame token: one extension owner or one profile owner, never public and never both.
   struct active_frame {
     extension_invocation* extension;     ///< Original extension owner whose bridge checks apply.
@@ -392,14 +396,54 @@ private:
 };
 /// Observational counters of a profile owner; carries no authority and no mutable VM access.
 struct profile_invocation_observation {
-  bool        live          = false; ///< True for an owner that has not been moved from, failed or consumed.
-  bool        consumed      = false; ///< True once into_extension consumed the owner.
-  bool        known_load    = false; ///< True only for open_known_load; false for open_opaque and moved-from owners.
-  bool        frame_begun   = false; ///< True once begin_frame started the single active invocation frame.
-  std::size_t instructions  = 0;     ///< Cumulative VM instructions (state::instructions).
-  std::size_t native_bytes  = 0;     ///< Cumulative charged native bytes (state::native_bytes).
-  std::size_t registrations = 0; ///< Cumulative register_vm calls made for this owner's original capture (1 after a successful
-                                 ///< factory; unchanged across into_extension).
+  bool        live            = false; ///< True for an owner that has not been moved from, failed or consumed.
+  bool        consumed        = false; ///< True once into_extension consumed the owner.
+  bool        known_load      = false; ///< True only for open_known_load; false for open_opaque and moved-from owners.
+  bool        frame_begun     = false; ///< True once prepare_load started the single active invocation frame (private start).
+  std::size_t instructions    = 0;     ///< Cumulative VM instructions (state::instructions).
+  std::size_t native_bytes    = 0;     ///< Cumulative charged native bytes (state::native_bytes).
+  std::size_t owner_charge    = 0;     ///< Native bytes the factory charged for this owner's own allocation (0 when moved from).
+  std::size_t registrations   = 0; ///< Cumulative register_vm calls made for this owner's original capture (1 after a successful
+                                   ///< factory; unchanged across into_extension).
+  std::size_t tag_entries     = 0; ///< Observation only: entries currently in the VM's registry tag table (0 when no VM).
+  std::size_t backing_entries = 0; ///< Observation only: entries currently in the VM's registry backing table (0 when no VM).
+  std::size_t temporary_entries =
+      0; ///< Observation only: tag and backing entries absent from the shape baseline (0 without one).
+};
+/// Failure of prepare_load. Either a native or protocol `failure`, or an ordinary trusted semantic refusal in `semantic`.
+struct profile_preparation_error {
+  registration_error failure;  ///< Native or protocol failure; meaningful when `semantic` is null.
+  value_ptr          semantic; ///< Inner E of a trusted {error=E} refusal (route or job validation); null for native failure.
+  bool cleanup_ran = false;    ///< Observation only: true once the frame cleanup ran (false when refused before the frame began).
+  std::size_t peak_temporary_entries = 0; ///< Observation only: temporary registry entries present just before the release.
+  std::size_t temporary_entries_after_release = 0; ///< Observation only: temporary registry entries remaining after the release.
+};
+/// Observational counters of a prepared stage; carries no authority and no access to its private state.
+struct profile_load_stage_observation {
+  bool        live             = false; ///< True while the stage owns its state (false once moved-from).
+  bool        frame_begun      = false; ///< True once the single frame began.
+  bool        sealed           = false; ///< True once bytes and topology were sealed into the original capture.
+  bool        bundle_retained  = false; ///< True while the normalized bundle B is retained privately.
+  bool        model_retained   = false; ///< True while the finalized model S is retained privately.
+  std::size_t jobs             = 0;     ///< Number of jobs in S.
+  std::size_t shape_dispatches = 0;     ///< Cumulative custom shape F calls (one per custom job).
+  std::size_t instructions     = 0;     ///< Cumulative VM instructions of the original frame.
+  std::size_t native_bytes     = 0;     ///< Cumulative charged native bytes of the original frame.
+  std::size_t registrations    = 0;     ///< Registration count of the original capture (1).
+  std::size_t tag_entries      = 0;     ///< Observation only: entries currently in the VM's registry tag table.
+  std::size_t backing_entries  = 0;     ///< Observation only: entries currently in the VM's registry backing table.
+  std::size_t temporary_entries =
+      0; ///< Observation only: tag and backing entries absent from the shape baseline (0 without one).
+  bool        cleanup_ran            = false; ///< Observation only: true once the frame cleanup ran.
+  std::size_t peak_temporary_entries = 0;     ///< Observation only: temporary registry entries present just before the release.
+  /// Observation only: true when the explicit shape baseline already existed just before the route call, so every nested
+  /// call's temporaries lie outside it.
+  bool baseline_before_route = false;
+  /// Observation only: cumulative instruction counter at four points of prepare_load: after the frame began, after the route
+  /// call, just before final validation (after its input was built) and after validation returned.
+  std::array<std::size_t, 4> instruction_marks{};
+  /// Observation only: cumulative native byte counter at the same four points as instruction_marks.
+  std::array<std::size_t, 4> native_byte_marks{};
 };
 /// Original profile capture paired with its sealed VM before final command parsing.
 /// Opaque and move-only: copying is deleted, there is no public default or pointer constructor, and moved-from
@@ -407,6 +451,7 @@ struct profile_invocation_observation {
 /// addresses (including borrowed catalog bytes) and counters survive. Self-move preserves state.
 /// The known-load factory alone records the supplied workspace root, declaration, registry and ledger admissions; an opaque
 /// owner can never prepare built-in load, and there is intentionally no upgrade API.
+/// into_extension adopts opaque owners only and refuses known-load owners.
 /// @note Thread-confined. Each factory captures the profile once and runs the shipped plus external registration chunks
 /// exactly once; into_extension never recaptures or re-registers, and no handler or command code runs.
 class profile_invocation {
@@ -427,11 +472,21 @@ public:
   /// @brief Borrow canonical catalog-v2 bytes for final parsing.
   /// @return Stable bytes (addresses survive moves), empty when moved-from, consumed or failed.
   std::string_view effective_catalog() const;
-  /// @brief Begin the single active invocation frame (internal composition seam retained for B3-B prepare_load; no product caller exists yet).
-  /// @return Success once; second calls and calls on moved-from, failed or consumed owners refuse as protocol and publish nothing.
-  std::expected<void, registration_error> begin_frame();
+  /// @brief Consume a known-load owner: bind the final intent, capture, route, seal and validate every job in one frame.
+  /// Runs phases 1 to 3 of the preparation architecture. The owner is consumed (moved-from) before any fallible work, so a
+  /// refusal or failure never allows a retry and nothing is published on failure. The final intent must equal the bound
+  /// intent in request id, expected head, encoded bytes and the workspace, registry and profile selectors. Original receipts
+  /// are reverified before capture and after staging. Exactly one frame begins; instruction and native counters are
+  /// cumulative and never reset. No selection, render, projection or history service runs.
+  /// @param final_intent Final parsed load intent; no caller bundle, model or capture is accepted anywhere.
+  /// @return Opaque stage holding the sealed capture, normalized bundle and finalized model privately, or a typed error
+  /// whose `semantic` is non-null only for an ordinary trusted semantic refusal (never for a native failure).
+  /// @note Thread-confined. Opaque, consumed, failed and moved-from owners refuse with a protocol error at field profile.
+  std::expected<profile_load_stage, profile_preparation_error> prepare_load(const acceptance::request_intent& final_intent) &&;
   /// @brief Transfer the original capture and VM into an extension owner without recapture or re-registration.
-  /// @return Extension owner; refuses on moved-from, consumed, failed or frame-begun owners and publishes nothing.
+  /// Known-load owners are refused (adoption cannot change mode; known load goes through prepare_load and X07 extension
+  /// dispatch uses opaque owners only); the refusal consumes nothing and leaves the owner usable.
+  /// @return Extension owner; refuses on moved-from, consumed, failed, frame-begun or known-load owners and publishes nothing.
   std::expected<extension_invocation, registration_error> into_extension() &&;
   /// @brief Read counters without authority.
   /// @return Snapshot; zeroed with live false when moved-from.
@@ -450,8 +505,37 @@ public:
 
 private:
   struct implementation;
+  friend class profile_load_stage;
   explicit profile_invocation(std::unique_ptr<implementation> owner);
-  std::expected<void, registration_error> fail(registration_error error);
-  std::unique_ptr<implementation>         _owner;
+  static std::expected<void, registration_error> begin_frame(implementation& owner);
+  static std::expected<void, registration_error> fail(implementation& owner, registration_error error);
+  std::unique_ptr<implementation>                _owner;
+};
+/// Private product of prepare_load: the consumed owner, sealed source capture, normalized bundle and finalized model.
+/// Move-only with no default or public constructor; the only public member is observe(). There is intentionally no accessor
+/// for the bundle, model, VM, capture or receipts, and no route to any transaction API.
+/// @note Thread-confined; destruction releases the VM and all native receipts.
+class profile_load_stage {
+public:
+  /// @brief Read counters without authority.
+  /// @return Snapshot; zeroed with live false when moved-from.
+  profile_load_stage_observation observe() const noexcept;
+  profile_load_stage(const profile_load_stage&)            = delete;
+  profile_load_stage& operator=(const profile_load_stage&) = delete;
+  /// @brief Transfer the stable stage; the source thereafter reports not live.
+  /// @param other Stage to consume.
+  profile_load_stage(profile_load_stage&& other) noexcept;
+  /// @brief Release this stage and transfer another; self-move preserves state.
+  /// @param other Stage to consume.
+  /// @return This stage.
+  profile_load_stage& operator=(profile_load_stage&& other) noexcept;
+  /// Release the VM and all native receipts.
+  ~profile_load_stage();
+
+private:
+  struct implementation;
+  friend class profile_invocation;
+  explicit profile_load_stage(std::unique_ptr<implementation> state);
+  std::unique_ptr<implementation> _impl;
 };
 } // namespace planar::engine

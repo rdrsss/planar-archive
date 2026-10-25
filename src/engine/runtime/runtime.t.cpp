@@ -988,7 +988,14 @@ extern "C" void          planar_admission_watch(std::uint64_t device, std::uint6
 extern "C" std::uint64_t planar_admission_read_attempts();
 namespace {
 template <class T>
-concept has_prepare_load = requires(T& p) { p.prepare_load(0); };
+concept has_prepare_load = requires(T& p, const acceptance::request_intent& i) { p.prepare_load(i); };
+template <class T>
+concept can_prepare_load_rvalue = requires(T&& p, const acceptance::request_intent& i) { std::move(p).prepare_load(i); };
+template <class T>
+concept has_begin_frame = requires(T& p) { p.begin_frame(); } || requires(T& p, int i) { p.begin_frame(i); };
+template <class T>
+concept has_stage_access = requires(T& p) { p.data(); } || requires(T& p) { p.bundle(); } || requires(T& p) { p.model(); } ||
+                           requires(T& p) { p.vm(); } || requires(T& p) { p.capture(); } || requires(T& p) { p.source(); };
 template <class T>
 concept has_prepared = requires(T& p) { p.prepared(); };
 template <class T>
@@ -1012,6 +1019,15 @@ static_assert(can_open_opaque<std::string_view>);
 static_assert(!can_open_opaque<std::string_view, std::string_view>);
 static_assert(!can_open_opaque<const acceptance::request_intent&, std::string_view>);
 static_assert(!has_prepare_load<profile_invocation>);
+static_assert(can_prepare_load_rvalue<profile_invocation>);
+static_assert(!has_begin_frame<profile_invocation>);
+static_assert(!std::is_copy_constructible_v<profile_load_stage>);
+static_assert(!std::is_copy_assignable_v<profile_load_stage>);
+static_assert(!std::is_default_constructible_v<profile_load_stage>);
+static_assert(std::is_nothrow_move_constructible_v<profile_load_stage>);
+static_assert(std::is_nothrow_move_assignable_v<profile_load_stage>);
+static_assert(!has_stage_access<profile_load_stage>);
+static_assert(!std::is_constructible_v<profile_load_stage, std::unique_ptr<int>>);
 static_assert(!has_prepared<profile_invocation>);
 static_assert(!has_vm_accessor<profile_invocation>);
 static_assert(!has_upgrade<profile_invocation>);
@@ -1225,7 +1241,17 @@ TEST_CASE("X06 B3 A factories capture exactly once and adoption reads nothing", 
     }
     const auto created = planar_admission_read_attempts();
     CHECK(created == module_reads);
-    auto bytes     = owner->effective_catalog().data();
+    auto bytes = owner->effective_catalog().data();
+    if (known) {
+      // Known-load owners are never adopted: refusal reads nothing and leaves the owner live.
+      auto refused = std::move(*owner).into_extension();
+      REQUIRE_FALSE(refused);
+      CHECK(refused.error().field == "profile");
+      CHECK(planar_admission_read_attempts() == created);
+      CHECK(owner->observe().live);
+      CHECK_FALSE(owner->observe().consumed);
+      continue;
+    }
     auto extension = std::move(*owner).into_extension();
     REQUIRE(extension);
     CHECK(planar_admission_read_attempts() == created);
@@ -1258,10 +1284,11 @@ TEST_CASE("X06 B3 A registration count stays one across into_extension", "[runti
   b3a_fixture f;
   auto        owner = f.clean();
   CHECK(owner.observe().registrations == 1);
-  auto adopted = std::move(owner).into_extension();
-  REQUIRE(adopted);
+  auto refused = std::move(owner).into_extension();
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().field == "profile");
   CHECK(owner.observe().registrations == 1);
-  CHECK(owner.observe().consumed);
+  CHECK_FALSE(owner.observe().consumed);
   auto opaque = profile_invocation::open_opaque(f.profile.string());
   REQUIRE(opaque);
   CHECK(opaque->observe().registrations == 1);
@@ -1326,9 +1353,10 @@ TEST_CASE("X06 B3 A owner moves preserve address and counters and moved-from own
   CHECK_FALSE(a.observe().live);
   CHECK_FALSE(a.catalog());
   CHECK(a.effective_catalog().empty());
-  auto frame = a.begin_frame();
+  auto frame = std::move(a).prepare_load(f.intent());
   REQUIRE_FALSE(frame);
-  CHECK(frame.error().field == "profile");
+  CHECK(frame.error().failure.field == "profile");
+  CHECK_FALSE(frame.error().semantic);
   auto ext = std::move(a).into_extension();
   REQUIRE_FALSE(ext);
   CHECK(ext.error().field == "profile");
@@ -1344,29 +1372,136 @@ TEST_CASE("X06 B3 A owner moves preserve address and counters and moved-from own
   CHECK(c.observe().instructions == before.instructions);
   CHECK(c.observe().instructions == c.observe().instructions);
 }
+namespace {
+std::string read_file_bytes(const std::filesystem::path& p) {
+  std::ifstream in(p, std::ios::binary);
+  return std::string{std::istreambuf_iterator<char>(in), {}};
+}
+void replace_in_file(const std::filesystem::path& p, std::string_view from, std::string_view to) {
+  auto bytes = read_file_bytes(p);
+  auto at    = bytes.find(from);
+  REQUIRE(at != std::string::npos);
+  bytes.replace(at, from.size(), to);
+  put(p, bytes);
+}
+/// Real selected profile with one registered custom shape, a copied quota workspace and registry, and a native ledger.
+struct b3b_fixture {
+  std::filesystem::path root, workspace_dir, declaration, registry, ledger_path, profile, module;
+  std::size_t           custom_jobs = 0;
+  static std::string    default_body() {
+    return "return engine.object{ok=true,value=engine.object{obligations=engine.array{},guidance=input.job.id}}";
+  }
+  explicit b3b_fixture(std::string body = default_body(), bool combined_custom = true, bool split_custom = true) {
+    char pattern[] = "/tmp/planar-b3b-XXXXXX";
+    REQUIRE(::mkdtemp(pattern));
+    root          = std::filesystem::canonical(pattern);
+    workspace_dir = root / "workspace";
+    declaration   = workspace_dir / "workspace.lua";
+    registry      = root / "registry.json";
+    ledger_path   = root / "ledger";
+    profile       = root / "trusted/profile.json";
+    module        = root / "trusted/module.lua";
+    std::filesystem::create_directory(root / "trusted");
+    put(profile, R"({"version":1,"modules":["module.lua"]})");
+    put(module,
+        "registration.shape({id='custom',abi='shape_v1',revision='final',stages='optional',help='shape'},function(input) " +
+            body + " end)");
+    const std::filesystem::path fixture(PLANAR_SCHEMA_FIXTURE);
+    std::filesystem::copy(fixture / "workspace", workspace_dir, std::filesystem::copy_options::recursive);
+    std::filesystem::copy_file(fixture / "registry/quota-tools.json", registry);
+    if (combined_custom) {
+      replace_in_file(workspace_dir / "combined.lua", "shape = \"fanout_review\"", "shape = \"custom\"");
+      ++custom_jobs;
+    }
+    if (split_custom) {
+      replace_in_file(workspace_dir / "split.lua", "shape = \"fanout_review\"", "shape = \"custom\"");
+      ++custom_jobs;
+    }
+    REQUIRE(ledger::initialize_new(ledger_path, "demo"));
+  }
+  b3b_fixture(const b3b_fixture&)            = delete;
+  b3b_fixture& operator=(const b3b_fixture&) = delete;
+  ~b3b_fixture() {
+    std::filesystem::remove_all(root);
+  }
+  acceptance::request_intent intent(std::string_view request_id = "req-1", std::string_view actor = "actor",
+                                    std::optional<std::int64_t> head = std::nullopt, std::string workspace_override = {},
+                                    std::string profile_override = {}) const {
+    auto r = acceptance::request_intent::create_v2(
+        request_id, actor, head, workspace_override.empty() ? declaration.string() : workspace_override, registry.string(),
+        profile_override.empty() ? profile.string() : profile_override);
+    REQUIRE(r);
+    return std::move(*r);
+  }
+  profile_invocation open() const {
+    auto i = intent();
+    auto o = profile_invocation::open_known_load(i, ledger_path.string());
+    if (!o)
+      INFO(o.error().detail.code << " " << o.error().detail.message << " " << o.error().field);
+    REQUIRE(o);
+    return std::move(*o);
+  }
+};
+std::string describe(const profile_preparation_error& e) {
+  return std::format("failure={}/{}/{}/{} semantic={}", e.failure.detail.code, e.failure.detail.message, e.failure.field,
+                     e.failure.detail.limit, e.semantic ? "yes" : "no");
+}
+void expect_protocol(const std::expected<profile_load_stage, profile_preparation_error>& r) {
+  REQUIRE_FALSE(r);
+  CHECK(r.error().failure.field == "profile");
+  CHECK(r.error().failure.detail.code == "internal");
+  CHECK(r.error().failure.detail.message == "Invalid external profile protocol");
+  CHECK_FALSE(r.error().semantic);
+}
+} // namespace
 TEST_CASE("X06 B3 A begin_frame is once only and blocks adoption", "[runtime][x06b3a]") {
+  // begin_frame is private; its once-only and adoption-blocking behavior is observable through prepare_load.
   b3a_fixture f;
   auto        owner = f.clean();
-  REQUIRE(owner.begin_frame());
-  auto begun = owner.observe();
-  CHECK(begun.frame_begun);
-  CHECK(begun.live);
-  auto second = owner.begin_frame();
+  CHECK_FALSE(owner.observe().frame_begun);
+  auto other = acceptance::request_intent::create_v2("req-2", "actor", std::nullopt, f.declaration.string(), f.registry.string(),
+                                                     f.profile.string());
+  REQUIRE(other);
+  auto refused = std::move(owner).prepare_load(*other);
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().failure.field == "profile");
+  CHECK_FALSE(refused.error().semantic);
+  CHECK_FALSE(owner.observe().live);
+  CHECK_FALSE(owner.observe().frame_begun);
+  auto second = std::move(owner).prepare_load(f.intent());
   REQUIRE_FALSE(second);
-  CHECK(second.error().field == "profile");
-  auto after = owner.observe();
-  CHECK(after.frame_begun);
-  CHECK(after.instructions == begun.instructions);
-  CHECK(after.native_bytes == begun.native_bytes);
+  CHECK(second.error().failure.field == "profile");
   auto ext = std::move(owner).into_extension();
   REQUIRE_FALSE(ext);
   CHECK(ext.error().field == "profile");
   CHECK_FALSE(owner.observe().consumed);
-  CHECK(owner.observe().frame_begun);
+  auto opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  CHECK_FALSE(opaque->observe().frame_begun);
+  auto not_known = std::move(*opaque).prepare_load(f.intent());
+  REQUIRE_FALSE(not_known);
+  CHECK(opaque->observe().live);
+  CHECK_FALSE(opaque->observe().frame_begun);
+  CHECK(std::move(*opaque).into_extension());
+  // A real successful frame: the owner is consumed, the stage reports the begun frame, and neither a second
+  // preparation nor adoption can succeed afterwards.
+  b3b_fixture g;
+  auto        live  = g.open();
+  auto        stage = std::move(live).prepare_load(g.intent());
+  REQUIRE(stage);
+  CHECK(stage->observe().frame_begun);
+  CHECK(stage->observe().registrations == 1);
+  expect_protocol(std::move(live).prepare_load(g.intent()));
+  auto adopted = std::move(live).into_extension();
+  REQUIRE_FALSE(adopted);
+  CHECK(adopted.error().field == "profile");
+  CHECK_FALSE(live.observe().live);
 }
 TEST_CASE("X06 B3 A into_extension adopts the same VM and receipts without recapture", "[runtime][x06b3a]") {
   b3a_fixture f;
-  auto        owner = f.clean();
+  auto        opened = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opened);
+  auto&       owner = *opened;
   auto        bytes = owner.effective_catalog().data();
   std::string copy(owner.effective_catalog());
   auto        extension = std::move(owner).into_extension();
@@ -1381,11 +1516,27 @@ TEST_CASE("X06 B3 A into_extension adopts the same VM and receipts without recap
   auto again = std::move(owner).into_extension();
   REQUIRE_FALSE(again);
   CHECK(again.error().field == "profile");
-  auto frame = owner.begin_frame();
+  auto frame = std::move(owner).prepare_load(f.intent());
   REQUIRE_FALSE(frame);
+  CHECK(frame.error().failure.field == "profile");
   f.admit(*extension);
   REQUIRE(extension->prepare_history());
   REQUIRE(extension->verify());
+  // Adoption evidence on an opaque owner whose declaration is never read: same catalog bytes, one registration before
+  // and after, and no admission read of the watched declaration. The interposer tracks one inode, so only the
+  // declaration is watched here.
+  b3b_fixture g;
+  watch_path(g.declaration);
+  auto other = profile_invocation::open_opaque(g.profile.string());
+  REQUIRE(other);
+  auto other_bytes = other->effective_catalog().data();
+  CHECK(other->observe().registrations == 1);
+  auto adopted = std::move(*other).into_extension();
+  REQUIRE(adopted);
+  CHECK(adopted->effective_catalog().data() == other_bytes);
+  CHECK(other->observe().consumed);
+  CHECK(other->observe().registrations == 1);
+  CHECK(planar_admission_read_attempts() == 0);
 }
 TEST_CASE("X06 B3 A opaque owner adopts into a working extension", "[runtime][x06b3a]") {
   b3a_fixture f;
@@ -1417,10 +1568,506 @@ TEST_CASE("X06 B3 A public validate_profile keeps its cumulative public semantic
     CHECK(first.error().detail.code == retry.error().detail.code);
   // The owner exposes no VM accessor, so no public call can run inside its active frame.
   static_assert(!has_vm_accessor<profile_invocation>);
-  auto owner = f.clean();
-  REQUIRE(owner.begin_frame());
+  auto owner  = f.clean();
   auto before = owner.observe();
+  CHECK_FALSE(before.frame_begun);
   owner.observe();
   auto moved = std::move(owner);
   CHECK(moved.observe().instructions == before.instructions);
+}
+TEST_CASE("X06 B3 B known-load owner refuses into_extension terminally-free and stays usable", "[runtime][x06b3b]") {
+  b3a_fixture f;
+  auto        owner = f.clean();
+  auto        first = std::move(owner).into_extension();
+  REQUIRE_FALSE(first);
+  CHECK(first.error().field == "profile");
+  auto seen = owner.observe();
+  CHECK(seen.live);
+  CHECK_FALSE(seen.consumed);
+  CHECK(seen.known_load);
+  CHECK(owner.catalog());
+  auto second = std::move(owner).into_extension();
+  REQUIRE_FALSE(second);
+  CHECK(second.error().field == first.error().field);
+  CHECK(second.error().detail.code == first.error().detail.code);
+  CHECK(second.error().detail.message == first.error().detail.message);
+  CHECK(owner.observe().live);
+  CHECK_FALSE(owner.observe().consumed);
+  CHECK(owner.catalog());
+  auto opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  auto adopted = std::move(*opaque).into_extension();
+  REQUIRE(adopted);
+  CHECK(opaque->observe().consumed);
+}
+TEST_CASE("X06 B3 B owner implementation allocation is charged identically by both factories", "[runtime][x06b3b]") {
+  // No VM-only native_bytes counter is observable, so the charge itself cannot be isolated here; this asserts the
+  // observable invariant: both factories charge the identical amount (equal, nonzero, and repeatable).
+  b3a_fixture f;
+  auto        known  = f.clean();
+  auto        again  = f.clean();
+  auto        opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  CHECK(known.observe().native_bytes > 0);
+  CHECK(known.observe().native_bytes == opaque->observe().native_bytes);
+  CHECK(known.observe().native_bytes == again.observe().native_bytes);
+}
+TEST_CASE("X06 B3 B owner allocation charge is observable and covers the owner's own storage", "[runtime][x06b3b]") {
+  // The factory charge for the owner allocation is reported separately, so removing it from either factory is detected.
+  // Lower bound from public types: the owner holds at least a capture and a VM, plus the fixed 64 byte allowance.
+  constexpr std::size_t floor = sizeof(profile_capture) + sizeof(command_vm) + 64;
+  b3a_fixture           f;
+  auto                  known  = f.clean();
+  auto                  opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  CHECK(known.observe().owner_charge >= floor);
+  CHECK(opaque->observe().owner_charge >= floor);
+  CHECK(known.observe().owner_charge == opaque->observe().owner_charge);
+  CHECK(known.observe().native_bytes > known.observe().owner_charge);
+}
+TEST_CASE("X06 B3 B prepare_load succeeds through phase 2 for custom and mixed jobs", "[runtime][x06b3b]") {
+  for (auto [combined, split] : {std::pair{true, true}, std::pair{false, true}, std::pair{false, false}}) {
+    b3b_fixture f(b3b_fixture::default_body(), combined, split);
+    auto        owner  = f.open();
+    auto        before = owner.observe();
+    auto        stage  = std::move(owner).prepare_load(f.intent());
+    if (!stage)
+      INFO(describe(stage.error()));
+    REQUIRE(stage);
+    auto seen = stage->observe();
+    CHECK(seen.live);
+    CHECK(seen.frame_begun);
+    CHECK(seen.sealed);
+    CHECK(seen.bundle_retained);
+    CHECK(seen.model_retained);
+    CHECK(seen.jobs == 2);
+    CHECK(seen.shape_dispatches == f.custom_jobs);
+    CHECK(seen.instructions > 0);
+    CHECK(seen.instructions > before.instructions);
+    CHECK(seen.registrations == 1);
+    CHECK_FALSE(owner.observe().live);
+    // Observation performs no filesystem access after the seal.
+    // The interposer tracks one inode and each watch_path resets the counter: watch the declaration alone.
+    watch_path(f.declaration);
+    (void)stage->observe();
+    CHECK(planar_admission_read_attempts() == 0);
+    watch_path(f.registry);
+    (void)stage->observe();
+    CHECK(planar_admission_read_attempts() == 0);
+    auto moved = std::move(*stage);
+    CHECK_FALSE(stage->observe().live);
+    CHECK(moved.observe().live);
+    CHECK(moved.observe().shape_dispatches == f.custom_jobs);
+    auto& self = moved;
+    moved      = std::move(self);
+    CHECK(moved.observe().live);
+  }
+}
+TEST_CASE("X06 B3 B prepare_load reads the declaration through the watched interposer", "[runtime][x06b3b]") {
+  // Positive control for the zero-read assertions: the same watch on the same fixture does see admission reads.
+  b3b_fixture f;
+  auto        owner = f.open();
+  watch_path(f.declaration);
+  auto stage = std::move(owner).prepare_load(f.intent());
+  REQUIRE(stage);
+  CHECK(planar_admission_read_attempts() > 0);
+}
+TEST_CASE("X06 B3 B an invalid unselected job fails all-job validation and publishes nothing", "[runtime][x06b3b]") {
+  b3b_fixture f(b3b_fixture::default_body(), true, false);
+  replace_in_file(f.workspace_dir / "split.lua", "work = L { \"library\" } },\n    { id = \"cli_worker\"",
+                  "work = L { \"nosuch\" } },\n    { id = \"cli_worker\"");
+  auto owner = f.open();
+  auto r     = std::move(owner).prepare_load(f.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  REQUIRE(r.error().semantic);
+  CHECK(r.error().semantic->kind == value_kind::record);
+  CHECK(r.error().semantic->fields.contains("code"));
+  CHECK(r.error().failure.detail.code.empty());
+  CHECK(r.error().failure.field.empty());
+  CHECK_FALSE(owner.observe().live);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+}
+TEST_CASE("X06 B3 B a route phase refusal is ordinary semantic data before any job is captured", "[runtime][x06b3b]") {
+  // The workspace declaration itself is invalid, so the trusted route phase (phase 8) answers with a semantic error.
+  {
+    // Positive control: with a valid declaration the same watch observes specification reads during preparation.
+    b3b_fixture control;
+    auto        controlled = control.open();
+    watch_path(control.workspace_dir / "spec.lua");
+    REQUIRE(std::move(controlled).prepare_load(control.intent()));
+    REQUIRE(planar_admission_read_attempts() > 0);
+  }
+  b3b_fixture f;
+  replace_in_file(f.declaration, "toolchains = L { \"python\" }", "toolchains = L { \"python\", \"python\" }");
+  auto owner = f.open();
+  watch_path(f.workspace_dir / "spec.lua");
+  auto r = std::move(owner).prepare_load(f.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  REQUIRE(r.error().semantic);
+  CHECK(r.error().semantic->kind == value_kind::record);
+  CHECK(r.error().semantic->fields.contains("code"));
+  CHECK(r.error().failure.detail.code.empty());
+  CHECK(r.error().failure.field.empty());
+  // Phase 8 refused before source capture read the specification or any job, and before shape dispatch.
+  CHECK(planar_admission_read_attempts() == 0);
+  CHECK_FALSE(owner.observe().live);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+}
+TEST_CASE("X06 B3 B a declaration the bound source cannot open refuses with its native diagnostic", "[runtime][x06b3b]") {
+  // The declaration content is first read when prepare_load opens the bound source, after both profile checks pass.
+  // A declaration that fails to load there must surface the native diagnostic under the profile field, not the
+  // generic protocol refusal, and must not reach the route phase.
+  b3b_fixture f;
+  put(f.declaration, "this is not a workspace declaration (");
+  auto owner = f.open();
+  auto r     = std::move(owner).prepare_load(f.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  CHECK(r.error().failure.field == "profile");
+  CHECK(r.error().failure.detail.code == "lua_syntax");
+  CHECK(r.error().failure.detail.message == "Invalid Lua text chunk");
+  CHECK_FALSE(r.error().semantic);
+  CHECK_FALSE(r.error().cleanup_ran);
+  CHECK_FALSE(owner.observe().live);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+}
+TEST_CASE("X06 B3 B a custom job refusal after earlier shape dispatch is ordinary semantic data", "[runtime][x06b3b]") {
+  b3b_fixture f("if input.job.id=='split' then return {ok=false,error={code='schema',message='refused'}} end " +
+                b3b_fixture::default_body());
+  auto        owner = f.open();
+  auto        r     = std::move(owner).prepare_load(f.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  CHECK(r.error().semantic);
+  CHECK_FALSE(owner.observe().live);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+}
+TEST_CASE("X06 B3 B every job is validated exactly once", "[runtime][x06b3b]") {
+  b3b_fixture                f;
+  std::optional<std::size_t> instructions, bytes;
+  for (int round = 0; round < 3; ++round) {
+    auto owner = f.open();
+    auto stage = std::move(owner).prepare_load(f.intent());
+    REQUIRE(stage);
+    auto seen = stage->observe();
+    CHECK(seen.shape_dispatches == f.custom_jobs);
+    CHECK(seen.jobs == f.custom_jobs);
+    if (!instructions) {
+      instructions = seen.instructions;
+      bytes        = seen.native_bytes;
+    }
+    CHECK(seen.instructions == *instructions);
+    CHECK(seen.native_bytes == *bytes);
+  }
+}
+TEST_CASE("X06 B3 B declaration leaf replaced before prepare_load refuses terminally before content", "[runtime][x06b3b]") {
+  for (bool registry_file : {false, true}) {
+    b3b_fixture f;
+    auto        owner  = f.open();
+    auto        target = registry_file ? f.registry : f.declaration;
+    auto        fresh  = target;
+    fresh += ".new";
+    put(fresh, read_file_bytes(target));
+    watch_path(fresh);
+    std::filesystem::rename(fresh, target);
+    auto r = std::move(owner).prepare_load(f.intent());
+    REQUIRE_FALSE(r);
+    INFO(describe(r.error()));
+    CHECK(r.error().failure.detail.code == "capture_changed");
+    CHECK(r.error().failure.field == "profile");
+    CHECK_FALSE(r.error().semantic);
+    CHECK_FALSE(r.error().cleanup_ran);
+    CHECK(planar_admission_read_attempts() == 0);
+    CHECK_FALSE(owner.observe().live);
+    expect_protocol(std::move(owner).prepare_load(f.intent()));
+  }
+}
+TEST_CASE("X06 B3 B final intent must equal the bound intent", "[runtime][x06b3b]") {
+  b3b_fixture f;
+  struct variant {
+    std::string                name;
+    acceptance::request_intent intent;
+  };
+  std::vector<variant> variants;
+  variants.push_back({"request id", f.intent("req-2")});
+  variants.push_back({"actor", f.intent("req-1", "other")});
+  variants.push_back({"expected head", f.intent("req-1", "actor", 7)});
+  variants.push_back({"profile", f.intent("req-1", "actor", std::nullopt, {}, (f.root / "trusted/other.json").string())});
+  variants.push_back({"workspace", f.intent("req-1", "actor", std::nullopt, (f.workspace_dir / "other.lua").string())});
+  for (auto& v : variants) {
+    INFO(v.name);
+    auto owner = f.open();
+    auto r     = std::move(owner).prepare_load(v.intent);
+    expect_protocol(r);
+    CHECK_FALSE(owner.observe().live);
+    expect_protocol(std::move(owner).prepare_load(f.intent()));
+  }
+  // An equal freshly created intent succeeds.
+  auto owner = f.open();
+  CHECK(std::move(owner).prepare_load(f.intent()));
+}
+TEST_CASE("X06 B3 B opaque consumed failed and moved-from owners refuse prepare_load", "[runtime][x06b3b]") {
+  b3b_fixture f;
+  auto        opaque = profile_invocation::open_opaque(f.profile.string());
+  REQUIRE(opaque);
+  expect_protocol(std::move(*opaque).prepare_load(f.intent()));
+  CHECK(opaque->observe().live);
+  CHECK_FALSE(opaque->observe().frame_begun);
+  CHECK(std::move(*opaque).into_extension());
+  expect_protocol(std::move(*opaque).prepare_load(f.intent()));
+  auto known = f.open();
+  auto moved = std::move(known);
+  expect_protocol(std::move(known).prepare_load(f.intent()));
+  auto stage = std::move(moved).prepare_load(f.intent());
+  REQUIRE(stage);
+  expect_protocol(std::move(moved).prepare_load(f.intent()));
+  auto failed = f.open();
+  expect_protocol(std::move(failed).prepare_load(f.intent("req-9")));
+  expect_protocol(std::move(failed).prepare_load(f.intent()));
+  CHECK_FALSE(failed.observe().live);
+  CHECK_FALSE(std::move(failed).into_extension());
+}
+TEST_CASE("X06 B3 B one frame cumulative counters never reset", "[runtime][x06b3b]") {
+  b3b_fixture f;
+  auto        owner  = f.open();
+  auto        before = owner.observe();
+  CHECK_FALSE(before.frame_begun);
+  CHECK(before.instructions > 0);
+  auto stage = std::move(owner).prepare_load(f.intent());
+  REQUIRE(stage);
+  auto after = stage->observe();
+  CHECK(after.frame_begun);
+  CHECK(after.instructions > before.instructions);
+  CHECK(after.native_bytes > before.native_bytes);
+  CHECK(after.registrations == before.registrations);
+  auto twin = f.open();
+  auto next = std::move(twin).prepare_load(f.intent());
+  REQUIRE(next);
+  CHECK(next->observe().instructions == after.instructions);
+  CHECK(next->observe().native_bytes == after.native_bytes);
+  // The owner cannot start another frame: it is moved-from.
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+}
+TEST_CASE("X06 B3 B cumulative instruction exhaustion preserves the first error and cleans nested roots", "[runtime][x06b3b]") {
+  b3b_fixture f("local n=0; for i=1,B3B_LOOP do n=n+1 end; " + b3b_fixture::default_body());
+  replace_in_file(f.module, "B3B_LOOP", "30000000");
+  auto owner  = f.open();
+  auto before = owner.observe();
+  auto r      = std::move(owner).prepare_load(f.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  CHECK_FALSE(r.error().semantic);
+  CHECK(r.error().failure.detail.code == "resource_limit");
+  CHECK(r.error().failure.detail.limit == "instructions");
+  CHECK(r.error().failure.detail.maximum == 100000000);
+  CHECK(r.error().failure.field == "catalog.shapes[1]");
+  CHECK_FALSE(owner.observe().live);
+  CHECK(owner.observe().instructions == 0);
+  CHECK(r.error().cleanup_ran);
+  CHECK(r.error().peak_temporary_entries > 0);
+  CHECK(r.error().temporary_entries_after_release == 0);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+  CHECK(before.instructions < 100000000);
+  // A single custom job under the same body fits, proving the second dispatch is what exhausts the cumulative budget.
+  b3b_fixture single("local n=0; for i=1,B3B_LOOP do n=n+1 end; " + b3b_fixture::default_body(), false, true);
+  replace_in_file(single.module, "B3B_LOOP", "30000000");
+  auto one = single.open();
+  auto ok  = std::move(one).prepare_load(single.intent());
+  REQUIRE(ok);
+  CHECK(ok->observe().instructions > before.instructions);
+  CHECK(ok->observe().instructions < 100000000);
+}
+TEST_CASE("X06 B3 B capture change before prepare_load refuses capture_changed with zero declaration reads",
+          "[runtime][x06b3b]") {
+  // Same-length edits of captured state that the declaration and registry leaf checks cannot see.
+  for (int which = 0; which < 4; ++which) {
+    INFO("iteration " << which);
+    b3b_fixture f;
+    auto        owner = f.open();
+    if (which == 0)
+      replace_in_file(f.module, "help='shape'", "help='shapf'");
+    else if (which == 1)
+      put(f.profile, R"({"modules":["module.lua"],"version":1})");
+    else if (which == 3) {
+      // Same-size, same-mtime content edit of a captured module: only the content reverification can observe it.
+      const auto stamp = std::filesystem::last_write_time(f.module);
+      replace_in_file(f.module, "help='shape'", "help='shapf'");
+      std::filesystem::last_write_time(f.module, stamp);
+    } else {
+      auto fresh = f.ledger_path;
+      fresh += ".new";
+      put(fresh, read_file_bytes(f.ledger_path));
+      std::filesystem::rename(fresh, f.ledger_path);
+    }
+    watch_path(f.declaration);
+    auto r = std::move(owner).prepare_load(f.intent());
+    REQUIRE_FALSE(r);
+    INFO(describe(r.error()));
+    CHECK(r.error().failure.detail.code == "capture_changed");
+    CHECK(r.error().failure.field == "profile");
+    CHECK_FALSE(r.error().semantic);
+    CHECK_FALSE(r.error().cleanup_ran);
+    CHECK(planar_admission_read_attempts() == 0);
+    CHECK_FALSE(owner.observe().live);
+    expect_protocol(std::move(owner).prepare_load(f.intent()));
+  }
+}
+TEST_CASE("X06 B3 B one cumulative instruction and native byte budget spans route validation and preparation",
+          "[runtime][x06b3b]") {
+  b3b_fixture f;
+  auto        owner  = f.open();
+  auto        before = owner.observe();
+  auto        stage  = std::move(owner).prepare_load(f.intent());
+  REQUIRE(stage);
+  auto        seen = stage->observe();
+  const auto& i    = seen.instruction_marks;
+  const auto& n    = seen.native_byte_marks;
+  // begin_invocation restarts the instruction counter once at the frame start, so mark 0 may be below the owner value.
+  CHECK(i[0] < i[1]);
+  CHECK(i[1] <= i[2]);
+  CHECK(i[2] < i[3]);
+  CHECK(i[3] <= seen.instructions);
+  CHECK(i[1] > before.instructions);
+  CHECK(before.native_bytes <= n[0]);
+  CHECK(n[0] < n[1]);
+  CHECK(n[1] < n[2]);
+  CHECK(n[2] < n[3]);
+  CHECK(n[3] < seen.native_bytes);
+  // F-dominated case: one loop-heavy custom job succeeds and its cost lands between the validation marks.
+  b3b_fixture single("local n=0; for i=1,B3B_LOOP do n=n+1 end; " + b3b_fixture::default_body(), false, true);
+  replace_in_file(single.module, "B3B_LOOP", "30000000");
+  auto one = std::move(single.open()).prepare_load(single.intent());
+  REQUIRE(one);
+  auto heavy = one->observe();
+  CHECK(heavy.instruction_marks[3] >= heavy.instruction_marks[2] + 30000000);
+  CHECK(heavy.instructions >= heavy.instruction_marks[3]);
+  CHECK(heavy.instructions < 100000000);
+}
+TEST_CASE("X06 B3 B success releases nested temporaries to the exact pre invocation membership", "[runtime][x06b3b]") {
+  for (auto [combined, split] : {std::pair{true, true}, std::pair{false, true}, std::pair{false, false}}) {
+    b3b_fixture f(b3b_fixture::default_body(), combined, split);
+    auto        owner  = f.open();
+    auto        before = owner.observe();
+    CHECK(before.temporary_entries == 0);
+    auto stage = std::move(owner).prepare_load(f.intent());
+    REQUIRE(stage);
+    auto seen = stage->observe();
+    CHECK(seen.shape_dispatches == f.custom_jobs);
+    CHECK(seen.baseline_before_route);
+    CHECK(seen.cleanup_ran);
+    if (f.custom_jobs > 0)
+      CHECK(seen.peak_temporary_entries > 0);
+    CHECK(seen.temporary_entries == 0);
+    CHECK(seen.tag_entries == before.tag_entries);
+    CHECK(seen.backing_entries == before.backing_entries);
+  }
+}
+TEST_CASE("X06 B3 B failure paths release nested temporaries", "[runtime][x06b3b]") {
+  struct scenario {
+    std::string name;
+    std::string body;
+    bool        invalid_unselected;
+    bool        long_loop;
+  };
+  for (const auto& sc : {scenario{"native F error", "error('shape failure')", false, false},
+                         scenario{"invalid unselected job", b3b_fixture::default_body(), true, false},
+                         scenario{"instruction exhaustion",
+                                  "local n=0; for i=1,B3B_LOOP do n=n+1 end; " + b3b_fixture::default_body(), false, true}}) {
+    INFO(sc.name);
+    b3b_fixture f(sc.body, true, !sc.invalid_unselected);
+    if (sc.long_loop)
+      replace_in_file(f.module, "B3B_LOOP", "30000000");
+    if (sc.invalid_unselected)
+      replace_in_file(f.workspace_dir / "split.lua", "work = L { \"library\" } },\n    { id = \"cli_worker\"",
+                      "work = L { \"nosuch\" } },\n    { id = \"cli_worker\"");
+    auto owner = f.open();
+    auto r     = std::move(owner).prepare_load(f.intent());
+    REQUIRE_FALSE(r);
+    INFO(describe(r.error()));
+    CHECK(r.error().cleanup_ran);
+    CHECK(r.error().peak_temporary_entries > 0);
+    CHECK(r.error().temporary_entries_after_release == 0);
+    CHECK_FALSE(owner.observe().live);
+  }
+  // Refusals before the frame begins run no cleanup.
+  b3b_fixture g;
+  auto        owner = g.open();
+  auto        early = std::move(owner).prepare_load(g.intent("req-other"));
+  REQUIRE_FALSE(early);
+  CHECK_FALSE(early.error().cleanup_ran);
+}
+TEST_CASE("X06 B3 B profile frame branches stay reachable and first terminal native failures are preserved",
+          "[runtime][x06b3b]") {
+  // Nested F execution failure (non-resource): the retained call fails inside the profile frame and stays terminal.
+  b3b_fixture f("error('shape failure')");
+  auto        owner = f.open();
+  auto        r     = std::move(owner).prepare_load(f.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  CHECK_FALSE(r.error().semantic);
+  CHECK(r.error().failure.field == "catalog.shapes[1]");
+  CHECK_FALSE(owner.observe().live);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+  // Unregistered shape selected by a job: trusted phase 0 refuses as ordinary data before any F dispatch.
+  b3b_fixture g;
+  replace_in_file(g.workspace_dir / "split.lua", "shape = \"custom\"", "shape = \"nonexistent\"");
+  auto missing = std::move(g.open()).prepare_load(g.intent());
+  REQUIRE_FALSE(missing);
+  INFO(describe(missing.error()));
+  CHECK(missing.error().semantic);
+}
+TEST_CASE("X06 B3 B prepare_load reverifies captured profile content exactly three times", "[runtime][x06b3b]") {
+  b3b_fixture f;
+  auto        owner = f.open();
+  // Each content verification reads the selected module twice (profile reverification is two-pass), so exactly three
+  // verifications give six reads. This asserts the count only; the order of the verifications is not observable here.
+  watch_path(f.module);
+  auto stage = std::move(owner).prepare_load(f.intent());
+  REQUIRE(stage);
+  CHECK(planar_admission_read_attempts() == 6);
+}
+TEST_CASE("X06 B3 B exhaustion depends on route consumption because the instruction budget is one cumulative counter",
+          "[runtime][x06b3b]") {
+  // Calibration (Debug, default body, one custom job, loop `for i=1,N do n=n+1 end` in the custom shape):
+  //   route (marks[1]-marks[0]) = 9000 instructions, independent of N;
+  //   validation + preparation (marks[3]-marks[2]) = 121000 + 2*N instructions (measured at N = 1000, 1e6, 2e6:
+  //   123000, 2121000, 4121000).
+  // The heavy N below makes validation alone 99995000 (< 100000000) while route + validation is 100004000, so only
+  // a budget that carries the route's consumption into validation can exhaust.
+  constexpr int          heavy_n = 49937000;
+  constexpr int          light_n = 49927000;
+  constexpr std::int64_t budget  = 100000000;
+  auto                   body    = [](int n) {
+    return std::string("local n=0; for i=1,") + std::to_string(n) + " do n=n+1 end; " + b3b_fixture::default_body();
+  };
+  // Light variant: route + validation fits; each phase and the total stay below the budget.
+  b3b_fixture light(body(light_n), false, true);
+  auto        ok = std::move(light.open()).prepare_load(light.intent());
+  if (!ok)
+    INFO(describe(ok.error()));
+  REQUIRE(ok);
+  const auto seen  = ok->observe();
+  const auto route = seen.instruction_marks[1] - seen.instruction_marks[0];
+  const auto valid = seen.instruction_marks[3] - seen.instruction_marks[2];
+  CHECK(route > 0);
+  CHECK(seen.instructions < budget);
+  CHECK(valid < budget);
+  // Validation alone for the heavy variant: the light measurement plus the extra loop iterations at 2 per iteration.
+  const auto heavy_valid = valid + 2 * static_cast<std::int64_t>(heavy_n - light_n);
+  CHECK(heavy_valid < budget);
+  CHECK(heavy_valid + route > budget);
+  // Heavy variant: the same fixture shape with a slightly longer loop exhausts only because route cost is counted.
+  b3b_fixture heavy(body(heavy_n), false, true);
+  auto        owner  = heavy.open();
+  auto        before = owner.observe();
+  auto        r      = std::move(owner).prepare_load(heavy.intent());
+  REQUIRE_FALSE(r);
+  INFO(describe(r.error()));
+  CHECK_FALSE(r.error().semantic);
+  CHECK(r.error().failure.detail.code == "resource_limit");
+  CHECK(r.error().failure.detail.limit == "instructions");
+  CHECK(r.error().failure.detail.maximum == 100000000);
+  CHECK(before.instructions < budget);
 }
