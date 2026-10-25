@@ -45,12 +45,20 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    the run. A round whose changes are applied but whose gate failed resumes as a
    `repair` run: no new mapping, just the repair coder and the gate.
 5. A mutation prober (Sonnet 5.5, medium) breaks each acceptance invariant in a
-   scratch copy outside the checkout and records which mutants no test catches
-   (`tests/native/<round>-evidence/probes/PROBES.md`). Survivors go back to the
-   repair coder, then the gate and prober rerun once before review.
-6. The reviewer returns `approve`, `request-changes` or `blocked`, writing
+   scratch copy outside the checkout, names the mutant that fails each new test
+   (red-first), and records the results with one raw log per mutant
+   (`tests/native/<round>-evidence/probes/PROBES.md` and `probes/raw/`). Earlier
+   probe generations move to `probes/superseded-<n>/`; raw logs are never deleted.
+   Survivors go back to the repair coder, then the gate and prober rerun once.
+   Only the prober applies mutants: coders and repair coders never mutate, stash
+   or revert files in the checkout or `build/rewrite-debug`, and do not add public
+   product fields only for observability unless the round record allows it.
+6. Before review, the coordinator syncs the round record to the final candidate
+   (identity hashes, test counts, probe results, repairs and amendments), so no
+   section describes an earlier candidate.
+7. The reviewer returns `approve`, `request-changes` or `blocked`, writing
    `rounds/<id>-review.md`.
-7. The coordinator records the outcome, updates the roadmap's current status and,
+8. The coordinator records the outcome, updates the roadmap's current status and,
    on approval, commits.
 
 All agents work in the main checkout on `dev/planar-v2-vernacular`; no separate
