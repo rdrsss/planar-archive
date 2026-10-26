@@ -1,21 +1,21 @@
 /// @file acceptance.cppm
 /// @brief Atomic completion of one prepared embedded acceptance over native storage, with exact replay resolved before candidate inspection.
 ///
-/// Entry points are the two `complete_acceptance` overloads. Failures use the shared redacted `format_error` vocabulary;
-/// the receipt overload retains authoritative completion evidence. This module imports storage, completion and the
-/// prepared/intent modules only: never runtime or format.
+/// Entry points are the two `complete_acceptance` overloads, plus the prepared-profile overload re-exported from the
+/// profile partition. Failures use the shared redacted `format_error` vocabulary; the receipt overload retains
+/// authoritative completion evidence. The shared transaction body lives in an internal partition that this interface
+/// imports but never re-exports; shared state is none (thread-confined per call).
 export module planar.engine.ledger.acceptance;
 import std;
 export import planar.engine.ledger.storage_types;
 export import planar.engine.ledger.completion;
 export import planar.engine.acceptance.prepared;
 import planar.engine.ledger.storage;
+import :seam;
+export import :profile;
 export namespace planar::engine::ledger {
-/// Exact committed response bytes, buffered until commit succeeds.
-struct acceptance_result {
-  std::string result;   ///< Original canonical saved JSON bytes.
-  bool        replayed; ///< True only for an exact previously committed request.
-};
+/// Exact committed response bytes (defined by the internal partition, re-exported here).
+using ::planar::engine::ledger::acceptance_result;
 /// @brief Complete one prepared acceptance atomically, resolving exact replay before inspecting the candidate.
 /// @param path Explicit existing ledger path.
 /// @param intent Immutable validated request and expected revision.

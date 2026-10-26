@@ -570,6 +570,18 @@ Product format dependencies include native prepared/capture and pure codecs; Lua
 the loader and higher interpretation wrappers remain outside that link graph.
 No public acceptance orchestration or CLI is added by this storage API.
 
+V5-02-X06-C adds a third overload, `complete_acceptance(path, intent, profile)`,
+taking the opaque runtime `prepared_profile`. It lives in the re-exported
+`:profile` partition of `planar.engine.ledger.acceptance`, so callers keep the
+single import. The embedded and profile overloads are thin adapters over one
+shared transaction body in the non-exported `:seam` partition, whose entities sit
+in a nested internal namespace that no exported type is associated with; code
+outside the module can neither import nor name it, and a source-scan test confirms
+that only the two adapters call it. The profile overload preserves the same
+replay, conflict, format, CAS, error, receipt and uncertainty order as the
+embedded one, checks the source and profile receipts immediately before COMMIT,
+and runs no Lua while the write transaction is open.
+
 The R14-D7-A overload takes the prelude's expected ledger identity and an initially
 empty shared `completion_receipt`. It compares identity before locked request lookup,
 refusing replacement with `unsafe_path`. Exact replay moves saved bytes into the

@@ -15,17 +15,17 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 
 - **Approved through:** R01-R14 (D8), V5-01, V5-02 A/B/C, X01-X05 (C5),
   X06-A1/A2/A3, the [X06-A4 architecture plus C01](profile-preparation-architecture.md)
-  documentation, X06-B1 (with C01), X06-B2 (with C01, C02) and
-  [X06-B3](rounds/V5-02-X06-B3.md) A, B and [C](rounds/V5-02-X06-B3-C.md) native v2
-  derivation and `prepared_profile`, with correctives
-  [C01](rounds/V5-02-X06-B3-C-C01.md) and [C02](rounds/V5-02-X06-B3-C-C02.md)
-  ([review](rounds/V5-02-X06-B3-C-C02-review.md)), all committed. Debug 1003/1003
-  (macOS Debug only). Recorded profile histories verify and replay saved
-  accepted/noop requests; fresh profile acceptance still refuses.
+  documentation, X06-B1 (with C01), X06-B2 (with C01, C02), X06-B3 A, B and C
+  (with C01, C02), and [X06-C](rounds/V5-02-X06-C.md) native profile transactions with
+  correctives [C01](rounds/V5-02-X06-C-C01.md) to [C04](rounds/V5-02-X06-C-C04.md)
+  ([review](rounds/V5-02-X06-C-C04-review.md), approved on the records re-check
+  2026-10-26), all committed. Debug 1041/1041 (macOS Debug only). The profile
+  overload of `complete_acceptance` is internal; the shared seam is a non-exported
+  partition (operator decisions 2026-10-26). Public `init` still creates format1.
 - **In review:** nothing.
 - **Latest complete approved gate:** macOS Debug and RelWithDebInfo, **876/876**
   each, zero failures/errors/skips/disabled ([X05-C5 review](rounds/V5-02-X05-C5-review.md)).
-  Committed inventory is 1003 (B3-C+C02, macOS Debug only).
+  Committed inventory is 1041 (X06-C+C04, macOS Debug only).
 - **Unchanged limits:** public `init` creates format1; no RSS guarantee; Linux
   acceptance has not run.
 
@@ -33,8 +33,7 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 
 | Step | Scope |
 | --- | --- |
-| X06-C | Native profile transactions (per the [delivery sequence](profile-preparation-architecture.md#bounded-delivery-sequence-and-independent-gates)); carried B3-C limits: P01 survives (masked), N1 phase coverage unmeasured, N2 message "Captured inputs changed." open, #531 timing test about 15.4 s of 30 s (flake risk) |
-| X06-D | Whole-invocation budgets plus the integrated X06 gate, one round (operator amendment 2026-10-25) |
+| X06-D | Whole-invocation budgets plus the integrated X06 gate, one round (operator amendment 2026-10-25); carried limits: P01 survives (masked), N1 phase coverage unmeasured, #531 timing test about 15.5 s of 30 s (flake risk), red snapshot tracked-only, Linux not run |
 | X07 | Public cutover in one round, two waves: CLI11 envelope/parser integration (X07-A) and service/CLI admission with format2 init (X07-B) ([rows](external-profile-implementation.md#source-seams-and-bounded-implementation-rounds)) |
 | X08 | Mandatory full external-profile acceptance gate, including the actual Linux gate |
 | RA01, R15-R19 | Authoring/driver prompts, then observed-state execution (Phase 2 below) |

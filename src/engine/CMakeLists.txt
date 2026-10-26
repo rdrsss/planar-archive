@@ -169,8 +169,15 @@ planar_rewrite_module(planar_acceptance_intent
   DEPENDS planar_value planar_history_record planar_history_request_v2 TESTS acceptance/intent.t.cpp)
 
 planar_rewrite_module(planar_ledger_acceptance
-  INTERFACE ledger/acceptance.cppm SOURCES ledger/acceptance.cpp
-  DEPENDS planar_ledger_storage planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec)
+  INTERFACE ledger/acceptance.cppm ledger/acceptance_seam.cppm ledger/profile_acceptance.cppm
+  SOURCES ledger/acceptance.cpp ledger/acceptance_seam.cpp ledger/profile_acceptance.cpp
+  DEPENDS planar_runtime planar_ledger_storage planar_ledger_storage_types planar_acceptance_prepared planar_acceptance_intent
+    planar_ledger_completion planar_ledger_types planar_ledger_history_codec planar_history_tree_core
+  TESTS ledger/profile_acceptance.t.cpp ledger/profile_acceptance_seam.t.cpp TEST_TIMEOUT 60)
+target_link_libraries(planar_ledger_acceptance_tests PRIVATE planar_ledger_format planar_acceptance_prepared planar_acceptance_intent
+  planar_history_tree planar_history_read planar_source_export planar_json_codec)
+target_compile_definitions(planar_ledger_acceptance_tests PRIVATE
+  PLANAR_SCHEMA_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota")
 
 planar_rewrite_module(planar_ledger_format
   INTERFACE ledger/format.cppm SOURCES ledger/format.cpp
@@ -199,6 +206,8 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/ledger/storage.cppm"
   "${CMAKE_CURRENT_SOURCE_DIR}/ledger/acceptance.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ledger/acceptance.cppm"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ledger/acceptance_seam.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ledger/acceptance_seam.cppm"
   "${r12c2_support}/generate.py")
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 execute_process(COMMAND "${Python3_EXECUTABLE}" "${r12c2_support}/generate.py"
@@ -292,8 +301,9 @@ planar_rewrite_module(planar_atomic_storage_test
   DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
     planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_atomic_digest_test)
 planar_rewrite_module(planar_atomic_acceptance_test
-  INTERFACE "${r14c3b2_generated}/acceptance.cppm" SOURCES "${r14c3b2_generated}/acceptance.cpp"
-  DEPENDS planar_atomic_storage_test planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec)
+  INTERFACE "${r14c3b2_generated}/acceptance.cppm" "${r14c3b2_generated}/acceptance_seam.cppm"
+  SOURCES "${r14c3b2_generated}/acceptance.cpp" "${r14c3b2_generated}/acceptance_seam.cpp"
+  DEPENDS planar_atomic_storage_test planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec planar_history_tree_core)
 planar_rewrite_module(planar_atomic_format_test
   INTERFACE "${r14c3b2_generated}/format.cppm" SOURCES "${r14c3b2_generated}/format.cpp"
   DEPENDS planar_atomic_storage_test planar_ledger_storage_types planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
@@ -455,8 +465,9 @@ planar_rewrite_module(planar_metadata_storage_test
   DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
     planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_metadata_fixture)
 planar_rewrite_module(planar_metadata_acceptance_test
-  INTERFACE "${x03b2bc01_generated}/acceptance.cppm" SOURCES "${x03b2bc01_generated}/acceptance.cpp"
-  DEPENDS planar_metadata_storage_test planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec)
+  INTERFACE "${x03b2bc01_generated}/acceptance.cppm" "${x03b2bc01_generated}/acceptance_seam.cppm"
+  SOURCES "${x03b2bc01_generated}/acceptance.cpp" "${x03b2bc01_generated}/acceptance_seam.cpp"
+  DEPENDS planar_metadata_storage_test planar_ledger_storage_types planar_acceptance_intent planar_acceptance_prepared planar_ledger_completion planar_ledger_types planar_ledger_history_codec planar_history_tree_core)
 planar_rewrite_module(planar_metadata_format_test
   INTERFACE "${x03b2bc01_generated}/format.cppm" SOURCES "${x03b2bc01_generated}/format.cpp"
   DEPENDS planar_metadata_storage_test planar_ledger_storage_types planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec

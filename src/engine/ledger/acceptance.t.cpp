@@ -735,3 +735,348 @@ TEST_CASE("atomic native format2 acceptance history export and backup restore su
     CHECK(replay->result == *encode_load_result(result));
   }
 }
+
+namespace {
+template <class... A>
+concept embedded_completes = requires(A&&... a) { ::planar::engine::ledger::complete_acceptance(std::forward<A>(a)...); };
+} // namespace
+
+namespace {
+// Whitespace-insensitive view of a C++ unit: line comments removed, then every whitespace character dropped, so spaced or
+// split spellings of an import or export cannot evade the checks below.
+std::string squashed(const std::string& text) {
+  std::string out;
+  bool        comment = false;
+  for (std::size_t i = 0; i < text.size(); ++i) {
+    const char c = text[i];
+    if (comment) {
+      comment = c != '\n';
+      continue;
+    }
+    if (c == '/' && i + 1 < text.size() && text[i + 1] == '/') {
+      comment = true;
+      continue;
+    }
+    if (!std::isspace(static_cast<unsigned char>(c)))
+      out += c;
+  }
+  return out;
+}
+bool contains(const std::string& text, std::string_view needle) {
+  return text.find(needle) != std::string::npos;
+}
+} // namespace
+
+TEST_CASE("X06 C C01 seam is unreachable from a plain acceptance importer", "[atomic_acceptance][x06c][c01]") {
+  // A qualified name that this TU cannot see is a hard compile error, so the invisibility is checked on the interface unit
+  // this TU imports, whitespace-insensitively: the seam is imported privately and none of its names are exported.
+  const auto interface_text = read_bytes(std::filesystem::path(__FILE__).parent_path() / "acceptance.cppm");
+  REQUIRE_FALSE(interface_text.empty());
+  const auto code = squashed(interface_text);
+  CHECK(contains(code, "import:seam;"));
+  CHECK_FALSE(contains(code, "exportimport:seam"));
+  CHECK_FALSE(contains(code, "exportimportplanar.engine.ledger.acceptance_seam"));
+  CHECK_FALSE(contains(code, "planar.engine.ledger.acceptance_seam"));
+  for (const char* name : {"native_candidate", "candidate_values", "complete_native_candidate", "seam_detail"}) {
+    INFO(name);
+    CHECK_FALSE(contains(code, name));
+  }
+  // Only the two in-tree adapters (and the seam itself and these tests) may mention the seam at all: no other target,
+  // such as a command entry point, reaches it even by linking.
+  const auto                  source_root = std::filesystem::path(__FILE__).parent_path().parent_path().parent_path();
+  const std::set<std::string> allowed{"engine/ledger/acceptance_seam.cppm",   "engine/ledger/acceptance_seam.cpp",
+                                      "engine/ledger/acceptance.cppm",        "engine/ledger/acceptance.cpp",
+                                      "engine/ledger/acceptance.t.cpp",       "engine/ledger/profile_acceptance.cppm",
+                                      "engine/ledger/profile_acceptance.cpp", "engine/ledger/profile_acceptance_seam.t.cpp"};
+  // The allowed set counts eight units.
+  CHECK(allowed.size() == 8);
+  std::set<std::string> mentioning;
+  std::size_t           scanned = 0;
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(source_root)) {
+    const auto ext = entry.path().extension().string();
+    if (!entry.is_regular_file() || (ext != ".cpp" && ext != ".cppm"))
+      continue;
+    ++scanned;
+    const auto text = squashed(read_bytes(entry.path()));
+    if (contains(text, "acceptance_seam") || contains(text, ":seam") || contains(text, "native_candidate") ||
+        contains(text, "complete_native_candidate") || contains(text, "candidate_values") || contains(text, "seam_detail"))
+      mentioning.insert(std::filesystem::relative(entry.path(), source_root).generic_string());
+  }
+  CHECK(scanned > 100);
+  for (const auto& file : mentioning) {
+    INFO(file);
+    CHECK(allowed.contains(file));
+  }
+  CHECK(mentioning == allowed);
+  // Embedded entry points stay callable on the opaque prepared_acceptance.
+  STATIC_REQUIRE(embedded_completes<const std::filesystem::path&, const request_intent&, const prepared_acceptance&>);
+  STATIC_REQUIRE(embedded_completes<const std::filesystem::path&, const request_intent&, const prepared_acceptance&,
+                                    std::string_view, completion_receipt&>);
+}
+
+namespace {
+std::filesystem::path c03_source_root() {
+  return std::filesystem::path(__FILE__).parent_path().parent_path().parent_path();
+}
+std::string c03_squashed_unit(const char* relative) {
+  return squashed(read_bytes(c03_source_root() / relative));
+}
+} // namespace
+
+TEST_CASE("X06 C C03 seam is a non-exported partition of the acceptance module", "[atomic_acceptance][x06c][c03]") {
+  const auto seam_interface = c03_squashed_unit("engine/ledger/acceptance_seam.cppm");
+  CHECK(contains(seam_interface, "exportmoduleplanar.engine.ledger.acceptance:seam;"));
+  CHECK_FALSE(contains(seam_interface, "exportmoduleplanar.engine.ledger.acceptance_seam;"));
+  const auto primary = c03_squashed_unit("engine/ledger/acceptance.cppm");
+  CHECK(contains(primary, "exportmoduleplanar.engine.ledger.acceptance;"));
+  CHECK(contains(primary, "import:seam;"));
+  CHECK_FALSE(contains(primary, "exportimport:seam"));
+  const auto seam_impl = c03_squashed_unit("engine/ledger/acceptance_seam.cpp");
+  CHECK(contains(seam_impl, "moduleplanar.engine.ledger.acceptance;"));
+  CHECK_FALSE(contains(seam_impl, "moduleplanar.engine.ledger.acceptance_seam;"));
+  CHECK(contains(c03_squashed_unit("engine/ledger/acceptance.cpp"), "moduleplanar.engine.ledger.acceptance;"));
+}
+
+TEST_CASE("X06 C C03 profile adapter is a partition re-exported by the acceptance interface", "[atomic_acceptance][x06c][c03]") {
+  const auto profile = c03_squashed_unit("engine/ledger/profile_acceptance.cppm");
+  CHECK(contains(profile, "exportmoduleplanar.engine.ledger.acceptance:profile;"));
+  CHECK(contains(profile, "import:seam;"));
+  CHECK_FALSE(contains(profile, "exportimport:seam"));
+  CHECK_FALSE(contains(profile, "planar.engine.ledger.acceptance_seam"));
+  CHECK(contains(c03_squashed_unit("engine/ledger/acceptance.cppm"), "exportimport:profile;"));
+  CHECK(contains(c03_squashed_unit("engine/ledger/profile_acceptance.cpp"), "moduleplanar.engine.ledger.acceptance;"));
+}
+
+TEST_CASE("X06 C C04 seam entities live in a nested non-exported internal namespace", "[atomic_acceptance][x06c][c04]") {
+  const auto seam = c03_squashed_unit("engine/ledger/acceptance_seam.cppm");
+  CHECK(contains(seam, "namespaceseam_detail{"));
+  CHECK_FALSE(contains(seam, "exportnamespaceseam_detail"));
+  CHECK_FALSE(contains(seam, "namespaceplanar::engine::ledger::seam_detail"));
+  const auto open = seam.find("namespaceseam_detail{");
+  REQUIRE(open != std::string::npos);
+  for (const char* name : {"structcandidate_values{", "classnative_candidate{", "complete_native_candidate("}) {
+    INFO(name);
+    const auto first = seam.find(name);
+    REQUIRE(first != std::string::npos);
+    CHECK(first > open);
+  }
+  // Nothing declared inside the nested namespace may be exported: an exported nested entity would be reachable through
+  // the primary interface's import of the partition.
+  CHECK_FALSE(contains(seam.substr(open), "export"));
+  const auto impl      = c03_squashed_unit("engine/ledger/acceptance_seam.cpp");
+  const auto impl_open = impl.find("namespaceseam_detail{");
+  CHECK(impl_open != std::string::npos);
+  const auto impl_call = impl.find("complete_native_candidate(");
+  REQUIRE(impl_call != std::string::npos);
+  if (impl_open != std::string::npos)
+    CHECK(impl_call > impl_open);
+}
+
+TEST_CASE("X06 C C04 acceptance_result stays outside the internal seam namespace", "[atomic_acceptance][x06c][c04]") {
+  const auto seam = c03_squashed_unit("engine/ledger/acceptance_seam.cppm");
+  CHECK(contains(seam, "namespaceplanar::engine::ledger{exportstructacceptance_result{"));
+  CHECK(contains(seam, "boolreplayed;};namespaceseam_detail{"));
+  CHECK_FALSE(contains(seam, "exportnamespaceseam_detail"));
+  const auto primary = c03_squashed_unit("engine/ledger/acceptance.cppm");
+  CHECK_FALSE(contains(primary, "seam_detail"));
+  for (const char* name : {"native_candidate", "candidate_values", "complete_native_candidate"}) {
+    INFO(name);
+    CHECK_FALSE(contains(primary, name));
+  }
+}
+
+TEST_CASE("X06 C C04 direct seam tests live in their own implementation unit and the adapter tests import normally",
+          "[atomic_acceptance][x06c][c04]") {
+  const std::string first_name  = "X06 C C01 seam interns the registry tree with the provenance limits";
+  const std::string second_name = "X06 C seam interns an effective stdlib closure beyond the original tree limits";
+  const auto        root        = c03_source_root();
+  const auto        seam_raw    = read_bytes(root / "engine/ledger/profile_acceptance_seam.t.cpp");
+  const auto        plain_raw   = read_bytes(root / "engine/ledger/profile_acceptance.t.cpp");
+  REQUIRE_FALSE(seam_raw.empty());
+  REQUIRE_FALSE(plain_raw.empty());
+  const auto seam_unit  = squashed(seam_raw);
+  const auto plain_unit = squashed(plain_raw);
+  CHECK(contains(seam_unit, "moduleplanar.engine.ledger.acceptance;"));
+  CHECK(contains(seam_unit, "import:seam;"));
+  CHECK(contains(seam_unit, "usingnamespaceplanar::engine::ledger::seam_detail;"));
+  CHECK(contains(seam_raw, first_name));
+  CHECK(contains(seam_raw, second_name));
+  CHECK(contains(plain_unit, "importplanar.engine.ledger.acceptance;"));
+  CHECK_FALSE(contains(plain_unit, "moduleplanar.engine.ledger.acceptance;"));
+  CHECK_FALSE(contains(plain_unit, "import:seam;"));
+  CHECK_FALSE(contains(plain_raw, first_name));
+  CHECK_FALSE(contains(plain_raw, second_name));
+  for (const char* name : {"native_candidate", "complete_native_candidate", "candidate_values"}) {
+    INFO(name);
+    CHECK_FALSE(contains(plain_raw, name));
+  }
+}
+
+TEST_CASE("X06 C C03 no passkey grant or test hook vocabulary remains under src", "[atomic_acceptance][x06c][c03]") {
+  const std::string tokens[]      = {std::string("seam_") + "key", std::string("seam_") + "grant", std::string("test_") + "probe",
+                                     std::string("make_") + "key"};
+  const std::string adjacent_word = std::string("fri") + "end";
+  const std::string hook_macro    = std::string("PLANAR_") + "TEST";
+  const std::set<std::string> eight{"engine/ledger/acceptance.cppm",        "engine/ledger/acceptance.cpp",
+                                    "engine/ledger/acceptance_seam.cppm",   "engine/ledger/acceptance_seam.cpp",
+                                    "engine/ledger/acceptance.t.cpp",       "engine/ledger/profile_acceptance.cppm",
+                                    "engine/ledger/profile_acceptance.cpp", "engine/ledger/profile_acceptance_seam.t.cpp"};
+  const auto                  root = c03_source_root();
+  std::set<std::string>       offending;
+  std::size_t                 scanned = 0;
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
+    const auto ext = entry.path().extension().string();
+    if (!entry.is_regular_file() || (ext != ".cpp" && ext != ".cppm"))
+      continue;
+    ++scanned;
+    const auto raw = read_bytes(entry.path());
+    const auto rel = std::filesystem::relative(entry.path(), root).generic_string();
+    for (const auto& token : tokens)
+      if (contains(raw, token))
+        offending.insert(rel + " has " + token);
+    if (eight.contains(rel)) {
+      if (contains(raw, adjacent_word))
+        offending.insert(rel + " has " + adjacent_word);
+      if (contains(raw, hook_macro))
+        offending.insert(rel + " has " + hook_macro);
+    }
+  }
+  CHECK(scanned > 100);
+  std::string names;
+  for (const auto& n : offending)
+    names += n + "; ";
+  INFO(names);
+  CHECK(offending.empty());
+}
+
+TEST_CASE("X06 C C03 only the adapters call complete_native_candidate", "[atomic_acceptance][x06c][c03]") {
+  const std::string                  call = std::string("complete_native_") + "candidate(";
+  const auto                         root = c03_source_root();
+  std::map<std::string, std::size_t> counts;
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
+    const auto ext = entry.path().extension().string();
+    if (!entry.is_regular_file() || (ext != ".cpp" && ext != ".cppm"))
+      continue;
+    const auto  text = squashed(read_bytes(entry.path()));
+    std::size_t n    = 0;
+    for (auto at = text.find(call); at != std::string::npos; at = text.find(call, at + call.size()))
+      ++n;
+    if (n != 0)
+      counts[std::filesystem::relative(entry.path(), root).generic_string()] = n;
+  }
+  CHECK(counts["engine/ledger/acceptance.cpp"] == 2);
+  CHECK(counts["engine/ledger/profile_acceptance.cpp"] == 1);
+  CHECK(counts["engine/ledger/acceptance_seam.cppm"] == 1);
+  CHECK(counts["engine/ledger/acceptance_seam.cpp"] == 1);
+  CHECK(counts["engine/ledger/profile_acceptance_seam.t.cpp"] >= 1);
+  counts.erase("engine/ledger/acceptance.cpp");
+  counts.erase("engine/ledger/profile_acceptance.cpp");
+  counts.erase("engine/ledger/acceptance_seam.cppm");
+  counts.erase("engine/ledger/acceptance_seam.cpp");
+  counts.erase("engine/ledger/profile_acceptance_seam.t.cpp");
+  counts.erase("engine/ledger/acceptance.t.cpp"); // this file names the call in its own pins
+  std::string others;
+  for (const auto& [file, n] : counts)
+    others += file + "; ";
+  INFO(others);
+  CHECK(counts.empty());
+}
+
+TEST_CASE("X06 C C03 shared body refusal message bytes are pinned", "[atomic_acceptance][x06c][c03]") {
+  const int format = GENERATE(1, 2);
+  INFO(std::format("format={}", format));
+  const auto message = [](const auto& result, format_error_code code, std::string_view text) {
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == code);
+    CHECK(result.error().message == text);
+  };
+  temporary  t(format);
+  inputs     i;
+  const auto metadata = (format == 2 ? initialize_new_v2 : initialize_new)(t.path / "ledger", "quota");
+  REQUIRE(metadata);
+  auto candidate = prepare(t, i);
+  auto first     = accepted(t, intent(t, "first", {}), candidate);
+  // Unknown request id at a stale head.
+  message(complete_acceptance(t.path / "ledger", intent(t, "stale", {}), candidate), format_error_code::revision_conflict,
+          "Expected revision differs from current head");
+  // Same request id with different parameters.
+  message(complete_acceptance(t.path / "ledger", intent(t, "first", {}, "changed actor"), candidate),
+          format_error_code::request_conflict, "Request parameters differ from saved request");
+  // Ledger identity differs from the prelude identity.
+  completion_receipt identity_receipt;
+  message(complete_acceptance(t.path / "ledger", intent(t, "first", {}), candidate, std::string(32, '0'), identity_receipt),
+          format_error_code::unsafe_path, "Ledger identity differs from prelude");
+  // Request format differs from the ledger format.
+  auto mismatched = format == 1 ? request_intent::create_v2("unknown", "tester", {}, "/workspace", "/registry")
+                                : request_intent::create("unknown", "tester", {}, "/workspace", "/registry");
+  REQUIRE(mismatched);
+  message(complete_acceptance(t.path / "ledger", *mismatched, candidate), format_error_code::unsupported_version,
+          "Unsupported ledger format version");
+  if (format == 2) {
+    auto profile = request_intent::create_v2("profile", "tester", {}, "/workspace", "/registry", "/private/profile");
+    REQUIRE(profile);
+    message(complete_acceptance(t.path / "ledger", *profile, candidate), format_error_code::unsupported_state,
+            "Unsupported profile acceptance");
+  }
+  // A used receipt, an unavailable intent and an unavailable candidate.
+  auto               request = intent(t, "first", {});
+  completion_receipt used;
+  REQUIRE(complete_acceptance(t.path / "ledger", request, candidate, metadata->identity, used));
+  REQUIRE(used.phase == completion_phase::replayed);
+  message(complete_acceptance(t.path / "ledger", request, candidate, metadata->identity, used),
+          format_error_code::invalid_argument, "Completion receipt is already in use");
+  auto               gone_intent = intent(t, "other", 1);
+  auto               owner       = std::move(gone_intent);
+  completion_receipt fresh;
+  message(complete_acceptance(t.path / "ledger", gone_intent, candidate, metadata->identity, fresh),
+          format_error_code::invalid_argument, "Unavailable request intent");
+  auto gone = std::move(candidate);
+  message(complete_acceptance(t.path / "ledger", intent(t, "next", 1), candidate), format_error_code::invalid_argument,
+          "Unavailable prepared acceptance");
+}
+
+TEST_CASE("X06 C C03 workspace mismatch message bytes are pinned", "[atomic_acceptance][x06c][c03]") {
+  const int format = GENERATE(1, 2);
+  temporary t(format);
+  inputs    i;
+  REQUIRE((format == 2 ? initialize_new_v2 : initialize_new)(t.path / "ledger", "other"));
+  auto candidate = prepare(t, i);
+  auto result    = complete_acceptance(t.path / "ledger", intent(t, "first", {}), candidate);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == format_error_code::invalid_argument);
+  CHECK(result.error().message == "Prepared workspace differs from ledger");
+}
+
+TEST_CASE("X06 C C03 runtime product sources import only ledger completion from the ledger", "[atomic_acceptance][x06c][c03]") {
+  const auto root = c03_source_root() / "engine/runtime";
+  REQUIRE(std::filesystem::is_directory(root));
+  std::size_t           scanned = 0;
+  std::set<std::string> offending;
+  bool                  completion_seen = false;
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
+    const auto name = entry.path().filename().string();
+    if (!entry.is_regular_file() || name.ends_with(".t.cpp") ||
+        (entry.path().extension() != ".cpp" && entry.path().extension() != ".cppm"))
+      continue;
+    ++scanned;
+    const auto        text   = squashed(read_bytes(entry.path()));
+    const std::string prefix = "planar.engine.ledger.";
+    for (auto at = text.find(prefix); at != std::string::npos; at = text.find(prefix, at + prefix.size())) {
+      std::size_t end = at;
+      while (end < text.size() && (std::isalnum(static_cast<unsigned char>(text[end])) || text[end] == '_' || text[end] == '.'))
+        ++end;
+      const auto module = text.substr(at, end - at);
+      if (module == "planar.engine.ledger.completion")
+        completion_seen = true;
+      else
+        offending.insert(name + " names " + module);
+    }
+  }
+  CHECK(scanned > 0);
+  CHECK(completion_seen);
+  std::string names;
+  for (const auto& n : offending)
+    names += n + "; ";
+  INFO(names);
+  CHECK(offending.empty());
+}

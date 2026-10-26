@@ -15,20 +15,38 @@ INJECTED = ('read_guard', 'read_gate_status', 'ledger_format', 'ledger_metadata'
             'revision_row', 'event_row', 'request_row', 'event_page', 'format_error_code', 'format_error',
             'record_reference', 'stored_record', 'event_references', 'connection')
 USING = ''.join(f'\nusing ::planar::engine::ledger::{n};' for n in INJECTED) + '\nnamespace types = ::planar::engine::ledger::types;'
+# The seam interface imports storage_types only, so it cannot name the storage-only declarations.
+SEAM_ONLY_STORAGE = ('read_guard', 'read_gate_status', 'connection')
+SEAM_USING = ''.join(f'\nusing ::planar::engine::ledger::{n};' for n in INJECTED if n not in SEAM_ONLY_STORAGE) + '\nnamespace types = ::planar::engine::ledger::types;'
 # Clone storage, format and acceptance; no variant file imports the real storage/format/acceptance modules.
-for name in ('storage.cppm', 'storage.cpp', 'format.cppm', 'format.cpp', 'acceptance.cppm', 'acceptance.cpp'):
+for name in ('storage.cppm', 'storage.cpp', 'format.cppm', 'format.cpp', 'acceptance.cppm', 'acceptance.cpp',
+             'acceptance_seam.cppm', 'acceptance_seam.cpp'):
     original = (source / name).read_text()
+    if name in ('acceptance_seam.cppm', 'acceptance_seam.cpp'):
+        # The seam entities live in a nested non-exported seam_detail namespace inside the single renamed ledger namespace.
+        if original.count('namespace seam_detail {') != 1 or 'planar::engine::ledger::seam_detail' in original:
+            raise SystemExit(f'Unexpected seam_detail shape: {name}')
+        if name.endswith('.cppm') and 'export namespace' in original:
+            raise SystemExit(f'Seam interface must not use an export namespace: {name}')
     changes = []
     if name.startswith('format'):
         changes.append(('planar.engine.ledger.format;', 'planar.test.atomic_format;'))
-    if name.startswith('acceptance'):
+    if name in ('acceptance.cppm', 'acceptance.cpp', 'acceptance_seam.cpp'):
         changes.append(('planar.engine.ledger.acceptance;', 'planar.test.atomic_acceptance;'))
+    if name == 'acceptance_seam.cppm':
+        # The shared transaction body is a cloned interface partition, so it runs over the cloned storage.
+        changes.append(('planar.engine.ledger.acceptance:seam;', 'planar.test.atomic_acceptance:seam;'))
+    if name == 'acceptance.cppm':
+        # Variants never see the profile partition or the runtime; the comment keeps the substitution reversible.
+        changes.append(('export import :profile;\n', '// profile partition omitted from the generated variant\n'))
+        changes.append(('using ::planar::engine::ledger::acceptance_result;', 'using ::planar::engine::atomic_test::acceptance_result;'))
+    if name != 'acceptance_seam.cppm':
+        changes.append(('planar.engine.ledger.storage;', 'planar.test.atomic_storage;'))
     changes += [
-        ('planar.engine.ledger.storage;', 'planar.test.atomic_storage;'),
         ('namespace planar::engine::ledger {', 'namespace planar::engine::atomic_test {'),
     ]
     if name.endswith('.cppm'):
-        changes += [('namespace planar::engine::atomic_test {', 'namespace planar::engine::atomic_test {' + USING)]
+        changes += [('namespace planar::engine::atomic_test {', 'namespace planar::engine::atomic_test {' + (SEAM_USING if name == 'acceptance_seam.cppm' else USING))]
         if name == 'storage.cppm':
             # The cloned helper namespace must match the cpp definitions, which the general rename places in atomic_test::native.
             changes += [
@@ -51,7 +69,7 @@ for name in ('storage.cppm', 'storage.cpp', 'format.cppm', 'format.cpp', 'accept
 std::expected<std::int64_t, format_error> allocator_boundary(std::int64_t maximum);
 struct storage_state;
 class write_transaction;''')]
-    if mutation and name == 'acceptance.cpp':
+    if mutation and name == 'acceptance_seam.cpp':
         changes.append(("if (!candidate.verify())", "if (false)"))
     generated = original
     counts = []
@@ -59,11 +77,13 @@ class write_transaction;''')]
         count = generated.count(before)
         if before in ('digest_record(', 'digest_request_v2(') and count != 2:
             raise SystemExit(f'Expected exactly one reader and one writer digest site: {name}: {before}: {count}')
+        if before.startswith('export import :profile;') and count != 1:
+            raise SystemExit(f'Expected exactly one profile re-export: {name}: {count}')
         if not count:
             raise SystemExit(f'Missing exact substitution: {name}: {before}')
         counts.append(count)
         generated = generated.replace(before, after)
-    if name.endswith('.cppm') and 'using ::planar::engine::ledger::event_references;' not in generated:
+    if name.endswith('.cppm') and name != 'acceptance_seam.cppm' and 'using ::planar::engine::ledger::event_references;' not in generated:
         raise SystemExit(f'Missing event_references injection: {name}')
     restored = generated
     for before, after in reversed(changes):
