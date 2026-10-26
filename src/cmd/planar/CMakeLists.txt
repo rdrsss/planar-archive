@@ -79,7 +79,7 @@ foreach(variant RANGE 0 5)
   file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
   planar_rewrite_module(planar_cli_runtime_${variant}
     INTERFACE "${generated}/runtime.cppm" SOURCES "${generated}/runtime.cpp"
-    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_cli_bundle_source_${variant})
+    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_cli_bundle_source_${variant})
   planar_rewrite_module(planar_cli_invocation_${variant}
     INTERFACE "${generated}/invocation.cppm" SOURCES "${generated}/invocation.cpp"
     DEPENDS planar_command_response planar_cli_runtime_${variant} planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
@@ -135,7 +135,7 @@ string(REPLACE "${d7b_logical}" "planar/commands.lua" d7b_source_text "${d7b_sou
 file(CONFIGURE OUTPUT "${d7b_source_module}" CONTENT "${d7b_source_text}" @ONLY)
 planar_rewrite_module(planar_load_cli_probe_runtime
   INTERFACE "${d7b_generated}/runtime.cppm" SOURCES "${d7b_generated}/runtime.cpp"
-  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_cli_probe_source)
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_cli_probe_source)
 planar_rewrite_module(planar_load_cli_probe_invocation
   INTERFACE "${d7b_generated}/invocation.cppm" SOURCES "${d7b_generated}/invocation.cpp"
   DEPENDS planar_command_response planar_load_cli_probe_runtime planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)

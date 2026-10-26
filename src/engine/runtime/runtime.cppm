@@ -1,14 +1,16 @@
 /// @file
 /// @brief Bounded fresh exports and sealed invocation-local command VMs with typed native services and redacted failures;
 /// also the profile_invocation owner (open_known_load/open_opaque capture and register once; prepare_load consumes a
-/// known-load owner into a private profile_load_stage after bound capture, route, seal and all-job validation inside the
-/// one private active frame; begin_frame is private; into_extension adopts opaque owners and refuses known-load owners;
-/// observe).
+/// known-load owner into an opaque move-only prepared_profile after bound capture, route, seal, all-job validation,
+/// native correspondence and v2 interpretation derivation inside the one private active frame; prepared_profile exposes
+/// only immutable profile_acceptance_data, native receipt verification and counters; begin_frame is private;
+/// into_extension adopts opaque owners and refuses known-load owners; observe).
 export module planar.engine.runtime;
 import std;
 export import planar.engine.value;
 export import planar.engine.capture.profile;
 export import planar.engine.history.provenance_codec;
+export import planar.engine.history.interpretation_v2_codec;
 export import planar.engine.ledger.completion;
 export import planar.engine.history.read;
 import planar.engine.acceptance.intent;
@@ -205,7 +207,8 @@ struct extension_preparation_error {
 };
 class extension_invocation; ///< Original captured invocation owner, defined below.
 class profile_invocation;   ///< Original profile owner before final parsing, defined below.
-class profile_load_stage;   ///< Private non-published product of prepare_load, defined below.
+class profile_load_stage;   ///< Private internal step of prepare_load, defined below.
+class prepared_profile;     ///< Opaque published product of prepare_load, defined below.
 /// Move-only single-invocation retained trusted command VM; no global cache or job-facing API.
 /// @note Not concurrently callable. Moving preserves native ownership and Lua references; destruction releases all state.
 class command_vm {
@@ -479,10 +482,13 @@ public:
   /// are reverified before capture and after staging. Exactly one frame begins; instruction and native counters are
   /// cumulative and never reset. No selection, render, projection or history service runs.
   /// @param final_intent Final parsed load intent; no caller bundle, model or capture is accepted anywhere.
-  /// @return Opaque stage holding the sealed capture, normalized bundle and finalized model privately, or a typed error
-  /// whose `semantic` is non-null only for an ordinary trusted semantic refusal (never for a native failure).
+  /// Runs phases 4 to 6 as well: native correspondence, effective tree reassembly, v2 interpretation encoding and source
+  /// tree derivation, all charged to the same frame counters; the original receipts are reverified after derivation and the
+  /// owner is marked consumed before any fallible outward copy. Nothing from Lua or a caller supplies a digest or record.
+  /// @return Opaque prepared profile holding the original receipts and dormant VM privately plus immutable acceptance data,
+  /// or a typed error whose `semantic` is non-null only for an ordinary trusted semantic refusal (never for a native failure).
   /// @note Thread-confined. Opaque, consumed, failed and moved-from owners refuse with a protocol error at field profile.
-  std::expected<profile_load_stage, profile_preparation_error> prepare_load(const acceptance::request_intent& final_intent) &&;
+  std::expected<prepared_profile, profile_preparation_error> prepare_load(const acceptance::request_intent& final_intent) &&;
   /// @brief Transfer the original capture and VM into an extension owner without recapture or re-registration.
   /// Known-load owners are refused (adoption cannot change mode; known load goes through prepare_load and X07 extension
   /// dispatch uses opaque owners only); the refusal consumes nothing and leaves the owner usable.
@@ -506,6 +512,7 @@ public:
 private:
   struct implementation;
   friend class profile_load_stage;
+  friend class prepared_profile;
   explicit profile_invocation(std::unique_ptr<implementation> owner);
   static std::expected<void, registration_error> begin_frame(implementation& owner);
   static std::expected<void, registration_error> fail(implementation& owner, registration_error error);
@@ -535,7 +542,57 @@ public:
 private:
   struct implementation;
   friend class profile_invocation;
+  friend class prepared_profile;
   explicit profile_load_stage(std::unique_ptr<implementation> state);
+  std::unique_ptr<implementation> _impl;
+};
+/// Immutable values derived natively by prepare_load; every field is an owned value with no pointer into the VM, the
+/// normalized bundle, the model or any capture.
+struct profile_acceptance_data {
+  std::vector<history::tree_file>     source;         ///< Selected workspace declaration closure, sorted by portable path.
+  history::record_digest              source_digest;  ///< Pure source tree identity of `source`.
+  history::prepared_provenance        registry;       ///< Exactly the captured registry input.json provenance.
+  history::prepared_provenance        effective;      ///< Verified raw effective stdlib tree and its digest.
+  history::recorded_interpretation_v2 interpretation; ///< Encoded and versions bytes with decoded values (each at most 16 MiB).
+  std::string                         workspace_id;   ///< Workspace identity from the derived interpretation structure.
+  std::shared_ptr<const acceptance::request_data> bound_intent; ///< Exact intent bound when the owner was opened.
+};
+/// Opaque published product of prepare_load: the consumed owner (original receipts, dormant VM and counters), the sealed
+/// source capture and immutable derived acceptance data.
+/// Move-only with no default or public constructor; moved-from operations refuse with a typed protocol failure. Nothing
+/// accepts a prepared_profile or profile_acceptance_data as construction authority, and the dormant VM is never callable.
+/// @note Thread-confined; destruction releases the VM and all native receipts.
+class prepared_profile {
+public:
+  /// @brief Retrieve the immutable derived values; observational and never grants construction authority.
+  /// @return Shared immutable data, or a protocol failure at field profile when moved-from.
+  std::expected<std::shared_ptr<const profile_acceptance_data>, registration_error> data() const;
+  /// @brief Retrieve the exact bound intent without touching the VM.
+  /// @return Shared immutable intent, or null when moved-from.
+  std::shared_ptr<const acceptance::request_data> bound_intent() const;
+  /// @brief Repeat the original native receipt checks (source capture then profile capture) at the precommit boundary.
+  /// Runs no Lua, admits nothing, retries nothing and allocates no new receipts.
+  /// @return Success or the first failure; moved-from owners refuse as capture_changed.
+  std::expected<void, diagnostic> verify_native_receipts() const;
+  /// @brief Read counters of the retained stage without authority.
+  /// @return Snapshot; zeroed with live false when moved-from.
+  profile_load_stage_observation observe() const noexcept;
+  prepared_profile(const prepared_profile&)            = delete;
+  prepared_profile& operator=(const prepared_profile&) = delete;
+  /// @brief Transfer the stable prepared profile; the source thereafter refuses.
+  /// @param other Prepared profile to consume.
+  prepared_profile(prepared_profile&& other) noexcept;
+  /// @brief Release this prepared profile and transfer another; self-move preserves state.
+  /// @param other Prepared profile to consume.
+  /// @return This prepared profile.
+  prepared_profile& operator=(prepared_profile&& other) noexcept;
+  /// Release the VM and all native receipts.
+  ~prepared_profile();
+
+private:
+  struct implementation;
+  friend class profile_invocation;
+  explicit prepared_profile(std::unique_ptr<implementation> state);
   std::unique_ptr<implementation> _impl;
 };
 } // namespace planar::engine

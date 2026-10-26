@@ -20,6 +20,18 @@ struct source_error {
   diagnostic        detail = {}; ///< Original native diagnostic, if applicable.
 };
 
+/// Category of a load correspondence refusal.
+enum class correspondence_error_code {
+  mismatch, ///< The interpreted bundle does not correspond to the sealed capture, or the owner is not sealed.
+  capture   ///< The sealed native snapshot could not be read; detail carries the diagnostic.
+};
+
+/// Typed correspondence refusal.
+struct correspondence_error {
+  correspondence_error_code code;        ///< Refusal category.
+  diagnostic                detail = {}; ///< Native snapshot diagnostic when code is capture.
+};
+
 /// @brief Adapt a selected-declaration admission refusal to the existing load-family capture diagnostic.
 /// Intended for the future known-load factory, which admits the declaration before registration and
 /// passes profile_error::detail together with profile_capture::last_admission_refusal_was_absent().
@@ -126,4 +138,15 @@ private:
   explicit source_capture(std::unique_ptr<implementation> state);
   std::unique_ptr<implementation> _impl;
 };
+/// @brief Verify that an interpreted bundle corresponds to a sealed source capture.
+/// Checks the declaration, specification and registry file names, workspace and specification identities, the job
+/// route table and per-job identities against the original declarations, the registry identity and revision, and that
+/// every text reference in the bundle matches captured workspace bytes and the declared reference closure exactly.
+/// Requires source.sealed_ready(); does not consume or release the sealed capture and never throws.
+/// @param bundle Interpreted bundle value produced by trusted interpretation.
+/// @param source Sealed source capture owner to compare against.
+/// @return Sorted portable paths of every workspace-root file in the sealed snapshot, or mismatch when the bundle or
+/// owner state does not correspond, or capture when the snapshot cannot be read.
+std::expected<std::vector<std::string>, correspondence_error> verify_load_correspondence(const value_ptr& bundle,
+                                                                                         source_capture&  source);
 } // namespace planar::engine::acceptance

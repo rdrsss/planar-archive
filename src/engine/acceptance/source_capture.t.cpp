@@ -718,3 +718,239 @@ TEST_CASE("source capture receipt accessors report moved_from and role", "[sourc
   CHECK(r.root.moved_from());
   CHECK_FALSE(moved_root.moved_from());
 }
+
+namespace {
+value_ptr change(const value_ptr& v, std::string_view key, value_ptr replacement) {
+  auto c                      = std::make_shared<value>(*v);
+  c->fields[std::string(key)] = std::move(replacement);
+  return c;
+}
+value_ptr text_value(std::string s) {
+  auto v    = std::make_shared<value>();
+  v->kind   = value_kind::string;
+  v->string = std::move(s);
+  return v;
+}
+value_ptr list_value(std::vector<value_ptr> items) {
+  auto v   = std::make_shared<value>();
+  v->kind  = value_kind::list;
+  v->items = std::move(items);
+  return v;
+}
+bool is_text_reference(const value_ptr& v) {
+  auto k = v->fields.find("kind");
+  return v->fields.contains("file") && v->fields.contains("bytes") && k != v->fields.end() && k->second &&
+         k->second->string == "text";
+}
+void text_reference_paths(const value_ptr& v, std::set<std::string>& out) {
+  if (!v)
+    return;
+  if (is_text_reference(v))
+    out.insert(v->fields.at("file")->fields.at("path")->string);
+  for (auto& [k, c] : v->fields)
+    text_reference_paths(c, out);
+  for (auto& c : v->items)
+    text_reference_paths(c, out);
+}
+// Rewrites the first text reference found (depth first) through the supplied function; returns the rebuilt value.
+value_ptr rewrite_first_reference(const value_ptr& v, const std::function<value_ptr(const value_ptr&)>& fn, bool& done) {
+  if (!v || done)
+    return v;
+  if (is_text_reference(v)) {
+    done = true;
+    return fn(v);
+  }
+  auto c = std::make_shared<value>(*v);
+  for (auto& [k, child] : c->fields)
+    child = rewrite_first_reference(child, fn, done);
+  for (auto& child : c->items)
+    child = rewrite_first_reference(child, fn, done);
+  return c;
+}
+source_capture open_embedded_fixture(const fixture& f) {
+  auto source = source_capture::open_embedded(f.workspace.string(), f.registry.string());
+  REQUIRE(source);
+  return std::move(*source);
+}
+value_ptr interpreted_bundle(source_capture& source) {
+  auto b = success("interpret_bundle", captured_bundle(source));
+  return b->fields.at("bundle");
+}
+} // namespace
+
+TEST_CASE("source capture correspondence returns the exact sorted workspace paths for a good bundle", "[source_capture]") {
+  fixture f;
+  auto    source = open_embedded_fixture(f);
+  auto    bundle = interpreted_bundle(source);
+  auto    paths  = verify_load_correspondence(bundle, source);
+  REQUIRE(paths);
+  CHECK(std::ranges::is_sorted(*paths));
+  CHECK(std::ranges::adjacent_find(*paths) == paths->end());
+  std::vector<std::string> expected;
+  for (auto& entry : std::filesystem::recursive_directory_iterator(f.workspace_dir))
+    if (entry.is_regular_file())
+      expected.push_back(std::filesystem::relative(entry.path(), f.root).generic_string());
+  // Workspace-root snapshot paths are relative to the workspace directory; the registry is excluded.
+  for (auto& e : expected)
+    e = std::filesystem::path(e).lexically_relative("workspace").generic_string();
+  std::ranges::sort(expected);
+  CHECK(*paths == expected);
+  CHECK(paths->size() > 1);
+  CHECK(source.sealed_ready());
+  // Correspondence is read-only: repeating it gives the same answer.
+  auto again = verify_load_correspondence(bundle, source);
+  REQUIRE(again);
+  CHECK(*again == *paths);
+}
+
+TEST_CASE("source capture correspondence refuses every single bundle tamper as mismatch", "[source_capture]") {
+  fixture f;
+  auto    source = open_embedded_fixture(f);
+  auto    bundle = interpreted_bundle(source);
+  REQUIRE(verify_load_correspondence(bundle, source));
+  auto w    = bundle->fields.at("workspace");
+  auto jobs = bundle->fields.at("jobs")->items;
+  REQUIRE(jobs.size() >= 2);
+  std::set<std::string> referenced;
+  text_reference_paths(bundle, referenced);
+  REQUIRE_FALSE(referenced.empty());
+  auto paths = verify_load_correspondence(bundle, source);
+  REQUIRE(paths);
+  std::vector<std::pair<std::string, value_ptr>> tampers;
+  tampers.emplace_back("workspace_file", change(bundle, "workspace_file", text_value("other.lua")));
+  tampers.emplace_back("spec_file", change(bundle, "spec_file", text_value("other.lua")));
+  tampers.emplace_back("registry_file", change(bundle, "registry_file", text_value("other.json")));
+  tampers.emplace_back("workspace id", change(bundle, "workspace", change(w, "id", text_value("other"))));
+  tampers.emplace_back("spec id", change(bundle, "spec", change(bundle->fields.at("spec"), "id", text_value("other"))));
+  {
+    auto wj = w->fields.at("jobs")->items;
+    wj[0]   = change(wj[0], "id", text_value("zzz-other"));
+    tampers.emplace_back("workspace route job id", change(bundle, "workspace", change(w, "jobs", list_value(wj))));
+  }
+  {
+    auto j = jobs;
+    j[0]   = change(j[0], "file", text_value("wrong.lua"));
+    tampers.emplace_back("bundle job file", change(bundle, "jobs", list_value(j)));
+  }
+  {
+    auto j = jobs;
+    j[0]   = change(j[0], "value", change(j[0]->fields.at("value"), "id", text_value("other")));
+    tampers.emplace_back("job value id", change(bundle, "jobs", list_value(j)));
+  }
+  {
+    auto j = jobs;
+    j[0]   = change(j[0], "value", change(j[0]->fields.at("value"), "version", text_value("9.9.9")));
+    tampers.emplace_back("job value version", change(bundle, "jobs", list_value(j)));
+  }
+  {
+    auto j = jobs;
+    j.pop_back();
+    tampers.emplace_back("missing job", change(bundle, "jobs", list_value(j)));
+  }
+  tampers.emplace_back("registry revision",
+                       change(bundle, "registry", change(bundle->fields.at("registry"), "revision", text_value("other"))));
+  tampers.emplace_back("registry id",
+                       change(bundle, "registry", change(bundle->fields.at("registry"), "id", text_value("other"))));
+  {
+    // Swapped files keep every route valid, distinct and sorted: only equality with the captured route table refuses.
+    auto wj = w->fields.at("jobs")->items;
+    REQUIRE(wj.size() >= 2);
+    const auto first_file = wj[0]->fields.at("file")->string;
+    wj[0]                 = change(wj[0], "file", wj[1]->fields.at("file"));
+    wj[1]                 = change(wj[1], "file", text_value(first_file));
+    tampers.emplace_back("workspace route table swapped files", change(bundle, "workspace", change(w, "jobs", list_value(wj))));
+  }
+  {
+    // The same routes in reverse order build an equal id to file table: only the sorted-route requirement refuses.
+    auto wj = w->fields.at("jobs")->items;
+    std::ranges::reverse(wj);
+    tampers.emplace_back("workspace routes unsorted", change(bundle, "workspace", change(w, "jobs", list_value(wj))));
+  }
+  {
+    auto root = w->fields.at("root");
+    tampers.emplace_back("workspace root id",
+                         change(bundle, "workspace", change(w, "root", change(root, "id", text_value("other")))));
+    tampers.emplace_back("workspace root base",
+                         change(bundle, "workspace", change(w, "root", change(root, "base", text_value("other")))));
+  }
+  tampers.emplace_back("workspace spec reference", change(bundle, "workspace", change(w, "spec", text_value("other.lua"))));
+  // An extra registry header field leaves the registry id and revision agreeing with the bundle: only the whole
+  // header comparison against the declaration refuses.
+  tampers.emplace_back(
+      "workspace registry header",
+      change(bundle, "workspace", change(w, "registry", change(w->fields.at("registry"), "extra", text_value("x")))));
+  {
+    bool done    = false;
+    auto changed = rewrite_first_reference(
+        bundle, [](const value_ptr& r) { return change(r, "bytes", text_value(r->fields.at("bytes")->string + "x")); }, done);
+    REQUIRE(done);
+    tampers.emplace_back("reference bytes", changed);
+  }
+  {
+    bool done    = false;
+    auto removed = rewrite_first_reference(
+        bundle,
+        [](const value_ptr&) {
+          auto empty  = std::make_shared<value>();
+          empty->kind = value_kind::record;
+          return empty;
+        },
+        done);
+    REQUIRE(done);
+    tampers.emplace_back("missing reference", removed);
+  }
+  {
+    // An extra reference to a real captured file the declarations never reference.
+    auto snapshot = source.sealed()->snapshot();
+    REQUIRE(snapshot);
+    std::string unused_path, unused_bytes;
+    for (auto& file : **snapshot)
+      if (file.root == "workspace" && !referenced.contains(file.path)) {
+        unused_path  = file.path;
+        unused_bytes = file.bytes;
+        break;
+      }
+    REQUIRE_FALSE(unused_path.empty());
+    auto file_record            = std::make_shared<value>();
+    file_record->kind           = value_kind::record;
+    file_record->fields["root"] = text_value("workspace");
+    file_record->fields["path"] = text_value(unused_path);
+    auto ref                    = std::make_shared<value>();
+    ref->kind                   = value_kind::record;
+    ref->fields["kind"]         = text_value("text");
+    ref->fields["file"]         = file_record;
+    ref->fields["bytes"]        = text_value(unused_bytes);
+    tampers.emplace_back("extra reference", change(bundle, "extra", ref));
+  }
+  for (auto& [name, tampered] : tampers) {
+    INFO(name);
+    auto r = verify_load_correspondence(tampered, source);
+    REQUIRE_FALSE(r);
+    CHECK(r.error().code == correspondence_error_code::mismatch);
+    CHECK(r.error().detail.code.empty());
+  }
+  // The source is untouched by refusals: the untampered bundle still corresponds.
+  auto good = verify_load_correspondence(bundle, source);
+  REQUIRE(good);
+  CHECK(*good == *paths);
+}
+
+TEST_CASE("source capture correspondence refuses an unsealed or released source as mismatch", "[source_capture]") {
+  fixture f;
+  SECTION("opened but never captured") {
+    auto source = open_embedded_fixture(f);
+    auto r      = verify_load_correspondence(std::make_shared<value>(), source);
+    REQUIRE_FALSE(r);
+    CHECK(r.error().code == correspondence_error_code::mismatch);
+  }
+  SECTION("sealed capture released to preparation") {
+    auto source = open_embedded_fixture(f);
+    auto bundle = interpreted_bundle(source);
+    REQUIRE(verify_load_correspondence(bundle, source));
+    auto released = source.release_sealed();
+    REQUIRE(released);
+    auto r = verify_load_correspondence(bundle, source);
+    REQUIRE_FALSE(r);
+    CHECK(r.error().code == correspondence_error_code::mismatch);
+  }
+}

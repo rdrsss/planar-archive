@@ -87,7 +87,7 @@ planar_rewrite_module(planar_closure_guard
 
 planar_rewrite_module(planar_runtime
   INTERFACE runtime/runtime.cppm SOURCES runtime/runtime.cpp
-  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source
   TESTS runtime/runtime.t.cpp runtime/schema.t.cpp runtime/commands.t.cpp runtime/external_registration.t.cpp)
 planar_embed_lua(planar_runtime_test_source planar.engine.runtime_test_source
   "${PROJECT_SOURCE_DIR}/tests/stdlib/bridge.lua")
@@ -104,7 +104,7 @@ string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_t
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_test.cppm" CONTENT "${test_interface}" @ONLY)
 planar_rewrite_module(planar_runtime_test_harness
   INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/runtime_test.cppm" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/runtime_test.cpp"
-  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_test_source)
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_test_source)
 set_target_properties(planar_runtime_test_harness planar_runtime_test_source PROPERTIES EXCLUDE_FROM_ALL TRUE)
 target_link_libraries(planar_runtime_tests PRIVATE planar_runtime_test_harness planar_lua_loader)
 
@@ -140,7 +140,7 @@ foreach(variant RANGE 0 20)
   file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
   planar_rewrite_module(planar_command_variant_${variant}
     INTERFACE "${v502b1_generated}/runtime_${variant}.cppm" SOURCES "${v502b1_generated}/runtime_${variant}.cpp"
-    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_command_source_${variant})
+    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_command_source_${variant})
   set_target_properties(planar_command_variant_${variant} planar_command_source_${variant} PROPERTIES EXCLUDE_FROM_ALL TRUE)
   target_link_libraries(planar_runtime_tests PRIVATE planar_command_variant_${variant})
 endforeach()
@@ -387,7 +387,7 @@ foreach(variant RANGE 0 5)
   file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
   planar_rewrite_module(planar_load_variant_${variant}
     INTERFACE "${r14d6_generated}/runtime_${variant}.cppm" SOURCES "${r14d6_generated}/runtime_${variant}.cpp"
-    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_source_${variant})
+    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_source_${variant})
   set_target_properties(planar_load_variant_${variant} planar_load_source_${variant} PROPERTIES EXCLUDE_FROM_ALL TRUE)
   target_link_libraries(planar_runtime_tests PRIVATE planar_load_variant_${variant})
 endforeach()
@@ -423,7 +423,7 @@ foreach(variant RANGE 0 0)
   file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
   planar_rewrite_module(planar_load_c01_variant
     INTERFACE "${r14d6c01_generated}/runtime_${variant}.cppm" SOURCES "${r14d6c01_generated}/runtime_${variant}.cpp"
-    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_c01_source)
+    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_c01_source)
   set_target_properties(planar_load_c01_variant planar_load_c01_source PROPERTIES EXCLUDE_FROM_ALL TRUE)
   target_link_libraries(planar_runtime_tests PRIVATE planar_load_c01_variant)
 endforeach()
@@ -510,7 +510,7 @@ foreach(variant RANGE 0 1)
   endif()
   planar_rewrite_module(planar_x05_runtime_${variant}
     INTERFACE "${x05a0_generated}/x05_a0_${variant}_runtime.cppm" SOURCES "${x05a0_generated}/x05_a0_${variant}_runtime.cpp"
-    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_x05_source_${variant} planar_x05_closure_audit)
+    DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_x05_source_${variant} planar_x05_closure_audit)
   set_target_properties(planar_x05_runtime_${variant} planar_x05_source_${variant} PROPERTIES EXCLUDE_FROM_ALL TRUE)
   target_link_libraries(planar_x05_closure_audit_tests PRIVATE planar_x05_runtime_${variant})
 endforeach()
@@ -532,7 +532,7 @@ string(REPLACE "namespace planar::engine {" "namespace planar::engine::shapes_te
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/shapes_test.cppm" CONTENT "${shapes_interface}" @ONLY)
 planar_rewrite_module(planar_shapes_test_harness
   INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/shapes_test.cppm" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/shapes_test.cpp"
-  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_shapes_test_source)
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_shapes_test_source)
 set_target_properties(planar_shapes_test_harness planar_shapes_test_source PROPERTIES EXCLUDE_FROM_ALL TRUE)
 target_sources(planar_runtime_tests PRIVATE runtime/shapes.t.cpp)
 target_link_libraries(planar_runtime_tests PRIVATE planar_shapes_test_harness)

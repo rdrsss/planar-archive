@@ -294,8 +294,11 @@ void verify_correspondence(const value_ptr& root, const value_ptr& versions, con
     for (auto& candidate : at(context.catalog, "shapes")->items)
       if (at(at(candidate, "descriptor"), "id")->string == at(job, "shape")->string)
         entry = candidate;
-    require(bool(entry), code::invalid_correspondence);
-    bool custom = at(at(entry, "owner"), "tier")->string == "external";
+    // The runtime catalog lists only commands and registered external shapes; the reserved shipped shapes keep their
+    // old adapter behavior and have no catalog entry, so a job naming one is a shipped job without a selection.
+    const auto shipped_shape = at(job, "shape")->string == "pipeline" || at(job, "shape")->string == "fanout_review";
+    require(bool(entry) || shipped_shape, code::invalid_correspondence);
+    bool custom = entry && at(at(entry, "owner"), "tier")->string == "external";
     require(custom == bool(selected), code::invalid_correspondence);
     if (!custom)
       continue;

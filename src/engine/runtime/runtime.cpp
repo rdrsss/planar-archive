@@ -5070,6 +5070,51 @@ profile_load_stage& profile_load_stage::operator=(profile_load_stage&& other) no
   return *this;
 }
 profile_load_stage::~profile_load_stage() = default;
+/// Private prepared state: the retained internal stage (owner, sealed source, B and S) and the immutable derived data.
+struct prepared_profile::implementation {
+  profile_load_stage                             stage; ///< Retained internal step; owns the VM and every native receipt.
+  std::shared_ptr<const profile_acceptance_data> data;  ///< Immutable owned values; no aliases into the stage.
+  /// @param s Retained stage.
+  /// @param d Derived data.
+  implementation(profile_load_stage s, std::shared_ptr<const profile_acceptance_data> d)
+      : stage(std::move(s)), data(std::move(d)) {
+  }
+};
+prepared_profile::prepared_profile(std::unique_ptr<implementation> state) : _impl(std::move(state)) {
+}
+prepared_profile::prepared_profile(prepared_profile&& other) noexcept = default;
+prepared_profile& prepared_profile::operator=(prepared_profile&& other) noexcept {
+  if (this != &other)
+    _impl = std::move(other._impl);
+  return *this;
+}
+prepared_profile::~prepared_profile() = default;
+std::expected<std::shared_ptr<const profile_acceptance_data>, registration_error> prepared_profile::data() const {
+  if (!_impl)
+    return std::unexpected(registration_error{external_protocol(), "profile"});
+  return _impl->data;
+}
+std::shared_ptr<const acceptance::request_data> prepared_profile::bound_intent() const {
+  return _impl && _impl->data ? _impl->data->bound_intent : nullptr;
+}
+std::expected<void, diagnostic> prepared_profile::verify_native_receipts() const {
+  const auto changed = diagnostic{"capture_changed", "Captured inputs changed."};
+  if (!_impl || !_impl->stage._impl || !_impl->stage._impl->owner)
+    return std::unexpected(changed);
+  auto& stage = *_impl->stage._impl;
+  if (auto verified = stage.source.verify(); !verified) {
+    if (verified.error().code == acceptance::source_error_code::capture ||
+        verified.error().code == acceptance::source_error_code::resource_limit)
+      return std::unexpected(std::move(verified.error().detail));
+    return std::unexpected(changed);
+  }
+  if (auto verified = stage.owner->capture.verify(); !verified)
+    return std::unexpected(std::move(verified.error().detail));
+  return {};
+}
+profile_load_stage_observation prepared_profile::observe() const noexcept {
+  return _impl ? _impl->stage.observe() : profile_load_stage_observation{};
+}
 profile_load_stage_observation profile_load_stage::observe() const noexcept {
   profile_load_stage_observation out;
   if (!_impl || !_impl->owner)
@@ -5107,10 +5152,10 @@ registration_error from_source_error(acceptance::source_error error) {
   return profile_owner_protocol_error();
 }
 } // namespace
-std::expected<profile_load_stage, profile_preparation_error>
+std::expected<prepared_profile, profile_preparation_error>
 profile_invocation::prepare_load(const acceptance::request_intent& final_intent) && {
   cleanup_report report;
-  auto           run = [&]() -> std::expected<profile_load_stage, profile_preparation_error> {
+  auto           run = [&]() -> std::expected<prepared_profile, profile_preparation_error> {
     try {
       if (!_owner || _owner->consumed || _owner->first_failure || !_owner->known_load || _owner->frame_begun ||
           !_owner->bound_intent)
@@ -5262,15 +5307,191 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
       staged->baseline_before_route = baseline_before_route;
       staged->instruction_marks     = instruction_marks;
       staged->native_byte_marks     = native_byte_marks;
+      auto& owner_state             = *staged->owner;
+      auto& stage_vm                = *owner_state.vm._owner;
+      auto& st                      = stage_vm.runtime;
+      auto& cm                      = stage_vm.command;
+      auto  refuse_owner            = [&](registration_error error) -> std::unexpected<profile_preparation_error> {
+        (void)fail(owner_state, std::move(error));
+        return std::unexpected(profile_preparation_error{*owner_state.first_failure, {}});
+      };
+      auto protocol = [&]() -> std::unexpected<profile_preparation_error> {
+        (void)fail(owner_state, profile_owner_protocol_error());
+        return std::unexpected(profile_preparation_error{*owner_state.first_failure, {}});
+      };
+      auto native_mode = [](std::string_view text) -> std::optional<std::uint32_t> {
+        if (text == "0644")
+          return 0644u;
+        if (text == "0755")
+          return 0755u;
+        return std::nullopt;
+      };
+      // Phase 4: reassemble the effective raw tree from the owner's own originals; every step is charged first.
+      auto original_snapshot = owner_state.capture.snapshot();
+      if (!original_snapshot || !*original_snapshot)
+        return protocol();
+      const auto& closure = **original_snapshot;
+      {
+        std::size_t total = cm.assembly.size() + cm.effective_catalog_bytes.size() + closure.profile.bytes.size();
+        for (const auto& f : cm.originals)
+          total += f.bytes.size();
+        for (const auto& f : closure.modules)
+          total += f.bytes.size();
+        charge(st, total * 4 + (cm.originals.size() + closure.modules.size() + 16) * 4096);
+      }
+      auto embedded = history::prepare_stdlib(cm.originals, cm.separator, cm.assembly);
+      if (!embedded)
+        return embedded.error().code == history::provenance_error_code::resource_limit
+                   ? refuse_owner(registration_error{external_resource(), "profile"})
+                   : protocol();
+      std::vector<history::tree_file_view> module_views;
+      module_views.reserve(closure.modules.size());
+      for (const auto& f : closure.modules) {
+        auto m = native_mode(f.mode);
+        if (!m)
+          return protocol();
+        module_views.push_back({f.path, f.bytes, *m});
+      }
+      auto profile_mode = native_mode(closure.profile.mode);
+      if (!profile_mode)
+        return protocol();
+      auto effective = history::prepare_effective_stdlib(
+          {embedded->files, closure.profile.bytes, *profile_mode, module_views, cm.effective_catalog_bytes});
+      if (!effective)
+        return effective.error().code == history::effective_error_code::resource_limit
+                   ? refuse_owner(registration_error{external_resource(), "profile"})
+                   : protocol();
+      auto verified_tree = history::verify_effective_stdlib(effective->files);
+      if (!verified_tree)
+        return verified_tree.error().code == history::effective_error_code::resource_limit
+                   ? refuse_owner(registration_error{external_resource(), "profile"})
+                   : protocol();
+      {
+        std::string digest_text;
+        for (auto b : verified_tree->digest)
+          digest_text += std::format("{:02x}", b);
+        const auto same = [](const auto& a, const auto& b) {
+          return a.size() == b.size() && std::ranges::equal(a, b, [](const auto& x, const auto& y) {
+                   return x.path == y.path && x.payload == y.payload && x.mode == y.mode;
+                 });
+        };
+        if (digest_text != cm.effective_digest_bytes || !same(verified_tree->files, cm.provenance))
+          return protocol();
+      }
+      // Phase 5: shared native correspondence of B against the sealed source capture.
+      auto paths = acceptance::verify_load_correspondence(staged->bundle, staged->source);
+      if (!paths) {
+        if (paths.error().code == acceptance::correspondence_error_code::capture)
+          return refuse_owner(registration_error{std::move(paths.error().detail), "profile"});
+        return protocol();
+      }
+      // The v2 encoder derives E and V from B, S and the verified raw tree; nothing from Lua or a caller is trusted.
+      {
+        std::size_t total = 0;
+        for (const auto& f : verified_tree->files)
+          total += f.payload.size();
+        charge(st, total * 2 + verified_tree->files.size() * 1024 + 65536);
+      }
+      // The recorded semantic model is exactly dependencies and jobs; the validation envelope's bundle and capture stay out.
+      if (!staged->model->fields.contains("dependencies") || !staged->model->fields.at("dependencies"))
+        return protocol();
+      const auto semantic_model =
+          record({{"dependencies", staged->model->fields.at("dependencies")}, {"jobs", staged->model->fields.at("jobs")}});
+      auto interpretation = history::encode_interpretation_v2(staged->bundle, semantic_model, verified_tree->files);
+      if (!interpretation)
+        return interpretation.error().code == history::interpretation_v2_error_code::resource_limit
+                   ? refuse_owner(registration_error{external_resource(), "profile"})
+                   : protocol();
+      constexpr std::size_t interpretation_bound = 16u * 1024u * 1024u;
+      if (interpretation->encoded.size() > interpretation_bound || interpretation->versions_encoded.size() > interpretation_bound)
+        return refuse_owner(registration_error{external_resource(), "profile"});
+      charge(st, (interpretation->encoded.size() + interpretation->versions_encoded.size()) * 4);
+      std::string workspace_id;
+      {
+        const auto* node = interpretation->interpretation.get();
+        for (const char* name : {"bundle", "workspace", "id"}) {
+          if (!node || node->kind != value_kind::record)
+            return protocol();
+          auto it = node->fields.find(name);
+          if (it == node->fields.end())
+            return protocol();
+          node = it->second.get();
+        }
+        if (!node || node->kind != value_kind::string)
+          return protocol();
+        workspace_id = node->string;
+      }
+      // Source tree from the sealed native snapshot; registry is exactly input.json.
+      if (!staged->source.sealed())
+        return protocol();
+      auto sealed_snapshot = staged->source.sealed()->snapshot();
+      if (!sealed_snapshot || !*sealed_snapshot)
+        return protocol();
+      const std::set<std::string_view> selected(paths->begin(), paths->end());
+      std::vector<history::tree_file>  source_files;
+      const captured_file*             registry_file = nullptr;
+      std::size_t                      source_bytes  = 0;
+      for (const auto& f : **sealed_snapshot)
+        source_bytes += f.bytes.size();
+      charge(st, source_bytes * 3 + (**sealed_snapshot).size() * 4096);
+      for (const auto& f : **sealed_snapshot) {
+        if (f.root == "workspace" && selected.contains(f.path)) {
+          auto m = native_mode(f.mode);
+          if (!m)
+            return protocol();
+          source_files.push_back({f.path, f.bytes, *m});
+        } else if (f.root == "registry") {
+          if (registry_file || f.path != "input.json")
+            return protocol();
+          registry_file = &f;
+        }
+      }
+      if (!registry_file || source_files.size() != selected.size())
+        return protocol();
+      std::ranges::sort(source_files, {}, &history::tree_file::path);
+      std::vector<history::tree_file_view> source_views;
+      source_views.reserve(source_files.size());
+      for (const auto& f : source_files)
+        source_views.push_back({f.path, f.payload, f.mode});
+      auto source_digest = history::digest_tree(source_views, history::tree_profile::source);
+      if (!source_digest)
+        return source_digest.error().code == history::tree_error_code::resource_limit
+                   ? refuse_owner(registration_error{external_resource(), "profile"})
+                   : protocol();
+      auto registry_mode = native_mode(registry_file->mode);
+      if (!registry_mode)
+        return protocol();
+      auto registry = history::prepare_registry(registry_file->bytes, *registry_mode);
+      if (!registry)
+        return registry.error().code == history::provenance_error_code::resource_limit
+                   ? refuse_owner(registration_error{external_resource(), "profile"})
+                   : protocol();
+      // The shared immutable data is built privately; no pointer into the VM, B, S or capture survives in it.
+      charge(st, sizeof(profile_acceptance_data) + 64);
+      auto data            = std::make_shared<profile_acceptance_data>();
+      data->source         = std::move(source_files);
+      data->source_digest  = *source_digest;
+      data->registry       = std::move(*registry);
+      data->effective      = std::move(*verified_tree);
+      data->interpretation = std::move(*interpretation);
+      data->workspace_id   = std::move(workspace_id);
+      data->bound_intent   = owner_state.bound_intent;
+      // Phase 6: reverify every original receipt after derivation, before anything is published.
       if (auto verified = staged->source.verify(); !verified) {
-        (void)fail(*staged->owner, from_source_error(std::move(verified.error())));
-        return std::unexpected(profile_preparation_error{*staged->owner->first_failure, {}});
+        (void)fail(owner_state, from_source_error(std::move(verified.error())));
+        return std::unexpected(profile_preparation_error{*owner_state.first_failure, {}});
       }
-      if (auto verified = staged->owner->capture.verify(); !verified) {
-        (void)fail(*staged->owner, from_profile_error(std::move(verified.error())));
-        return std::unexpected(profile_preparation_error{*staged->owner->first_failure, {}});
+      if (auto verified = owner_state.capture.verify(); !verified) {
+        (void)fail(owner_state, from_profile_error(std::move(verified.error())));
+        return std::unexpected(profile_preparation_error{*owner_state.first_failure, {}});
       }
-      return profile_load_stage(std::move(staged));
+      charge(st, sizeof(prepared_profile::implementation) + 64);
+      // Consumed before any fallible outward copy: a later failure never leaves a retryable owner.
+      owner_state.consumed                                     = true;
+      std::shared_ptr<const profile_acceptance_data> published = std::move(data);
+      auto                                           prepared_state =
+          std::make_unique<prepared_profile::implementation>(profile_load_stage(std::move(staged)), std::move(published));
+      return prepared_profile(std::move(prepared_state));
     } catch (const diagnostic& error) {
       return std::unexpected(profile_preparation_error{registration_error{error, "profile"}, {}});
     } catch (const std::bad_alloc&) {
@@ -5278,7 +5499,7 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
     } catch (const std::length_error&) {
       return std::unexpected(profile_preparation_error{registration_error{external_resource(), "profile"}, {}});
     } catch (...) {
-      return std::unexpected(profile_preparation_error{registration_error{external_resource(), "profile"}, {}});
+      return std::unexpected(profile_preparation_error{profile_owner_protocol_error(), {}});
     }
   };
   auto result = run();

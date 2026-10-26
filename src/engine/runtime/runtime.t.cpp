@@ -1,5 +1,6 @@
 // Native trusted runtime boundary and separately embedded adversarial exports.
 #include <catch2/catch_test_macros.hpp>
+#include <fcntl.h>
 #include <signal.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -1031,6 +1032,54 @@ static_assert(!std::is_constructible_v<profile_load_stage, std::unique_ptr<int>>
 static_assert(!has_prepared<profile_invocation>);
 static_assert(!has_vm_accessor<profile_invocation>);
 static_assert(!has_upgrade<profile_invocation>);
+template <class T>
+concept has_data_member = requires(T& p) { p.data(); };
+template <class T>
+concept has_catalog_member = requires(T& p) { p.catalog(); };
+template <class... A>
+concept can_prepare_with = requires(profile_invocation&& o, A&&... a) { std::move(o).prepare_load(std::forward<A>(a)...); };
+static_assert(!std::is_copy_constructible_v<prepared_profile>);
+static_assert(!std::is_copy_assignable_v<prepared_profile>);
+static_assert(!std::is_default_constructible_v<prepared_profile>);
+static_assert(std::is_nothrow_move_constructible_v<prepared_profile>);
+static_assert(std::is_nothrow_move_assignable_v<prepared_profile>);
+static_assert(!std::is_constructible_v<prepared_profile, std::unique_ptr<int>>);
+static_assert(!std::is_constructible_v<prepared_profile, profile_acceptance_data>);
+static_assert(!std::is_constructible_v<prepared_profile, const profile_acceptance_data&>);
+static_assert(!std::is_constructible_v<prepared_profile, std::shared_ptr<const profile_acceptance_data>>);
+static_assert(!std::is_constructible_v<prepared_profile, acceptance::request_data>);
+static_assert(!std::is_constructible_v<prepared_profile, value_ptr>);
+static_assert(!std::is_constructible_v<prepared_profile, std::string>);
+static_assert(!std::is_constructible_v<prepared_profile, profile_load_stage>);
+static_assert(!has_upgrade<prepared_profile>);
+static_assert(!has_vm_accessor<prepared_profile>);
+static_assert(!has_catalog_member<prepared_profile>);
+static_assert(has_data_member<prepared_profile>);
+static_assert(std::is_same_v<decltype(std::declval<const prepared_profile&>().data()),
+                             std::expected<std::shared_ptr<const profile_acceptance_data>, registration_error>>);
+static_assert(std::is_same_v<decltype(std::declval<const prepared_profile&>().bound_intent()),
+                             std::shared_ptr<const acceptance::request_data>>);
+static_assert(
+    std::is_same_v<decltype(std::declval<const prepared_profile&>().verify_native_receipts()), std::expected<void, diagnostic>>);
+static_assert(
+    std::is_same_v<decltype(std::declval<profile_invocation&&>().prepare_load(std::declval<const acceptance::request_intent&>())),
+                   std::expected<prepared_profile, profile_preparation_error>>);
+// No prepare_load overload takes a caller bundle, model, tree, acceptance data, stage or prepared object.
+static_assert(can_prepare_with<const acceptance::request_intent&>);
+static_assert(!can_prepare_with<>);
+static_assert(!can_prepare_with<value_ptr>);
+static_assert(!can_prepare_with<std::string>);
+static_assert(!can_prepare_with<std::vector<history::tree_file>>);
+static_assert(!can_prepare_with<history::prepared_provenance>);
+static_assert(!can_prepare_with<profile_acceptance_data>);
+static_assert(!can_prepare_with<std::shared_ptr<const acceptance::request_data>>);
+static_assert(!can_prepare_with<profile_load_stage>);
+static_assert(!can_prepare_with<prepared_profile>);
+static_assert(!can_prepare_with<const acceptance::request_intent&, value_ptr>);
+static_assert(!can_prepare_with<const acceptance::request_intent&, value_ptr, value_ptr>);
+static_assert(!can_prepare_with<const acceptance::request_intent&, value_ptr, value_ptr, std::vector<history::tree_file>>);
+static_assert(!can_prepare_with<value_ptr, value_ptr>);
+static_assert(!can_prepare_with<value_ptr, value_ptr, std::vector<history::tree_file>>);
 
 void watch_path(const std::filesystem::path& p) {
   struct stat s{};
@@ -1446,7 +1495,7 @@ std::string describe(const profile_preparation_error& e) {
   return std::format("failure={}/{}/{}/{} semantic={}", e.failure.detail.code, e.failure.detail.message, e.failure.field,
                      e.failure.detail.limit, e.semantic ? "yes" : "no");
 }
-void expect_protocol(const std::expected<profile_load_stage, profile_preparation_error>& r) {
+void expect_protocol(const std::expected<prepared_profile, profile_preparation_error>& r) {
   REQUIRE_FALSE(r);
   CHECK(r.error().failure.field == "profile");
   CHECK(r.error().failure.detail.code == "internal");
@@ -1526,6 +1575,21 @@ TEST_CASE("X06 B3 A into_extension adopts the same VM and receipts without recap
   // and after, and no admission read of the watched declaration. The interposer tracks one inode, so only the
   // declaration is watched here.
   b3b_fixture g;
+  {
+    // Positive control: with the same watch armed on the same declaration, a known-load owner of the same fixture
+    // shape reads it during prepare_load, so a zero count below can only mean the opaque path never read it.
+    auto known = g.open();
+    // Reset the shared read counter through a file nobody reads, so a count left by an earlier test cannot satisfy the
+    // control: only an armed watch on the declaration itself can make it positive.
+    const auto unread = g.root / "unread.txt";
+    put(unread, "unread");
+    watch_path(unread);
+    REQUIRE(planar_admission_read_attempts() == 0);
+    watch_path(g.declaration);
+    auto prepared = std::move(known).prepare_load(g.intent());
+    REQUIRE(prepared);
+    CHECK(planar_admission_read_attempts() > 0);
+  }
   watch_path(g.declaration);
   auto other = profile_invocation::open_opaque(g.profile.string());
   REQUIRE(other);
@@ -2070,4 +2134,897 @@ TEST_CASE("X06 B3 B exhaustion depends on route consumption because the instruct
   CHECK(r.error().failure.detail.limit == "instructions");
   CHECK(r.error().failure.detail.maximum == 100000000);
   CHECK(before.instructions < budget);
+}
+
+namespace {
+/// Controlled allocator hook for the B3-C windows: counts operator new calls while armed and, on one chosen call,
+/// either renames a pre-made file over its target (never allocating) or throws std::bad_alloc.
+struct alloc_probe {
+  bool        armed = false, fired = false, throw_on_trigger = false;
+  std::size_t count = 0, trigger = 0;
+  const char* rename_from = nullptr;
+  const char* rename_to   = nullptr;
+  /// In-place edit, performed instead of the rename when `edit_path` is set: one byte overwritten at `edit_offset`
+  /// and the recorded modification time restored, so only content verification can see it. Uses raw system calls only.
+  const char*     edit_path   = nullptr;
+  std::size_t     edit_offset = 0;
+  char            edit_byte   = 0;
+  struct timespec edit_mtime{};
+};
+thread_local alloc_probe probe;
+} // namespace
+void* operator new(std::size_t bytes) {
+  if (probe.armed) {
+    ++probe.count;
+    if (probe.trigger != 0 && probe.count == probe.trigger) {
+      probe.armed = false;
+      probe.fired = true;
+      if (probe.throw_on_trigger)
+        throw std::bad_alloc{};
+      if (probe.edit_path) {
+        if (int fd = ::open(probe.edit_path, O_WRONLY); fd >= 0) {
+          (void)::pwrite(fd, &probe.edit_byte, 1, static_cast<off_t>(probe.edit_offset));
+          const struct timespec times[2] = {{0, UTIME_OMIT}, probe.edit_mtime};
+          (void)::futimens(fd, times);
+          (void)::close(fd);
+        }
+      } else if (probe.rename_from && probe.rename_to)
+        (void)::rename(probe.rename_from, probe.rename_to);
+    }
+  }
+  if (auto result = std::malloc(bytes ? bytes : 1))
+    return result;
+  throw std::bad_alloc{};
+}
+void operator delete(void* pointer) noexcept {
+  std::free(pointer);
+}
+void* operator new[](std::size_t bytes) {
+  return ::operator new(bytes);
+}
+void operator delete[](void* pointer) noexcept {
+  ::operator delete(pointer);
+}
+namespace {
+std::string digest_hex(const history::record_digest& digest) {
+  std::string out;
+  for (auto byte : digest)
+    out += std::format("{:02x}", byte);
+  return out;
+}
+std::uint32_t normalized_mode(const std::filesystem::path& p) {
+  struct stat s{};
+  REQUIRE(::stat(p.c_str(), &s) == 0);
+  return (s.st_mode & 0100) != 0 ? 0755u : 0644u;
+}
+/// Every regular file below the workspace directory, sorted by portable path, read from disk.
+std::vector<history::tree_file> workspace_files_on_disk(const std::filesystem::path& root) {
+  std::vector<history::tree_file> out;
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
+    if (!entry.is_regular_file())
+      continue;
+    out.push_back({std::filesystem::relative(entry.path(), root).generic_string(), read_file_bytes(entry.path()),
+                   normalized_mode(entry.path())});
+  }
+  std::ranges::sort(out, {}, &history::tree_file::path);
+  return out;
+}
+std::vector<history::tree_file_view> views_of(const std::vector<history::tree_file>& files) {
+  std::vector<history::tree_file_view> views;
+  for (const auto& f : files)
+    views.push_back({f.path, f.payload, f.mode});
+  return views;
+}
+prepared_profile prepare_ok(const b3b_fixture& f) {
+  auto              owner = f.open();
+  auto              r     = std::move(owner).prepare_load(f.intent());
+  const std::string note  = r ? std::string("ok") : describe(r.error());
+  INFO(note);
+  REQUIRE(r);
+  return std::move(*r);
+}
+std::shared_ptr<const profile_acceptance_data> data_of(const prepared_profile& p) {
+  auto d = p.data();
+  REQUIRE(d);
+  REQUIRE(*d);
+  return *d;
+}
+void expect_capture_changed(const std::expected<void, diagnostic>& r) {
+  REQUIRE_FALSE(r);
+  CHECK(r.error().code == "capture_changed");
+}
+/// Replaces the leaf with a fresh inode holding the same bytes.
+void replace_leaf(const std::filesystem::path& target) {
+  auto fresh = target;
+  fresh += ".fresh";
+  put(fresh, read_file_bytes(target));
+  std::filesystem::rename(fresh, target);
+}
+/// Same-size content edit in place with the original modification time restored: only content verification sees it.
+void edit_same_size_keep_mtime(const std::filesystem::path& target) {
+  const auto stamp = std::filesystem::last_write_time(target);
+  auto       bytes = read_file_bytes(target);
+  REQUIRE_FALSE(bytes.empty());
+  bytes[0] = bytes[0] == 'x' ? 'y' : 'x';
+  put(target, bytes);
+  std::filesystem::last_write_time(target, stamp);
+}
+std::string same_size_variant(std::string bytes) {
+  REQUIRE_FALSE(bytes.empty());
+  bytes[bytes.size() / 2] = bytes[bytes.size() / 2] == 'x' ? 'y' : 'x';
+  return bytes;
+}
+constexpr std::array<std::pair<bool, bool>, 3> b3c_shapes{std::pair{true, true}, std::pair{false, true}, std::pair{false, false}};
+} // namespace
+TEST_CASE("X06 B3 C success publishes source registry effective tree and bound intent for each fixture shape",
+          "[runtime][x06b3c]") {
+  std::set<std::string> source_digests;
+  for (auto [combined, split] : b3c_shapes) {
+    INFO("combined=" << combined << " split=" << split);
+    b3b_fixture f(b3b_fixture::default_body(), combined, split);
+    auto        prepared = prepare_ok(f);
+    auto        shared   = data_of(prepared);
+    const auto& d        = *shared;
+    // Source: the selected closure is the whole fixture workspace, sorted, and its identity is derived independently.
+    REQUIRE_FALSE(d.source.empty());
+    CHECK(std::ranges::is_sorted(d.source, {}, &history::tree_file::path));
+    const auto disk = workspace_files_on_disk(f.workspace_dir);
+    REQUIRE(d.source.size() == disk.size());
+    for (std::size_t i = 0; i < disk.size(); ++i) {
+      CHECK(d.source[i].path == disk[i].path);
+      CHECK(d.source[i].payload == disk[i].payload);
+      CHECK(d.source[i].mode == disk[i].mode);
+    }
+    auto expected_source = history::digest_tree(views_of(disk), history::tree_profile::source);
+    REQUIRE(expected_source);
+    CHECK(d.source_digest == *expected_source);
+    source_digests.insert(digest_hex(d.source_digest));
+    // Registry: exactly one input.json carrying the captured registry bytes.
+    REQUIRE(d.registry.files.size() == 1);
+    CHECK(d.registry.files[0].path == "input.json");
+    CHECK(d.registry.files[0].payload == read_file_bytes(f.registry));
+    auto registry_digest = history::digest_tree(views_of(d.registry.files), history::tree_profile::provenance);
+    REQUIRE(registry_digest);
+    CHECK(d.registry.digest == *registry_digest);
+    // Effective tree: reassembled raw stdlib including the manifest, the profile and the external module.
+    auto has_path = [&](std::string_view path) {
+      return std::ranges::any_of(d.effective.files, [&](const auto& file) { return file.path == path; });
+    };
+    CHECK(has_path("__planar__/effective.bin"));
+    CHECK(has_path("profile/input.json"));
+    CHECK(has_path("external/module.lua"));
+    auto profile_it = std::ranges::find(d.effective.files, "profile/input.json", &history::tree_file::path);
+    REQUIRE(profile_it != d.effective.files.end());
+    CHECK(profile_it->payload == read_file_bytes(f.profile));
+    auto effective_digest = history::digest_tree(views_of(d.effective.files), history::tree_profile::effective_provenance);
+    REQUIRE(effective_digest);
+    CHECK(d.effective.digest == *effective_digest);
+    CHECK(d.effective.digest != d.registry.digest);
+    CHECK(d.workspace_id == "quota");
+    // Bound intent: the exact bytes of the intent the owner was opened with.
+    auto bound = prepared.bound_intent();
+    REQUIRE(bound);
+    auto expected_intent = f.intent();
+    auto expected_data   = expected_intent.data();
+    REQUIRE(expected_data);
+    REQUIRE(*expected_data);
+    CHECK(bound->encoded == (*expected_data)->encoded);
+    CHECK(bound->request_id == "req-1");
+    CHECK(bound == d.bound_intent);
+    // Interpretation bytes are present and within the codec bound.
+    constexpr std::size_t bound_bytes = 16u * 1024u * 1024u;
+    CHECK_FALSE(d.interpretation.encoded.empty());
+    CHECK_FALSE(d.interpretation.versions_encoded.empty());
+    CHECK(d.interpretation.encoded.size() <= bound_bytes);
+    CHECK(d.interpretation.versions_encoded.size() <= bound_bytes);
+    CHECK(d.interpretation.interpretation);
+    CHECK(d.interpretation.versions);
+  }
+  // Each shape selects different job files, so the source identity cannot be a constant.
+  CHECK(source_digests.size() == b3c_shapes.size());
+}
+TEST_CASE("X06 B3 C derived interpretation decodes against the raw effective tree with equal separate versions",
+          "[runtime][x06b3c]") {
+  for (auto [combined, split] : b3c_shapes) {
+    INFO("combined=" << combined << " split=" << split);
+    b3b_fixture f(b3b_fixture::default_body(), combined, split);
+    auto        prepared = prepare_ok(f);
+    auto        shared   = data_of(prepared);
+    const auto& d        = *shared;
+    auto        decoded =
+        history::decode_interpretation_v2(d.interpretation.encoded, d.interpretation.versions_encoded, d.effective.files);
+    REQUIRE(decoded);
+    CHECK(decoded->encoded == d.interpretation.encoded);
+    CHECK(decoded->versions_encoded == d.interpretation.versions_encoded);
+    REQUIRE(d.interpretation.versions);
+    REQUIRE(d.interpretation.versions->fields.contains("stdlib_digest"));
+    CHECK(d.interpretation.versions->fields.at("stdlib_digest")->string == digest_hex(d.effective.digest));
+    // The separate versions value carries the digest as one of its recorded fields, never an empty record.
+    CHECK(d.interpretation.versions->fields.size() > 1);
+    // The binding is to the raw tree: a one byte change of any effective file, or of the versions, is refused.
+    auto tampered = d.effective.files;
+    tampered.front().payload += "x";
+    CHECK_FALSE(history::decode_interpretation_v2(d.interpretation.encoded, d.interpretation.versions_encoded, tampered));
+    auto other_versions   = d.interpretation.versions_encoded;
+    other_versions.back() = other_versions.back() == '0' ? '1' : '0';
+    CHECK_FALSE(history::decode_interpretation_v2(d.interpretation.encoded, other_versions, d.effective.files));
+  }
+}
+TEST_CASE("X06 B3 C published data is immutable shared and independent of the prepared object", "[runtime][x06b3c]") {
+  static_assert(std::is_same_v<std::remove_cvref_t<decltype(*std::declval<const prepared_profile&>().data())>,
+                               std::shared_ptr<const profile_acceptance_data>>);
+  static_assert(std::is_const_v<std::remove_reference_t<decltype(**std::declval<const prepared_profile&>().data())>>);
+  b3b_fixture                     f;
+  std::optional<prepared_profile> prepared;
+  prepared.emplace(prepare_ok(f));
+  auto first  = data_of(*prepared);
+  auto second = data_of(*prepared);
+  CHECK(first.get() == second.get());
+  CHECK(prepared->bound_intent().get() == first->bound_intent.get());
+  // Snapshot every published value, then mutate copies of the vectors and strings: a later read is unchanged.
+  const auto source_before        = first->source;
+  const auto effective_before     = first->effective.files;
+  const auto registry_before      = first->registry.files;
+  const auto encoded_before       = first->interpretation.encoded;
+  const auto versions_before      = first->interpretation.versions_encoded;
+  const auto source_digest_before = first->source_digest;
+  const auto workspace_id_before  = first->workspace_id;
+  auto       source_copy          = first->source;
+  source_copy.front().payload += "mutated";
+  source_copy.pop_back();
+  auto effective_copy = first->effective.files;
+  effective_copy.front().payload.clear();
+  auto encoded_copy = first->interpretation.encoded;
+  encoded_copy += "mutated";
+  auto third = data_of(*prepared);
+  REQUIRE(third->source.size() == source_before.size());
+  for (std::size_t i = 0; i < source_before.size(); ++i) {
+    CHECK(third->source[i].path == source_before[i].path);
+    CHECK(third->source[i].payload == source_before[i].payload);
+  }
+  CHECK(third->effective.files.front().payload == effective_before.front().payload);
+  CHECK(third->interpretation.encoded == encoded_before);
+  // The data survives destruction of the prepared object (VM, receipts and stage) and reads identically.
+  std::weak_ptr<const profile_acceptance_data> weak = first;
+  second.reset();
+  third.reset();
+  prepared.reset();
+  REQUIRE_FALSE(weak.expired());
+  CHECK(first.use_count() == 1);
+  REQUIRE(first->source.size() == source_before.size());
+  for (std::size_t i = 0; i < source_before.size(); ++i)
+    CHECK(first->source[i].payload == source_before[i].payload);
+  CHECK(first->source_digest == source_digest_before);
+  CHECK(first->workspace_id == workspace_id_before);
+  CHECK(first->interpretation.encoded == encoded_before);
+  CHECK(first->interpretation.versions_encoded == versions_before);
+  REQUIRE(first->registry.files.size() == registry_before.size());
+  CHECK(first->registry.files[0].payload == registry_before[0].payload);
+  // Two preparations of the same fixture publish equal values in distinct objects.
+  auto again = prepare_ok(f);
+  auto other = data_of(again);
+  CHECK(other.get() != first.get());
+  CHECK(other->source_digest == source_digest_before);
+  CHECK(other->interpretation.encoded == encoded_before);
+  first.reset();
+  CHECK(weak.expired());
+}
+TEST_CASE("X06 B3 C success consumes the owner, refuses retry and moved-from prepared objects refuse", "[runtime][x06b3c]") {
+  b3b_fixture f;
+  auto        owner = f.open();
+  CHECK(owner.observe().live);
+  auto r = std::move(owner).prepare_load(f.intent());
+  REQUIRE(r);
+  CHECK_FALSE(owner.observe().live);
+  expect_protocol(std::move(owner).prepare_load(f.intent()));
+  auto ext = std::move(owner).into_extension();
+  REQUIRE_FALSE(ext);
+  // The prepared object itself is live and observable.
+  CHECK(r->observe().live);
+  CHECK(r->observe().frame_begun);
+  auto expected_data = data_of(*r);
+  auto p             = std::move(*r);
+  // Moved-from: every operation refuses with a typed value, nothing is published and nothing throws.
+  auto none = r->data();
+  REQUIRE_FALSE(none);
+  CHECK(none.error().field == "profile");
+  CHECK(none.error().detail.code == "internal");
+  CHECK(none.error().detail.message == "Invalid external profile protocol");
+  CHECK_FALSE(r->bound_intent());
+  auto verified = r->verify_native_receipts();
+  expect_capture_changed(verified);
+  CHECK(verified.error().message == "Captured inputs changed.");
+  CHECK_FALSE(r->observe().live);
+  // The destination keeps the same published object and stays live.
+  CHECK(data_of(p).get() == expected_data.get());
+  CHECK(p.observe().live);
+  CHECK(p.verify_native_receipts());
+  // Self-move preserves state.
+  auto& self = p;
+  p          = std::move(self);
+  CHECK(p.observe().live);
+  CHECK(data_of(p).get() == expected_data.get());
+  CHECK(p.bound_intent());
+  CHECK(p.verify_native_receipts());
+  // Move assignment releases the old state of the destination and takes the source's.
+  b3b_fixture                                  g;
+  auto                                         q     = prepare_ok(g);
+  std::weak_ptr<const profile_acceptance_data> old_q = data_of(q);
+  auto                                         old_p = data_of(p);
+  q                                                  = std::move(p);
+  CHECK(old_q.expired());
+  CHECK(data_of(q).get() == old_p.get());
+  CHECK_FALSE(p.observe().live);
+  CHECK_FALSE(p.data());
+  CHECK_FALSE(p.bound_intent());
+  expect_capture_changed(p.verify_native_receipts());
+}
+TEST_CASE("X06 B3 C verify_native_receipts is repeatable on an untouched prepared profile and reads without consuming",
+          "[runtime][x06b3c]") {
+  b3b_fixture f;
+  auto        prepared = prepare_ok(f);
+  const auto  before   = prepared.observe();
+  const auto  data     = data_of(prepared);
+  CHECK(prepared.verify_native_receipts());
+  CHECK(prepared.verify_native_receipts());
+  const auto after = prepared.observe();
+  CHECK(after.live);
+  CHECK(after.instructions == before.instructions);
+  CHECK(after.native_bytes == before.native_bytes);
+  CHECK(after.registrations == before.registrations);
+  CHECK(data_of(prepared).get() == data.get());
+  // Verification re-reads captured content (the positive control), reads the same amount every time and admits nothing
+  // new: the counts for the declaration, a closure member, the registry, the profile and the module repeat exactly.
+  for (const auto& path : {f.declaration, f.workspace_dir / "split.lua", f.registry, f.profile, f.module}) {
+    INFO(path.string());
+    watch_path(path);
+    REQUIRE(prepared.verify_native_receipts());
+    const auto first_reads = planar_admission_read_attempts();
+    CHECK(first_reads > 0);
+    REQUIRE(prepared.verify_native_receipts());
+    CHECK(planar_admission_read_attempts() == 2 * first_reads);
+  }
+}
+TEST_CASE("X06 B3 C verify_native_receipts fails with capture_changed after any captured input changes post publication",
+          "[runtime][x06b3c]") {
+  struct target {
+    std::string                                              name;
+    std::function<std::filesystem::path(const b3b_fixture&)> path;
+  };
+  const std::vector<target> targets{{"declaration", [](const b3b_fixture& f) { return f.declaration; }},
+                                    {"specification", [](const b3b_fixture& f) { return f.workspace_dir / "spec.lua"; }},
+                                    {"job file", [](const b3b_fixture& f) { return f.workspace_dir / "split.lua"; }},
+                                    {"text reference", [](const b3b_fixture& f) { return f.workspace_dir / "text/shared.md"; }},
+                                    {"registry", [](const b3b_fixture& f) { return f.registry; }},
+                                    {"profile", [](const b3b_fixture& f) { return f.profile; }},
+                                    {"module", [](const b3b_fixture& f) { return f.module; }}};
+  for (const auto& t : targets) {
+    for (bool content_only : {false, true}) {
+      INFO(t.name << (content_only ? " same-size edit with restored mtime" : " leaf replaced"));
+      b3b_fixture f;
+      auto        prepared = prepare_ok(f);
+      REQUIRE(prepared.verify_native_receipts());
+      const auto path = t.path(f);
+      if (content_only)
+        edit_same_size_keep_mtime(path);
+      else
+        replace_leaf(path);
+      auto verified = prepared.verify_native_receipts();
+      expect_capture_changed(verified);
+      // The refusal is stable: verification never retries or recaptures.
+      expect_capture_changed(prepared.verify_native_receipts());
+      // Published data stays readable and unchanged: verification neither consumes nor rewrites it.
+      CHECK(prepared.observe().live);
+      REQUIRE(prepared.data());
+    }
+  }
+}
+TEST_CASE("X06 B3 C replacement before publication refuses terminally and publishes nothing", "[runtime][x06b3c]") {
+  struct target {
+    std::string                                              name;
+    std::function<std::filesystem::path(const b3b_fixture&)> path;
+  };
+  const std::vector<target> targets{{"declaration", [](const b3b_fixture& f) { return f.declaration; }},
+                                    {"registry", [](const b3b_fixture& f) { return f.registry; }},
+                                    {"profile", [](const b3b_fixture& f) { return f.profile; }},
+                                    {"module", [](const b3b_fixture& f) { return f.module; }}};
+  for (const auto& t : targets) {
+    for (bool content_only : {false, true}) {
+      INFO(t.name << (content_only ? " same-size edit with restored mtime" : " leaf replaced"));
+      b3b_fixture f;
+      auto        owner = f.open();
+      const auto  path  = t.path(f);
+      if (content_only)
+        edit_same_size_keep_mtime(path);
+      else
+        replace_leaf(path);
+      auto r = std::move(owner).prepare_load(f.intent());
+      REQUIRE_FALSE(r);
+      INFO(describe(r.error()));
+      CHECK(r.error().failure.detail.code == "capture_changed");
+      CHECK(r.error().failure.field == "profile");
+      CHECK_FALSE(r.error().semantic);
+      CHECK_FALSE(owner.observe().live);
+      expect_protocol(std::move(owner).prepare_load(f.intent()));
+    }
+  }
+  // A closure member is captured by prepare_load itself, so an edit before the call is captured fresh and published.
+  b3b_fixture base;
+  auto        unchanged = prepare_ok(base);
+  b3b_fixture edited;
+  const auto  split_path = edited.workspace_dir / "split.lua";
+  replace_in_file(split_path, "budget_bytes = 131072", "budget_bytes = 131073");
+  auto fresh = prepare_ok(edited);
+  auto d     = data_of(fresh);
+  auto it    = std::ranges::find(d->source, "split.lua", &history::tree_file::path);
+  REQUIRE(it != d->source.end());
+  CHECK(it->payload == read_file_bytes(split_path));
+  CHECK(it->payload.find("131073") != std::string::npos);
+  CHECK(d->source_digest != data_of(unchanged)->source_digest);
+  CHECK(fresh.verify_native_receipts());
+}
+TEST_CASE("X06 B3 C derivation is charged to the one frame and counters never reset", "[runtime][x06b3c]") {
+  for (auto [combined, split] : b3c_shapes) {
+    INFO("combined=" << combined << " split=" << split);
+    b3b_fixture f(b3b_fixture::default_body(), combined, split);
+    auto        owner  = f.open();
+    auto        before = owner.observe();
+    auto        r      = std::move(owner).prepare_load(f.intent());
+    REQUIRE(r);
+    const auto seen = r->observe();
+    const auto d    = data_of(*r);
+    const auto n3   = seen.native_byte_marks[3];
+    // Counters are cumulative: nothing reset them between validation and publication, nor since the owner opened.
+    CHECK(seen.native_bytes >= n3);
+    CHECK(seen.native_bytes > before.native_bytes);
+    CHECK(seen.instructions >= seen.instruction_marks[3]);
+    CHECK(seen.native_bytes >= seen.native_byte_marks[2]);
+    // Everything after the last validation mark is native derivation charged to the same counter. Lower bound from the
+    // published values alone: four times the encoded interpretation and versions, three times the sealed source bytes,
+    // and twice the effective tree payload.
+    std::size_t source_bytes = d->registry.files[0].payload.size();
+    for (const auto& file : d->source)
+      source_bytes += file.payload.size();
+    std::size_t effective_bytes = 0;
+    for (const auto& file : d->effective.files)
+      effective_bytes += file.payload.size();
+    const auto interpretation_bytes = d->interpretation.encoded.size() + d->interpretation.versions_encoded.size();
+    const auto derivation_floor =
+        4 * interpretation_bytes + 3 * source_bytes + 2 * effective_bytes + sizeof(profile_acceptance_data);
+    CHECK(seen.native_bytes - n3 >= derivation_floor);
+    CHECK(seen.native_bytes - n3 >= interpretation_bytes);
+    // Observation, data reads and verification charge and reset nothing.
+    (void)r->data();
+    (void)r->verify_native_receipts();
+    (void)r->bound_intent();
+    const auto later = r->observe();
+    CHECK(later.native_bytes == seen.native_bytes);
+    CHECK(later.instructions == seen.instructions);
+    CHECK(later.native_byte_marks == seen.native_byte_marks);
+    // Independent twin preparations charge identically, so the figure is deterministic and not an accident of state.
+    auto twin = prepare_ok(f);
+    CHECK(twin.observe().native_bytes == seen.native_bytes);
+    CHECK(twin.observe().instructions == seen.instructions);
+  }
+}
+namespace {
+struct sweep_outcome {
+  bool        fired = false, prepared = false, verified = false;
+  std::string failure_code, failure_field;
+  bool        semantic   = false;
+  bool        owner_live = false, cleanup_ran = false, retry_protocol = false;
+  std::string payload_on_publish;
+};
+/// Opens a fresh owner on `f`, arms the allocator hook for exactly the prepare_load call and reports what happened.
+sweep_outcome run_with_hook(const b3b_fixture& f, std::size_t trigger, bool throw_mode, const std::string& from,
+                            const std::string& to, const std::function<void(const prepared_profile&, sweep_outcome&)>& after,
+                            const std::function<void(alloc_probe&)>& arm_edit = {}) {
+  sweep_outcome out;
+  auto          owner    = f.open();
+  auto          intent   = f.intent();
+  probe                  = {};
+  probe.armed            = true;
+  probe.trigger          = trigger;
+  probe.throw_on_trigger = throw_mode;
+  probe.rename_from      = from.empty() ? nullptr : from.c_str();
+  probe.rename_to        = to.empty() ? nullptr : to.c_str();
+  if (arm_edit)
+    arm_edit(probe);
+  auto r         = std::move(owner).prepare_load(intent);
+  probe.armed    = false;
+  out.fired      = probe.fired;
+  out.prepared   = r.has_value();
+  out.owner_live = owner.observe().live;
+  if (r) {
+    out.verified = r->verify_native_receipts().has_value();
+    if (after)
+      after(*r, out);
+  } else {
+    out.failure_code   = r.error().failure.detail.code;
+    out.failure_field  = r.error().failure.field;
+    out.semantic       = static_cast<bool>(r.error().semantic);
+    out.cleanup_ran    = r.error().cleanup_ran;
+    auto again         = std::move(owner).prepare_load(f.intent());
+    out.retry_protocol = !again && again.error().failure.detail.code == "internal" &&
+                         again.error().failure.detail.message == "Invalid external profile protocol" &&
+                         again.error().failure.field == "profile" && !again.error().semantic;
+  }
+  return out;
+}
+std::size_t count_allocations(const b3b_fixture& f) {
+  auto owner  = f.open();
+  auto intent = f.intent();
+  probe       = {};
+  probe.armed = true;
+  auto r      = std::move(owner).prepare_load(intent);
+  probe.armed = false;
+  REQUIRE(r);
+  return probe.count;
+}
+} // namespace
+TEST_CASE("X06 B3 C a file replaced at any allocation inside prepare_load is never published as verified", "[runtime][x06b3c]") {
+  struct target {
+    std::string name;
+    std::string relative;
+    bool        captured_at_open; ///< True for the receipts the factory took; false for closure members prepare_load captures.
+    std::function<std::filesystem::path(const b3b_fixture&)> path;
+  };
+  const std::vector<target> targets{
+      {"declaration", "declaration", true, [](const b3b_fixture& f) { return f.declaration; }},
+      {"registry", "registry", true, [](const b3b_fixture& f) { return f.registry; }},
+      {"module", "module", true, [](const b3b_fixture& f) { return f.module; }},
+      {"job file", "split.lua", false, [](const b3b_fixture& f) { return f.workspace_dir / "split.lua"; }},
+      {"text reference", "text/shared.md", false, [](const b3b_fixture& f) { return f.workspace_dir / "text/shared.md"; }}};
+  b3b_fixture f;
+  const auto  total = count_allocations(f);
+  REQUIRE(total > 1000);
+  // Positions: every allocation of the tail, and an even stride of total/40 over the whole call.
+  std::vector<std::size_t> positions;
+  for (std::size_t back = 0; back < 16; ++back)
+    positions.push_back(total - back);
+  for (std::size_t n = 1; n < total; n += total / 40)
+    positions.push_back(n);
+  positions.push_back(total + 1);
+  for (const auto& t : targets) {
+    INFO(t.name);
+    const auto path     = t.path(f);
+    const auto original = read_file_bytes(path);
+    // The job file must stay a valid declaration so an early replacement is captured fresh, not refused as semantic data.
+    auto variant = same_size_variant(original);
+    if (t.relative == "split.lua") {
+      variant   = original;
+      auto from = variant.find("131072");
+      REQUIRE(from != std::string::npos);
+      variant.replace(from, 6, "131073");
+    }
+    auto alt = path;
+    alt += ".alt";
+    const auto  alt_text = alt.string(), path_text = path.string();
+    std::size_t refused = 0, fresh = 0, late = 0, never_fired = 0;
+    std::size_t earliest_late = total + 2;
+    // Closure members are checked again by both the final source reverification and the profile capture
+    // reverification: sample the last two and a half thousand allocations densely so a widened window shows up as a
+    // late publication far from the end.
+    auto sampled = positions;
+    if (!t.captured_at_open)
+      for (std::size_t back = 16; back < 2500; back += 40)
+        sampled.push_back(total - back);
+    for (const auto n : sampled) {
+      INFO("allocation " << n);
+      put(path, original);
+      put(alt, variant);
+      auto       o       = run_with_hook(f, n, false, alt_text, path_text, [&](const prepared_profile& p, sweep_outcome& out) {
+        auto d = p.data();
+        if (d && *d && !t.captured_at_open) {
+          auto it = std::ranges::find((*d)->source, t.relative, &history::tree_file::path);
+          if (it != (*d)->source.end())
+            out.payload_on_publish = it->payload;
+        }
+      });
+      const auto on_disk = read_file_bytes(path);
+      if (!o.fired) {
+        ++never_fired;
+        CHECK(o.prepared);
+        CHECK(o.verified);
+        CHECK(on_disk == original);
+        continue;
+      }
+      CHECK(on_disk == variant);
+      CHECK_FALSE(o.owner_live);
+      if (!o.prepared) {
+        ++refused;
+        CHECK(o.failure_code == "capture_changed");
+        CHECK(o.failure_field == "profile");
+        CHECK_FALSE(o.semantic);
+        CHECK(o.retry_protocol);
+        continue;
+      }
+      // Published: the verifier must agree with the disk. Verified implies the published bytes are the disk bytes.
+      if (t.captured_at_open) {
+        CHECK_FALSE(o.verified);
+        ++late;
+        earliest_late = std::min(earliest_late, n);
+      } else if (o.payload_on_publish == variant) {
+        CHECK(o.verified);
+        ++fresh;
+      } else {
+        CHECK(o.payload_on_publish == original);
+        CHECK_FALSE(o.verified);
+        ++late;
+        earliest_late = std::min(earliest_late, n);
+      }
+    }
+    CHECK(refused > 0);
+    CHECK(never_fired == 1);
+    // Publication with a stale capture is possible only after the last original receipt check: the trailing
+    // allocations (measured: one), never a phase. The window widens to the whole derivation only when both
+    // reverifications are skipped (a single skipped one is masked by the other).
+    CHECK(late > 0);
+    CHECK(total + 1 - earliest_late <= 4);
+    if (!t.captured_at_open)
+      CHECK(fresh > 0);
+    put(path, original);
+    std::filesystem::remove(alt);
+  }
+}
+TEST_CASE("X06 B3 C an in place same size edit at any allocation inside prepare_load is never published as verified",
+          "[runtime][x06b3c]") {
+  // The edit keeps the inode and the size, and the modification time is restored, but the captures compare content,
+  // so the restore is not load-bearing. Both the source capture reverification and the profile capture reverification
+  // refuse the edit, so a single skipped source reverification is masked by the profile capture reverification. This
+  // test was measured to guard a skip of both pre-publication reverifications and the ignoring of their results.
+  struct target {
+    std::string                                              name;
+    std::string                                              relative;
+    bool                                                     captured_at_open;
+    std::function<std::filesystem::path(const b3b_fixture&)> path;
+  };
+  const std::vector<target> targets{
+      {"declaration", "declaration", true, [](const b3b_fixture& f) { return f.declaration; }},
+      {"registry", "registry", true, [](const b3b_fixture& f) { return f.registry; }},
+      {"job file", "split.lua", false, [](const b3b_fixture& f) { return f.workspace_dir / "split.lua"; }},
+      {"text reference", "text/shared.md", false, [](const b3b_fixture& f) { return f.workspace_dir / "text/shared.md"; }}};
+  b3b_fixture f;
+  const auto  total = count_allocations(f);
+  REQUIRE(total > 1000);
+  std::vector<std::size_t> positions;
+  for (std::size_t back = 0; back < 16; ++back)
+    positions.push_back(total - back);
+  for (std::size_t n = 1; n < total; n += total / 20)
+    positions.push_back(n);
+  positions.push_back(total + 1);
+  for (const auto& t : targets) {
+    INFO(t.name);
+    const auto path     = t.path(f);
+    const auto original = read_file_bytes(path);
+    REQUIRE(original.size() > 4);
+    // The edited job file must stay a valid declaration, so an early edit is captured fresh, not refused as semantic data.
+    auto        variant = same_size_variant(original);
+    std::size_t offset  = original.size() / 2;
+    if (t.relative == "split.lua") {
+      offset = original.find("131072");
+      REQUIRE(offset != std::string::npos);
+      variant         = original;
+      variant[offset] = '3';
+    }
+    const char  edit_byte = variant[offset];
+    struct stat st{};
+    REQUIRE(::stat(path.c_str(), &st) == 0);
+#ifdef __APPLE__
+    const struct timespec mtime = st.st_mtimespec;
+#else
+    const struct timespec mtime = st.st_mtim;
+#endif
+    const auto path_text = path.string();
+    const auto restore   = [&] {
+      put(path, original);
+      const struct timespec times[2] = {{0, UTIME_OMIT}, mtime};
+      REQUIRE(::utimensat(AT_FDCWD, path_text.c_str(), times, 0) == 0);
+    };
+    std::size_t refused = 0, fresh = 0, late = 0, never_fired = 0;
+    std::size_t earliest_late = total + 2;
+    auto        sampled       = positions;
+    if (!t.captured_at_open)
+      for (std::size_t back = 16; back < 2500; back += 40)
+        sampled.push_back(total - back);
+    for (const auto n : sampled) {
+      INFO("allocation " << n);
+      restore();
+      auto o = run_with_hook(
+          f, n, false, "", "",
+          [&](const prepared_profile& p, sweep_outcome& out) {
+            auto d = p.data();
+            if (d && *d && !t.captured_at_open) {
+              auto it = std::ranges::find((*d)->source, t.relative, &history::tree_file::path);
+              if (it != (*d)->source.end())
+                out.payload_on_publish = it->payload;
+            }
+          },
+          [&](alloc_probe& pr) {
+            pr.edit_path   = path_text.c_str();
+            pr.edit_offset = offset;
+            pr.edit_byte   = edit_byte;
+            pr.edit_mtime  = mtime;
+          });
+      const auto on_disk = read_file_bytes(path);
+      if (!o.fired) {
+        ++never_fired;
+        CHECK(o.prepared);
+        CHECK(o.verified);
+        CHECK(on_disk == original);
+        continue;
+      }
+      CHECK(on_disk == variant);
+      CHECK_FALSE(o.owner_live);
+      if (!o.prepared) {
+        ++refused;
+        CHECK(o.failure_code == "capture_changed");
+        CHECK(o.failure_field == "profile");
+        CHECK_FALSE(o.semantic);
+        CHECK(o.retry_protocol);
+        continue;
+      }
+      if (t.captured_at_open) {
+        CHECK_FALSE(o.verified);
+        ++late;
+        earliest_late = std::min(earliest_late, n);
+      } else if (o.payload_on_publish == variant) {
+        CHECK(o.verified);
+        ++fresh;
+      } else {
+        CHECK(o.payload_on_publish == original);
+        CHECK_FALSE(o.verified);
+        ++late;
+        earliest_late = std::min(earliest_late, n);
+      }
+    }
+    CHECK(refused > 0);
+    CHECK(never_fired == 1);
+    CHECK(late > 0);
+    CHECK(total + 1 - earliest_late <= 4);
+    if (!t.captured_at_open)
+      CHECK(fresh > 0);
+    restore();
+  }
+}
+TEST_CASE("X06 B3 C allocation failure after validation maps to a resource refusal and leaves nothing retryable",
+          "[runtime][x06b3c]") {
+  b3b_fixture f;
+  const auto  total = count_allocations(f);
+  REQUIRE(total > 1000);
+  std::vector<std::size_t> positions;
+  for (std::size_t back = 0; back < 32; ++back)
+    positions.push_back(total - back);
+  for (std::size_t back = 32; back < 2400; back += 97)
+    positions.push_back(total - back);
+  std::size_t resource = 0, verification = 0;
+  for (const auto n : positions) {
+    INFO("allocation " << n << " of " << total);
+    auto o = run_with_hook(f, n, true, {}, {}, {});
+    REQUIRE(o.fired);
+    // A throw never yields a prepared object: nothing is published after a failure.
+    REQUIRE_FALSE(o.prepared);
+    CHECK_FALSE(o.semantic);
+    CHECK(o.failure_field == "profile");
+    CHECK(o.cleanup_ran);
+    CHECK_FALSE(o.owner_live);
+    // The owner is consumed and the first terminal failure is not replaced by the protocol refusal of a retry.
+    CHECK(o.retry_protocol);
+    if (o.failure_code == "resource_limit")
+      ++resource;
+    else {
+      CHECK(o.failure_code == "capture_changed");
+      ++verification;
+    }
+  }
+  // std::bad_alloc maps to the external resource refusal; only a throw inside a native reverification maps to
+  // capture_changed (the mapping of the capture layer, unchanged).
+  CHECK(resource > 0);
+  CHECK(verification > 0);
+  // Other exception kinds cannot be injected through the allocator, so their mapping to a protocol refusal is not
+  // exercised here.
+  auto healthy = prepare_ok(f);
+  CHECK(healthy.verify_native_receipts());
+}
+namespace {
+struct derivation_figures {
+  std::size_t charged = 0, source_bytes = 0, source_files = 0, interpretation_bytes = 0, effective_bytes = 0, effective_files = 0;
+};
+/// Prepares a freshly edited fixture and reports the native bytes charged after the last validation mark together with
+/// the sizes of the values the derivation covers, all read from the published data.
+derivation_figures derivation_of(const std::function<void(const b3b_fixture&)>& edit) {
+  b3b_fixture f;
+  edit(f);
+  auto              owner = f.open();
+  auto              r     = std::move(owner).prepare_load(f.intent());
+  const std::string note  = r ? std::string("ok") : describe(r.error());
+  INFO(note);
+  REQUIRE(r);
+  const auto         seen = r->observe();
+  const auto         d    = data_of(*r);
+  derivation_figures out;
+  out.charged      = seen.native_bytes - seen.native_byte_marks[3];
+  out.source_bytes = d->registry.files[0].payload.size();
+  for (const auto& file : d->source)
+    out.source_bytes += file.payload.size();
+  out.source_files         = d->source.size();
+  out.interpretation_bytes = d->interpretation.encoded.size() + d->interpretation.versions_encoded.size();
+  for (const auto& file : d->effective.files)
+    out.effective_bytes += file.payload.size();
+  out.effective_files = d->effective.files.size();
+  return out;
+}
+std::string padding(std::size_t n) {
+  return std::string(n, 'p');
+}
+void append_to(const std::filesystem::path& p, std::string_view extra) {
+  put(p, read_file_bytes(p) + std::string(extra));
+}
+} // namespace
+TEST_CASE("X06 B3 C each derivation charge scales exactly with the bytes it covers", "[runtime][x06b3c]") {
+  // Between two fixtures that differ only in sizes, the charges after the last validation mark differ by exactly
+  // 6 per effective payload byte (phase 4 reassembly 4, encoder 2), 3 per sealed source byte and 4 per encoded
+  // interpretation byte (post-encode charge); the per-file terms (4096 per sealed file, 1024 per effective file) are in
+  // the expectation and stay unchanged because no variant adds a file. Removing any one of the byte charges, or
+  // resetting the counter before the derivation, changes a difference.
+  const auto base = derivation_of([](const b3b_fixture&) {});
+  REQUIRE(base.charged > 0);
+  constexpr std::size_t pad = 7001;
+  struct variant {
+    std::string                             name;
+    std::function<void(const b3b_fixture&)> edit;
+  };
+  const std::vector<variant> variants{
+      {"module bytes", [](const b3b_fixture& f) { append_to(f.module, "\n--" + padding(pad)); }},
+      {"profile bytes", [](const b3b_fixture& f) { append_to(f.profile, std::string(pad, ' ')); }},
+      {"referenced text bytes", [](const b3b_fixture& f) { append_to(f.workspace_dir / "text/shared.md", padding(pad)); }}};
+  for (const auto& v : variants) {
+    INFO(v.name);
+    const auto other = derivation_of(v.edit);
+    const auto delta = [](std::size_t after, std::size_t before) {
+      return static_cast<std::int64_t>(after) - static_cast<std::int64_t>(before);
+    };
+    const auto expected =
+        6 * delta(other.effective_bytes, base.effective_bytes) + 3 * delta(other.source_bytes, base.source_bytes) +
+        4 * delta(other.interpretation_bytes, base.interpretation_bytes) + 4096 * delta(other.source_files, base.source_files) +
+        1024 * delta(other.effective_files, base.effective_files);
+    INFO("effective " << other.effective_bytes - base.effective_bytes << " source " << other.source_bytes - base.source_bytes
+                      << " interpretation " << delta(other.interpretation_bytes, base.interpretation_bytes) << " files "
+                      << delta(other.source_files, base.source_files));
+    CHECK(delta(other.charged, base.charged) == expected);
+    CHECK(other.charged > base.charged);
+  }
+}
+TEST_CASE("X06 B3 C published workspace id follows the declaration and source modes are normalised", "[runtime][x06b3c]") {
+  b3b_fixture f;
+  replace_in_file(f.workspace_dir / "workspace.lua", "id = \"quota\"", "id = \"ledgerq\"");
+  replace_in_file(f.workspace_dir / "spec.lua", "id = \"quota\"", "id = \"ledgerq\"");
+  const auto executable = f.workspace_dir / "text/shared.md";
+  REQUIRE(::chmod(executable.c_str(), 0755) == 0);
+  put(f.workspace_dir / "unreferenced.txt", "never captured");
+  const auto group_writable = f.workspace_dir / "text/quota-api.md";
+  REQUIRE(::chmod(group_writable.c_str(), 0664) == 0);
+  auto        prepared = prepare_ok(f);
+  auto        shared   = data_of(prepared);
+  const auto& d        = *shared;
+  CHECK(d.workspace_id == "ledgerq");
+  auto it = std::ranges::find(d.source, "text/shared.md", &history::tree_file::path);
+  REQUIRE(it != d.source.end());
+  CHECK(it->mode == 0755u);
+  auto other = std::ranges::find(d.source, "text/quota-api.md", &history::tree_file::path);
+  REQUIRE(other != d.source.end());
+  CHECK(other->mode == 0644u);
+  for (const auto& file : d.source) {
+    CHECK((file.mode == 0644u || file.mode == 0755u));
+    CHECK(file.path != "unreferenced.txt"); // Only the captured closure is sealed into the source tree.
+  }
+  // The identity is derived from the executable bit too: the same bytes with the bit cleared digest differently.
+  auto disk = workspace_files_on_disk(f.workspace_dir);
+  std::erase_if(disk, [](const auto& file) { return file.path == "unreferenced.txt"; });
+  auto expected = history::digest_tree(views_of(disk), history::tree_profile::source);
+  REQUIRE(expected);
+  CHECK(d.source_digest == *expected);
+  REQUIRE(::chmod(executable.c_str(), 0644) == 0);
+  auto plain = prepare_ok(f);
+  CHECK(data_of(plain)->source_digest != d.source_digest);
 }

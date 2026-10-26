@@ -81,6 +81,29 @@ bool routes(const value_ptr& jobs, std::map<std::string, std::string>& out, std:
   }
   return true;
 }
+bool references(const value_ptr& v, const std::map<std::string, std::string_view>& files, std::set<std::string>& found,
+                std::size_t depth = 0) {
+  if (!v || depth > 256)
+    return false;
+  if (auto f = at(v, "file"); kind(f, value_kind::record) && at(v, "kind") && kind(at(v, "kind"), value_kind::string) &&
+                              at(v, "kind")->string == "text") {
+    auto root = at(f, "root"), p = at(f, "path"), bytes = at(v, "bytes");
+    if (!keys(f, {"root", "path"}) || !kind(root, value_kind::string) || root->string != "workspace" || !path(p) ||
+        !kind(bytes, value_kind::string))
+      return false;
+    auto it = files.find(p->string);
+    if (it == files.end() || it->second != bytes->string)
+      return false;
+    found.insert(p->string);
+  }
+  for (auto& [k, c] : v->fields)
+    if (!references(c, files, found, depth + 1))
+      return false;
+  for (auto& c : v->items)
+    if (!references(c, files, found, depth + 1))
+      return false;
+  return true;
+}
 // Lexical host-path checks shared by the embedded and bound openings.
 std::optional<source_error> validate_paths(std::string_view workspace, std::string_view registry) {
   for (auto p : {workspace, registry}) {
@@ -310,5 +333,64 @@ std::expected<void, source_error> source_capture::verify() const {
   if (!verified)
     return captured_error(verified.error());
   return {};
+}
+std::expected<std::vector<std::string>, correspondence_error> verify_load_correspondence(const value_ptr& bundle,
+                                                                                         source_capture&  source) {
+  auto mismatch = [] { return std::unexpected(correspondence_error{correspondence_error_code::mismatch}); };
+  if (!source.sealed_ready() || !source.sealed())
+    return mismatch();
+  const auto& workspace_root = source.workspace_declaration().root;
+  const auto& declarations   = source.declarations();
+  auto        w = at(bundle, "workspace"), spec = at(bundle, "spec");
+  auto        workspace_file = at(bundle, "workspace_file"), spec_file = at(bundle, "spec_file"),
+              registry_file = at(bundle, "registry_file"), bundle_jobs = at(bundle, "jobs");
+  if (!kind(workspace_file, value_kind::string) || !kind(spec_file, value_kind::string) ||
+      !kind(registry_file, value_kind::string) || !kind(bundle_jobs, value_kind::list))
+    return mismatch();
+  auto spec_declaration = declarations.find(source.spec_path());
+  if (workspace_file->string != source.file() || spec_file->string != source.spec_path() ||
+      registry_file->string != "input.json" || !identity(workspace_root, w) || !same_field(workspace_root, w, "spec") ||
+      !same_field(workspace_root, w, "registry") || !same_field(at(workspace_root, "root"), at(w, "root"), "id") ||
+      !same_field(at(workspace_root, "root"), at(w, "root"), "base") || spec_declaration == declarations.end() ||
+      !kind(spec_declaration->second.root, value_kind::spec) || !identity(spec_declaration->second.root, spec))
+    return mismatch();
+  std::map<std::string, std::string> normalized_jobs;
+  if (!routes(at(w, "jobs"), normalized_jobs, parent(source.file()), true) || normalized_jobs != source.jobs() ||
+      bundle_jobs->items.size() != source.jobs().size())
+    return mismatch();
+  for (auto& entry : bundle_jobs->items) {
+    auto file = at(entry, "file");
+    auto j    = at(entry, "value");
+    if (!kind(file, value_kind::string))
+      return mismatch();
+    auto it = declarations.find(file->string);
+    if (it == declarations.end() || !kind(it->second.root, value_kind::job) || !identity(it->second.root, j))
+      return mismatch();
+  }
+  auto registry = at(bundle, "registry"), header = at(w, "registry");
+  if (!same_field(registry, header, "id") || !same_field(registry, header, "revision"))
+    return mismatch();
+  auto snapshot = source.sealed()->snapshot();
+  if (!snapshot)
+    return std::unexpected(correspondence_error{correspondence_error_code::capture, snapshot.error()});
+  std::map<std::string, std::string_view> files;
+  std::vector<std::string>                paths;
+  for (auto& f : **snapshot)
+    if (f.root == "workspace") {
+      files.emplace(f.path, f.bytes);
+      paths.push_back(f.path);
+    }
+  std::set<std::string> expected_refs, found;
+  auto                  collect = [&](std::string_view file, const declaration& d) {
+    for (auto& r : d.references)
+      expected_refs.insert(parent(file) + r);
+  };
+  collect(source.file(), source.workspace_declaration());
+  for (auto& [file, d] : declarations)
+    collect(file, d);
+  if (!references(bundle, files, found) || found != expected_refs)
+    return mismatch();
+  std::ranges::sort(paths);
+  return paths;
 }
 } // namespace planar::engine::acceptance

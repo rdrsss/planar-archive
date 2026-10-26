@@ -306,6 +306,13 @@ TEST_CASE("v2 custom shipped classification and exact E membership cannot be sub
     at(at(item(at(at(r, "bundle"), "jobs")), "value"), "shape")->string = "unknown";
     refused(r, code::invalid_correspondence);
   }
+  {
+    // A shipped job (no selected shape) renamed to an unknown shape has no catalog entry and is no reserved shape.
+    auto r = fixture();
+    REQUIRE_FALSE(item(at(at(r, "semantic"), "jobs"), 1)->fields.contains("selected_shape"));
+    at(at(item(at(at(r, "bundle"), "jobs"), 1), "value"), "shape")->string = "unknown";
+    refused(r, code::invalid_correspondence);
+  }
 }
 TEST_CASE("v2 asserted catalog requires actual manifest owner ordinals before equality", "[interpretation_v2]") {
   {
