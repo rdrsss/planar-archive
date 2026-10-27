@@ -20,6 +20,7 @@ Operator decision, 2026-10-24. Every round uses fresh agents.
 | Red-check runner | Sonnet 5.5 | low | Prove test-first tests compile and fail on assertions before implementation |
 | Gate runner | Sonnet 5.5 | low | Run the agreed build/test commands serially and report raw results |
 | Mutation prober | Sonnet 5.5 | medium | Break each acceptance invariant in a scratch copy and report surviving mutants |
+| Plan reviewer | Opus 5.5 | high | Check the plan and invariant table against the contracts before any code |
 | Reviewer | Opus 5.5 | high | Independently review candidate and raw evidence |
 
 Escalation: a round's coders use Sonnet 5.5 (medium) instead of Haiku when the
@@ -38,7 +39,18 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    breaks it and the test that must fail under that mutant. Tests are designed
    against their mutant; a row that cannot be observed without a new public
    field or fault hook says so instead of getting a hollow test. Search then
-   splits the work into packages with exclusive file ownership per wave.
+   splits the work into packages with exclusive file ownership per wave. Its notes
+   open with a **decisions table**: every design choice the round implies, marked
+   contract-decided (with citation), decided in
+   [remaining-steps design](remaining-steps-design.md), or new (operator decision
+   Q18, 2026-10-27).
+   **Plan review** (operator decision, 2026-10-27): before any code, an Opus plan
+   reviewer checks the plan against the governing clauses: no clause narrowed,
+   every clause and finding has a row, every design choice is decided by a cited
+   source. Gaps go back to search for one revision. A new product or authority
+   choice stops the run with an operator question. During the day the operator may
+   ask for a **checkpoint**: the run stops after plan review and resumes, with the
+   operator's notes passed to every coder, once the operator approves the plan.
 3. Rounds that add new behaviour run **test-first**: test coders write the tests
    from the contract and the table, plus compiling stubs (real declarations,
    not-implemented bodies), and a red check proves each new-behaviour test
@@ -57,7 +69,13 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    plus any invariant the table missed, in a scratch copy outside the checkout,
    names the mutant that fails each new test (red-first), and records the
    results with one raw log per mutant
-   (`tests/native/<round>-evidence/probes/PROBES.md` and `probes/raw/`). Earlier
+   (`tests/native/<round>-evidence/probes/PROBES.md` and `probes/raw/`). The prober
+   keeps one persistent warm scratch build and rebuilds only the test targets each
+   mutant needs. Corrective rounds carry forward earlier rows whose files are
+   byte-identical and re-run only changed, new and finding rows; the re-probe after a
+   survivor repair re-runs only the survivors and rows the repair touched.
+   Exploratory mutants beyond the table are capped at 20, with skipped ones listed.
+   Earlier
    probe generations move to `probes/superseded-<n>/`; raw logs are never deleted.
    Survivors go back to the repair coder, then the gate and prober rerun once.
    Only the prober applies mutants: coders and repair coders never mutate, stash
@@ -65,7 +83,9 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    product fields only for observability unless the round record allows it.
 6. Before review, the coordinator syncs the round record to the final candidate
    (identity hashes, test counts, probe results, repairs and amendments), so no
-   section describes an earlier candidate.
+   section describes an earlier candidate. Identity tables come from the driver's
+   identity tool (HEAD, diff hash and per-file hashes including untracked files,
+   each naming its pathspec); agents never hand-write hashes.
 7. The reviewer checks the invariant table (every criterion has a row, each
    mutant breaks its invariant and is killed by its test, test-first rows were
    red) and returns `approve`, `request-changes` or `blocked`, writing
