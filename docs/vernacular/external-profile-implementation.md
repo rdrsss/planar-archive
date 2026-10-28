@@ -62,6 +62,8 @@ implementation. If a round becomes too large, split it before coding while
 retaining the final atomic X07 admission gate. No interim permissive catalog or
 public profile flag without complete safety/provenance/replay composition.
 
+Before any X07 code, the [X07 design addendum](x07-addendum.md) fixes the closed factory, the production outcome table and the carried-limit records that the X07-A and X07-B rows above are implemented against.
+
 Current source anchors: [CLI11 composition](../../src/cmd/planar/bootstrap.cpp),
 [path snapshot](../../src/cmd/planar/invocation.cpp),
 [retained runtime](../../src/engine/runtime/runtime.cpp),

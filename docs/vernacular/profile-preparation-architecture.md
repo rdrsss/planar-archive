@@ -227,8 +227,9 @@ same original profile_capture and VM. It cannot prepare built-in load. X07's
 successful embedded probe identifies shipped load before selected registration;
 therefore calling the opaque factory and later upgrading to known load is never
 needed. Unknown/extension final parse cannot claim that prior known-slot checks
-occurred. Other known shipped families require their own finite admission path;
-this document does not open them through a generic service factory.
+occurred. The closed factory for the other shipped families is defined in the [X07 design addendum](x07-addendum.md), and the rule is stated here:
+
+> Render, init, history and export are opened by the closed factory defined in the X07 design addendum; load is opened by open_known_load; no generic service factory exists, and a sixth family requires an amendment.
 
 The X07 integration retains the **same profile_invocation** while borrowing its
 sealed catalog for final CLI11 parsing. For known load, final native parameters
@@ -485,6 +486,7 @@ unchanged; only the round boundaries merge.
 | Authentic runtime preparation | runtime.{cppm,cpp}, colocated tests, new internal files in the same named module if useful, explicit CMake dependencies. Implement opaque invocation/prepared classes, known/opaque construction, private adoption, phase8 then all-job phase0/1/2 and native v2 derivation. No caller result upgrade; direct scratch-native tests only. Frozen prepared objects retain both receipts; no public profile CLI or fresh transactions yet. |
 | Native profile transactions | ledger/acceptance overload/private adapter and tests. Consume opaque runtime owner via the shared common algorithm, preserve replay/CAS/format/error/receipt/uncertainty order and embedded behavior. No init/envelope cutover; require original receipt races and no-Lua-under-lock evidence. |
 | Whole-invocation composition | Scope after accounting inventory: factory-owned cumulative budget across capture/register/declarations/shapes/conversion/preparation/result, preserving lower limits. Exhaustion/caught failure/moves/no reset/refund tested. This is separate from merely retaining existing metrics. |
+| X07 design addendum, before X07 | Docs-only prerequisite of X07: [x07-addendum.md](x07-addendum.md) records the closed factory over the five shipped families, the production outcome table and the carried-limit records, reviewed records-only before any X07 code. |
 | X06 integrated evidence, then X07 | Focused nonzero zero-skip gates first; complete agreed macOS Debug/RelWithDebInfo gates preserving current918 names and all prior evidence; lint/Doxygen/no-work builds as applicable. X07 uses original catalog owner through real CLI11 parse and built-in/extension continuation, early replay and format2 init cutover only in its approved frozen candidate. X08 separately proves mandatory external-profile acceptance. |
 
 No unresolved product choice is introduced by this design: selector, trust,
