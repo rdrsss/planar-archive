@@ -20,6 +20,10 @@ struct load_options {
 /// @param options State retained through parsing and dispatch.
 /// @return Root-owned command.
 CLI::App& attach_load(CLI::App& root, load_options& options);
+/// Convert validated CLI11 bindings to the native load intent without any host access.
+/// @param options Validated CLI11 bindings.
+/// @return The typed intent a direct or with-profile invocation executes.
+engine::command_options load_intent(const load_options& options);
 /// Execute load through the validated retained command VM.
 /// @param options Parsed required text values.
 /// @param vm Already validated registry or null for direct invocation.

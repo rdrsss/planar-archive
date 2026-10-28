@@ -54,9 +54,16 @@ CLI::App& attach_load(CLI::App& root, load_options& options) {
           "ACTOR"));
   return command;
 }
+engine::command_options load_intent(const load_options& options) {
+  return engine::command_load_options{options.ledger,
+                                      options.workspace,
+                                      options.registry,
+                                      options.expect_revision,
+                                      options.request_id,
+                                      options.actor,
+                                      positive(options.expect_revision)};
+}
 response load_command(const load_options& options, engine::command_vm* vm) {
-  return execute(engine::command_load_options{options.ledger, options.workspace, options.registry, options.expect_revision,
-                                              options.request_id, options.actor, positive(options.expect_revision)},
-                 vm);
+  return execute(load_intent(options), vm);
 }
 } // namespace planar::cmd::handlers

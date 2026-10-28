@@ -8,6 +8,7 @@ import planar.engine.runtime_budget_test;
 import planar.engine.hash;
 import planar.engine.capture;
 import planar.engine.json_codec;
+import planar.engine.acceptance.intent;
 using namespace planar::engine;
 namespace {
 profile_snapshot profile(std::vector<std::string> modules) {
@@ -4734,4 +4735,416 @@ TEST_CASE("X06 D C03 a recovered allocation refusal followed by an illegal regis
   CHECK(retry.error().detail.code == "resource_limit");
   CHECK(retry.error().detail.message == "Lua allocation exceeded");
   CHECK(retry.error().detail.limit == "lua_bytes");
+}
+
+// X07 closed factory (wave A): admission, the single dispatch and the module-private invoke path. These tests drive only the
+// exported surface; the factory returns an owner that retains the exact admitted options.
+namespace {
+class x07_history_services final : public command_services {
+public:
+  int                    calls = 0;
+  std::string            seen_ledger;
+  command_service_result open_workspace(const command_render_options&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result capture_render(const command_render_options&, const value_ptr&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result initialize_ledger(const command_init_options&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result read_history(const command_history_options& options, const command_history_selector& selector) override {
+    ++calls;
+    seen_ledger = options.ledger;
+    return {record_value({{"version",
+                           [] {
+                             auto v     = std::make_shared<value>();
+                             v->kind    = value_kind::integer;
+                             v->integer = 1;
+                             return value_ptr(v);
+                           }()},
+                          {"kind", string_value("history")},
+                          {"ledger", string_value(std::string(32, 'b'))},
+                          {"active_revision", string_value("none")},
+                          {"last_event", string_value("0")},
+                          {"data", record_value({{"selector", string_value(selector.selector)}, {"events", array_value()}})}}),
+            {}};
+  }
+  command_service_result export_source(const command_export_options&) override {
+    ++calls;
+    return {};
+  }
+};
+std::string x07_profile_selector(const extension_fixture& f) {
+  return (f.path / "trusted/profile.json").string();
+}
+command_history_options x07_history(const std::filesystem::path& ledger) {
+  return {ledger.string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+}
+acceptance::request_intent x07_load_intent(const extension_fixture& f) {
+  auto intent =
+      acceptance::request_intent::create_v2("req", "actor", std::nullopt, (f.path / "workspaces/demo/workspace.lua").string(),
+                                            (f.path / "trusted/registry.json").string(), x07_profile_selector(f));
+  REQUIRE(intent);
+  return std::move(*intent);
+}
+void x07_expect_protocol(const std::expected<value_ptr, diagnostic>& result) {
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "internal");
+  CHECK(result.error().message == "Invalid external profile protocol");
+}
+} // namespace
+TEST_CASE("X07 profile owner is consumed by its single dispatch", "[external-registration][x07]") {
+  extension_fixture f;
+  auto              owner = profile_invocation::open_with_profile(x07_profile_selector(f), x07_history(f.path / "ledger.db"));
+  REQUIRE(owner);
+  CHECK(owner->observe().live);
+  x07_history_services services;
+  auto                 first = std::move(*owner).run_known(x07_history(f.path / "ledger.db"), services);
+  REQUIRE(first);
+  CHECK(services.calls == 1);
+  CHECK_FALSE(owner->observe().live);
+  CHECK(owner->observe().consumed);
+  // A second dispatch on the same owner refuses with the protocol diagnostic and runs nothing.
+  x07_expect_protocol(std::move(*owner).run_known(x07_history(f.path / "ledger.db"), services));
+  CHECK(services.calls == 1);
+}
+TEST_CASE("X07 closed factory keeps the original receipts through dispatch", "[external-registration][x07]") {
+  extension_fixture f;
+  auto              owner = profile_invocation::open_with_profile(x07_profile_selector(f), x07_history(f.path / "ledger.db"));
+  REQUIRE(owner);
+  // A trusted module changed after open must refuse at dispatch through the original receipts, never recapturing.
+  f.put("trusted/module.lua", extension_protocol_source("") + "\n-- changed after open");
+  x07_history_services services;
+  auto                 result = std::move(*owner).run_known(x07_history(f.path / "ledger.db"), services);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "capture_changed");
+  CHECK(result.error().message == "Captured external profile changed");
+  CHECK(services.calls == 0);
+}
+TEST_CASE("X07 runtime has exactly one profile VM creation call", "[external-registration][x07]") {
+  const auto  path = std::filesystem::path(__FILE__).parent_path() / "runtime.cpp";
+  auto        text = read_bytes(path);
+  std::string squashed;
+  for (const char c : text)
+    if (!std::isspace(static_cast<unsigned char>(c)))
+      squashed += c;
+  std::size_t count = 0;
+  for (auto at = squashed.find("command_vm::create(*snapshot)"); at != std::string::npos;
+       at      = squashed.find("command_vm::create(*snapshot)", at + 1))
+    ++count;
+  CHECK(count == 1);
+}
+TEST_CASE("X07 exported command_vm invoke still refuses profile owners", "[external-registration][x07]") {
+  auto vm = command_vm::create(profile({command()}));
+  REQUIRE(vm);
+  untouched_services services;
+  auto               result = vm->invoke(command_history_options{}, services);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().message == "Invalid external profile protocol");
+  CHECK(services.calls == 0);
+}
+TEST_CASE("X07 closed factory registers exactly once for every family", "[external-registration][x07]") {
+  extension_fixture f;
+  f.put("source/keep", "x");
+  const auto                         selector = x07_profile_selector(f);
+  const std::vector<command_options> families{
+      command_render_options{(f.path / "workspaces/demo/workspace.lua").string(), (f.path / "trusted/registry.json").string(),
+                             "r=" + (f.path / "source").string(), "j", "worker", std::nullopt, std::nullopt, std::nullopt, false},
+      command_init_options{(f.path / "new-ledger.db").string(), "w"},
+      command_history_options{(f.path / "ledger.db").string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+                              std::nullopt},
+      command_export_options{(f.path / "ledger.db").string(), (f.path / "export-target").string(), 1},
+  };
+  auto load = profile_invocation::open_with_profile(x07_load_intent(f), (f.path / "ledger.db").string());
+  REQUIRE(load);
+  CHECK(load->observe().registrations == 1);
+  CHECK(load->observe().known_load);
+  auto opaque = profile_invocation::open_opaque(selector);
+  REQUIRE(opaque);
+  CHECK(opaque->observe().registrations == 1);
+  std::size_t index = 0;
+  for (const auto& family : families) {
+    CAPTURE(index++);
+    auto owner = profile_invocation::open_with_profile(selector, family);
+    REQUIRE(owner);
+    const auto seen = owner->observe();
+    CHECK(seen.live);
+    CHECK(seen.registrations == 1);
+    CHECK_FALSE(seen.known_load);
+  }
+}
+TEST_CASE("X07 selector overload refuses the load alternative before capture", "[external-registration][x07]") {
+  extension_fixture f;
+  // Control: the selector overload admits a history family on a valid profile, so the refusal below is the alternative.
+  auto control = profile_invocation::open_with_profile(x07_profile_selector(f), x07_history(f.path / "ledger.db"));
+  REQUIRE(control);
+  // A load alternative never reaches capture: a missing selector gives the protocol diagnostic, not a path error.
+  auto refused = profile_invocation::open_with_profile((f.path / "trusted/absent.json").string(), command_load_options{});
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().detail.code == "internal");
+  CHECK(refused.error().detail.message == "Invalid external profile protocol");
+  CHECK(refused.error().field == "profile");
+  auto valid_selector = profile_invocation::open_with_profile(x07_profile_selector(f), command_load_options{});
+  REQUIRE_FALSE(valid_selector);
+  CHECK(valid_selector.error().detail.message == "Invalid external profile protocol");
+}
+TEST_CASE("X07 run_known refuses options that differ from the admitted options", "[external-registration][x07]") {
+  extension_fixture f;
+  f.put("ledger2.db", "second ledger");
+  auto owner = profile_invocation::open_with_profile(x07_profile_selector(f), x07_history(f.path / "ledger.db"));
+  REQUIRE(owner);
+  x07_history_services services;
+  x07_expect_protocol(std::move(*owner).run_known(x07_history(f.path / "ledger2.db"), services));
+  const auto seen = owner->observe();
+  CHECK(seen.live);
+  CHECK_FALSE(seen.consumed);
+  CHECK(seen.registrations == 1);
+  CHECK(services.calls == 0);
+  // The admitted options still dispatch afterwards, and exactly those options reach the service.
+  auto good = std::move(*owner).run_known(x07_history(f.path / "ledger.db"), services);
+  REQUIRE(good);
+  CHECK(services.calls == 1);
+  CHECK(services.seen_ledger == (f.path / "ledger.db").string());
+}
+TEST_CASE("X07 run_known refuses opaque and known load owners", "[external-registration][x07]") {
+  extension_fixture          f;
+  const auto                 target = f.path / "fresh-ledger.db";
+  const command_init_options init{target.string(), "w"};
+  x07_history_services       services;
+  auto                       opaque = profile_invocation::open_opaque(x07_profile_selector(f));
+  REQUIRE(opaque);
+  x07_expect_protocol(std::move(*opaque).run_known(init, services));
+  CHECK(opaque->observe().live);
+  auto known = profile_invocation::open_known_load(x07_load_intent(f), (f.path / "ledger.db").string());
+  REQUIRE(known);
+  x07_expect_protocol(std::move(*known).run_known(init, services));
+  CHECK(known->observe().live);
+  CHECK(services.calls == 0);
+  // A control history owner from the closed factory dispatches in the same test.
+  {
+    auto control = profile_invocation::open_with_profile(x07_profile_selector(f), x07_history(f.path / "ledger.db"));
+    REQUIRE(control);
+    auto result = std::move(*control).run_known(x07_history(f.path / "ledger.db"), services);
+    REQUIRE(result);
+    CHECK(services.calls == 1);
+  }
+  CHECK_FALSE(std::filesystem::exists(target));
+}
+TEST_CASE("X07 new runtime refusals use only closed table messages", "[external-registration][x07]") {
+  const std::set<std::string> closed{"External profile resource limit exceeded", "Invalid external profile protocol",
+                                     "Captured external profile changed",        "External profile overlaps a supplied input",
+                                     "Invalid external profile structure",       "Invalid embedded command protocol"};
+  const auto                  source = std::filesystem::path(__FILE__).parent_path();
+  for (const char* file : {"runtime.cpp", "runtime.cppm"}) {
+    const auto text = read_bytes(source / file);
+    for (const char* name : {"profile_invocation::run_known(", "profile_invocation::open_with_profile(",
+                             "profile_invocation::open_admitted(", "invoke_known("}) {
+      for (auto at = text.find(name); at != std::string::npos; at = text.find(name, at + 1)) {
+        // Only definitions with a body are scanned; declarations end at the semicolon first.
+        const auto open = text.find('{', at);
+        const auto stop = text.find(';', at);
+        if (open == std::string::npos || (stop != std::string::npos && stop < open))
+          continue;
+        int         depth = 0;
+        std::size_t end   = open;
+        for (; end < text.size(); ++end) {
+          depth += text[end] == '{' ? 1 : text[end] == '}' ? -1 : 0;
+          if (depth == 0)
+            break;
+        }
+        const auto body = text.substr(open, end - open);
+        for (std::size_t i = 0; i < body.size(); ++i) {
+          if (body[i] != '"')
+            continue;
+          std::string literal;
+          for (++i; i < body.size() && body[i] != '"'; ++i) {
+            if (body[i] == '\\' && i + 1 < body.size())
+              ++i;
+            literal += body[i];
+          }
+          // Non-message tokens are identifier-like code and field names; anything else must be a closed table message.
+          const bool token = !literal.empty() && std::ranges::all_of(literal, [](char c) {
+            return std::islower(static_cast<unsigned char>(c)) || std::isdigit(static_cast<unsigned char>(c)) || c == '_' ||
+                   c == '.' || c == '[' || c == ']';
+          });
+          INFO(file << ' ' << name << ' ' << literal);
+          CHECK((token || closed.contains(literal)));
+        }
+      }
+    }
+  }
+}
+
+// X07 wave B N30 narrowing rows (D7-8): late-slot admission, role capture, history decode and projection transport charge
+// the factory budget owner. They reuse the X06 D C02 budget variant and its boundary technique: workspace padding
+// pre-consumes native bytes up to the ceiling, and a charged stage lowers the largest padding that still prepares.
+// Existing pins: the C02/C03 role tests already pin the role capture charges (snapshot, enumeration, registry and observation
+// reads), so I96 below drives those same helpers as a named guard. No existing test pins admission path charging, history
+// decode under run_known or projection transport after into_extension.
+namespace {
+namespace n30 {
+c02_outcome execute(rb::extension_invocation& owner);
+c02_outcome role_run(std::size_t pad, int hops, bool project) {
+  extension_fixture f;
+  d3_inputs(f);
+  f.root = "source=source";
+  for (int hop = 0; hop < hops; ++hop)
+    f.root += "/../source";
+  const auto half  = pad / 2;
+  auto       bytes = read_bytes(f.path / "workspaces/demo/workspace.lua");
+  f.put("workspaces/demo/workspace.lua", "--" + std::string(half, 'x') + "\n" + bytes);
+  auto spec = read_bytes(f.path / "workspaces/demo/spec.lua");
+  f.put("workspaces/demo/spec.lua", "--" + std::string(pad - half, 'x') + "\n" + spec);
+  if (project)
+    d4_handler(f, "local role=ctx.read_role({});local p=ctx.project({id='custom'}); " + std::string(d4_return),
+               "local t='x';for i=1,18 do t=t..t end;return "
+               "{version=1,sections=engine.array{{id='a',text=t,mandatory=false}}}");
+  else
+    d3_handler(f, "local role=ctx.read_role({}); " + d3_return());
+  auto owner = c02_factory_owner(f, false);
+  return execute(owner);
+}
+// Like c02_execute but without reading a role marker, so projection responses are accepted too.
+c02_outcome execute(rb::extension_invocation& owner) {
+  c02_outcome out;
+  auto        result = owner.execute();
+  if (result) {
+    REQUIRE((*result)->fields.at("ok")->boolean);
+    out.ok = true;
+    return out;
+  }
+  auto error = std::get_if<rb::registration_error>(&result.error());
+  REQUIRE(error);
+  out.code    = error->detail.code;
+  out.limit   = error->detail.limit;
+  out.message = error->detail.message;
+  out.maximum = error->detail.maximum;
+  return out;
+}
+// Largest padding for which the run still succeeds, or -1 when even the unpadded run refuses.
+std::int64_t boundary(const std::function<c02_outcome(std::size_t)>& run) {
+  if (!run(0).ok)
+    return -1;
+  std::size_t lo = 0, hi = 1 << 19;
+  auto        upper = run(hi);
+  REQUIRE_FALSE(upper.ok);
+  CHECK(upper.code == "resource_limit");
+  CHECK(upper.limit == "native_bytes");
+  CHECK(upper.maximum == PLANAR_BUDGET_NATIVE_MAX);
+  while (hi - lo > 1) {
+    auto mid                = lo + (hi - lo) / 2;
+    (run(mid).ok ? lo : hi) = mid;
+  }
+  return static_cast<std::int64_t>(lo);
+}
+} // namespace n30
+} // namespace
+// Mutant: delete the admission path charges for pending hosts in extension_invocation::admit; a longer root spelling then no
+// longer lowers the padding boundary.
+TEST_CASE("X07 N30 late slot admission charges the factory budget owner", "[external-registration][x07][x07n30]") {
+  const auto shorter = n30::boundary([](std::size_t pad) { return n30::role_run(pad, 0, false); });
+  const auto longer  = n30::boundary([](std::size_t pad) { return n30::role_run(pad, 150, false); });
+  INFO("short spelling boundary " << shorter << " long spelling boundary " << longer);
+  REQUIRE(shorter >= 0);
+  REQUIRE(longer >= 0);
+  // About 1500 more spelling bytes are charged to the owner, at roughly 58 native bytes per padding byte.
+  CHECK(shorter - longer >= 10);
+}
+// Mutant: delete the prepare_role snapshot charge. Guard over the existing C02 pins: the outputs-on role adds directory
+// snapshots and record conversion, so its boundary must stay at least the measured gap below the outputs-off boundary.
+TEST_CASE("X07 N30 role capture charges the factory budget owner", "[external-registration][x07][x07n30]") {
+  const auto off = c02_boundary(false);
+  const auto on  = c02_boundary(true);
+  INFO("outputs-off boundary " << off << " outputs-on boundary " << on);
+  REQUIRE(off >= 0);
+  REQUIRE(on >= 0);
+  auto subject = c02_padded(static_cast<std::size_t>(off), true);
+  REQUIRE_FALSE(subject.ok);
+  CHECK(subject.code == "resource_limit");
+  CHECK(subject.limit == "native_bytes");
+  CHECK(subject.maximum == PLANAR_BUDGET_NATIVE_MAX);
+  CHECK(off - on >= c02_outputs_gap);
+}
+// Mutant: delete the projection transport charge. Guard: a 262144-byte section raw result must lower the boundary by at least
+// its own size divided by the measured slope after into_extension.
+TEST_CASE("X07 N30 projection transport charges the factory budget owner", "[external-registration][x07][x07n30]") {
+  const auto plain     = n30::boundary([](std::size_t pad) { return n30::role_run(pad, 0, false); });
+  const auto projected = n30::boundary([](std::size_t pad) { return n30::role_run(pad, 0, true); });
+  INFO("plain boundary " << plain << " projected boundary " << projected);
+  REQUIRE(plain >= 0);
+  REQUIRE(projected >= 0);
+  CHECK(plain - projected >= 1000);
+}
+namespace {
+namespace n30 {
+// Budget-variant history service returning a record padded with `chunks` strings of `chunk_bytes` bytes.
+class padded_history_services final : public rb::command_services {
+public:
+  padded_history_services(std::size_t chunks, std::size_t chunk_bytes) : _chunks(chunks), _chunk_bytes(chunk_bytes) {
+  }
+  rb::command_service_result open_workspace(const rb::command_render_options&) override {
+    return {};
+  }
+  rb::command_service_result capture_render(const rb::command_render_options&, const value_ptr&) override {
+    return {};
+  }
+  rb::command_service_result initialize_ledger(const rb::command_init_options&) override {
+    return {};
+  }
+  rb::command_service_result read_history(const rb::command_history_options&,
+                                          const rb::command_history_selector& selector) override {
+    auto data = std::map<std::string, value_ptr>{{"selector", string_value(selector.selector)}, {"events", array_value()}};
+    for (std::size_t i = 0; i < _chunks; ++i)
+      data.emplace(std::format("pad{:04d}", i), string_value(std::string(_chunk_bytes, 'h')));
+    auto number     = std::make_shared<value>();
+    number->kind    = value_kind::integer;
+    number->integer = 1;
+    return {record_value({{"version", number},
+                          {"kind", string_value("history")},
+                          {"ledger", string_value(std::string(32, 'b'))},
+                          {"active_revision", string_value("none")},
+                          {"last_event", string_value("0")},
+                          {"data", record_value(std::move(data))}}),
+            {}};
+  }
+  rb::command_service_result export_source(const rb::command_export_options&) override {
+    return {};
+  }
+
+private:
+  std::size_t _chunks, _chunk_bytes;
+};
+// Dispatch the shipped history callable under the budget variant against a service returning the padded record.
+std::expected<value_ptr, diagnostic> known_history(std::size_t chunks) {
+  extension_fixture f;
+  auto              ledger = (f.path / "ledger.db").string();
+  auto              opened = rb::profile_invocation::open_with_profile(
+      (f.path / "trusted/profile.json").string(),
+      rb::command_history_options{ledger, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt});
+  INFO((opened ? std::string("opened")
+               : opened.error().detail.code + " " + opened.error().detail.message + " " + opened.error().field));
+  REQUIRE(opened);
+  padded_history_services services(chunks, 65536);
+  return std::move(*opened).run_known(
+      rb::command_history_options{ledger, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt}, services);
+}
+} // namespace n30
+} // namespace
+// Mutant: delete the history transport charge in the profile dispatch path. A history record of about 80 percent of the
+// native ceiling stays under the live Lua ceiling on its own, so only a native transport charge can refuse it.
+TEST_CASE("X07 N30 history decode charges the factory budget owner", "[external-registration][x07][x07n30]") {
+  const auto control = n30::known_history(4);
+  if (!control)
+    INFO(control.error().code << " " << control.error().message);
+  REQUIRE(control);
+  const std::size_t chunks = (PLANAR_BUDGET_NATIVE_MAX / 10 * 8) / 65536;
+  const auto        big    = n30::known_history(chunks);
+  REQUIRE_FALSE(big);
+  CHECK(big.error().code == "resource_limit");
+  CHECK((big.error().limit == "native_bytes" || big.error().limit == "lua_bytes"));
+  CHECK(big.error().maximum == PLANAR_BUDGET_NATIVE_MAX);
 }

@@ -50,7 +50,7 @@ CLI::App& attach_render(CLI::App& root, render_options& options) {
   command.add_flag("--capture-outputs", options.capture_outputs)->multi_option_policy(CLI::MultiOptionPolicy::Throw);
   return command;
 }
-response render_command(const render_options& options, engine::command_vm* vm) {
+engine::command_options render_intent(const render_options& options) {
   engine::command_render_options intent{
       options.values[0], options.values[1], options.values[2], options.values[3], options.values[4], {}, {}, {}, false};
   if (!options.values[5].empty())
@@ -60,6 +60,9 @@ response render_command(const render_options& options, engine::command_vm* vm) {
   if (!options.values[7].empty())
     intent.budget_bytes = options.budget_bytes;
   intent.capture_outputs = options.capture_outputs;
-  return execute(std::move(intent), vm);
+  return intent;
+}
+response render_command(const render_options& options, engine::command_vm* vm) {
+  return execute(render_intent(options), vm);
 }
 } // namespace planar::cmd::handlers

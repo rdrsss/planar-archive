@@ -23,7 +23,10 @@ CLI::App& attach_init(CLI::App& root, init_options& options) {
       ->check(explicit_value);
   return command;
 }
+engine::command_options init_intent(const init_options& options) {
+  return engine::command_init_options{options.ledger, options.workspace_id};
+}
 response init_command(const init_options& options, engine::command_vm* vm) {
-  return execute(engine::command_init_options{options.ledger, options.workspace_id}, vm);
+  return execute(init_intent(options), vm);
 }
 } // namespace planar::cmd::handlers

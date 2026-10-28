@@ -257,3 +257,41 @@ A stdout write failure is exit 4 and may leave partial output; discard that outp
 Precommit refusals preserve history and leave failed IDs reusable. The exact
 [load contract](vernacular/load-command-contract.md) defines the finite services,
 completion receipt, diagnostics and remaining acceptance gates.
+
+## With-profile envelope (X07)
+
+The with-profile envelope is `planar with-profile --stdlib-profile FILE COMMAND [OPTIONS]`.
+Selected help has two counted orders: `planar with-profile --stdlib-profile FILE --help`
+and `planar with-profile --help --stdlib-profile FILE`. The envelope is
+parsed by CLI11 in `src/cmd/planar/envelope.cpp`; the only code that runs
+before CLI11 is the whole-invocation `--name=value` syntax guard over all argv
+tokens including the tail. Both refusals are usage errors with exit 2, and the
+profile is not accessed.
+
+- The selector is a scalar option (a duplicate is usage), nonempty, not starting
+  with `--`, valid UTF-8 without NUL. `./--help` is a valid selector.
+- The prefix is exactly three tokens (four when `--help` is counted). Selected
+  help exits 0 only for the two counted-help rows; other help placements are usage.
+- An option before the selector, or a root `--` terminator, is prefix usage.
+- The selector is normalized lexically against one cwd snapshot, with no
+  existence check, under a 64 MiB path ceiling. The request ceiling wins for load.
+- Order after the prefix: probe (shipped signature or opaque extension tail),
+  capture, known-slot admission, registration, final parse from the sealed
+  catalog with the same validators, then dispatch. A broken profile is reported
+  before an unknown command. A known shipped-signature failure is usage with
+  no extension fallback.
+- Known slot admission (before registration): render refuses overlap and alias
+  as `unsafe_path`; init is alias-only; history refuses a ledger alias; export
+  refuses a ledger alias or target overlap; load refuses its known slots through
+  the production CLI. A missing ledger is exit 3.
+- Load replays an equal saved request before any profile capture, conflicts on
+  an unequal body before profile access, and refuses a format1 ledger before
+  profile access.
+- Registration and preparation refusals print only the closed message set
+  of the [external profile contract](vernacular/external-profile-contract.md); fields,
+  host paths and tracebacks are never printed. Preparation usage prints the
+  public usage bytes; preparation semantic errors exit by code; malformed
+  trusted payloads are redacted to internal protocol.
+
+Public `init` creates a format2 ledger. The design record is
+[x07-addendum](vernacular/x07-addendum.md).

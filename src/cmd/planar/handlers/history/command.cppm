@@ -24,6 +24,10 @@ struct history_options {
 /// @param options State retained through parsing and dispatch.
 /// @return Subcommand owned by root.
 CLI::App& attach_history(CLI::App& root, history_options& options);
+/// Convert validated CLI11 bindings to the native history intent without any host access.
+/// @param options Validated CLI11 bindings.
+/// @return The typed intent a direct or with-profile invocation executes.
+engine::command_options history_intent(const history_options& options);
 /// Read and encode a complete bounded history response.
 /// @param options Validated CLI11 bindings.
 /// @param vm Already validated retained registry, or null for direct invocation.

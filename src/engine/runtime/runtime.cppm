@@ -469,6 +469,25 @@ public:
   /// @param profile_selector Absolute profile file selector.
   /// @return Owner whose known_load is false, or a typed failure with no partial owner.
   static std::expected<profile_invocation, registration_error> open_opaque(std::string_view profile_selector);
+  /// @brief Closed factory for render, init, history and export: capture, metadata-admit the family's slots, register once.
+  /// @param profile_selector Absolute normalized profile selector.
+  /// @param family Exactly the parsed family options; a load alternative is refused before any capture.
+  /// @return Owner retaining the admitted options, or a typed failure with no partial owner.
+  static std::expected<profile_invocation, registration_error> open_with_profile(std::string_view       profile_selector,
+                                                                                 const command_options& family);
+  /// @brief Closed factory for load: the intent overload that forwards to the known-load path.
+  /// @param request_intent Codec2 load intent carrying the profile selector, workspace and registry arguments.
+  /// @param ledger_path Native-only ledger selection used for alias admission.
+  /// @return Known-load owner or a typed failure with no partial owner.
+  static std::expected<profile_invocation, registration_error> open_with_profile(const acceptance::request_intent& request_intent,
+                                                                                 std::string_view                  ledger_path);
+  /// @brief Dispatch the admitted shipped family once on the retained VM and consume this owner.
+  /// @param options Must equal the options retained at admission exactly; otherwise refuses with the protocol diagnostic.
+  /// @param services Invocation-local native services, called synchronously.
+  /// @return The retained callable's response record, or a closed diagnostic; refusal of unequal or non-admitted options
+  /// leaves the owner unconsumed.
+  /// @note Thread-confined. The exported command_vm::invoke keeps refusing profile owners.
+  std::expected<value_ptr, diagnostic> run_known(command_options options, command_services& services) &&;
   /// @brief Return the immutable sealed catalog metadata.
   /// @return Exact catalog value, or null when moved-from, consumed or failed.
   value_ptr catalog() const;
@@ -516,7 +535,10 @@ private:
   explicit profile_invocation(std::unique_ptr<implementation> owner);
   static std::expected<void, registration_error> begin_frame(implementation& owner);
   static std::expected<void, registration_error> fail(implementation& owner, registration_error error);
-  std::unique_ptr<implementation>                _owner;
+  /// Capture, metadata-admit the family's slots, register once and reverify; reached only by the closed factory.
+  static std::expected<profile_invocation, registration_error> open_admitted(std::string_view       profile_selector,
+                                                                             const command_options& family);
+  std::unique_ptr<implementation>                              _owner;
 };
 /// Private product of prepare_load: the consumed owner, sealed source capture, normalized bundle and finalized model.
 /// Move-only with no default or public constructor; the only public member is observe(). There is intentionally no accessor

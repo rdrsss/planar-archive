@@ -20,6 +20,10 @@ struct export_options {
 /// @param options State retained through dispatch.
 /// @return Root-owned command.
 CLI::App& attach_export(CLI::App& root, export_options& options);
+/// Convert validated CLI11 bindings to the native export intent without any host access.
+/// @param options Validated CLI11 bindings.
+/// @return The typed intent a direct or with-profile invocation executes.
+engine::command_options export_intent(const export_options& options);
 /// Publish the selected source tree and encode a complete public result.
 /// @param options Validated explicit bindings.
 /// @param vm Already validated retained registry, or null for direct invocation.

@@ -79,6 +79,10 @@ with tempfile.TemporaryDirectory(prefix='planar-load-') as temp:
  assert len({r['registry'] for r in refs})==1 and len({r['stdlib'] for r in refs})==1
  original_revision=historical('--revision','1')['data'];original_event=historical('--at-event','2')['data']
  original_request=history(ledger,'chronology-initial')['data']
+ # D7-11 (clause 25): ledgers made by public init are format2, so an embedded load stores request_v2 with the embedded selector tag.
+ with sqlite3.connect(ledger) as db:
+  assert db.execute('PRAGMA user_version').fetchone()==(2,)
+  assert db.execute("SELECT codec,substr(encoded,1,15),substr(encoded,-1) FROM records JOIN requests ON requests.body_id=records.id WHERE request_id='chronology-initial'").fetchone()==(2,b'PLANAR-REQUEST\x02',b'\x00')
  shutil.rmtree(workspace)
  for executable in [binary,probe]:
   # Probe embeds a changed retained load policy; recorded history/export must not interpret it.

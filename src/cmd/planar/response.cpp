@@ -174,6 +174,140 @@ response failed(value_ptr error) {
 response usage() {
   return failed(native_error({"usage", "Expected command options or --help; see --help"}));
 }
+namespace {
+struct closed_pair {
+  std::string_view code, message;
+};
+// Every fixed {code, message} of the closed diagnostic table that profile capture, admission and registration can
+// propagate. Anything outside it is a protocol failure and is redacted; no field, host path or Lua text is ever printed.
+std::span<const closed_pair> closed_pairs() {
+  static constexpr auto table = std::to_array<closed_pair>({
+      {"usage", "Expected command options or --help; see --help"},
+      {"path_denied", "Invalid explicit input path"},
+      {"path_denied", "Invalid explicit input cwd"},
+      {"resource_limit", "Explicit input path limit exceeded"},
+      {"io", "Cannot resolve explicit input path"},
+      {"io", "Cannot obtain invocation cwd"},
+      {"path_denied", "Explicit input file is a symbolic link"},
+      {"io", "Explicit input must be a regular file"},
+      {"io", "Explicit root must be a directory"},
+      {"path_denied", "Too many symbolic links in explicit root"},
+      {"path_denied", "Explicit root is a symbolic link target"},
+      {"io", "Cannot resolve explicit root directory"},
+      {"path_denied", "Cannot resolve explicit input path"},
+      {"resource_limit", "Load exceeds native resource limits"},
+      {"internal", "Invalid native load preparation"},
+      {"resource_limit", "Load request exceeds native resource limits"},
+      {"schema", "Invalid load arguments"},
+      {"schema", "Invalid external profile structure"},
+      {"unsupported_version", "Unsupported external profile version"},
+      {"path", "Invalid external module path"},
+      {"unsafe_path", "External profile overlaps a supplied input"},
+      {"reference", "External registration identity conflict"},
+      {"capture_changed", "Captured external profile changed"},
+      {"resource_limit", "External profile resource limit exceeded"},
+      {"internal", "Invalid external profile protocol"},
+      {"resource_limit", "Lua stack exceeded"},
+      {"resource_limit", "Lua instruction limit exceeded"},
+      {"resource_limit", "Lua allocation exceeded"},
+      {"schema", "Invalid ledger arguments"},
+      {"path_denied", "Ledger path requires existing real parent directories and a valid target"},
+      {"ledger_exists", "Ledger target already exists"},
+      {"ledger_not_found", "Ledger was not found"},
+      {"foreign_ledger", "File is not a Planar ledger"},
+      {"unsupported_ledger_version", "Ledger version or state is unsupported"},
+      {"ledger_corrupt", "Ledger integrity verification failed"},
+      {"ledger_busy", "Ledger is busy"},
+      {"storage_full", "Ledger storage is full"},
+      {"io", "Ledger operation failed"},
+      {"io", "Ledger may be published; inspect the explicit target before retrying"},
+      {"io", "Explicit ledger recovery is required"},
+      {"hash_collision", "Ledger record identity collision"},
+      {"request_conflict", "Ledger request conflicts with its saved intent"},
+      {"revision_conflict", "Ledger revision does not match the expected revision"},
+      {"capture_changed", "Captured declaration inputs changed"},
+      {"revision_not_found", "Recorded history view is unavailable"},
+      {"request_not_found", "Recorded history view is unavailable"},
+      {"event_not_found", "Recorded history view is unavailable"},
+      {"unsupported_interpretation", "Recorded history view is unavailable"},
+      {"revision_not_found", "Recorded revision was not found"},
+      {"schema", "Invalid export arguments"},
+      {"path_denied", "Export path requires existing real parent directories and a valid target"},
+      {"target_exists", "Export target already exists"},
+      {"io", "Export operation failed"},
+      {"internal", "Invalid export cleanup location"},
+      {"internal", "Invalid embedded command protocol"},
+      {"internal", "Missing native load capture"},
+      {"internal", "Missing native load intent"},
+      {"internal", "Invalid saved load response"},
+      {"internal", "Missing load completion"},
+      {"io", "Cannot write stdout"},
+      {"resource_limit", "JSON codec refused input"},
+  });
+  return table;
+}
+bool in_closed_pairs(const diagnostic& detail) {
+  return std::ranges::any_of(closed_pairs(),
+                             [&](const closed_pair& row) { return row.code == detail.code && row.message == detail.message; });
+}
+// Existing propagated native capture, path and ledger refusals keep their exact messages; the registration vocabulary
+// (schema, version, path, unsafe_path, reference, capture_changed, resource_limit, internal) never does.
+bool is_native_passthrough(const diagnostic& detail) {
+  const auto& code = detail.code;
+  return code == "io" || code == "path_denied" || code == "ledger_not_found" || code == "foreign_ledger" ||
+         code == "unsupported_ledger_version" || code == "ledger_corrupt" || code == "ledger_busy" || code == "storage_full" ||
+         code == "ledger_exists" || code == "hash_collision" || code == "request_conflict" || code == "revision_conflict" ||
+         code == "revision_not_found" || code == "request_not_found" || code == "event_not_found" ||
+         code == "unsupported_interpretation" || code == "target_exists" || code == "export_incomplete";
+}
+} // namespace
+response registration_failed(const diagnostic& detail) {
+  try {
+    if (in_closed_pairs(detail) || is_native_passthrough(detail))
+      return failed(native_error(detail));
+    return extension_protocol_failed();
+  } catch (...) {
+    return {4, "", ""};
+  }
+}
+response extension_usage_failed() {
+  return usage();
+}
+response extension_protocol_failed() {
+  try {
+    return failed(native_error({"internal", "Invalid external profile protocol"}));
+  } catch (...) {
+    return {4, "", ""};
+  }
+}
+response extension_resource_failed(const diagnostic& detail) {
+  try {
+    if (detail.code != "resource_limit" || !in_closed_pairs(detail))
+      return extension_protocol_failed();
+    return failed(native_error(detail));
+  } catch (...) {
+    return {4, "", ""};
+  }
+}
+response semantic_failed(value_ptr error) {
+  try {
+    // The exact trusted inner error is passed through only when it is a well formed record; anything else is redacted.
+    const auto field = [&](const char* name, value_kind kind) -> const value* {
+      if (!error || error->kind != value_kind::record)
+        return nullptr;
+      const auto found = error->fields.find(name);
+      return found == error->fields.end() || !found->second || found->second->kind != kind ? nullptr : found->second.get();
+    };
+    const auto* code    = field("code", value_kind::string);
+    const auto* message = field("message", value_kind::string);
+    const auto* where   = field("field", value_kind::string);
+    if (!code || !message || !where || code->string.empty())
+      return extension_protocol_failed();
+    return failed(std::move(error));
+  } catch (...) {
+    return {4, "", ""};
+  }
+}
 } // namespace planar::cmd::detail
 namespace planar::cmd {
 using namespace detail;

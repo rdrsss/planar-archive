@@ -2000,6 +2000,18 @@
   "tests/native/v5-02-x06-a3-review-evidence/private-test-argv.json": {
    "original_sha256": "b30dca6c08d0ad7768ae64e169ab0338b6fcadb1066743771481a4cc2ecf9187",
    "redacted_sha256": "41c05bcab04afde562117e3e338fb0a5247c3af64d90f9242a45417a8184ac72"
+  },
+  "tests/native/v5-02-x07-c01-evidence/inventory.txt": {
+   "original_sha256": "a89a41d40217a05a46ca6433ea221ce73a040535ea65fa2f5e0a00baef443ac9",
+   "redacted_sha256": "5b6a974b905754f7dd74cbdba357d302a618fe134c8b48dfc75783df74a23bff"
+  },
+  "tests/native/v5-02-x07-evidence/REPORT.md": {
+   "original_sha256": "7a0fc13d4ae9cbe047f02526fc99c0beb9d0a47b9ec3542c2429d53bc12f3b53",
+   "redacted_sha256": "2396b715c2af542740a5547617e2355cf0863413b1ac85470701a90603e3aac7"
+  },
+  "tests/native/v5-02-x07-r1-evidence/inventory.txt": {
+   "original_sha256": "6b3707081cad5e3b1e419f6fa3ab56d161b12ecb9dbc48e435902e19e7756634",
+   "redacted_sha256": "9a97461befede512876b8df33b7af9321f9d375e01eb8a59aa5ce2c00d5530b4"
   }
  },
  "tokens": {

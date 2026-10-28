@@ -1192,7 +1192,11 @@ TEST_CASE("X06 D runtime public surface and resource messages stay closed", "[at
   CHECK(owner.public_section ==
         "classprofile_invocation{public:staticstd::expected<profile_invocation,registration_error>open_known_load(const"
         "acceptance::request_intent&request_intent,std::string_viewledger_path);staticstd::expected<profile_invocation,"
-        "registration_error>open_opaque(std::string_viewprofile_selector);value_ptrcatalog()const;std::string_vieweffective_"
+        "registration_error>open_opaque(std::string_viewprofile_selector);staticstd::expected<profile_invocation,registration_"
+        "error>open_with_profile(std::string_viewprofile_selector,constcommand_options&family);staticstd::expected<profile_"
+        "invocation,registration_error>open_with_profile(constacceptance::request_intent&request_intent,std::string_view"
+        "ledger_path);std::expected<value_ptr,diagnostic>run_known(command_optionsoptions,command_services&services)&&;"
+        "value_ptrcatalog()const;std::string_vieweffective_"
         "catalog()const;std::expected<prepared_profile,profile_preparation_error>prepare_load(constacceptance::request_intent&"
         "final_intent)&&;std::expected<extension_invocation,registration_error>into_extension()&&;profile_invocation_"
         "observationobserve()constnoexcept;profile_invocation(constprofile_invocation&)=delete;profile_invocation&operator=("

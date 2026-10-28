@@ -38,7 +38,10 @@ CLI::App& attach_export(CLI::App& root, export_options& o) {
 response export_failure(const engine::source_export::export_error& error) {
   return native_export_failure(error);
 }
+engine::command_options export_intent(const export_options& o) {
+  return engine::command_export_options{o.ledger, o.target, o.revision_number};
+}
 response export_command(const export_options& o, engine::command_vm* vm) {
-  return execute(engine::command_export_options{o.ledger, o.target, o.revision_number}, vm);
+  return execute(export_intent(o), vm);
 }
 } // namespace planar::cmd::handlers

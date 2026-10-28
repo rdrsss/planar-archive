@@ -1129,6 +1129,103 @@ read_gate_status read_snapshot::gate_status() const noexcept {
          : _state->gate_failure != read_gate_status::ready ? _state->gate_failure
                                                            : _state->db.gate_status();
 }
+namespace {
+// Diagnostic shared by the liveness helper; byte-identical to native::no_sidecars (closed message table).
+constexpr std::string_view sidecar_refusal_message = "Ledger sidecar requires separately audited recovery";
+// SQLite's default PENDING_BYTE plus one: the RESERVED byte. A writer in RESERVED, PENDING or EXCLUSIVE holds a write
+// lock on it; a reader holds only the SHARED range and never locks this byte.
+constexpr off_t reserved_byte = 0x40000000 + 1;
+/// @brief Check one leftover sidecar by name, without following links.
+/// @param where Located ledger with its retained parent directory.
+/// @param suffix Sidecar suffix appended to the ledger name.
+/// @return True when present, false when absent, or the shared io failure for any other stat error.
+std::expected<bool, format_error> sidecar_present(const location& where, const char* suffix) {
+  struct stat st{};
+  if (::fstatat(where.parent.fd, (where.name + suffix).c_str(), &st, AT_SYMLINK_NOFOLLOW) == 0)
+    return true;
+  if (errno != ENOENT)
+    return storage();
+  return false;
+}
+enum class probe_state : std::uint8_t { held, busy_writer, failed };
+/// @brief Scoped non-blocking read lock on the RESERVED byte of the retained ledger descriptor.
+///
+/// A read lock never blocks a reader and holds the byte steady while the journal is decided. POSIX record locks belong to
+/// a process, so a holder in this same process is invisible here (recorded limit; the product runs one connection per
+/// ledger per command). The destructor releases only that one byte on every exit path. It never closes the descriptor,
+/// because closing any descriptor of the inode would drop every lock this process holds on it. The unlock is safe: at both
+/// call sites this process holds no SQLite lock on the inode (the read snapshot released SHARED, or was never taken), and a
+/// read connection never locks the RESERVED byte. Single-threaded use only.
+class reserved_probe {
+public:
+  /// @brief Attempt the non-blocking read lock on the RESERVED byte.
+  /// @param fd Retained ledger descriptor; it must be open for reading. Borrowed, never closed here.
+  explicit reserved_probe(int fd) : _fd(fd) {
+    struct flock lock = byte_lock(F_RDLCK);
+    if (::fcntl(_fd, F_SETLK, &lock) == 0) {
+      _state = probe_state::held;
+      return;
+    }
+    const int error = errno;
+    _state          = (error == EAGAIN || error == EACCES) ? probe_state::busy_writer : probe_state::failed;
+  }
+  reserved_probe(const reserved_probe&)            = delete;
+  reserved_probe& operator=(const reserved_probe&) = delete;
+  ~reserved_probe() {
+    if (_state != probe_state::held)
+      return;
+    struct flock lock = byte_lock(F_UNLCK);
+    (void)::fcntl(_fd, F_SETLK, &lock);
+  }
+  /// @brief Report the probe outcome.
+  /// @return held when this process holds the read lock, busy_writer when another process holds RESERVED or higher,
+  ///   failed for any other fcntl error.
+  probe_state state() const noexcept {
+    return _state;
+  }
+
+private:
+  static struct flock byte_lock(short type) noexcept {
+    struct flock lock{};
+    lock.l_type   = type;
+    lock.l_whence = SEEK_SET;
+    lock.l_start  = reserved_byte;
+    lock.l_len    = 1;
+    return lock;
+  }
+  int         _fd;
+  probe_state _state = probe_state::failed;
+};
+/// @brief Decide whether a leftover sidecar blocks the open, excusing a plain journal only for a live writer.
+/// @param where Located ledger with its retained parent directory.
+/// @param fd Retained read-only ledger descriptor, borrowed for the RESERVED probe; never closed here.
+/// @return Success when nothing blocks the open, when a live writer holds RESERVED (SQLite busy handling and the
+///   compare-and-set decide), or recovery_required when a -wal, -shm or a non-live -journal is present. A stat or fcntl
+///   failure other than the expected errors surfaces as the shared io failure.
+std::expected<void, format_error> no_orphan_sidecars(const location& where, int fd) {
+  // The ledger never uses WAL, so -wal and -shm are never excused by a live writer.
+  for (const char* suffix : {"-wal", "-shm"}) {
+    auto present = sidecar_present(where, suffix);
+    if (!present)
+      return std::unexpected(present.error());
+    if (*present)
+      return refuse(format_error_code::recovery_required, std::string(sidecar_refusal_message));
+  }
+  // The journal is decided while the probe holds the RESERVED byte: a writer cannot create or delete its journal
+  // without first holding RESERVED, so the stat below cannot race a live writer.
+  reserved_probe probe(fd);
+  if (probe.state() == probe_state::failed)
+    return storage();
+  if (probe.state() == probe_state::busy_writer)
+    return {};
+  auto journal = sidecar_present(where, "-journal");
+  if (!journal)
+    return std::unexpected(journal.error());
+  if (*journal)
+    return refuse(format_error_code::recovery_required, std::string(sidecar_refusal_message));
+  return {};
+}
+} // namespace
 std::expected<read_snapshot, format_error> read_snapshot::open_read(const std::filesystem::path& path, ledger_access access,
                                                                     std::shared_ptr<storage_read_guard> guard) {
   if (access != ledger_access::read_only && access != ledger_access::read_write)
@@ -1155,7 +1252,7 @@ std::expected<read_snapshot, format_error> read_snapshot::open_read(const std::f
   auto checked = header(held.fd);
   if (!checked)
     return std::unexpected(checked.error());
-  auto sidecars = no_sidecars(*where);
+  auto sidecars = no_orphan_sidecars(*where, held.fd);
   if (!sidecars)
     return std::unexpected(sidecars.error());
   if (!identity_matches(*where, identity))
@@ -1179,7 +1276,7 @@ std::expected<read_snapshot, format_error> read_snapshot::open_read(const std::f
   if (access == ledger_access::read_write) {
     // Destroy the read snapshot and connection before the separately verified writable transition.
     LEDGER_TRY(tx->rollback());
-    sidecars = no_sidecars(*where);
+    sidecars = no_orphan_sidecars(*where, held.fd);
     if (!sidecars)
       return std::unexpected(sidecars.error());
     if (!identity_matches(*where, identity))
@@ -1361,9 +1458,6 @@ std::expected<write_transaction, format_error> begin_write(const std::filesystem
   struct stat identity{};
   if (::fstat(state->file.fd, &identity) != 0 || !identity_matches(state->where, identity))
     return refuse(format_error_code::unsafe_path, "Ledger identity changed before write transaction");
-  auto sidecars = no_sidecars(state->where);
-  if (!sidecars)
-    return std::unexpected(sidecars.error());
   auto tx = state->db.begin();
   if (!tx)
     return storage(tx.error());
@@ -1371,7 +1465,8 @@ std::expected<write_transaction, format_error> begin_write(const std::filesystem
   auto checked    = verify(state->db);
   if (!checked)
     return std::unexpected(checked.error());
-  sidecars = no_sidecars(state->where);
+  // Plain existence check under this connection's own RESERVED lock: a sidecar here cannot belong to a live writer.
+  auto sidecars = no_sidecars(state->where);
   if (!sidecars)
     return std::unexpected(sidecars.error());
   if (!identity_matches(state->where, identity) || !same_metadata(*checked, state->info))

@@ -1632,3 +1632,29 @@ runtime dependency, and supplies neither a production profile adapter/raw-header
 binding nor a history service or public handler. There is no full, release or
 Linux execution claim; Linux is assessed for source portability only. C4-B1
 awaits independent review; C4-A and test-only C4-B0 are independently approved.
+
+## X07 test layout
+
+- Catch2 matrices live in `src/cmd/planar/bootstrap.t.cpp` and
+  `src/engine/runtime/external_registration.t.cpp`. They enumerate every X01
+  row (44 E and 12 O) exactly once and assert exit, exact stdout/stderr bytes
+  and a tri-state profile outcome.
+- Oracle: per test, a work tree holds three profile trees. TA is a valid
+  profile, TB a malformed profile (accessed exactly when its bytes differ from
+  TA) and TC a valid profile whose module spins at chunk level (registered
+  exactly when its bytes differ from TA). Limit: rows that never access the
+  profile are indistinguishable among themselves.
+- Source scans locate sources through `__FILE__` (parent directory) and assert
+  structure: no manual argv scan in `envelope.cpp` or `bootstrap.cpp`, closed
+  message literals, the early-lookup scope closing before profile capture, and
+  adoption counts.
+- Production sources carry `X07-ANCHOR:<name>` comment markers (for example
+  `after-early-miss`, `after-factory-open`, `after-prepare-load`,
+  `after-commit`, `response-ceiling`). Generated variants built from those
+  anchors inject hooks in scratch copies; the checkout is never mutated.
+- Negative-compile probes assert that forbidden API shapes (for example a
+  mutable `command_vm` extraction or a public constructor) do not compile.
+- Python process suites are `tests/acceptance/x07_*.py` (replay, services,
+  substitution, workflow); the fixture generator is
+  `tests/native/v5-02-x07-support/generate.py`; evidence is under the
+  gitignored `tests/native/v5-02-x07-evidence/`.

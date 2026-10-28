@@ -50,4 +50,22 @@ response failed(value_ptr error);
 /// Encode the fixed invocation diagnostic without host arguments.
 /// @return Status 2 and canonical stderr.
 response usage();
+/// Adapt a captured-profile registration refusal to its closed public diagnostic.
+/// @param detail Closed registration diagnostic; the logical field, host paths and Lua text are never passed here.
+/// @return Buffered failure by the shared exit policy.
+response registration_failed(const diagnostic& detail);
+/// Adapt a final-parse or preparation usage refusal.
+/// @return Status 2 with the existing public usage bytes, never the runtime message.
+response extension_usage_failed();
+/// Adapt a trusted-protocol refusal into the redacted internal diagnostic.
+/// @return Status 4 with the closed `Invalid external profile protocol` diagnostic.
+response extension_protocol_failed();
+/// Adapt a terminal resource refusal.
+/// @param detail Closed resource diagnostic with its limit and maximum.
+/// @return Status 3 buffered failure.
+response extension_resource_failed(const diagnostic& detail);
+/// Adapt a trusted semantic refusal by its inner code.
+/// @param error Raw-validated inner error value; malformed payloads become the redacted protocol diagnostic.
+/// @return Buffered failure with the exit chosen by code.
+response semantic_failed(value_ptr error);
 } // namespace planar::cmd::detail

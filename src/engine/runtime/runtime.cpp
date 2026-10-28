@@ -3131,7 +3131,7 @@ void validate_response(command_state& c, const value_ptr& response) {
   auto envelope = response->fields.at("value");
   if (!envelope || envelope->kind != value_kind::record || !envelope->fields.contains("version") ||
       envelope->fields.at("version")->kind != value_kind::integer || envelope->fields.at("version")->integer != 1 ||
-      text_field(envelope, "kind") != c.name)
+      (text_field(envelope, "kind") != c.name && !(c.name == "render" && text_field(envelope, "kind") == "render_external")))
     command_refuse();
   if (c.name == "history" || c.name == "load") {
     if (!same(envelope, c.facts))
@@ -3146,6 +3146,9 @@ void validate_response(command_state& c, const value_ptr& response) {
     expected->fields["kind"]    = command_text(c.name);
     if (!same(envelope, expected))
       command_refuse();
+  } else if (text_field(envelope, "kind") == "render_external") {
+    // An external shape adds its identity record beside the packet and manifest.
+    exact(envelope, {"version", "kind", "packet", "manifest", "shape"});
   } else {
     exact(envelope, {"version", "kind", "packet", "manifest"});
   }
@@ -4840,37 +4843,41 @@ std::expected<value_ptr, registration_error> command_vm::validate_profile_phases
     return allocation_failure();
   }
 }
-std::expected<value_ptr, diagnostic> command_vm::invoke(command_options options, command_services& services) {
-  if (_owner && _owner->command.profile)
-    return std::unexpected(external_protocol());
-  if (!_owner || _owner->runtime.seal_failed || _owner->command.invoked)
-    return std::unexpected(diagnostic{"internal", "Command invocation already consumed"});
-  auto& s   = _owner->runtime;
-  auto& c   = _owner->command;
-  auto  l   = _owner->lua;
-  c.invoked = true;
-  struct terminal_release {
-    implementation& owner;
-    ~terminal_release() {
-      if (owner.lua) {
-        lua_close(owner.lua);
-        owner.lua = nullptr;
-      }
-      owner.command.services = nullptr;
-      owner.command.handles.clear();
-      owner.command.entries.clear();
-      owner.command.options = command_render_options{};
-      owner.command.pending_descriptor.reset();
-      owner.command.invocation.reset();
-      owner.command.response.reset();
-      owner.command.native_error.reset();
-      owner.command.facts.reset();
-      owner.command.opened.reset();
-      owner.runtime.input.reset();
-      owner.runtime.codec_result.reset();
-      owner.runtime.pending.clear();
+namespace {
+/// Releases every invocation-local reference and closes the Lua state when a command body ends, on every exit path.
+struct command_terminal_release {
+  command_vm::implementation& owner; ///< VM whose invocation state is released.
+  ~command_terminal_release() {
+    if (owner.lua) {
+      lua_close(owner.lua);
+      owner.lua = nullptr;
     }
-  } release{*_owner};
+    owner.command.services = nullptr;
+    owner.command.handles.clear();
+    owner.command.entries.clear();
+    owner.command.options = command_render_options{};
+    owner.command.pending_descriptor.reset();
+    owner.command.invocation.reset();
+    owner.command.response.reset();
+    owner.command.native_error.reset();
+    owner.command.facts.reset();
+    owner.command.opened.reset();
+    owner.runtime.input.reset();
+    owner.runtime.codec_result.reset();
+    owner.runtime.pending.clear();
+  }
+};
+/// The shared command invocation body: one retained handler call over the supplied native services.
+/// The caller decides whether a profile VM may enter; this body only refuses a consumed or failed VM.
+std::expected<value_ptr, diagnostic> invoke_command_body(command_vm::implementation& owner, command_options options,
+                                                         command_services& services) {
+  if (owner.runtime.seal_failed || owner.command.invoked)
+    return std::unexpected(diagnostic{"internal", "Command invocation already consumed"});
+  auto& s   = owner.runtime;
+  auto& c   = owner.command;
+  auto  l   = owner.lua;
+  c.invoked = true;
+  command_terminal_release release{owner};
   try {
     c.options = std::move(options);
     prepare_invocation(c);
@@ -4902,6 +4909,127 @@ std::expected<value_ptr, diagnostic> command_vm::invoke(command_options options,
     return std::unexpected(diagnostic{"internal", "Command execution failed"});
   }
 }
+} // namespace
+std::expected<value_ptr, diagnostic> command_vm::invoke(command_options options, command_services& services) {
+  if (_owner && _owner->command.profile)
+    return std::unexpected(external_protocol());
+  if (!_owner)
+    return std::unexpected(diagnostic{"internal", "Command invocation already consumed"});
+  return invoke_command_body(*_owner, std::move(options), services);
+}
+namespace {
+/// Render under a profile: the same two native services as the shipped handler, with the approved render_profile phases
+/// replacing the embedded renderer so that render_external_v1 and custom shapes apply. The VM never began a profile frame.
+std::expected<value_ptr, diagnostic> invoke_known_render(command_vm& vm, command_vm::implementation& owner,
+                                                         command_options options, command_services& services) {
+  if (owner.runtime.seal_failed || owner.command.invoked)
+    return std::unexpected(external_protocol());
+  auto&                    s = owner.runtime;
+  auto&                    c = owner.command;
+  command_terminal_release release{owner};
+  try {
+    c.options = std::move(options);
+    prepare_invocation(c);
+    begin_invocation(s, c);
+    s.active.clear();
+    c.services = &services;
+    validate(s, c.invocation, 1);
+    auto l = owner.lua;
+    {
+      lua_pushcfunction(l, ensure_shape_baseline_protected);
+      const int status = lua_pcall(l, 0, 0, 0);
+      lua_settop(l, 0);
+      if (status == LUA_ERRMEM || exhausted(s))
+        throw command_resource(s);
+      if (status || s.stack_exhausted || !c.shape_baseline_ready)
+        throw external_resource();
+    }
+    const auto& render_options = std::get<command_render_options>(c.options);
+    // One service result, copied and checked exactly as the shipped service bridge does; an error ends the invocation.
+    auto accept = [&](command_service_result result) -> value_ptr {
+      ++c.calls;
+      if (bool(result.value) == bool(result.error))
+        command_refuse();
+      auto data = result.error ? result.error : result.value;
+      validate(s, data, 1);
+      auto copied = copy_value(data);
+      if (result.error) {
+        native_error_schema(copied);
+        c.native_error = copied;
+      }
+      return copied;
+    };
+    auto failed = [&](const value_ptr& error) { return command_record({{"ok", command_boolean(false)}, {"error", error}}); };
+    auto opened = accept(services.open_workspace(render_options));
+    if (c.native_error)
+      return failed(c.native_error);
+    exact(opened, {"file", "workspace"});
+    if (!valid_path(text_field(opened, "file")))
+      command_refuse();
+    c.opened = opened;
+    charge(s, 3 * 128 + sizeof(value));
+    auto route_input = command_record({{"file", opened->fields.at("file")}, {"workspace", opened->fields.at("workspace")}});
+    auto routed      = call_retained_value(l, c.shape_phases[8], route_input);
+    if (c.bridge_error)
+      throw *c.bridge_error;
+    if (exhausted(s))
+      throw command_resource(s);
+    if (!routed)
+      throw routed.error().code == "resource_limit" ? std::move(routed.error()) : external_protocol();
+    auto envelope = std::move(*routed);
+    if (!envelope || envelope->kind != value_kind::record || envelope->fields.size() != 1 ||
+        envelope->fields.contains("error") == envelope->fields.contains("value"))
+      throw external_protocol();
+    s.preserving_aliases = false;
+    s.push_memo          = 0;
+    s.input.reset();
+    release_shape_temporaries(l);
+    if (envelope->fields.contains("error")) {
+      native_error_schema(envelope->fields.at("error"));
+      return failed(envelope->fields.at("error"));
+    }
+    auto route = envelope->fields.at("value");
+    validate_route(c, route);
+    auto request = accept(services.capture_render(render_options, route));
+    if (c.native_error)
+      return failed(c.native_error);
+    c.services    = nullptr;
+    auto rendered = vm.render_profile(request);
+    c.invoked     = true;
+    if (!rendered)
+      return std::unexpected(std::move(rendered.error().detail));
+    auto result = std::move(*rendered);
+    if (!result || result->kind != value_kind::record || result->fields.size() != 1 ||
+        result->fields.contains("error") == result->fields.contains("value"))
+      throw external_protocol();
+    auto response = result->fields.contains("error")
+                        ? failed(result->fields.at("error"))
+                        : command_record({{"ok", command_boolean(true)}, {"value", result->fields.at("value")}});
+    validate_response(c, response);
+    return response;
+  } catch (diagnostic& e) {
+    c.services = nullptr;
+    return std::unexpected(std::move(e));
+  } catch (const std::bad_alloc&) {
+    c.services = nullptr;
+    return std::unexpected(external_resource());
+  } catch (const std::length_error&) {
+    c.services = nullptr;
+    return std::unexpected(external_resource());
+  } catch (...) {
+    c.services = nullptr;
+    return std::unexpected(external_protocol());
+  }
+}
+/// Dispatch the sealed shipped callable of the admitted family in the retained VM.
+/// Init, history and export run the shared command body; render runs the approved profile render phases.
+std::expected<value_ptr, diagnostic> invoke_known(command_vm& vm, command_vm::implementation& owner, command_options options,
+                                                  command_services& services) {
+  if (std::holds_alternative<command_render_options>(options))
+    return invoke_known_render(vm, owner, std::move(options), services);
+  return invoke_command_body(owner, std::move(options), services);
+}
+} // namespace
 /// Private stable pair retaining original trusted receipts and one final parsed admission.
 struct extension_invocation::implementation {
   profile_capture                              capture;          ///< Original moved trusted and late-slot receipt owner.
@@ -5008,9 +5136,10 @@ struct profile_invocation::implementation {
   std::shared_ptr<const acceptance::request_data> bound_intent; ///< Immutable intent bound at open_known_load; null when opaque.
   std::size_t                                     owner_charge = 0;     ///< Bytes charged for this allocation by the factory.
   bool                                            known_load   = false; ///< Set only by open_known_load.
-  bool                                            frame_begun  = false; ///< Whether the single active frame has begun.
-  bool                                            consumed     = false; ///< Whether into_extension took the capture and VM.
-  std::optional<registration_error>               first_failure;        ///< First terminal diagnostic, preserved across moves.
+  std::optional<command_options>                  admitted; ///< Exact options admitted by the closed factory; empty otherwise.
+  bool                                            frame_begun = false; ///< Whether the single active frame has begun.
+  bool                                            consumed    = false; ///< Whether into_extension took the capture and VM.
+  std::optional<registration_error>               first_failure;       ///< First terminal diagnostic, preserved across moves.
   /// @param sink Factory budget shared with the capture and receipts.
   /// @param captured Original receipt owner.
   /// @param registered VM registered from captured.
@@ -5024,6 +5153,112 @@ registration_error profile_owner_protocol_error() {
 }
 registration_error from_profile_error(profile_error error) {
   return {std::move(error.detail), std::move(error.field)};
+}
+/// The family error for a supplied ledger that does not exist; admission never registers in that case.
+registration_error admitted_ledger_absent() {
+  return {diagnostic{"ledger_not_found", "Ledger was not found"}, "ledger"};
+}
+/// Admit one supplied ledger file; genuine absence keeps the family error and every other refusal passes through.
+std::expected<void, registration_error> admit_ledger(profile_capture& capture, std::string_view ledger) {
+  auto admitted = capture.admit_file("ledger", ledger, admission_file_role::ledger);
+  if (admitted)
+    return {};
+  if (capture.last_admission_refusal_was_absent())
+    return std::unexpected(admitted_ledger_absent());
+  return std::unexpected(from_profile_error(std::move(admitted.error())));
+}
+/// The directory of an ID=DIR mapping, or nothing when the token has no separator; dispatch refuses such a token.
+std::optional<std::string_view> mapping_directory(std::string_view mapping) {
+  const auto at = mapping.find('=');
+  if (at == std::string_view::npos)
+    return std::nullopt;
+  return mapping.substr(at + 1);
+}
+/// Metadata-only admission of every supplied slot of the family, after capture and before registration.
+std::expected<void, registration_error> admit_family_slots(profile_capture& capture, const command_options& family) {
+  struct visitor {
+    profile_capture&                        capture;
+    std::expected<void, registration_error> operator()(const command_render_options& o) const {
+      const auto host = std::filesystem::path(o.workspace).parent_path().string();
+      if (auto admitted = capture.admit_root("workspace", host); !admitted)
+        return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (auto admitted = capture.admit_file("declaration", o.workspace, admission_file_role::declaration); !admitted)
+        return std::unexpected(registration_error{
+            acceptance::known_declaration_error(admitted.error().detail, capture.last_admission_refusal_was_absent()).detail,
+            "profile"});
+      if (auto admitted = capture.admit_file("registry", o.registry, admission_file_role::registry); !admitted)
+        return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (auto directory = mapping_directory(o.root))
+        if (auto admitted = capture.admit_root("source", *directory); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (o.base_root)
+        if (auto directory = mapping_directory(*o.base_root))
+          if (auto admitted = capture.admit_root("base", *directory); !admitted)
+            return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (o.observations)
+        if (auto admitted = capture.admit_file("observations", *o.observations, admission_file_role::observation); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
+    }
+    std::expected<void, registration_error> operator()(const command_init_options& o) const {
+      // Alias-only: a new target has nothing to alias, and no containment refusal applies to it.
+      std::error_code ec;
+      const auto      status = std::filesystem::symlink_status(o.ledger, ec);
+      if (!ec && status.type() == std::filesystem::file_type::not_found)
+        return {};
+      if (ec && ec == std::errc::no_such_file_or_directory)
+        return {};
+      return admit_ledger(capture, o.ledger);
+    }
+    std::expected<void, registration_error> operator()(const command_history_options& o) const {
+      return admit_ledger(capture, o.ledger);
+    }
+    std::expected<void, registration_error> operator()(const command_export_options& o) const {
+      if (auto admitted = admit_ledger(capture, o.ledger); !admitted)
+        return admitted;
+      if (auto admitted = capture.admit_target("target", o.target); !admitted)
+        return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
+    }
+    std::expected<void, registration_error> operator()(const command_load_options&) const {
+      return std::unexpected(profile_owner_protocol_error());
+    }
+  };
+  return std::visit(visitor{capture}, family);
+}
+/// Exact field-by-field equality of two option sets of the same family.
+bool same_options(const command_options& a, const command_options& b) {
+  if (a.index() != b.index())
+    return false;
+  struct visitor {
+    const command_options& other;
+    bool                   operator()(const command_render_options& x) const {
+      const auto& y = std::get<command_render_options>(other);
+      return x.workspace == y.workspace && x.registry == y.registry && x.root == y.root && x.job == y.job && x.role == y.role &&
+             x.base_root == y.base_root && x.observations == y.observations && x.budget_bytes == y.budget_bytes &&
+             x.capture_outputs == y.capture_outputs;
+    }
+    bool operator()(const command_init_options& x) const {
+      const auto& y = std::get<command_init_options>(other);
+      return x.ledger == y.ledger && x.workspace_id == y.workspace_id;
+    }
+    bool operator()(const command_history_options& x) const {
+      const auto& y = std::get<command_history_options>(other);
+      return x.ledger == y.ledger && x.revision == y.revision && x.at_event == y.at_event && x.after_event == y.after_event &&
+             x.request_id == y.request_id && x.limit == y.limit;
+    }
+    bool operator()(const command_export_options& x) const {
+      const auto& y = std::get<command_export_options>(other);
+      return x.ledger == y.ledger && x.target == y.target && x.revision == y.revision;
+    }
+    bool operator()(const command_load_options& x) const {
+      const auto& y = std::get<command_load_options>(other);
+      return x.ledger == y.ledger && x.workspace == y.workspace && x.registry == y.registry &&
+             x.expect_revision == y.expect_revision && x.request_id == y.request_id && x.actor == y.actor &&
+             x.expected_head == y.expected_head;
+    }
+  };
+  return std::visit(visitor{b}, a);
 }
 } // namespace
 profile_invocation::profile_invocation(std::unique_ptr<implementation> owner) : _owner(std::move(owner)) {
@@ -5116,6 +5351,71 @@ std::expected<profile_invocation, registration_error> profile_invocation::open_o
     return std::unexpected(registration_error{external_resource(), "profile"});
   } catch (const std::length_error&) {
     return std::unexpected(registration_error{external_resource(), "profile"});
+  }
+}
+std::expected<profile_invocation, registration_error> profile_invocation::open_admitted(std::string_view       profile_selector,
+                                                                                        const command_options& family) {
+  try {
+    auto budget  = std::make_shared<factory_budget>();
+    auto capture = profile_capture::open(profile_selector, budget);
+    if (!capture)
+      return std::unexpected(from_profile_error(std::move(capture.error())));
+    // Metadata-only admissions precede the single registration.
+    if (auto admitted = admit_family_slots(*capture, family); !admitted)
+      return std::unexpected(std::move(admitted.error()));
+    auto vm = extension_invocation::register_vm(*capture);
+    if (!vm)
+      return std::unexpected(std::move(vm.error()));
+    attach_budget(budget, vm->_owner->runtime);
+    const auto charged_before = vm->_owner->runtime.native_bytes;
+    charge(vm->_owner->runtime, sizeof(implementation) + 64);
+    const auto charged  = vm->_owner->runtime.native_bytes - charged_before;
+    auto       owner    = std::make_unique<implementation>(budget, std::move(*capture), std::move(*vm));
+    owner->owner_charge = charged;
+    owner->admitted     = family;
+    if (auto verified = owner->capture.verify(); !verified)
+      return std::unexpected(from_profile_error(std::move(verified.error())));
+    return profile_invocation(std::move(owner));
+  } catch (const diagnostic& error) {
+    return std::unexpected(registration_error{error, "profile"});
+  } catch (const std::bad_alloc&) {
+    return std::unexpected(registration_error{external_resource(), "profile"});
+  } catch (const std::length_error&) {
+    return std::unexpected(registration_error{external_resource(), "profile"});
+  }
+}
+std::expected<profile_invocation, registration_error> profile_invocation::open_with_profile(std::string_view profile_selector,
+                                                                                            const command_options& family) {
+  if (std::holds_alternative<command_load_options>(family))
+    return std::unexpected(profile_owner_protocol_error());
+  return open_admitted(profile_selector, family);
+}
+std::expected<profile_invocation, registration_error>
+profile_invocation::open_with_profile(const acceptance::request_intent& request_intent, std::string_view ledger_path) {
+  return open_known_load(request_intent, ledger_path);
+}
+std::expected<value_ptr, diagnostic> profile_invocation::run_known(command_options options, command_services& services) && {
+  // One check covers moved-from, consumed, failed, frame-begun and every owner without retained admitted options.
+  if (!_owner || _owner->consumed || _owner->first_failure || _owner->frame_begun || !_owner->admitted)
+    return std::unexpected(profile_owner_protocol_error().detail);
+  if (!same_options(*_owner->admitted, options))
+    return std::unexpected(profile_owner_protocol_error().detail);
+  try {
+    // Consume before any fallible work: a failure below never allows a retry.
+    _owner->registrations_at_adoption = _owner->capture.registration_count();
+    _owner->consumed                  = true;
+    if (auto verified = _owner->capture.verify(); !verified)
+      return std::unexpected(std::move(verified.error().detail));
+    auto* vm = _owner->vm._owner.get();
+    if (!vm)
+      return std::unexpected(profile_owner_protocol_error().detail);
+    return invoke_known(_owner->vm, *vm, std::move(options), services);
+  } catch (const diagnostic& error) {
+    return std::unexpected(error);
+  } catch (const std::bad_alloc&) {
+    return std::unexpected(external_resource());
+  } catch (const std::length_error&) {
+    return std::unexpected(external_resource());
   }
 }
 value_ptr profile_invocation::catalog() const {
@@ -5661,7 +5961,7 @@ profile_invocation_observation profile_invocation::observe() const noexcept {
   out.live          = !_owner->consumed && !_owner->first_failure;
   out.owner_charge  = _owner->owner_charge;
   out.registrations = _owner->consumed ? _owner->registrations_at_adoption : _owner->capture.registration_count();
-  if (const auto* vm = _owner->vm._owner.get()) {
+  if (const auto* vm = _owner->vm._owner.get(); vm && vm->lua) {
     out.instructions      = vm->runtime.instructions;
     out.native_bytes      = vm->runtime.native_bytes;
     const auto membership = measure_registry(vm->lua);

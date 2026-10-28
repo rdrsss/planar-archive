@@ -1564,3 +1564,29 @@ before unregistering the VFS and releasing its guard. A BUSY close or unregister
 failure at that internal destructor is a fatal ownership invariant violation,
 not a supported retry protocol; concurrent SQLite shutdown is unsupported.
 No global routing, TLS, retirement queue, immutable URI or database copy is used.
+
+## X07 with-profile composition
+
+`src/cmd/planar/envelope.{cppm,cpp}` is imported only by `bootstrap`; handlers
+never import it. It owns the CLI11 prefix (`prefix_command`, scalar
+`--stdlib-profile` with Throw multiplicity, counted `--help`), the embedded and
+opaque probes (the reverse-order passthrough stack is copied unchanged to both)
+and the final parser built from the sealed catalog, with option storage alive
+through dispatch. There is no manual argv scan or shadow parser.
+
+The closed factory is a static member family of `profile_invocation` in
+`planar.engine.runtime`: `open_with_profile(selector, command_options)` for
+render, init, history and export, and `open_with_profile(request_intent,
+ledger_path)` for load, forwarding to `open_known_load`. It captures the
+profile, metadata-admits the family's known slots, registers once and
+reverifies. `run_known(options, services)` is consumed by its single
+dispatch and refuses when the admitted options differ from the final parsed
+options. `into_extension()` adopts opaque owners only and refuses known-load
+owners. No generic service factory, mutable `command_vm` or reverse conversion
+exists. The extension handler is `src/cmd/planar/handlers/extension/`.
+
+`response.cpp` holds the one error adapter mapping registration refusals to
+closed code, message and exit, with redaction. Every message literal in
+non-test `src/cmd/planar` belongs to the closed message table. Public `init`
+creates format2. See [x07-addendum](vernacular/x07-addendum.md) and
+[profile preparation architecture](vernacular/profile-preparation-architecture.md).

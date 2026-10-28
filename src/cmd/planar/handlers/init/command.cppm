@@ -17,6 +17,10 @@ struct init_options {
 /// @param options Bindings retained through parsing and execution.
 /// @return Subcommand owned by root.
 CLI::App& attach_init(CLI::App& root, init_options& options);
+/// Convert validated CLI11 bindings to the native init intent without any host access.
+/// @param options Validated CLI11 bindings.
+/// @return The typed intent a direct or with-profile invocation executes.
+engine::command_options init_intent(const init_options& options);
 /// Publish a new ledger through the native no-replace boundary.
 /// @param options Parsed explicit bindings; target components retain filesystem meaning.
 /// @param vm Already validated retained registry, or null for direct invocation.

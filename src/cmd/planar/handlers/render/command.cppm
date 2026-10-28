@@ -19,6 +19,10 @@ struct render_options {
 /// @param options Bindings whose lifetime covers parsing and execution.
 /// @return Registered subcommand; owned by root.
 CLI::App& attach_render(CLI::App& root, render_options& options);
+/// Convert validated CLI11 bindings to the native render intent without any host access.
+/// @param options Validated CLI11 bindings.
+/// @return The typed intent a direct or with-profile invocation executes.
+engine::command_options render_intent(const render_options& options);
 /// Resolve host inputs and render using captured values after CLI11 parsing.
 /// @param options Parsed explicit options.
 /// @param vm Already validated retained registry, or null for direct invocation.

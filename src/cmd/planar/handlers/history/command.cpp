@@ -60,7 +60,7 @@ CLI::App& attach_history(CLI::App& root, history_options& o) {
   e->excludes(a)->excludes(l);
   return c;
 }
-response history_command(const history_options& o, engine::command_vm* vm) {
+engine::command_options history_intent(const history_options& o) {
   engine::command_history_options intent;
   intent.ledger = o.ledger;
   if (!o.revision.empty())
@@ -73,6 +73,9 @@ response history_command(const history_options& o, engine::command_vm* vm) {
     intent.request_id = o.request_id;
   if (!o.limit.empty())
     intent.limit = static_cast<std::int32_t>(o.limit_number);
-  return execute(std::move(intent), vm);
+  return intent;
+}
+response history_command(const history_options& o, engine::command_vm* vm) {
+  return execute(history_intent(o), vm);
 }
 } // namespace planar::cmd::handlers

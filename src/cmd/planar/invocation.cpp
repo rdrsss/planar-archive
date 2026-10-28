@@ -7,6 +7,7 @@ import planar.engine.ledger.format;
 import planar.engine.ledger.acceptance;
 import planar.engine.history.read;
 import planar.engine.source_export;
+import planar.engine.runtime; // X07-REAL-RUNTIME
 namespace planar::cmd {
 namespace {
 using namespace detail;
@@ -95,6 +96,22 @@ value_ptr export_error(const engine::source_export::export_error& e) {
     fields["details"] = object({{"operation", text("export")}});
   return object(std::move(fields));
 }
+
+std::expected<std::string, diagnostic> process_cwd() {
+  try {
+    return std::filesystem::current_path().lexically_normal().string();
+  } catch (const std::filesystem::filesystem_error&) {
+    return std::unexpected(diagnostic{"io", "Cannot obtain invocation cwd"});
+  }
+}
+std::optional<std::string_view> process_workspace_environment() {
+  const auto* value = std::getenv("PLANAR_WORKSPACE_DIR");
+  return value ? std::optional<std::string_view>(value) : std::nullopt;
+}
+std::expected<std::string, diagnostic> process_workspace_directory() {
+  return snapshot_workspace_directory(process_workspace_environment());
+}
+using snapshot_reader = std::function<std::expected<std::string, diagnostic>()>;
 
 class native_services final : public command_services {
   capture_session                                  _session;
@@ -231,7 +248,7 @@ public:
   }
   command_service_result initialize_ledger(const command_init_options& options) override {
     try {
-      auto metadata = engine::ledger::initialize_new(options.ledger, options.workspace_id);
+      auto metadata = engine::ledger::initialize_new_v2(options.ledger, options.workspace_id);
       if (!metadata)
         return {{}, ledger_error(metadata.error())};
       return {object({{"ledger", text(metadata->identity)},
@@ -378,6 +395,153 @@ prepare_invocation_paths(engine::command_options&                               
   }
   return {};
 }
+namespace {
+// Normalize the profile selector lexically against the invocation's one cwd snapshot, without any existence check.
+std::expected<std::string, engine::diagnostic>
+normalize_profile_selector(std::string_view selector, invocation_snapshot& snapshot, const snapshot_reader& cwd_reader) {
+  if (auto checked = engine::validate_host_path(selector); !checked)
+    return std::unexpected(checked.error());
+  std::optional<std::string_view> cwd;
+  if (!selector.starts_with('/')) {
+    if (!snapshot.cwd) {
+      auto captured = cwd_reader();
+      if (!captured)
+        return std::unexpected(engine::diagnostic{"io", "Cannot obtain invocation cwd"});
+      snapshot.cwd = std::move(*captured);
+    }
+    cwd = *snapshot.cwd;
+  }
+  auto prepared = engine::prepare_host_path(selector, cwd);
+  if (!prepared)
+    return std::unexpected(prepared.error());
+  return std::move(prepared->intent);
+}
+} // namespace
+std::expected<std::string, engine::diagnostic>
+prepare_profile_invocation(std::string_view selector, engine::command_options& options, invocation_snapshot& snapshot,
+                           const std::function<std::expected<std::string, engine::diagnostic>()>& cwd_reader,
+                           const std::function<std::expected<std::string, engine::diagnostic>()>& workspace_directory_reader) {
+  if (auto checked = engine::validate_host_path(selector); !checked)
+    return std::unexpected(checked.error());
+  // Each reader runs at most once; later slots, including the selector, reuse the snapshot.
+  const snapshot_reader cwd_once = [&]() -> std::expected<std::string, engine::diagnostic> {
+    if (snapshot.cwd)
+      return *snapshot.cwd;
+    auto captured = cwd_reader();
+    if (!captured)
+      return std::unexpected(captured.error());
+    snapshot.cwd = *captured;
+    return std::move(*captured);
+  };
+  const snapshot_reader workspace_once = [&]() -> std::expected<std::string, engine::diagnostic> {
+    if (snapshot.workspace_directory)
+      return *snapshot.workspace_directory;
+    auto captured = workspace_directory_reader();
+    if (!captured)
+      return std::unexpected(captured.error());
+    snapshot.workspace_directory = *captured;
+    return std::move(*captured);
+  };
+  if (auto prepared = prepare_invocation_paths(options, cwd_once, workspace_once); !prepared)
+    return std::unexpected(prepared.error());
+  return normalize_profile_selector(selector, snapshot, cwd_once);
+}
+std::expected<std::string, engine::diagnostic> prepare_process_profile_selector(std::string_view     selector,
+                                                                                invocation_snapshot& snapshot) {
+  return normalize_profile_selector(selector, snapshot, process_cwd);
+}
+std::expected<void, engine::diagnostic> complete_process_snapshot(invocation_snapshot& snapshot) {
+  if (!snapshot.cwd) {
+    auto captured = process_cwd();
+    if (!captured)
+      return std::unexpected(captured.error());
+    snapshot.cwd = std::move(*captured);
+  }
+  if (!snapshot.workspace_directory && process_workspace_environment()) {
+    // An unusable environment value is left absent: a later bare workspace name then refuses as usage.
+    if (auto captured = process_workspace_directory())
+      snapshot.workspace_directory = std::move(*captured);
+  }
+  return {};
+}
+namespace {
+// Profile load always runs on the one real runtime that owns the ledger's prepared_profile type, even in generated variants.
+namespace rt_api = ::planar::engine;
+// X07-ANCHOR:response-ceiling
+constexpr std::size_t response_ceiling = 16777215;
+} // namespace
+response execute_profile_load(const engine::acceptance::request_intent& intent, std::string_view ledger_path) {
+  using namespace detail;
+  response                           fallback{4, "", ""};
+  std::string                        stdout_error;
+  engine::ledger::completion_receipt completion;
+  const auto committed = [&]() { return completion.phase != engine::ledger::completion_phase::not_completed; };
+  try {
+    fallback     = failed(load_uncertainty_error("load"));
+    stdout_error = failed(load_uncertainty_error("stdout")).error;
+    if (fallback.error.empty() || stdout_error.empty())
+      return {4, "", ""};
+    auto data = intent.data();
+    if (!data)
+      return failed(native_error({"internal", "Missing native load intent"}));
+    const auto& request = **data;
+    std::string ledger_identity;
+    {
+      auto ledger = engine::ledger::open_existing(std::filesystem::path(std::string(ledger_path)),
+                                                  engine::ledger::ledger_access::read_only);
+      if (!ledger)
+        return failed(ledger_error(ledger.error()));
+      ledger_identity = ledger->metadata().identity;
+      auto saved      = ledger->read_request(request.request_id);
+      if (!saved)
+        return failed(ledger_error(saved.error()));
+      if (*saved) {
+        if ((*saved)->body_encoded != request.encoded)
+          return failed(ledger_error({engine::ledger::format_error_code::request_conflict, ""}));
+        return {0, (*saved)->result + "\n", "", std::move(stdout_error)};
+      }
+      // Only a format2 ledger can record a profile request; this is decided before the profile is read.
+      if (ledger->metadata().format != engine::ledger::ledger_format::v2)
+        return failed(ledger_error({engine::ledger::format_error_code::unsupported_version, ""}));
+    } // The verified read transaction is released before any profile capture or writable acceptance.
+    // X07-ANCHOR:after-early-miss
+    auto opened = rt_api::profile_invocation::open_with_profile(intent, ledger_path);
+    if (!opened)
+      return registration_failed(opened.error().detail);
+    // X07-ANCHOR:after-factory-open
+    // The step-4 intent object is passed unchanged: preparation refuses any other intent.
+    auto prepared = std::move(*opened).prepare_load(intent);
+    if (!prepared) {
+      if (prepared.error().semantic)
+        return semantic_failed(prepared.error().semantic);
+      return registration_failed(prepared.error().failure.detail);
+    }
+    // X07-ANCHOR:after-prepare-load
+    // Exact relookup under the lock, the stale-head check and the final receipt verification run inside the commit.
+    auto sealed = engine::ledger::complete_acceptance(std::filesystem::path(std::string(ledger_path)), intent, *prepared,
+                                                      ledger_identity, completion);
+    // X07-ANCHOR:after-commit
+    if (!sealed) {
+      if (committed())
+        return fallback;
+      return failed(ledger_error(sealed.error()));
+    }
+    if (completion.phase != engine::ledger::completion_phase::committed &&
+        completion.phase != engine::ledger::completion_phase::replayed)
+      return committed() ? std::move(fallback) : failed(native_error({"internal", "Missing load completion"}));
+    // Encoding the saved response is a post-commit step: an oversize or malformed record keeps the completion receipt.
+    if (completion.saved_result.size() > response_ceiling)
+      return fallback;
+    auto saved_value = engine::codec_decode(completion.saved_result);
+    if (!saved_value)
+      return fallback;
+    return {0, completion.saved_result + "\n", "", std::move(stdout_error)};
+  } catch (...) {
+    if (committed())
+      return fallback;
+    return {4, "", ""};
+  }
+}
 response native_export_failure(const engine::source_export::export_error& error) {
   auto result = detail::failed(export_error(error));
   if (error.code == engine::source_export::error_code::cleanup_incomplete)
@@ -407,19 +571,7 @@ response execute(engine::command_options options, engine::command_vm* registered
       local.emplace(std::move(*created));
       vm = &*local;
     }
-    auto prepared = prepare_invocation_paths(
-        options,
-        []() -> std::expected<std::string, engine::diagnostic> {
-          try {
-            return std::filesystem::current_path().lexically_normal().string();
-          } catch (const std::filesystem::filesystem_error&) {
-            return std::unexpected(engine::diagnostic{"io", "Cannot obtain invocation cwd"});
-          }
-        },
-        []() -> std::expected<std::string, engine::diagnostic> {
-          const auto* value = std::getenv("PLANAR_WORKSPACE_DIR");
-          return engine::snapshot_workspace_directory(value ? std::optional<std::string_view>(value) : std::nullopt);
-        });
+    auto prepared = prepare_invocation_paths(options, process_cwd, process_workspace_directory);
     if (!prepared)
       return failed(native_error(prepared.error()));
     const bool exporting = std::holds_alternative<engine::command_export_options>(options);
@@ -452,7 +604,18 @@ response execute(engine::command_options options, engine::command_vm* registered
         if (!ledger)
           return failed(ledger_error(ledger.error()));
         services->load_ledger_identity = ledger->metadata().identity;
-        auto saved                     = ledger->read_request(load.request_id);
+        if (ledger->metadata().format == engine::ledger::ledger_format::v2) {
+          // The ledger format, not the command, selects the request codec; the embedded profile stays absent.
+          auto framed = engine::acceptance::request_intent::create_v2(load.request_id, load.actor, load.expected_head,
+                                                                      load.workspace, load.registry);
+          if (!framed) {
+            if (framed.error().code == engine::acceptance::preparation_error_code::resource_limit)
+              return failed(native_error({"resource_limit", "Load request exceeds native resource limits"}));
+            return failed(native_error({"schema", "Invalid load arguments"}));
+          }
+          services->load_intent.emplace(std::move(*framed));
+        }
+        auto saved = ledger->read_request(load.request_id);
         if (!saved)
           return failed(ledger_error(saved.error()));
         if (*saved) {
@@ -496,6 +659,70 @@ response execute(engine::command_options options, engine::command_vm* registered
       auto error = encoded.error().detail;
       if (error.code == "resource_limit" && error.limit == "output_bytes")
         error.maximum = 16777216;
+      return failed(native_error(error));
+    }
+    return {0, *encoded + "\n", "", std::move(stdout_error)};
+  } catch (...) {
+    if (published())
+      return fallback;
+    return {4, "", ""};
+  }
+}
+response execute_with_profile(engine::command_options options, std::string_view profile_selector) {
+  using namespace detail;
+  response                         fallback{4, "", ""};
+  std::string                      stdout_error;
+  std::unique_ptr<native_services> services;
+  const auto                       published = [&]() { return services && services->export_published; };
+  try {
+    invocation_snapshot snapshot;
+    auto selector = prepare_profile_invocation(profile_selector, options, snapshot, process_cwd, process_workspace_directory);
+    if (!selector)
+      return failed(native_error(selector.error()));
+    if (const auto* load = std::get_if<engine::command_load_options>(&options)) {
+      // The one request_v2 intent framed here is the intent every later load step uses.
+      auto intent = engine::acceptance::request_intent::create_v2(load->request_id, load->actor, load->expected_head,
+                                                                  load->workspace, load->registry, *selector);
+      if (!intent) {
+        if (intent.error().code == engine::acceptance::preparation_error_code::resource_limit)
+          return failed(native_error({"resource_limit", "Load request exceeds native resource limits"}));
+        return failed(native_error({"schema", "Invalid load arguments"}));
+      }
+      return execute_profile_load(*intent, load->ledger);
+    }
+    if (std::holds_alternative<engine::command_export_options>(options)) {
+      fallback     = failed(uncertainty_error("export"));
+      stdout_error = failed(uncertainty_error("stdout")).error;
+      if (fallback.error.empty() || stdout_error.empty())
+        return {4, "", ""};
+    }
+    services    = std::make_unique<native_services>();
+    auto opened = engine::profile_invocation::open_with_profile(*selector, options);
+    if (!opened)
+      return registration_failed(opened.error().detail);
+    // The owner dispatches exactly the options it admitted and is consumed by the call.
+    auto result = std::move(*opened).run_known(options, *services);
+    if (!result) {
+      if (published())
+        return fallback;
+      return failed(native_error(result.error()));
+    }
+    if (!(*result)->fields.at("ok")->boolean) {
+      if (published())
+        return fallback;
+      auto error    = (*result)->fields.at("error");
+      auto response = failed(error);
+      if (error->fields.at("code")->string == "export_incomplete")
+        response.status = 4;
+      return response;
+    }
+    auto encoded = engine::codec_encode((*result)->fields.at("value"), {response_ceiling, 256, 4000000});
+    if (!encoded) {
+      if (published())
+        return fallback;
+      auto error = encoded.error().detail;
+      if (error.code == "resource_limit" && error.limit == "output_bytes")
+        error.maximum = response_ceiling + 1;
       return failed(native_error(error));
     }
     return {0, *encoded + "\n", "", std::move(stdout_error)};
