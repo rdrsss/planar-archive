@@ -412,20 +412,24 @@ roots and first failures; final native preparation does not reset invocation
 instruction, conversion node or charged allocation counters.
 
 Current content, admission metadata, declaration-VM and retained trusted-VM
-metrics are **distinct**. This architecture does not call them shared or prove
-RSS. Each owner keeps its original accounting storage; moves do not copy/reset
-counter state, temporary/cached storage does not refund cumulative charges, and
+metrics are now composed into the one factory budget owner. This architecture
+does not prove RSS. The stage objects (capture/admission, native capture, declaration
+VM, trusted VM) keep their own accounting storage but charge the one factory budget
+owner; moves do not copy or reset counter state, temporary or cached storage does
+not refund cumulative charges, the composed owner also enforces the 512 MiB live
+Lua ceiling (declaration-VM live Lua acquire and release, decision Q9) next to the
+per-stage ceilings, and
 the selected declaration-file handle and temporary comparison/discovery staging
 retain existing cumulative admission metadata charges without refunds. They add
 no quota category and admission reads no source content. All new structs, retained
 data, copies and fallback allocations require checked charges before allocation
 under applicable stage ceilings. The private prepared implementation retains accounting lifetime with receipts/VM until completion and
 response cleanup; destroying an outer wrapper cannot erase counters while the
-prepared object survives. Later whole-invocation composition must inject a common
+prepared object survives. Whole-invocation composition injects a common
 budget owner from the initial factory into these stages, preserving stricter
 limits and counters, rather than recapture/re-register or mint a fresh budget at
-preparation. The first code slice must inventory metric ownership/sizes so later
-composition is possible; no claim of already-composed 512 MiB follows.
+preparation. The first code slice must inventory metric ownership/sizes so
+composition is possible; the metrics are now composed into that one owner.
 
 The encapsulation guarantee concerns ordinary C++ API clients: arbitrary value
 aggregates, another VM, codec results, moved objects and observable immutable

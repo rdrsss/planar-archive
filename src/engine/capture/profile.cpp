@@ -60,16 +60,18 @@ profile_capture& profile_capture::operator=(profile_capture&& other) noexcept {
     _impl = std::move(other._impl);
   return *this;
 }
-std::expected<profile_capture, profile_error> profile_capture::open(std::string_view selector) {
+std::expected<profile_capture, profile_error> profile_capture::open(std::string_view             selector,
+                                                                    std::shared_ptr<budget_sink> budget) {
   try {
     require(validate_host_path(selector));
     if (selector.empty() || selector.front() != '/')
       return std::unexpected(error("path"));
     auto slash     = selector.rfind('/');
     auto directory = std::string(selector.substr(0, slash ? slash : 1));
-    auto admission = require(capture_admission::create(directory));
+    auto admission = require(capture_admission::create(directory, budget));
     require(admission.select_trusted("profile", selector));
     native_capture_session session;
+    session.set_budget(budget);
     require(session.add_input("profile", std::string(selector)));
     auto profile = require(session.read_bounded("profile", "input.json", admission, "profile", 65536, 65536, false));
     auto paths   = decode_profile(profile.bytes);

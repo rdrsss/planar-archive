@@ -121,6 +121,9 @@ public:
   /// @brief Retrieve sealed directory topology without filesystem access.
   /// @return Sorted immutable directories, or internal unless finish succeeded.
   std::expected<capture_topology, diagnostic> directories() const;
+  /// @brief Attach a factory-owned cumulative budget charged by reads and enumeration.
+  /// @param budget Budget to charge, or null for none.
+  void set_budget(std::shared_ptr<budget_sink> budget);
   /// @brief Set a deterministic verification seam, called immediately before the final reread.
   /// @param callback Test/driver instrumentation; exceptions are not swallowed.
   void before_verification(std::function<void()> callback);

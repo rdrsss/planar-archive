@@ -6,6 +6,7 @@ extern "C" {
 #include <cstdlib>
 module planar.engine.lua;
 import std;
+import planar.engine.budget;
 namespace planar::engine {
 namespace {
 constexpr std::size_t memory_max = 64 * 1024 * 1024;
@@ -16,6 +17,8 @@ struct state {
   std::set<const void*>             tables;
   std::set<std::string>             references;
   const value*                      pending = nullptr;
+  std::shared_ptr<budget_sink>      budget;
+  std::optional<diagnostic>         composed;
 };
 void* allocate(void* ud, void* p, std::size_t old, std::size_t size) {
   auto& s = *static_cast<state*>(ud);
@@ -24,13 +27,32 @@ void* allocate(void* ud, void* p, std::size_t old, std::size_t size) {
   if (!size) {
     std::free(p);
     s.memory -= old;
+    if (s.budget && old)
+      s.budget->release_lua(old);
     return nullptr;
   }
   if (size > memory_max - s.memory + old)
     return nullptr;
+  if (s.budget && size > old) {
+    std::size_t delta   = size - old;
+    bool        refused = false;
+    {
+      auto r = s.budget->acquire_lua(delta);
+      if (!r) {
+        s.composed = std::move(r.error());
+        refused    = true;
+      }
+    }
+    if (refused)
+      return nullptr;
+  }
   auto result = std::realloc(p, size);
-  if (result)
+  if (result) {
     s.memory = s.memory - old + size;
+    if (s.budget && size < old)
+      s.budget->release_lua(old - size);
+  } else if (s.budget && size > old)
+    s.budget->release_lua(size - old);
   return result;
 }
 state& context(lua_State* l) {
@@ -42,7 +64,16 @@ int denied(lua_State* l) {
 void hook(lua_State* l, lua_Debug*) {
   auto& s = context(l);
   s.instructions += 100;
-  if (s.instructions >= 1000000)
+  bool refused = false;
+  if (s.budget) {
+    auto r = s.budget->charge_instructions(100);
+    if (!r) {
+      refused = true;
+      if (s.instructions < 1000000)
+        s.error = std::move(r.error());
+    }
+  }
+  if (s.instructions >= 1000000 || refused)
     luaL_error(l, "instruction_limit");
 }
 [[noreturn]] void refuse(std::string code, std::string message) {
@@ -51,6 +82,11 @@ void hook(lua_State* l, lua_Debug*) {
 void charge(state& s, std::size_t bytes) {
   if (bytes > memory_max - s.native_bytes)
     throw diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", memory_max};
+  if (s.budget) {
+    auto r = s.budget->charge_native(bytes);
+    if (!r)
+      throw std::move(r.error());
+  }
   s.native_bytes += bytes;
 }
 int anchor_table(lua_State* l) {
@@ -114,6 +150,12 @@ value_ptr convert(lua_State* l, int index, std::size_t depth, bool list = false)
     lua_pushcfunction(l, anchor_table);
     lua_pushvalue(l, index);
     auto anchored = lua_pcall(l, 1, 0, 0);
+    if (anchored) {
+      if (s.composed)
+        throw *s.composed;
+      if (!s.error.code.empty())
+        throw s.error;
+    }
     if (anchored)
       throw diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max};
     v->kind = list ? value_kind::list : value_kind::record;
@@ -302,7 +344,7 @@ void validate_graph(const value_ptr& v, std::set<const value*>& seen, std::size_
     validate_graph(child, seen, depth + 1, nodes);
 }
 } // namespace
-std::expected<declaration, diagnostic> load_declaration(std::string_view source) {
+std::expected<declaration, diagnostic> load_declaration(std::string_view source, std::shared_ptr<budget_sink> budget) {
   if (source.size() > 1048576)
     return std::unexpected(diagnostic{"resource_limit", "Declaration too large", "input_bytes", 1048576});
   if (!valid_text(source))
@@ -310,9 +352,11 @@ std::expected<declaration, diagnostic> load_declaration(std::string_view source)
   if (!source.empty() && source[0] == '\x1b')
     return std::unexpected(diagnostic{"capability_denied", "Bytecode forbidden"});
   state s;
-  auto  l = lua_newstate(allocate, &s, 0);
+  s.budget = std::move(budget);
+  auto l   = lua_newstate(allocate, &s, 0);
   if (!l)
-    return std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max});
+    return s.composed ? std::unexpected(*s.composed)
+                      : std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max});
   *static_cast<state**>(lua_getextraspace(l)) = &s;
   auto close                                  = std::unique_ptr<lua_State, decltype(&lua_close)>(l, lua_close);
   lua_sethook(l, hook, LUA_MASKCOUNT, 100);
@@ -330,6 +374,8 @@ std::expected<declaration, diagnostic> load_declaration(std::string_view source)
   if (status) {
     if (!s.error.code.empty())
       return std::unexpected(std::move(s.error));
+    if (status == LUA_ERRMEM && s.composed)
+      return std::unexpected(*s.composed);
     if (status == LUA_ERRMEM)
       return std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max});
     if (s.instructions >= 1000000)
@@ -345,6 +391,13 @@ std::expected<declaration, diagnostic> load_declaration(std::string_view source)
     std::set<const value*> seen;
     std::size_t            nodes = 0;
     validate_graph(root, seen, 1, nodes);
+    if (s.budget) {
+      std::size_t retained = sizeof(declaration);
+      for (const auto& r : s.references)
+        retained += r.size() + sizeof(std::string);
+      if (auto r = s.budget->charge_native(retained); !r)
+        return std::unexpected(std::move(r.error()));
+    }
     return declaration{std::move(root), {s.references.begin(), s.references.end()}};
   } catch (diagnostic& e) {
     return std::unexpected(std::move(e));

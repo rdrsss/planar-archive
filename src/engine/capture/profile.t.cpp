@@ -9,6 +9,33 @@ using namespace planar::engine;
 extern "C" void          planar_admission_watch(std::uint64_t device, std::uint64_t inode);
 extern "C" std::uint64_t planar_admission_read_attempts();
 namespace {
+struct counting_sink : budget_sink {
+  std::size_t                     native = 0, instructions = 0, live = 0, peak = 0;
+  std::size_t                     native_ceiling = 0, instruction_ceiling = 0, lua_ceiling = 0; ///< Zero means none.
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    if (native_ceiling && bytes > native_ceiling - std::min(native, native_ceiling))
+      return std::unexpected(
+          diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", native_ceiling});
+    native += bytes;
+    return {};
+  }
+  std::expected<void, diagnostic> charge_instructions(std::size_t count) override {
+    if (instruction_ceiling && count > instruction_ceiling - std::min(instructions, instruction_ceiling))
+      return std::unexpected(diagnostic{"resource_limit", "Lua instruction limit exceeded", "instructions", instruction_ceiling});
+    instructions += count;
+    return {};
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t bytes) override {
+    if (lua_ceiling && bytes > lua_ceiling - std::min(live, lua_ceiling))
+      return std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", lua_ceiling});
+    live += bytes;
+    peak = std::max(peak, live);
+    return {};
+  }
+  void release_lua(std::size_t bytes) noexcept override {
+    live -= std::min(live, bytes);
+  }
+};
 struct temporary {
   std::filesystem::path path;
   temporary() {
@@ -923,4 +950,45 @@ TEST_CASE("X06 B3 B note_registration is a no-op on moved-from owners and the co
   CHECK(moved.registration_count() == 0);
   CHECK(replaced.registration_count() == 3);
   CHECK(replaced.verify());
+}
+// Mutant: profile.cpp open omits the sink for the admission or the closure native session; supplied reads skip the sink.
+TEST_CASE("X06 D C01 profile capture threads the factory budget through admission and supplied reads",
+          "[profile][capture][x06d]") {
+  temporary t;
+  auto      sink   = std::make_shared<counting_sink>();
+  auto      opened = profile_capture::open(t.selector(), sink);
+  REQUIRE(opened);
+  const auto after_open = sink->native;
+  // The trusted profile bytes alone are charged by the closure native session, plus admission metadata.
+  CHECK(after_open >= std::string_view(R"({"version":1,"modules":[]})").size());
+  auto root = (t.path / "workspace").string();
+  REQUIRE(opened->admit_root("workspace", root));
+  const auto after_root = sink->native;
+  CHECK(after_root > after_open);
+  const std::string payload(4096, 'p');
+  t.put("workspace/data.txt", payload);
+  REQUIRE(opened->admit_file("data", (t.path / "workspace/data.txt").string(), admission_file_role::declaration));
+  const auto after_file = sink->native;
+  CHECK(after_file > after_root);
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(opened->bind_root(session, "workspace", root, "workspace"));
+  auto read = opened->read_bounded(session, "workspace", "data.txt", "data", 1048576, 1048576, true);
+  REQUIRE(read);
+  CHECK(sink->native >= after_file + payload.size());
+}
+// Mutant P1b: profile_capture::open omits session.set_budget, so the closure session's profile read bypasses the sink.
+// The trusted profile read is the only charge whose size follows the profile length at slope 1 (padding is JSON whitespace).
+TEST_CASE("X06 D C01 profile capture charges the profile read to the factory budget", "[profile][capture][x06dc01]") {
+  temporary t;
+  auto      total = [&](std::size_t padding) {
+    t.profile(R"({"version":1,"modules":[)" + std::string(padding, ' ') + "]}");
+    auto sink   = std::make_shared<counting_sink>();
+    auto opened = profile_capture::open(t.selector(), sink);
+    REQUIRE(opened);
+    return sink->native;
+  };
+  auto shorter = total(0);
+  auto longer  = total(1000);
+  CHECK(longer - shorter == 1000);
 }

@@ -101,7 +101,10 @@ struct capture_admission::implementation {
   std::map<std::pair<std::size_t, std::string>, std::size_t> discovered;
   std::size_t                                                storage = 0, trusted_files = 0, files = 0;
   mutable bool                                               failed = false;
+  std::shared_ptr<budget_sink>                               budget;
   void                                                       charge(std::size_t bytes) {
+    if (budget && !budget->charge_native(bytes))
+      exhausted();
     if (bytes > max_storage - storage)
       exhausted();
     storage += bytes;
@@ -291,9 +294,11 @@ capture_admission& capture_admission::operator=(capture_admission&& other) noexc
     _impl = std::move(other._impl);
   return *this;
 }
-std::expected<capture_admission, diagnostic> capture_admission::create(std::string_view directory) {
+std::expected<capture_admission, diagnostic> capture_admission::create(std::string_view             directory,
+                                                                       std::shared_ptr<budget_sink> budget) {
   try {
-    auto state = std::make_shared<implementation>();
+    auto state    = std::make_shared<implementation>();
+    state->budget = std::move(budget);
     // Conservative fixed allowance covers the shared control block and state.
     state->charge(sizeof(implementation) + 128);
     state->append(state->open("trusted", directory, implementation::kind::trusted_root, true));

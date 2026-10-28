@@ -21,6 +21,39 @@ struct temporary {
     std::ofstream(file, std::ios::binary) << bytes;
   }
 };
+struct counting_sink : budget_sink {
+  std::size_t                     native = 0, native_ceiling = 0; ///< Zero ceiling means none.
+  std::vector<std::size_t>        native_requests;
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    native_requests.push_back(bytes);
+    if (native_ceiling && bytes > native_ceiling - std::min(native, native_ceiling))
+      return std::unexpected(
+          diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", native_ceiling});
+    native += bytes;
+    return {};
+  }
+  std::expected<void, diagnostic> charge_instructions(std::size_t) override {
+    return {};
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t) override {
+    return {};
+  }
+  void release_lua(std::size_t) noexcept override {
+  }
+};
+// Sink total after reading each file individually, without tree discovery.
+std::size_t read_total(temporary& t, const std::vector<std::string>& paths) {
+  auto                   sink = std::make_shared<counting_sink>();
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  for (auto& p : paths)
+    REQUIRE(session.read("ws", p, false));
+  return sink->native;
+}
+std::size_t enumeration_charge(std::size_t prefix, std::size_t name) {
+  return 512 + 6 * (prefix + name + 1) + 2 * (name + 1);
+}
 } // namespace
 static_assert(!std::is_default_constructible_v<acceptance_capture>);
 static_assert(!std::is_copy_constructible_v<acceptance_capture>);
@@ -876,4 +909,178 @@ TEST_CASE("D2 B2 C01 initial borrowed and cached replacement modes refuse", "[ca
     CHECK_FALSE(owner->healthy());
     CHECK_FALSE(session.finish());
   }
+}
+
+// X06 D C01 rows N1-N6: composed factory budget in native capture.
+TEST_CASE("X06 D C01 capture charges the composed ceiling before reading or allocating a file", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/big", std::string(2000, static_cast<char>(0xff)));
+  auto sink            = std::make_shared<counting_sink>();
+  sink->native_ceiling = 1000;
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  auto result = session.read("ws", "big", true);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "resource_limit");
+  CHECK(result.error().maximum == 1000);
+  REQUIRE(sink->native_requests.size() == 1);
+  CHECK(sink->native_requests[0] >= 2000);
+}
+TEST_CASE("X06 D C01 native read charges each retained file exactly once", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/f.txt", "0123456789");
+  auto                   sink = std::make_shared<counting_sink>();
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  REQUIRE(session.read("ws", "f.txt", true));
+  auto expected =
+      10 + std::string("f.txt").size() + std::string("ws").size() + std::string("0644").size() + sizeof(captured_file);
+  CHECK(sink->native == expected);
+  REQUIRE(session.read("ws", "f.txt", true));
+  CHECK(sink->native == expected);
+}
+TEST_CASE("X06 D C01 discovery staging is charged to the factory budget and never refunded", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/a", "x");
+  t.put("ws/bb", "yy");
+  auto                   control = read_total(t, {"a", "bb"});
+  auto                   sink    = std::make_shared<counting_sink>();
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  REQUIRE(session.tree("ws"));
+  CHECK(sink->native - control == enumeration_charge(0, 1) + enumeration_charge(0, 2));
+  auto after = sink->native;
+  REQUIRE(session.finish());
+  CHECK(sink->native >= after);
+}
+TEST_CASE("X06 D C01 discovery staging refuses at the composed ceiling", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/a", "x");
+  t.put("ws/bb", "yy");
+  auto sink            = std::make_shared<counting_sink>();
+  sink->native_ceiling = 600;
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  auto result = session.tree("ws");
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "resource_limit");
+  CHECK(result.error().maximum == 600);
+  CHECK_FALSE(session.read("ws", "a", false));
+}
+TEST_CASE("X06 D C01 verification staging is charged on every verify and never refunded", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/a", "x");
+  t.put("ws/bb", "yy");
+  auto                   sink = std::make_shared<counting_sink>();
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  REQUIRE(session.tree("ws"));
+  auto receipt = session.finish_for_acceptance();
+  REQUIRE(receipt);
+  auto before = sink->native;
+  REQUIRE(receipt->verify());
+  auto first = sink->native - before;
+  REQUIRE(receipt->verify());
+  auto second = sink->native - before - first;
+  CHECK(first >= enumeration_charge(0, 1) + enumeration_charge(0, 2));
+  CHECK(second == first);
+}
+TEST_CASE("X06 D C01 ancestor staging is charged with each retained file", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/c.txt", "same");
+  t.put("ws/a/b/c.txt", "same");
+  auto flat   = read_total(t, {"c.txt"});
+  auto nested = read_total(t, {"a/b/c.txt"});
+  // Ancestor receipts are keyed by (root, ancestor path): 'a' and 'a/b'.
+  CHECK(nested - flat >= enumeration_charge(2, 1) + enumeration_charge(2, 3));
+}
+// Allocation probe for the before-allocation tests below: records the largest request made while armed.
+namespace {
+std::atomic<bool>        probe_armed{false};
+std::atomic<std::size_t> probe_largest{0};
+} // namespace
+void* operator new(std::size_t size) {
+  if (probe_armed.load(std::memory_order_relaxed)) {
+    auto seen = probe_largest.load(std::memory_order_relaxed);
+    while (size > seen && !probe_largest.compare_exchange_weak(seen, size, std::memory_order_relaxed)) {
+    }
+  }
+  if (void* memory = std::malloc(size ? size : 1))
+    return memory;
+  throw std::bad_alloc();
+}
+void operator delete(void* memory) noexcept {
+  std::free(memory);
+}
+void operator delete(void* memory, std::size_t) noexcept {
+  std::free(memory);
+}
+// Mutants N1b/N1c: the composed charge moves after the read loop or after the std::string allocation. A refused read of a
+// 100000-byte file must not request any allocation near the file size.
+TEST_CASE("X06 D C01 refused capture allocates nothing near the file size", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/big.txt", std::string(100000, 'a'));
+  auto sink            = std::make_shared<counting_sink>();
+  sink->native_ceiling = 1000;
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  probe_largest = 0;
+  probe_armed   = true;
+  auto result   = session.read("ws", "big.txt", true);
+  probe_armed   = false;
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "resource_limit");
+  CHECK(result.error().maximum == 1000);
+  CHECK(probe_largest.load() < 50000);
+  // Control: an unrefused read of the same file does allocate the content.
+  auto                   accepted = std::make_shared<counting_sink>();
+  native_capture_session control;
+  control.set_budget(accepted);
+  REQUIRE(control.add_root("ws", t.path / "ws"));
+  probe_largest = 0;
+  probe_armed   = true;
+  auto read     = control.read("ws", "big.txt", true);
+  probe_armed   = false;
+  REQUIRE(read);
+  CHECK(probe_largest.load() >= 100000);
+}
+// Mutant N4: enumeration_budget::charge ignores the sink refusal. One entry means no later charge can mask it.
+TEST_CASE("X06 D C01 a single discovery entry refuses at the composed ceiling", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/a", "x");
+  auto sink            = std::make_shared<counting_sink>();
+  sink->native_ceiling = enumeration_charge(0, 1) - 1;
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  auto result = session.tree("ws");
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "resource_limit");
+  CHECK(result.error().maximum == enumeration_charge(0, 1) - 1);
+  CHECK(sink->native == 0);
+}
+// Mutants N2 (both cache guards removed) and N2d: re-reading retained files during verification adds no read charge, so one
+// verify costs exactly the enumeration staging.
+TEST_CASE("X06 D C01 verification charges only the enumeration staging", "[capture][native][x06dc01]") {
+  temporary t;
+  t.put("ws/a", "x");
+  t.put("ws/bb", "yy");
+  auto                   sink = std::make_shared<counting_sink>();
+  native_capture_session session;
+  session.set_budget(sink);
+  REQUIRE(session.add_root("ws", t.path / "ws"));
+  REQUIRE(session.tree("ws"));
+  REQUIRE(session.read("ws", "a", false));
+  REQUIRE(session.read("ws", "bb", false));
+  auto receipt = session.finish_for_acceptance();
+  REQUIRE(receipt);
+  auto before = sink->native;
+  REQUIRE(receipt->verify());
+  CHECK(sink->native - before == enumeration_charge(0, 1) + enumeration_charge(0, 2));
 }

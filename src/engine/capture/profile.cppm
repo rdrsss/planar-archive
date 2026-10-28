@@ -20,8 +20,9 @@ class profile_capture {
 public:
   /// @brief Capture the entire trusted closure before exposing supplied-input admission.
   /// @param selector Explicit absolute host profile file; Unicode/spaced filenames are allowed.
+  /// @param budget Optional factory-owned cumulative budget threaded into admission and the closure native session.
   /// @return Complete owner or logical refusal, with no partially published closure.
-  static std::expected<profile_capture, profile_error> open(std::string_view selector);
+  static std::expected<profile_capture, profile_error> open(std::string_view selector, std::shared_ptr<budget_sink> budget = {});
   /// Close retained descriptors.
   ~profile_capture();
   /// @brief Transfer all original receipts and bytes; the source thereafter refuses operations.

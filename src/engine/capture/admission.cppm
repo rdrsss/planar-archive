@@ -3,6 +3,7 @@
 export module planar.engine.capture.admission;
 import std;
 export import planar.engine.value;
+export import planar.engine.budget;
 export namespace planar::engine {
 /// Explicit standalone input policy; none authorizes content access.
 enum class admission_file_role {
@@ -24,8 +25,10 @@ class capture_admission {
 public:
   /// @brief Admit an explicit trusted directory and its no-follow ancestors.
   /// @param directory Absolute host directory, never exposed in diagnostics.
+  /// @param budget Optional factory-owned cumulative budget charged for admission metadata.
   /// @return Capability or typed native refusal.
-  static std::expected<capture_admission, diagnostic> create(std::string_view directory);
+  static std::expected<capture_admission, diagnostic> create(std::string_view             directory,
+                                                             std::shared_ptr<budget_sink> budget = {});
   /// Release all retained descriptors.
   ~capture_admission();
   /// @brief Transfer receipts; the source thereafter refuses operations.

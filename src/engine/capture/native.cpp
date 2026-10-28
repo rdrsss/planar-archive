@@ -129,24 +129,29 @@ struct native_capture_session::implementation {
   directory_map                                              ancestors;
   capture_topology                                           topology;
   struct enumeration_budget {
-    std::size_t entries = 0;
-    std::size_t bytes   = 0;
-    void        charge(std::size_t prefix, std::size_t name) {
+    std::size_t  entries = 0;
+    std::size_t  bytes   = 0;
+    budget_sink* sink    = nullptr;
+    void         charge(std::size_t prefix, std::size_t name) {
       if (entries == 100000)
         limit("enumeration_entries", 100000);
       // Cover staging, spelling, retained/verified topology, and the sealed logical copy.
       auto charge = 512 + 6 * (prefix + name + 1) + 2 * (name + 1);
       if (charge > 67108864 - bytes)
         limit("enumeration_bytes", 67108864);
+      if (sink)
+        if (auto charged = sink->charge_native(charge); !charged)
+          throw std::move(charged.error());
       ++entries;
       bytes += charge;
     }
   } discovery_budget, ancestor_budget;
-  std::size_t           bytes  = 0;
-  bool                  sealed = false;
-  bool                  failed = false;
-  std::function<void()> seam;
-  root&                 get(std::string_view name, bool verifying = false) {
+  std::shared_ptr<budget_sink> sink;
+  std::size_t                  bytes  = 0;
+  bool                         sealed = false;
+  bool                         failed = false;
+  std::function<void()>        seam;
+  root&                        get(std::string_view name, bool verifying = false) {
     if (failed)
       fail("capture_changed", "Bound input capture already failed");
     if (sealed && !verifying)
@@ -314,6 +319,12 @@ struct native_capture_session::implementation {
     // Budget before allocation, also during the final reread.
     if (static_cast<std::uint64_t>(before.st_size) > 67108864 - bytes && !files.contains({r.name, path}))
       limit("retained_bytes", 67108864);
+    // Composed factory ceiling: charged before any read or allocation of a new entry.
+    if (sink && !verifying && !files.contains({r.name, path}))
+      if (auto charged = sink->charge_native(static_cast<std::size_t>(before.st_size) + path.size() + r.name.size() + 4 +
+                                             sizeof(captured_file));
+          !charged)
+        throw std::move(charged.error());
     std::string data(static_cast<std::size_t>(before.st_size), '\0');
     std::size_t offset = 0;
     while (offset < data.size()) {
@@ -456,7 +467,8 @@ struct native_capture_session::implementation {
     if (failed)
       fail("capture_changed", "Bound input capture already failed");
     enumeration_budget verification_budget;
-    directory_map      verified_directories;
+    verification_budget.sink = sink.get();
+    directory_map verified_directories;
     for (auto& r : roots) {
       auto reopened = open_root(r.host, r.physical_parents);
       if (id(status(reopened.fd)) != r.physical || id(status(r.fd.fd)) != r.physical)
@@ -832,6 +844,13 @@ std::expected<void, diagnostic> native_capture_session::tree(std::string_view ro
       _impl->poison();
     return std::unexpected(diagnostic{"resource_limit", "Capture limit exceeded"});
   }
+}
+void native_capture_session::set_budget(std::shared_ptr<budget_sink> budget) {
+  if (!_impl)
+    return;
+  _impl->sink                  = std::move(budget);
+  _impl->discovery_budget.sink = _impl->sink.get();
+  _impl->ancestor_budget.sink  = _impl->sink.get();
 }
 void native_capture_session::before_verification(std::function<void()> callback) {
   if (_impl && !_impl->sealed)

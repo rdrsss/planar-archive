@@ -1,7 +1,9 @@
 module planar.engine.capture;
 import std;
 namespace planar::engine {
-capture_session::capture_session()  = default;
+capture_session::capture_session(std::shared_ptr<budget_sink> budget) : _budget(budget) {
+  _native.set_budget(std::move(budget));
+}
 capture_session::~capture_session() = default;
 std::expected<void, diagnostic> capture_session::add_root(std::string logical, std::string directory) {
   return _native.add_root(std::move(logical), std::move(directory));
@@ -42,7 +44,7 @@ std::expected<declaration, diagnostic> capture_session::load(std::string_view pa
   auto input = read("workspace", path, true);
   if (!input)
     return std::unexpected(input.error());
-  auto result = load_declaration(input->bytes);
+  auto result = load_declaration(input->bytes, _budget);
   if (!result)
     return std::unexpected(result.error());
   auto slash  = path.rfind('/');

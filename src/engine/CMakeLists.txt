@@ -3,15 +3,20 @@ planar_rewrite_module(planar_ledger_completion
 
 planar_rewrite_module(planar_value
   INTERFACE value/value.cppm SOURCES value/value.cpp)
+planar_rewrite_module(planar_budget
+  INTERFACE budget/budget.cppm
+  DEPENDS planar_value)
 planar_rewrite_module(planar_lua_loader
   INTERFACE lua/loader.cppm SOURCES lua/loader.cpp
-  DEPENDS planar_value planar_lua TESTS lua/loader.t.cpp)
+  DEPENDS planar_value planar_lua planar_budget TESTS lua/loader.t.cpp)
+target_compile_definitions(planar_lua_loader_tests PRIVATE PLANAR_SOURCE_ROOT="${PROJECT_SOURCE_DIR}")
+target_link_libraries(planar_lua_loader_tests PRIVATE planar_capture_admission)
 planar_rewrite_module(planar_capture_host_path
   INTERFACE capture/host_path.cppm SOURCES capture/host_path.cpp
   DEPENDS planar_value TESTS capture/host_path.t.cpp)
 planar_rewrite_module(planar_capture_admission
   INTERFACE capture/admission.cppm SOURCES capture/admission.cpp
-  DEPENDS planar_value TESTS capture/admission.t.cpp)
+  DEPENDS planar_value planar_budget TESTS capture/admission.t.cpp)
 planar_rewrite_module(planar_capture_native
   INTERFACE capture/native.cppm SOURCES capture/native.cpp
   DEPENDS planar_value planar_capture_admission TESTS capture/native.t.cpp)
@@ -88,17 +93,21 @@ planar_rewrite_module(planar_closure_guard
 planar_rewrite_module(planar_runtime
   INTERFACE runtime/runtime.cppm SOURCES runtime/runtime.cpp
   DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source
-  TESTS runtime/runtime.t.cpp runtime/schema.t.cpp runtime/commands.t.cpp runtime/external_registration.t.cpp)
+  TESTS runtime/runtime.t.cpp runtime/schema.t.cpp runtime/commands.t.cpp runtime/external_registration.t.cpp
+  TEST_TIMEOUT 120)
 planar_embed_lua(planar_runtime_test_source planar.engine.runtime_test_source
   "${PROJECT_SOURCE_DIR}/tests/stdlib/bridge.lua")
 # Compile the exact bridge against test-only embedded exports, in its own module.
+# Verification harnesses compile the exact runtime units under renamed modules; ceilings come from compile definitions.
+set(planar_runtime_unit "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cpp")
+set(planar_runtime_interface_unit "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cppm")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cpp")
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cpp" test_bridge)
+file(READ "${planar_runtime_unit}" test_bridge)
 string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_test;" test_bridge "${test_bridge}")
 string(REPLACE "import planar.engine.runtime_source;" "import planar.engine.runtime_test_source;" test_bridge "${test_bridge}")
 string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_test {" test_bridge "${test_bridge}")
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_test.cpp" CONTENT "${test_bridge}" @ONLY)
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cppm" test_interface)
+file(READ "${planar_runtime_interface_unit}" test_interface)
 string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_test;" test_interface "${test_interface}")
 string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_test {" test_interface "${test_interface}")
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_test.cppm" CONTENT "${test_interface}" @ONLY)
@@ -109,6 +118,62 @@ set_target_properties(planar_runtime_test_harness planar_runtime_test_source PRO
 target_link_libraries(planar_runtime_tests PRIVATE planar_runtime_test_harness planar_lua_loader)
 
 target_link_libraries(planar_runtime_tests PRIVATE planar_capture planar_admission_syscalls)
+
+# Small-ceiling variant: the exact runtime compiled with injected composed ceilings, so budget tests stay fast. Tests and
+# variant read the same numbers through PLANAR_BUDGET_* definitions. Rule: every non-bracketing fixture keeps at least 25
+# percent of each ceiling free (native bytes, live Lua, invocation instructions, registration instructions, nodes).
+# Bracketing classes are excluded per column: bisects, confirmation pairs, deliberate refusals, ceiling-sized families
+# and the tight variant. Peaks, margins and exclusions are in the Margin record section of
+# docs/vernacular/rounds/V5-02-X06-D-C04.md.
+set(PLANAR_BUDGET_NATIVE_MAX 39845888)
+set(PLANAR_BUDGET_INSTRUCTION_MAX 19900000)
+set(PLANAR_BUDGET_REGISTRATION_INSTRUCTION_MAX 1000000)
+set(PLANAR_BUDGET_NODE_MAX 25000)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cppm")
+file(READ "${planar_runtime_unit}" budget_unit_text)
+string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_budget_test;" budget_unit_text "${budget_unit_text}")
+string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_budget_test {" budget_unit_text "${budget_unit_text}")
+file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_budget_test.cpp" CONTENT "${budget_unit_text}" @ONLY)
+file(READ "${planar_runtime_interface_unit}" budget_interface_text)
+string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_budget_test;" budget_interface_text "${budget_interface_text}")
+string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_budget_test {" budget_interface_text "${budget_interface_text}")
+file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_budget_test.cppm" CONTENT "${budget_interface_text}" @ONLY)
+planar_rewrite_module(planar_runtime_budget_test_harness
+  INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/runtime_budget_test.cppm" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/runtime_budget_test.cpp"
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source)
+set_target_properties(planar_runtime_budget_test_harness PROPERTIES EXCLUDE_FROM_ALL TRUE)
+target_compile_definitions(planar_runtime_budget_test_harness PRIVATE
+  PLANAR_RUNTIME_MEMORY_MAX=${PLANAR_BUDGET_NATIVE_MAX}
+  PLANAR_RUNTIME_INSTRUCTION_MAX=${PLANAR_BUDGET_INSTRUCTION_MAX}
+  PLANAR_RUNTIME_NODE_MAX=${PLANAR_BUDGET_NODE_MAX}
+  PLANAR_RUNTIME_REGISTRATION_INSTRUCTION_MAX=${PLANAR_BUDGET_REGISTRATION_INSTRUCTION_MAX})
+target_link_libraries(planar_runtime_tests PRIVATE planar_runtime_budget_test_harness)
+target_compile_definitions(planar_runtime_tests PRIVATE
+  PLANAR_BUDGET_NATIVE_MAX=${PLANAR_BUDGET_NATIVE_MAX}
+  PLANAR_BUDGET_INSTRUCTION_MAX=${PLANAR_BUDGET_INSTRUCTION_MAX}
+  PLANAR_BUDGET_REGISTRATION_INSTRUCTION_MAX=${PLANAR_BUDGET_REGISTRATION_INSTRUCTION_MAX}
+  PLANAR_BUDGET_NODE_MAX=${PLANAR_BUDGET_NODE_MAX})
+
+# Tight instruction-ceiling variant: only the invocation instruction ceiling is injected, below the inherited per-chunk limit,
+# so a pre-frame declaration chunk is refused by the composed sink alone. Used by exactly one test.
+set(PLANAR_TIGHT_INSTRUCTION_MAX 500000)
+file(READ "${planar_runtime_unit}" tight_unit_text)
+string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_tight_test;" tight_unit_text "${tight_unit_text}")
+string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_tight_test {" tight_unit_text "${tight_unit_text}")
+file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_tight_test.cpp" CONTENT "${tight_unit_text}" @ONLY)
+file(READ "${planar_runtime_interface_unit}" tight_interface_text)
+string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_tight_test;" tight_interface_text "${tight_interface_text}")
+string(REPLACE "namespace planar::engine {" "namespace planar::engine::runtime_tight_test {" tight_interface_text "${tight_interface_text}")
+file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/runtime_tight_test.cppm" CONTENT "${tight_interface_text}" @ONLY)
+planar_rewrite_module(planar_runtime_tight_test_harness
+  INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/runtime_tight_test.cppm" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/runtime_tight_test.cpp"
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source)
+set_target_properties(planar_runtime_tight_test_harness PROPERTIES EXCLUDE_FROM_ALL TRUE)
+target_compile_definitions(planar_runtime_tight_test_harness PRIVATE
+  PLANAR_RUNTIME_INSTRUCTION_MAX=${PLANAR_TIGHT_INSTRUCTION_MAX})
+target_link_libraries(planar_runtime_tests PRIVATE planar_runtime_tight_test_harness)
+target_compile_definitions(planar_runtime_tests PRIVATE PLANAR_TIGHT_INSTRUCTION_MAX=${PLANAR_TIGHT_INSTRUCTION_MAX})
+
 target_compile_definitions(planar_runtime_tests PRIVATE PLANAR_SCHEMA_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota")
 
 # Test-only altered captured bundles compile the exact runtime and public interface.
@@ -532,12 +597,12 @@ planar_embed_lua(planar_shapes_test_source planar.engine.shapes_test_source
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/schema.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/semantic.lua"
   "${PROJECT_SOURCE_DIR}/tests/stdlib/x05-shapes.lua")
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cpp" shapes_bridge)
+file(READ "${planar_runtime_unit}" shapes_bridge)
 string(REPLACE "module planar.engine.runtime;" "module planar.engine.shapes_test;" shapes_bridge "${shapes_bridge}")
 string(REPLACE "import planar.engine.runtime_source;" "import planar.engine.shapes_test_source;" shapes_bridge "${shapes_bridge}")
 string(REPLACE "namespace planar::engine {" "namespace planar::engine::shapes_test {" shapes_bridge "${shapes_bridge}")
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/shapes_test.cpp" CONTENT "${shapes_bridge}" @ONLY)
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cppm" shapes_interface)
+file(READ "${planar_runtime_interface_unit}" shapes_interface)
 string(REPLACE "module planar.engine.runtime;" "module planar.engine.shapes_test;" shapes_interface "${shapes_interface}")
 string(REPLACE "namespace planar::engine {" "namespace planar::engine::shapes_test {" shapes_interface "${shapes_interface}")
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/shapes_test.cppm" CONTENT "${shapes_interface}" @ONLY)

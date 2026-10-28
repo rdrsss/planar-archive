@@ -72,9 +72,30 @@ compares original receipts, and failed/moved owners refuse. Only the listed
 closure and its ancestors are selected; sibling membership remains irrelevant.
 A1, A2 and the integrated A3 native verification gate are independently approved.
 The full A3 gates pass 489/489 in debug and RelWithDebInfo.
-Registration, public CLI, result/commit phase wiring and sharing 64 MiB/10000
-capture limits with later services remain future integration. External-profile
-acceptance remains open.
+Public CLI and result/commit phase wiring remain future
+integration. External-profile acceptance remains open.
+
+Each profile factory (`profile_invocation::open_known_load` and `open_opaque`)
+creates one factory budget that composes capture/admission metadata, staging,
+the declaration loader VM (instructions, native bytes and live Lua as
+acquire/release), retained values, the source-capture bundle copy, registration,
+shapes, conversion, preparation and extension role preparation. Contract
+ceilings are enforced with checked addition before allocation, and stricter
+inherited limits still win. `extension_invocation::create`, the embedded source
+capture path (`source_capture::open_embedded` in
+`src/engine/acceptance/source_capture.cpp`) and the CLI render session
+(`src/cmd/planar/invocation.cpp`) are outside the factory. No resident-memory
+(RSS) claim is made. The enforced ceilings are the 512 MiB live Lua ceiling
+(`memory_max = 512 * 1024 * 1024` in `src/engine/runtime/runtime.cpp:32`; the
+declaration loader has its own separate 64 MiB `memory_max` in
+`src/engine/lua/loader.cpp:12`), enforced for declaration-VM Lua by
+`factory_budget::acquire_lua` as live acquire and release (decision Q9 in
+`docs/vernacular/remaining-steps-design.md`), the cumulative native conversion
+ceiling, the 100,000,000 invocation instruction ceiling and 4,000,000 conversion
+nodes. Small-ceiling test variants inject smaller numbers through
+`PLANAR_RUNTIME_*` compile definitions. The budget interface lives in `planar.engine.budget`
+(`src/engine/budget/budget.cppm`, depending only on `planar_value`), exported by
+capture/admission and imported by the Lua loader.
 
 Work fingerprints exclude optional prose, checkpoints, assertions and source
 output bytes. Output identities remain per unit regardless of job grouping;
@@ -1489,8 +1510,8 @@ results retain physical traversal spelling through `prepare_host_path.spelling`.
 First-equals mapping RHS normalization preserves later equals and parent steps.
 No ambient cwd/environment lookup, recapture, late-input content read, Lua handler,
 provider, userdata or read-service implementation is added. Capture subsystems keep
-their separate bounded metrics; whole-invocation shared capture/VM accounting stays
-open for X06. New wrapper/path staging charges the existing cumulative VM native
+their separate bounded metrics; whole-invocation shared capture/VM accounting stayed
+open at X05 (historical: X06 composed it, see the composed-budget paragraph above). New wrapper/path staging charges the existing cumulative VM native
 metric before allocation, using pinned libc++ component/string bounds documented
 in [the accounting proof](../tests/native/v5-02-x05-c3-b2-support/accounting.md).
 This conservative metric is not process RSS accounting.
@@ -1523,8 +1544,9 @@ introduce no growing application cache or buffer. The native allocations are one
 shared SQLite-state/control block and one context allocation, plus SQLite-owned
 `sizeof(file) + alignof(max_align_t) + base.szOsFile` file allocations, with checked
 integer size arithmetic. The caller's existing shared guard is retained without
-copying its receipts. This primitive does not charge or combine VM512MiB/capture
-budgets; X06 whole-invocation accounting remains open.
+copying its receipts. The SQLite/VFS primitive itself charges nothing; the
+composition with VM, native and capture budgets happens in the factory budget
+owner described earlier.
 
 The VFS is explicitly nondefault, carries direct stable pAppData, and forwards
 using the actual base VFS/file pointers. File method versions and optional null

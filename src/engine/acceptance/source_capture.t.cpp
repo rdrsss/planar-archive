@@ -14,6 +14,35 @@ using namespace planar::engine::acceptance;
 extern "C" void          planar_admission_watch(std::uint64_t device, std::uint64_t inode);
 extern "C" std::uint64_t planar_admission_read_attempts();
 namespace {
+struct counting_sink : budget_sink {
+  std::size_t                     native = 0, instructions = 0, live = 0, peak = 0;
+  std::size_t                     native_ceiling = 0, instruction_ceiling = 0, lua_ceiling = 0; ///< Zero means none.
+  std::vector<std::size_t>        native_requests;
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    if (native_ceiling && bytes > native_ceiling - std::min(native, native_ceiling))
+      return std::unexpected(
+          diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", native_ceiling});
+    native += bytes;
+    native_requests.push_back(bytes);
+    return {};
+  }
+  std::expected<void, diagnostic> charge_instructions(std::size_t count) override {
+    if (instruction_ceiling && count > instruction_ceiling - std::min(instructions, instruction_ceiling))
+      return std::unexpected(diagnostic{"resource_limit", "Lua instruction limit exceeded", "instructions", instruction_ceiling});
+    instructions += count;
+    return {};
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t bytes) override {
+    if (lua_ceiling && bytes > lua_ceiling - std::min(live, lua_ceiling))
+      return std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", lua_ceiling});
+    live += bytes;
+    peak = std::max(peak, live);
+    return {};
+  }
+  void release_lua(std::size_t bytes) noexcept override {
+    live -= std::min(live, bytes);
+  }
+};
 value_ptr invoke(std::string_view entry, value_ptr input) {
   auto r = run_trusted(entry, input);
   REQUIRE(r);
@@ -952,5 +981,162 @@ TEST_CASE("source capture correspondence refuses an unsealed or released source 
     auto r = verify_load_correspondence(bundle, source);
     REQUIRE_FALSE(r);
     CHECK(r.error().code == correspondence_error_code::mismatch);
+  }
+}
+namespace {
+// Prefix every declaration of the fixture with a loop of known instruction cost and optionally pad one text file.
+void instrument(const fixture& f, std::size_t pad = 0) {
+  for (auto name : {"workspace.lua", "spec.lua", "combined.lua", "split.lua"}) {
+    auto file = f.workspace_dir / name;
+    put_bytes(file, "for i=1,5000 do end\n" + read_bytes(file));
+  }
+  if (pad) {
+    auto file = f.workspace_dir / "text/shared.md";
+    put_bytes(file, read_bytes(file) + std::string(pad, 'x'));
+  }
+}
+struct measured {
+  std::size_t after_open = 0, after_capture = 0, instructions_open = 0, instructions_capture = 0;
+};
+measured run_embedded(const fixture& f, const std::shared_ptr<counting_sink>& sink) {
+  measured m;
+  auto     source = source_capture::open_embedded(f.workspace.string(), f.registry.string(), sink);
+  REQUIRE(source);
+  m.after_open        = sink->native;
+  m.instructions_open = sink->instructions;
+  auto route          = success("route_workspace", *source->workspace());
+  auto bundle         = source->capture(route);
+  REQUIRE(bundle);
+  m.after_capture        = sink->native;
+  m.instructions_capture = sink->instructions;
+  return m;
+}
+} // namespace
+// Mutant: source_capture.cpp spec/job session.load runs without the sink, or open_bound/open_embedded drops it.
+TEST_CASE("X06 D C01 source capture threads one budget through workspace spec and job declarations", "[source_capture][x06d]") {
+  SECTION("embedded") {
+    fixture f;
+    instrument(f);
+    auto sink = std::make_shared<counting_sink>();
+    auto m    = run_embedded(f, sink);
+    CHECK(m.instructions_open >= 4000);
+    CHECK(m.instructions_capture >= m.instructions_open + 4000);
+  }
+  SECTION("bound") {
+    fixture f;
+    instrument(f);
+    auto sink   = std::make_shared<counting_sink>();
+    auto p      = open_profile(f);
+    auto r      = admit(p, f, f.workspace, f.registry);
+    auto source = source_capture::open_bound(f.workspace.string(), f.registry.string(), std::move(r.root),
+                                             std::move(r.declaration), std::move(r.registry), sink);
+    REQUIRE(source);
+    const auto opened = sink->instructions;
+    CHECK(opened >= 4000);
+    auto route = success("route_workspace", *source->workspace());
+    REQUIRE(source->capture(route));
+    CHECK(sink->instructions >= opened + 4000);
+  }
+}
+// Mutant: source_capture.cpp capture() deletes the bundle copy charge (slope becomes 1 per payload byte).
+TEST_CASE("X06 D C01 source capture charges the bundle copy of every captured file", "[source_capture][x06d]") {
+  std::size_t       total[2]{};
+  const std::size_t pads[2] = {1000, 9000};
+  for (int i = 0; i < 2; ++i) {
+    fixture f;
+    instrument(f, pads[i]);
+    auto sink = std::make_shared<counting_sink>();
+    auto m    = run_embedded(f, sink);
+    total[i]  = m.after_capture;
+  }
+  // One native read plus one retained bundle copy per payload byte.
+  CHECK(total[1] - total[0] == 2 * (pads[1] - pads[0]));
+}
+// Mutant: source_capture.cpp maps the sink diagnostic to source_error_code::capture instead of resource_limit.
+TEST_CASE("X06 D C01 source capture refuses at the composed ceiling as resource_limit", "[source_capture][x06d]") {
+  SECTION("native ceiling during capture") {
+    fixture f;
+    instrument(f);
+    auto probe = std::make_shared<counting_sink>();
+    auto m     = run_embedded(f, probe);
+    REQUIRE(m.after_open > 0);
+    REQUIRE(m.after_capture > m.after_open);
+    fixture g;
+    instrument(g);
+    auto sink            = std::make_shared<counting_sink>();
+    sink->native_ceiling = m.after_open + 1;
+    auto source          = source_capture::open_embedded(g.workspace.string(), g.registry.string(), sink);
+    REQUIRE(source);
+    auto route  = success("route_workspace", *source->workspace());
+    auto failed = source->capture(route);
+    REQUIRE_FALSE(failed);
+    CHECK(failed.error().code == source_error_code::resource_limit);
+    CHECK(failed.error().detail.code == "resource_limit");
+    CHECK(failed.error().detail.limit == "native_bytes");
+    CHECK(failed.error().detail.maximum == sink->native_ceiling);
+    CHECK(failed.error().detail.message == "Native conversion allocation exceeded");
+    CHECK_FALSE(source->sealed_ready());
+    auto again = source->capture(route);
+    REQUIRE_FALSE(again);
+    CHECK(again.error().code == source_error_code::invalid_state);
+  }
+  SECTION("instruction ceiling below one chunk") {
+    fixture f;
+    instrument(f);
+    auto sink                 = std::make_shared<counting_sink>();
+    sink->instruction_ceiling = 2000;
+    auto source               = source_capture::open_embedded(f.workspace.string(), f.registry.string(), sink);
+    REQUIRE_FALSE(source);
+    CHECK(source.error().code == source_error_code::resource_limit);
+    CHECK(source.error().detail.code == "resource_limit");
+    CHECK(source.error().detail.limit == "instructions");
+    CHECK(source.error().detail.maximum == 2000);
+  }
+}
+// Mutants S2b (delete the registry bundle charge) and S2c (ignore a bundle charge refusal). The bundle charges are the last
+// requests of capture(): one per workspace file (path + bytes + 2 values) then the registry bytes. A ceiling one byte below
+// the largest bundle charge refuses exactly there, so no later charge can mask an ignored refusal.
+TEST_CASE("X06 D C01 source capture bundle charges refuse at their own ceiling", "[source_capture][x06d]") {
+  enum class target { text_file, registry };
+  for (auto which : {target::text_file, target::registry}) {
+    auto prepare = [&](fixture& f) {
+      instrument(f);
+      auto file = which == target::text_file ? f.workspace_dir / "text/shared.md" : f.registry;
+      put_bytes(file, read_bytes(file) + std::string(20000, ' '));
+    };
+    fixture f;
+    prepare(f);
+    auto probe = std::make_shared<counting_sink>();
+    run_embedded(f, probe);
+    std::size_t expected = 0;
+    if (which == target::registry)
+      expected = read_bytes(f.registry).size();
+    else
+      expected = std::string("text/shared.md").size() + read_bytes(f.workspace_dir / "text/shared.md").size() + 2 * sizeof(value);
+    const auto& requests = probe->native_requests;
+    std::size_t index    = requests.size();
+    for (std::size_t i = requests.size(); i-- > 0;)
+      if (requests[i] == expected) {
+        index = i;
+        break;
+      }
+    REQUIRE(index < requests.size());
+    if (which == target::registry)
+      CHECK(index + 1 == requests.size());
+    std::size_t before = 0;
+    for (std::size_t i = 0; i < index; ++i)
+      before += requests[i];
+    fixture g;
+    prepare(g);
+    auto sink            = std::make_shared<counting_sink>();
+    sink->native_ceiling = before + expected - 1;
+    auto source          = source_capture::open_embedded(g.workspace.string(), g.registry.string(), sink);
+    REQUIRE(source);
+    auto route  = success("route_workspace", *source->workspace());
+    auto failed = source->capture(route);
+    REQUIRE_FALSE(failed);
+    CHECK(failed.error().code == source_error_code::resource_limit);
+    CHECK(failed.error().detail.maximum == sink->native_ceiling);
+    CHECK(sink->native == before);
   }
 }

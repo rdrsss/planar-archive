@@ -133,9 +133,13 @@ source_error known_declaration_error(const diagnostic& admission, bool absent) {
 }
 /// Sole owner of discovery, sealed receipts and identity correspondence; never shared between threads.
 struct source_capture::implementation {
-  capture_session session;                               ///< Confined declaration discovery; no tree authority is exercised.
-  declaration     workspace;                             ///< Exact original opened declaration and its original references.
-  std::string     file,                                  ///< Portable original workspace filename.
+  /// @param sink Factory-owned cumulative budget, or null for an unbudgeted capture.
+  explicit implementation(std::shared_ptr<budget_sink> sink = {}) : budget(sink), session(std::move(sink)) {
+  }
+  std::shared_ptr<budget_sink> budget;                   ///< Factory-owned cumulative sink, or null.
+  capture_session              session;                  ///< Confined declaration discovery; no tree authority is exercised.
+  declaration                  workspace;                ///< Exact original opened declaration and its original references.
+  std::string                  file,                     ///< Portable original workspace filename.
       registry_path,                                     ///< Private normalized explicit registry target, never exported.
       spec_path;                                         ///< Validated portable route to the specification.
   std::map<std::string, std::string>   jobs;             ///< Sorted unique routed job IDs and portable paths.
@@ -153,10 +157,11 @@ source_capture& source_capture::operator=(source_capture&& other) noexcept {
     _impl = std::move(other._impl);
   return *this;
 }
-std::expected<source_capture, source_error> source_capture::open_embedded(std::string_view workspace, std::string_view registry) {
+std::expected<source_capture, source_error> source_capture::open_embedded(std::string_view workspace, std::string_view registry,
+                                                                          std::shared_ptr<budget_sink> budget) {
   if (auto refused = validate_paths(workspace, registry))
     return std::unexpected(*refused);
-  auto state  = std::make_unique<implementation>();
+  auto state  = std::make_unique<implementation>(std::move(budget));
   auto host   = std::filesystem::path(workspace);
   state->file = host.filename().string();
   if (!valid_path(state->file))
@@ -172,9 +177,10 @@ std::expected<source_capture, source_error> source_capture::open_embedded(std::s
   return source_capture(std::move(state));
 }
 std::expected<source_capture, source_error> source_capture::open_bound(std::string_view workspace, std::string_view registry,
-                                                                       retained_root_receipt root,
-                                                                       retained_file_receipt declaration_receipt,
-                                                                       retained_file_receipt registry_file) {
+                                                                       retained_root_receipt        root,
+                                                                       retained_file_receipt        declaration_receipt,
+                                                                       retained_file_receipt        registry_file,
+                                                                       std::shared_ptr<budget_sink> budget) {
   // Construction refuses moved-from, poisoned or foreign receipts before any consumption or read.
   // Every refusal poisons each supplied receipt; poison on a moved-from handle is a no-op.
   auto refuse_unconsumed = [&](source_error e) {
@@ -198,7 +204,7 @@ std::expected<source_capture, source_error> source_capture::open_bound(std::stri
   auto file = host.filename().string();
   if (!valid_path(file))
     return refuse_unconsumed(source_error{source_error_code::invalid_path});
-  auto state           = std::make_unique<implementation>();
+  auto state           = std::make_unique<implementation>(std::move(budget));
   state->file          = std::move(file);
   state->registry_path = registry;
   // After consumption every refusal poisons the single shared admission through the registry receipt.
@@ -287,6 +293,15 @@ std::expected<value_ptr, source_error> source_capture::capture(const value_ptr& 
   auto snapshot = state->sealed->snapshot();
   if (!snapshot)
     return captured_error(snapshot.error());
+  if (state->budget) {
+    // Retained bundle copies (files list and registry bytes) are charged before they are allocated.
+    for (auto& f : **snapshot)
+      if (f.root == "workspace")
+        if (auto charged = state->budget->charge_native(f.path.size() + f.bytes.size() + 2 * sizeof(value)); !charged)
+          return captured_error(charged.error());
+    if (auto charged = state->budget->charge_native(registry->bytes.size()); !charged)
+      return captured_error(charged.error());
+  }
   std::vector<value_ptr> files;
   for (auto& f : **snapshot)
     if (f.root == "workspace")

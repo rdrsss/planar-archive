@@ -4,6 +4,7 @@
 #include <unistd.h>
 import std;
 import planar.engine.runtime;
+import planar.engine.runtime_budget_test;
 import planar.engine.hash;
 import planar.engine.capture;
 import planar.engine.json_codec;
@@ -4364,4 +4365,373 @@ TEST_CASE("C4 D4 optional base priorities follow reverse custom omissions includ
   REQUIRE(expected);
   CHECK(*codec_encode(actual->fields.at("omitted")) == *codec_encode(*expected));
   CHECK(actual->fields.at("text")->string.size() <= 30000);
+}
+
+// X06 D C02 role preparation under the factory budget. These tests run the budget variant (composed ceilings injected through
+// PLANAR_BUDGET_*), adopting an opaque factory owner as an extension, and compare against owners created without a factory.
+namespace {
+namespace rb = planar::engine::runtime_budget_test;
+struct c02_outcome {
+  bool        ok = false;
+  value_ptr   role;
+  std::string code, limit, message;
+  std::size_t maximum = 0;
+};
+c02_outcome c02_execute(rb::extension_invocation& owner) {
+  c02_outcome out;
+  auto        result = owner.execute();
+  if (result) {
+    REQUIRE((*result)->fields.at("ok")->boolean);
+    out.ok   = true;
+    out.role = (*result)->fields.at("value")->fields.at("data")->fields.at("value"); ///< Small marker, not the role.
+    return out;
+  }
+  auto error = std::get_if<rb::registration_error>(&result.error());
+  REQUIRE(error);
+  out.code    = error->detail.code;
+  out.limit   = error->detail.limit;
+  out.message = error->detail.message;
+  out.maximum = error->detail.maximum;
+  return out;
+}
+std::vector<rb::extension_parsed_option> c02_options(const std::vector<extension_parsed_option>& options) {
+  std::vector<rb::extension_parsed_option> converted;
+  for (const auto& option : options)
+    converted.push_back({option.name, option.present, option.token});
+  return converted;
+}
+/// Extension owner adopted from an opaque factory owner (the factory budget stays attached), admitted for the role.
+rb::extension_invocation c02_factory_owner(extension_fixture& f, bool outputs) {
+  auto opened = rb::profile_invocation::open_opaque((f.path / "trusted/profile.json").string());
+  REQUIRE(opened);
+  auto extension = std::move(*opened).into_extension();
+  REQUIRE(extension);
+  auto options  = c02_options(d3_options(f, outputs));
+  auto admitted = extension->admit("inspect", options, f.cwd);
+  if (!admitted)
+    INFO(admitted.error().detail.code << " " << admitted.error().detail.message << " " << admitted.error().field);
+  REQUIRE(admitted);
+  return std::move(*extension);
+}
+/// Owner created without a factory, exactly as extension_fixture::owner() does but from the budget variant.
+rb::extension_invocation c02_plain_owner(extension_fixture& f) {
+  auto capture = profile_capture::open((f.path / "trusted/profile.json").string());
+  REQUIRE(capture);
+  auto created = rb::extension_invocation::create(std::move(*capture));
+  REQUIRE(created);
+  auto options  = c02_options(d3_options(f));
+  auto admitted = created->admit("inspect", options, f.cwd);
+  REQUIRE(admitted);
+  return std::move(*created);
+}
+void c02_prefix(extension_fixture& f, std::string_view file, int iterations) {
+  auto bytes = read_bytes(f.path / "workspaces/demo" / file);
+  f.put("workspaces/demo/" + std::string(file), "for i=1," + std::to_string(iterations) + " do end\n" + bytes);
+}
+constexpr int c02_tail = 18400000; ///< Handler loop: ceiling minus 1,500,000 (19,900,000); with two 900000 prefixes it crosses
+                                   ///< the ceiling, with one it stays below.
+} // namespace
+TEST_CASE("X06 D C02 role preparation charges declaration chunks to the factory budget",
+          "[external-registration][role-service][x06d]") {
+  auto handler = "for i=1," + std::to_string(c02_tail) + " do end local role=ctx.read_role({}); " + d3_return();
+  {
+    extension_fixture f;
+    d3_inputs(f);
+    d3_handler(f, handler);
+    auto owner   = c02_factory_owner(f, false);
+    auto control = c02_execute(owner);
+    INFO(control.code << " " << control.limit << " " << control.message);
+    REQUIRE(control.ok);
+  }
+  {
+    extension_fixture f;
+    d3_inputs(f);
+    c02_prefix(f, "workspace.lua", 900000);
+    d3_handler(f, handler);
+    auto owner  = c02_factory_owner(f, false);
+    auto middle = c02_execute(owner);
+    INFO(middle.code << " " << middle.limit << " " << middle.message);
+    CHECK(middle.ok);
+  }
+  extension_fixture f;
+  d3_inputs(f);
+  c02_prefix(f, "workspace.lua", 900000);
+  c02_prefix(f, "spec.lua", 900000);
+  d3_handler(f, handler);
+  auto owner   = c02_factory_owner(f, false);
+  auto subject = c02_execute(owner);
+  REQUIRE_FALSE(subject.ok);
+  CHECK(subject.code == "resource_limit");
+  CHECK(subject.limit == "instructions");
+  CHECK(subject.maximum == PLANAR_BUDGET_INSTRUCTION_MAX);
+  CHECK(subject.message == "Lua instruction limit exceeded");
+  auto again = c02_execute(owner);
+  REQUIRE_FALSE(again.ok);
+  CHECK(again.code == subject.code);
+  CHECK(again.limit == subject.limit);
+  CHECK(again.maximum == subject.maximum);
+  CHECK(again.message == subject.message);
+}
+// Mutant M2: extension_invocation::create builds and attaches a factory budget. Owners created without a factory keep role
+// declarations outside any budget, so the same prefixes succeed.
+TEST_CASE("X06 D C02 extension owners created without a factory keep role declarations outside the budget",
+          "[external-registration][role-service][x06d]") {
+  extension_fixture f;
+  d3_inputs(f);
+  c02_prefix(f, "workspace.lua", 900000);
+  c02_prefix(f, "spec.lua", 900000);
+  d3_handler(f, "for i=1," + std::to_string(c02_tail) + " do end local role=ctx.read_role({}); " + d3_return());
+  auto owner   = c02_plain_owner(f);
+  auto outcome = c02_execute(owner);
+  INFO(outcome.code << " " << outcome.limit << " " << outcome.message);
+  REQUIRE(outcome.ok);
+}
+// Workspace padding pre-consumes native bytes up to the exact boundary of the outputs-off role. The outputs-on role also
+// snapshots the directories and converts the captured records, so it must refuse as resource_limit/native_bytes with the
+// owner maximum at that boundary while the outputs-off control passes, and the boundary gap between the two modes must not
+// shrink below the measured snapshot and conversion charges of the outputs-on path. The mutants that kill this test are X12
+// (prepare_role snapshot/directories VM charge deleted) and X13 (capture-outputs ignored, outputs forced off). The tree
+// enumeration and the registry and observation read charges (X11, X11b, M_REG and M_OBS) are killed by the X06 D C03 role
+// test below, not by this one.
+namespace {
+c02_outcome c02_padded(std::size_t pad, bool outputs) {
+  extension_fixture f;
+  d3_inputs(f);
+  auto bytes = read_bytes(f.path / "workspaces/demo/workspace.lua");
+  // The padding is spread over two .lua files so that no single text file crosses the 1 MiB text quota (C3-4e).
+  const auto half = pad / 2;
+  f.put("workspaces/demo/workspace.lua", "--" + std::string(half, 'x') + "\n" + bytes);
+  auto spec = read_bytes(f.path / "workspaces/demo/spec.lua");
+  f.put("workspaces/demo/spec.lua", "--" + std::string(pad - half, 'x') + "\n" + spec);
+  d3_handler(f, "local role=ctx.read_role({}); " + d3_return());
+  auto owner = c02_factory_owner(f, outputs);
+  return c02_execute(owner);
+}
+// Largest workspace padding for which the role still prepares (so the role sits at the native boundary), or -1 when even
+/// the unpadded role refuses.
+std::int64_t c02_boundary(bool outputs) {
+  auto padded = [&](std::size_t pad) { return c02_padded(pad, outputs); };
+  if (!padded(0).ok)
+    return -1;
+  // The upper bracket stays below two 900000-byte files; it must refuse on native bytes, never on the text quota.
+  std::size_t lo = 0, hi = 1 << 19;
+  auto        upper = padded(hi);
+  REQUIRE_FALSE(upper.ok);
+  CHECK(upper.code == "resource_limit");
+  CHECK(upper.limit == "native_bytes");
+  CHECK(upper.maximum == PLANAR_BUDGET_NATIVE_MAX);
+  while (hi - lo > 1) {
+    auto mid                   = lo + (hi - lo) / 2;
+    (padded(mid).ok ? lo : hi) = mid;
+  }
+  return static_cast<std::int64_t>(lo);
+}
+// Measured gap, in workspace padding bytes, between the outputs-off and outputs-on native boundaries. The outputs-on role
+// additionally charges the two tree enumerations, the directory snapshot and the captured-record conversions; deleting any of
+// those charges (or ignoring capture-outputs) lowers the gap, so it is a lower bound that must not shrink. Trees stay empty
+// here to isolate the snapshot and conversion charges; the tree enumeration and the registry and observation read charges
+// are pinned by the X06 D C03 role test below.
+// 4525 at the former ceilings; one padding byte of boundary quantization (slope about 58 native bytes per byte) at the
+// raised native ceiling.
+constexpr std::int64_t c02_outputs_gap = 4524;
+} // namespace
+TEST_CASE("X06 D C02 role preparation charges enumeration and registry reads to the factory budget",
+          "[external-registration][role-service][x06d]") {
+  auto off = c02_boundary(false);
+  auto on  = c02_boundary(true);
+  INFO("outputs-off boundary " << off << " outputs-on boundary " << on);
+  REQUIRE(off >= 0);
+  REQUIRE(on >= 0);
+  CHECK(c02_padded(static_cast<std::size_t>(off), false).ok);
+  auto subject = c02_padded(static_cast<std::size_t>(off), true);
+  INFO(subject.code << " " << subject.limit << " " << subject.message);
+  REQUIRE_FALSE(subject.ok);
+  CHECK(subject.code == "resource_limit");
+  CHECK(subject.limit == "native_bytes");
+  CHECK(subject.maximum == PLANAR_BUDGET_NATIVE_MAX);
+  CHECK(off - on >= c02_outputs_gap);
+}
+
+// X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget. Workspace
+// padding (spread over several .lua files so the 1 MiB text quota is never reached before the native ceiling) pre-consumes
+// native bytes; the boundary is the largest padding for which the outputs-on role still prepares. Adding files to either
+// tree, or padding the registry or the observations, lowers that boundary by the extra charged bytes, so each charge is
+// observed as a strictly positive drop (mutants X11 current tree, X11b base tree, M_REG registry read and M_OBS observation
+// read each remove one drop).
+namespace {
+struct c03_config {
+  std::size_t current_files = 0, base_files = 0, registry_pad = 0, observation_pad = 0;
+};
+/// Files per tree: 40 needs 45,642 nodes and 44.3 MB native, beyond what the node bisect and native sweeps allow (346
+/// nodes and 218 KB per entry per tree).
+constexpr std::size_t c03_entries = 1;
+constexpr std::size_t c03_registry_pad =
+    200000; ///< Trailing whitespace added to registry or observations (D16 cap, below the text quota).
+constexpr std::size_t c03_role_pad_files =
+    2; ///< .lua files that share the role padding (see the Margin record section of docs/vernacular/rounds/V5-02-X06-D-C04.md).
+constexpr std::size_t  c03_pad_file_max = 900000;
+constexpr std::int64_t c03_window       = 1 << 18;
+constexpr std::size_t  c03_bytes_per_entry =
+    100; ///< Divisor sizing one garbage fill to about three quarters of the live ceiling (75 to 110 recover).
+// Drop thresholds in padding units, calibrated on the unmutated product (Debug): floor(M * (1 - f / 2)), raised to 0.90 M
+// where that is lower. A tree mutant removes a whole enumeration (predicted drop about 0), so the tree floors are 0.90 M. A
+// registry or observation mutant removes only the read charge, one native byte per padded byte out of a slope of 58
+// (registry) or 51 (observations) bytes per byte, so f is 1/58 or 1/51 and the predicted mutated drops are 196552 and
+// 172416. The drops scale with c03_entries (= 1) and c03_registry_pad (= 200000): recalibrate when c03_entries,
+// c03_registry_pad or a ceiling changes. Measurements: the Margin record section of docs/vernacular/rounds/V5-02-X06-D-C04.md.
+// Tree floors for c03_entries = 1: 0.90 of the measured drop M = 3768.
+constexpr std::int64_t c03_cur_floor  = 3391;
+constexpr std::int64_t c03_base_floor = 3391;
+constexpr std::int64_t c03_reg_floor  = 198276; // measured 200000; f = 1/58, mutated drop 196552
+constexpr std::int64_t c03_obs_floor  = 174140; // measured 175862; f = 1/51, mutated drop 172416
+
+void c03_tree(extension_fixture& f, std::string_view directory, std::size_t files) {
+  for (std::size_t i = 0; i < files; ++i)
+    f.put(std::format("{}/t{:03}.txt", directory, i), "x\n");
+}
+c02_outcome c03_padded(std::size_t pad, c03_config cfg) {
+  extension_fixture f;
+  d3_inputs(f);
+  c03_tree(f, "source", cfg.current_files);
+  c03_tree(f, "base", cfg.base_files);
+  f.put("trusted/registry.json", read_bytes(f.path / "trusted/registry.json") + std::string(cfg.registry_pad, ' '));
+  f.put("observations.json", read_bytes(f.path / "observations.json") + std::string(cfg.observation_pad, ' '));
+  constexpr const char* files[] = {"workspace.lua", "spec.lua", "split.lua", "combined.lua"};
+  static_assert(c03_role_pad_files <= std::size(files));
+  auto share = (pad + c03_role_pad_files - 1) / c03_role_pad_files;
+  REQUIRE(share <= c03_pad_file_max);
+  if (pad)
+    for (std::size_t i = 0; i < c03_role_pad_files; ++i) {
+      auto bytes = read_bytes(f.path / "workspaces/demo" / files[i]);
+      f.put(std::string("workspaces/demo/") + files[i], "--" + std::string(share, 'x') + "\n" + bytes);
+    }
+  d3_handler(f, "local role=ctx.read_role({}); " + d3_return());
+  auto owner = c02_factory_owner(f, true);
+  return c02_execute(owner);
+}
+/// Largest padding in [lo, hi) for which the role prepares; lo must prepare and hi must not.
+std::int64_t c03_bisect(const c03_config& cfg, std::int64_t lo, std::int64_t hi) {
+  while (hi - lo > 1) {
+    auto mid                                                      = lo + (hi - lo) / 2;
+    (c03_padded(static_cast<std::size_t>(mid), cfg).ok ? lo : hi) = mid;
+  }
+  return lo;
+}
+/// Boundary of the all-zero configuration by doubling; the refusal at the upper bracket must be the native ceiling.
+std::int64_t c03_base_boundary() {
+  std::int64_t lo = 0, hi = 1 << 16;
+  while (c03_padded(static_cast<std::size_t>(hi), {}).ok) {
+    lo = hi;
+    hi *= 2;
+    REQUIRE(hi <= static_cast<std::int64_t>(c03_role_pad_files * c03_pad_file_max));
+  }
+  auto refused = c03_padded(static_cast<std::size_t>(hi), {});
+  INFO(refused.code << " " << refused.limit << " " << refused.message);
+  REQUIRE(refused.code == "resource_limit");
+  REQUIRE(refused.limit == "native_bytes");
+  return c03_bisect({}, lo, hi);
+}
+/// Boundary of cfg searched in [base - window, base]; the window must bracket it.
+std::int64_t c03_boundary(const c03_config& cfg, std::int64_t base) {
+  auto lo = std::max<std::int64_t>(0, base - c03_window);
+  auto hi = base + 1;
+  INFO("window [" << lo << ", " << hi << ")");
+  REQUIRE(c03_padded(static_cast<std::size_t>(lo), cfg).ok);
+  REQUIRE_FALSE(c03_padded(static_cast<std::size_t>(hi), cfg).ok);
+  return c03_bisect(cfg, lo, hi);
+}
+} // namespace
+TEST_CASE("X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget",
+          "[external-registration][role-service][x06d][c03]") {
+  // Node headroom: two trees of c03_entries files plus padded registry and observations prepare at padding 0.
+  auto both_trees = c03_padded(0, {c03_entries, c03_entries, 0, 0});
+  INFO(both_trees.code << " " << both_trees.limit << " " << both_trees.message);
+  REQUIRE(both_trees.ok);
+
+  auto b0 = c03_base_boundary();
+  INFO("base boundary " << b0);
+  auto drop_cur  = b0 - c03_boundary({c03_entries, 0, 0, 0}, b0);
+  auto drop_base = b0 - c03_boundary({0, c03_entries, 0, 0}, b0);
+  auto drop_reg  = b0 - c03_boundary({0, 0, c03_registry_pad, 0}, b0);
+  auto drop_obs  = b0 - c03_boundary({0, 0, 0, c03_registry_pad}, b0);
+  INFO("drops cur " << drop_cur << " base " << drop_base << " reg " << drop_reg << " obs " << drop_obs);
+  CHECK(drop_cur > 0);  // X11
+  CHECK(drop_base > 0); // X11b
+  CHECK(drop_reg > 0);  // M_REG
+  CHECK(drop_obs > 0);  // M_OBS
+  // Additivity: drop_both >= 0.9 * (drop_cur + drop_base) holds exactly when the padding one above that bound refuses,
+  // so one probe replaces a fifth bisection (the role boundary is monotone in the padding).
+  auto both_bound = b0 - (9 * (drop_cur + drop_base) + 9) / 10 + 1;
+  INFO("both-trees probe padding " << both_bound);
+  REQUIRE(both_bound > 0);
+  CHECK_FALSE(c03_padded(static_cast<std::size_t>(both_bound), {c03_entries, c03_entries, 0, 0}).ok);
+  CHECK(drop_cur >= c03_cur_floor);
+  CHECK(drop_base >= c03_base_floor);
+  CHECK(drop_reg >= c03_reg_floor);
+  CHECK(drop_obs >= c03_obs_floor);
+}
+
+namespace {
+std::string c03_illegal_shape(std::string_view prelude, std::string_view tail) {
+  return "local saved=registration.shape; local D={id='custom',abi='shape_v1',revision='v1',stages='optional',help=''}; "
+         "registration.shape(D,function(input) " +
+         std::string(prelude) + " assert(not pcall(saved,D,function()end)); " + std::string(tail) + " end)";
+}
+} // namespace
+TEST_CASE("X06 D C03 a caught illegal registration followed by exhaustion keeps the first failure in a direct shape call",
+          "[external-registration][shape-call][x06d][c03]") {
+  for (auto tail : {"while true do end", "local t={} while true do t[#t+1]={} end"}) {
+    auto vm = rb::command_vm::create(profile({c03_illegal_shape("", tail)}));
+    REQUIRE(vm);
+    auto response = vm->invoke_shape("custom", shape_input());
+    REQUIRE_FALSE(response);
+    CHECK(response.error().detail.code == "internal");
+    CHECK(response.error().detail.message == "Invalid external profile protocol");
+    CHECK(response.error().field == "catalog.shapes[1]");
+    auto retry = vm->invoke_shape("custom", shape_input());
+    REQUIRE_FALSE(retry);
+    CHECK(retry.error().detail.code == "internal");
+    CHECK(retry.error().detail.message == "Invalid external profile protocol");
+    CHECK(retry.error().field == "catalog.shapes[1]");
+  }
+}
+
+// A recovered allocator refusal (Lua's emergency collection frees the garbage and retries) sets the exhausted flag while the
+// shape keeps running; the later illegal registration must not record a protocol failure over the resource failure.
+TEST_CASE("X06 D C03 a recovered allocation refusal followed by an illegal registration keeps the resource failure in a direct "
+          "shape call",
+          "[external-registration][shape-call][x06d][c03]") {
+  // Each fill builds live tables of about three quarters of the ceiling and is dropped before the next, so a later fill
+  // crosses the live ceiling, the emergency collection frees the previous fill and the allocation is retried.
+  auto garbage = std::format("local function fill() local t={{}} for i=1,{} do t[i]={{}} end return #t end ",
+                             PLANAR_BUDGET_NATIVE_MAX / c03_bytes_per_entry);
+  auto fills   = std::string("local n=fill() n=fill() n=fill() n=fill()");
+  {
+    // Reach guard: after the same fills the shape is still running (the refusal was recovered, not fatal), so an endless loop
+    // ends at the instruction ceiling instead of reporting the allocator.
+    auto reach_source =
+        "registration.shape({id='custom',abi='shape_v1',revision='v1',stages='optional',help=''},function(input) " + garbage +
+        fills + " while true do end end)";
+    auto reach_vm = rb::command_vm::create(profile({reach_source}));
+    REQUIRE(reach_vm);
+    auto reached = reach_vm->invoke_shape("custom", shape_input());
+    REQUIRE_FALSE(reached);
+    INFO(reached.error().detail.code << " " << reached.error().detail.message << " " << reached.error().detail.limit);
+    REQUIRE(reached.error().detail.code == "resource_limit");
+    REQUIRE(reached.error().detail.limit == "instructions");
+  }
+  auto source = c03_illegal_shape(garbage + fills, "return {}");
+  auto vm     = rb::command_vm::create(profile({source}));
+  REQUIRE(vm);
+  auto response = vm->invoke_shape("custom", shape_input());
+  REQUIRE_FALSE(response);
+  INFO(response.error().detail.code << " " << response.error().detail.message << " " << response.error().detail.limit);
+  CHECK(response.error().detail.code == "resource_limit");
+  CHECK(response.error().detail.message == "Lua allocation exceeded");
+  CHECK(response.error().detail.limit == "lua_bytes");
+  auto retry = vm->invoke_shape("custom", shape_input());
+  REQUIRE_FALSE(retry);
+  CHECK(retry.error().detail.code == "resource_limit");
+  CHECK(retry.error().detail.message == "Lua allocation exceeded");
+  CHECK(retry.error().detail.limit == "lua_bytes");
 }

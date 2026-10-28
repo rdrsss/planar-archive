@@ -43,7 +43,10 @@ substitute models. Rounds before this decision used `gpt-6-luna` search and
    open with a **decisions table**: every design choice the round implies, marked
    contract-decided (with citation), decided in
    [remaining-steps design](remaining-steps-design.md), or new (operator decision
-   Q18, 2026-10-27).
+   Q18, 2026-10-27). Search writes both tables in full to the round's evidence
+   folder as `plan/DECISIONS.md` and `plan/INVARIANTS.md`; later stages and the
+   round record read those files, never a copy passed inline between stages, and
+   both are committed with the round.
    **Plan review** (operator decision, 2026-10-27): before any code, an Opus plan
    reviewer checks the plan against the governing clauses: no clause narrowed,
    every clause and finding has a row, every design choice is decided by a cited

@@ -8,8 +8,9 @@ export namespace planar::engine {
 /// Discovery session. Not thread-safe; completed snapshots are independently shareable.
 class capture_session {
 public:
-  /// Create an empty session; no ambient roots are discovered.
-  capture_session();
+  /// @brief Create an empty session; no ambient roots are discovered.
+  /// @param budget Optional factory-owned cumulative budget forwarded to native reads and declaration loading.
+  explicit capture_session(std::shared_ptr<budget_sink> budget = {});
   /// Close held root descriptors.
   ~capture_session();
   capture_session(const capture_session&)            = delete;
@@ -73,6 +74,7 @@ public:
   void before_verification(std::function<void()> callback);
 
 private:
-  native_capture_session _native;
+  native_capture_session       _native;
+  std::shared_ptr<budget_sink> _budget;
 };
 } // namespace planar::engine

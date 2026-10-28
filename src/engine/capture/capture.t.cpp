@@ -6,6 +6,33 @@ import std;
 import planar.engine.capture;
 using namespace planar::engine;
 namespace {
+struct counting_sink : budget_sink {
+  std::size_t                     native = 0, instructions = 0, live = 0, peak = 0;
+  std::size_t                     native_ceiling = 0, instruction_ceiling = 0, lua_ceiling = 0; ///< Zero means none.
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    if (native_ceiling && bytes > native_ceiling - std::min(native, native_ceiling))
+      return std::unexpected(
+          diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", native_ceiling});
+    native += bytes;
+    return {};
+  }
+  std::expected<void, diagnostic> charge_instructions(std::size_t count) override {
+    if (instruction_ceiling && count > instruction_ceiling - std::min(instructions, instruction_ceiling))
+      return std::unexpected(diagnostic{"resource_limit", "Lua instruction limit exceeded", "instructions", instruction_ceiling});
+    instructions += count;
+    return {};
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t bytes) override {
+    if (lua_ceiling && bytes > lua_ceiling - std::min(live, lua_ceiling))
+      return std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", lua_ceiling});
+    live += bytes;
+    peak = std::max(peak, live);
+    return {};
+  }
+  void release_lua(std::size_t bytes) noexcept override {
+    live -= std::min(live, bytes);
+  }
+};
 struct temporary {
   std::filesystem::path path;
   temporary() {
@@ -740,4 +767,20 @@ TEST_CASE("D2 B2 original root authority loads real declarations and text refere
   REQUIRE((*seal->snapshot())->size() == 2);
   t.put("workspace/decl/text.md", "changed reference");
   CHECK_FALSE(seal->verify());
+}
+// Mutant: capture.cpp capture_session::load calls load_declaration without the sink (or the native session lacks the budget).
+TEST_CASE("X06 D C01 capture session threads the factory budget through declarations and reads", "[capture][x06d]") {
+  temporary         t;
+  const std::string reference(2000, 'r');
+  t.put("t.md", reference);
+  const std::string declaration_source = "for i=1,5000 do end\nreturn planar.spec {version=1, ref=planar.file('t.md')}";
+  t.put("d.lua", declaration_source);
+  auto            sink = std::make_shared<counting_sink>();
+  capture_session c(sink);
+  REQUIRE(c.add_root("workspace", t.path));
+  REQUIRE(c.load("d.lua"));
+  // Native reads alone account for the declaration and its reference bytes.
+  CHECK(sink->native >= reference.size() + declaration_source.size());
+  // The 5000-iteration loop executes inside the declaration VM and reaches the same sink.
+  CHECK(sink->instructions >= 4000);
 }

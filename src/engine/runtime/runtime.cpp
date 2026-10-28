@@ -23,10 +23,35 @@ import planar.engine.history.effective_catalog;
 import planar.engine.history.effective_provenance;
 namespace planar::engine {
 namespace {
-constexpr std::size_t command_catalog_size       = 5;
-constexpr std::size_t memory_max                 = 512 * 1024 * 1024;
-constexpr std::size_t instruction_max            = 100000000;
-constexpr std::size_t node_max                   = 4000000;
+constexpr std::size_t command_catalog_size = 5;
+// The four ceilings default to the contract values; verification variants override them at compile time.
+#ifndef PLANAR_RUNTIME_MEMORY_MAX
+#define PLANAR_RUNTIME_MEMORY_MAX 512 * 1024 * 1024
+#endif
+#if PLANAR_RUNTIME_MEMORY_MAX == 512 * 1024 * 1024
+constexpr std::size_t memory_max = 512 * 1024 * 1024;
+#else
+constexpr std::size_t memory_max = PLANAR_RUNTIME_MEMORY_MAX;
+#endif
+#ifndef PLANAR_RUNTIME_INSTRUCTION_MAX
+#define PLANAR_RUNTIME_INSTRUCTION_MAX 100000000
+#endif
+#if PLANAR_RUNTIME_INSTRUCTION_MAX == 100000000
+constexpr std::size_t instruction_max = 100000000;
+#else
+constexpr std::size_t instruction_max = PLANAR_RUNTIME_INSTRUCTION_MAX;
+#endif
+#ifndef PLANAR_RUNTIME_NODE_MAX
+#define PLANAR_RUNTIME_NODE_MAX 4000000
+#endif
+#if PLANAR_RUNTIME_NODE_MAX == 4000000
+constexpr std::size_t node_max = 4000000;
+#else
+constexpr std::size_t node_max = PLANAR_RUNTIME_NODE_MAX;
+#endif
+#ifndef PLANAR_RUNTIME_REGISTRATION_INSTRUCTION_MAX
+#define PLANAR_RUNTIME_REGISTRATION_INSTRUCTION_MAX 10000000
+#endif
 constexpr std::size_t depth_max                  = 256;
 constexpr int         tags_index                 = LUA_RIDX_LAST + 1;
 constexpr int         backing_index              = tags_index + 1;
@@ -38,8 +63,11 @@ constexpr char        shape_tags_key = 0, shape_backings_key = 0;
 constexpr const char* kind_names[] = {"boolean", "integer", "string", "object", "array",     "workspace",
                                       "spec",    "job",     "md",     "file",   "immaterial"};
 struct command_state;
+struct factory_budget;
 struct state {
-  command_state*            command      = nullptr;
+  std::shared_ptr<factory_budget> budget; ///< Factory sink kept alive for receipts; its target is nulled at VM teardown.
+  std::size_t               carried_instructions = 0; ///< Pre-frame declaration instructions carried into the invocation counter.
+  command_state*            command              = nullptr;
   std::size_t               memory_limit = memory_max, instruction_limit = instruction_max;
   bool                      exhausted = false, lua_memory_failed = false, stack_exhausted = false, seal_failed = false;
   std::optional<diagnostic> conversion_failure;
@@ -1171,7 +1199,8 @@ diagnostic command_resource(const state& s) {
   return {"resource_limit", "Lua allocation exceeded", "lua_bytes", s.memory_limit};
 }
 void command_failure(lua_State* l, diagnostic e) {
-  if (!commands(l).bridge_error)
+  // A failure raised after a resource ceiling was reached is not the first terminal failure.
+  if (!commands(l).bridge_error && !exhausted(context(l)))
     commands(l).bridge_error = std::move(e);
 }
 // All C++ owners unwind before callbacks allocate Lua objects or raise errors.
@@ -2039,20 +2068,21 @@ std::expected<value_ptr, diagnostic> call_retained_value(lua_State* l, int retai
   auto status = lua_pcall(l, 0, LUA_MULTRET, 0);
   if (status == LUA_ERRMEM)
     s.lua_memory_failed = true;
-  if (exhausted(s))
-    return std::unexpected(command_resource(s));
   if (commands(l).bridge_error)
     return std::unexpected(*commands(l).bridge_error);
+  if (exhausted(s))
+    return std::unexpected(command_resource(s));
   if (status || lua_gettop(l) != base + 1)
     return std::unexpected(external_protocol());
   return convert(l, base + 1, 1);
 }
 void begin_invocation(state& s, command_state& c) {
   if (!c.invocation_started) {
-    c.invocation_started = true;
-    s.memory_limit       = memory_max;
-    s.instruction_limit  = instruction_max;
-    s.instructions       = 0;
+    c.invocation_started   = true;
+    s.memory_limit         = memory_max;
+    s.instruction_limit    = instruction_max;
+    s.instructions         = s.carried_instructions;
+    s.carried_instructions = 0;
   }
 }
 // Private protected-call seam: arguments are exact retained roots, no global writes.
@@ -2696,10 +2726,10 @@ std::expected<value_ptr, diagnostic> call_retained_assembly(lua_State* l, int re
   auto status = lua_pcall(l, 0, LUA_MULTRET, 0);
   if (status == LUA_ERRMEM)
     s.lua_memory_failed = true;
-  if (exhausted(s))
-    return std::unexpected(command_resource(s));
   if (commands(l).bridge_error)
     return std::unexpected(*commands(l).bridge_error);
+  if (exhausted(s))
+    return std::unexpected(command_resource(s));
   if (status || lua_gettop(l) != base + 1)
     return std::unexpected(external_protocol());
   lua_pushcfunction(l, scan_assembly_response);
@@ -3124,19 +3154,120 @@ void validate_response(command_state& c, const value_ptr& response) {
     throw encoded.error().detail;
 }
 } // namespace
+namespace {
+diagnostic factory_native_diagnostic() {
+  return diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", memory_max};
+}
+diagnostic factory_instruction_diagnostic(std::size_t maximum) {
+  return diagnostic{"resource_limit", "Lua instruction limit exceeded", "instructions", maximum};
+}
+diagnostic factory_lua_diagnostic(std::size_t maximum) {
+  return diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", maximum};
+}
+/// Factory-owned cumulative sink composing declaration loading, admission and native capture with one invocation VM.
+/// Before the VM exists charges accumulate in the pre_* counters; attach() folds them into the VM state and from then on
+/// every call delegates to it. detach() makes later calls inert so receipts that outlive the VM never touch freed state.
+/// Single-thread-confined.
+struct factory_budget final : budget_sink {
+  state*                          target     = nullptr; ///< VM state once attached; null before attach and after teardown.
+  bool                            detached   = false;   ///< Set when the VM state was destroyed.
+  std::size_t                     pre_native = 0, pre_instructions = 0, pre_lua = 0;
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    if (detached)
+      return std::unexpected(factory_native_diagnostic());
+    if (!target) {
+      if (bytes > memory_max - pre_native)
+        return std::unexpected(factory_native_diagnostic());
+      pre_native += bytes;
+      return {};
+    }
+    try {
+      charge(*target, bytes);
+    } catch (const diagnostic& error) {
+      return std::unexpected(error);
+    }
+    return {};
+  }
+  std::expected<void, diagnostic> charge_instructions(std::size_t count) override {
+    if (detached)
+      return std::unexpected(factory_native_diagnostic());
+    if (!target) {
+      if (pre_instructions >= instruction_max || count >= instruction_max - pre_instructions)
+        return std::unexpected(factory_instruction_diagnostic(instruction_max));
+      pre_instructions += count;
+      return {};
+    }
+    auto& s = *target;
+    if (!s.command || !s.command->invocation_started) {
+      if (s.carried_instructions >= instruction_max || count >= instruction_max - s.carried_instructions)
+        return std::unexpected(factory_instruction_diagnostic(instruction_max));
+      s.carried_instructions += count;
+      return {};
+    }
+    s.instructions += count;
+    if (s.instructions >= s.instruction_limit)
+      return std::unexpected(factory_instruction_diagnostic(s.instruction_limit));
+    return {};
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t bytes) override {
+    if (detached)
+      return std::unexpected(factory_native_diagnostic());
+    if (!target) {
+      if (bytes > memory_max - pre_lua)
+        return std::unexpected(factory_lua_diagnostic(memory_max));
+      pre_lua += bytes;
+      return {};
+    }
+    auto& s = *target;
+    if (bytes > s.memory_limit - s.memory)
+      return std::unexpected(factory_lua_diagnostic(s.memory_limit));
+    s.memory += bytes;
+    return {};
+  }
+  void release_lua(std::size_t bytes) noexcept override {
+    if (detached)
+      return;
+    if (!target)
+      pre_lua -= std::min(bytes, pre_lua);
+    else
+      target->memory -= std::min(bytes, target->memory);
+  }
+};
+/// Fold the pre-VM charges into the VM state and delegate from now on. May throw the checked native diagnostic.
+void attach_budget(const std::shared_ptr<factory_budget>& budget, state& s) {
+  if (budget->pre_native)
+    charge(s, budget->pre_native);
+  s.carried_instructions += budget->pre_instructions;
+  s.memory += budget->pre_lua;
+  budget->pre_native = budget->pre_instructions = budget->pre_lua = 0;
+  budget->target                                                  = &s;
+  s.budget                                                        = budget;
+}
+void detach_budget(state& s) noexcept {
+  if (s.budget) {
+    s.budget->target   = nullptr;
+    s.budget->detached = true;
+  }
+}
+} // namespace
 /// Stable invocation owner; its allocator context outlives the Lua state.
 struct command_vm::implementation {
   state         runtime;       ///< Cumulative resource and conversion ownership.
   command_state command;       ///< Sealed catalog, callable references and service facts.
   lua_State*    lua = nullptr; ///< Owned Lua state, closed on terminal invocation or destruction.
   implementation() {
-    runtime.command           = &command;
-    runtime.memory_limit      = 64 * 1024 * 1024;
+    runtime.command      = &command;
+    runtime.memory_limit = 64 * 1024 * 1024;
+#if PLANAR_RUNTIME_REGISTRATION_INSTRUCTION_MAX == 10000000
     runtime.instruction_limit = 10000000;
+#else
+    runtime.instruction_limit = PLANAR_RUNTIME_REGISTRATION_INSTRUCTION_MAX;
+#endif
   }
   ~implementation() {
     if (lua)
       lua_close(lua);
+    detach_budget(runtime);
   }
 };
 namespace {
@@ -4248,10 +4379,10 @@ std::expected<shape_response, registration_error> command_vm::invoke_shape_impl(
       } release{*_owner};
       lua_pushcfunction(l, execute_shape);
       auto status = lua_pcall(l, 0, LUA_MULTRET, 0);
-      if (exhausted(s) || status == LUA_ERRMEM)
-        return failure(command_resource(s));
       if (c.bridge_error)
         return failure(*c.bridge_error);
+      if (exhausted(s) || status == LUA_ERRMEM)
+        return failure(command_resource(s));
       if (status || lua_gettop(l) != 1)
         return failure(external_protocol());
       auto result  = convert(l, 1, 1);
@@ -4867,8 +4998,9 @@ std::expected<extension_invocation, registration_error> extension_invocation::cr
 /// Metric: the owner allocation is charged once per owner as sizeof(implementation)+64 to the cumulative native_bytes,
 /// never refunded; this excludes receipts and capture, whose storage is charged by the admission/native layers.
 struct profile_invocation::implementation {
-  profile_capture                                 capture;             ///< Original capture; never recaptured.
-  command_vm                                      vm;                  ///< VM registered once from this capture's snapshot.
+  std::shared_ptr<factory_budget>                 budget;  ///< Factory sink; declared first so it outlives capture and receipts.
+  profile_capture                                 capture; ///< Original capture; never recaptured.
+  command_vm                                      vm;      ///< VM registered once from this capture's snapshot.
   std::optional<retained_root_receipt>            root_receipt;        ///< Original supplied workspace root token (known load).
   std::optional<retained_file_receipt>            declaration_receipt; ///< Original selected declaration token (known load).
   std::optional<retained_file_receipt>            registry_receipt;    ///< Original registry token (known load).
@@ -4879,9 +5011,11 @@ struct profile_invocation::implementation {
   bool                                            frame_begun  = false; ///< Whether the single active frame has begun.
   bool                                            consumed     = false; ///< Whether into_extension took the capture and VM.
   std::optional<registration_error>               first_failure;        ///< First terminal diagnostic, preserved across moves.
+  /// @param sink Factory budget shared with the capture and receipts.
   /// @param captured Original receipt owner.
   /// @param registered VM registered from captured.
-  implementation(profile_capture captured, command_vm registered) : capture(std::move(captured)), vm(std::move(registered)) {
+  implementation(std::shared_ptr<factory_budget> sink, profile_capture captured, command_vm registered)
+      : budget(std::move(sink)), capture(std::move(captured)), vm(std::move(registered)) {
   }
 };
 namespace {
@@ -4908,7 +5042,8 @@ profile_invocation::open_known_load(const acceptance::request_intent& request_in
     if (!data || !*data || !(*data)->version2 || !(*data)->version2->profile_argument)
       return std::unexpected(profile_owner_protocol_error());
     const auto& v2      = *(*data)->version2;
-    auto        capture = profile_capture::open(*v2.profile_argument);
+    auto        budget  = std::make_shared<factory_budget>();
+    auto        capture = profile_capture::open(*v2.profile_argument, budget);
     if (!capture)
       return std::unexpected(from_profile_error(std::move(capture.error())));
     // Metadata-only admissions precede registration; the physical parent is not normalized.
@@ -4935,10 +5070,11 @@ profile_invocation::open_known_load(const acceptance::request_intent& request_in
     auto vm = extension_invocation::register_vm(*capture);
     if (!vm)
       return std::unexpected(std::move(vm.error()));
+    attach_budget(budget, vm->_owner->runtime);
     const auto charged_before = vm->_owner->runtime.native_bytes;
     charge(vm->_owner->runtime, sizeof(implementation) + 64);
     const auto charged         = vm->_owner->runtime.native_bytes - charged_before;
-    auto       owner           = std::make_unique<implementation>(std::move(*capture), std::move(*vm));
+    auto       owner           = std::make_unique<implementation>(budget, std::move(*capture), std::move(*vm));
     owner->owner_charge        = charged;
     owner->root_receipt        = std::move(*root);
     owner->declaration_receipt = std::move(*declaration);
@@ -4958,16 +5094,18 @@ profile_invocation::open_known_load(const acceptance::request_intent& request_in
 }
 std::expected<profile_invocation, registration_error> profile_invocation::open_opaque(std::string_view profile_selector) {
   try {
-    auto capture = profile_capture::open(profile_selector);
+    auto budget  = std::make_shared<factory_budget>();
+    auto capture = profile_capture::open(profile_selector, budget);
     if (!capture)
       return std::unexpected(from_profile_error(std::move(capture.error())));
     auto vm = extension_invocation::register_vm(*capture);
     if (!vm)
       return std::unexpected(std::move(vm.error()));
+    attach_budget(budget, vm->_owner->runtime);
     const auto charged_before = vm->_owner->runtime.native_bytes;
     charge(vm->_owner->runtime, sizeof(implementation) + 64);
     const auto charged  = vm->_owner->runtime.native_bytes - charged_before;
-    auto       owner    = std::make_unique<implementation>(std::move(*capture), std::move(*vm));
+    auto       owner    = std::make_unique<implementation>(budget, std::move(*capture), std::move(*vm));
     owner->owner_charge = charged;
     if (auto verified = owner->capture.verify(); !verified)
       return std::unexpected(from_profile_error(std::move(verified.error())));
@@ -5188,7 +5326,7 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
       const auto& bound_v2 = *impl->bound_intent->version2;
       auto source = acceptance::source_capture::open_bound(bound_v2.workspace_argument, bound_v2.registry_argument,
                                                            std::move(*impl->root_receipt), std::move(*impl->declaration_receipt),
-                                                           std::move(*impl->registry_receipt));
+                                                           std::move(*impl->registry_receipt), impl->budget);
       if (!source)
         return refuse(from_source_error(std::move(source.error())));
       if (auto begun = begin_frame(*impl); !begun)
@@ -5264,10 +5402,10 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
           record({{"file", (*routed_input)->fields.at("file")}, {"workspace", (*routed_input)->fields.at("workspace")}});
       const bool baseline_before_route = c.shape_baseline_ready;
       auto       routed                = call_retained_value(vm.lua, c.shape_phases[8], route_input);
-      if (exhausted(s))
-        return refuse(registration_error{command_resource(s), "profile"});
       if (c.bridge_error)
         return refuse(registration_error{*c.bridge_error, "profile"});
+      if (exhausted(s))
+        return refuse(registration_error{command_resource(s), "profile"});
       mark(1);
       if (!routed)
         return refuse(registration_error{
@@ -5283,6 +5421,9 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
         return refuse(from_source_error(std::move(verified.error())));
       if (auto verified = impl->capture.verify(); !verified)
         return refuse(from_profile_error(std::move(verified.error())));
+      // Capture-stage storage is charged inside the native and source layers to the one factory sink.
+      if (!source->sealed())
+        return refuse(profile_owner_protocol_error());
       auto validation = record({{"bundle", *bundle}, {"capture", record({{"status", text("not_captured")}})}});
       mark(2);
       auto prepared = impl->vm.validate_profile_phases(validation, {}, {}, frame, nullptr);
@@ -5821,7 +5962,7 @@ const value* extension_invocation::prepare_role() {
       !c.extension_history.context_identity || !c.extension_execution)
     return nullptr;
   owner.role_attempted = true;
-  capture_session session;
+  capture_session session(s.budget);
   auto            require = []<class T, class Error>(std::expected<T, Error> result) -> T {
     if (!result) {
       if constexpr (std::is_same_v<Error, diagnostic>)

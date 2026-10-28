@@ -8,6 +8,8 @@
 import std;
 import planar.engine.runtime;
 import planar.engine.runtime_test;
+import planar.engine.runtime_budget_test;
+import planar.engine.runtime_tight_test;
 import planar.engine.lua;
 import planar.engine.hash;
 import planar.engine.acceptance.intent;
@@ -441,6 +443,16 @@ options=engine.array{
   }
   ~native_history_fixture() {
     std::filesystem::remove_all(root);
+  }
+  /// Extension owner adopted from an opaque profile_invocation factory (the factory budget stays attached). This is the
+  /// extension frame after into_extension; the profile-owned prepare_load frame is covered by the known-load tests. The
+  /// existing C4 tests use extension_invocation::create, which has no factory.
+  extension_invocation profile_owner() {
+    auto opaque = profile_invocation::open_opaque((root / "trusted/profile.json").string());
+    REQUIRE(opaque);
+    auto extension = std::move(*opaque).into_extension();
+    REQUIRE(extension);
+    return std::move(*extension);
   }
   extension_invocation owner() {
     auto capture = profile_capture::open((root / "trusted/profile.json").string());
@@ -1322,7 +1334,14 @@ TEST_CASE("X06 B3 A factory registration counters are deterministic across facto
   CHECK(known.observe().instructions > 0);
   CHECK(known.observe().native_bytes > 0);
   CHECK(known.observe().instructions == opaque->observe().instructions);
-  CHECK(known.observe().native_bytes == opaque->observe().native_bytes);
+  // Known load charges its metadata admissions (workspace root, declaration, registry, ledger) to the one factory budget (B1),
+  // so it is deterministic and strictly above the opaque open, which admits none of them.
+  {
+    auto second = profile_invocation::open_opaque(f.profile.string());
+    REQUIRE(second);
+    CHECK(second->observe().native_bytes == opaque->observe().native_bytes);
+  }
+  CHECK(known.observe().native_bytes > opaque->observe().native_bytes);
   CHECK(known.observe().instructions == again.observe().instructions);
   CHECK(known.observe().native_bytes == again.observe().native_bytes);
   CHECK(known.observe().registrations == 1);
@@ -1673,7 +1692,14 @@ TEST_CASE("X06 B3 B owner implementation allocation is charged identically by bo
   auto        opaque = profile_invocation::open_opaque(f.profile.string());
   REQUIRE(opaque);
   CHECK(known.observe().native_bytes > 0);
-  CHECK(known.observe().native_bytes == opaque->observe().native_bytes);
+  // Known load additionally charges its metadata admissions to the one factory budget (B1); the owner charge itself is
+  // compared exactly by the next test.
+  {
+    auto second = profile_invocation::open_opaque(f.profile.string());
+    REQUIRE(second);
+    CHECK(second->observe().native_bytes == opaque->observe().native_bytes);
+  }
+  CHECK(known.observe().native_bytes > opaque->observe().native_bytes);
   CHECK(known.observe().native_bytes == again.observe().native_bytes);
 }
 TEST_CASE("X06 B3 B owner allocation charge is observable and covers the owner's own storage", "[runtime][x06b3b]") {
@@ -3027,4 +3053,1204 @@ TEST_CASE("X06 B3 C published workspace id follows the declaration and source mo
   REQUIRE(::chmod(executable.c_str(), 0644) == 0);
   auto plain = prepare_ok(f);
   CHECK(data_of(plain)->source_digest != d.source_digest);
+}
+// ---- X06 D whole-invocation budget tests ----
+namespace {
+constexpr std::size_t budget_native_max                   = PLANAR_BUDGET_NATIVE_MAX;
+constexpr std::size_t budget_instruction_max              = PLANAR_BUDGET_INSTRUCTION_MAX;
+constexpr std::size_t budget_registration_instruction_max = PLANAR_BUDGET_REGISTRATION_INSTRUCTION_MAX;
+constexpr std::size_t budget_node_max                     = PLANAR_BUDGET_NODE_MAX;
+constexpr std::size_t hook_quantum = 1000; // runtime.cpp hook(): one count event adds exactly 1000 instructions.
+
+struct probe_result {
+  bool                       opened = false, prepared = false, semantic = false, cleanup_ran = false, owner_live_after = false;
+  bool                       retry_protocol = false;
+  std::string                code, message, limit, field;
+  std::size_t                maximum = 0, temporary_after = 0, peak_temporary = 0;
+  std::size_t                open_instructions = 0, open_native = 0, instructions = 0, native_bytes = 0, shape_dispatches = 0;
+  std::array<std::size_t, 4> imarks{}, nmarks{};
+};
+template <class Registration> void take_registration(probe_result& p, const Registration& e) {
+  p.code    = e.detail.code;
+  p.message = e.detail.message;
+  p.limit   = e.detail.limit;
+  p.maximum = e.detail.maximum;
+  p.field   = e.field;
+}
+// Opens, prepares and retries one fixture in the harness namespace `Inv` and flattens every observation.
+template <class Inv> probe_result run_probe(const b3b_fixture& f) {
+  probe_result p;
+  auto         intent = f.intent();
+  auto         opened = Inv::open_known_load(intent, f.ledger_path.string());
+  if (!opened) {
+    take_registration(p, opened.error());
+    return p;
+  }
+  p.opened            = true;
+  auto       owner    = std::move(*opened);
+  const auto ob       = owner.observe();
+  p.open_instructions = ob.instructions;
+  p.open_native       = ob.native_bytes;
+  auto prepared       = std::move(owner).prepare_load(f.intent());
+  p.owner_live_after  = owner.observe().live;
+  if (prepared) {
+    p.prepared         = true;
+    const auto seen    = prepared->observe();
+    p.instructions     = seen.instructions;
+    p.native_bytes     = seen.native_bytes;
+    p.shape_dispatches = seen.shape_dispatches;
+    p.imarks           = seen.instruction_marks;
+    p.nmarks           = seen.native_byte_marks;
+    p.cleanup_ran      = seen.cleanup_ran;
+  } else {
+    const auto& e = prepared.error();
+    take_registration(p, e.failure);
+    p.semantic        = static_cast<bool>(e.semantic);
+    p.cleanup_ran     = e.cleanup_ran;
+    p.temporary_after = e.temporary_entries_after_release;
+    p.peak_temporary  = e.peak_temporary_entries;
+  }
+  auto retry       = std::move(owner).prepare_load(f.intent());
+  p.retry_protocol = !retry && retry.error().failure.field == "profile" && retry.error().failure.detail.code == "internal" &&
+                     retry.error().failure.detail.message == "Invalid external profile protocol" && !retry.error().semantic;
+  return p;
+}
+std::string brief(const probe_result& p) {
+  return std::format(
+      "opened={} prepared={} semantic={} code={} limit={} field={} max={} instr={} native={} cleanup={} tmp_after={}", p.opened,
+      p.prepared, p.semantic, p.code, p.limit, p.field, p.maximum, p.instructions, p.native_bytes, p.cleanup_ran,
+      p.temporary_after);
+}
+} // namespace
+namespace {
+// Largest value in [lo, hi) that still passes, for a predicate that passes at lo and fails at hi and is monotone between.
+// Callers bracket the boundary from a measured linear estimate, so a boundary outside the bracket fails the REQUIREs.
+std::size_t last_passing(std::size_t lo, std::size_t hi, const std::function<bool(std::size_t)>& passes) {
+  std::size_t probes = 2;
+  REQUIRE(passes(lo));
+  REQUIRE_FALSE(passes(hi));
+  while (hi - lo > 1) {
+    const auto mid = lo + (hi - lo) / 2;
+    ++probes;
+    (passes(mid) ? lo : hi) = mid;
+  }
+  INFO("bisect probes " << probes);
+  REQUIRE(probes <= 24);
+  return lo;
+}
+using budget_invocation = runtime_budget_test::profile_invocation;
+// Fixture with optional registration-side module padding and frame-side referenced-text padding.
+probe_result padded_probe(std::size_t module_pad, std::size_t text_pad) {
+  b3b_fixture f;
+  if (module_pad)
+    append_to(f.module, "\n--" + padding(module_pad));
+  if (text_pad)
+    append_to(f.workspace_dir / "text/shared.md", padding(text_pad));
+  return run_probe<budget_invocation>(f);
+}
+void expect_native_exhaustion(const probe_result& p) {
+  INFO(brief(p) << " message=" << p.message);
+  CHECK_FALSE(p.prepared);
+  CHECK_FALSE(p.semantic);
+  CHECK(p.code == "resource_limit");
+  CHECK(p.limit == "native_bytes");
+  CHECK(p.maximum == budget_native_max);
+  CHECK(p.message == "Native conversion allocation exceeded");
+}
+void expect_terminal_cleaned(const probe_result& p) {
+  CHECK(p.cleanup_ran);
+  CHECK(p.temporary_after == 0);
+  CHECK_FALSE(p.owner_live_after);
+  CHECK(p.retry_protocol);
+}
+struct native_sweep {
+  std::size_t pad = 0, step = 0, native_at_pass = 0, mark3_at_pass = 0;
+};
+// Finds the largest frame-side text pad that prepares under the small native ceiling, with exact per-byte slope.
+native_sweep sweep_native_boundary(std::size_t module_pad) {
+  constexpr std::size_t probe_pad = 20000;
+  const auto            r0        = padded_probe(module_pad, 0);
+  const auto            r1        = padded_probe(module_pad, probe_pad);
+  INFO(brief(r0) << " | " << brief(r1));
+  REQUIRE(r0.prepared);
+  REQUIRE(r1.prepared);
+  REQUIRE(r1.native_bytes > r0.native_bytes);
+  native_sweep out;
+  CHECK((r1.native_bytes - r0.native_bytes) % probe_pad == 0);
+  out.step = (r1.native_bytes - r0.native_bytes) / probe_pad;
+  REQUIRE(out.step > 0);
+  const auto estimate = probe_pad + (budget_native_max - r1.native_bytes) / out.step;
+  out.pad             = last_passing(estimate - 64, estimate + 64, [&](std::size_t pad) {
+    const auto r = padded_probe(module_pad, pad);
+    return r.prepared;
+  });
+  const auto pass     = padded_probe(module_pad, out.pad);
+  REQUIRE(pass.prepared);
+  out.native_at_pass = pass.native_bytes;
+  out.mark3_at_pass  = pass.nmarks[3];
+  const auto fail    = padded_probe(module_pad, out.pad + 1);
+  expect_native_exhaustion(fail);
+  return out;
+}
+bool same_counters(const profile_load_stage_observation& a, const profile_load_stage_observation& b) {
+  return a.instructions == b.instructions && a.native_bytes == b.native_bytes && a.instruction_marks == b.instruction_marks &&
+         a.native_byte_marks == b.native_byte_marks && a.registrations == b.registrations &&
+         a.shape_dispatches == b.shape_dispatches && a.jobs == b.jobs && a.sealed == b.sealed && a.frame_begun == b.frame_begun;
+}
+} // namespace
+TEST_CASE("X06 D capture stage charges every sealed byte to the one native counter", "[runtime][x06d]") {
+  // Mutant I1: delete the capture-charge loop in prepare_load. Measured from the open-time native counter (so the
+  // workspace declaration open, the native reads and the bundle copies are all inside the window), a padded captured
+  // file moves mark(2) by exactly two bytes per payload byte: one native read charge and one retained copy charge.
+  struct window {
+    std::int64_t interval = 0, captured = 0;
+  };
+  const auto measure = [](const b3b_fixture& f) {
+    auto       owner  = f.open();
+    const auto opened = owner.observe().native_bytes;
+    auto       r      = std::move(owner).prepare_load(f.intent());
+    REQUIRE(r);
+    const auto seen = r->observe();
+    const auto d    = data_of(*r);
+    window     w;
+    w.interval = static_cast<std::int64_t>(seen.native_byte_marks[2]) - static_cast<std::int64_t>(opened);
+    w.captured = static_cast<std::int64_t>(d->registry.files[0].payload.size());
+    for (const auto& file : d->source)
+      w.captured += static_cast<std::int64_t>(file.payload.size());
+    return w;
+  };
+  b3b_fixture base;
+  const auto  baseline = measure(base);
+  CHECK(baseline.interval >= baseline.captured);
+  for (std::size_t pad : {7001ul, 20011ul}) {
+    INFO("pad " << pad);
+    b3b_fixture f;
+    append_to(f.workspace_dir / "text/shared.md", padding(pad));
+    const auto padded = measure(f);
+    CHECK(padded.interval - baseline.interval == 2 * static_cast<std::int64_t>(pad));
+    CHECK(padded.captured - baseline.captured >= static_cast<std::int64_t>(pad));
+    CHECK(padded.interval >= padded.captured + static_cast<std::int64_t>(pad));
+  }
+}
+TEST_CASE("X06 D frame start inherits the factory counters and the prepared object keeps them", "[runtime][x06d]") {
+  // Mutants I2: begin_invocation zeroing native_bytes, or re-registering the capture before the frame.
+  b3b_fixture f;
+  auto        owner  = f.open();
+  const auto  before = owner.observe();
+  CHECK(before.registrations == 1);
+  CHECK(before.native_bytes > 0);
+  auto r = std::move(owner).prepare_load(f.intent());
+  REQUIRE(r);
+  const auto seen = r->observe();
+  // The workspace declaration open runs before the frame and charges the native counter directly, so mark(0) may exceed it.
+  CHECK(seen.native_byte_marks[0] >= before.native_bytes);
+  CHECK(seen.registrations == 1);
+  CHECK(seen.registrations == before.registrations);
+  CHECK(seen.native_bytes > before.native_bytes);
+  CHECK(seen.native_byte_marks[0] <= seen.native_byte_marks[1]);
+  CHECK_FALSE(owner.observe().live);
+}
+TEST_CASE("X06 D each custom shape dispatch adds to the one budget and nothing is refunded", "[runtime][x06d]") {
+  // Mutant I3: restore instructions and native bytes after each shape dispatch.
+  const auto  body = "local n=0; for i=1,100000 do n=n+1 end; " + b3b_fixture::default_body();
+  b3b_fixture one(body, false, true);
+  b3b_fixture two(body, true, true);
+  const auto  a = run_probe<profile_invocation>(one);
+  const auto  b = run_probe<profile_invocation>(two);
+  INFO(brief(a) << " | " << brief(b));
+  REQUIRE(a.prepared);
+  REQUIRE(b.prepared);
+  CHECK(a.shape_dispatches == 1);
+  CHECK(b.shape_dispatches == 2);
+  CHECK(b.instructions > a.instructions);
+  CHECK(b.native_bytes > a.native_bytes);
+  CHECK(b.instructions - a.instructions >= 200000 - 2000);
+  CHECK(a.instructions >= 200000);
+  // Mutants I3a (route refund), I3c (nested phase refund) and I3e (native-only dispatch refund): the route and validation
+  // windows each keep their own consumption, and a dispatch's discarded conversion stays charged.
+  CHECK(a.imarks[1] > a.imarks[0]);
+  CHECK(a.nmarks[1] > a.nmarks[0]);
+  CHECK(a.imarks[3] - a.imarks[2] >= 200000 - 2000);
+  CHECK(b.imarks[3] - b.imarks[2] - (a.imarks[3] - a.imarks[2]) >= 200000 - 2000);
+  // The extra payload rides in the converted response (an unconverted Lua table adds no native charge), so each dispatch's
+  // conversion cost is observable and a refund of it is detectable.
+  const auto  junk_body = std::string("local n=0; for i=1,100000 do n=n+1 end; ") +
+                          "return engine.object{ok=true,value=engine.object{obligations=engine.array{},guidance=input.job.id..'" +
+                          std::string(4000, 'x') + "'}}";
+  b3b_fixture junk_one(junk_body, false, true);
+  b3b_fixture junk_two(junk_body, true, true);
+  const auto  c = run_probe<profile_invocation>(junk_one);
+  const auto  d = run_probe<profile_invocation>(junk_two);
+  INFO(brief(c) << " | " << brief(d));
+  REQUIRE(c.prepared);
+  REQUIRE(d.prepared);
+  const auto window = [](const probe_result& p) {
+    return static_cast<std::int64_t>(p.nmarks[3]) - static_cast<std::int64_t>(p.nmarks[2]);
+  };
+  // Two dispatches of the same body add exactly the per-dispatch cost; the 4000-byte converted payload is part of it.
+  CHECK((window(d) - window(c)) - (window(b) - window(a)) >= 2000);
+}
+TEST_CASE("X06 D native ceiling spans registration and frame at a small ceiling", "[runtime][x06d]") {
+  // Mutants I5: begin_invocation forgetting registration charges, or charge() comparing against the ceiling alone.
+  const auto base = padded_probe(0, 0);
+  INFO(brief(base));
+  REQUIRE(base.prepared);
+  REQUIRE(base.native_bytes + 2 * 1024 * 1024 <= budget_native_max);
+  const auto plain      = sweep_native_boundary(0);
+  const auto registered = sweep_native_boundary(65536);
+  INFO("frame pad " << plain.pad << " with registration pad " << registered.pad);
+  CHECK(registered.pad < plain.pad);
+  CHECK(plain.step == registered.step);
+  for (const auto& sweep : {plain, registered}) {
+    CHECK(sweep.native_at_pass <= budget_native_max);
+    CHECK(budget_native_max - sweep.native_at_pass < sweep.step * 2);
+  }
+  // The registration pad charges native bytes both at open and again in the frame, so the lost headroom exceeds the pad.
+  CHECK((plain.pad - registered.pad) * plain.step >= 65536);
+}
+TEST_CASE("X06 D invocation instruction ceiling is shared by every stage at a small ceiling", "[runtime][x06d]") {
+  // Mutant I6b: reset the instruction counter after each custom shape dispatch; also shows dispatches share the counter.
+  // (Mutant I6, a reset between route and validation, is killed by the X06 B3 B route consumption test.)
+  const auto make = [](bool two, std::size_t n) {
+    b3b_fixture f("local n=0; for i=1,LOOPN do n=n+1 end; " + b3b_fixture::default_body(), two, true);
+    replace_in_file(f.module, "LOOPN", std::to_string(n));
+    return run_probe<budget_invocation>(f);
+  };
+  struct boundary {
+    std::size_t n = 0, slope = 0, at_zero = 0, at_pass = 0;
+  };
+  const auto find = [&](bool two) {
+    constexpr std::size_t reference = 200000;
+    const auto            r0        = make(two, 0);
+    const auto            r1        = make(two, reference);
+    INFO(brief(r0) << " | " << brief(r1));
+    REQUIRE(r0.prepared);
+    REQUIRE(r1.prepared);
+    boundary b;
+    CHECK((r1.instructions - r0.instructions) % reference == 0);
+    b.slope   = (r1.instructions - r0.instructions) / reference;
+    b.at_zero = r0.instructions;
+    REQUIRE(b.slope > 0);
+    const auto estimate = reference + (budget_instruction_max - r1.instructions) / b.slope;
+    b.n                 = last_passing(estimate - 1100, estimate + 1100, [&](std::size_t n) { return make(two, n).prepared; });
+    const auto pass     = make(two, b.n);
+    REQUIRE(pass.prepared);
+    b.at_pass       = pass.instructions;
+    const auto fail = make(two, b.n + 1);
+    INFO(brief(fail));
+    CHECK_FALSE(fail.prepared);
+    CHECK_FALSE(fail.semantic);
+    CHECK(fail.code == "resource_limit");
+    CHECK(fail.limit == "instructions");
+    CHECK(fail.maximum == budget_instruction_max);
+    CHECK(fail.field.starts_with("catalog.shapes"));
+    CHECK(fail.cleanup_ran);
+    CHECK(fail.temporary_after == 0);
+    CHECK_FALSE(fail.owner_live_after);
+    CHECK(fail.retry_protocol);
+    return b;
+  };
+  const auto one = find(false);
+  const auto two = find(true);
+  for (const auto& b : {one, two}) {
+    CHECK(b.at_pass < budget_instruction_max);
+    CHECK(budget_instruction_max - b.at_pass <= 2 * hook_quantum);
+  }
+  CHECK(two.n < one.n);
+  const std::size_t slack = (two.at_zero > one.at_zero ? (two.at_zero - one.at_zero) / one.slope : 0) + 2 * hook_quantum;
+  INFO("one " << one.n << " two " << two.n << " slack " << slack);
+  CHECK(2 * two.n <= one.n + slack);
+  CHECK(2 * two.n + slack >= one.n);
+}
+TEST_CASE("X06 D registration instruction ceiling is separate and refuses at open with no owner", "[runtime][x06d]") {
+  // Mutant I7: the registration instruction limit replaced by the invocation ceiling or dropped.
+  const auto make = [](std::size_t n) {
+    b3b_fixture f;
+    put(f.module, "for i=1," + std::to_string(n) + " do end\n" + read_file_bytes(f.module));
+    return run_probe<budget_invocation>(f);
+  };
+  constexpr std::size_t reference = 100000;
+  const auto            r0        = make(0);
+  const auto            r1        = make(reference);
+  INFO(brief(r0) << " | " << brief(r1));
+  REQUIRE(r0.prepared);
+  REQUIRE(r1.prepared);
+  CHECK((r1.open_instructions - r0.open_instructions) % reference == 0);
+  const auto slope = (r1.open_instructions - r0.open_instructions) / reference;
+  REQUIRE(slope > 0);
+  REQUIRE(budget_registration_instruction_max < budget_instruction_max);
+  const auto estimate = reference + (budget_registration_instruction_max - r1.open_instructions) / slope;
+  const auto boundary = last_passing(estimate - 3000, estimate + 3000, [&](std::size_t n) { return make(n).opened; });
+  const auto pass     = make(boundary);
+  REQUIRE(pass.opened);
+  CHECK(pass.open_instructions < budget_registration_instruction_max);
+  CHECK(budget_registration_instruction_max - pass.open_instructions <= 2 * hook_quantum);
+  const auto fail = make(boundary + 1);
+  INFO(brief(fail));
+  CHECK_FALSE(fail.opened);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "instructions");
+  CHECK(fail.field == "profile.modules[1]");
+  CHECK(fail.maximum == budget_registration_instruction_max);
+}
+TEST_CASE("X06 D conversion node ceiling refuses with nodes at a small ceiling", "[runtime][x06d]") {
+  // Mutant I8: the node comparison scaled to twice the ceiling. Exactness is a recorded limit: only adjacent pass and fail.
+  const auto make = [](std::size_t entries) {
+    b3b_fixture f("local t={} for i=1,ENTRIES do t[i]=i end return engine.object{ok=true,value=engine.object{obligations="
+                  "engine.array(t),guidance=input.job.id}}",
+                  false, true);
+    replace_in_file(f.module, "ENTRIES", std::to_string(entries));
+    return run_probe<budget_invocation>(f);
+  };
+  const auto passes = [&](std::size_t entries) {
+    const auto r = make(entries);
+    return r.prepared || (r.semantic && r.code.empty());
+  };
+  const auto boundary = last_passing(0, budget_node_max, passes);
+  INFO("last passing entries " << boundary);
+  CHECK(boundary > 0);
+  CHECK(boundary < budget_node_max);
+  const auto fail = make(boundary + 1);
+  INFO(brief(fail) << " message=" << fail.message);
+  CHECK_FALSE(fail.prepared);
+  CHECK_FALSE(fail.semantic);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "nodes");
+  CHECK(fail.maximum == budget_node_max);
+  CHECK(fail.message == "Conversion node count exceeded");
+  CHECK(fail.cleanup_ran);
+  CHECK(fail.temporary_after == 0);
+  CHECK_FALSE(fail.owner_live_after);
+  CHECK(fail.retry_protocol);
+}
+TEST_CASE("X06 D native exhaustion is resource_limit terminal and cleans nested roots", "[runtime][x06d]") {
+  // Mutants I9: cleanup skipped, or charge() clamping instead of refusing. (I1b needs a single capture-stage overshoot,
+  // which small fixtures cannot reach: the capture charge is 1 per byte against 21 per byte elsewhere. Recorded limit.)
+  {
+    // (a) Registration side: four 1 MiB modules exhaust the native ceiling at open, so no owner exists.
+    b3b_fixture f;
+    std::string modules = "[\"module.lua\"";
+    for (int k = 0; k < 4; ++k) {
+      const auto name = "pad" + std::to_string(k) + ".lua";
+      put(f.root / "trusted" / name, "--" + padding(1048576 - 2));
+      modules += ",\"" + name + "\"";
+    }
+    put(f.profile, R"({"version":1,"modules":)" + modules + "]}");
+    const auto p = run_probe<budget_invocation>(f);
+    expect_native_exhaustion(p);
+    CHECK_FALSE(p.opened);
+    CHECK_FALSE(p.cleanup_ran);
+  }
+  {
+    // (b) Frame side, one byte past the exact boundary and far past it through a near-maximum module.
+    const auto sweep = sweep_native_boundary(0);
+    const auto edge  = padded_probe(0, sweep.pad + 1);
+    expect_native_exhaustion(edge);
+    CHECK(edge.opened);
+    expect_terminal_cleaned(edge);
+    CHECK(edge.peak_temporary > 0);
+    const auto far = padded_probe(1000000, 0);
+    expect_native_exhaustion(far);
+    CHECK(far.opened);
+    expect_terminal_cleaned(far);
+    CHECK(far.message == edge.message);
+  }
+}
+TEST_CASE("X06 D a failure caught by Lua stays terminal with the first diagnostic", "[runtime][x06d]") {
+  // Mutant I10: protected_call ignoring an exhausted instruction counter after the enclosing pcall caught the error.
+  const auto make = [](std::size_t big) {
+    b3b_fixture f("pcall(function() local n=0 for i=1,BIGLOOP do n=n+1 end end); " + b3b_fixture::default_body());
+    replace_in_file(f.module, "BIGLOOP", std::to_string(big));
+    return run_probe<budget_invocation>(f);
+  };
+  const auto control = make(1000);
+  INFO(brief(control));
+  CHECK(control.prepared);
+  const auto fail = make(budget_instruction_max);
+  INFO(brief(fail));
+  CHECK_FALSE(fail.prepared);
+  CHECK_FALSE(fail.semantic);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "instructions");
+  CHECK(fail.maximum == budget_instruction_max);
+  CHECK(fail.field == "catalog.shapes[1]");
+  expect_terminal_cleaned(fail);
+}
+TEST_CASE("X06 D moving the prepared profile transfers counters and move assignment is safe", "[runtime][x06d]") {
+  // Mutant I11: the move constructor or assignment dropping the implementation instead of transferring it.
+  b3b_fixture fa;
+  b3b_fixture fb(b3b_fixture::default_body(), false, true);
+  auto        a      = prepare_ok(fa);
+  auto        b      = prepare_ok(fb);
+  const auto  seen_a = a.observe();
+  const auto  seen_b = b.observe();
+  REQUIRE(seen_a.live);
+  REQUIRE(seen_b.live);
+  CHECK_FALSE(same_counters(seen_a, seen_b));
+  prepared_profile c(std::move(a));
+  CHECK(c.observe().live);
+  CHECK(same_counters(c.observe(), seen_a));
+  CHECK(c.verify_native_receipts());
+  CHECK_FALSE(a.observe().live);
+  auto refused = a.data();
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().detail.code == "internal");
+  CHECK(refused.error().field == "profile");
+  expect_capture_changed(a.verify_native_receipts());
+  auto earlier = data_of(c);
+  c            = std::move(b);
+  CHECK(c.observe().live);
+  CHECK(same_counters(c.observe(), seen_b));
+  CHECK_FALSE(b.observe().live);
+  CHECK(c.verify_native_receipts());
+  CHECK_FALSE(earlier->workspace_id.empty());
+  CHECK(earlier != data_of(c));
+  auto& self = c;
+  c          = std::move(self);
+  CHECK(c.observe().live);
+  CHECK(same_counters(c.observe(), seen_b));
+  CHECK(c.verify_native_receipts());
+}
+TEST_CASE("X06 D destroying the consumed owner wrapper cannot erase prepared counters", "[runtime][x06d]") {
+  // Mutant I12: prepare_load erasing the native counter when it marks the owner consumed.
+  b3b_fixture                     f;
+  std::optional<prepared_profile> kept;
+  profile_load_stage_observation  before;
+  {
+    auto owner = f.open();
+    auto r     = std::move(owner).prepare_load(f.intent());
+    REQUIRE(r);
+    kept.emplace(std::move(*r));
+    {
+      auto copy = data_of(*kept);
+      CHECK_FALSE(copy->workspace_id.empty());
+    }
+    before = kept->observe();
+    CHECK(before.native_bytes > 0);
+    CHECK_FALSE(owner.observe().live);
+  }
+  const auto after = kept->observe();
+  CHECK(same_counters(after, before));
+  CHECK(after.live);
+  CHECK(kept->verify_native_receipts());
+}
+TEST_CASE("X06 D lower inherited limits still win over the composed ceilings", "[runtime][x06d]") {
+  // Mutant I4 (scratch edit of the capture module): raising a per-module, total or declaration limit to the composed value.
+  const auto open_with_modules = [](std::size_t count, std::size_t each) {
+    b3b_fixture f;
+    std::string modules = "[\"module.lua\"";
+    for (std::size_t k = 1; k < count; ++k) {
+      const auto name = "pad" + std::to_string(k) + ".lua";
+      put(f.root / "trusted" / name, "--" + padding(each - 2));
+      modules += ",\"" + name + "\"";
+    }
+    put(f.profile, R"({"version":1,"modules":)" + modules + "]}");
+    if (each != 0) {
+      auto text = read_file_bytes(f.module);
+      REQUIRE(text.size() < each);
+      put(f.module, text + "\n--" + padding(each - text.size() - 3));
+    }
+    auto intent = f.intent();
+    return profile_invocation::open_known_load(intent, f.ledger_path.string());
+  };
+  constexpr std::size_t one_mib = 1024 * 1024;
+  {
+    auto exact = open_with_modules(1, one_mib);
+    CHECK(exact);
+    auto over = open_with_modules(1, one_mib + 1);
+    REQUIRE_FALSE(over);
+    CHECK(over.error().detail.code == "resource_limit");
+  }
+  {
+    auto total = open_with_modules(8, one_mib);
+    CHECK(total);
+    auto over = open_with_modules(9, one_mib);
+    REQUIRE_FALSE(over);
+    CHECK(over.error().detail.code == "resource_limit");
+  }
+  {
+    b3b_fixture f;
+    auto        text = read_file_bytes(f.declaration);
+    put(f.declaration, "for i=1,1500000 do local n=i*i end\n" + text);
+    const auto p = run_probe<profile_invocation>(f);
+    INFO(brief(p) << " message=" << p.message);
+    CHECK_FALSE(p.prepared);
+    CHECK(p.code == "resource_limit");
+    CHECK(p.limit == "instructions");
+    CHECK(p.maximum == 1000000);
+    CHECK(p.message == "Lua instruction limit exceeded");
+  }
+}
+TEST_CASE("X06 D prepared_profile has no new construction path", "[runtime][x06d]") {
+  // Mutant I17: a public default or converting constructor appearing on the prepared type.
+  constexpr bool default_constructible = std::is_default_constructible_v<prepared_profile>;
+  constexpr bool copy_constructible    = std::is_copy_constructible_v<prepared_profile>;
+  constexpr bool copy_assignable       = std::is_copy_assignable_v<prepared_profile>;
+  constexpr bool move_constructible    = std::is_move_constructible_v<prepared_profile>;
+  constexpr bool from_data             = std::is_constructible_v<prepared_profile, profile_acceptance_data>;
+  constexpr bool from_data_ptr        = std::is_constructible_v<prepared_profile, std::shared_ptr<const profile_acceptance_data>>;
+  constexpr bool from_stage_view      = std::is_constructible_v<prepared_profile, profile_load_stage_observation>;
+  constexpr bool from_invocation_view = std::is_constructible_v<prepared_profile, profile_invocation_observation>;
+  constexpr bool from_value           = std::is_constructible_v<prepared_profile, value_ptr>;
+  constexpr bool from_stage           = std::is_constructible_v<prepared_profile, profile_load_stage>;
+  constexpr bool from_owner           = std::is_constructible_v<prepared_profile, profile_invocation>;
+  CHECK(default_constructible == false);
+  CHECK(copy_constructible == false);
+  CHECK(copy_assignable == false);
+  CHECK(move_constructible == true);
+  CHECK(from_data == false);
+  CHECK(from_data_ptr == false);
+  CHECK(from_stage_view == false);
+  CHECK(from_invocation_view == false);
+  CHECK(from_value == false);
+  CHECK(from_stage == false);
+  CHECK(from_owner == false);
+  constexpr bool stage_default = std::is_default_constructible_v<profile_load_stage>;
+  constexpr bool stage_copy    = std::is_copy_constructible_v<profile_load_stage>;
+  constexpr bool owner_default = std::is_default_constructible_v<profile_invocation>;
+  constexpr bool owner_copy    = std::is_copy_constructible_v<profile_invocation>;
+  CHECK(stage_default == false);
+  CHECK(stage_copy == false);
+  CHECK(owner_default == false);
+  CHECK(owner_copy == false);
+}
+namespace {
+// Adds `count` extra job files (ids a1..aN, sorting before every other job, copies of the combined job) so a fixture can carry
+// more prefixable declaration chunks than the per-chunk limit would otherwise allow under a raised composed ceiling. Returns
+// their file names.
+std::vector<std::string> add_extra_jobs(const b3b_fixture& f, std::size_t count) {
+  std::vector<std::string> names;
+  for (std::size_t i = 1; i <= count; ++i) {
+    const auto id   = "a" + std::to_string(i);
+    auto       job  = read_file_bytes(f.workspace_dir / "combined.lua");
+    const auto from = std::string_view("id = \"combined\"");
+    auto       at   = job.find(from);
+    REQUIRE(at != std::string::npos);
+    job.replace(at, from.size(), "id = \"" + id + "\"");
+    put(f.workspace_dir / (id + ".lua"), job);
+    replace_in_file(f.workspace_dir / "workspace.lua", "{ id = \"combined\", file = \"combined.lua\" }",
+                    "{ id = \"" + id + "\", file = \"" + id + ".lua\" }, { id = \"combined\", file = \"combined.lua\" }");
+    names.push_back(id + ".lua");
+  }
+  return names;
+}
+void prefix_file(const std::filesystem::path& p, std::string_view head) {
+  put(p, std::string(head) + read_file_bytes(p));
+}
+// Extra-job counts of the instruction-ceiling families, sized for the 19,900,000 composed instruction ceiling (D14): each
+// declaration chunk is capped at 1,000,000 instructions, so reaching the ceiling takes about twice the chunks the former
+// 8,000,000 ceiling needed (clause C3-4d).
+constexpr std::size_t c01_extra_jobs_stages = 10;
+constexpr std::size_t c01_extra_jobs_sink   = 16;
+constexpr std::size_t c01_extra_jobs_first  = 15;
+constexpr std::size_t c01_extra_jobs_native = 17;
+// One empty counting loop: about one VM instruction per iteration.
+std::string spin(std::size_t iterations) {
+  return "for i=1," + std::to_string(iterations) + " do end\n";
+}
+} // namespace
+TEST_CASE("X06 D C01 workspace declaration instructions are carried into the invocation counter", "[runtime][x06d][c01]") {
+  // Mutant: begin_invocation zeroes the instruction counter without carrying the pre-frame declaration instructions.
+  const auto measure = [](std::size_t n) {
+    b3b_fixture f;
+    prefix_file(f.declaration, spin(n));
+    return prepare_ok(f).observe().instruction_marks[0];
+  };
+  const auto small = measure(100000);
+  const auto large = measure(200000);
+  INFO("small " << small << " large " << large);
+  CHECK(small >= 100000 - hook_quantum);
+  REQUIRE(large > small);
+  CHECK(large - small >= 90000);
+}
+TEST_CASE("X06 D C01 spec and job declaration instructions join the invocation counter", "[runtime][x06d][c01]") {
+  // Mutant: the spec or job declaration is loaded without the factory budget, so its chunk never reaches the counter.
+  std::vector<std::size_t> deltas;
+  for (const char* name : {"spec.lua", "combined.lua", "split.lua"}) {
+    INFO(name);
+    const auto total = [&](std::size_t n) {
+      b3b_fixture f;
+      prefix_file(f.workspace_dir / name, spin(n));
+      return prepare_ok(f).observe().instructions;
+    };
+    const auto small = total(100000);
+    const auto large = total(200000);
+    REQUIRE(large > small);
+    CHECK(large - small >= 90000);
+    deltas.push_back(large - small);
+  }
+  for (const auto delta : deltas) {
+    const auto diff = delta > deltas[0] ? delta - deltas[0] : deltas[0] - delta;
+    CHECK(diff <= 2 * hook_quantum);
+  }
+}
+TEST_CASE("X06 D C01 declaration chunks exhaust the composed invocation instruction ceiling across stages",
+          "[runtime][x06d][c01]") {
+  // Mutants: declaration chunks are not charged to the factory budget, the composed refusal is not enforced, or it reports
+  // the inherited 1,000,000 chunk maximum. Four chunks of 900,000 stay below the per-chunk limit and only together
+  // (with the custom shape loop) approach the 4,000,000 composed ceiling.
+  const auto make = [](std::size_t last) {
+    b3b_fixture f("local n=0; for i=1,3670000 do n=n+1 end; " + b3b_fixture::default_body(), false, true);
+    const auto  extras = add_extra_jobs(f, c01_extra_jobs_stages);
+    for (const char* name : {"workspace.lua", "spec.lua", "combined.lua"})
+      prefix_file(f.workspace_dir / name, spin(900000));
+    for (const auto& name : extras)
+      prefix_file(f.workspace_dir / name, spin(900000));
+    prefix_file(f.workspace_dir / "split.lua", spin(last));
+    return run_probe<budget_invocation>(f);
+  };
+  const auto r0 = make(0);
+  const auto r1 = make(100000);
+  INFO(brief(r0) << " | " << brief(r1));
+  REQUIRE(r0.prepared);
+  REQUIRE(r1.prepared);
+  REQUIRE(r1.instructions > r0.instructions);
+  CHECK((r1.instructions - r0.instructions) % 100000 == 0);
+  const auto slope = (r1.instructions - r0.instructions) / 100000;
+  REQUIRE(slope > 0);
+  REQUIRE(r1.instructions < budget_instruction_max);
+  CHECK(r0.instructions > (3 + c01_extra_jobs_stages) * 900000);
+  const auto estimate = 100000 + (budget_instruction_max - r1.instructions) / slope;
+  const auto boundary = last_passing(estimate - 1100, estimate + 1100, [&](std::size_t n) { return make(n).prepared; });
+  const auto pass     = make(boundary);
+  REQUIRE(pass.prepared);
+  CHECK(pass.instructions < budget_instruction_max);
+  CHECK(budget_instruction_max - pass.instructions <= 2 * hook_quantum);
+  const auto fail = make(boundary + 1);
+  INFO(brief(fail) << " message=" << fail.message);
+  CHECK_FALSE(fail.prepared);
+  CHECK_FALSE(fail.semantic);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "instructions");
+  CHECK(fail.maximum == budget_instruction_max);
+  CHECK(fail.maximum != 1000000);
+  CHECK(fail.message == "Lua instruction limit exceeded");
+  expect_terminal_cleaned(fail);
+}
+TEST_CASE("X06 D C01 retained declaration values exhaust the composed native ceiling in the declaration stage",
+          "[runtime][x06d][c01]") {
+  // Mutants: the declaration loader charges its conversion bytes only against its own 64 MiB cap, or reports that cap. A
+  // discarded planar.list of K booleans costs 640 bytes per element, crossing the small composed ceiling well below both
+  // the loader's own native cap and its 100,000 node cap.
+  const auto make = [](std::size_t k) {
+    b3b_fixture f;
+    prefix_file(f.workspace_dir / "combined.lua",
+                "local big={} for i=1," + std::to_string(k) + " do big[i]=true end local keep=planar.list(big)\n");
+    return run_probe<budget_invocation>(f);
+  };
+  const std::size_t hi       = budget_native_max / 640 + 1;
+  const auto        boundary = last_passing(0, hi, [&](std::size_t k) { return make(k).prepared; });
+  INFO("last passing elements " << boundary);
+  CHECK(boundary > 0);
+  CHECK(boundary < hi);
+  const auto fail = make(boundary + 1);
+  expect_native_exhaustion(fail);
+  expect_terminal_cleaned(fail);
+}
+TEST_CASE("X06 D C01 declaration Lua memory counts against the composed live Lua ceiling", "[runtime][x06d][c01]") {
+  // Mutants: declaration Lua memory is not live memory against the composed ceiling, or the refusal reports the loader's
+  // own 64 MiB maximum. About 50 MB of live strings exceeds the small ceiling and stays under 64 MiB; about 13 MB passes.
+  const auto run = [](std::string_view text) {
+    b3b_fixture f;
+    prefix_file(f.workspace_dir / "combined.lua", text);
+    return run_probe<budget_invocation>(f);
+  };
+  const auto small = run("local x='a' for i=1,22 do x=x..x end local y=x..x\n");
+  INFO(brief(small));
+  CHECK(small.prepared);
+  const auto big = run("local x='a' for i=1,23 do x=x..x end local y=x..x local z=y..x\n");
+  INFO(brief(big) << " message=" << big.message);
+  CHECK_FALSE(big.prepared);
+  CHECK_FALSE(big.semantic);
+  CHECK(big.code == "resource_limit");
+  CHECK(big.limit == "lua_bytes");
+  CHECK(big.maximum == budget_native_max);
+  expect_terminal_cleaned(big);
+}
+TEST_CASE("X06 D C01 admission metadata charges are part of the factory counter at open", "[runtime][x06d][c01]") {
+  // Mutant: the workspace declaration open is not charged, so its path and receipt bytes never reach the counter.
+  constexpr std::size_t short_name = 8, delta = 200;
+  const auto            open_native = [](std::size_t length) {
+    b3b_fixture f;
+    const auto  dir = f.root / std::string(length, 'w');
+    std::filesystem::rename(f.workspace_dir, dir);
+    f.workspace_dir = dir;
+    f.declaration   = dir / "workspace.lua";
+    const auto p    = run_probe<budget_invocation>(f);
+    INFO(brief(p));
+    REQUIRE(p.opened);
+    return p.open_native;
+  };
+  const auto shorter = open_native(short_name);
+  const auto longer  = open_native(short_name + delta);
+  INFO("short " << shorter << " long " << longer);
+  REQUIRE(longer > shorter);
+  CHECK((longer - shorter) % delta == 0);
+}
+TEST_CASE("X06 D C01 native boundary is exercised by the post-validation derivation charges", "[runtime][x06d][c01]") {
+  // Mutants: a derivation charge after mark(3) is unchecked or removed. At the exact boundary the validation mark sits far
+  // below the ceiling, so the refusal one byte later comes from the later phases.
+  const auto sweep = sweep_native_boundary(0);
+  INFO("pad " << sweep.pad << " mark3 " << sweep.mark3_at_pass << " final " << sweep.native_at_pass);
+  CHECK(sweep.mark3_at_pass + sweep.step < budget_native_max);
+  CHECK(budget_native_max - sweep.mark3_at_pass > 4096);
+  CHECK(sweep.native_at_pass >= sweep.mark3_at_pass);
+}
+TEST_CASE("X06 D C01 a caught Lua error still leaves the budget counters monotone", "[runtime][x06d][c01]") {
+  // Mutant: a shape that catches an error with pcall restores the instruction or native counters it had before the call.
+  const auto make = [](std::string_view prefix) {
+    b3b_fixture f(std::string(prefix) + b3b_fixture::default_body());
+    return run_probe<budget_invocation>(f);
+  };
+  const auto base = make("local n=0; for i=1,1000 do n=n+1 end; ");
+  REQUIRE(base.prepared);
+  for (const char* caught : {"local ok=pcall(function() for i=1,100000 do end error({}) end); ",
+                             "local ok=pcall(function() for i=1,100000 do end error('x') end); "}) {
+    INFO(caught);
+    // The caught call itself runs a loop well above the hook granularity (100 instructions) so its cost is observable.
+    const auto r = make(std::string("local n=0; for i=1,1000 do n=n+1 end; ") + caught);
+    INFO(brief(r));
+    REQUIRE(r.prepared);
+    for (std::size_t i = 0; i + 1 < r.imarks.size(); ++i) {
+      CHECK(r.imarks[i] <= r.imarks[i + 1]);
+      CHECK(r.nmarks[i] <= r.nmarks[i + 1]);
+    }
+    CHECK(r.instructions >= r.imarks[3]);
+    CHECK(r.native_bytes >= r.nmarks[3]);
+    CHECK(r.instructions > base.instructions);
+    CHECK(r.imarks[3] - r.imarks[2] > base.imarks[3] - base.imarks[2]);
+  }
+}
+// Observable half of the 25 percent margin rule (rule and bracketing classes: the Margin record section of
+// docs/vernacular/rounds/V5-02-X06-D-C04.md). The ceiling-independent peaks of the ordinary control padded_probe(0, 0) in
+// the first measurement pass are 24,503,619 native bytes, 131,200 instructions, 17,802,201 open native bytes and 2,000
+// open instructions. Live Lua, nodes and
+// role-flow native have no observer here and no field was added for them: those columns are covered by the measurement
+// record only (a limit of this test). Mutants it must kill: the C03 ceilings restored (native 41943040 with instructions
+// 18000000), the instruction ceiling set strictly between the extrapolated sweep-boundary cost E and 4/3 of E, the
+// registration ceiling lowered toward the ordinary open use, or the native ceiling set strictly between the control peak
+// P and 4/3 of P.
+TEST_CASE("X06 D C03 ordinary fixtures keep a quarter of every observable ceiling free", "[runtime][x06d][c03]") {
+  const auto p = padded_probe(0, 0);
+  INFO(brief(p));
+  REQUIRE(p.opened);
+  REQUIRE(p.prepared);
+  CHECK(p.native_bytes * 4 <= budget_native_max * 3);
+  CHECK(p.instructions * 4 <= budget_instruction_max * 3);
+  CHECK(p.open_native * 4 <= budget_native_max * 3);
+  CHECK(p.open_instructions * 4 <= budget_registration_instruction_max * 3);
+  // The margin checks above are upper bounds on usage and cannot notice a ceiling lowered toward the heaviest must-succeed
+  // fixture, so derive that fixture: the native sweep boundary run. Instruction and native cost per pad byte come from two
+  // padded probes, are extrapolated to the native ceiling, and the instruction ceiling must keep a quarter free of the
+  // extrapolated boundary cost. No ceiling number is hard-coded.
+  constexpr std::size_t probe_pad = 20000;
+  const auto            q         = padded_probe(0, probe_pad);
+  INFO(brief(q));
+  REQUIRE(q.prepared);
+  REQUIRE(q.native_bytes > p.native_bytes);
+  REQUIRE(q.instructions > p.instructions);
+  const auto native_slope      = (q.native_bytes - p.native_bytes) / probe_pad;
+  const auto instruction_slope = (q.instructions - p.instructions) / probe_pad;
+  REQUIRE(native_slope > 0);
+  REQUIRE(budget_native_max > p.native_bytes);
+  const auto boundary_pad = (budget_native_max - p.native_bytes) / native_slope;
+  const auto extrapolated = p.instructions + instruction_slope * boundary_pad;
+  INFO("extrapolated boundary instructions " << extrapolated);
+  CHECK(budget_instruction_max * 3 >= 4 * extrapolated);
+  // Registration: the heaviest must-succeed registration run is the ordinary open (2,000 instructions); the registration
+  // bisect fixture is a bracketing fixture and has no derived bound here, so the ceiling stays pinned at the final value
+  // (mutant: REGISTRATION_INSTRUCTION_MAX lowered toward the ordinary open use, which the margin check alone passes).
+  CHECK(budget_registration_instruction_max == 1000000);
+}
+// Mutants T3, T3b, T3c, T3d (off-by-one) and T16 (wrong maximum): factory_budget::charge_instructions skips or shifts the
+// ceiling comparison. The fixture has no custom shape, so no runtime VM tick follows the last declaration chunk and the
+// runtime hook cannot mask the sink: the last passing total is exactly one loader quantum (100) below the ceiling.
+TEST_CASE("X06 D C01 the composed sink alone enforces the invocation instruction ceiling on declaration chunks",
+          "[runtime][x06d][c01]") {
+  const auto make = [](std::size_t last) {
+    b3b_fixture f(b3b_fixture::default_body(), false, false);
+    const auto  extras = add_extra_jobs(f, c01_extra_jobs_sink);
+    for (const char* name : {"workspace.lua", "spec.lua", "combined.lua"})
+      prefix_file(f.workspace_dir / name, spin(985000));
+    for (const auto& name : extras)
+      prefix_file(f.workspace_dir / name, spin(985000));
+    prefix_file(f.workspace_dir / "split.lua", spin(last));
+    return run_probe<budget_invocation>(f);
+  };
+  const auto r0 = make(0);
+  const auto r1 = make(100000);
+  INFO(brief(r0) << " | " << brief(r1));
+  REQUIRE(r0.prepared);
+  REQUIRE(r1.prepared);
+  REQUIRE(r1.instructions > r0.instructions);
+  const auto slope = (r1.instructions - r0.instructions) / 100000;
+  REQUIRE(slope == 1);
+  const auto estimate = 100000 + (budget_instruction_max - r1.instructions) / slope;
+  const auto boundary = last_passing(estimate - 1100, estimate + 1100, [&](std::size_t n) { return make(n).prepared; });
+  const auto pass     = make(boundary);
+  REQUIRE(pass.prepared);
+  CHECK(budget_instruction_max - pass.instructions == 100);
+  const auto fail = make(boundary + 1);
+  INFO(brief(fail) << " message=" << fail.message);
+  CHECK_FALSE(fail.prepared);
+  CHECK_FALSE(fail.semantic);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "instructions");
+  CHECK(fail.maximum == budget_instruction_max);
+  CHECK(fail.message == "Lua instruction limit exceeded");
+  expect_terminal_cleaned(fail);
+}
+// Mutant T5e: the attached factory sink's release_lua is a no-op, so each declaration chunk's live Lua bytes stay charged.
+// Each of the four chunks peaks near 12.6 MB of live strings, which fits the 26.7 MB ceiling only when freed between chunks.
+TEST_CASE("X06 D C01 declaration live Lua memory is released between chunks", "[runtime][x06d][c01]") {
+  b3b_fixture f;
+  for (const char* name : {"workspace.lua", "spec.lua", "combined.lua", "split.lua"})
+    prefix_file(f.workspace_dir / name, "local x='a' for i=1,22 do x=x..x end local y=x..x\n");
+  const auto r = run_probe<budget_invocation>(f);
+  INFO(brief(r) << " message=" << r.message);
+  CHECK(r.opened);
+  CHECK(r.prepared);
+}
+// Mutant T14: open_opaque opens the capture without the factory budget. The profile and module reads are charged by the
+// sink at open for both factories, so one padded module byte moves both owners' counters by the same amount.
+TEST_CASE("X06 D C01 opaque factory charges module reads like the known-load factory", "[runtime][x06d][c01]") {
+  const auto counters = [](std::size_t pad) {
+    b3b_fixture f;
+    if (pad)
+      append_to(f.module, "\n--" + padding(pad));
+    auto known  = f.open();
+    auto opaque = profile_invocation::open_opaque(f.profile.string());
+    REQUIRE(opaque);
+    return std::pair(known.observe().native_bytes, opaque->observe().native_bytes);
+  };
+  const auto [known0, opaque0] = counters(0);
+  const auto [known1, opaque1] = counters(20000);
+  CHECK(known1 - known0 >= 20000);
+  CHECK(opaque1 - opaque0 == known1 - known0);
+}
+// Mutant I3e (public placement): invoke_shape refunds the native bytes charged while running and encoding the shape. Repeated
+// direct calls share one cumulative native budget, so a response of a quarter megabyte per call exhausts the small ceiling.
+TEST_CASE("X06 D C01 repeated direct shape calls never refund native bytes", "[runtime][x06d][c01]") {
+  auto p     = std::make_shared<profile_closure>();
+  p->profile = {"profile", "profile.json", "0644", R"({"version":1,"modules":["m1.lua"]})"};
+  p->modules.push_back(
+      {"modules", "m1.lua", "0644",
+       "registration.shape({id='custom',abi='shape_v1',revision='final',stages='optional',help='shape'},function(input) "
+       "local s='01234567' for i=1,15 do s=s..s end return engine.object{big=s} end)"});
+  auto vm = runtime_budget_test::command_vm::create(p);
+  REQUIRE(vm);
+  auto        input     = object({{"version",
+                                   [] {
+                          auto v     = std::make_shared<value>();
+                          v->kind    = value_kind::integer;
+                          v->integer = 1;
+                          return v;
+                                   }()},
+                                  {"job", object()},
+                                  {"spec", object()},
+                                  {"assignments", object()},
+                                  {"reviewer", object()}});
+  std::size_t calls     = 0;
+  bool        exhausted = false;
+  for (; calls < 400 && !exhausted; ++calls) {
+    auto response = vm->invoke_shape("custom", input);
+    if (!response) {
+      exhausted = true;
+      CHECK(response.error().detail.code == "resource_limit");
+      CHECK(response.error().detail.limit == "native_bytes");
+      CHECK(response.error().detail.maximum == budget_native_max);
+    }
+  }
+  INFO("calls " << calls);
+  CHECK(exhausted);
+  CHECK(calls > 4);
+}
+
+// ---- X06 D C02 composed-sink, stage and terminal-failure tests ----
+namespace {
+using tight_invocation                      = runtime_tight_test::profile_invocation;
+constexpr std::size_t tight_instruction_max = PLANAR_TIGHT_INSTRUCTION_MAX;
+// Adds a third job file that sorts before the others, so a workspace has four prefixable declaration chunks after the
+// workspace chunk's own (workspace, spec and three jobs).
+void add_alpha_job(const b3b_fixture& f) {
+  auto job = read_file_bytes(f.workspace_dir / "combined.lua");
+  auto at  = job.find("id = \"combined\"");
+  REQUIRE(at != std::string::npos);
+  job.replace(at, std::string_view("id = \"combined\"").size(), "id = \"alpha\"");
+  put(f.workspace_dir / "alpha.lua", job);
+  replace_in_file(f.workspace_dir / "workspace.lua", "{ id = \"combined\", file = \"combined.lua\" }",
+                  "{ id = \"alpha\", file = \"alpha.lua\" }, { id = \"combined\", file = \"combined.lua\" }");
+}
+} // namespace
+// Mutants T3 (delete the post-frame comparison in charge_instructions), T3d (`>` for `>=`) and T16 (maximum + 1). The last
+// chunk errors after a spin, so the composed sink refusal must be the first failure; the boundary is anchored on the valid
+// control's public stage marks instead of on its own refusal point.
+TEST_CASE("X06 D C02 the composed sink refusal is the first failure on a declaration chunk that crosses the invocation ceiling",
+          "[runtime][x06d][c02]") {
+  constexpr std::size_t prefix = 995000;
+  const auto            make   = [&](std::size_t last, bool erroring) {
+    b3b_fixture f(b3b_fixture::default_body(), false, false);
+    add_alpha_job(f);
+    const auto extras = add_extra_jobs(f, c01_extra_jobs_first);
+    for (const char* name : {"workspace.lua", "spec.lua", "alpha.lua", "combined.lua"})
+      prefix_file(f.workspace_dir / name, spin(prefix));
+    for (const auto& name : extras)
+      prefix_file(f.workspace_dir / name, spin(prefix));
+    prefix_file(f.workspace_dir / "split.lua", spin(last) + (erroring ? "error('refused')\n" : ""));
+    return run_probe<budget_invocation>(f);
+  };
+  // Valid controls at two sizes a hundred apart in loader quanta: the capture stage (marks 1 to 2) pays the quantized chunk
+  // charges, so the slope is exactly one instruction per spin iteration.
+  constexpr std::size_t a = 100000, b = 200000;
+  const auto            va = make(a, false);
+  const auto            vb = make(b, false);
+  INFO(brief(va) << " | " << brief(vb));
+  REQUIRE(va.prepared);
+  REQUIRE(vb.prepared);
+  CHECK(va.imarks[1] == vb.imarks[1]);
+  REQUIRE(vb.imarks[2] - vb.imarks[1] > va.imarks[2] - va.imarks[1]);
+  CHECK((vb.imarks[2] - va.imarks[2]) == (b - a));
+  // The exact-equality case must be reachable, otherwise `>=` and `>` could not differ: the running total moves in whole
+  // loader quanta, so the ceiling is met exactly only when the control's capture total is congruent to it.
+  CHECK((budget_instruction_max - va.imarks[2]) % 100 == 0);
+  const std::size_t n_eq = a + (budget_instruction_max - va.imarks[2]);
+  // Quantum phase of the valid chunk: the smallest k at which the total steps above its value at `a`.
+  std::size_t rho = 0;
+  {
+    const auto probe = make(a + 99, false);
+    REQUIRE(probe.prepared);
+    if (probe.imarks[2] != va.imarks[2]) {
+      std::size_t lo = 0, hi = 99; // total at a+lo == va, total at a+hi > va
+      while (hi - lo > 1) {
+        const auto mid = lo + (hi - lo) / 2;
+        const auto r   = make(a + mid, false);
+        REQUIRE(r.prepared);
+        (r.imarks[2] == va.imarks[2] ? lo : hi) = mid;
+      }
+      rho = 100 - hi;
+    }
+  }
+  // The valid chunk would first reach the ceiling exactly at n_valid; the erroring chunk differs only by its (shorter) tail.
+  const std::size_t n_valid       = n_eq - rho;
+  const auto        reached_error = [&](std::size_t n) {
+    const auto p = make(n, true);
+    return !p.prepared && p.code != "resource_limit";
+  };
+  const auto n_e = last_passing(n_valid - 1100, n_valid + 1100, reached_error);
+  INFO("n_eq " << n_eq << " rho " << rho << " n_valid " << n_valid << " n_e " << n_e);
+  // The refusal is one quantum step: the first refused size sits within one tail length below the valid one. Under `>` the
+  // boundary moves a whole quantum later, outside this window.
+  const long delta = static_cast<long>(n_e + 1) - static_cast<long>(n_valid);
+  INFO("delta " << delta);
+  CHECK(delta >= 0);
+  CHECK(delta < 100);
+  const auto before = make(n_e, true);
+  CHECK_FALSE(before.prepared);
+  CHECK(before.code != "resource_limit");
+  const auto fail = make(n_e + 1, true);
+  INFO(brief(fail) << " message=" << fail.message);
+  CHECK_FALSE(fail.prepared);
+  CHECK_FALSE(fail.semantic);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "instructions");
+  CHECK(fail.maximum == budget_instruction_max);
+  CHECK(fail.maximum != 1000000);
+  CHECK(fail.message == "Lua instruction limit exceeded");
+  expect_terminal_cleaned(fail);
+}
+// Mutant T3c: the carried (pre-frame) branch of charge_instructions has no comparison. The tight variant's ceiling (500,000)
+// is below the inherited per-chunk limit (1,000,000), so only the composed sink can refuse the workspace chunk.
+TEST_CASE("X06 D C02 the composed sink refuses a pre-frame declaration chunk at the carried ceiling", "[runtime][x06d][c02]") {
+  const auto make = [](std::size_t n) {
+    b3b_fixture f;
+    prefix_file(f.workspace_dir / "workspace.lua", spin(n) + "error('refused')\n");
+    return run_probe<tight_invocation>(f);
+  };
+  const auto below = make(300000);
+  INFO(brief(below));
+  CHECK(below.opened);
+  CHECK_FALSE(below.prepared);
+  CHECK(below.code != "resource_limit");
+  const auto above = make(600000);
+  INFO(brief(above) << " message=" << above.message);
+  CHECK(above.opened);
+  CHECK_FALSE(above.prepared);
+  CHECK_FALSE(above.semantic);
+  CHECK(above.code == "resource_limit");
+  CHECK(above.limit == "instructions");
+  CHECK(above.maximum == tight_instruction_max);
+  CHECK(above.maximum != 1000000);
+  CHECK(above.message == "Lua instruction limit exceeded");
+  CHECK_FALSE(above.cleanup_ran);
+}
+// Route-stage exhaustion. The route function is trusted stdlib code, so its cost is driven through data: many declared jobs
+// with long (valid) paths make route_workspace loop for millions of instructions inside the begun frame. spec.lua is invalid
+// Lua, so reaching the capture stage is observable as a non-resource failure.
+// Mutant row-T8: delete the exhausted(s) refusal after the route call and map every route failure to external_protocol.
+TEST_CASE("X06 D C01 route stage exhaustion refuses before any declaration is captured", "[runtime][x06d][c01]") {
+  const auto make = [](std::size_t jobs) {
+    b3b_fixture f;
+    put(f.workspace_dir / "spec.lua", "this is not lua\n");
+    const std::string segment(1, 'a');
+    std::string       list = "jobs = L { ";
+    for (std::size_t i = 0; i < jobs; ++i) {
+      // One-byte segments cost the most route instructions per byte (clause C3-4g): the boundary then falls well under the
+      // 1 MiB text quota even at twice the boundary job count.
+      std::string path;
+      for (int k = 0; k < 480; ++k)
+        path += segment + "/";
+      path += "f" + std::to_string(i) + ".lua";
+      list += std::format("{}{{ id = \"j{}\", file = \"{}\" }}", i ? ", " : "", i, path);
+    }
+    list += " },";
+    replace_in_file(f.workspace_dir / "workspace.lua",
+                    "jobs = L { { id = \"combined\", file = \"combined.lua\" }, { id = \"split\", file = \"split.lua\" } },",
+                    list);
+    return run_probe<budget_invocation>(f);
+  };
+  const auto reached_capture = [&](std::size_t jobs) {
+    const auto p = make(jobs);
+    return p.opened && !p.prepared && p.code != "resource_limit";
+  };
+  REQUIRE(reached_capture(1));
+  std::size_t lo = 1, hi = 2;
+  while (reached_capture(hi)) {
+    lo = hi;
+    hi *= 2;
+    REQUIRE(hi <= 4096);
+  }
+  const auto boundary = last_passing(lo, hi, reached_capture);
+  const auto pass     = make(boundary);
+  const auto fail     = make(boundary + 1);
+  INFO("boundary jobs " << boundary << " | pass " << brief(pass) << " | fail " << brief(fail));
+  CHECK(fail.opened);
+  CHECK_FALSE(fail.prepared);
+  CHECK_FALSE(fail.semantic);
+  CHECK(fail.code == "resource_limit");
+  CHECK(fail.limit == "instructions");
+  CHECK(fail.maximum == budget_instruction_max);
+  CHECK(fail.message == "Lua instruction limit exceeded");
+  CHECK(fail.cleanup_ran);
+  CHECK(fail.temporary_after == 0);
+  CHECK_FALSE(fail.owner_live_after);
+  CHECK(fail.retry_protocol);
+  // Far past the boundary the refusal is the same (the route is stopped, nothing later runs).
+  const auto far = make(boundary * 2);
+  CHECK(far.code == "resource_limit");
+  CHECK(far.maximum == budget_instruction_max);
+  CHECK(far.cleanup_ran);
+}
+// Mutants row-T9a (capture-stage source failure mapped to a protocol error) and row-T9b (phase-6 charge deleted).
+TEST_CASE("X06 D C01 native exhaustion after all-job validation refuses in preparation and cleans nested roots",
+          "[runtime][x06d][c01]") {
+  {
+    // (a) Capture stage after the route: five chunks of 985,000 stay below the per-chunk limit but exceed the composed
+    // ceiling together.
+    b3b_fixture f(b3b_fixture::default_body(), false, true);
+    add_alpha_job(f);
+    const auto extras = add_extra_jobs(f, c01_extra_jobs_native);
+    for (const char* name : {"workspace.lua", "spec.lua", "alpha.lua", "combined.lua", "split.lua"})
+      prefix_file(f.workspace_dir / name, spin(985000));
+    for (const auto& name : extras)
+      prefix_file(f.workspace_dir / name, spin(985000));
+    const auto p = run_probe<budget_invocation>(f);
+    INFO(brief(p) << " message=" << p.message);
+    CHECK(p.opened);
+    CHECK_FALSE(p.prepared);
+    CHECK_FALSE(p.semantic);
+    CHECK(p.code == "resource_limit");
+    CHECK(p.limit == "instructions");
+    CHECK(p.maximum == budget_instruction_max);
+    expect_terminal_cleaned(p);
+  }
+  {
+    // (b) Post-validation phases: one byte past the exact boundary the refusal still happens in preparation.
+    const auto sweep = sweep_native_boundary(0);
+    const auto edge  = padded_probe(0, sweep.pad + 1);
+    expect_native_exhaustion(edge);
+    CHECK(edge.opened);
+    expect_terminal_cleaned(edge);
+    CHECK(edge.peak_temporary > 0);
+    CHECK(sweep.mark3_at_pass + sweep.step < budget_native_max);
+    // Slope pin: everything charged after validation (marks[3]) costs at least 7 per added text byte; the phase-6 charge
+    // (3 per source byte plus 4096 per sealed file) is part of it.
+    constexpr std::size_t pad = 20000;
+    const auto            p0  = padded_probe(0, 0);
+    const auto            p1  = padded_probe(0, pad);
+    REQUIRE(p0.prepared);
+    REQUIRE(p1.prepared);
+    const auto post0 = p0.native_bytes - p0.nmarks[3];
+    const auto post1 = p1.native_bytes - p1.nmarks[3];
+    REQUIRE(post1 > post0);
+    INFO("post-validation charge " << post0 << " -> " << post1);
+    CHECK((post1 - post0) % pad == 0);
+    // Measured slope is 7 per padded byte: 3 from the phase-6 source charge plus 4 from the later derivation charges. Deleting
+    // or weakening the phase-6 charge lowers it below 7 even though the other charges alone still exceed 3.
+    CHECK((post1 - post0) / pad >= 7);
+  }
+}
+// Mutants M_R4a (delete the extension_history.refused return) and M_R4b (swap it with the exhaustion branch), in the
+// extension frame adopted from the factory.
+TEST_CASE("X06 D C02 a protocol or semantic failure caught by pcall in a profile-owned frame stays terminal",
+          "[runtime][x06d][c02]") {
+  for (auto tail : {history_semantic, history_success, std::string_view("error('later')"), std::string_view("while true do end")})
+    for (auto misuse : {"ctx.read_history()", "ctx.read_history({}); ctx.read_history({})"}) {
+      INFO(tail << " | " << misuse);
+      native_history_fixture f;
+      history_handler(f, "pcall(function() " + std::string(misuse) + " end); " + std::string(tail));
+      auto owner = f.profile_owner();
+      f.admit(owner);
+      history_protocol(owner.execute());
+      history_protocol(owner.execute());
+    }
+  for (auto tail :
+       {history_semantic, history_success, std::string_view("error('later')"), std::string_view("while true do end")}) {
+    INFO(tail);
+    native_history_fixture f;
+    history_handler(f, "pcall(function() ctx.read_history({}) end); " + std::string(tail));
+    auto owner = f.profile_owner();
+    f.admit(owner, {{"revision", true, "9223372036854775807"}});
+    auto result = owner.execute();
+    REQUIRE_FALSE(result);
+    if (std::holds_alternative<history::history_read_error>(result.error())) {
+      CHECK(std::get<history::history_read_error>(result.error()).code == history::history_read_code::revision_not_found);
+      auto retry = owner.execute();
+      REQUIRE_FALSE(retry);
+      REQUIRE(std::holds_alternative<history::history_read_error>(retry.error()));
+      CHECK(std::get<history::history_read_error>(retry.error()).code == history::history_read_code::revision_not_found);
+    } else {
+      FAIL("expected the typed history_read_error to survive the tail");
+    }
+  }
+}
+// The illegal registration is caught by pcall in the custom shape, which runs inside the validation phase of the begun
+// frame through call_retained_value (runtime.cpp:4351 and 4689); the exhausting tail turns the first failure into a race
+// between bridge_error and exhaustion. Mutant it kills: M_O2 (swap the bridge_error and exhausted checks in
+// call_retained_value, runtime.cpp:2071-2074). It does not kill M_O3 (call_retained_assembly), M_O5 (prepare_load route),
+// X2 (profile_invocation::fail precedence) or X3 (post-route bridge_error check); those are recorded equivalent in the round
+// record (plan/INVARIANTS.md E2, E3, E3b, E5). X4 (command_failure guard, runtime.cpp:1201) is not equivalent and is killed
+// by the C03 direct shape test.
+TEST_CASE("X06 D C02 a protocol failure caught by pcall in a known-load prepare frame stays terminal", "[runtime][x06d][c02]") {
+  std::optional<probe_result> first;
+  for (auto tail : {std::string(b3b_fixture::default_body()), std::string("error('later')"), std::string("while true do end")}) {
+    INFO(tail);
+    b3b_fixture f;
+    put(f.module, "local saved=registration.shape; local D={id='custom',abi='shape_v1',revision='final',stages='optional',"
+                  "help='shape'}; registration.shape(D,function(input) assert(not pcall(saved,D,function()end)); " +
+                      tail + " end)");
+    const auto p = run_probe<budget_invocation>(f);
+    INFO(brief(p) << " message=" << p.message);
+    CHECK(p.opened);
+    CHECK_FALSE(p.prepared);
+    CHECK_FALSE(p.semantic);
+    CHECK(p.code == "internal");
+    CHECK(p.message == "Invalid external profile protocol");
+    CHECK(p.limit.empty());
+    expect_terminal_cleaned(p);
+    if (!first)
+      first = p;
+    CHECK(p.code == first->code);
+    CHECK(p.message == first->message);
+    CHECK(p.field == first->field);
+  }
 }

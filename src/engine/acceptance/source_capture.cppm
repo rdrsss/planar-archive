@@ -69,8 +69,10 @@ public:
   /// @brief Open and load the workspace declaration through discovery with no original authority.
   /// @param workspace Absolute lexically normalized workspace declaration intent path.
   /// @param registry Absolute lexically normalized registry intent path, retained without opening until capture.
+  /// @param budget Optional factory-owned cumulative budget threaded through every declaration and read.
   /// @return New owner or typed refusal. No cwd, environment or name lookup occurs.
-  static std::expected<source_capture, source_error> open_embedded(std::string_view workspace, std::string_view registry);
+  static std::expected<source_capture, source_error> open_embedded(std::string_view workspace, std::string_view registry,
+                                                                   std::shared_ptr<budget_sink> budget = {});
 
   /// @brief Open the workspace declaration through original supplied-root and declaration authority.
   /// Construction first refuses any moved-from receipt as invalid_state, then poisoned, foreign-admission or
@@ -83,10 +85,12 @@ public:
   /// @param root Original supplied-root receipt for the declaration's directory; consumed.
   /// @param declaration Original supplied-file receipt for the workspace declaration; consumed.
   /// @param registry_file Original supplied-file receipt for the registry; consumed at capture.
+  /// @param budget Optional factory-owned cumulative budget threaded through every declaration and read.
   /// @return New owner or typed refusal.
   static std::expected<source_capture, source_error> open_bound(std::string_view workspace, std::string_view registry,
                                                                 retained_root_receipt root, retained_file_receipt declaration,
-                                                                retained_file_receipt registry_file);
+                                                                retained_file_receipt        registry_file,
+                                                                std::shared_ptr<budget_sink> budget = {});
 
   /// @brief Read the original opened workspace route input, once, for trusted routing.
   /// @return Exact {file,workspace} value or invalid_state; no filesystem access.

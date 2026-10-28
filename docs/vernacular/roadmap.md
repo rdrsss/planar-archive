@@ -22,10 +22,17 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
   2026-10-26), all committed. Debug 1041/1041 (macOS Debug only). The profile
   overload of `complete_acceptance` is internal; the shared seam is a non-exported
   partition (operator decisions 2026-10-26). Public `init` still creates format1.
-- **In review:** nothing.
+- **Approved and committed:** [X06-D](rounds/V5-02-X06-D.md) whole-invocation budgets
+  with correctives [C01](rounds/V5-02-X06-D-C01.md) to [C04](rounds/V5-02-X06-D-C04.md)
+  ([review](rounds/V5-02-X06-D-C04-review.md), approved on records re-check 2,
+  2026-10-27). One factory budget owner is threaded through every stage, including role
+  preparation. Ceilings: native and live Lua 39,845,888, invocation instructions
+  19,900,000, nodes 25,000, registration instructions 1,000,000, each fixture measured
+  with at least 25 percent margin in Debug and RelWithDebInfo. Gate run 2: 1114/1114 in
+  both configurations, zero skips; the final comment-only fix re-ran X06 165/165 (Debug).
 - **Latest complete approved gate:** macOS Debug and RelWithDebInfo, **876/876**
   each, zero failures/errors/skips/disabled ([X05-C5 review](rounds/V5-02-X05-C5-review.md)).
-  Committed inventory is 1041 (X06-C+C04, macOS Debug only).
+  Committed inventory is 1114 (X06-D+C04, macOS Debug and RelWithDebInfo).
 - **Unchanged limits:** public `init` creates format1; no RSS guarantee; Linux
   acceptance has not run.
 
@@ -33,7 +40,9 @@ latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 
 | Step | Scope |
 | --- | --- |
-| X06-D | Whole-invocation budgets plus the integrated X06 gate, one round (operator amendment 2026-10-25); carried limits: P01 survives (masked), N1 phase coverage unmeasured, #531 timing test about 15.5 s of 30 s (flake risk), red snapshot tracked-only, Linux not run |
+| Carried limits CL-1 to CL-6 | Operator-approved carried limits (option A, 2026-10-27), not findings: the D5b exhaustion-first sites where a first failure caught by Lua can be replaced by `resource_limit` because exhaustion is tested before `bridge_error`. Each is repaired by a later round (X06-D repairs none). Clauses: `profile-preparation-architecture.md:396` ("one terminal first failure from any active stage") and the row "Semantic/protocol/resource failure caught by Lua | First terminal failure survives" (`:459` after X06-D; `:455` before it). **CL-1** `call_retained_projection` (`runtime.cpp:2016-2022`, exhaustion test at 2019, `bridge_error` at 2021): REACHABLE; untrusted callers `invoke_projection` (4498) and the extension projection callback (6335-6338). **CL-2** registration module loop in `register_profile` (`runtime.cpp:3503-3508`, exhaustion at 3505): REACHABLE; untrusted caller is the profile module chunk. **CL-3** `setup_commands`/`seal_environment` frames (`runtime.cpp:4219-4222` and `4235-4238`): NOT REACHABLE by untrusted callers (trusted environment-setup natives only). **CL-4** non-nested `phase()` pcall in `validate_profile_phases` (`runtime.cpp:4713`): PROBABLY REACHABLE, not exercised; untrusted caller is a public `validate_profile`, `select_profile` or `render_profile` call on a profile-snapshot command VM. **CL-5** command-service response in `command_vm::invoke` (`runtime.cpp:4888-4891`): NOT REACHABLE by untrusted callers (profile VMs refuse invoke at 4844-4845). **CL-6** catch-all fallbacks (`runtime.cpp:4298`, 4442, 4549, 4632, 6182): reachable only on host `bad_alloc` or `length_error`, not injectable. |
+| Other carried limits | P01 survives (masked); N1 phase coverage unmeasured; #531 timing test about 15.5 s of 30 s; red snapshot tracked-only; Linux not run; ceiling pins: the instruction-ceiling equality pin was replaced by a derivation in C04 (`budget_instruction_max` derived from the margin model), the registration pin `budget_registration_instruction_max == 1000000` is kept and must change with any deliberate registration ceiling change; the knife-edge margin cells (about 25.1 percent native and nodes, 25.6 percent instructions) hold only for exactly the C04 constants |
+| X07-DOC | Next: docs-only design addendum before X07 (decision Q4 A): the closed factory over the five shipped families (Q1 B) and the X01 production outcome table, per [remaining-steps design](remaining-steps-design.md) |
 | X07 | Public cutover in one round, two waves: CLI11 envelope/parser integration (X07-A) and service/CLI admission with format2 init (X07-B) ([rows](external-profile-implementation.md#source-seams-and-bounded-implementation-rounds)) |
 | X08 | Mandatory full external-profile acceptance gate, including the actual Linux gate |
 | RA01, R15-R19 | Authoring/driver prompts, then observed-state execution (Phase 2 below) |

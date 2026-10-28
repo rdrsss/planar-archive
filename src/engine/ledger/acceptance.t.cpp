@@ -1080,3 +1080,204 @@ TEST_CASE("X06 C C03 runtime product sources import only ledger completion from 
   INFO(names);
   CHECK(offending.empty());
 }
+
+namespace {
+std::string x06d_runtime_text(const char* name) {
+  const auto text = read_bytes(c03_source_root() / "engine/runtime" / name);
+  REQUIRE_FALSE(text.empty());
+  return text;
+}
+// Ordered member names of a plain struct, read from its declaration (comments removed, one statement per semicolon).
+std::vector<std::string> x06d_struct_members(const std::string& text, std::string_view name) {
+  const auto head = text.find("struct " + std::string(name) + " {");
+  REQUIRE(head != std::string::npos);
+  const auto end = text.find("\n};", head);
+  REQUIRE(end != std::string::npos);
+  std::string body;
+  const auto  raw     = text.substr(head, end - head);
+  bool        comment = false;
+  for (std::size_t i = raw.find('{') + 1; i < raw.size(); ++i) {
+    if (!comment && raw[i] == '/' && i + 1 < raw.size() && raw[i + 1] == '/')
+      comment = true;
+    if (raw[i] == '\n')
+      comment = false;
+    if (!comment)
+      body += raw[i];
+  }
+  std::vector<std::string> members;
+  std::size_t              start = 0;
+  for (auto semi = body.find(';'); semi != std::string::npos; semi = body.find(';', start)) {
+    auto statement = body.substr(start, semi - start);
+    start          = semi + 1;
+    if (const auto cut = statement.find_first_of("={"); cut != std::string::npos)
+      statement.resize(cut);
+    while (!statement.empty() && std::isspace(static_cast<unsigned char>(statement.back())))
+      statement.pop_back();
+    auto at = statement.size();
+    while (at > 0 && (std::isalnum(static_cast<unsigned char>(statement[at - 1])) || statement[at - 1] == '_'))
+      --at;
+    members.push_back(statement.substr(at));
+  }
+  return members;
+}
+// Squashed public section of a class plus its access-grant declarations.
+struct x06d_surface {
+  std::string              public_section;
+  std::vector<std::string> grants;
+};
+x06d_surface x06d_class_surface(const std::string& squashed_text, std::string_view name) {
+  const auto head = squashed_text.find("class" + std::string(name) + "{");
+  REQUIRE(head != std::string::npos);
+  const auto end = squashed_text.find("};", head);
+  REQUIRE(end != std::string::npos);
+  const auto section = squashed_text.substr(head, end - head + 2);
+  const auto priv    = section.find("private:");
+  REQUIRE(priv != std::string::npos);
+  x06d_surface out;
+  out.public_section       = section.substr(0, priv);
+  const std::string marker = std::string("fri") + "endclass";
+  for (auto at = section.find(marker); at != std::string::npos; at = section.find(marker, at + 1)) {
+    const auto semi = section.find(';', at);
+    out.grants.push_back(section.substr(at, semi - at));
+  }
+  return out;
+}
+} // namespace
+
+TEST_CASE("X06 D composed ceiling constants keep their contract values", "[atomic_acceptance][x06d]") {
+  // Mutant I14: any composed ceiling constant changed in runtime.cpp. Per-module and total capture limits stay in the
+  // capture module and are not restated here.
+  const auto code = squashed(x06d_runtime_text("runtime.cpp"));
+  for (const char* pinned :
+       {"constexprstd::size_tmemory_max=512*1024*1024;", "constexprstd::size_tinstruction_max=100000000;",
+        "constexprstd::size_tnode_max=4000000;", "runtime.memory_limit=64*1024*1024;", "runtime.instruction_limit=10000000;"}) {
+    INFO(pinned);
+    const auto first = code.find(pinned);
+    REQUIRE(first != std::string::npos);
+    CHECK(code.find(pinned, first + 1) == std::string::npos);
+  }
+}
+
+TEST_CASE("X06 D runtime public surface and resource messages stay closed", "[atomic_acceptance][x06d]") {
+  // Mutants I15 and I16: a new resource message, a budget or ceiling vocabulary export, a new observation member, a new
+  // public constructor or a new access grant on the profile types.
+  const auto interface_raw = x06d_runtime_text("runtime.cppm");
+  {
+    auto code = squashed(interface_raw);
+    for (std::size_t at = code.find("budget_bytes"); at != std::string::npos; at = code.find("budget_bytes"))
+      code.erase(at, std::string_view("budget_bytes").size()); // The pre-existing render option, not budget vocabulary.
+    for (const char* word : {"budget", "ceiling", "capture_charge"}) {
+      INFO(word);
+      CHECK_FALSE(contains(code, word));
+    }
+  }
+  CHECK(x06d_struct_members(interface_raw, "profile_invocation_observation") ==
+        std::vector<std::string>{"live", "consumed", "known_load", "frame_begun", "instructions", "native_bytes", "owner_charge",
+                                 "registrations", "tag_entries", "backing_entries", "temporary_entries"});
+  CHECK(x06d_struct_members(interface_raw, "profile_load_stage_observation") ==
+        std::vector<std::string>{"live", "frame_begun", "sealed", "bundle_retained", "model_retained", "jobs", "shape_dispatches",
+                                 "instructions", "native_bytes", "registrations", "tag_entries", "backing_entries",
+                                 "temporary_entries", "cleanup_ran", "peak_temporary_entries", "baseline_before_route",
+                                 "instruction_marks", "native_byte_marks"});
+  const auto squashed_interface = squashed(interface_raw);
+  const auto prepared           = x06d_class_surface(squashed_interface, "prepared_profile");
+  CHECK(prepared.public_section ==
+        "classprepared_profile{public:std::expected<std::shared_ptr<constprofile_acceptance_data>,registration_error>data()"
+        "const;std::shared_ptr<constacceptance::request_data>bound_intent()const;std::expected<void,diagnostic>verify_native_"
+        "receipts()const;profile_load_stage_observationobserve()constnoexcept;prepared_profile(constprepared_profile&)=delete;"
+        "prepared_profile&operator=(constprepared_profile&)=delete;prepared_profile(prepared_profile&&other)noexcept;"
+        "prepared_profile&operator=(prepared_profile&&other)noexcept;~prepared_profile();");
+  CHECK(prepared.grants == std::vector<std::string>{std::string("fri") + "endclassprofile_invocation"});
+  const auto owner = x06d_class_surface(squashed_interface, "profile_invocation");
+  CHECK(owner.public_section ==
+        "classprofile_invocation{public:staticstd::expected<profile_invocation,registration_error>open_known_load(const"
+        "acceptance::request_intent&request_intent,std::string_viewledger_path);staticstd::expected<profile_invocation,"
+        "registration_error>open_opaque(std::string_viewprofile_selector);value_ptrcatalog()const;std::string_vieweffective_"
+        "catalog()const;std::expected<prepared_profile,profile_preparation_error>prepare_load(constacceptance::request_intent&"
+        "final_intent)&&;std::expected<extension_invocation,registration_error>into_extension()&&;profile_invocation_"
+        "observationobserve()constnoexcept;profile_invocation(constprofile_invocation&)=delete;profile_invocation&operator=("
+        "constprofile_invocation&)=delete;profile_invocation(profile_invocation&&other)noexcept;profile_invocation&operator=("
+        "profile_invocation&&other)noexcept;~profile_invocation();");
+  CHECK(owner.grants == std::vector<std::string>{std::string("fri") + "endclassprofile_load_stage",
+                                                 std::string("fri") + "endclassprepared_profile"});
+  const auto stage = x06d_class_surface(squashed_interface, "profile_load_stage");
+  CHECK(stage.public_section ==
+        "classprofile_load_stage{public:profile_load_stage_observationobserve()constnoexcept;profile_load_stage(const"
+        "profile_load_stage&)=delete;profile_load_stage&operator=(constprofile_load_stage&)=delete;profile_load_stage("
+        "profile_load_stage&&other)noexcept;profile_load_stage&operator=(profile_load_stage&&other)noexcept;~profile_load_"
+        "stage();");
+  CHECK(stage.grants == std::vector<std::string>{std::string("fri") + "endclassprofile_invocation",
+                                                 std::string("fri") + "endclassprepared_profile"});
+  // Every resource_limit message literal in the runtime unit is one of the closed seven; the capture charge adds none.
+  const auto            code   = x06d_runtime_text("runtime.cpp");
+  const std::string     marker = "{\"resource_limit\",";
+  std::set<std::string> messages;
+  for (auto at = code.find(marker); at != std::string::npos; at = code.find(marker, at + 1)) {
+    auto quote = code.find_first_not_of(" \t\r\n", at + marker.size());
+    REQUIRE(quote != std::string::npos);
+    if (code[quote] != '"')
+      continue;
+    std::string message;
+    for (auto i = quote + 1; i < code.size() && code[i] != '"'; ++i) {
+      if (code[i] == '\\' && i + 1 < code.size())
+        ++i;
+      message += code[i];
+    }
+    messages.insert(message);
+  }
+  const std::set<std::string> pinned{"Conversion depth exceeded",
+                                     "Conversion node count exceeded",
+                                     "External profile resource limit exceeded",
+                                     "Lua allocation exceeded",
+                                     "Lua instruction limit exceeded",
+                                     "Lua stack exceeded",
+                                     "Native conversion allocation exceeded"};
+  CHECK(messages == pinned);
+}
+
+TEST_CASE("X06 D C01 variant ceiling mechanism does not depend on runtime source text", "[atomic_acceptance][x06d][c01]") {
+  // Mutants: the small-ceiling test variant is produced by rewriting runtime.cpp text in the build description (a
+  // FATAL_ERROR on a pattern miss, a REGEX REPLACE over the runtime text), or the runtime loses its overridable
+  // default-constant seam or one of its contract values.
+  const auto build = read_bytes(c03_source_root() / "engine" / "CMakeLists.txt");
+  REQUIRE_FALSE(build.empty());
+  CHECK_FALSE(contains(build, "planar_budget_rewrite"));
+  CHECK_FALSE(contains(build, "budget_bridge"));
+  CHECK_FALSE(contains(build, "pattern did not match"));
+  for (auto at = build.find("file(READ"); at != std::string::npos; at = build.find("file(READ", at + 1)) {
+    const auto line = build.substr(at, build.find('\n', at) - at);
+    INFO(line);
+    CHECK_FALSE(contains(line, "runtime.cpp"));
+  }
+  for (auto at = build.find("FATAL_ERROR"); at != std::string::npos; at = build.find("FATAL_ERROR", at + 1)) {
+    const auto before = build.substr(at > 300 ? at - 300 : 0, at > 300 ? 300 : at);
+    CHECK_FALSE(contains(before, "runtime.cpp"));
+    CHECK_FALSE(contains(before, "runtime/runtime"));
+  }
+  for (auto at = build.find("REGEX REPLACE"); at != std::string::npos; at = build.find("REGEX REPLACE", at + 1)) {
+    const auto statement = build.substr(at, build.find(')', at) - at);
+    INFO(statement);
+    CHECK_FALSE(contains(statement, "runtime"));
+    CHECK_FALSE(contains(statement, "budget"));
+  }
+  const auto        code   = squashed(x06d_runtime_text("runtime.cpp"));
+  const std::string guard  = "#ifndefPLANAR_RUNTIME_";
+  std::size_t       guards = 0;
+  for (auto at = code.find(guard); at != std::string::npos; at = code.find(guard, at + 1))
+    ++guards;
+  CHECK(guards >= 4);
+  std::vector<std::string> defaults;
+  const std::string        define = "#definePLANAR_RUNTIME_";
+  for (auto at = code.find(define); at != std::string::npos; at = code.find(define, at + 1)) {
+    auto end = code.find("#endif", at);
+    REQUIRE(end != std::string::npos);
+    auto chunk = code.substr(at, end - at);
+    while (!chunk.empty() && std::string_view("uUlLzZ()").find(chunk.back()) != std::string_view::npos)
+      chunk.pop_back();
+    defaults.push_back(chunk);
+  }
+  for (const char* value : {"512*1024*1024", "100000000", "4000000", "10000000"}) {
+    INFO(value);
+    CHECK(std::ranges::any_of(defaults, [&](const std::string& chunk) { return chunk.ends_with(value); }));
+  }
+}

@@ -8,6 +8,25 @@ import planar.engine.capture.admission;
 import planar.engine.capture.native;
 using namespace planar::engine;
 namespace {
+struct counting_sink : budget_sink {
+  std::size_t                     native = 0, native_calls = 0, native_ceiling = 0; ///< Zero ceiling means none.
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    ++native_calls;
+    if (native_ceiling && bytes > native_ceiling - std::min(native, native_ceiling))
+      return std::unexpected(
+          diagnostic{"resource_limit", "Native conversion allocation exceeded", "native_bytes", native_ceiling});
+    native += bytes;
+    return {};
+  }
+  std::expected<void, diagnostic> charge_instructions(std::size_t) override {
+    return {};
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t) override {
+    return {};
+  }
+  void release_lua(std::size_t) noexcept override {
+  }
+};
 struct temporary {
   std::filesystem::path path;
   temporary() {
@@ -902,4 +921,84 @@ TEST_CASE("capture admission reports only final-component ENOENT as absence", "[
     CHECK_FALSE(admission.last_refusal_was_absent()); // NOLINT(bugprone-use-after-move)
     CHECK_FALSE(moved.last_refusal_was_absent());
   }
+}
+
+// X06 D C01 rows A1-A3: composed factory budget in capture admission.
+TEST_CASE("X06 D C01 admission metadata charges reach the factory budget", "[capture][admission][x06dc01]") {
+  temporary t;
+  auto      sink      = std::make_shared<counting_sink>();
+  auto      admission = capture_admission::create((t.path / "trusted").string(), sink);
+  REQUIRE(admission);
+  auto last = sink->native;
+  CHECK(last > 0);
+  REQUIRE(admission->select_trusted("profile", (t.path / "trusted/profile with é space.json").string()));
+  CHECK(sink->native > last);
+  last = sink->native;
+  REQUIRE(admission->admit_root("workspace", (t.path / "workspace").string()));
+  CHECK(sink->native > last);
+  last = sink->native;
+  REQUIRE(admission->admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  CHECK(sink->native > last);
+  last      = sink->native;
+  auto file = admission->retain_file("late");
+  REQUIRE(file);
+  CHECK(sink->native > last);
+}
+TEST_CASE("X06 D C01 admission refuses at the composed ceiling with the existing resource message",
+          "[capture][admission][x06dc01]") {
+  temporary t;
+  auto      sink      = std::make_shared<counting_sink>();
+  auto      admission = capture_admission::create((t.path / "trusted").string(), sink);
+  REQUIRE(admission);
+  sink->native_ceiling = sink->native + 1;
+  auto before          = sink->native;
+  auto refused = admission->admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration);
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().code == "resource_limit");
+  CHECK(refused.error().message == "External profile resource limit exceeded");
+  CHECK_FALSE(admission->healthy());
+  CHECK(sink->native == before);
+}
+TEST_CASE("X06 D C01 retained declaration handle charges accumulate on every issue without refund",
+          "[capture][admission][x06dc01]") {
+  temporary t;
+  auto      sink      = std::make_shared<counting_sink>();
+  auto      admission = capture_admission::create((t.path / "trusted").string(), sink);
+  REQUIRE(admission);
+  REQUIRE(admission->admit_root("workspace", (t.path / "workspace").string()));
+  REQUIRE(admission->admit_file("late", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+  auto        before = sink->native;
+  std::size_t first = 0, second = 0, third = 0;
+  {
+    auto a = admission->retain_file("late");
+    REQUIRE(a);
+    first  = sink->native - before;
+    auto b = admission->retain_file("late");
+    REQUIRE(b);
+    second = sink->native - before - first;
+  }
+  auto after_drop = sink->native;
+  auto c          = admission->retain_file("late");
+  REQUIRE(c);
+  third = sink->native - after_drop;
+  CHECK(first > 0);
+  CHECK(second == first);
+  CHECK(third == first);
+  CHECK(after_drop == before + first + second);
+}
+// Mutant A1b: capture_admission::implementation::charge() charges the sink twice per charge. Slot spelling is retained
+// exactly once (512 + slot bytes), so the sink delta of one admission scales with slot length at slope 1.
+TEST_CASE("X06 D C01 admission charges the factory budget exactly once per charge", "[capture][admission][x06dc01]") {
+  temporary t;
+  auto      delta = [&](std::string_view slot) {
+    auto sink      = std::make_shared<counting_sink>();
+    auto admission = capture_admission::create((t.path / "trusted").string(), sink);
+    REQUIRE(admission);
+    auto before = sink->native;
+    REQUIRE(admission->admit_root(slot, (t.path / "workspace").string()));
+    return sink->native - before;
+  };
+  auto shorter = delta("w");
+  auto longer  = delta("w" + std::string(999, 'x'));
+  CHECK(longer - shorter == 999);
 }
