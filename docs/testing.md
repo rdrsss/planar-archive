@@ -1658,3 +1658,203 @@ awaits independent review; C4-A and test-only C4-B0 are independently approved.
   substitution, workflow); the fixture generator is
   `tests/native/v5-02-x07-support/generate.py`; evidence is under the
   gitignored `tests/native/v5-02-x07-evidence/`.
+
+## X08 acceptance gate
+
+X08 closes the external-profile acceptance matrix with binary-level evidence.
+Its raw logs, exact counts and results are recorded in
+`tests/native/v5-02-x08-evidence/REPORT.md`; this section describes what the
+gate runs and what it does not establish. The Linux recipe exists, but its
+results live only in that evidence. This document claims no Linux pass, and
+x86_64 is not covered.
+
+Gate order, with every build directory serialized:
+
+1. Focused runs of the `x08.*` cases and the two Catch2 cases, plus the affected
+   prior selections, against the Debug build.
+2. macOS Debug: `ctest --test-dir build/rewrite-debug --no-tests=error
+   --output-on-failure` over the full inventory, with no failed and no skipped
+   test.
+3. macOS RelWithDebInfo: the same command against `build/rewrite-release`.
+4. Inventory comparison: the sorted `ctest -N` name lists of both macOS
+   configurations are identical, and they preserve every prior test name.
+5. `make cpp-lint` (active formatting and Doxygen), run once, on macOS only.
+6. Two consecutive no-work builds, each reporting `ninja: no work to do.`
+7. Redaction check with `scripts/redact-local-paths.py check` over the explicit
+   list of evidence files.
+8. Linux gate: Debug and RelWithDebInfo full ctest and no-work builds in the
+   container, with each sorted `ctest -N` list equal to the macOS list of the
+   same configuration.
+
+The closeout validator, `tests/native/v5-02-x08-support/validate.py --evidence
+<evidence-dir> --repo <repo-root>`, reads the raw logs and evaluates gates G01 to
+G09. It never runs ctest, a build or a product binary. Its self-test is
+`ctest --test-dir build/rewrite-debug -R x08.validator_selftest`.
+
+The X08 suites run the production binary, or the generated E12 variant, in
+temporary roots with scratch `HOME` and `PLANAR_DB`. They assert that the
+forbidden legacy database path is never created, and they never use an installed
+binary. The Python cases are registered with the `acceptance` label. Each case
+below has one requirement:
+
+| Case | Requirement |
+| --- | --- |
+| `x08.e01_no_discovery` | E01: environment variables, and `stdlib.d` trees in the working directory or `HOME`, never select or load a profile; only `with-profile` does. |
+| `x08.e01_registration_policy` | E01 and X-POL: root-level flag, aliases, overrides, duplicate or reserved identities, job-chosen trusted code and unselected `stdlib.d` files are refused or ignored with the closed messages. |
+| `x08.e02_envelope_rows_binary` | E02: all 44 production and 12 opaque envelope rows give the tabulated exit and stderr class; accessed classes differ with and without the trusted directory, and not-accessed classes do not. |
+| `x08.e03_closure_separation_binary` | E03: known-slot overlap, ledger aliasing and late-slot overlap refuse `unsafe_path` before registration or the handler; disjoint trees succeed. |
+| `x08.e07_old_goldens_unselected_profile` | E07: six quota renders without `with-profile` match the committed goldens, and renders under an empty-module profile are byte-identical to them. |
+| `x08.e07_old_w_vectors_binary` | E07: old work values and digests agree across unselected, empty-profile and golden renders; fresh-ledger history agrees except for justified provenance fields. |
+| `x08.e08_projection_vector_binary` | E08: projection omission, exact-fit padding and `budget_exceeded` vectors at the real 1 MiB budget. |
+| `x08.e09_history_id_binary` | E09: `history_id` boundaries, invalid spellings, selector conflicts and after-event paging through the binary. |
+| `x08.e10_removed_profile_replay_binary` | E10: an identical `with-profile` request replays with equal bytes after the profile, workspace and registry are deleted; a different actor or selector conflicts. |
+| `x08.e12_variant_reads_identically` | E12: the variant reads a normal ledger's history byte for byte with its trusted directory deleted. |
+| `x08.e12_variant_exports_identically` | E12: variant exports equal the normal export and the pre-deletion source files. |
+| `x08.e12_variant_poison_is_live` | E12 liveness for render: the normal binary exits 0, and the variant exits nonzero with empty stdout. |
+| `x08.e12_variant_poison_is_live_load` | E12 liveness for embedded and `with-profile` load: each fails with empty stdout and no revision. |
+| `x08.e12_variant_poison_is_live_profile_render` | E12 liveness for custom-shape `with-profile` render: failure with empty stdout. |
+| `x08.e12_variant_audit` | E12: generated C++ equals product C++ apart from module names, and embedded Lua differs only in the planned substitutions. |
+| `x08.e12_sources_and_profile_removed` | E12: after the profile, workspace and registry are deleted, a fresh normal process reads and exports byte for byte. |
+| `x08.adv_hardlink_module_refuses_before_chunk` | Matrix row 3: a module hard-linked to the selected declaration refuses at initial admission before any chunk runs. |
+| `x08.adv_missing_declaration_initial_admission` | Matrix row 3: a missing selected declaration refuses at initial admission before registration. |
+| `x08.adv_opaque_ordering_binary` | Matrix row 3: opaque final syntax errors precede late checks, and overlap precedes the handler. |
+| `x08.adv_invalid_unselected_job_refuses_all` | Matrix row 5: one invalid unselected job refuses the whole load and publishes nothing. |
+| `x08.adv_job_mix_and_phase_failures` | Matrix row 5: many custom jobs and built-in/custom mixes load; failures in phases 0 to 2 publish nothing; the obligation bound is enforced. |
+| `x08.adv_registry_colocation_binary` | Matrix row 6: a registry colocated with the modules but in a distinct file succeeds; selected-file aliases refuse. |
+| `x08.adv_limits_cli` | Matrix row 12: an unbounded-loop module and an oversize module each refuse with the closed `resource_limit` and empty stdout. |
+| `x08.timeout_headroom_531` | Q7 A guard: the CTest timeout of the named `prepare_load` test is at least 120 seconds. |
+| `x08.linux_recipe_pins` | Linux recipe pins: base digest, CMake SHA256, exact LLVM apt pin, single COPY, non-root user, schema exception, disk and prune rules, no tag or bind mount. |
+| `x08.validator_selftest` | Closeout validator: accepts a good synthetic evidence tree and rejects each defined bad tree. |
+| `replacement.X08 platform branches are exactly the audited set` | Platform guard: widened platform-token counts under `src/` equal the audited per-file table. |
+| `replacement.X08 Linux publish and metadata branches keep their no-replace and path-only flags` | Linux publish, metadata and open branches keep `RENAME_NOREPLACE`, `O_PATH` and `st_mtim`; the `ENOTSUP` fallback stays in the final `#else`. |
+
+The E12 variant is a generated, test-only binary. `tests/native/v5-02-x08-support/generate.py`
+produces it from the shipped sources, and `tests/native/v5-02-x08-support/x08.cmake`
+registers it. Its generated tree is built under the build directory, and the
+checkout is never modified. The embedded `json.lua` differs by one comment line.
+A generated poison chunk, inserted between `acceptance.lua` and `commands.lua`,
+reassigns the shared chunk-local exports (semantic, render, shape, role and
+profile-material functions), and the generated bootstrap poisons `parse_json`.
+All embedded files form one chunk, so the reassignment reaches the shipped
+handlers and the bootstrap export table.
+
+The E12 cases prove two things. Differing embedded stdlib bytes read and export
+byte for byte the same stored data as the normal binary, and the poison is live,
+so the failing exports are actually reached. They do not prove that no Lua runs:
+the history and export handler callables in `commands.lua` run on the public
+path. The claim is narrower. No poisoned bootstrap export is reached by history
+or export. If history or export ever reaches a poisoned export, that is a
+product-defect candidate. The round halts for review with the exact call chain,
+and the poison is never narrowed to make the test pass.
+
+Linux gate: run `scripts/linux-gate.sh <new-out-dir>`. The out directory must not
+exist and must lie outside the checkout. The runner refuses below 15 GiB free on
+the data volume before a build, records Docker usage, and writes host-side
+manifests of the image context. It runs one `docker build --target evidence
+--output type=local,dest=<out-dir>/container` from the repository root, with no
+image tag and no bind mount. It then compares the host manifest before and after
+the build with the in-image context manifest, and finishes with
+`docker builder prune -f`, which prunes only the builder cache. It never runs
+system prune, image removal or `-a`. Building needs network access to
+apt.llvm.org, the Kitware CMake release archive and the base image registry. The
+runner targets macOS.
+
+`scripts/linux-gate.Dockerfile` pins the base image by digest (Ubuntu 24.04, arm64
+native under Docker on the Mac), pins the LLVM 23 apt packages to one exact 23.x
+version at or above 23.1.0, and pins a CMake 4.4.x archive by version and SHA256.
+Source is copied into the image filesystem, and build directories stay in the
+container. The gate runs as a non-root user (uid 1000). The permission tests
+branch on `geteuid() == 0`, and a root container would take the weaker branch and
+skip the intended Linux rows. Each gate command writes its raw log and exit status
+to the output directory, and the Dockerfile does not fail the layer on a test
+failure. In each configuration, the gate configures, builds `planar_tests`, runs
+full ctest with `--no-tests=error`, runs a no-work build and records a sorted
+inventory. Lint and Doxygen run only on macOS. x86_64 is not covered.
+
+`scripts/linux-gate.Dockerfile.dockerignore` excludes git metadata, build
+products, round evidence and local agent state. It has one exception: the
+gitignored `tests/native/r12b-evidence/expected-schema.sql` is re-included,
+because `src/engine/CMakeLists.txt` points the ledger format tests at it. A public
+clone that tracks only committed files lacks that schema, so the replacement
+ledger format tests cannot run there until the file is relocated to a tracked
+fixture path.
+
+Platform branches. Apart from the eight source branches below, the Linux-only
+CMake branches in `cmake/llvm-toolchain.cmake` also belong to the audit: the
+`UNIX AND NOT APPLE` flag at line 235 and the one at line 283, and the
+`_planar_runtime_system STREQUAL "Linux"` branch at line 252. The line-252 branch
+is inside `if(PLANAR_PORTABLE)`, which is off by default, so the default
+configuration does not execute it.
+
+| Source | Apple arm | Linux arm |
+| --- | --- | --- |
+| `src/engine/capture/native.cpp:46` | `st_mtimespec` | `#else`: `st_mtim` |
+| `src/engine/capture/admission.cpp:62` | `st_mtimespec` and `st_ctimespec` | `#else`: `st_mtim` and `st_ctim` |
+| `src/engine/capture/admission.cpp:71` | `O_EVTONLY` for files | `#else`: `O_PATH` for files; directories keep `openat` |
+| `src/engine/export/source_export.cpp:7-12` | `<sys/stdio.h>` | `<linux/fs.h>` and `<sys/syscall.h>` |
+| `src/engine/export/source_export.cpp:179-189` | `renameatx_np` with `RENAME_EXCL` | `SYS_renameat2` with `RENAME_NOREPLACE`; the `#else` `ENOTSUP` fallback (lines 183-188) must not be taken |
+| `src/engine/runtime/runtime.t.cpp:2839` | `st_mtimespec` | `#else`: `st_mtim` |
+| `src/engine/acceptance/source_capture.t.cpp:626` | `O_EVTONLY` admission refuses with `EACCES` | `#else`: `O_PATH` admits, and the failure belongs to the later content read |
+| `src/engine/runtime/external_registration.t.cpp:4557` (test only) | `c02_outputs_gap` 4742 and `c02_off_boundary` 228586 | `#else`: 4737 and 228612 (libc++ container and string sizing differ by a few native bytes); audited in `audited_platform_counts()` with count 1 and recorded as validator row G06i |
+
+The `geteuid() == 0` branch in `source_capture.t.cpp` is the reason for the
+non-root container user described above.
+
+Q6 A rule. A Linux-only corrective is permitted only inside a Linux branch. The
+Linux arms of `capture/native.cpp` and `capture/admission.cpp` are the `#else` arms
+of `#ifdef __APPLE__`; since the repository supports only macOS and Linux, every
+non-Apple arm counts as Linux code. A Linux failure in the `#else` arm of an
+existing test (`runtime.t.cpp` or `source_capture.t.cpp` in the table above) halts
+the round for review. The resolution is either a product defect fixed in the Linux
+arm with a regression test, or a reviewed corrective that changes only the Linux
+arm of the test and shows the exact assertion delta. Assertions are never weakened
+silently. Any other Linux failure needs a fresh corrective round.
+
+#531 note. The test identified by name, `X06 B3 C a file replaced at any allocation
+inside prepare_load is never published as verified` (in `src/engine/runtime/runtime.t.cpp`),
+runs under the `planar_runtime` module. That module's CTest TIMEOUT is 120 seconds
+in `src/engine/CMakeLists.txt`, a change that landed in V5-02-X06-D; the module
+previously ran at the 30-second default. The Q7 A timeout requirement is
+therefore already satisfied, and X08 makes no CMake edit. The case is named rather
+than numbered, because its CTest number changes between inventories. The guard
+`x08.timeout_headroom_531` pins the timeout at 120 seconds or more. If the Linux
+container shows this case above 60 seconds, raising the module value is a
+closeout test-infrastructure edit, not a product change.
+
+C01 additions. The Linux gate of the second X08 run failed four pre-existing tests; C01 repairs them and the
+final Linux results again live only in the evidence directory, so this document claims no Linux pass. The
+host path fix is a platform-neutral pre-check, covered by `host path maps a regular file followed by parent
+traversal to the root directory error` and `host path keeps missing and unresolvable directory spellings as
+input path errors`. The C02 budget-gap tests (`X06 D C02 ...` and `X07 N30 ...`) use a fixture root pinned to a
+fixed canonical byte length so the pinned gap does not depend on the platform temporary path; the case
+`X08 C01 the C02 budget fixture root has a fixed canonical byte length` pins it (`c02_root_bytes` = 64).
+
+Per-platform budget pins (C01-R6). The outputs-on gap `c02_outputs_gap` is measured at the pinned root:
+4742 in Debug and RelWithDebInfo on macOS and 4737 in both on Linux, because the libc++ container and string
+sizing differ by a few native bytes. Each platform's test uses its own measured value, with no slack, so a
+two-byte charge deletion fails on either platform; the single 4742 pin and its "keep the smaller value" rule are
+withdrawn. The test-only `#if defined(__APPLE__)` that selects the pins is an audited platform branch (see the
+table above). The outputs-off boundary `c02_off_boundary` is an absolute measurement: 228586 on macOS and 228612
+on Linux (the macOS value was measured in Debug only and the Linux value in Debug and RelWithDebInfo; the macOS RelWithDebInfo pass shows only that its value is within the window of 8), checked inside a window of 8 padding bytes by `X08 C01 role
+preparation outputs-off boundary pins the request-record conversion charge`, which kills deletion of the
+request-record conversion charge in `runtime.cpp` (about 33 padding bytes). Re-measure rule: any change to native
+accounting on the role preparation path (a charge added, removed or resized, a changed ceiling, a changed
+canonical root length or a changed libc++) moves the boundary and the gap, so re-measure both constants in Debug
+and RelWithDebInfo on each platform with `scripts/linux-gate.sh` for Linux, and set each platform's pin to its
+own measured value. Never widen the window or take the smaller platform's value to absorb a move.
+
+Decimal id facts are bounded at INT64_MAX by `X08 C01 native decimal id facts are bounded at INT64_MAX
+exactly`. The expected inventory is 1260 names (1227 prior, 28 X08, 3 C01, 2 R6).
+
+Closeout validator. `tests/native/v5-02-x08-support/validate.py` reads the assembled evidence tree. Gate G06
+now requires each platform row's `pass_line` to occur verbatim in `linux/container/debug-ctest.log`, so a
+stale line fails; the rows are G06a to G06i.
+
+Known limits, restated and not repaired. There is no RSS (process memory)
+guarantee, and no defence against a hostile writer. CL-1 to CL-6 and the X07-C01
+limits remain as recorded in their contracts. A crash during the busy wait is
+accepted behaviour, per `docs/vernacular/ledger-contract.md` lines 493 to 497. `tests/native/r12b-evidence/expected-schema.sql` is gitignored,
+so a public clone cannot run the ledger format tests until it is relocated. Row 3's
+opaque-to-load transition and row 6's leaf replacement between registration and
+first read are native-only: the binary cannot observe them. Linux on x86_64 is
+not covered.

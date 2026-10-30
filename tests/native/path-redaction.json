@@ -2012,6 +2012,10 @@
   "tests/native/v5-02-x07-r1-evidence/inventory.txt": {
    "original_sha256": "6b3707081cad5e3b1e419f6fa3ab56d161b12ecb9dbc48e435902e19e7756634",
    "redacted_sha256": "9a97461befede512876b8df33b7af9321f9d375e01eb8a59aa5ce2c00d5530b4"
+  },
+  "tests/native/v5-02-x08-c01-r7-evidence/probes/tools/driver.py": {
+   "original_sha256": "437483b273fa705f6d1704b36d99541c8947e807ea38ecacbc0a75b4db7e1b71",
+   "redacted_sha256": "37ac6416fac879cd347107b8fa6c0639858b440511901e857c53909d65ecf4a9"
   }
  },
  "tokens": {

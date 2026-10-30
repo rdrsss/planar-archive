@@ -264,6 +264,62 @@ TEST_CASE("command history selects exact typed decimal strings and defaults with
     CHECK(provider.limit == limit);
   }
 }
+namespace {
+// Fake services whose history and export facts carry a caller-chosen decimal id, to probe the native fact validation.
+struct id_services : fake_services<real_types> {
+  std::string last_event = "1", active = "1", source_id = "1";
+  result      read_history(const command_history_options&, const command_history_selector&) override {
+    ++calls;
+    return {record({{"version", number(1)},
+                    {"kind", text("history")},
+                    {"ledger", text(std::string(32, 'b'))},
+                    {"active_revision", text(active)},
+                    {"last_event", text(last_event)},
+                    {"data", record({{"selector", text("page")}, {"events", array()}})}}),
+            {}};
+  }
+  result export_source(const command_export_options& o) override {
+    ++calls;
+    return {record({{"ledger", text(std::string(32, 'c'))},
+                    {"revision", text(std::to_string(o.revision))},
+                    {"source", text(source_id)}}),
+            {}};
+  }
+};
+// True when the retained history handler accepts the given last_event and active_revision facts.
+bool history_accepts(std::string_view last_event, std::string_view active) {
+  id_services provider;
+  provider.last_event = last_event;
+  provider.active     = active;
+  auto vm             = command_vm::create();
+  REQUIRE(vm.has_value());
+  command_history_options o;
+  o.ledger = "private-ledger.db";
+  return vm->invoke(o, provider).has_value();
+}
+// True when the retained export handler accepts the given source id fact.
+bool export_accepts(std::string_view source_id) {
+  id_services provider;
+  provider.source_id = source_id;
+  auto vm            = command_vm::create();
+  REQUIRE(vm.has_value());
+  return vm->invoke(command_export_options{"private-ledger.db", "private-target", 1}, provider).has_value();
+}
+} // namespace
+TEST_CASE("X08 C01 native decimal id facts are bounded at INT64_MAX exactly", "[commands][x08][c01]") {
+  // Mutants killed: decimal_id maximum raised by one (accepts 9223372036854775808) and raised to UINT64_MAX (accepts the
+  // 20-digit values), for history last_event and active_revision and for export source.
+  CHECK(history_accepts("1", "1"));
+  CHECK(history_accepts("9223372036854775807", "9223372036854775807"));
+  CHECK_FALSE(history_accepts("9223372036854775808", "1"));
+  CHECK_FALSE(history_accepts("1", "9223372036854775808"));
+  CHECK_FALSE(history_accepts("18446744073709551615", "1"));
+  CHECK_FALSE(history_accepts("1", "18446744073709551615"));
+  CHECK_FALSE(history_accepts("10000000000000000000", "1"));
+  CHECK(export_accepts("9223372036854775807"));
+  CHECK_FALSE(export_accepts("9223372036854775808"));
+  CHECK_FALSE(export_accepts("18446744073709551615"));
+}
 TEST_CASE("command real callable replacement is effective and private binding survives later lexical replacement", "[commands]") {
   fake_services<altered_types> provider;
   auto                         vm = altered::command_vm::create();

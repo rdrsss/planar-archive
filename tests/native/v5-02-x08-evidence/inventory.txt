@@ -1,0 +1,1258 @@
+Test project <repo>/build/rewrite-debug
+  Test    #1: replacement.cli
+  Test    #2: replacement.init_cli
+  Test    #3: replacement.history_cli
+  Test    #4: replacement.export_cli
+  Test    #5: x08.e01_no_discovery
+  Test    #6: x08.e01_registration_policy
+  Test    #7: x08.e02_envelope_rows_binary
+  Test    #8: x08.e03_closure_separation_binary
+  Test    #9: x08.e07_old_goldens_unselected_profile
+  Test   #10: x08.e07_old_w_vectors_binary
+  Test   #11: x08.e08_projection_vector_binary
+  Test   #12: x08.e09_history_id_binary
+  Test   #13: x08.e10_removed_profile_replay_binary
+  Test   #14: x08.adv_hardlink_module_refuses_before_chunk
+  Test   #15: x08.adv_missing_declaration_initial_admission
+  Test   #16: x08.adv_opaque_ordering_binary
+  Test   #17: x08.adv_invalid_unselected_job_refuses_all
+  Test   #18: x08.adv_job_mix_and_phase_failures
+  Test   #19: x08.adv_registry_colocation_binary
+  Test   #20: x08.adv_limits_cli
+  Test   #21: x08.timeout_headroom_531
+  Test   #22: x08.linux_recipe_pins
+  Test   #23: x08.e12_variant_reads_identically
+  Test   #24: x08.e12_variant_exports_identically
+  Test   #25: x08.e12_variant_poison_is_live
+  Test   #26: x08.e12_variant_poison_is_live_load
+  Test   #27: x08.e12_variant_poison_is_live_profile_render
+  Test   #28: x08.e12_variant_audit
+  Test   #29: x08.e12_sources_and_profile_removed
+  Test   #30: x08.validator_selftest
+  Test   #31: replacement.X06 D C01 loader charges instructions to the factory budget
+  Test   #32: replacement.X06 D C01 loader charges retained declaration values to the factory budget byte for byte
+  Test   #33: replacement.X06 D C01 loader charges the final retained declaration and references to the factory budget
+  Test   #34: replacement.X06 D C01 loader declaration Lua memory is live against the factory budget and released on close
+  Test   #35: replacement.X06 D C01 loader inherited chunk limits still win over the composed budget
+  Test   #36: replacement.X06 D C01 loader refuses at the composed instruction ceiling with the owner diagnostic
+  Test   #37: replacement.X06 D C01 loader refuses at the composed live Lua ceiling with the owner diagnostic
+  Test   #38: replacement.X06 D C01 loader refuses at the composed native ceiling and reports the owner diagnostic
+  Test   #39: replacement.X06 D C01 loader refuses one oversized value even when every later charge fits
+  Test   #40: replacement.X06 D C02 loader module graph does not depend on capture admission
+  Test   #41: replacement.X06 D C02 loader reports the owner diagnostic when the composed owner refuses Lua state creation
+  Test   #42: replacement.X06 D C02 loader reports the owner diagnostic when the composed owner refuses a declaration chunk
+  Test   #43: replacement.loader bounds native amplification of reused scalar strings
+  Test   #44: replacement.loader constructed nested records remain immutable and readable
+  Test   #45: replacement.loader denies ambient capabilities and all trusted mutation
+  Test   #46: replacement.loader enforces independent instruction allocation and structural bounds
+  Test   #47: replacement.loader preserves structural constructor tags
+  Test   #48: replacement.loader rejects unsupported structures
+  Test   #49: replacement.loader retains table identities across garbage collection
+  Test   #50: replacement.host path lexical cwd validity still precedes joined length overflow
+  Test   #51: replacement.host path preserves physical parent traversal
+  Test   #52: replacement.host path pure preflight checks malformed oversized text before size
+  Test   #53: replacement.host path pure preflight preserves relevant text size and ignored snapshot errors
+  Test   #54: replacement.host path refuses file leaf links and nonregular inputs
+  Test   #55: replacement.host path refuses final root aliases with all suffixes
+  Test   #56: replacement.host path retains ordinary directory spellings
+  Test   #57: replacement.host path sanitizes invalid file traversal and missing parents
+  Test   #58: replacement.intent path bounds input and joined output before concatenation
+  Test   #59: replacement.intent path normalizes nonexistent lexical equivalents against explicit cwd
+  Test   #60: replacement.intent path refuses invalid text and cwd shape without leaking bytes
+  Test   #61: replacement.prepared native paths retain render spelling and normalize future intent
+  Test   #62: replacement.workspace names require only explicit absolute valid environment
+  Test   #63: replacement.workspace preparation validates text and checks all join bounds
+  Test   #64: replacement.workspace selector classifies exact names and explicit file grammar
+  Test   #65: replacement.D2 A retained receipt refuses every non supplied file slot
+  Test   #66: replacement.D2 A retained receipt rejects different actual opened file
+  Test   #67: replacement.D2 A retained receipt survives original wrapper moves and destruction
+  Test   #68: replacement.D2 A retained receipt uses stable append only selection and shared poison
+  Test   #69: replacement.D2 B2 caller file slots exclude private ordinal namespace in either order
+  Test   #70: replacement.D2 B2 discovery keeps private keys bounded and independent of caller keys
+  Test   #71: replacement.D2 B2 discovery rejects escapes grammar links and trusted aliases
+  Test   #72: replacement.D2 B2 metadata discovery refuses component case aliases
+  Test   #73: replacement.D2 B2 root discovery retains metadata only and original explicit selection
+  Test   #74: replacement.D2 B2 root receipt requires supplied roots and actual original root descriptors
+  Test   #75: replacement.X06 D C01 admission charges the factory budget exactly once per charge
+  Test   #76: replacement.X06 D C01 admission metadata charges reach the factory budget
+  Test   #77: replacement.X06 D C01 admission refuses at the composed ceiling with the existing resource message
+  Test   #78: replacement.X06 D C01 retained declaration handle charges accumulate on every issue without refund
+  Test   #79: replacement.capture admission all selected file roles have zero observed metadata phase data reads
+  Test   #80: replacement.capture admission ancestor replacement preserving selected inode refuses
+  Test   #81: replacement.capture admission bound standalone profile and module reads retain original identity
+  Test   #82: replacement.capture admission charges a host component before its temporary copy
+  Test   #83: replacement.capture admission descriptor binding refuses a different live file and unknown slots
+  Test   #84: replacement.capture admission descriptor binding rejects replacement before native content read
+  Test   #85: replacement.capture admission exited traversal remains verified without false final nesting
+  Test   #86: replacement.capture admission export target selected file aliases use overlap refusal
+  Test   #87: replacement.capture admission export targets retain absence and reject trusted overlap
+  Test   #88: replacement.capture admission final supplied symlinks and absent target replacements refuse
+  Test   #89: replacement.capture admission host and private receipt key bounds reject before path opening
+  Test   #90: replacement.capture admission move failed and bounded states refuse safely
+  Test   #91: replacement.capture admission parent traversal never cancels unsafe intermediate components
+  Test   #92: replacement.capture admission parent traversal preserves physical overlaps and file role policy
+  Test   #93: replacement.capture admission physical parent traversal retains final ancestry
+  Test   #94: replacement.capture admission receipts report same admission and liveness
+  Test   #95: replacement.capture admission reports only final-component ENOENT as absence
+  Test   #96: replacement.capture admission retained modes and file metadata reject changes
+  Test   #97: replacement.capture admission root binding checks original ancestors leaf names and modes
+  Test   #98: replacement.capture admission root binding refuses wrong descriptor slot and invalid descriptor terminally
+  Test   #99: replacement.capture admission root binding retains exited physical parent branches
+  Test  #100: replacement.capture admission root binding retains original directory and ignores sibling timestamps
+  Test  #101: replacement.capture admission root relocation and late addition retain original receipts
+  Test  #102: replacement.capture admission root repeated parents and slash typing remain physical
+  Test  #103: replacement.capture admission roots reject equality and both ancestry directions
+  Test  #104: replacement.capture admission selected ancestors above trusted root retain modes
+  Test  #105: replacement.capture admission selected hard links refuse every supplied file role
+  Test  #106: replacement.capture admission selected inputs perform zero observed data reads before binding
+  Test  #107: replacement.capture admission staged trusted selections check earlier supplied aliases
+  Test  #108: replacement.capture admission standalone roles preserve registry colocation policy
+  Test  #109: replacement.capture admission symlinks refuse root intermediate and final components
+  Test  #110: replacement.capture admission unrelated siblings and their modes do not invalidate selections
+  Test  #111: replacement.D2 A changed retained file refuses every later content path
+  Test  #112: replacement.D2 A native retained read uses same selection on cache and acceptance
+  Test  #113: replacement.D2 A owned cache refuses different original state or selection
+  Test  #114: replacement.D2 A owned caches reject borrowed authority through both overloads
+  Test  #115: replacement.D2 A retained file survives admission wrapper destruction until sealing
+  Test  #116: replacement.D2 A unbound caches cannot be upgraded to retained authority
+  Test  #117: replacement.D2 B1 binding wrong selected file poisons before publication
+  Test  #118: replacement.D2 B1 bound input restrictions and initial ceiling failures are terminal
+  Test  #119: replacement.D2 B1 bound standalone input moves original pending authority into first plain read
+  Test  #120: replacement.D2 B1 input binding opens physical parents without cancellation
+  Test  #121: replacement.D2 B1 pending and captured input refuse borrowed and different retained modes
+  Test  #122: replacement.D2 B1 refused unpublished binding cannot be revived by unbound registration
+  Test  #123: replacement.D2 B1 same selection retained read preserves binding before and after transfer
+  Test  #124: replacement.D2 B1 unread bound input retains metadata authority through acceptance
+  Test  #125: replacement.D2 B2 C01 exact original pre-cache receipt survives all owned rereads
+  Test  #126: replacement.D2 B2 C01 first retained reads require original root selection
+  Test  #127: replacement.D2 B2 C01 initial borrowed and cached replacement modes refuse
+  Test  #128: replacement.D2 B2 final rooted tree membership refuses additions and removals
+  Test  #129: replacement.D2 B2 root registration failure is terminal with no unbound retry
+  Test  #130: replacement.D2 B2 rooted caches refuse mutation without recapture
+  Test  #131: replacement.D2 B2 rooted capture survives admission destruction and verifies acceptance
+  Test  #132: replacement.X06 D C01 a single discovery entry refuses at the composed ceiling
+  Test  #133: replacement.X06 D C01 ancestor staging is charged with each retained file
+  Test  #134: replacement.X06 D C01 capture charges the composed ceiling before reading or allocating a file
+  Test  #135: replacement.X06 D C01 discovery staging is charged to the factory budget and never refunded
+  Test  #136: replacement.X06 D C01 discovery staging refuses at the composed ceiling
+  Test  #137: replacement.X06 D C01 native read charges each retained file exactly once
+  Test  #138: replacement.X06 D C01 refused capture allocates nothing near the file size
+  Test  #139: replacement.X06 D C01 verification charges only the enumeration staging
+  Test  #140: replacement.X06 D C01 verification staging is charged on every verify and never refunded
+  Test  #141: replacement.capture native bound root mismatch verifies before overlap and publishes nothing
+  Test  #142: replacement.capture native bound roots never cancel missing link or file parents
+  Test  #143: replacement.capture native bound roots preserve duplicate and physical overlap policy
+  Test  #144: replacement.capture native bound roots support physical parent spelling through final verification
+  Test  #145: replacement.capture native bound roots validate absolute host text without publishing
+  Test  #146: replacement.capture native failed selected reads do not retain ancestor receipts
+  Test  #147: replacement.capture native receipt owns state through session destruction and moves
+  Test  #148: replacement.capture native registry receipt refuses replacement after seal
+  Test  #149: replacement.capture native seal performs full verification before transfer
+  Test  #150: replacement.capture native seals workspace and registry without Lua
+  Test  #151: replacement.capture native selected ancestor changes refuse initial sealing and discovery
+  Test  #152: replacement.capture native selected ancestor removal and links refuse repeat verification
+  Test  #153: replacement.capture native selected ancestor replacement preserves file inode but refuses receipt
+  Test  #154: replacement.capture native selected closure ignores unrelated siblings and keeps topology private
+  Test  #155: replacement.capture native selected receipts preserve alias and file identity refusal
+  Test  #156: replacement.profile codec decodes exact ordered paths in memory
+  Test  #157: replacement.profile codec enforces bounded strings arrays nodes depth and input
+  Test  #158: replacement.profile codec keeps strict schema and arbitrary integer classification
+  Test  #159: replacement.profile codec preserves path policy and logical error fields
+  Test  #160: replacement.D2 A native late poison is visible in profile snapshot without refresh
+  Test  #161: replacement.D2 A native retained receipt survives original profile destruction
+  Test  #162: replacement.D2 A profile forwards retained supplied reads after owner move
+  Test  #163: replacement.D2 A profile retained read failures are terminal and publish no file
+  Test  #164: replacement.D2 B1 input binding failures close profile owner and preserve immutable closure
+  Test  #165: replacement.D2 B1 pending input survives profile moves and destruction
+  Test  #166: replacement.D2 B1 profile binds colocated registry without supplied parent root
+  Test  #167: replacement.D2 B1 unread native input change is visible to original profile
+  Test  #168: replacement.D2 B2 empty and unread roots retain metadata through profile destruction
+  Test  #169: replacement.D2 B2 profile bound roots discover ordinary files and propagate poison
+  Test  #170: replacement.X06 B3 B note_registration is a no-op on moved-from owners and the count moves with the capture
+  Test  #171: replacement.X06 B3 B note_registration is a pure counter that never affects authority
+  Test  #172: replacement.X06 D C01 profile capture charges the profile read to the factory budget
+  Test  #173: replacement.X06 D C01 profile capture threads the factory budget through admission and supplied reads
+  Test  #174: replacement.profile bound native seam checks original descriptor before ceiling and read
+  Test  #175: replacement.profile bounded acceptance rereads preserve original charged byte ceiling
+  Test  #176: replacement.profile bounded native cached read honors newly tighter caller ceilings
+  Test  #177: replacement.profile bounded native sealing reread refuses growth before observed content read
+  Test  #178: replacement.profile capture UTF8 NUL BOM and escaped scalar validation is strict
+  Test  #179: replacement.profile capture aggregate remaining module budget precedes final read
+  Test  #180: replacement.profile capture allows explicit stdlib directory and excludes unlisted siblings
+  Test  #181: replacement.profile capture binds roots through the moved original admission and preserves closure
+  Test  #182: replacement.profile capture bound root failures close owner and leave original snapshot intact
+  Test  #183: replacement.profile capture bound roots still verify original trusted content receipts
+  Test  #184: replacement.profile capture directory modes and trusted root replacement retain receipts
+  Test  #185: replacement.profile capture empty closure retains Unicode host filename privately
+  Test  #186: replacement.profile capture escaped keys and portable paths use decoded library strings
+  Test  #187: replacement.profile capture exact decoded key limit and surrogate escape boundaries
+  Test  #188: replacement.profile capture exact structural node ceiling before container growth
+  Test  #189: replacement.profile capture exited late slot ancestor replacement poisons original owner
+  Test  #190: replacement.profile capture final intermediate and root symlinks refuse
+  Test  #191: replacement.profile capture input bound checked before observed profile read
+  Test  #192: replacement.profile capture integer versions have no machine integer classification ceiling
+  Test  #193: replacement.profile capture module ceiling checked before observed module read
+  Test  #194: replacement.profile capture module count zero sixtyfour and sixtyfive
+  Test  #195: replacement.profile capture move assignment and self move transfer retained receipts
+  Test  #196: replacement.profile capture node and depth ceilings refuse resource exhaustion
+  Test  #197: replacement.profile capture oversized raw escaped string and key refuse bounded scratch
+  Test  #198: replacement.profile capture parent admitted slots retain original owner and traversed receipts
+  Test  #199: replacement.profile capture path byte and segment bounds include escaped spellings
+  Test  #200: replacement.profile capture portable suffix segment namespace and alias policy
+  Test  #201: replacement.profile capture profile module hard link alias refuses
+  Test  #202: replacement.profile capture receipt modes include normalized equal file mode changes
+  Test  #203: replacement.profile capture repeated seals retain selected original bytes after failure
+  Test  #204: replacement.profile capture retains exact whitespace modes and module list order
+  Test  #205: replacement.profile capture selected directory ancestor replacement refuses
+  Test  #206: replacement.profile capture selected hard link aliases refuse before first module read
+  Test  #207: replacement.profile capture selects all module metadata before any module contents
+  Test  #208: replacement.profile capture source only modules reject bytecode NUL invalid UTF8
+  Test  #209: replacement.profile capture staged admission consumes no supplied file content
+  Test  #210: replacement.profile capture staged binding refuses replaced inode before content
+  Test  #211: replacement.profile capture staged descriptor binding is metadata only and terminal on mismatch
+  Test  #212: replacement.profile capture staged module aliases refuse without reads and poison owner
+  Test  #213: replacement.profile capture staged overlap missing and aliases fail terminally
+  Test  #214: replacement.profile capture staged root file and target checks retain initial receipts
+  Test  #215: replacement.profile capture strict schema refuses malformed and ambiguous JSON
+  Test  #216: replacement.profile capture validates full portable list before any module contents
+  Test  #217: replacement.D2 B2 original root authority loads real declarations and text references
+  Test  #218: replacement.X06 D C01 capture session threads the factory budget through declarations and reads
+  Test  #219: replacement.capture acceptance detects changes after sealing without changing published values
+  Test  #220: replacement.capture acceptance owns receipts after moves and session destruction
+  Test  #221: replacement.capture acceptance preserves exclusions and normalized modes
+  Test  #222: replacement.capture acceptance releases root descriptors exactly once
+  Test  #223: replacement.capture acceptance retains standalone registry file and parent receipts
+  Test  #224: replacement.capture bounds name staging across trees and both passes
+  Test  #225: replacement.capture bounds path metadata before staging on both passes
+  Test  #226: replacement.capture bounds text raw files totals and exclusions
+  Test  #227: replacement.capture classifies retained binary growth beyond quota as changed
+  Test  #228: replacement.capture classifies retained text growth beyond quota as changed
+  Test  #229: replacement.capture declaration references join final retained snapshot
+  Test  #230: replacement.capture detects empty directory membership and identity changes
+  Test  #231: replacement.capture deterministic seam detects bytes mode identity and membership changes
+  Test  #232: replacement.capture empty directories leave file provenance unchanged
+  Test  #233: replacement.capture enforces aggregate bytes and count before retention
+  Test  #234: replacement.capture exposes sealed logical topology independently of file snapshots
+  Test  #235: replacement.capture refuses portable paths aliases and unsafe file types
+  Test  #236: replacement.capture rejects overlapping roots and cross-root hardlinks
+  Test  #237: replacement.capture retains sorted bytes and discovered references
+  Test  #238: replacement.capture standalone inputs share physical workspace without tree authority
+  Test  #239: replacement.capture withholds topology after unsuccessful verification
+  Test  #240: replacement.canonical bounds depth nodes and bytes without declaration string caps
+  Test  #241: replacement.canonical decoder bounds bytes nodes keys depth and claimed allocations
+  Test  #242: replacement.canonical decoder refuses noncanonical integers tags keys and counts
+  Test  #243: replacement.canonical decoder reproduces independent exact typed vectors
+  Test  #244: replacement.canonical distinguishes typed empty values and integer boundaries
+  Test  #245: replacement.canonical preserves raw strings and unsigned UTF8 key order
+  Test  #246: replacement.canonical refuses null private malformed cyclic and out of range input
+  Test  #247: replacement.hash matches independent hand canonical and domain vectors
+  Test  #248: replacement.hash selected captured base observation unit and role recipes remain separate
+  Test  #249: replacement.hash validates published upstream seed zero XXH3 length vectors
+  Test  #250: replacement.replacement.effective catalog closed schemas and scalar kinds
+  Test  #251: replacement.replacement.effective catalog count and canonical byte ceilings
+  Test  #252: replacement.replacement.effective catalog external descriptors and reserved namespaces
+  Test  #253: replacement.replacement.effective catalog help and grammar bounds
+  Test  #254: replacement.replacement.effective catalog history id capability matrix
+  Test  #255: replacement.replacement.effective catalog malformed canonical and bounded trees
+  Test  #256: replacement.replacement.effective catalog mandatory shipped signatures
+  Test  #257: replacement.replacement.effective catalog ordering and identity conflicts
+  Test  #258: replacement.replacement.effective catalog roundtrip and immutable aliases
+  Test  #259: replacement.replacement.effective catalog source ownership and ordinals
+  Test  #260: replacement.replacement.effective catalog static read capability signatures
+  Test  #261: replacement.record decoder rejects corrupt framing and oversized claims before allocation
+  Test  #262: replacement.record decoding validates persisted local directory and request fields
+  Test  #263: replacement.record directory local IDs change storage while metadata changes portable digest
+  Test  #264: replacement.record file and value payload ceilings include canonical framing bytes
+  Test  #265: replacement.record independent literal framing and canonical digest vectors
+  Test  #266: replacement.record rejects invalid modes names aliases ordering kinds and local IDs
+  Test  #267: replacement.record requests validate local text and head tokens without normalizing arguments
+  Test  #268: replacement.record values require exact supported bounded canonical data
+  Test  #269: replacement.record whole encoding ceiling is exact for requests
+  Test  #270: replacement.request v2 complete 64 MiB frame ceiling includes selector and suffix
+  Test  #271: replacement.request v2 independent complete frame and digest vectors
+  Test  #272: replacement.request v2 inherits text head bounds and requires normalized absolute profile
+  Test  #273: replacement.request v2 refuses malformed framing tags versions and oversized claims
+  Test  #274: replacement.codec Glaze syntax and schema boundaries
+  Test  #275: replacement.codec X05 C2 B1 projection callback exceptions remain typed
+  Test  #276: replacement.codec X05 C2 B1 projection count matches unchanged Glaze encoding
+  Test  #277: replacement.codec X05 C2 B1 projection encoded 16 MiB exact boundaries
+  Test  #278: replacement.codec X05 C2 B1 projection exact precharge cumulative denial and diagnostic ownership
+  Test  #279: replacement.codec X05 C2 B1 projection independent nested concurrent and borrowed immutable calls
+  Test  #280: replacement.codec X05 C2 B1 projection tighter output ceiling and semantic name separation
+  Test  #281: replacement.codec X05 C2 B1 projection validates all source bounds before charging
+  Test  #282: replacement.codec decode exact resource ceilings
+  Test  #283: replacement.codec diagnostics retain safe offsets and resource details
+  Test  #284: replacement.codec encode Glaze escaping and unsigned UTF8 key order
+  Test  #285: replacement.codec encode refuses cycles tags and exact bounds
+  Test  #286: replacement.codec encoder enforces four million visits before expansion allocation
+  Test  #287: replacement.codec reservation callbacks have a safe typed exception boundary
+  Test  #288: replacement.codec reservation cumulative budget exact fit and sticky typed refusal
+  Test  #289: replacement.codec reservation measures repeated copies and deterministic capacity
+  Test  #290: replacement.codec reservation preserves depth leaf semantics and repeated container aliases
+  Test  #291: replacement.codec reservation retains complete transport and escape expansion ceilings
+  Test  #292: replacement.codec reserved decode callback exceptions and early guards remain typed
+  Test  #293: replacement.codec reserved decode charges exact output components and preserves owned first refusal
+  Test  #294: replacement.codec reserved decode preserves graphs and exact ordinary refusals
+  Test  #295: replacement.codec reserved decode supports independent nested concurrent and cumulative contexts
+  Test  #296: replacement.codec strict Glaze object separators and offsets
+  Test  #297: replacement.codec strict validation preserves object values and decoded duplicate policy
+  Test  #298: replacement.codec validation refusal precedes reservation and preserves ordinary errors
+  Test  #299: replacement.X05 A1 C02 detailed guard distinguishes pre root failures and restores stack
+  Test  #300: replacement.X05 A1 C02 detailed guard reports selected roots and preserves wrapper
+  Test  #301: replacement.X05 A1 C02 detailed guard retains shared memo and report
+  Test  #302: replacement.X05 A1 active C frame reservation allocation refusal preserves state
+  Test  #303: replacement.X05 A1 allows curated helpers and invocation local string iterators
+  Test  #304: replacement.X05 A1 audits actual helper closures with shared cell and graph aliases
+  Test  #305: replacement.X05 A1 distinguishes table alias freezing from lexical sealing
+  Test  #306: replacement.X05 A1 native identity snapshot allocation failure stays protected
+  Test  #307: replacement.X05 A1 ordered roots share memo and retain existing global depth boundary
+  Test  #308: replacement.X05 A1 permits invocation local nested counters and helpers
+  Test  #309: replacement.X05 A1 refuses C roots retained iterators and same pointer new contexts
+  Test  #310: replacement.X05 A1 rejects direct inherited shared and unreachable retained writes
+  Test  #311: replacement.X05 A1 repeated audits exhaust cumulative native accounting without refunds
+  Test  #312: replacement.X05 A1 reserved active C frame audits realistic deep retained graph
+  Test  #313: replacement.X05 A1 retains graph depth refusal and restores stack
+  Test  #314: replacement.X05 A1 shared prototypes memoize exact masks across distinct actual closures
+  Test  #315: replacement.X05 A1 shared roots still inspect newly reachable writers and reject native callable roots
+  Test  #316: replacement.X05 A1 source compiled LOADKX fits actual module and Lua memory ceilings
+  Test  #317: replacement.X05 A1 source compiled NEWTABLE and SETLIST payloads inspect and run
+  Test  #318: replacement.X05 A1 unreserved C frame refuses before Lua allocation or push
+  Test  #319: replacement.X05 A2 invalid successful identity registry refuses without stack mutation
+  Test  #320: replacement.X05 A2 prior successful identities are opaque without trusting empty tables
+  Test  #321: replacement.X05 A2 successful atoms do not bless new writers or direct native roots
+  Test  #322: replacement.C3 A earlier retained callable failure dominates preparation without entering handler
+  Test  #323: replacement.C3 A every history ID preserves exact signed64 strings and authoritative presence
+  Test  #324: replacement.C3 A every malformed history ID refuses as usage without poisoning preparation
+  Test  #325: replacement.C3 A history selectors exclude each other and paging while paging defaults stay native
+  Test  #326: replacement.C3 A parsed record invariants and general scalar limits refuse closed usage
+  Test  #327: replacement.C3 A preparation requires a live selected owner and results survive moves and destruction
+  Test  #328: replacement.C3 A pure preparation keeps typed defaults and capability-free path text as data
+  Test  #329: replacement.C3 A repeated preparation charges cumulative native storage and preserves first terminal refusal
+  Test  #330: replacement.C3 A request IDs use exact bounded ASCII and query selector
+  Test  #331: replacement.C3 A role intent separates all pending hosts and retains matching presence guards
+  Test  #332: replacement.C3 B2 absolute explicit hosts ignore irrelevant malformed snapshots
+  Test  #333: replacement.C3 B2 creation refuses moved or poisoned original captures
+  Test  #334: replacement.C3 B2 cumulative native reservation refuses huge snapshots before path allocation
+  Test  #335: replacement.C3 B2 final admission verifies the original capture after registration
+  Test  #336: replacement.C3 B2 final syntax and all path normalization precede metadata admission
+  Test  #337: replacement.C3 B2 history admits its unused ledger without reading database content
+  Test  #338: replacement.C3 B2 malformed oversized relevant snapshots retain text before size precedence
+  Test  #339: replacement.C3 B2 missing nonregular and symlink leaf slots retain native errors
+  Test  #340: replacement.C3 B2 move and one admission lifecycle preserve the first terminal failure
+  Test  #341: replacement.C3 B2 named workspace uses approved lexical environment while explicit paths retain traversal
+  Test  #342: replacement.C3 B2 optional host slots are admitted even without later service use
+  Test  #343: replacement.C3 B2 original captured owner admits all role slots using explicit snapshots
+  Test  #344: replacement.C3 B2 physical parent spelling refuses symlink missing and regular intermediates
+  Test  #345: replacement.C3 B2 pure commands keep same-spelled host options as data
+  Test  #346: replacement.C3 B2 root overlap checks both physical containment directions
+  Test  #347: replacement.C3 B2 selected file aliases refuse while registry directory colocation succeeds
+  Test  #348: replacement.C3 B2 verification retains original profile module workspace and late root receipts
+  Test  #349: replacement.C4 A Lua allocation exhaustion and unsupported graph values suppress all results
+  Test  #350: replacement.C4 A absent scalar defaults remain typed and input context mutations refuse
+  Test  #351: replacement.C4 A accepts inner semantic errors for every render code and exact details
+  Test  #352: replacement.C4 A closed context exposes no service
+  Test  #353: replacement.C4 A executes exact retained function with scalar types defaults presence and empty context
+  Test  #354: replacement.C4 A lifecycle refuses before admission and instruction failures remain terminal
+  Test  #355: replacement.C4 A maximum summary and UTF8 boundaries are exact
+  Test  #356: replacement.C4 A original command index differs from module and canonical order
+  Test  #357: replacement.C4 A original receipt mutation suppresses execution and first failure survives moves
+  Test  #358: replacement.C4 A rejects malformed return arity root envelope and summary protocol
+  Test  #359: replacement.C4 A rejects public wrapper unknown code malformed semantic fields and details
+  Test  #360: replacement.C4 A retained registration aliases proxy returns preserve lifetime across owner moves
+  Test  #361: replacement.C4 A semantic text has no standalone quota and whole result obeys reserved codec bound
+  Test  #362: replacement.C4 B2 changed original profile or admitted ledger refuses before native preparation
+  Test  #363: replacement.C4 B2 invalid and moved history owners refuse and invalid ledger keeps typed format error
+  Test  #364: replacement.C4 B2 original history owner prepares both formats without Lua and releases reader locks
+  Test  #365: replacement.C4 B2 original history selectors preserve typed misses and original receipt priority
+  Test  #366: replacement.C4 B3 C01 actual history method has one backing across indexing rawget next and pairs
+  Test  #367: replacement.C4 B3 C01 history missing known services refuse through ordinary and raw aliases
+  Test  #368: replacement.C4 B3 C01 missing raw service lookup poisons pure handler even when caught
+  Test  #369: replacement.C4 B3 C01 service named data in scratch and sealed tables keeps ordinary lookup semantics
+  Test  #370: replacement.C4 B3 ID strings absence presence and limit defaults reach actual retained handler
+  Test  #371: replacement.C4 B3 actual retained history handler reads both formats and returns immutable native facts
+  Test  #372: replacement.C4 B3 caught argument repeated and missing service attempts poison invocation
+  Test  #373: replacement.C4 B3 caught completed Lua memory failure after native service remains terminal
+  Test  #374: replacement.C4 B3 caught missing capability calls poison zero-capability handler without granting methods
+  Test  #375: replacement.C4 B3 exact history correspondence permits copies and refuses fabricated summaries or facts
+  Test  #376: replacement.C4 B3 history is lazy and semantic responses need no content read
+  Test  #377: replacement.C4 B3 history selector conflicts refuse before handler regardless of ID magnitude
+  Test  #378: replacement.C4 B3 manual native preparation cannot bypass once-only service and original receipt verification
+  Test  #379: replacement.C4 B3 opaque ledger cannot stringify serialize substitute or expose host path
+  Test  #380: replacement.C4 B3 original typed service failures survive Lua catches later errors moves and retries
+  Test  #381: replacement.C4 B3 page cursor and explicit limit reach actual service with exact ID ABI
+  Test  #382: replacement.C4 C1 retained projection frame preserves aliased input across sequential calls
+  Test  #383: replacement.C4 C2 first service protocol refusal survives later instruction exhaustion
+  Test  #384: replacement.C4 C2 one MiB assembly reverses optional removals and preserves metadata
+  Test  #385: replacement.C4 C2 original native history failure precedes projection and later handler errors
+  Test  #386: replacement.C4 C2 project ordering exact arguments once-only and missing methods stay terminal
+  Test  #387: replacement.C4 C2 projection input kind and fabricated DATA refuse
+  Test  #388: replacement.C4 C2 raw projection admission refuses malformed reserved and oversized retained output
+  Test  #389: replacement.C4 C2 real original history projection and trusted assembly run in both formats
+  Test  #390: replacement.C4 C2 services are lazy and performed history remains a permitted response
+  Test  #391: replacement.C4 C2 trusted budget E preserves exact details through catches moves and retries
+  Test  #392: replacement.C4 D3 captured source base trees preserve exclusions outputs and exact worker reviewer optionality
+  Test  #393: replacement.C4 D3 discovery accepts pre discovery reference bytes and preserves them in authentic selected work
+  Test  #394: replacement.C4 D3 exact empty arguments once missing services and forged role responses remain terminal
+  Test  #395: replacement.C4 D3 lazy role service exposes exact methods and opaque original slots without reads
+  Test  #396: replacement.C4 D3 named workspace optional budget and repeated owner construction preserve all trusted roots
+  Test  #397: replacement.C4 D3 observations validate even without assertion transport and retain original details
+  Test  #398: replacement.C4 D3 original root file and late slots refuse post admission changes before role publication
+  Test  #399: replacement.C4 D3 same VM all job custom shapes yield authentic guidance and immutable retained handler aliases
+  Test  #400: replacement.C4 D3 shipped role equals original trusted selection with exact empty guidance and metadata base
+  Test  #401: replacement.C4 D3 unselected declaration schema failure prevents custom callbacks and root mapping is semantic
+  Test  #402: replacement.C4 D3 unselected job custom shape semantic refusal remains first even when caught and followed by handler error
+  Test  #403: replacement.C4 D4 all job validation and observations precede any projection
+  Test  #404: replacement.C4 D4 custom shape headed guidance and appended sections preserve ordinary render bytes and W
+  Test  #405: replacement.C4 D4 default role budget and explicit override preserve reverse custom omissions
+  Test  #406: replacement.C4 D4 existing history projection keeps exact mandatory base and fixed budget
+  Test  #407: replacement.C4 D4 mandatory budget error belongs to trusted assembly and survives caught handler error
+  Test  #408: replacement.C4 D4 optional base priorities follow reverse custom omissions including checkpoint
+  Test  #409: replacement.C4 D4 order once arguments missing services and forged results poison caught failures
+  Test  #410: replacement.C4 D4 pair stays lazy and performed role DATA remains valid after project
+  Test  #411: replacement.C4 D4 projection tenth ordinal and native section resource refusal remain terminal
+  Test  #412: replacement.C4 D4 role projection refuses mismatched input and reserved section IDs
+  Test  #413: replacement.C4 D4 role projection uses original role and exact shipped headed base
+  Test  #414: replacement.C4 general decimal maximum remains Lua integer and history projection is lazy
+  Test  #415: replacement.X05 A3 C01 handler and option controls retain original command
+  Test  #416: replacement.X05 A3 C01 high catalog bytes remain valid
+  Test  #417: replacement.X05 A3 C01 malformed sort keys retain original fields
+  Test  #418: replacement.X05 A3 C02 sealing retains original mixed kind and module locations
+  Test  #419: replacement.X05 A3 C03 two digit seal locations retain original indices
+  Test  #420: replacement.X05 A3 C04 original descriptor errors survive canonical remap at two digit indices
+  Test  #421: replacement.X05 A3 C04 successful callbacks leave module boundary and first refusal sticky
+  Test  #422: replacement.X05 A3 C05 nested ordinary errors permit later valid registration
+  Test  #423: replacement.X05 A3 C05 nested resource failure preserves first registration entry
+  Test  #424: replacement.X05 A3 empty captured profile retains catalog and digest
+  Test  #425: replacement.X05 A3 exact descriptor schemas and external capability restrictions
+  Test  #426: replacement.X05 A3 external environment is pure frozen and self rooted
+  Test  #427: replacement.X05 A3 instruction accounting does not restart for later chunks
+  Test  #428: replacement.X05 A3 malformed reserved duplicate and caught registration refuse
+  Test  #429: replacement.X05 A3 normalized options detect duplicate identities independently
+  Test  #430: replacement.X05 A3 ordered external descriptors finalize and retain native owners
+  Test  #431: replacement.X05 A3 profile owners refuse invocation before provider effects
+  Test  #432: replacement.X05 A3 real capture owns original source after filesystem changes
+  Test  #433: replacement.X05 A3 resource ceilings remain sticky when protected calls catch
+  Test  #434: replacement.X05 A3 retained source byte and mode changes affect exact effective digest
+  Test  #435: replacement.X05 A3 retained upvalue writers and native callable roots refuse
+  Test  #436: replacement.X05 A3 separate identity namespaces and all reserved IDs
+  Test  #437: replacement.X05 A3 source only chunks require actual zero results
+  Test  #438: replacement.X05 A3 validates structural snapshot before any module evaluation
+  Test  #439: replacement.X05 B1 accepted dependency base cycles precede every custom callback
+  Test  #440: replacement.X05 B1 added full graph detects cycles for grouped units
+  Test  #441: replacement.X05 B1 additive obligations retain unit endpoints and sorted synthetic identities
+  Test  #442: replacement.X05 B1 all mandatory jobs validate before any selected callback
+  Test  #443: replacement.X05 B1 controlled malformed Lua results cannot cross helper protocol
+  Test  #444: replacement.X05 B1 cumulative obligations share native instruction accounting
+  Test  #445: replacement.X05 B1 custom stages honor descriptor presence and worker sets
+  Test  #446: replacement.X05 B1 dialect is internal and unknown custom shapes are references
+  Test  #447: replacement.X05 B1 done edges compose with start and complete facet phases
+  Test  #448: replacement.X05 B1 embedded default helper values remain exact
+  Test  #449: replacement.X05 B1 every custom shape sees exact normalized base input
+  Test  #450: replacement.X05 B1 guidance uses exact UTF8 and byte ceiling
+  Test  #451: replacement.X05 B1 malformed shape success and refusal values fail internal
+  Test  #452: replacement.X05 B1 normalization sorts additive IDs and preserves every base policy edge
+  Test  #453: replacement.X05 B1 obligation quota accepts 10000 and refuses 10001
+  Test  #454: replacement.X05 B1 obligations enforce exact identifiers endpoints phase and quality
+  Test  #455: replacement.X05 B1 semantic refusal preserves existing error vocabulary
+  Test  #456: replacement.X05 B1 semantic worker reviewer registry and subscription failures make zero calls
+  Test  #457: replacement.X05 B2 A actual host profile selectors do not enter selected shape identity
+  Test  #458: replacement.X05 B2 A definition lookup severs caller capture aliases and never invokes shape Lua
+  Test  #459: replacement.X05 B2 A final shape definition matches independent canonical hash construction
+  Test  #460: replacement.X05 B2 A repeated native definition work is cumulative and resource refusal is terminal
+  Test  #461: replacement.X05 B2 A selected source owner and final descriptor determine shape identity
+  Test  #462: replacement.X05 B2 A wrong namespace embedded and moved owners refuse without consuming lookup
+  Test  #463: replacement.X05 B2 C actual retained shape preserves identity aliases immutable input and writable scratch
+  Test  #464: replacement.X05 B2 C admission errors are nonconsuming and raw semantic refusal is ordinary data
+  Test  #465: replacement.X05 B2 C caught illegal registration stays sticky while ordinary caught Lua errors recover
+  Test  #466: replacement.X05 B2 C complete raw transport enforces exact 16 MiB without semantic acceptance
+  Test  #467: replacement.X05 B2 C invalid retained returns are terminal with original shape location
+  Test  #468: replacement.X05 B2 C prior lookup resource failure survives every later shape admission
+  Test  #469: replacement.X05 B2 C repeated calls share invocation instructions and caught exhaustion stays terminal
+  Test  #470: replacement.X05 B2 C wrong callable kind is nonconsuming and execution uses original shape ordinal
+  Test  #471: replacement.X05 B3 A check response matches B1 refusal malformed and guidance boundaries
+  Test  #472: replacement.X05 B3 A cumulative count checks before normalization expansion
+  Test  #473: replacement.X05 B3 A embedded structural preparation keeps original normalized semantic bytes
+  Test  #474: replacement.X05 B3 A finish binds supplied metadata and preserves B1 graph semantics
+  Test  #475: replacement.X05 B3 A finish refuses result and definition correspondence mismatch
+  Test  #476: replacement.X05 B3 A mandatory errors and base cycles precede structural requests
+  Test  #477: replacement.X05 B3 A structural preparation preserves mixed order and exact five field inputs
+  Test  #478: replacement.X05 B3 B actual profile phases bind same-call final definition and preserve immutable inputs
+  Test  #479: replacement.X05 B3 B additive graph obligations preserve base edges and report grouped cycles
+  Test  #480: replacement.X05 B3 B admission rejects wrong owners and retains private refs across moves and repeats
+  Test  #481: replacement.X05 B3 B all-job base failure prevents the first retained callable
+  Test  #482: replacement.X05 B3 B embedded-only semantic result remains exact through selected profile phases
+  Test  #483: replacement.X05 B3 B final native descriptor stage policy applies before retained F
+  Test  #484: replacement.X05 B3 B native callable failure is terminal with its first logical diagnostic
+  Test  #485: replacement.X05 B3 B ordinary registry JSON refusal permits a later complete semantic operation
+  Test  #486: replacement.X05 B3 B repeated semantic operations share finite budgets and retain first terminal refusal
+  Test  #487: replacement.X05 B3 B semantic refusal and malformed response stop before later shape dispatch
+  Test  #488: replacement.X05 B3 B validation input cannot inject phase context or select exported callables
+  Test  #489: replacement.X05 B3 C custom obligations outside selected units are excluded without losing selected shape identity
+  Test  #490: replacement.X05 B3 C guidance from nonmaterial notes leaves selected definition and W unchanged
+  Test  #491: replacement.X05 B3 C native custom selection matches independently authored W and domain oracle
+  Test  #492: replacement.X05 B3 C native shape failure remains terminal through selection retries
+  Test  #493: replacement.X05 B3 C obligations retain unit endpoints group semantics and synthetic ID sorting
+  Test  #494: replacement.X05 B3 C retained selection root survives repeats moves and immutable result lifetime
+  Test  #495: replacement.X05 B3 C same-module presentation source changes conservatively couple custom W
+  Test  #496: replacement.X05 B3 C selected module bytes and final revision affect every custom job role
+  Test  #497: replacement.X05 B3 C selection refuses caller models and validates all jobs before role lookup
+  Test  #498: replacement.X05 B3 C shipped pipeline W and complete selection stay exact with a selected profile
+  Test  #499: replacement.X05 B3 C shipped selection remains byte exact through profile semantics for every job role
+  Test  #500: replacement.X05 B3 C unrelated modules change provenance while custom W remains exact
+  Test  #501: replacement.X05 B3 C zero and single scoped obligation arrays survive native selection transport
+  Test  #502: replacement.X05 B4 A C01 complete job correspondence rejects missing duplicate and malformed identities
+  Test  #503: replacement.X05 B4 A C01 same-shape reversed semantic jobs refuse before guidance rendering
+  Test  #504: replacement.X05 B4 A custom worker reviewer recovery checkpoints remain optional assertions
+  Test  #505: replacement.X05 B4 A empty singleton and grouped shape policies retain complete normalized scoped records
+  Test  #506: replacement.X05 B4 A guidance uses exact display controls fences and remains outside W
+  Test  #507: replacement.X05 B4 A nonincident obligations render empty policy without mutating selection
+  Test  #508: replacement.X05 B4 A observation errors precede custom mandatory budget refusal
+  Test  #509: replacement.X05 B4 A optional omission preserves mandatory shape policy and exact old removal order
+  Test  #510: replacement.X05 B4 A pure custom rendering preserves exact envelope policy and full prerequisites
+  Test  #511: replacement.X05 B4 A pure helper mandatory policy participates in exact byte budget
+  Test  #512: replacement.X05 B4 A pure helper refuses mismatched job role and shape identities
+  Test  #513: replacement.X05 B4 A pure helper shipped shapes exactly preserve every existing role render
+  Test  #514: replacement.X05 B4 B C01 complete native render bound covers original oversized schema refusal
+  Test  #515: replacement.X05 B4 B C01 ordinary responses retain exact errors recoverability and native lifetimes at every phase
+  Test  #516: replacement.X05 B4 B actual captured profile renders authentic same-call immutable material repeatedly
+  Test  #517: replacement.X05 B4 B native custom worker reviewer recovery retains assertions and policy exactly
+  Test  #518: replacement.X05 B4 B native observation and budget refusals retain pure render ordering and recoverability
+  Test  #519: replacement.X05 B4 B native rendering keeps grouped empty and singleton obligations and immutable shape input
+  Test  #520: replacement.X05 B4 B native shape failure remains terminal across render selection validation moves and retries
+  Test  #521: replacement.X05 B4 B native shipped and mixed render outputs preserve ordinary exact bytes
+  Test  #522: replacement.X05 B4 B render preflight preserves both schema priorities before any shape execution
+  Test  #523: replacement.X05 C1 assembly counts UTF8 bytes and preserves supplied trailing LF bytes
+  Test  #524: replacement.X05 C1 custom mandatory sections refuse without truncating or omitting
+  Test  #525: replacement.X05 C1 custom optional priority precedes every shipped optional while mandatory bytes survive
+  Test  #526: replacement.X05 C1 empty and singleton assemblies retain exact metadata shape
+  Test  #527: replacement.X05 C1 exact projection omission vector preserves removal order and byte counts
+  Test  #528: replacement.X05 C1 notice growth can overflow after all optional text is removed
+  Test  #529: replacement.X05 C2 A actual host profile selectors do not enter selected projection identity
+  Test  #530: replacement.X05 C2 A cumulative definition exhaustion preserves first error across APIs and moves
+  Test  #531: replacement.X05 C2 A definition lookup severs caller capture aliases and never invokes projection Lua
+  Test  #532: replacement.X05 C2 A earlier shape resource refusal remains exact on projection lookup
+  Test  #533: replacement.X05 C2 A every final projection descriptor field is material
+  Test  #534: replacement.X05 C2 A final projection definition matches independent canonical hash construction
+  Test  #535: replacement.X05 C2 A owned projection identity survives native owner destruction
+  Test  #536: replacement.X05 C2 A selected source owner and final descriptor determine projection identity
+  Test  #537: replacement.X05 C2 A wrong namespace embedded and moved owners refuse without consuming lookup
+  Test  #538: replacement.X05 C2 B2 global reserved section union applies to both input kinds
+  Test  #539: replacement.X05 C2 B2 immutable alias input and known proxy result retain transport identity
+  Test  #540: replacement.X05 C2 B2 maximum section text and shared noncyclic sections remain valid
+  Test  #541: replacement.X05 C2 B2 preadmission guards do not execute F or consume healthy owner
+  Test  #542: replacement.X05 C2 B2 raw projection schema refuses malformed values before copy
+  Test  #543: replacement.X05 C2 B2 retained projection admits both kinds and owns results across moves and destruction
+  Test  #544: replacement.X05 C2 B2 retained projection arity and Lua errors are terminal at original projection index
+  Test  #545: replacement.X05 C2 B2 section count and text bounds produce resource refusals
+  Test  #546: replacement.X06 B3 A admission precedes registration so an invalid module never executes
+  Test  #547: replacement.X06 B3 A begin_frame is once only and blocks adoption
+  Test  #548: replacement.X06 B3 A declaration in an unsearchable directory refuses as open, not inspect
+  Test  #549: replacement.X06 B3 A factories capture exactly once and adoption reads nothing
+  Test  #550: replacement.X06 B3 A factory registration counters are deterministic across factories
+  Test  #551: replacement.X06 B3 A into_extension adopts the same VM and receipts without recapture
+  Test  #552: replacement.X06 B3 A known load opens once with original receipts and no frame
+  Test  #553: replacement.X06 B3 A known load reads no declaration or registry content and admits metadata before registration
+  Test  #554: replacement.X06 B3 A missing declaration refuses with the declaration adapter and leaves no owner
+  Test  #555: replacement.X06 B3 A opaque open needs no supplied slots, reads none and is never known load
+  Test  #556: replacement.X06 B3 A opaque owner adopts into a working extension
+  Test  #557: replacement.X06 B3 A owner moves preserve address and counters and moved-from owners refuse
+  Test  #558: replacement.X06 B3 A profile invocation static surface offers no prepare, vm or upgrade access
+  Test  #559: replacement.X06 B3 A public validate_profile keeps its cumulative public semantics on a fresh registration
+  Test  #560: replacement.X06 B3 A registration count stays one across into_extension
+  Test  #561: replacement.X06 B3 A request intents without a codec2 profile selector refuse
+  Test  #562: replacement.X06 B3 A supplied slot aliasing a trusted module refuses with unsafe_path and no partial owner
+  Test  #563: replacement.X06 B3 B a custom job refusal after earlier shape dispatch is ordinary semantic data
+  Test  #564: replacement.X06 B3 B a declaration the bound source cannot open refuses with its native diagnostic
+  Test  #565: replacement.X06 B3 B a route phase refusal is ordinary semantic data before any job is captured
+  Test  #566: replacement.X06 B3 B an invalid unselected job fails all-job validation and publishes nothing
+  Test  #567: replacement.X06 B3 B capture change before prepare_load refuses capture_changed with zero declaration reads
+  Test  #568: replacement.X06 B3 B cumulative instruction exhaustion preserves the first error and cleans nested roots
+  Test  #569: replacement.X06 B3 B declaration leaf replaced before prepare_load refuses terminally before content
+  Test  #570: replacement.X06 B3 B every job is validated exactly once
+  Test  #571: replacement.X06 B3 B exhaustion depends on route consumption because the instruction budget is one cumulative counter
+  Test  #572: replacement.X06 B3 B failure paths release nested temporaries
+  Test  #573: replacement.X06 B3 B final intent must equal the bound intent
+  Test  #574: replacement.X06 B3 B known-load owner refuses into_extension terminally-free and stays usable
+  Test  #575: replacement.X06 B3 B one cumulative instruction and native byte budget spans route validation and preparation
+  Test  #576: replacement.X06 B3 B one frame cumulative counters never reset
+  Test  #577: replacement.X06 B3 B opaque consumed failed and moved-from owners refuse prepare_load
+  Test  #578: replacement.X06 B3 B owner allocation charge is observable and covers the owner's own storage
+  Test  #579: replacement.X06 B3 B owner implementation allocation is charged identically by both factories
+  Test  #580: replacement.X06 B3 B prepare_load reads the declaration through the watched interposer
+  Test  #581: replacement.X06 B3 B prepare_load reverifies captured profile content exactly three times
+  Test  #582: replacement.X06 B3 B prepare_load succeeds through phase 2 for custom and mixed jobs
+  Test  #583: replacement.X06 B3 B profile frame branches stay reachable and first terminal native failures are preserved
+  Test  #584: replacement.X06 B3 B success releases nested temporaries to the exact pre invocation membership
+  Test  #585: replacement.X06 B3 C a file replaced at any allocation inside prepare_load is never published as verified
+  Test  #586: replacement.X06 B3 C allocation failure after validation maps to a resource refusal and leaves nothing retryable
+  Test  #587: replacement.X06 B3 C an in place same size edit at any allocation inside prepare_load is never published as verified
+  Test  #588: replacement.X06 B3 C derivation is charged to the one frame and counters never reset
+  Test  #589: replacement.X06 B3 C derived interpretation decodes against the raw effective tree with equal separate versions
+  Test  #590: replacement.X06 B3 C each derivation charge scales exactly with the bytes it covers
+  Test  #591: replacement.X06 B3 C published data is immutable shared and independent of the prepared object
+  Test  #592: replacement.X06 B3 C published workspace id follows the declaration and source modes are normalised
+  Test  #593: replacement.X06 B3 C replacement before publication refuses terminally and publishes nothing
+  Test  #594: replacement.X06 B3 C success consumes the owner, refuses retry and moved-from prepared objects refuse
+  Test  #595: replacement.X06 B3 C success publishes source registry effective tree and bound intent for each fixture shape
+  Test  #596: replacement.X06 B3 C verify_native_receipts fails with capture_changed after any captured input changes post publication
+  Test  #597: replacement.X06 B3 C verify_native_receipts is repeatable on an untouched prepared profile and reads without consuming
+  Test  #598: replacement.X06 D C01 a caught Lua error still leaves the budget counters monotone
+  Test  #599: replacement.X06 D C01 admission metadata charges are part of the factory counter at open
+  Test  #600: replacement.X06 D C01 declaration Lua memory counts against the composed live Lua ceiling
+  Test  #601: replacement.X06 D C01 declaration chunks exhaust the composed invocation instruction ceiling across stages
+  Test  #602: replacement.X06 D C01 declaration live Lua memory is released between chunks
+  Test  #603: replacement.X06 D C01 native boundary is exercised by the post-validation derivation charges
+  Test  #604: replacement.X06 D C01 native exhaustion after all-job validation refuses in preparation and cleans nested roots
+  Test  #605: replacement.X06 D C01 opaque factory charges module reads like the known-load factory
+  Test  #606: replacement.X06 D C01 repeated direct shape calls never refund native bytes
+  Test  #607: replacement.X06 D C01 retained declaration values exhaust the composed native ceiling in the declaration stage
+  Test  #608: replacement.X06 D C01 route stage exhaustion refuses before any declaration is captured
+  Test  #609: replacement.X06 D C01 spec and job declaration instructions join the invocation counter
+  Test  #610: replacement.X06 D C01 the composed sink alone enforces the invocation instruction ceiling on declaration chunks
+  Test  #611: replacement.X06 D C01 workspace declaration instructions are carried into the invocation counter
+  Test  #612: replacement.X06 D C02 a protocol failure caught by pcall in a known-load prepare frame stays terminal
+  Test  #613: replacement.X06 D C02 a protocol or semantic failure caught by pcall in a profile-owned frame stays terminal
+  Test  #614: replacement.X06 D C02 extension owners created without a factory keep role declarations outside the budget
+  Test  #615: replacement.X06 D C02 role preparation charges declaration chunks to the factory budget
+  Test  #616: replacement.X06 D C02 role preparation charges enumeration and registry reads to the factory budget
+  Test  #617: replacement.X06 D C02 the composed sink refusal is the first failure on a declaration chunk that crosses the invocation ceiling
+  Test  #618: replacement.X06 D C02 the composed sink refuses a pre-frame declaration chunk at the carried ceiling
+  Test  #619: replacement.X06 D C03 a caught illegal registration followed by exhaustion keeps the first failure in a direct shape call
+  Test  #620: replacement.X06 D C03 a recovered allocation refusal followed by an illegal registration keeps the resource failure in a direct shape call
+  Test  #621: replacement.X06 D C03 ordinary fixtures keep a quarter of every observable ceiling free
+  Test  #622: replacement.X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget
+  Test  #623: replacement.X06 D a failure caught by Lua stays terminal with the first diagnostic
+  Test  #624: replacement.X06 D capture stage charges every sealed byte to the one native counter
+  Test  #625: replacement.X06 D conversion node ceiling refuses with nodes at a small ceiling
+  Test  #626: replacement.X06 D destroying the consumed owner wrapper cannot erase prepared counters
+  Test  #627: replacement.X06 D each custom shape dispatch adds to the one budget and nothing is refunded
+  Test  #628: replacement.X06 D frame start inherits the factory counters and the prepared object keeps them
+  Test  #629: replacement.X06 D invocation instruction ceiling is shared by every stage at a small ceiling
+  Test  #630: replacement.X06 D lower inherited limits still win over the composed ceilings
+  Test  #631: replacement.X06 D moving the prepared profile transfers counters and move assignment is safe
+  Test  #632: replacement.X06 D native ceiling spans registration and frame at a small ceiling
+  Test  #633: replacement.X06 D native exhaustion is resource_limit terminal and cleans nested roots
+  Test  #634: replacement.X06 D prepared_profile has no new construction path
+  Test  #635: replacement.X06 D registration instruction ceiling is separate and refuses at open with no owner
+  Test  #636: replacement.X07 N30 history decode charges the factory budget owner
+  Test  #637: replacement.X07 N30 late slot admission charges the factory budget owner
+  Test  #638: replacement.X07 N30 projection transport charges the factory budget owner
+  Test  #639: replacement.X07 N30 role capture charges the factory budget owner
+  Test  #640: replacement.X07 closed factory keeps the original receipts through dispatch
+  Test  #641: replacement.X07 closed factory registers exactly once for every family
+  Test  #642: replacement.X07 exported command_vm invoke still refuses profile owners
+  Test  #643: replacement.X07 new runtime refusals use only closed table messages
+  Test  #644: replacement.X07 profile owner is consumed by its single dispatch
+  Test  #645: replacement.X07 run_known refuses opaque and known load owners
+  Test  #646: replacement.X07 run_known refuses options that differ from the admitted options
+  Test  #647: replacement.X07 runtime has exactly one profile VM creation call
+  Test  #648: replacement.X07 selector overload refuses the load alternative before capture
+  Test  #649: replacement.command captured direct nested transitive and table key state refuses writes
+  Test  #650: replacement.command caught execution depth stack and instruction exhaustion are terminal
+  Test  #651: replacement.command execution caught live allocation exhaustion stays terminal
+  Test  #652: replacement.command export publication state survives invalid projection and caught exhaustion
+  Test  #653: replacement.command family order exact argument maps missing service and manufactured success are refused
+  Test  #654: replacement.command frozen returned module table converts private backing without changing its tag
+  Test  #655: replacement.command frozen shared cyclic and callable keys preserve reads and local scratch
+  Test  #656: replacement.command history selects exact typed decimal strings and defaults without Lua number conversion
+  Test  #657: replacement.command initialization semantic policy refuses invalid workspace IDs before publication
+  Test  #658: replacement.command load altered retained callable carries its own original bytes and digest
+  Test  #659: replacement.command load caught resource exhaustion is terminal before and after native completion
+  Test  #660: replacement.command load defers provenance refusal until fresh acceptance
+  Test  #661: replacement.command load malformed bundle semantic and captured result fail before completion
+  Test  #662: replacement.command load native failure poisons caught subsequent services and wins
+  Test  #663: replacement.command load private admission refuses missing duplicate capability and signature variants
+  Test  #664: replacement.command load private catalog routes and interprets in retained VM with exact provenance
+  Test  #665: replacement.command load refuses forged family order skipped duplicate and malformed arguments
+  Test  #666: replacement.command load retains completion through altered malformed caught and throwing returns
+  Test  #667: replacement.command load retains exact native receipt for replay uncertain and ordinary completion
+  Test  #668: replacement.command load validates retained token head request and actor before services
+  Test  #669: replacement.command native sealing accepts depth boundary and refuses next node with typed resource
+  Test  #670: replacement.command native service failure wins over suppression retry and manufactured success
+  Test  #671: replacement.command opaque path slots reject forged wrong-type reused extra-field and out-of-order calls
+  Test  #672: replacement.command real callable replacement is effective and private binding survives later lexical replacement
+  Test  #673: replacement.command registration and execution transfers share one cumulative conversion budget
+  Test  #674: replacement.command registration caught exhaustion is terminal without native services
+  Test  #675: replacement.command registry rejects malformed catalog owner callable ABI duplicate and missing entries atomically
+  Test  #676: replacement.command registry seals mandatory embedded families without services
+  Test  #677: replacement.command retained initialization and export handlers project exact native facts after moving VM
+  Test  #678: replacement.command retained render runs real routing validation selection and projection with unchanged fixed export result
+  Test  #679: replacement.command sealed globals libraries and engine cannot be altered by retained callable
+  Test  #680: replacement.command typed native invocation rejects structural option invariants before services
+  Test  #681: replacement.render checkpoint canonical JSON byte bound accepts exactly 8192
+  Test  #682: replacement.render checkpoint is bounded role scoped unverified optional data
+  Test  #683: replacement.render checkpoint missing paths stay valid and sorted
+  Test  #684: replacement.render checkpoint paths refuse portable segment aliases
+  Test  #685: replacement.render checkpoint sizes Glaze short escapes at the exact byte boundary
+  Test  #686: replacement.render computes all six quota projections through the production export
+  Test  #687: replacement.render distinguishes no capture empty capture and absent observations
+  Test  #688: replacement.render errors unknown targets and stale producer vector without leaking assertions
+  Test  #689: replacement.render exact budget boundaries optional removal order and overflow details
+  Test  #690: replacement.render fences injections controls binary deletions and complete upstream differences
+  Test  #691: replacement.render presentation isolates unrelated output edits and lists reviewer targets once
+  Test  #692: replacement.render presentation keeps complete check fields and safe exact argument data
+  Test  #693: replacement.render presentation retains every dependency facet pipeline and question policy field
+  Test  #694: replacement.render preserves internal cross role and pipeline completion obligations
+  Test  #695: replacement.render refuses malformed observations with exact schema and duplicates
+  Test  #696: replacement.render reviewer obligation grouping follows worker assignments
+  Test  #697: replacement.render semantic observation errors retain raw nested array indexes
+  Test  #698: replacement.render validates assertions globally then filters role visibility
+  Test  #699: replacement.runtime Glaze callbacks roundtrip structural data and ordinary failures
+  Test  #700: replacement.runtime Glaze decode bounds remain ordinary typed data and declarations cannot call codecs
+  Test  #701: replacement.runtime bounds Lua execution allocation and native amplification
+  Test  #702: replacement.runtime enforces immaterial text payloads on both boundaries
+  Test  #703: replacement.runtime exposes only the selected bounded table helpers
+  Test  #704: replacement.runtime identifies the diagnostic actually escaping Lua
+  Test  #705: replacement.runtime makes caught quota terminal before protected calls return
+  Test  #706: replacement.runtime mutations cannot affect captured native input
+  Test  #707: replacement.runtime native hash primitives match direct canonical identities
+  Test  #708: replacement.runtime preserves ordinary protected call arity errors and nesting
+  Test  #709: replacement.runtime preserves private declaration tags and raw captured bytes
+  Test  #710: replacement.runtime prevents finalizers from bypassing instruction limits
+  Test  #711: replacement.runtime refuses native count paths within a subprocess bound
+  Test  #712: replacement.runtime refuses native sparse table range helpers
+  Test  #713: replacement.runtime refuses native string pattern paths within a subprocess bound
+  Test  #714: replacement.runtime refuses unsupported trusted returns and malformed native inputs
+  Test  #715: replacement.runtime repairs traversal state after caught conversion failures
+  Test  #716: replacement.runtime retains deterministic nonpattern string operations
+  Test  #717: replacement.runtime retains rich stdlib diagnostics as structural data
+  Test  #718: replacement.runtime states are fresh deterministic and separated from declarations
+  Test  #719: replacement.schema ID record normalization sorts collections and preserves ordered lists
+  Test  #720: replacement.schema JSON counts container entries for empty and nonempty terminals
+  Test  #721: replacement.schema JSON node limit and request envelopes refuse deterministically
+  Test  #722: replacement.schema diagnostics choose logical file field code deterministically
+  Test  #723: replacement.schema enforces job intrinsic policy budgets preferences and sorted sets
+  Test  #724: replacement.schema enforces registry descriptor types bounds enums and uniqueness
+  Test  #725: replacement.schema enforces workspace intrinsic constraints and declaration constructors
+  Test  #726: replacement.schema final text uses exact text identity and wrapped provenance
+  Test  #727: replacement.schema production exports normalize every quota job and defaults
+  Test  #728: replacement.schema refuses malformed constructors fields lists wrappers and versions
+  Test  #729: replacement.schema resolves retained text from declaring directory with exact bytes
+  Test  #730: replacement.schema resolves text in every job relative to that job declaration
+  Test  #731: replacement.schema sorted records retain declaration indexes for intrinsic diagnostics
+  Test  #732: replacement.schema strict JSON preserves container Unicode and integer identities
+  Test  #733: replacement.schema strict JSON refuses malformed syntax text duplicates and bounds
+  Test  #734: replacement.schema validates joined declaration and text paths before diagnostics
+  Test  #735: replacement.schema validates unselected jobs registry and exact workspace routes
+  Test  #736: replacement.selection distinguishes capture absence empty outputs and missing facet paths
+  Test  #737: replacement.selection enforces aggregate byte file limits and normalized executable modes
+  Test  #738: replacement.selection independently resolves every quota symbolic work manifest
+  Test  #739: replacement.selection optional observations provenance syntax and set order remain immaterial
+  Test  #740: replacement.selection pipeline derives obligations before scope and records remapped producers
+  Test  #741: replacement.selection refuses inconsistent malformed and excessive retained byte records
+  Test  #742: replacement.selection retains check applicability registry definitions and pipeline assignment scope
+  Test  #743: replacement.selection scopes requirements and excludes optional policy and own bytes
+  Test  #744: replacement.selection start facets are external exact content and completion is never inferred
+  Test  #745: replacement.semantic additions retain per-unit applicability even when definition unions match
+  Test  #746: replacement.semantic captured file ancestors cannot satisfy file facets
+  Test  #747: replacement.semantic checks trusted allowed definitions conformance and per-unit additions
+  Test  #748: replacement.semantic consumes sealed real quota topology after source trees are removed
+  Test  #749: replacement.semantic contract complete dependencies allow only availability and still need start contract
+  Test  #750: replacement.semantic distinguishes captured empty directories and current base boundary topology
+  Test  #751: replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier
+  Test  #752: replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries
+  Test  #753: replacement.semantic phase cycles report actual deterministic closed traces
+  Test  #754: replacement.semantic pipeline derives adjacent cross products and validates every stage
+  Test  #755: replacement.semantic pipeline expands full adjacent stage work cross products before scope
+  Test  #756: replacement.semantic production validates both quota jobs and preserves grouped unit obligations
+  Test  #757: replacement.semantic refuses all union boundary overlaps and segment aliases
+  Test  #758: replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs
+  Test  #759: replacement.semantic schema refusal precedes policy and diagnostics retain author indexes
+  Test  #760: replacement.semantic validates references and namespaces before selecting any job
+  Test  #761: replacement.ledger gated actual pathname replacement refuses before additional delegate
+  Test  #762: replacement.ledger gated first header verification precedes real content reads
+  Test  #763: replacement.ledger gated healthy reads preserve exact file bytes and permissions
+  Test  #764: replacement.ledger gated independent owners and sticky late refusal
+  Test  #765: replacement.ledger gated mmap performs actual mapping through native verification
+  Test  #766: replacement.ledger gated owners retain VFS and guard through statements and transactions
+  Test  #767: replacement.ledger gated partial base open closes before registration release
+  Test  #768: replacement.ledger gated read-only SQL rejects writes and attached alternate database before open
+  Test  #769: replacement.ledger gated underlying HAS_MOVED must succeed unmoved before read
+  Test  #770: replacement.ledger gated verifier failures are typed and never cross SQLite C frames
+  Test  #771: replacement.ledger gated versioned optional methods retain real reads
+  Test  #772: replacement.ledger sqlite URI looking native filenames remain persistent files
+  Test  #773: replacement.ledger sqlite VFS write and sync errors never report commit and permit complete retry
+  Test  #774: replacement.ledger sqlite authorizer prevents manual transaction bypass
+  Test  #775: replacement.ledger sqlite bare memory filename existing modes refuse missing files
+  Test  #776: replacement.ledger sqlite bare memory filename persists through native path spellings
+  Test  #777: replacement.ledger sqlite binding failures and preparation errors abandon writes
+  Test  #778: replacement.ledger sqlite bounded busy refusal releases for retry
+  Test  #779: replacement.ledger sqlite commit evidence distinguishes success inactive and deferred rollback
+  Test  #780: replacement.ledger sqlite configured full rolls back complete symbolic storage state
+  Test  #781: replacement.ledger sqlite extended constraints rollback and permit retry
+  Test  #782: replacement.ledger sqlite failed deferred commit rolls back and releases writer
+  Test  #783: replacement.ledger sqlite handled rollback write fault recovers complete state and permits retry
+  Test  #784: replacement.ledger sqlite online backup propagates actual destination VFS failure
+  Test  #785: replacement.ledger sqlite online backup supports pinned snapshots and rejects invalid owners
+  Test  #786: replacement.ledger sqlite owns binary text blob empty and null values
+  Test  #787: replacement.ledger sqlite process termination brackets actual commit sync and returned commit
+  Test  #788: replacement.ledger sqlite readonly existing mode never creates missing files
+  Test  #789: replacement.ledger sqlite separate reader makes commit busy and complete rollback reusable
+  Test  #790: replacement.ledger sqlite separate writer process busy bound releases and retries
+  Test  #791: replacement.ledger sqlite statements retain moved and destroyed connections
+  Test  #792: replacement.ledger sqlite transactions commit abandon and survive wrapper destruction
+  Test  #793: replacement.ledger sqlite unavailable cwd returns typed path failure
+  Test  #794: replacement.storage SHARED-only reader does not excuse a leftover journal
+  Test  #795: replacement.storage abort and destruction roll back
+  Test  #796: replacement.storage begin_write refuses a missing ledger
+  Test  #797: replacement.storage begin_write refuses a sidecar that appears while waiting for the writer lock
+  Test  #798: replacement.storage begin_write sidecar refusal message is byte exact
+  Test  #799: replacement.storage begin_write still refuses a persistent journal
+  Test  #800: replacement.storage begin_write surfaces a non-ENOENT sidecar stat failure
+  Test  #801: replacement.storage begin_write waits out a transient live writer journal
+  Test  #802: replacement.storage entry and precommit identity checks are separate and site specific
+  Test  #803: replacement.storage failed operation poisons and rolls back the transaction
+  Test  #804: replacement.storage killed writer leaves a genuine hot journal that still refuses
+  Test  #805: replacement.storage leftover journal refuses immediately on read and write paths
+  Test  #806: replacement.storage live writer does not excuse a wal or shm sidecar
+  Test  #807: replacement.storage live writer journal does not refuse the read path
+  Test  #808: replacement.storage no_sidecars ignores writer liveness
+  Test  #809: replacement.storage no_sidecars refuses a leftover sidecar without delay
+  Test  #810: replacement.storage open_read and native no_sidecars surface a non-ENOENT sidecar stat failure
+  Test  #811: replacement.storage probe fcntl failure surfaces as io
+  Test  #812: replacement.storage probe lock is gone before the gated open reads
+  Test  #813: replacement.storage probe releases the writer lock on the no-journal path
+  Test  #814: replacement.storage request miss does not poison the transaction
+  Test  #815: replacement.storage writable open refuses a sidecar created after the read check
+  Test  #816: replacement.storage writable open tolerates a live writer journal
+  Test  #817: replacement.storage write transaction matches the record writer byte for byte
+  Test  #818: replacement.intent create refuses invalid arguments
+  Test  #819: replacement.intent create returns exact immutable legacy data
+  Test  #820: replacement.intent create_v2 carries the optional profile selector
+  Test  #821: replacement.intent moved-from data refuses
+  Test  #822: replacement.X06 C C01 profile completion stores a built-in job beside a custom job
+  Test  #823: replacement.X06 C C01 seam interns the registry tree with the provenance limits
+  Test  #824: replacement.X06 C no Lua runs while the profile write transaction is open
+  Test  #825: replacement.X06 C profile capture receipt changes refuse capture_changed with rollback
+  Test  #826: replacement.X06 C profile completion busy commit keeps the proposed bytes
+  Test  #827: replacement.X06 C profile completion changed profile module creates a new revision
+  Test  #828: replacement.X06 C profile completion commit hook failure is commit_uncertain
+  Test  #829: replacement.X06 C profile completion in-use receipt refuses before any transaction
+  Test  #830: replacement.X06 C profile completion moved-from profile refuses after CAS before any row
+  Test  #831: replacement.X06 C profile completion receipt phases committed and replayed
+  Test  #832: replacement.X06 C profile completion refuses a same id intent whose body differs from the bound intent
+  Test  #833: replacement.X06 C profile completion refuses a workspace id different from the ledger
+  Test  #834: replacement.X06 C profile completion refuses an intent that differs from the bound intent
+  Test  #835: replacement.X06 C profile completion stores the derived trees and values from profile_acceptance_data
+  Test  #836: replacement.X06 C profile completion stores the exact request_v2 body of the bound intent
+  Test  #837: replacement.X06 C profile completion surface accepts only the opaque prepared profile
+  Test  #838: replacement.X06 C profile completion unchanged second request is noop and replay bytes equal the result
+  Test  #839: replacement.X06 C profile format mismatch refuses unsupported_version before the head read
+  Test  #840: replacement.X06 C profile receipt race after staging is caught before commit
+  Test  #841: replacement.X06 C profile receipt race inside the pre-commit metadata check is caught
+  Test  #842: replacement.X06 C profile receipt refusal surfaces only the ledger capture_changed message
+  Test  #843: replacement.X06 C profile replay precedes candidate inspection and needs no live inputs or profile
+  Test  #844: replacement.X06 C profile same id with a different body conflicts before the head check
+  Test  #845: replacement.X06 C profile source receipt changes refuse capture_changed with rollback
+  Test  #846: replacement.X06 C profile stale head refuses revision_conflict with details and no row
+  Test  #847: replacement.X06 C racing profile completions have exactly one winner
+  Test  #848: replacement.X06 C seam interns an effective stdlib closure beyond the original tree limits
+  Test  #849: replacement.C4 B2 format binds actual held descriptor before interpreting invalid header
+  Test  #850: replacement.C4 B2 same bound guard gates format reads with sticky failure and embedded format parity
+  Test  #851: replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request
+  Test  #852: replacement.D8 complete acceptance process death at write sync and returned completion stays atomic
+  Test  #853: replacement.X06 C C01 seam is unreachable from a plain acceptance importer
+  Test  #854: replacement.X06 C C03 no passkey grant or test hook vocabulary remains under src
+  Test  #855: replacement.X06 C C03 only the adapters call complete_native_candidate
+  Test  #856: replacement.X06 C C03 profile adapter is a partition re-exported by the acceptance interface
+  Test  #857: replacement.X06 C C03 runtime product sources import only ledger completion from the ledger
+  Test  #858: replacement.X06 C C03 seam is a non-exported partition of the acceptance module
+  Test  #859: replacement.X06 C C03 shared body refusal message bytes are pinned
+  Test  #860: replacement.X06 C C03 workspace mismatch message bytes are pinned
+  Test  #861: replacement.X06 C C04 acceptance_result stays outside the internal seam namespace
+  Test  #862: replacement.X06 C C04 direct seam tests live in their own implementation unit and the adapter tests import normally
+  Test  #863: replacement.X06 C C04 seam entities live in a nested non-exported internal namespace
+  Test  #864: replacement.X06 D C01 variant ceiling mechanism does not depend on runtime source text
+  Test  #865: replacement.X06 D composed ceiling constants keep their contract values
+  Test  #866: replacement.X06 D runtime public surface and resource messages stay closed
+  Test  #867: replacement.atomic SQLite mutation verification and commit failures roll back every prefix
+  Test  #868: replacement.atomic acceptance initial noop change and revert retain chronology
+  Test  #869: replacement.atomic concurrent identical requests replay and competing heads refuse within finite retry
+  Test  #870: replacement.atomic conflict retains locked heads after rollback and later head advance
+  Test  #871: replacement.atomic final native receipt refusal rolls back all tentative history
+  Test  #872: replacement.atomic format request mismatch and profile refusal precede CAS and unusable candidate
+  Test  #873: replacement.atomic identity bound receipt busy commit proves rollback and preserves proposed saved bytes
+  Test  #874: replacement.atomic identity bound receipt capture and unavailable candidate refusals retain noncompletion
+  Test  #875: replacement.atomic identity bound receipt late replay owns bytes before stale CAS and unusable candidate
+  Test  #876: replacement.atomic identity bound receipt refuses replacement before exact replay
+  Test  #877: replacement.atomic native format2 acceptance history export and backup restore survive removed inputs
+  Test  #878: replacement.atomic replay precedes later head missing capture and moved input inspection
+  Test  #879: replacement.atomic unknown request CAS precedes prepared inspection and leaves no rows
+  Test  #880: replacement.atomic valid maximum record ID refuses allocation without writes
+  Test  #881: replacement.atomic valid maximum revision permits noop but refuses changed allocation
+  Test  #882: replacement.atomic workspace mismatch refuses before record writes
+  Test  #883: replacement.ledger accepted history checks saved noop parent event references request body and bounded metadata
+  Test  #884: replacement.ledger accepted history distinguishes unknown event and result payload versions
+  Test  #885: replacement.ledger accepted history negotiates unknown event row versions separately from outer format
+  Test  #886: replacement.ledger accepted history permits raw access to shape verified unsupported interpretation versions
+  Test  #887: replacement.ledger accepted history refuses identical content hidden behind duplicate record IDs
+  Test  #888: replacement.ledger accepted history rejects orphan and projection rows
+  Test  #889: replacement.ledger accepted history rejects schema valid relational and chronology corruption unchanged
+  Test  #890: replacement.ledger accepted history validates complete provenance workspace and interpretation shapes
+  Test  #891: replacement.ledger complete accepted change noop and revert history reopens writes backs up and restores
+  Test  #892: replacement.ledger complete accepted history survives explicit quiescent hot journal recovery
+  Test  #893: replacement.ledger format all immutable triggers abort meaningful row mutations
+  Test  #894: replacement.ledger format backup restore refuse existing destinations and sidecars unchanged
+  Test  #895: replacement.ledger format backup restore reject invalid sources before target creation
+  Test  #896: replacement.ledger format explicit recovery rolls back real killed dirty pages
+  Test  #897: replacement.ledger format initialization refuses every existing destination sidecar
+  Test  #898: replacement.ledger format initialization rejects invalid arguments and persists literal memory filename
+  Test  #899: replacement.ledger format initializes exact metadata schema and Glaze event
+  Test  #900: replacement.ledger format malformed btree and altered trigger refuse unchanged
+  Test  #901: replacement.ledger format no replace and no follow initialization preserves all targets
+  Test  #902: replacement.ledger format online backup and restore preserve initialized metadata and state
+  Test  #903: replacement.ledger format recovery accepts redundant genuine hot journal
+  Test  #904: replacement.ledger format recovery refuses super-journal authority unchanged
+  Test  #905: replacement.ledger format recovery rejects deceptive and malformed pairs unchanged
+  Test  #906: replacement.ledger format refuses every missing trigger and explicit index unchanged
+  Test  #907: replacement.ledger format refuses foreign empty truncated and version files unchanged
+  Test  #908: replacement.ledger format refuses metadata grammar and timestamp corruption
+  Test  #909: replacement.ledger format rejects NUL suffixes and oversized encoded metadata unchanged
+  Test  #910: replacement.ledger format rejects altered schema and extra objects unchanged
+  Test  #911: replacement.ledger format reopens read only and writable without mutation
+  Test  #912: replacement.ledger format schema and initialization rollback are one atomic transaction
+  Test  #913: replacement.ledger format sidecars require recovery without writable fallback
+  Test  #914: replacement.ledger format validates init cross rows and refuses populated history explicitly
+  Test  #915: replacement.ledger format2 backup restore preserve format identity and never overwrite
+  Test  #916: replacement.ledger format2 exact schema delta and native initialization retain format
+  Test  #917: replacement.ledger format2 mixed request codecs preserve recorded history export and privacy
+  Test  #918: replacement.ledger format2 native write transaction opens after complete typed integration
+  Test  #919: replacement.ledger format2 reads native typed embedded request-v2 fixture
+  Test  #920: replacement.ledger format2 refuses mutation before writable access and preserves codec1 reads
+  Test  #921: replacement.ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged
+  Test  #922: replacement.ledger format2 request-v2 malformed and mismatched rows refuse unchanged privately
+  Test  #923: replacement.ledger format2 structurally decodes private profile request without claiming acceptance
+  Test  #924: replacement.ledger reader ordinary failures invalidate through moves and preserve metadata
+  Test  #925: replacement.ledger record IDs guard signed overflow and preserve existing rows
+  Test  #926: replacement.ledger record only backups restoration and real hot recovery preserve records
+  Test  #927: replacement.ledger record reader remains independent and blocked commit rolls back
+  Test  #928: replacement.ledger record transaction errors and abandonment roll back every prefix
+  Test  #929: replacement.ledger records intern all kinds with exact reuse and ordered edges
+  Test  #930: replacement.ledger records refuse malformed metadata and unknown value codecs before use
+  Test  #931: replacement.ledger records reject inconsistent graphs and encoded rows without mutation
+  Test  #932: replacement.ledger refuses orphan revision history after valid record storage
+  Test  #933: replacement.ledger request children of either codec refuse format2 directories
+  Test  #934: replacement.ledger typed DELETE snapshot blocks commit until released then fresh reads observe later head
+  Test  #935: replacement.ledger typed initialized snapshot has absent head and revision but owned initialization event
+  Test  #936: replacement.ledger typed pages enforce exclusive ascending bounded snapshot cursors
+  Test  #937: replacement.ledger typed read failures invalidate every read method while cached metadata survives
+  Test  #938: replacement.ledger typed reads distinguish optional misses from invalid arguments and retain owned rows
+  Test  #939: replacement.ledger typed reads permit raw unsupported interpretation without poisoning history
+  Test  #940: replacement.ledger typed reads preserve exact initial change noop revert rows and replay bytes
+  Test  #941: replacement.ledger typed request read fault invalidates all methods after real SQLite IOERR
+  Test  #942: replacement.ledger verified reader must not silently switch snapshots after storage read failure
+  Test  #943: replacement.ledger writer explicit abort is idempotent releases lock and prevents commit
+  Test  #944: replacement.ledger writer read failure invalidates and rolls back uncommitted prefix
+  Test  #945: replacement.recorded effective history selects wider fixed tree profile for valid closure above4096 files
+  Test  #946: replacement.recorded effective provenance refuses request v1 independently of format2 schema
+  Test  #947: replacement.recorded history requires request selector family on accepted and noop events
+  Test  #948: replacement.recorded profile actual raw tree workspace digest catalog and selection forgeries refuse
+  Test  #949: replacement.recorded profile history reconstructs effective v2 and projects every selector
+  Test  #950: replacement.recorded profile saved accepted and noop replay precede unusable preparation while fresh profile stays refused
+  Test  #951: replacement.recorded profile unknown interpretation preserves raw export without semantic payload
+  Test  #952: replacement.recorded profile unknown manifest refuses typed unsupported before export
+  Test  #953: replacement.tree core effective provenance byte budgets preserve original ceilings
+  Test  #954: replacement.tree core effective provenance counts expanded file occurrences
+  Test  #955: replacement.tree core effective provenance file boundary validates before callbacks
+  Test  #956: replacement.tree core effective provenance preserves lower path depth and file limits
+  Test  #957: replacement.tree core exact portable digest and reconstruction without storage
+  Test  #958: replacement.tree core preserves original typed callback failures and exception ownership
+  Test  #959: replacement.tree core reconstruction rejects identity and empty nonroot directories
+  Test  #960: replacement.tree core rejects invalid inputs before interning and matches digest refusals
+  Test  #961: replacement.tree empty root composition explicit abort and abandonment
+  Test  #962: replacement.tree exact and excessive byte budgets source and provenance
+  Test  #963: replacement.tree exact and excessive file bounds for both profiles and expanded shared records
+  Test  #964: replacement.tree exact and excessive path length depth and portable segment boundaries
+  Test  #965: replacement.tree exact bytes modes sorted topology and immutable history
+  Test  #966: replacement.tree exact source directories and independent provenance directory allowance
+  Test  #967: replacement.tree expanded shared subtrees enforce payload occurrences and profile difference
+  Test  #968: replacement.tree immutable reader malformed roots fail without successful partial output
+  Test  #969: replacement.tree input duplicate aliases conflicts grammar and modes abort prior pending records
+  Test  #970: replacement.tree pending records rollback through idempotent abort and abandoned writer
+  Test  #971: replacement.tree preserves typed storage refusal without hash overrides
+  Test  #972: replacement.tree provenance maximum induced directories count shared occurrences
+  Test  #973: replacement.tree typed roots digest references and non-tree children refuse atomically
+  Test  #974: replacement.ledger format2 publication faults retain complete target only after atomic publication
+  Test  #975: replacement.ledger format2 publication late sidecar refuses and preserves arriving sidecar
+  Test  #976: replacement.ledger format2 publication no replace preserves target arriving at link boundary
+  Test  #977: replacement.ledger publication faults retain complete target only after atomic publication
+  Test  #978: replacement.ledger publication late sidecar refuses and preserves arriving sidecar
+  Test  #979: replacement.ledger publication no replace preserves target arriving at link boundary
+  Test  #980: replacement.ledger forced ambiguous exact plus unequal buckets refuse every opening path unchanged
+  Test  #981: replacement.ledger forced collisions refuse every kind and roll back prefix records
+  Test  #982: replacement.ledger forced directory collisions compare exact database local child IDs
+  Test  #983: replacement.provenance codec complete set count and exact byte bounds include both synthetics
+  Test  #984: replacement.provenance codec historical verification rejects incomplete malformed unsupported and wrong-mode sets
+  Test  #985: replacement.provenance codec registry retains exact captured bytes and normalized mode
+  Test  #986: replacement.provenance codec rejects unsafe duplicate aliased and reserved original paths
+  Test  #987: replacement.provenance codec source order separator and boundaries remain portable identity
+  Test  #988: replacement.interpretation codec assembly matches saved canonical fixtures exactly
+  Test  #989: replacement.interpretation codec canonical storage preserves containers signed32 and exact byte ceiling
+  Test  #990: replacement.interpretation codec distinguishes supported historical envelopes from future policy versions
+  Test  #991: replacement.interpretation codec refuses malformed fixed envelopes types containers ordering and correspondence
+  Test  #992: replacement.provenance complete set count and exact byte bounds include both synthetics
+  Test  #993: replacement.provenance generated originals and legacy assembled chunk match exact authored bytes
+  Test  #994: replacement.provenance historical verification rejects incomplete malformed unsupported and wrong-mode sets
+  Test  #995: replacement.provenance registry retains exact captured bytes and normalized mode
+  Test  #996: replacement.provenance rejects unsafe duplicate aliased and reserved original paths
+  Test  #997: replacement.provenance source order separator and boundaries remain portable identity
+  Test  #998: replacement.interpretation canonical storage preserves containers signed32 and exact byte ceiling
+  Test  #999: replacement.interpretation complete quota outputs match reviewed JSON and canonical goldens
+  Test #1000: replacement.interpretation distinguishes supported historical envelopes from future policy versions
+  Test #1001: replacement.interpretation keeps live schema and ownership diagnostics with logical locations
+  Test #1002: replacement.interpretation orders all jobs independently of workspace routing and captured order
+  Test #1003: replacement.interpretation preserves absent optional notes without manufacturing fields
+  Test #1004: replacement.interpretation preserves every existing normalized and semantic field and captured provenance
+  Test #1005: replacement.interpretation refuses malformed fixed envelopes types containers ordering and correspondence
+  Test #1006: replacement.interpretation separates native runtime resources from trusted validation
+  Test #1007: replacement.interpretation stored record roundtrip reopens exact historical bytes without Lua
+  Test #1008: replacement.ledger history codec accepted changed noop and reverted independent event wires
+  Test #1009: replacement.ledger history codec canonical decimal and optional head token refusals
+  Test #1010: replacement.ledger history codec duplicate escape whitespace ordering and trailing bytes refuse
+  Test #1011: replacement.ledger history codec event exact field sets and types refuse malformed schema
+  Test #1012: replacement.ledger history codec initialization exact existing format payload
+  Test #1013: replacement.ledger history codec ledger identity and bounded ASCII request grammar
+  Test #1014: replacement.ledger history codec maximum signed IDs and nonconsecutive identities roundtrip
+  Test #1015: replacement.ledger history codec result exact field sets and types refuse malformed schema
+  Test #1016: replacement.ledger history codec saved load result keeps returned revision parent on noop
+  Test #1017: replacement.ledger history codec typed state and enum validation refuses invalid encoding
+  Test #1018: replacement.ledger history codec unsupported versions and redacted fixed byte ceiling failures
+  Test #1019: replacement.acceptance prepared binds selected exact snapshot bytes after disk changes
+  Test #1020: replacement.acceptance prepared bounds external inputs before owning bytes
+  Test #1021: replacement.acceptance prepared enforces source directory ceiling on genuine captured selections
+  Test #1022: replacement.acceptance prepared owns values across moves destruction and final native verification
+  Test #1023: replacement.acceptance prepared refuses empty duplicate absent invalid and excessive selections
+  Test #1024: replacement.acceptance prepared rejects canonical version mismatch unsupported and workspace shape
+  Test #1025: replacement.acceptance prepared rejects malformed canonical manifest and retains original parsed ownership
+  Test #1026: replacement.acceptance prepared requires exactly registry input json
+  Test #1027: replacement.acceptance prepared reverifies stdlib files manifest aliases mode and recorded digest
+  Test #1028: replacement.acceptance prepared selects only explicit workspace paths and ignores other logical roots
+  Test #1029: replacement.acceptance request intent preserves exact shared record bytes and positive signed64 heads
+  Test #1030: replacement.acceptance request intent rejects grammar relative nonnormalized and invalid text arguments
+  Test #1031: replacement.acceptance request v2 owns exact normalized embedded and profile selectors
+  Test #1032: replacement.workspace names and explicit targets frame the same pure future load request
+  Test #1033: replacement.atomic codec2 forced request collision rolls back and redacts private digest
+  Test #1034: replacement.atomic exact private signed allocator boundary covers event and revision exhaustion
+  Test #1035: replacement.atomic forced request digests separate codec buckets and preserve version body conflict
+  Test #1036: replacement.atomic targeted collisions refuse file directory interpretation and request without prefixes
+  Test #1037: replacement.atomic variant final receipt mutation cannot publish changed capture
+  Test #1038: replacement.history initialized views use one read owner and typed misses
+  Test #1039: replacement.history metadata preserves native IDs above int32 exactly
+  Test #1040: replacement.history summary keeps structured payload and absent IDs without null
+  Test #1041: replacement.source export accepts an unsupported interpretation and an empty stored root
+  Test #1042: replacement.source export accepts relative target and old reverted revisions
+  Test #1043: replacement.source export handles the source file ceiling and thousands of directories with bounded descriptors
+  Test #1044: replacement.source export preserves exact bytes modes and source-only closure
+  Test #1045: replacement.source export refuses existing entries and unsafe original paths
+  Test #1046: replacement.source export supports bounded-depth traversal under a low descriptor ceiling
+  Test #1047: replacement.source export fault boundaries clean before publication and preserve after
+  Test #1048: replacement.source export no-replace race preserves arriving target
+  Test #1049: replacement.source export refuses cleanup of replaced or unowned entries
+  Test #1050: replacement.source export termination leaves absent or complete target and never adopts leftovers
+  Test #1051: replacement.X06 D C01 source capture bundle charges refuse at their own ceiling
+  Test #1052: replacement.X06 D C01 source capture charges the bundle copy of every captured file
+  Test #1053: replacement.X06 D C01 source capture refuses at the composed ceiling as resource_limit
+  Test #1054: replacement.X06 D C01 source capture threads one budget through workspace spec and job declarations
+  Test #1055: replacement.source capture N1 unreadable declaration is not reported as missing
+  Test #1056: replacement.source capture N2 refuses swapped receipt roles
+  Test #1057: replacement.source capture N3 moved-from receipt is invalid_state but poisoned and foreign stay capture_changed
+  Test #1058: replacement.source capture absence is a signal from admission, not a message match
+  Test #1059: replacement.source capture admission precedes registration and reads no declaration content
+  Test #1060: replacement.source capture correspondence refuses an unsealed or released source as mismatch
+  Test #1061: replacement.source capture correspondence refuses every single bundle tamper as mismatch
+  Test #1062: replacement.source capture correspondence returns the exact sorted workspace paths for a good bundle
+  Test #1063: replacement.source capture factories require three original receipts and refuse moved and poisoned authority
+  Test #1064: replacement.source capture receipt accessors report moved_from and role
+  Test #1065: replacement.source capture refuses a declaration replaced between registration and first read
+  Test #1066: replacement.source capture refuses a hard-linked trusted declaration before content or factory
+  Test #1067: replacement.source capture refuses a registry hard-linked to the declaration as path_denied
+  Test #1068: replacement.source capture refuses receipts outside one original admission at construction
+  Test #1069: replacement.source capture refuses retained authority for another selection or admission
+  Test #1070: replacement.source capture registry colocation binds standalone input and refuses trusted alias
+  Test #1071: replacement.source capture retained flow survives moves and detects post-seal mutation
+  Test #1072: replacement.source capture terminal failure after capture refuses later operations
+  Test #1073: replacement.source capture vanished declaration reports admitted change beside embedded missing
+  Test #1074: replacement.load capture prepares complete multi-job closure and exact trusted provenance without source trees
+  Test #1075: replacement.load capture refuses B M membership headers and captured reference mismatches
+  Test #1076: replacement.load capture rejects malformed and mismatched routes before routed reads
+  Test #1077: replacement.load capture retains original selected receipts and ignores unrelated siblings
+  Test #1078: replacement.load capture seals original workspace and refuses missing linked or oversized references
+  Test #1079: replacement.load capture state moves failures paths aliases provenance and bounds are terminal
+  Test #1080: replacement.load capture trusted all-job validation preserves unselected and duplicate logical diagnostics
+  Test #1081: replacement.metadata continuity acceptance precommit includes selected format
+  Test #1082: replacement.metadata continuity locked begin includes selected format
+  Test #1083: replacement.metadata continuity record precommit includes selected format
+  Test #1084: replacement.replacement.effective provenance closed exact manifest and framing
+  Test #1085: replacement.replacement.effective provenance combined manifest one MiB ceiling
+  Test #1086: replacement.replacement.effective provenance component and defensive outer resource refusals
+  Test #1087: replacement.replacement.effective provenance embedded source order assembly and catalog owners
+  Test #1088: replacement.replacement.effective provenance external owners bind profile ordinals
+  Test #1089: replacement.replacement.effective provenance full membership and modes
+  Test #1090: replacement.replacement.effective provenance independent exact bytes and digest
+  Test #1091: replacement.replacement.effective provenance maximum reachable file membership
+  Test #1092: replacement.replacement.effective provenance prefixed path byte and depth limits
+  Test #1093: replacement.replacement.effective provenance profile module order and correspondence
+  Test #1094: replacement.replacement.effective provenance raw whitespace modes and source bytes affect identity
+  Test #1095: replacement.replacement.effective provenance reachable external byte and profile boundaries
+  Test #1096: replacement.X05 A0 active C frame reservation allocation refusal preserves state
+  Test #1097: replacement.X05 A0 allows curated helpers and invocation local string iterators
+  Test #1098: replacement.X05 A0 altered retained scalar writer bundle refuses
+  Test #1099: replacement.X05 A0 audited exact shipped five-handler bundle creates
+  Test #1100: replacement.X05 A0 audits actual helper closures with shared cell and graph aliases
+  Test #1101: replacement.X05 A0 checks graph prototype instruction depth and arena ceilings
+  Test #1102: replacement.X05 A0 distinguishes table alias freezing from lexical sealing
+  Test #1103: replacement.X05 A0 native identity snapshot allocation failure stays protected
+  Test #1104: replacement.X05 A0 permits invocation local nested counters and helpers
+  Test #1105: replacement.X05 A0 refuses C roots retained iterators and same pointer new contexts
+  Test #1106: replacement.X05 A0 rejects direct inherited shared and unreachable retained writes
+  Test #1107: replacement.X05 A0 reserved active C frame audits realistic deep retained graph
+  Test #1108: replacement.X05 A0 source compiled LOADKX fits actual module and Lua memory ceilings
+  Test #1109: replacement.X05 A0 source compiled NEWTABLE and SETLIST payloads inspect and run
+  Test #1110: replacement.X05 A0 unreserved C frame refuses before Lua allocation or push
+  Test #1111: replacement.v2 asserted catalog requires actual manifest owner ordinals before equality
+  Test #1112: replacement.v2 custom shipped classification and exact E membership cannot be substituted
+  Test #1113: replacement.v2 every native allocation failure remains a redacted typed resource refusal
+  Test #1114: replacement.v2 exact supported constants and embedded versions equality precede tree
+  Test #1115: replacement.v2 fixed keys kinds B S job ordering and selected syntax are malformed
+  Test #1116: replacement.v2 forged selfconsistent catalog digest and definition still require raw tree binding
+  Test #1117: replacement.v2 independent mixed and empty profile canonical bytes bind and roundtrip
+  Test #1118: replacement.v2 normalized obligations validate exact shape source sorted IDs work roles phase quality
+  Test #1119: replacement.v2 per job normalized obligation maximum accepts exactly ten thousand sorted IDs
+  Test #1120: replacement.v2 preallocation byte tree guidance obligation and cyclic graph limits are typed
+  Test #1121: replacement.v2 prerequisite lower provenance adapters preserve canonical resource failures
+  Test #1122: replacement.v2 raw membership mode manifest order owner module and embedded tampering refuse
+  Test #1123: replacement.v2 results sever all B S raw tree aliases
+  Test #1124: replacement.v2 selected definition spelling refuses untagged uppercase malformed UTF8 and NUL
+  Test #1125: replacement.v2 unrelated module bytes and reordered ordinals change tree but preserve selected shape H
+  Test #1126: replacement.v2 valid normalized guidance boundary and preallocation canonical counts are explicit
+  Test #1127: replacement.recorded canonical inputs preflight both byte limits and bounded depth before family hints
+  Test #1128: replacement.recorded direct old decoder keeps embedded versions allocation refusal typed
+  Test #1129: replacement.recorded dispatch maps every one-shot allocation refusal to typed resource
+  Test #1130: replacement.recorded dispatch preserves original v1 decoder supported future and malformed precedence
+  Test #1131: replacement.recorded dispatch supports both fixed families with recomputed tree workspace and owned bytes
+  Test #1132: replacement.recorded embedded valid provenance reaches4096 file ceiling with owned supported decode
+  Test #1133: replacement.recorded family markers are presence hints and numeric future version stays embedded
+  Test #1134: replacement.recorded future fields and malformed manifest markers never become unsupported semantics
+  Test #1135: replacement.recorded marker mismatches cannot grant effective provenance authority
+  Test #1136: replacement.recorded original embedded manifest keeps typed future manifest refusal
+  Test #1137: replacement.recorded paired failures follow canonical topology provenance decoder correspondence order
+  Test #1138: replacement.recorded raw tree fixed byte ceilings distinguish embedded16 and effective32 MiB
+  Test #1139: replacement.recorded raw tree fixed count ceilings bound admission before provenance
+  Test #1140: replacement.recorded unknown effective manifest differs from unknown interpretation and malformed manifest
+  Test #1141: replacement.recorded unknown semantics still require workspace and raw tree digest correspondence
+  Test #1142: replacement.recorded unsupported interpretation refuses malformed structure and separate versions mismatch
+  Test #1143: replacement.recorded unsupported v2 cannot skip changed actual raw provenance
+  Test #1144: replacement.recorded valid embedded provenance reaches exact16MiB aggregate ceiling
+  Test #1145: replacement.CLI11 rejects repeated handler bindings before execution
+  Test #1146: replacement.X01 CLI11 envelope and sealed catalog matrix
+  Test #1147: replacement.X01 CLI11 opaque positional probe rejects prefix flags before catalog selection
+  Test #1148: replacement.X01 CLI11 parsed profile scalar supports existing explicit value policy
+  Test #1149: replacement.X07 adapter maps every registration refusal to its closed code message and exit
+  Test #1150: replacement.X07 adapter never prints fields host paths or tracebacks
+  Test #1151: replacement.X07 adapter redacts malformed trusted payloads as internal protocol
+  Test #1152: replacement.X07 cmd sources open the profile owner through one factory call per branch
+  Test #1153: replacement.X07 command sources add no diagnostic outside the closed table
+  Test #1154: replacement.X07 decimal and limit boundary vectors through the real CLI
+  Test #1155: replacement.X07 early lookup scope closes before profile capture
+  Test #1156: replacement.X07 embedded format2 load keeps v1 interpretation and versions
+  Test #1157: replacement.X07 embedded load on format1 keeps request_v1
+  Test #1158: replacement.X07 embedded load on format2 frames request_v2 with embedded selector
+  Test #1159: replacement.X07 envelope and bootstrap source has no manual argv scan
+  Test #1160: replacement.X07 export known slots refuse before registration
+  Test #1161: replacement.X07 export refuses a target overlapping the trusted root before publication
+  Test #1162: replacement.X07 extension and profile rows print one JSON line and nothing during registration
+  Test #1163: replacement.X07 extension preparation usage prints the public usage bytes
+  Test #1164: replacement.X07 extension responses are the closed extension_v1 and match retained services
+  Test #1165: replacement.X07 final syntax error in an extension tail precedes late slot overlap
+  Test #1166: replacement.X07 history and export responses are identical with and without a profile
+  Test #1167: replacement.X07 history and export under a profile validate the profile before dispatch
+  Test #1168: replacement.X07 history known slot refuses a ledger alias before registration
+  Test #1169: replacement.X07 history_id after-event with limit pages through the real CLI
+  Test #1170: replacement.X07 history_id invalid spellings refuse before the handler
+  Test #1171: replacement.X07 history_id misuse is refused at registration through the real CLI
+  Test #1172: replacement.X07 history_id selector conflicts are usage regardless of magnitude
+  Test #1173: replacement.X07 history_id vectors report Lua type and presence through the real CLI
+  Test #1174: replacement.X07 init known slot is alias only and runs before registration
+  Test #1175: replacement.X07 init refuses a format selector option
+  Test #1176: replacement.X07 ledger aliasing the profile or a module refuses for history export and load
+  Test #1177: replacement.X07 load known slots refuse before registration
+  Test #1178: replacement.X07 native format1 initializer remains available to fixtures
+  Test #1179: replacement.X07 prefix count is three or four and dot slash help is a valid selector
+  Test #1180: replacement.X07 production envelope rows refused after capture and registration are final usage
+  Test #1181: replacement.X07 production envelope rows refused by syntax and prefix usage never access the profile
+  Test #1182: replacement.X07 production envelope rows refused by the probe never access the profile
+  Test #1183: replacement.X07 production handler rows succeed
+  Test #1184: replacement.X07 production matrices enumerate every X01 row
+  Test #1185: replacement.X07 production normalization and known slot rows refuse at their step
+  Test #1186: replacement.X07 production opaque probe rows refuse or admit at their step
+  Test #1187: replacement.X07 production selected help rows capture and register the profile
+  Test #1188: replacement.X07 profile environment variables are ignored without with-profile
+  Test #1189: replacement.X07 profile invocation reads cwd and environment once
+  Test #1190: replacement.X07 profile load binds the early lookup intent through prepare_load
+  Test #1191: replacement.X07 profile load on a format1 ledger refuses before profile access
+  Test #1192: replacement.X07 profile load records request_v2 selector effective stdlib and v2 interpretation
+  Test #1193: replacement.X07 profile load replays a saved request before touching the profile
+  Test #1194: replacement.X07 profile load with a different body conflicts before profile access
+  Test #1195: replacement.X07 profile preparation semantic error exits by code
+  Test #1196: replacement.X07 profile selector honours the path ceiling and the request ceiling wins
+  Test #1197: replacement.X07 profile selector normalizes lexically without existence
+  Test #1198: replacement.X07 projection omission vector reproduces 87 94 and 59 bytes through the CLI
+  Test #1199: replacement.X07 public init creates a format2 ledger with unchanged response
+  Test #1200: replacement.X07 render known slots refuse overlap before registration
+  Test #1201: replacement.X07 role read overlaps and aliases refuse before the handler runs
+  Test #1202: replacement.X07 root help bytes are unchanged and omit with-profile
+  Test #1203: replacement.X07 root level stdlib-profile flag is usage
+  Test #1204: replacement.X07 selected help bytes are exact sorted and escaped
+  Test #1205: replacement.X07 selected help ceiling is one mebibyte by default and bootstrap passes none
+  Test #1206: replacement.X07 selected help refuses above the help ceiling
+  Test #1207: replacement.X07 selector with invalid UTF-8 or NUL is prefix usage before profile access
+  Test #1208: replacement.X07 shipped tail under a profile keeps probe option state and scalar command words stay values
+  Test #1209: replacement.X07 src cmd contains no profile VM creation site
+  Test #1210: replacement.X07 wave B fixture modules register natively and misuse modules are refused
+  Test #1211: replacement.X07 wave B reporter and projection modules behave natively as the rows expect
+  Test #1212: replacement.X08 Linux publish and metadata branches keep their no-replace and path-only flags
+  Test #1213: replacement.X08 platform branches are exactly the audited set
+  Test #1214: replacement.export adapters redact refusals and validate generated stage tokens
+  Test #1215: replacement.export binds strict explicit options before native access
+  Test #1216: replacement.help is explicit and buffered
+  Test #1217: replacement.history CLI11 bindings validate selectors before any ledger access
+  Test #1218: replacement.init handler binds explicit options without filesystem access
+  Test #1219: replacement.invocation path refusal precedes cwd reads and native services
+  Test #1220: replacement.invocation paths snapshot cwd and workspace environment only when needed
+  Test #1221: replacement.invocation refuses environment views before snapshot ownership and cwd
+  Test #1222: replacement.ledger authoritative diagnostics include stable revision and collision detail
+  Test #1223: replacement.ledger diagnostic malformed typed payloads refuse with exact redacted internal envelope
+  Test #1224: replacement.ledger error adapter pins every typed refusal without native messages
+  Test #1225: replacement.legacy commands and implicit discovery are refused
+  Test #1226: replacement.load handler attaches six required text bindings
+  Test #1227: replacement.load intent aggregate record bound remains a resource refusal before ledger access
+  Test #1228: replacement.load invocation snapshots one cwd and environment with lexical targets
+  Test #1229: replacement.missing explicit files refuse without partial output
+  Test #1230: replacement.render handler attaches CLI11 bindings without executing capture
+  Test #1231: replacement.render mapping refusal precedes missing routed inputs
+  Test #1232: replacement.export postpublication encoding refusal returns prebuilt uncertainty
+  Test #1233: replacement.export service facts allocation failure retains adapter publication
+  Test #1234: replacement.retained_cli
+  Test #1235: replacement.workspace_selector_cli
+  Test #1236: replacement.load_cli
+  Test #1237: x07.substitute_init
+  Test #1238: x07.substitute_history
+  Test #1239: x07.substitute_export
+  Test #1240: x07.late_receipt_survives_to_seal
+  Test #1241: x07.response_ceiling_extension
+  Test #1242: x07.replay_after_inputs_deleted
+  Test #1243: x07.replay_conflict_matrix
+  Test #1244: x07.replay_same_selector_changed_bytes_new_provenance
+  Test #1245: x07.relookup_equal_replay_before_stale_cas
+  Test #1246: x07.relookup_unequal_conflicts
+  Test #1247: x07.two_process_cas_one_winner
+  Test #1248: x07.receipt_races_refuse_before_authorization
+  Test #1249: x07.final_race_rolls_back_before_commit
+  Test #1250: x07.post_commit_allocation_failure_keeps_receipt
+  Test #1251: x07.post_commit_encoding_failure_keeps_receipt
+  Test #1252: x07.post_commit_stdout_failure_keeps_receipt
+  Test #1253: x07.workflow_shape_load
+  Test #1254: x07.workflow_render_external
+  Test #1255: x07.workflow_verb_history_export
+
+Total Tests: 1255

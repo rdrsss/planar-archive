@@ -1,0 +1,1260 @@
+replacement.cli
+replacement.init_cli
+replacement.history_cli
+replacement.export_cli
+x08.e01_no_discovery
+x08.e01_registration_policy
+x08.e02_envelope_rows_binary
+x08.e03_closure_separation_binary
+x08.e07_old_goldens_unselected_profile
+x08.e07_old_w_vectors_binary
+x08.e08_projection_vector_binary
+x08.e09_history_id_binary
+x08.e10_removed_profile_replay_binary
+x08.adv_hardlink_module_refuses_before_chunk
+x08.adv_missing_declaration_initial_admission
+x08.adv_opaque_ordering_binary
+x08.adv_invalid_unselected_job_refuses_all
+x08.adv_job_mix_and_phase_failures
+x08.adv_registry_colocation_binary
+x08.adv_limits_cli
+x08.timeout_headroom_531
+x08.linux_recipe_pins
+x08.e12_variant_reads_identically
+x08.e12_variant_exports_identically
+x08.e12_variant_poison_is_live
+x08.e12_variant_poison_is_live_load
+x08.e12_variant_poison_is_live_profile_render
+x08.e12_variant_audit
+x08.e12_sources_and_profile_removed
+x08.validator_selftest
+replacement.X06 D C01 loader charges instructions to the factory budget
+replacement.X06 D C01 loader charges retained declaration values to the factory budget byte for byte
+replacement.X06 D C01 loader charges the final retained declaration and references to the factory budget
+replacement.X06 D C01 loader declaration Lua memory is live against the factory budget and released on close
+replacement.X06 D C01 loader inherited chunk limits still win over the composed budget
+replacement.X06 D C01 loader refuses at the composed instruction ceiling with the owner diagnostic
+replacement.X06 D C01 loader refuses at the composed live Lua ceiling with the owner diagnostic
+replacement.X06 D C01 loader refuses at the composed native ceiling and reports the owner diagnostic
+replacement.X06 D C01 loader refuses one oversized value even when every later charge fits
+replacement.X06 D C02 loader module graph does not depend on capture admission
+replacement.X06 D C02 loader reports the owner diagnostic when the composed owner refuses Lua state creation
+replacement.X06 D C02 loader reports the owner diagnostic when the composed owner refuses a declaration chunk
+replacement.loader bounds native amplification of reused scalar strings
+replacement.loader constructed nested records remain immutable and readable
+replacement.loader denies ambient capabilities and all trusted mutation
+replacement.loader enforces independent instruction allocation and structural bounds
+replacement.loader preserves structural constructor tags
+replacement.loader rejects unsupported structures
+replacement.loader retains table identities across garbage collection
+replacement.host path keeps missing and unresolvable directory spellings as input path errors
+replacement.host path lexical cwd validity still precedes joined length overflow
+replacement.host path maps a regular file followed by parent traversal to the root directory error
+replacement.host path preserves physical parent traversal
+replacement.host path pure preflight checks malformed oversized text before size
+replacement.host path pure preflight preserves relevant text size and ignored snapshot errors
+replacement.host path refuses file leaf links and nonregular inputs
+replacement.host path refuses final root aliases with all suffixes
+replacement.host path retains ordinary directory spellings
+replacement.host path sanitizes invalid file traversal and missing parents
+replacement.intent path bounds input and joined output before concatenation
+replacement.intent path normalizes nonexistent lexical equivalents against explicit cwd
+replacement.intent path refuses invalid text and cwd shape without leaking bytes
+replacement.prepared native paths retain render spelling and normalize future intent
+replacement.workspace names require only explicit absolute valid environment
+replacement.workspace preparation validates text and checks all join bounds
+replacement.workspace selector classifies exact names and explicit file grammar
+replacement.D2 A retained receipt refuses every non supplied file slot
+replacement.D2 A retained receipt rejects different actual opened file
+replacement.D2 A retained receipt survives original wrapper moves and destruction
+replacement.D2 A retained receipt uses stable append only selection and shared poison
+replacement.D2 B2 caller file slots exclude private ordinal namespace in either order
+replacement.D2 B2 discovery keeps private keys bounded and independent of caller keys
+replacement.D2 B2 discovery rejects escapes grammar links and trusted aliases
+replacement.D2 B2 metadata discovery refuses component case aliases
+replacement.D2 B2 root discovery retains metadata only and original explicit selection
+replacement.D2 B2 root receipt requires supplied roots and actual original root descriptors
+replacement.X06 D C01 admission charges the factory budget exactly once per charge
+replacement.X06 D C01 admission metadata charges reach the factory budget
+replacement.X06 D C01 admission refuses at the composed ceiling with the existing resource message
+replacement.X06 D C01 retained declaration handle charges accumulate on every issue without refund
+replacement.capture admission all selected file roles have zero observed metadata phase data reads
+replacement.capture admission ancestor replacement preserving selected inode refuses
+replacement.capture admission bound standalone profile and module reads retain original identity
+replacement.capture admission charges a host component before its temporary copy
+replacement.capture admission descriptor binding refuses a different live file and unknown slots
+replacement.capture admission descriptor binding rejects replacement before native content read
+replacement.capture admission exited traversal remains verified without false final nesting
+replacement.capture admission export target selected file aliases use overlap refusal
+replacement.capture admission export targets retain absence and reject trusted overlap
+replacement.capture admission final supplied symlinks and absent target replacements refuse
+replacement.capture admission host and private receipt key bounds reject before path opening
+replacement.capture admission move failed and bounded states refuse safely
+replacement.capture admission parent traversal never cancels unsafe intermediate components
+replacement.capture admission parent traversal preserves physical overlaps and file role policy
+replacement.capture admission physical parent traversal retains final ancestry
+replacement.capture admission receipts report same admission and liveness
+replacement.capture admission reports only final-component ENOENT as absence
+replacement.capture admission retained modes and file metadata reject changes
+replacement.capture admission root binding checks original ancestors leaf names and modes
+replacement.capture admission root binding refuses wrong descriptor slot and invalid descriptor terminally
+replacement.capture admission root binding retains exited physical parent branches
+replacement.capture admission root binding retains original directory and ignores sibling timestamps
+replacement.capture admission root relocation and late addition retain original receipts
+replacement.capture admission root repeated parents and slash typing remain physical
+replacement.capture admission roots reject equality and both ancestry directions
+replacement.capture admission selected ancestors above trusted root retain modes
+replacement.capture admission selected hard links refuse every supplied file role
+replacement.capture admission selected inputs perform zero observed data reads before binding
+replacement.capture admission staged trusted selections check earlier supplied aliases
+replacement.capture admission standalone roles preserve registry colocation policy
+replacement.capture admission symlinks refuse root intermediate and final components
+replacement.capture admission unrelated siblings and their modes do not invalidate selections
+replacement.D2 A changed retained file refuses every later content path
+replacement.D2 A native retained read uses same selection on cache and acceptance
+replacement.D2 A owned cache refuses different original state or selection
+replacement.D2 A owned caches reject borrowed authority through both overloads
+replacement.D2 A retained file survives admission wrapper destruction until sealing
+replacement.D2 A unbound caches cannot be upgraded to retained authority
+replacement.D2 B1 binding wrong selected file poisons before publication
+replacement.D2 B1 bound input restrictions and initial ceiling failures are terminal
+replacement.D2 B1 bound standalone input moves original pending authority into first plain read
+replacement.D2 B1 input binding opens physical parents without cancellation
+replacement.D2 B1 pending and captured input refuse borrowed and different retained modes
+replacement.D2 B1 refused unpublished binding cannot be revived by unbound registration
+replacement.D2 B1 same selection retained read preserves binding before and after transfer
+replacement.D2 B1 unread bound input retains metadata authority through acceptance
+replacement.D2 B2 C01 exact original pre-cache receipt survives all owned rereads
+replacement.D2 B2 C01 first retained reads require original root selection
+replacement.D2 B2 C01 initial borrowed and cached replacement modes refuse
+replacement.D2 B2 final rooted tree membership refuses additions and removals
+replacement.D2 B2 root registration failure is terminal with no unbound retry
+replacement.D2 B2 rooted caches refuse mutation without recapture
+replacement.D2 B2 rooted capture survives admission destruction and verifies acceptance
+replacement.X06 D C01 a single discovery entry refuses at the composed ceiling
+replacement.X06 D C01 ancestor staging is charged with each retained file
+replacement.X06 D C01 capture charges the composed ceiling before reading or allocating a file
+replacement.X06 D C01 discovery staging is charged to the factory budget and never refunded
+replacement.X06 D C01 discovery staging refuses at the composed ceiling
+replacement.X06 D C01 native read charges each retained file exactly once
+replacement.X06 D C01 refused capture allocates nothing near the file size
+replacement.X06 D C01 verification charges only the enumeration staging
+replacement.X06 D C01 verification staging is charged on every verify and never refunded
+replacement.capture native bound root mismatch verifies before overlap and publishes nothing
+replacement.capture native bound roots never cancel missing link or file parents
+replacement.capture native bound roots preserve duplicate and physical overlap policy
+replacement.capture native bound roots support physical parent spelling through final verification
+replacement.capture native bound roots validate absolute host text without publishing
+replacement.capture native failed selected reads do not retain ancestor receipts
+replacement.capture native receipt owns state through session destruction and moves
+replacement.capture native registry receipt refuses replacement after seal
+replacement.capture native seal performs full verification before transfer
+replacement.capture native seals workspace and registry without Lua
+replacement.capture native selected ancestor changes refuse initial sealing and discovery
+replacement.capture native selected ancestor removal and links refuse repeat verification
+replacement.capture native selected ancestor replacement preserves file inode but refuses receipt
+replacement.capture native selected closure ignores unrelated siblings and keeps topology private
+replacement.capture native selected receipts preserve alias and file identity refusal
+replacement.profile codec decodes exact ordered paths in memory
+replacement.profile codec enforces bounded strings arrays nodes depth and input
+replacement.profile codec keeps strict schema and arbitrary integer classification
+replacement.profile codec preserves path policy and logical error fields
+replacement.D2 A native late poison is visible in profile snapshot without refresh
+replacement.D2 A native retained receipt survives original profile destruction
+replacement.D2 A profile forwards retained supplied reads after owner move
+replacement.D2 A profile retained read failures are terminal and publish no file
+replacement.D2 B1 input binding failures close profile owner and preserve immutable closure
+replacement.D2 B1 pending input survives profile moves and destruction
+replacement.D2 B1 profile binds colocated registry without supplied parent root
+replacement.D2 B1 unread native input change is visible to original profile
+replacement.D2 B2 empty and unread roots retain metadata through profile destruction
+replacement.D2 B2 profile bound roots discover ordinary files and propagate poison
+replacement.X06 B3 B note_registration is a no-op on moved-from owners and the count moves with the capture
+replacement.X06 B3 B note_registration is a pure counter that never affects authority
+replacement.X06 D C01 profile capture charges the profile read to the factory budget
+replacement.X06 D C01 profile capture threads the factory budget through admission and supplied reads
+replacement.profile bound native seam checks original descriptor before ceiling and read
+replacement.profile bounded acceptance rereads preserve original charged byte ceiling
+replacement.profile bounded native cached read honors newly tighter caller ceilings
+replacement.profile bounded native sealing reread refuses growth before observed content read
+replacement.profile capture UTF8 NUL BOM and escaped scalar validation is strict
+replacement.profile capture aggregate remaining module budget precedes final read
+replacement.profile capture allows explicit stdlib directory and excludes unlisted siblings
+replacement.profile capture binds roots through the moved original admission and preserves closure
+replacement.profile capture bound root failures close owner and leave original snapshot intact
+replacement.profile capture bound roots still verify original trusted content receipts
+replacement.profile capture directory modes and trusted root replacement retain receipts
+replacement.profile capture empty closure retains Unicode host filename privately
+replacement.profile capture escaped keys and portable paths use decoded library strings
+replacement.profile capture exact decoded key limit and surrogate escape boundaries
+replacement.profile capture exact structural node ceiling before container growth
+replacement.profile capture exited late slot ancestor replacement poisons original owner
+replacement.profile capture final intermediate and root symlinks refuse
+replacement.profile capture input bound checked before observed profile read
+replacement.profile capture integer versions have no machine integer classification ceiling
+replacement.profile capture module ceiling checked before observed module read
+replacement.profile capture module count zero sixtyfour and sixtyfive
+replacement.profile capture move assignment and self move transfer retained receipts
+replacement.profile capture node and depth ceilings refuse resource exhaustion
+replacement.profile capture oversized raw escaped string and key refuse bounded scratch
+replacement.profile capture parent admitted slots retain original owner and traversed receipts
+replacement.profile capture path byte and segment bounds include escaped spellings
+replacement.profile capture portable suffix segment namespace and alias policy
+replacement.profile capture profile module hard link alias refuses
+replacement.profile capture receipt modes include normalized equal file mode changes
+replacement.profile capture repeated seals retain selected original bytes after failure
+replacement.profile capture retains exact whitespace modes and module list order
+replacement.profile capture selected directory ancestor replacement refuses
+replacement.profile capture selected hard link aliases refuse before first module read
+replacement.profile capture selects all module metadata before any module contents
+replacement.profile capture source only modules reject bytecode NUL invalid UTF8
+replacement.profile capture staged admission consumes no supplied file content
+replacement.profile capture staged binding refuses replaced inode before content
+replacement.profile capture staged descriptor binding is metadata only and terminal on mismatch
+replacement.profile capture staged module aliases refuse without reads and poison owner
+replacement.profile capture staged overlap missing and aliases fail terminally
+replacement.profile capture staged root file and target checks retain initial receipts
+replacement.profile capture strict schema refuses malformed and ambiguous JSON
+replacement.profile capture validates full portable list before any module contents
+replacement.D2 B2 original root authority loads real declarations and text references
+replacement.X06 D C01 capture session threads the factory budget through declarations and reads
+replacement.capture acceptance detects changes after sealing without changing published values
+replacement.capture acceptance owns receipts after moves and session destruction
+replacement.capture acceptance preserves exclusions and normalized modes
+replacement.capture acceptance releases root descriptors exactly once
+replacement.capture acceptance retains standalone registry file and parent receipts
+replacement.capture bounds name staging across trees and both passes
+replacement.capture bounds path metadata before staging on both passes
+replacement.capture bounds text raw files totals and exclusions
+replacement.capture classifies retained binary growth beyond quota as changed
+replacement.capture classifies retained text growth beyond quota as changed
+replacement.capture declaration references join final retained snapshot
+replacement.capture detects empty directory membership and identity changes
+replacement.capture deterministic seam detects bytes mode identity and membership changes
+replacement.capture empty directories leave file provenance unchanged
+replacement.capture enforces aggregate bytes and count before retention
+replacement.capture exposes sealed logical topology independently of file snapshots
+replacement.capture refuses portable paths aliases and unsafe file types
+replacement.capture rejects overlapping roots and cross-root hardlinks
+replacement.capture retains sorted bytes and discovered references
+replacement.capture standalone inputs share physical workspace without tree authority
+replacement.capture withholds topology after unsuccessful verification
+replacement.canonical bounds depth nodes and bytes without declaration string caps
+replacement.canonical decoder bounds bytes nodes keys depth and claimed allocations
+replacement.canonical decoder refuses noncanonical integers tags keys and counts
+replacement.canonical decoder reproduces independent exact typed vectors
+replacement.canonical distinguishes typed empty values and integer boundaries
+replacement.canonical preserves raw strings and unsigned UTF8 key order
+replacement.canonical refuses null private malformed cyclic and out of range input
+replacement.hash matches independent hand canonical and domain vectors
+replacement.hash selected captured base observation unit and role recipes remain separate
+replacement.hash validates published upstream seed zero XXH3 length vectors
+replacement.replacement.effective catalog closed schemas and scalar kinds
+replacement.replacement.effective catalog count and canonical byte ceilings
+replacement.replacement.effective catalog external descriptors and reserved namespaces
+replacement.replacement.effective catalog help and grammar bounds
+replacement.replacement.effective catalog history id capability matrix
+replacement.replacement.effective catalog malformed canonical and bounded trees
+replacement.replacement.effective catalog mandatory shipped signatures
+replacement.replacement.effective catalog ordering and identity conflicts
+replacement.replacement.effective catalog roundtrip and immutable aliases
+replacement.replacement.effective catalog source ownership and ordinals
+replacement.replacement.effective catalog static read capability signatures
+replacement.record decoder rejects corrupt framing and oversized claims before allocation
+replacement.record decoding validates persisted local directory and request fields
+replacement.record directory local IDs change storage while metadata changes portable digest
+replacement.record file and value payload ceilings include canonical framing bytes
+replacement.record independent literal framing and canonical digest vectors
+replacement.record rejects invalid modes names aliases ordering kinds and local IDs
+replacement.record requests validate local text and head tokens without normalizing arguments
+replacement.record values require exact supported bounded canonical data
+replacement.record whole encoding ceiling is exact for requests
+replacement.request v2 complete 64 MiB frame ceiling includes selector and suffix
+replacement.request v2 independent complete frame and digest vectors
+replacement.request v2 inherits text head bounds and requires normalized absolute profile
+replacement.request v2 refuses malformed framing tags versions and oversized claims
+replacement.codec Glaze syntax and schema boundaries
+replacement.codec X05 C2 B1 projection callback exceptions remain typed
+replacement.codec X05 C2 B1 projection count matches unchanged Glaze encoding
+replacement.codec X05 C2 B1 projection encoded 16 MiB exact boundaries
+replacement.codec X05 C2 B1 projection exact precharge cumulative denial and diagnostic ownership
+replacement.codec X05 C2 B1 projection independent nested concurrent and borrowed immutable calls
+replacement.codec X05 C2 B1 projection tighter output ceiling and semantic name separation
+replacement.codec X05 C2 B1 projection validates all source bounds before charging
+replacement.codec decode exact resource ceilings
+replacement.codec diagnostics retain safe offsets and resource details
+replacement.codec encode Glaze escaping and unsigned UTF8 key order
+replacement.codec encode refuses cycles tags and exact bounds
+replacement.codec encoder enforces four million visits before expansion allocation
+replacement.codec reservation callbacks have a safe typed exception boundary
+replacement.codec reservation cumulative budget exact fit and sticky typed refusal
+replacement.codec reservation measures repeated copies and deterministic capacity
+replacement.codec reservation preserves depth leaf semantics and repeated container aliases
+replacement.codec reservation retains complete transport and escape expansion ceilings
+replacement.codec reserved decode callback exceptions and early guards remain typed
+replacement.codec reserved decode charges exact output components and preserves owned first refusal
+replacement.codec reserved decode preserves graphs and exact ordinary refusals
+replacement.codec reserved decode supports independent nested concurrent and cumulative contexts
+replacement.codec strict Glaze object separators and offsets
+replacement.codec strict validation preserves object values and decoded duplicate policy
+replacement.codec validation refusal precedes reservation and preserves ordinary errors
+replacement.X05 A1 C02 detailed guard distinguishes pre root failures and restores stack
+replacement.X05 A1 C02 detailed guard reports selected roots and preserves wrapper
+replacement.X05 A1 C02 detailed guard retains shared memo and report
+replacement.X05 A1 active C frame reservation allocation refusal preserves state
+replacement.X05 A1 allows curated helpers and invocation local string iterators
+replacement.X05 A1 audits actual helper closures with shared cell and graph aliases
+replacement.X05 A1 distinguishes table alias freezing from lexical sealing
+replacement.X05 A1 native identity snapshot allocation failure stays protected
+replacement.X05 A1 ordered roots share memo and retain existing global depth boundary
+replacement.X05 A1 permits invocation local nested counters and helpers
+replacement.X05 A1 refuses C roots retained iterators and same pointer new contexts
+replacement.X05 A1 rejects direct inherited shared and unreachable retained writes
+replacement.X05 A1 repeated audits exhaust cumulative native accounting without refunds
+replacement.X05 A1 reserved active C frame audits realistic deep retained graph
+replacement.X05 A1 retains graph depth refusal and restores stack
+replacement.X05 A1 shared prototypes memoize exact masks across distinct actual closures
+replacement.X05 A1 shared roots still inspect newly reachable writers and reject native callable roots
+replacement.X05 A1 source compiled LOADKX fits actual module and Lua memory ceilings
+replacement.X05 A1 source compiled NEWTABLE and SETLIST payloads inspect and run
+replacement.X05 A1 unreserved C frame refuses before Lua allocation or push
+replacement.X05 A2 invalid successful identity registry refuses without stack mutation
+replacement.X05 A2 prior successful identities are opaque without trusting empty tables
+replacement.X05 A2 successful atoms do not bless new writers or direct native roots
+replacement.C3 A earlier retained callable failure dominates preparation without entering handler
+replacement.C3 A every history ID preserves exact signed64 strings and authoritative presence
+replacement.C3 A every malformed history ID refuses as usage without poisoning preparation
+replacement.C3 A history selectors exclude each other and paging while paging defaults stay native
+replacement.C3 A parsed record invariants and general scalar limits refuse closed usage
+replacement.C3 A preparation requires a live selected owner and results survive moves and destruction
+replacement.C3 A pure preparation keeps typed defaults and capability-free path text as data
+replacement.C3 A repeated preparation charges cumulative native storage and preserves first terminal refusal
+replacement.C3 A request IDs use exact bounded ASCII and query selector
+replacement.C3 A role intent separates all pending hosts and retains matching presence guards
+replacement.C3 B2 absolute explicit hosts ignore irrelevant malformed snapshots
+replacement.C3 B2 creation refuses moved or poisoned original captures
+replacement.C3 B2 cumulative native reservation refuses huge snapshots before path allocation
+replacement.C3 B2 final admission verifies the original capture after registration
+replacement.C3 B2 final syntax and all path normalization precede metadata admission
+replacement.C3 B2 history admits its unused ledger without reading database content
+replacement.C3 B2 malformed oversized relevant snapshots retain text before size precedence
+replacement.C3 B2 missing nonregular and symlink leaf slots retain native errors
+replacement.C3 B2 move and one admission lifecycle preserve the first terminal failure
+replacement.C3 B2 named workspace uses approved lexical environment while explicit paths retain traversal
+replacement.C3 B2 optional host slots are admitted even without later service use
+replacement.C3 B2 original captured owner admits all role slots using explicit snapshots
+replacement.C3 B2 physical parent spelling refuses symlink missing and regular intermediates
+replacement.C3 B2 pure commands keep same-spelled host options as data
+replacement.C3 B2 root overlap checks both physical containment directions
+replacement.C3 B2 selected file aliases refuse while registry directory colocation succeeds
+replacement.C3 B2 verification retains original profile module workspace and late root receipts
+replacement.C4 A Lua allocation exhaustion and unsupported graph values suppress all results
+replacement.C4 A absent scalar defaults remain typed and input context mutations refuse
+replacement.C4 A accepts inner semantic errors for every render code and exact details
+replacement.C4 A closed context exposes no service
+replacement.C4 A executes exact retained function with scalar types defaults presence and empty context
+replacement.C4 A lifecycle refuses before admission and instruction failures remain terminal
+replacement.C4 A maximum summary and UTF8 boundaries are exact
+replacement.C4 A original command index differs from module and canonical order
+replacement.C4 A original receipt mutation suppresses execution and first failure survives moves
+replacement.C4 A rejects malformed return arity root envelope and summary protocol
+replacement.C4 A rejects public wrapper unknown code malformed semantic fields and details
+replacement.C4 A retained registration aliases proxy returns preserve lifetime across owner moves
+replacement.C4 A semantic text has no standalone quota and whole result obeys reserved codec bound
+replacement.C4 B2 changed original profile or admitted ledger refuses before native preparation
+replacement.C4 B2 invalid and moved history owners refuse and invalid ledger keeps typed format error
+replacement.C4 B2 original history owner prepares both formats without Lua and releases reader locks
+replacement.C4 B2 original history selectors preserve typed misses and original receipt priority
+replacement.C4 B3 C01 actual history method has one backing across indexing rawget next and pairs
+replacement.C4 B3 C01 history missing known services refuse through ordinary and raw aliases
+replacement.C4 B3 C01 missing raw service lookup poisons pure handler even when caught
+replacement.C4 B3 C01 service named data in scratch and sealed tables keeps ordinary lookup semantics
+replacement.C4 B3 ID strings absence presence and limit defaults reach actual retained handler
+replacement.C4 B3 actual retained history handler reads both formats and returns immutable native facts
+replacement.C4 B3 caught argument repeated and missing service attempts poison invocation
+replacement.C4 B3 caught completed Lua memory failure after native service remains terminal
+replacement.C4 B3 caught missing capability calls poison zero-capability handler without granting methods
+replacement.C4 B3 exact history correspondence permits copies and refuses fabricated summaries or facts
+replacement.C4 B3 history is lazy and semantic responses need no content read
+replacement.C4 B3 history selector conflicts refuse before handler regardless of ID magnitude
+replacement.C4 B3 manual native preparation cannot bypass once-only service and original receipt verification
+replacement.C4 B3 opaque ledger cannot stringify serialize substitute or expose host path
+replacement.C4 B3 original typed service failures survive Lua catches later errors moves and retries
+replacement.C4 B3 page cursor and explicit limit reach actual service with exact ID ABI
+replacement.C4 C1 retained projection frame preserves aliased input across sequential calls
+replacement.C4 C2 first service protocol refusal survives later instruction exhaustion
+replacement.C4 C2 one MiB assembly reverses optional removals and preserves metadata
+replacement.C4 C2 original native history failure precedes projection and later handler errors
+replacement.C4 C2 project ordering exact arguments once-only and missing methods stay terminal
+replacement.C4 C2 projection input kind and fabricated DATA refuse
+replacement.C4 C2 raw projection admission refuses malformed reserved and oversized retained output
+replacement.C4 C2 real original history projection and trusted assembly run in both formats
+replacement.C4 C2 services are lazy and performed history remains a permitted response
+replacement.C4 C2 trusted budget E preserves exact details through catches moves and retries
+replacement.C4 D3 captured source base trees preserve exclusions outputs and exact worker reviewer optionality
+replacement.C4 D3 discovery accepts pre discovery reference bytes and preserves them in authentic selected work
+replacement.C4 D3 exact empty arguments once missing services and forged role responses remain terminal
+replacement.C4 D3 lazy role service exposes exact methods and opaque original slots without reads
+replacement.C4 D3 named workspace optional budget and repeated owner construction preserve all trusted roots
+replacement.C4 D3 observations validate even without assertion transport and retain original details
+replacement.C4 D3 original root file and late slots refuse post admission changes before role publication
+replacement.C4 D3 same VM all job custom shapes yield authentic guidance and immutable retained handler aliases
+replacement.C4 D3 shipped role equals original trusted selection with exact empty guidance and metadata base
+replacement.C4 D3 unselected declaration schema failure prevents custom callbacks and root mapping is semantic
+replacement.C4 D3 unselected job custom shape semantic refusal remains first even when caught and followed by handler error
+replacement.C4 D4 all job validation and observations precede any projection
+replacement.C4 D4 custom shape headed guidance and appended sections preserve ordinary render bytes and W
+replacement.C4 D4 default role budget and explicit override preserve reverse custom omissions
+replacement.C4 D4 existing history projection keeps exact mandatory base and fixed budget
+replacement.C4 D4 mandatory budget error belongs to trusted assembly and survives caught handler error
+replacement.C4 D4 optional base priorities follow reverse custom omissions including checkpoint
+replacement.C4 D4 order once arguments missing services and forged results poison caught failures
+replacement.C4 D4 pair stays lazy and performed role DATA remains valid after project
+replacement.C4 D4 projection tenth ordinal and native section resource refusal remain terminal
+replacement.C4 D4 role projection refuses mismatched input and reserved section IDs
+replacement.C4 D4 role projection uses original role and exact shipped headed base
+replacement.C4 general decimal maximum remains Lua integer and history projection is lazy
+replacement.X05 A3 C01 handler and option controls retain original command
+replacement.X05 A3 C01 high catalog bytes remain valid
+replacement.X05 A3 C01 malformed sort keys retain original fields
+replacement.X05 A3 C02 sealing retains original mixed kind and module locations
+replacement.X05 A3 C03 two digit seal locations retain original indices
+replacement.X05 A3 C04 original descriptor errors survive canonical remap at two digit indices
+replacement.X05 A3 C04 successful callbacks leave module boundary and first refusal sticky
+replacement.X05 A3 C05 nested ordinary errors permit later valid registration
+replacement.X05 A3 C05 nested resource failure preserves first registration entry
+replacement.X05 A3 empty captured profile retains catalog and digest
+replacement.X05 A3 exact descriptor schemas and external capability restrictions
+replacement.X05 A3 external environment is pure frozen and self rooted
+replacement.X05 A3 instruction accounting does not restart for later chunks
+replacement.X05 A3 malformed reserved duplicate and caught registration refuse
+replacement.X05 A3 normalized options detect duplicate identities independently
+replacement.X05 A3 ordered external descriptors finalize and retain native owners
+replacement.X05 A3 profile owners refuse invocation before provider effects
+replacement.X05 A3 real capture owns original source after filesystem changes
+replacement.X05 A3 resource ceilings remain sticky when protected calls catch
+replacement.X05 A3 retained source byte and mode changes affect exact effective digest
+replacement.X05 A3 retained upvalue writers and native callable roots refuse
+replacement.X05 A3 separate identity namespaces and all reserved IDs
+replacement.X05 A3 source only chunks require actual zero results
+replacement.X05 A3 validates structural snapshot before any module evaluation
+replacement.X05 B1 accepted dependency base cycles precede every custom callback
+replacement.X05 B1 added full graph detects cycles for grouped units
+replacement.X05 B1 additive obligations retain unit endpoints and sorted synthetic identities
+replacement.X05 B1 all mandatory jobs validate before any selected callback
+replacement.X05 B1 controlled malformed Lua results cannot cross helper protocol
+replacement.X05 B1 cumulative obligations share native instruction accounting
+replacement.X05 B1 custom stages honor descriptor presence and worker sets
+replacement.X05 B1 dialect is internal and unknown custom shapes are references
+replacement.X05 B1 done edges compose with start and complete facet phases
+replacement.X05 B1 embedded default helper values remain exact
+replacement.X05 B1 every custom shape sees exact normalized base input
+replacement.X05 B1 guidance uses exact UTF8 and byte ceiling
+replacement.X05 B1 malformed shape success and refusal values fail internal
+replacement.X05 B1 normalization sorts additive IDs and preserves every base policy edge
+replacement.X05 B1 obligation quota accepts 10000 and refuses 10001
+replacement.X05 B1 obligations enforce exact identifiers endpoints phase and quality
+replacement.X05 B1 semantic refusal preserves existing error vocabulary
+replacement.X05 B1 semantic worker reviewer registry and subscription failures make zero calls
+replacement.X05 B2 A actual host profile selectors do not enter selected shape identity
+replacement.X05 B2 A definition lookup severs caller capture aliases and never invokes shape Lua
+replacement.X05 B2 A final shape definition matches independent canonical hash construction
+replacement.X05 B2 A repeated native definition work is cumulative and resource refusal is terminal
+replacement.X05 B2 A selected source owner and final descriptor determine shape identity
+replacement.X05 B2 A wrong namespace embedded and moved owners refuse without consuming lookup
+replacement.X05 B2 C actual retained shape preserves identity aliases immutable input and writable scratch
+replacement.X05 B2 C admission errors are nonconsuming and raw semantic refusal is ordinary data
+replacement.X05 B2 C caught illegal registration stays sticky while ordinary caught Lua errors recover
+replacement.X05 B2 C complete raw transport enforces exact 16 MiB without semantic acceptance
+replacement.X05 B2 C invalid retained returns are terminal with original shape location
+replacement.X05 B2 C prior lookup resource failure survives every later shape admission
+replacement.X05 B2 C repeated calls share invocation instructions and caught exhaustion stays terminal
+replacement.X05 B2 C wrong callable kind is nonconsuming and execution uses original shape ordinal
+replacement.X05 B3 A check response matches B1 refusal malformed and guidance boundaries
+replacement.X05 B3 A cumulative count checks before normalization expansion
+replacement.X05 B3 A embedded structural preparation keeps original normalized semantic bytes
+replacement.X05 B3 A finish binds supplied metadata and preserves B1 graph semantics
+replacement.X05 B3 A finish refuses result and definition correspondence mismatch
+replacement.X05 B3 A mandatory errors and base cycles precede structural requests
+replacement.X05 B3 A structural preparation preserves mixed order and exact five field inputs
+replacement.X05 B3 B actual profile phases bind same-call final definition and preserve immutable inputs
+replacement.X05 B3 B additive graph obligations preserve base edges and report grouped cycles
+replacement.X05 B3 B admission rejects wrong owners and retains private refs across moves and repeats
+replacement.X05 B3 B all-job base failure prevents the first retained callable
+replacement.X05 B3 B embedded-only semantic result remains exact through selected profile phases
+replacement.X05 B3 B final native descriptor stage policy applies before retained F
+replacement.X05 B3 B native callable failure is terminal with its first logical diagnostic
+replacement.X05 B3 B ordinary registry JSON refusal permits a later complete semantic operation
+replacement.X05 B3 B repeated semantic operations share finite budgets and retain first terminal refusal
+replacement.X05 B3 B semantic refusal and malformed response stop before later shape dispatch
+replacement.X05 B3 B validation input cannot inject phase context or select exported callables
+replacement.X05 B3 C custom obligations outside selected units are excluded without losing selected shape identity
+replacement.X05 B3 C guidance from nonmaterial notes leaves selected definition and W unchanged
+replacement.X05 B3 C native custom selection matches independently authored W and domain oracle
+replacement.X05 B3 C native shape failure remains terminal through selection retries
+replacement.X05 B3 C obligations retain unit endpoints group semantics and synthetic ID sorting
+replacement.X05 B3 C retained selection root survives repeats moves and immutable result lifetime
+replacement.X05 B3 C same-module presentation source changes conservatively couple custom W
+replacement.X05 B3 C selected module bytes and final revision affect every custom job role
+replacement.X05 B3 C selection refuses caller models and validates all jobs before role lookup
+replacement.X05 B3 C shipped pipeline W and complete selection stay exact with a selected profile
+replacement.X05 B3 C shipped selection remains byte exact through profile semantics for every job role
+replacement.X05 B3 C unrelated modules change provenance while custom W remains exact
+replacement.X05 B3 C zero and single scoped obligation arrays survive native selection transport
+replacement.X05 B4 A C01 complete job correspondence rejects missing duplicate and malformed identities
+replacement.X05 B4 A C01 same-shape reversed semantic jobs refuse before guidance rendering
+replacement.X05 B4 A custom worker reviewer recovery checkpoints remain optional assertions
+replacement.X05 B4 A empty singleton and grouped shape policies retain complete normalized scoped records
+replacement.X05 B4 A guidance uses exact display controls fences and remains outside W
+replacement.X05 B4 A nonincident obligations render empty policy without mutating selection
+replacement.X05 B4 A observation errors precede custom mandatory budget refusal
+replacement.X05 B4 A optional omission preserves mandatory shape policy and exact old removal order
+replacement.X05 B4 A pure custom rendering preserves exact envelope policy and full prerequisites
+replacement.X05 B4 A pure helper mandatory policy participates in exact byte budget
+replacement.X05 B4 A pure helper refuses mismatched job role and shape identities
+replacement.X05 B4 A pure helper shipped shapes exactly preserve every existing role render
+replacement.X05 B4 B C01 complete native render bound covers original oversized schema refusal
+replacement.X05 B4 B C01 ordinary responses retain exact errors recoverability and native lifetimes at every phase
+replacement.X05 B4 B actual captured profile renders authentic same-call immutable material repeatedly
+replacement.X05 B4 B native custom worker reviewer recovery retains assertions and policy exactly
+replacement.X05 B4 B native observation and budget refusals retain pure render ordering and recoverability
+replacement.X05 B4 B native rendering keeps grouped empty and singleton obligations and immutable shape input
+replacement.X05 B4 B native shape failure remains terminal across render selection validation moves and retries
+replacement.X05 B4 B native shipped and mixed render outputs preserve ordinary exact bytes
+replacement.X05 B4 B render preflight preserves both schema priorities before any shape execution
+replacement.X05 C1 assembly counts UTF8 bytes and preserves supplied trailing LF bytes
+replacement.X05 C1 custom mandatory sections refuse without truncating or omitting
+replacement.X05 C1 custom optional priority precedes every shipped optional while mandatory bytes survive
+replacement.X05 C1 empty and singleton assemblies retain exact metadata shape
+replacement.X05 C1 exact projection omission vector preserves removal order and byte counts
+replacement.X05 C1 notice growth can overflow after all optional text is removed
+replacement.X05 C2 A actual host profile selectors do not enter selected projection identity
+replacement.X05 C2 A cumulative definition exhaustion preserves first error across APIs and moves
+replacement.X05 C2 A definition lookup severs caller capture aliases and never invokes projection Lua
+replacement.X05 C2 A earlier shape resource refusal remains exact on projection lookup
+replacement.X05 C2 A every final projection descriptor field is material
+replacement.X05 C2 A final projection definition matches independent canonical hash construction
+replacement.X05 C2 A owned projection identity survives native owner destruction
+replacement.X05 C2 A selected source owner and final descriptor determine projection identity
+replacement.X05 C2 A wrong namespace embedded and moved owners refuse without consuming lookup
+replacement.X05 C2 B2 global reserved section union applies to both input kinds
+replacement.X05 C2 B2 immutable alias input and known proxy result retain transport identity
+replacement.X05 C2 B2 maximum section text and shared noncyclic sections remain valid
+replacement.X05 C2 B2 preadmission guards do not execute F or consume healthy owner
+replacement.X05 C2 B2 raw projection schema refuses malformed values before copy
+replacement.X05 C2 B2 retained projection admits both kinds and owns results across moves and destruction
+replacement.X05 C2 B2 retained projection arity and Lua errors are terminal at original projection index
+replacement.X05 C2 B2 section count and text bounds produce resource refusals
+replacement.X06 B3 A admission precedes registration so an invalid module never executes
+replacement.X06 B3 A begin_frame is once only and blocks adoption
+replacement.X06 B3 A declaration in an unsearchable directory refuses as open, not inspect
+replacement.X06 B3 A factories capture exactly once and adoption reads nothing
+replacement.X06 B3 A factory registration counters are deterministic across factories
+replacement.X06 B3 A into_extension adopts the same VM and receipts without recapture
+replacement.X06 B3 A known load opens once with original receipts and no frame
+replacement.X06 B3 A known load reads no declaration or registry content and admits metadata before registration
+replacement.X06 B3 A missing declaration refuses with the declaration adapter and leaves no owner
+replacement.X06 B3 A opaque open needs no supplied slots, reads none and is never known load
+replacement.X06 B3 A opaque owner adopts into a working extension
+replacement.X06 B3 A owner moves preserve address and counters and moved-from owners refuse
+replacement.X06 B3 A profile invocation static surface offers no prepare, vm or upgrade access
+replacement.X06 B3 A public validate_profile keeps its cumulative public semantics on a fresh registration
+replacement.X06 B3 A registration count stays one across into_extension
+replacement.X06 B3 A request intents without a codec2 profile selector refuse
+replacement.X06 B3 A supplied slot aliasing a trusted module refuses with unsafe_path and no partial owner
+replacement.X06 B3 B a custom job refusal after earlier shape dispatch is ordinary semantic data
+replacement.X06 B3 B a declaration the bound source cannot open refuses with its native diagnostic
+replacement.X06 B3 B a route phase refusal is ordinary semantic data before any job is captured
+replacement.X06 B3 B an invalid unselected job fails all-job validation and publishes nothing
+replacement.X06 B3 B capture change before prepare_load refuses capture_changed with zero declaration reads
+replacement.X06 B3 B cumulative instruction exhaustion preserves the first error and cleans nested roots
+replacement.X06 B3 B declaration leaf replaced before prepare_load refuses terminally before content
+replacement.X06 B3 B every job is validated exactly once
+replacement.X06 B3 B exhaustion depends on route consumption because the instruction budget is one cumulative counter
+replacement.X06 B3 B failure paths release nested temporaries
+replacement.X06 B3 B final intent must equal the bound intent
+replacement.X06 B3 B known-load owner refuses into_extension terminally-free and stays usable
+replacement.X06 B3 B one cumulative instruction and native byte budget spans route validation and preparation
+replacement.X06 B3 B one frame cumulative counters never reset
+replacement.X06 B3 B opaque consumed failed and moved-from owners refuse prepare_load
+replacement.X06 B3 B owner allocation charge is observable and covers the owner's own storage
+replacement.X06 B3 B owner implementation allocation is charged identically by both factories
+replacement.X06 B3 B prepare_load reads the declaration through the watched interposer
+replacement.X06 B3 B prepare_load reverifies captured profile content exactly three times
+replacement.X06 B3 B prepare_load succeeds through phase 2 for custom and mixed jobs
+replacement.X06 B3 B profile frame branches stay reachable and first terminal native failures are preserved
+replacement.X06 B3 B success releases nested temporaries to the exact pre invocation membership
+replacement.X06 B3 C a file replaced at any allocation inside prepare_load is never published as verified
+replacement.X06 B3 C allocation failure after validation maps to a resource refusal and leaves nothing retryable
+replacement.X06 B3 C an in place same size edit at any allocation inside prepare_load is never published as verified
+replacement.X06 B3 C derivation is charged to the one frame and counters never reset
+replacement.X06 B3 C derived interpretation decodes against the raw effective tree with equal separate versions
+replacement.X06 B3 C each derivation charge scales exactly with the bytes it covers
+replacement.X06 B3 C published data is immutable shared and independent of the prepared object
+replacement.X06 B3 C published workspace id follows the declaration and source modes are normalised
+replacement.X06 B3 C replacement before publication refuses terminally and publishes nothing
+replacement.X06 B3 C success consumes the owner, refuses retry and moved-from prepared objects refuse
+replacement.X06 B3 C success publishes source registry effective tree and bound intent for each fixture shape
+replacement.X06 B3 C verify_native_receipts fails with capture_changed after any captured input changes post publication
+replacement.X06 B3 C verify_native_receipts is repeatable on an untouched prepared profile and reads without consuming
+replacement.X06 D C01 a caught Lua error still leaves the budget counters monotone
+replacement.X06 D C01 admission metadata charges are part of the factory counter at open
+replacement.X06 D C01 declaration Lua memory counts against the composed live Lua ceiling
+replacement.X06 D C01 declaration chunks exhaust the composed invocation instruction ceiling across stages
+replacement.X06 D C01 declaration live Lua memory is released between chunks
+replacement.X06 D C01 native boundary is exercised by the post-validation derivation charges
+replacement.X06 D C01 native exhaustion after all-job validation refuses in preparation and cleans nested roots
+replacement.X06 D C01 opaque factory charges module reads like the known-load factory
+replacement.X06 D C01 repeated direct shape calls never refund native bytes
+replacement.X06 D C01 retained declaration values exhaust the composed native ceiling in the declaration stage
+replacement.X06 D C01 route stage exhaustion refuses before any declaration is captured
+replacement.X06 D C01 spec and job declaration instructions join the invocation counter
+replacement.X06 D C01 the composed sink alone enforces the invocation instruction ceiling on declaration chunks
+replacement.X06 D C01 workspace declaration instructions are carried into the invocation counter
+replacement.X06 D C02 a protocol failure caught by pcall in a known-load prepare frame stays terminal
+replacement.X06 D C02 a protocol or semantic failure caught by pcall in a profile-owned frame stays terminal
+replacement.X06 D C02 extension owners created without a factory keep role declarations outside the budget
+replacement.X06 D C02 role preparation charges declaration chunks to the factory budget
+replacement.X06 D C02 role preparation charges enumeration and registry reads to the factory budget
+replacement.X06 D C02 the composed sink refusal is the first failure on a declaration chunk that crosses the invocation ceiling
+replacement.X06 D C02 the composed sink refuses a pre-frame declaration chunk at the carried ceiling
+replacement.X06 D C03 a caught illegal registration followed by exhaustion keeps the first failure in a direct shape call
+replacement.X06 D C03 a recovered allocation refusal followed by an illegal registration keeps the resource failure in a direct shape call
+replacement.X06 D C03 ordinary fixtures keep a quarter of every observable ceiling free
+replacement.X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget
+replacement.X06 D a failure caught by Lua stays terminal with the first diagnostic
+replacement.X06 D capture stage charges every sealed byte to the one native counter
+replacement.X06 D conversion node ceiling refuses with nodes at a small ceiling
+replacement.X06 D destroying the consumed owner wrapper cannot erase prepared counters
+replacement.X06 D each custom shape dispatch adds to the one budget and nothing is refunded
+replacement.X06 D frame start inherits the factory counters and the prepared object keeps them
+replacement.X06 D invocation instruction ceiling is shared by every stage at a small ceiling
+replacement.X06 D lower inherited limits still win over the composed ceilings
+replacement.X06 D moving the prepared profile transfers counters and move assignment is safe
+replacement.X06 D native ceiling spans registration and frame at a small ceiling
+replacement.X06 D native exhaustion is resource_limit terminal and cleans nested roots
+replacement.X06 D prepared_profile has no new construction path
+replacement.X06 D registration instruction ceiling is separate and refuses at open with no owner
+replacement.X07 N30 history decode charges the factory budget owner
+replacement.X07 N30 late slot admission charges the factory budget owner
+replacement.X07 N30 projection transport charges the factory budget owner
+replacement.X07 N30 role capture charges the factory budget owner
+replacement.X07 closed factory keeps the original receipts through dispatch
+replacement.X07 closed factory registers exactly once for every family
+replacement.X07 exported command_vm invoke still refuses profile owners
+replacement.X07 new runtime refusals use only closed table messages
+replacement.X07 profile owner is consumed by its single dispatch
+replacement.X07 run_known refuses opaque and known load owners
+replacement.X07 run_known refuses options that differ from the admitted options
+replacement.X07 runtime has exactly one profile VM creation call
+replacement.X07 selector overload refuses the load alternative before capture
+replacement.X08 C01 native decimal id facts are bounded at INT64_MAX exactly
+replacement.X08 C01 role preparation outputs-off boundary pins the request-record conversion charge
+replacement.X08 C01 the C02 budget fixture root has a fixed canonical byte length
+replacement.command captured direct nested transitive and table key state refuses writes
+replacement.command caught execution depth stack and instruction exhaustion are terminal
+replacement.command execution caught live allocation exhaustion stays terminal
+replacement.command export publication state survives invalid projection and caught exhaustion
+replacement.command family order exact argument maps missing service and manufactured success are refused
+replacement.command frozen returned module table converts private backing without changing its tag
+replacement.command frozen shared cyclic and callable keys preserve reads and local scratch
+replacement.command history selects exact typed decimal strings and defaults without Lua number conversion
+replacement.command initialization semantic policy refuses invalid workspace IDs before publication
+replacement.command load altered retained callable carries its own original bytes and digest
+replacement.command load caught resource exhaustion is terminal before and after native completion
+replacement.command load defers provenance refusal until fresh acceptance
+replacement.command load malformed bundle semantic and captured result fail before completion
+replacement.command load native failure poisons caught subsequent services and wins
+replacement.command load private admission refuses missing duplicate capability and signature variants
+replacement.command load private catalog routes and interprets in retained VM with exact provenance
+replacement.command load refuses forged family order skipped duplicate and malformed arguments
+replacement.command load retains completion through altered malformed caught and throwing returns
+replacement.command load retains exact native receipt for replay uncertain and ordinary completion
+replacement.command load validates retained token head request and actor before services
+replacement.command native sealing accepts depth boundary and refuses next node with typed resource
+replacement.command native service failure wins over suppression retry and manufactured success
+replacement.command opaque path slots reject forged wrong-type reused extra-field and out-of-order calls
+replacement.command real callable replacement is effective and private binding survives later lexical replacement
+replacement.command registration and execution transfers share one cumulative conversion budget
+replacement.command registration caught exhaustion is terminal without native services
+replacement.command registry rejects malformed catalog owner callable ABI duplicate and missing entries atomically
+replacement.command registry seals mandatory embedded families without services
+replacement.command retained initialization and export handlers project exact native facts after moving VM
+replacement.command retained render runs real routing validation selection and projection with unchanged fixed export result
+replacement.command sealed globals libraries and engine cannot be altered by retained callable
+replacement.command typed native invocation rejects structural option invariants before services
+replacement.render checkpoint canonical JSON byte bound accepts exactly 8192
+replacement.render checkpoint is bounded role scoped unverified optional data
+replacement.render checkpoint missing paths stay valid and sorted
+replacement.render checkpoint paths refuse portable segment aliases
+replacement.render checkpoint sizes Glaze short escapes at the exact byte boundary
+replacement.render computes all six quota projections through the production export
+replacement.render distinguishes no capture empty capture and absent observations
+replacement.render errors unknown targets and stale producer vector without leaking assertions
+replacement.render exact budget boundaries optional removal order and overflow details
+replacement.render fences injections controls binary deletions and complete upstream differences
+replacement.render presentation isolates unrelated output edits and lists reviewer targets once
+replacement.render presentation keeps complete check fields and safe exact argument data
+replacement.render presentation retains every dependency facet pipeline and question policy field
+replacement.render preserves internal cross role and pipeline completion obligations
+replacement.render refuses malformed observations with exact schema and duplicates
+replacement.render reviewer obligation grouping follows worker assignments
+replacement.render semantic observation errors retain raw nested array indexes
+replacement.render validates assertions globally then filters role visibility
+replacement.runtime Glaze callbacks roundtrip structural data and ordinary failures
+replacement.runtime Glaze decode bounds remain ordinary typed data and declarations cannot call codecs
+replacement.runtime bounds Lua execution allocation and native amplification
+replacement.runtime enforces immaterial text payloads on both boundaries
+replacement.runtime exposes only the selected bounded table helpers
+replacement.runtime identifies the diagnostic actually escaping Lua
+replacement.runtime makes caught quota terminal before protected calls return
+replacement.runtime mutations cannot affect captured native input
+replacement.runtime native hash primitives match direct canonical identities
+replacement.runtime preserves ordinary protected call arity errors and nesting
+replacement.runtime preserves private declaration tags and raw captured bytes
+replacement.runtime prevents finalizers from bypassing instruction limits
+replacement.runtime refuses native count paths within a subprocess bound
+replacement.runtime refuses native sparse table range helpers
+replacement.runtime refuses native string pattern paths within a subprocess bound
+replacement.runtime refuses unsupported trusted returns and malformed native inputs
+replacement.runtime repairs traversal state after caught conversion failures
+replacement.runtime retains deterministic nonpattern string operations
+replacement.runtime retains rich stdlib diagnostics as structural data
+replacement.runtime states are fresh deterministic and separated from declarations
+replacement.schema ID record normalization sorts collections and preserves ordered lists
+replacement.schema JSON counts container entries for empty and nonempty terminals
+replacement.schema JSON node limit and request envelopes refuse deterministically
+replacement.schema diagnostics choose logical file field code deterministically
+replacement.schema enforces job intrinsic policy budgets preferences and sorted sets
+replacement.schema enforces registry descriptor types bounds enums and uniqueness
+replacement.schema enforces workspace intrinsic constraints and declaration constructors
+replacement.schema final text uses exact text identity and wrapped provenance
+replacement.schema production exports normalize every quota job and defaults
+replacement.schema refuses malformed constructors fields lists wrappers and versions
+replacement.schema resolves retained text from declaring directory with exact bytes
+replacement.schema resolves text in every job relative to that job declaration
+replacement.schema sorted records retain declaration indexes for intrinsic diagnostics
+replacement.schema strict JSON preserves container Unicode and integer identities
+replacement.schema strict JSON refuses malformed syntax text duplicates and bounds
+replacement.schema validates joined declaration and text paths before diagnostics
+replacement.schema validates unselected jobs registry and exact workspace routes
+replacement.selection distinguishes capture absence empty outputs and missing facet paths
+replacement.selection enforces aggregate byte file limits and normalized executable modes
+replacement.selection independently resolves every quota symbolic work manifest
+replacement.selection optional observations provenance syntax and set order remain immaterial
+replacement.selection pipeline derives obligations before scope and records remapped producers
+replacement.selection refuses inconsistent malformed and excessive retained byte records
+replacement.selection retains check applicability registry definitions and pipeline assignment scope
+replacement.selection scopes requirements and excludes optional policy and own bytes
+replacement.selection start facets are external exact content and completion is never inferred
+replacement.semantic additions retain per-unit applicability even when definition unions match
+replacement.semantic captured file ancestors cannot satisfy file facets
+replacement.semantic checks trusted allowed definitions conformance and per-unit additions
+replacement.semantic consumes sealed real quota topology after source trees are removed
+replacement.semantic contract complete dependencies allow only availability and still need start contract
+replacement.semantic distinguishes captured empty directories and current base boundary topology
+replacement.semantic legal qualities preserve unit edges and accepted quality exposes reviewer barrier
+replacement.semantic ownership covers excluded lists and work with frozen and excluded boundaries
+replacement.semantic phase cycles report actual deterministic closed traces
+replacement.semantic pipeline derives adjacent cross products and validates every stage
+replacement.semantic pipeline expands full adjacent stage work cross products before scope
+replacement.semantic production validates both quota jobs and preserves grouped unit obligations
+replacement.semantic refuses all union boundary overlaps and segment aliases
+replacement.semantic rejects incomplete duplicate or nonindependent assignments in unselected jobs
+replacement.semantic schema refusal precedes policy and diagnostics retain author indexes
+replacement.semantic validates references and namespaces before selecting any job
+replacement.ledger gated actual pathname replacement refuses before additional delegate
+replacement.ledger gated first header verification precedes real content reads
+replacement.ledger gated healthy reads preserve exact file bytes and permissions
+replacement.ledger gated independent owners and sticky late refusal
+replacement.ledger gated mmap performs actual mapping through native verification
+replacement.ledger gated owners retain VFS and guard through statements and transactions
+replacement.ledger gated partial base open closes before registration release
+replacement.ledger gated read-only SQL rejects writes and attached alternate database before open
+replacement.ledger gated underlying HAS_MOVED must succeed unmoved before read
+replacement.ledger gated verifier failures are typed and never cross SQLite C frames
+replacement.ledger gated versioned optional methods retain real reads
+replacement.ledger sqlite URI looking native filenames remain persistent files
+replacement.ledger sqlite VFS write and sync errors never report commit and permit complete retry
+replacement.ledger sqlite authorizer prevents manual transaction bypass
+replacement.ledger sqlite bare memory filename existing modes refuse missing files
+replacement.ledger sqlite bare memory filename persists through native path spellings
+replacement.ledger sqlite binding failures and preparation errors abandon writes
+replacement.ledger sqlite bounded busy refusal releases for retry
+replacement.ledger sqlite commit evidence distinguishes success inactive and deferred rollback
+replacement.ledger sqlite configured full rolls back complete symbolic storage state
+replacement.ledger sqlite extended constraints rollback and permit retry
+replacement.ledger sqlite failed deferred commit rolls back and releases writer
+replacement.ledger sqlite handled rollback write fault recovers complete state and permits retry
+replacement.ledger sqlite online backup propagates actual destination VFS failure
+replacement.ledger sqlite online backup supports pinned snapshots and rejects invalid owners
+replacement.ledger sqlite owns binary text blob empty and null values
+replacement.ledger sqlite process termination brackets actual commit sync and returned commit
+replacement.ledger sqlite readonly existing mode never creates missing files
+replacement.ledger sqlite separate reader makes commit busy and complete rollback reusable
+replacement.ledger sqlite separate writer process busy bound releases and retries
+replacement.ledger sqlite statements retain moved and destroyed connections
+replacement.ledger sqlite transactions commit abandon and survive wrapper destruction
+replacement.ledger sqlite unavailable cwd returns typed path failure
+replacement.storage SHARED-only reader does not excuse a leftover journal
+replacement.storage abort and destruction roll back
+replacement.storage begin_write refuses a missing ledger
+replacement.storage begin_write refuses a sidecar that appears while waiting for the writer lock
+replacement.storage begin_write sidecar refusal message is byte exact
+replacement.storage begin_write still refuses a persistent journal
+replacement.storage begin_write surfaces a non-ENOENT sidecar stat failure
+replacement.storage begin_write waits out a transient live writer journal
+replacement.storage entry and precommit identity checks are separate and site specific
+replacement.storage failed operation poisons and rolls back the transaction
+replacement.storage killed writer leaves a genuine hot journal that still refuses
+replacement.storage leftover journal refuses immediately on read and write paths
+replacement.storage live writer does not excuse a wal or shm sidecar
+replacement.storage live writer journal does not refuse the read path
+replacement.storage no_sidecars ignores writer liveness
+replacement.storage no_sidecars refuses a leftover sidecar without delay
+replacement.storage open_read and native no_sidecars surface a non-ENOENT sidecar stat failure
+replacement.storage probe fcntl failure surfaces as io
+replacement.storage probe lock is gone before the gated open reads
+replacement.storage probe releases the writer lock on the no-journal path
+replacement.storage request miss does not poison the transaction
+replacement.storage writable open refuses a sidecar created after the read check
+replacement.storage writable open tolerates a live writer journal
+replacement.storage write transaction matches the record writer byte for byte
+replacement.intent create refuses invalid arguments
+replacement.intent create returns exact immutable legacy data
+replacement.intent create_v2 carries the optional profile selector
+replacement.intent moved-from data refuses
+replacement.X06 C C01 profile completion stores a built-in job beside a custom job
+replacement.X06 C C01 seam interns the registry tree with the provenance limits
+replacement.X06 C no Lua runs while the profile write transaction is open
+replacement.X06 C profile capture receipt changes refuse capture_changed with rollback
+replacement.X06 C profile completion busy commit keeps the proposed bytes
+replacement.X06 C profile completion changed profile module creates a new revision
+replacement.X06 C profile completion commit hook failure is commit_uncertain
+replacement.X06 C profile completion in-use receipt refuses before any transaction
+replacement.X06 C profile completion moved-from profile refuses after CAS before any row
+replacement.X06 C profile completion receipt phases committed and replayed
+replacement.X06 C profile completion refuses a same id intent whose body differs from the bound intent
+replacement.X06 C profile completion refuses a workspace id different from the ledger
+replacement.X06 C profile completion refuses an intent that differs from the bound intent
+replacement.X06 C profile completion stores the derived trees and values from profile_acceptance_data
+replacement.X06 C profile completion stores the exact request_v2 body of the bound intent
+replacement.X06 C profile completion surface accepts only the opaque prepared profile
+replacement.X06 C profile completion unchanged second request is noop and replay bytes equal the result
+replacement.X06 C profile format mismatch refuses unsupported_version before the head read
+replacement.X06 C profile receipt race after staging is caught before commit
+replacement.X06 C profile receipt race inside the pre-commit metadata check is caught
+replacement.X06 C profile receipt refusal surfaces only the ledger capture_changed message
+replacement.X06 C profile replay precedes candidate inspection and needs no live inputs or profile
+replacement.X06 C profile same id with a different body conflicts before the head check
+replacement.X06 C profile source receipt changes refuse capture_changed with rollback
+replacement.X06 C profile stale head refuses revision_conflict with details and no row
+replacement.X06 C racing profile completions have exactly one winner
+replacement.X06 C seam interns an effective stdlib closure beyond the original tree limits
+replacement.C4 B2 format binds actual held descriptor before interpreting invalid header
+replacement.C4 B2 same bound guard gates format reads with sticky failure and embedded format parity
+replacement.D8 complete acceptance SQLITE_FULL enumerates journal and database writes with reusable request
+replacement.D8 complete acceptance process death at write sync and returned completion stays atomic
+replacement.X06 C C01 seam is unreachable from a plain acceptance importer
+replacement.X06 C C03 no passkey grant or test hook vocabulary remains under src
+replacement.X06 C C03 only the adapters call complete_native_candidate
+replacement.X06 C C03 profile adapter is a partition re-exported by the acceptance interface
+replacement.X06 C C03 runtime product sources import only ledger completion from the ledger
+replacement.X06 C C03 seam is a non-exported partition of the acceptance module
+replacement.X06 C C03 shared body refusal message bytes are pinned
+replacement.X06 C C03 workspace mismatch message bytes are pinned
+replacement.X06 C C04 acceptance_result stays outside the internal seam namespace
+replacement.X06 C C04 direct seam tests live in their own implementation unit and the adapter tests import normally
+replacement.X06 C C04 seam entities live in a nested non-exported internal namespace
+replacement.X06 D C01 variant ceiling mechanism does not depend on runtime source text
+replacement.X06 D composed ceiling constants keep their contract values
+replacement.X06 D runtime public surface and resource messages stay closed
+replacement.atomic SQLite mutation verification and commit failures roll back every prefix
+replacement.atomic acceptance initial noop change and revert retain chronology
+replacement.atomic concurrent identical requests replay and competing heads refuse within finite retry
+replacement.atomic conflict retains locked heads after rollback and later head advance
+replacement.atomic final native receipt refusal rolls back all tentative history
+replacement.atomic format request mismatch and profile refusal precede CAS and unusable candidate
+replacement.atomic identity bound receipt busy commit proves rollback and preserves proposed saved bytes
+replacement.atomic identity bound receipt capture and unavailable candidate refusals retain noncompletion
+replacement.atomic identity bound receipt late replay owns bytes before stale CAS and unusable candidate
+replacement.atomic identity bound receipt refuses replacement before exact replay
+replacement.atomic native format2 acceptance history export and backup restore survive removed inputs
+replacement.atomic replay precedes later head missing capture and moved input inspection
+replacement.atomic unknown request CAS precedes prepared inspection and leaves no rows
+replacement.atomic valid maximum record ID refuses allocation without writes
+replacement.atomic valid maximum revision permits noop but refuses changed allocation
+replacement.atomic workspace mismatch refuses before record writes
+replacement.ledger accepted history checks saved noop parent event references request body and bounded metadata
+replacement.ledger accepted history distinguishes unknown event and result payload versions
+replacement.ledger accepted history negotiates unknown event row versions separately from outer format
+replacement.ledger accepted history permits raw access to shape verified unsupported interpretation versions
+replacement.ledger accepted history refuses identical content hidden behind duplicate record IDs
+replacement.ledger accepted history rejects orphan and projection rows
+replacement.ledger accepted history rejects schema valid relational and chronology corruption unchanged
+replacement.ledger accepted history validates complete provenance workspace and interpretation shapes
+replacement.ledger complete accepted change noop and revert history reopens writes backs up and restores
+replacement.ledger complete accepted history survives explicit quiescent hot journal recovery
+replacement.ledger format all immutable triggers abort meaningful row mutations
+replacement.ledger format backup restore refuse existing destinations and sidecars unchanged
+replacement.ledger format backup restore reject invalid sources before target creation
+replacement.ledger format explicit recovery rolls back real killed dirty pages
+replacement.ledger format initialization refuses every existing destination sidecar
+replacement.ledger format initialization rejects invalid arguments and persists literal memory filename
+replacement.ledger format initializes exact metadata schema and Glaze event
+replacement.ledger format malformed btree and altered trigger refuse unchanged
+replacement.ledger format no replace and no follow initialization preserves all targets
+replacement.ledger format online backup and restore preserve initialized metadata and state
+replacement.ledger format recovery accepts redundant genuine hot journal
+replacement.ledger format recovery refuses super-journal authority unchanged
+replacement.ledger format recovery rejects deceptive and malformed pairs unchanged
+replacement.ledger format refuses every missing trigger and explicit index unchanged
+replacement.ledger format refuses foreign empty truncated and version files unchanged
+replacement.ledger format refuses metadata grammar and timestamp corruption
+replacement.ledger format rejects NUL suffixes and oversized encoded metadata unchanged
+replacement.ledger format rejects altered schema and extra objects unchanged
+replacement.ledger format reopens read only and writable without mutation
+replacement.ledger format schema and initialization rollback are one atomic transaction
+replacement.ledger format sidecars require recovery without writable fallback
+replacement.ledger format validates init cross rows and refuses populated history explicitly
+replacement.ledger format2 backup restore preserve format identity and never overwrite
+replacement.ledger format2 exact schema delta and native initialization retain format
+replacement.ledger format2 mixed request codecs preserve recorded history export and privacy
+replacement.ledger format2 native write transaction opens after complete typed integration
+replacement.ledger format2 reads native typed embedded request-v2 fixture
+replacement.ledger format2 refuses mutation before writable access and preserves codec1 reads
+replacement.ledger format2 refuses schema header metadata mismatch and codec2 rows unchanged
+replacement.ledger format2 request-v2 malformed and mismatched rows refuse unchanged privately
+replacement.ledger format2 structurally decodes private profile request without claiming acceptance
+replacement.ledger reader ordinary failures invalidate through moves and preserve metadata
+replacement.ledger record IDs guard signed overflow and preserve existing rows
+replacement.ledger record only backups restoration and real hot recovery preserve records
+replacement.ledger record reader remains independent and blocked commit rolls back
+replacement.ledger record transaction errors and abandonment roll back every prefix
+replacement.ledger records intern all kinds with exact reuse and ordered edges
+replacement.ledger records refuse malformed metadata and unknown value codecs before use
+replacement.ledger records reject inconsistent graphs and encoded rows without mutation
+replacement.ledger refuses orphan revision history after valid record storage
+replacement.ledger request children of either codec refuse format2 directories
+replacement.ledger typed DELETE snapshot blocks commit until released then fresh reads observe later head
+replacement.ledger typed initialized snapshot has absent head and revision but owned initialization event
+replacement.ledger typed pages enforce exclusive ascending bounded snapshot cursors
+replacement.ledger typed read failures invalidate every read method while cached metadata survives
+replacement.ledger typed reads distinguish optional misses from invalid arguments and retain owned rows
+replacement.ledger typed reads permit raw unsupported interpretation without poisoning history
+replacement.ledger typed reads preserve exact initial change noop revert rows and replay bytes
+replacement.ledger typed request read fault invalidates all methods after real SQLite IOERR
+replacement.ledger verified reader must not silently switch snapshots after storage read failure
+replacement.ledger writer explicit abort is idempotent releases lock and prevents commit
+replacement.ledger writer read failure invalidates and rolls back uncommitted prefix
+replacement.recorded effective history selects wider fixed tree profile for valid closure above4096 files
+replacement.recorded effective provenance refuses request v1 independently of format2 schema
+replacement.recorded history requires request selector family on accepted and noop events
+replacement.recorded profile actual raw tree workspace digest catalog and selection forgeries refuse
+replacement.recorded profile history reconstructs effective v2 and projects every selector
+replacement.recorded profile saved accepted and noop replay precede unusable preparation while fresh profile stays refused
+replacement.recorded profile unknown interpretation preserves raw export without semantic payload
+replacement.recorded profile unknown manifest refuses typed unsupported before export
+replacement.tree core effective provenance byte budgets preserve original ceilings
+replacement.tree core effective provenance counts expanded file occurrences
+replacement.tree core effective provenance file boundary validates before callbacks
+replacement.tree core effective provenance preserves lower path depth and file limits
+replacement.tree core exact portable digest and reconstruction without storage
+replacement.tree core preserves original typed callback failures and exception ownership
+replacement.tree core reconstruction rejects identity and empty nonroot directories
+replacement.tree core rejects invalid inputs before interning and matches digest refusals
+replacement.tree empty root composition explicit abort and abandonment
+replacement.tree exact and excessive byte budgets source and provenance
+replacement.tree exact and excessive file bounds for both profiles and expanded shared records
+replacement.tree exact and excessive path length depth and portable segment boundaries
+replacement.tree exact bytes modes sorted topology and immutable history
+replacement.tree exact source directories and independent provenance directory allowance
+replacement.tree expanded shared subtrees enforce payload occurrences and profile difference
+replacement.tree immutable reader malformed roots fail without successful partial output
+replacement.tree input duplicate aliases conflicts grammar and modes abort prior pending records
+replacement.tree pending records rollback through idempotent abort and abandoned writer
+replacement.tree preserves typed storage refusal without hash overrides
+replacement.tree provenance maximum induced directories count shared occurrences
+replacement.tree typed roots digest references and non-tree children refuse atomically
+replacement.ledger format2 publication faults retain complete target only after atomic publication
+replacement.ledger format2 publication late sidecar refuses and preserves arriving sidecar
+replacement.ledger format2 publication no replace preserves target arriving at link boundary
+replacement.ledger publication faults retain complete target only after atomic publication
+replacement.ledger publication late sidecar refuses and preserves arriving sidecar
+replacement.ledger publication no replace preserves target arriving at link boundary
+replacement.ledger forced ambiguous exact plus unequal buckets refuse every opening path unchanged
+replacement.ledger forced collisions refuse every kind and roll back prefix records
+replacement.ledger forced directory collisions compare exact database local child IDs
+replacement.provenance codec complete set count and exact byte bounds include both synthetics
+replacement.provenance codec historical verification rejects incomplete malformed unsupported and wrong-mode sets
+replacement.provenance codec registry retains exact captured bytes and normalized mode
+replacement.provenance codec rejects unsafe duplicate aliased and reserved original paths
+replacement.provenance codec source order separator and boundaries remain portable identity
+replacement.interpretation codec assembly matches saved canonical fixtures exactly
+replacement.interpretation codec canonical storage preserves containers signed32 and exact byte ceiling
+replacement.interpretation codec distinguishes supported historical envelopes from future policy versions
+replacement.interpretation codec refuses malformed fixed envelopes types containers ordering and correspondence
+replacement.provenance complete set count and exact byte bounds include both synthetics
+replacement.provenance generated originals and legacy assembled chunk match exact authored bytes
+replacement.provenance historical verification rejects incomplete malformed unsupported and wrong-mode sets
+replacement.provenance registry retains exact captured bytes and normalized mode
+replacement.provenance rejects unsafe duplicate aliased and reserved original paths
+replacement.provenance source order separator and boundaries remain portable identity
+replacement.interpretation canonical storage preserves containers signed32 and exact byte ceiling
+replacement.interpretation complete quota outputs match reviewed JSON and canonical goldens
+replacement.interpretation distinguishes supported historical envelopes from future policy versions
+replacement.interpretation keeps live schema and ownership diagnostics with logical locations
+replacement.interpretation orders all jobs independently of workspace routing and captured order
+replacement.interpretation preserves absent optional notes without manufacturing fields
+replacement.interpretation preserves every existing normalized and semantic field and captured provenance
+replacement.interpretation refuses malformed fixed envelopes types containers ordering and correspondence
+replacement.interpretation separates native runtime resources from trusted validation
+replacement.interpretation stored record roundtrip reopens exact historical bytes without Lua
+replacement.ledger history codec accepted changed noop and reverted independent event wires
+replacement.ledger history codec canonical decimal and optional head token refusals
+replacement.ledger history codec duplicate escape whitespace ordering and trailing bytes refuse
+replacement.ledger history codec event exact field sets and types refuse malformed schema
+replacement.ledger history codec initialization exact existing format payload
+replacement.ledger history codec ledger identity and bounded ASCII request grammar
+replacement.ledger history codec maximum signed IDs and nonconsecutive identities roundtrip
+replacement.ledger history codec result exact field sets and types refuse malformed schema
+replacement.ledger history codec saved load result keeps returned revision parent on noop
+replacement.ledger history codec typed state and enum validation refuses invalid encoding
+replacement.ledger history codec unsupported versions and redacted fixed byte ceiling failures
+replacement.acceptance prepared binds selected exact snapshot bytes after disk changes
+replacement.acceptance prepared bounds external inputs before owning bytes
+replacement.acceptance prepared enforces source directory ceiling on genuine captured selections
+replacement.acceptance prepared owns values across moves destruction and final native verification
+replacement.acceptance prepared refuses empty duplicate absent invalid and excessive selections
+replacement.acceptance prepared rejects canonical version mismatch unsupported and workspace shape
+replacement.acceptance prepared rejects malformed canonical manifest and retains original parsed ownership
+replacement.acceptance prepared requires exactly registry input json
+replacement.acceptance prepared reverifies stdlib files manifest aliases mode and recorded digest
+replacement.acceptance prepared selects only explicit workspace paths and ignores other logical roots
+replacement.acceptance request intent preserves exact shared record bytes and positive signed64 heads
+replacement.acceptance request intent rejects grammar relative nonnormalized and invalid text arguments
+replacement.acceptance request v2 owns exact normalized embedded and profile selectors
+replacement.workspace names and explicit targets frame the same pure future load request
+replacement.atomic codec2 forced request collision rolls back and redacts private digest
+replacement.atomic exact private signed allocator boundary covers event and revision exhaustion
+replacement.atomic forced request digests separate codec buckets and preserve version body conflict
+replacement.atomic targeted collisions refuse file directory interpretation and request without prefixes
+replacement.atomic variant final receipt mutation cannot publish changed capture
+replacement.history initialized views use one read owner and typed misses
+replacement.history metadata preserves native IDs above int32 exactly
+replacement.history summary keeps structured payload and absent IDs without null
+replacement.source export accepts an unsupported interpretation and an empty stored root
+replacement.source export accepts relative target and old reverted revisions
+replacement.source export handles the source file ceiling and thousands of directories with bounded descriptors
+replacement.source export preserves exact bytes modes and source-only closure
+replacement.source export refuses existing entries and unsafe original paths
+replacement.source export supports bounded-depth traversal under a low descriptor ceiling
+replacement.source export fault boundaries clean before publication and preserve after
+replacement.source export no-replace race preserves arriving target
+replacement.source export refuses cleanup of replaced or unowned entries
+replacement.source export termination leaves absent or complete target and never adopts leftovers
+replacement.X06 D C01 source capture bundle charges refuse at their own ceiling
+replacement.X06 D C01 source capture charges the bundle copy of every captured file
+replacement.X06 D C01 source capture refuses at the composed ceiling as resource_limit
+replacement.X06 D C01 source capture threads one budget through workspace spec and job declarations
+replacement.source capture N1 unreadable declaration is not reported as missing
+replacement.source capture N2 refuses swapped receipt roles
+replacement.source capture N3 moved-from receipt is invalid_state but poisoned and foreign stay capture_changed
+replacement.source capture absence is a signal from admission, not a message match
+replacement.source capture admission precedes registration and reads no declaration content
+replacement.source capture correspondence refuses an unsealed or released source as mismatch
+replacement.source capture correspondence refuses every single bundle tamper as mismatch
+replacement.source capture correspondence returns the exact sorted workspace paths for a good bundle
+replacement.source capture factories require three original receipts and refuse moved and poisoned authority
+replacement.source capture receipt accessors report moved_from and role
+replacement.source capture refuses a declaration replaced between registration and first read
+replacement.source capture refuses a hard-linked trusted declaration before content or factory
+replacement.source capture refuses a registry hard-linked to the declaration as path_denied
+replacement.source capture refuses receipts outside one original admission at construction
+replacement.source capture refuses retained authority for another selection or admission
+replacement.source capture registry colocation binds standalone input and refuses trusted alias
+replacement.source capture retained flow survives moves and detects post-seal mutation
+replacement.source capture terminal failure after capture refuses later operations
+replacement.source capture vanished declaration reports admitted change beside embedded missing
+replacement.load capture prepares complete multi-job closure and exact trusted provenance without source trees
+replacement.load capture refuses B M membership headers and captured reference mismatches
+replacement.load capture rejects malformed and mismatched routes before routed reads
+replacement.load capture retains original selected receipts and ignores unrelated siblings
+replacement.load capture seals original workspace and refuses missing linked or oversized references
+replacement.load capture state moves failures paths aliases provenance and bounds are terminal
+replacement.load capture trusted all-job validation preserves unselected and duplicate logical diagnostics
+replacement.metadata continuity acceptance precommit includes selected format
+replacement.metadata continuity locked begin includes selected format
+replacement.metadata continuity record precommit includes selected format
+replacement.replacement.effective provenance closed exact manifest and framing
+replacement.replacement.effective provenance combined manifest one MiB ceiling
+replacement.replacement.effective provenance component and defensive outer resource refusals
+replacement.replacement.effective provenance embedded source order assembly and catalog owners
+replacement.replacement.effective provenance external owners bind profile ordinals
+replacement.replacement.effective provenance full membership and modes
+replacement.replacement.effective provenance independent exact bytes and digest
+replacement.replacement.effective provenance maximum reachable file membership
+replacement.replacement.effective provenance prefixed path byte and depth limits
+replacement.replacement.effective provenance profile module order and correspondence
+replacement.replacement.effective provenance raw whitespace modes and source bytes affect identity
+replacement.replacement.effective provenance reachable external byte and profile boundaries
+replacement.X05 A0 active C frame reservation allocation refusal preserves state
+replacement.X05 A0 allows curated helpers and invocation local string iterators
+replacement.X05 A0 altered retained scalar writer bundle refuses
+replacement.X05 A0 audited exact shipped five-handler bundle creates
+replacement.X05 A0 audits actual helper closures with shared cell and graph aliases
+replacement.X05 A0 checks graph prototype instruction depth and arena ceilings
+replacement.X05 A0 distinguishes table alias freezing from lexical sealing
+replacement.X05 A0 native identity snapshot allocation failure stays protected
+replacement.X05 A0 permits invocation local nested counters and helpers
+replacement.X05 A0 refuses C roots retained iterators and same pointer new contexts
+replacement.X05 A0 rejects direct inherited shared and unreachable retained writes
+replacement.X05 A0 reserved active C frame audits realistic deep retained graph
+replacement.X05 A0 source compiled LOADKX fits actual module and Lua memory ceilings
+replacement.X05 A0 source compiled NEWTABLE and SETLIST payloads inspect and run
+replacement.X05 A0 unreserved C frame refuses before Lua allocation or push
+replacement.v2 asserted catalog requires actual manifest owner ordinals before equality
+replacement.v2 custom shipped classification and exact E membership cannot be substituted
+replacement.v2 every native allocation failure remains a redacted typed resource refusal
+replacement.v2 exact supported constants and embedded versions equality precede tree
+replacement.v2 fixed keys kinds B S job ordering and selected syntax are malformed
+replacement.v2 forged selfconsistent catalog digest and definition still require raw tree binding
+replacement.v2 independent mixed and empty profile canonical bytes bind and roundtrip
+replacement.v2 normalized obligations validate exact shape source sorted IDs work roles phase quality
+replacement.v2 per job normalized obligation maximum accepts exactly ten thousand sorted IDs
+replacement.v2 preallocation byte tree guidance obligation and cyclic graph limits are typed
+replacement.v2 prerequisite lower provenance adapters preserve canonical resource failures
+replacement.v2 raw membership mode manifest order owner module and embedded tampering refuse
+replacement.v2 results sever all B S raw tree aliases
+replacement.v2 selected definition spelling refuses untagged uppercase malformed UTF8 and NUL
+replacement.v2 unrelated module bytes and reordered ordinals change tree but preserve selected shape H
+replacement.v2 valid normalized guidance boundary and preallocation canonical counts are explicit
+replacement.recorded canonical inputs preflight both byte limits and bounded depth before family hints
+replacement.recorded direct old decoder keeps embedded versions allocation refusal typed
+replacement.recorded dispatch maps every one-shot allocation refusal to typed resource
+replacement.recorded dispatch preserves original v1 decoder supported future and malformed precedence
+replacement.recorded dispatch supports both fixed families with recomputed tree workspace and owned bytes
+replacement.recorded embedded valid provenance reaches4096 file ceiling with owned supported decode
+replacement.recorded family markers are presence hints and numeric future version stays embedded
+replacement.recorded future fields and malformed manifest markers never become unsupported semantics
+replacement.recorded marker mismatches cannot grant effective provenance authority
+replacement.recorded original embedded manifest keeps typed future manifest refusal
+replacement.recorded paired failures follow canonical topology provenance decoder correspondence order
+replacement.recorded raw tree fixed byte ceilings distinguish embedded16 and effective32 MiB
+replacement.recorded raw tree fixed count ceilings bound admission before provenance
+replacement.recorded unknown effective manifest differs from unknown interpretation and malformed manifest
+replacement.recorded unknown semantics still require workspace and raw tree digest correspondence
+replacement.recorded unsupported interpretation refuses malformed structure and separate versions mismatch
+replacement.recorded unsupported v2 cannot skip changed actual raw provenance
+replacement.recorded valid embedded provenance reaches exact16MiB aggregate ceiling
+replacement.CLI11 rejects repeated handler bindings before execution
+replacement.X01 CLI11 envelope and sealed catalog matrix
+replacement.X01 CLI11 opaque positional probe rejects prefix flags before catalog selection
+replacement.X01 CLI11 parsed profile scalar supports existing explicit value policy
+replacement.X07 adapter maps every registration refusal to its closed code message and exit
+replacement.X07 adapter never prints fields host paths or tracebacks
+replacement.X07 adapter redacts malformed trusted payloads as internal protocol
+replacement.X07 cmd sources open the profile owner through one factory call per branch
+replacement.X07 command sources add no diagnostic outside the closed table
+replacement.X07 decimal and limit boundary vectors through the real CLI
+replacement.X07 early lookup scope closes before profile capture
+replacement.X07 embedded format2 load keeps v1 interpretation and versions
+replacement.X07 embedded load on format1 keeps request_v1
+replacement.X07 embedded load on format2 frames request_v2 with embedded selector
+replacement.X07 envelope and bootstrap source has no manual argv scan
+replacement.X07 export known slots refuse before registration
+replacement.X07 export refuses a target overlapping the trusted root before publication
+replacement.X07 extension and profile rows print one JSON line and nothing during registration
+replacement.X07 extension preparation usage prints the public usage bytes
+replacement.X07 extension responses are the closed extension_v1 and match retained services
+replacement.X07 final syntax error in an extension tail precedes late slot overlap
+replacement.X07 history and export responses are identical with and without a profile
+replacement.X07 history and export under a profile validate the profile before dispatch
+replacement.X07 history known slot refuses a ledger alias before registration
+replacement.X07 history_id after-event with limit pages through the real CLI
+replacement.X07 history_id invalid spellings refuse before the handler
+replacement.X07 history_id misuse is refused at registration through the real CLI
+replacement.X07 history_id selector conflicts are usage regardless of magnitude
+replacement.X07 history_id vectors report Lua type and presence through the real CLI
+replacement.X07 init known slot is alias only and runs before registration
+replacement.X07 init refuses a format selector option
+replacement.X07 ledger aliasing the profile or a module refuses for history export and load
+replacement.X07 load known slots refuse before registration
+replacement.X07 native format1 initializer remains available to fixtures
+replacement.X07 prefix count is three or four and dot slash help is a valid selector
+replacement.X07 production envelope rows refused after capture and registration are final usage
+replacement.X07 production envelope rows refused by syntax and prefix usage never access the profile
+replacement.X07 production envelope rows refused by the probe never access the profile
+replacement.X07 production handler rows succeed
+replacement.X07 production matrices enumerate every X01 row
+replacement.X07 production normalization and known slot rows refuse at their step
+replacement.X07 production opaque probe rows refuse or admit at their step
+replacement.X07 production selected help rows capture and register the profile
+replacement.X07 profile environment variables are ignored without with-profile
+replacement.X07 profile invocation reads cwd and environment once
+replacement.X07 profile load binds the early lookup intent through prepare_load
+replacement.X07 profile load on a format1 ledger refuses before profile access
+replacement.X07 profile load records request_v2 selector effective stdlib and v2 interpretation
+replacement.X07 profile load replays a saved request before touching the profile
+replacement.X07 profile load with a different body conflicts before profile access
+replacement.X07 profile preparation semantic error exits by code
+replacement.X07 profile selector honours the path ceiling and the request ceiling wins
+replacement.X07 profile selector normalizes lexically without existence
+replacement.X07 projection omission vector reproduces 87 94 and 59 bytes through the CLI
+replacement.X07 public init creates a format2 ledger with unchanged response
+replacement.X07 render known slots refuse overlap before registration
+replacement.X07 role read overlaps and aliases refuse before the handler runs
+replacement.X07 root help bytes are unchanged and omit with-profile
+replacement.X07 root level stdlib-profile flag is usage
+replacement.X07 selected help bytes are exact sorted and escaped
+replacement.X07 selected help ceiling is one mebibyte by default and bootstrap passes none
+replacement.X07 selected help refuses above the help ceiling
+replacement.X07 selector with invalid UTF-8 or NUL is prefix usage before profile access
+replacement.X07 shipped tail under a profile keeps probe option state and scalar command words stay values
+replacement.X07 src cmd contains no profile VM creation site
+replacement.X07 wave B fixture modules register natively and misuse modules are refused
+replacement.X07 wave B reporter and projection modules behave natively as the rows expect
+replacement.X08 Linux publish and metadata branches keep their no-replace and path-only flags
+replacement.X08 platform branches are exactly the audited set
+replacement.export adapters redact refusals and validate generated stage tokens
+replacement.export binds strict explicit options before native access
+replacement.help is explicit and buffered
+replacement.history CLI11 bindings validate selectors before any ledger access
+replacement.init handler binds explicit options without filesystem access
+replacement.invocation path refusal precedes cwd reads and native services
+replacement.invocation paths snapshot cwd and workspace environment only when needed
+replacement.invocation refuses environment views before snapshot ownership and cwd
+replacement.ledger authoritative diagnostics include stable revision and collision detail
+replacement.ledger diagnostic malformed typed payloads refuse with exact redacted internal envelope
+replacement.ledger error adapter pins every typed refusal without native messages
+replacement.legacy commands and implicit discovery are refused
+replacement.load handler attaches six required text bindings
+replacement.load intent aggregate record bound remains a resource refusal before ledger access
+replacement.load invocation snapshots one cwd and environment with lexical targets
+replacement.missing explicit files refuse without partial output
+replacement.render handler attaches CLI11 bindings without executing capture
+replacement.render mapping refusal precedes missing routed inputs
+replacement.export postpublication encoding refusal returns prebuilt uncertainty
+replacement.export service facts allocation failure retains adapter publication
+replacement.retained_cli
+replacement.workspace_selector_cli
+replacement.load_cli
+x07.substitute_init
+x07.substitute_history
+x07.substitute_export
+x07.late_receipt_survives_to_seal
+x07.response_ceiling_extension
+x07.replay_after_inputs_deleted
+x07.replay_conflict_matrix
+x07.replay_same_selector_changed_bytes_new_provenance
+x07.relookup_equal_replay_before_stale_cas
+x07.relookup_unequal_conflicts
+x07.two_process_cas_one_winner
+x07.receipt_races_refuse_before_authorization
+x07.final_race_rolls_back_before_commit
+x07.post_commit_allocation_failure_keeps_receipt
+x07.post_commit_encoding_failure_keeps_receipt
+x07.post_commit_stdout_failure_keeps_receipt
+x07.workflow_shape_load
+x07.workflow_render_external
+x07.workflow_verb_history_export

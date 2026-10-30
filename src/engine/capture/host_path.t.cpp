@@ -81,6 +81,17 @@ TEST_CASE("host path sanitizes invalid file traversal and missing parents", "[ho
   for (const auto& name : {"absent", "absent/../physical", "loop"})
     refused(resolve_explicit_directory((t.path / name).string()), "io", "Cannot resolve explicit input path");
 }
+TEST_CASE("host path maps a regular file followed by parent traversal to the root directory error", "[host_path]") {
+  temporary t;
+  for (const auto& name : {"physical/file/..", "file-link/..", "alias/file/..", "physical/file/../file", "lexical/hop/../file/..",
+                           "physical/file/./.."})
+    refused(resolve_explicit_directory((t.path / name).string()), "io", "Cannot resolve explicit root directory");
+}
+TEST_CASE("host path keeps missing and unresolvable directory spellings as input path errors", "[host_path]") {
+  temporary t;
+  for (const auto& name : {"absent/../physical", "physical/file/x/.."})
+    refused(resolve_explicit_directory((t.path / name).string()), "io", "Cannot resolve explicit input path");
+}
 TEST_CASE("intent path normalizes nonexistent lexical equivalents against explicit cwd", "[host_path]") {
   // No root here is required to exist; the cwd is data, not ambient process state.
   CHECK(normalize_intent_path("../input/./job/../workspace.lua", "/uncreated/cwd") == "/uncreated/input/workspace.lua");

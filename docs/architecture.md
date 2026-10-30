@@ -626,6 +626,17 @@ bytes; intermediate links and physical link/.. semantics remain unchanged.
 Filesystem exceptions become the same redacted capture I/O diagnostic; allocation
 failures propagate to the caller's boundary. Resolution remains cooperative.
 
+Directory resolution first runs a file-local, platform-neutral pre-check (X08-C01): when a
+lexical component is `..` and the status of the prefix before it exists and is not a
+directory (a regular file or a link to one), the spelling is refused with the existing
+`io` "Cannot resolve explicit root directory" before `canonical` runs. Empty and `.`
+components are skipped as the walker skips them, any status error is ignored so missing
+and unresolvable spellings keep "Cannot resolve explicit input path", and the file
+resolver does not call the check. It exports no symbol and has no platform branch. The
+check runs first on every platform, so on macOS `alias/file/..` now yields that `io`
+diagnostic instead of the final-root-alias refusal, and `physical/file/../file` given as
+a directory yields it instead of "Explicit root must be a directory".
+
 The separate `normalize_intent_path(argument, explicit_cwd)` is a pure lexical
 boundary for future load request identity. It requires nonempty non-NUL UTF-8 and
 an absolute already normalized explicit cwd, normalizes absolute arguments or
@@ -1590,3 +1601,35 @@ closed code, message and exit, with redaction. Every message literal in
 non-test `src/cmd/planar` belongs to the closed message table. Public `init`
 creates format2. See [x07-addendum](vernacular/x07-addendum.md) and
 [profile preparation architecture](vernacular/profile-preparation-architecture.md).
+
+## X08 test-only acceptance layer
+
+X08 adds test-only infrastructure beside the product. It adds no module, dependency
+edge or product source file, and the module graph above is unchanged. Its parts are:
+
+- `tests/acceptance/x08_cli.py`, `x08_adversarial.py`, `x08_e12.py`,
+  `x08_timeout.py` and `x08_recipe.py`: Python process suites that drive the built
+  `planar` binary, or the E12 variant, in scratch roots. Each ctest case names one
+  entry point.
+- `tests/native/v5-02-x08-support/generate.py`: produces the single E12 variant
+  from the shipped sources. The variant is built under the build directory as the
+  test executable `planar_x08_variant_0`, and the checkout is never modified. The
+  generator keeps a reversible audit, so the variant differs from the product only
+  in the planned substitutions: one `json.lua` comment, a poison chunk and the
+  `parse_json` body.
+- `tests/native/v5-02-x08-support/x08.cmake`: registers the 26 `x08.*` cases and the
+  variant build. The root `CMakeLists.txt` includes it with one line; the product
+  `CMakeLists.txt` files are not edited.
+- `tests/native/v5-02-x08-support/validate.py`: the closeout validator. It reads raw
+  evidence logs and `requirements.json`, uses only the Python standard library, and
+  runs no build or product binary.
+- `scripts/linux-gate.sh`, `scripts/linux-gate.Dockerfile` and
+  `scripts/linux-gate.Dockerfile.dockerignore`: the Linux build-and-test recipe,
+  run through Docker from macOS. The image copies the source tree, runs as a
+  non-root user and exports only its gate logs. It is verification tooling, not a
+  distribution or installation path.
+
+The variant binary links the same product sources as `planar`, with its embedded
+stdlib and generated poison chunk substituted. The test-only layer therefore adds
+no new product dependency. The gate procedure and its limits are in
+[testing](testing.md#x08-acceptance-gate).

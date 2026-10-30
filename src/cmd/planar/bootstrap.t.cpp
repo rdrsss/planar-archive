@@ -3030,3 +3030,127 @@ TEST_CASE("X07 wave B reporter and projection modules behave natively as the row
       CHECK(data->fields.at("value")->fields.contains(key));
   }
 }
+// X08 platform audit (I18, I19). Guard tokens are split by adjacent literals so this file never contains them whole; the
+// scan also excludes this file by path. The audited counts are the tree at the X08 cutover: any new platform branch, or an
+// edit to a Linux flag, must update this table in the same reviewed change.
+namespace x08 {
+namespace fs = std::filesystem;
+
+// src/ is three levels above this file (src/cmd/planar/bootstrap.t.cpp).
+fs::path source_root() {
+  return fs::path(__FILE__).parent_path().parent_path().parent_path();
+}
+
+std::vector<std::string> platform_tokens() {
+  return {"__"
+          "APPLE__",
+          "__"
+          "linux__",
+          "__"
+          "unix__",
+          "__"
+          "MACH__",
+          "TARGET_"
+          "OS_",
+          "_"
+          "WIN32",
+          "__"
+          "gnu_linux__"};
+}
+
+// Per-file occurrence counts of the platform tokens under src, vendor and this file excluded; clean files are absent.
+std::map<std::string, std::size_t> platform_counts(std::size_t& scanned) {
+  const auto                         root = source_root();
+  std::map<std::string, std::size_t> counts;
+  for (const auto& entry : fs::recursive_directory_iterator(root)) {
+    if (!entry.is_regular_file())
+      continue;
+    const auto rel = fs::relative(entry.path(), root).generic_string();
+    if (rel.starts_with("engine/vendor/") || rel == "cmd/planar/bootstrap.t.cpp")
+      continue;
+    ++scanned;
+    const auto  text = x07::slurp(entry.path());
+    std::size_t n    = 0;
+    for (const auto& token : platform_tokens())
+      n += x07::count_of(text, token);
+    if (n != 0)
+      counts[rel] = n;
+  }
+  return counts;
+}
+
+std::map<std::string, std::size_t> audited_platform_counts() {
+  return {{"engine/capture/native.cpp", 1},
+          {"engine/capture/admission.cpp", 2},
+          {"engine/runtime/runtime.t.cpp", 1},
+          {"engine/acceptance/source_capture.t.cpp", 1},
+          {"engine/export/source_export.cpp", 4},
+          // Test-only allocator and string sizing differs between libc++ on macOS and Linux (c02_outputs_gap pin).
+          {"engine/runtime/external_registration.t.cpp", 1}};
+}
+
+// Full text of one source file under src; the caller's REQUIRE fails when the file cannot be read.
+std::string source(std::string_view rel) {
+  auto text = x07::slurp(source_root() / rel);
+  REQUIRE_FALSE(text.empty());
+  return text;
+}
+
+// Text between the first `open` and the next `close` after it; empty when either marker is absent.
+std::string_view between(std::string_view text, std::string_view open, std::string_view close) {
+  const auto begin = text.find(open);
+  if (begin == std::string_view::npos)
+    return {};
+  const auto from = begin + open.size();
+  const auto end  = text.find(close, from);
+  if (end == std::string_view::npos)
+    return {};
+  return text.substr(from, end - from);
+}
+
+// The line that starts with `marker`, without its newline; empty when the marker is absent.
+std::string_view line_from(std::string_view text, std::string_view marker) {
+  const auto begin = text.find(marker);
+  if (begin == std::string_view::npos)
+    return {};
+  const auto end = text.find('\n', begin);
+  return text.substr(begin, end == std::string_view::npos ? std::string_view::npos : end - begin);
+}
+} // namespace x08
+
+TEST_CASE("X08 platform branches are exactly the audited set", "[bootstrap][x08]") {
+  std::size_t scanned = 0;
+  const auto  counts  = x08::platform_counts(scanned);
+  CHECK(scanned >= 100);
+  CHECK(counts == x08::audited_platform_counts());
+}
+
+TEST_CASE("X08 Linux publish and metadata branches keep their no-replace and path-only flags", "[bootstrap][x08]") {
+  // admission.cpp: metadata_flags opens Apple metadata with O_EVTONLY and the non-Apple arm uses O_PATH.
+  const auto admission = x08::source("engine/capture/admission.cpp");
+  const auto flags     = x08::between(admission, "int metadata_flags(bool directory) {", "\n}\n");
+  CHECK(x08::between(flags, "#ifdef __APPLE__", "#else").contains("O_EVTONLY"));
+  CHECK(x08::between(flags, "#else", "#endif").contains("O_PATH"));
+
+  // native.cpp: stable() reads the non-Apple st_mtim fields after the #else.
+  const auto native = x08::source("engine/capture/native.cpp");
+  const auto stable = x08::between(native, "bool stable(const struct stat& a, const struct stat& b) {", "\n}\n");
+  CHECK(x08::between(stable, "#else", "#endif").contains(".st_mtim,"));
+
+  // source_export.cpp: the Linux publish arm names SYS_renameat2 and RENAME_NOREPLACE on its directive and its call, and
+  // the ENOTSUP fallback is the only errno assignment and sits after the final #else of publish().
+  const auto exporter = x08::source("engine/export/source_export.cpp");
+  const auto publish =
+      x08::between(exporter, "int publish(int parent, const char* stage, const char* target) noexcept {", "\n}\n");
+  REQUIRE_FALSE(publish.empty());
+  const auto directive = x08::line_from(publish, "#elif defined(__linux__)");
+  CHECK(directive.contains("SYS_renameat2"));
+  CHECK(directive.contains("RENAME_NOREPLACE"));
+  CHECK(x08::between(publish, "#elif defined(__linux__)", "#else")
+            .contains("SYS_renameat2, parent, stage, parent, target, RENAME_NOREPLACE"));
+  const auto final_else = publish.rfind("#else");
+  REQUIRE(final_else != std::string_view::npos);
+  CHECK(x07::count_of(publish, "ENOTSUP") == 1);
+  CHECK(publish.find("errno = ENOTSUP;") > final_else);
+  CHECK(x07::count_of(exporter, "ENOTSUP") == 1);
+}

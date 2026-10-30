@@ -14,8 +14,27 @@ std::string host_file(std::string_view input) {
     throw diagnostic{"io", "Explicit input must be a regular file"};
   return (std::filesystem::canonical(absolute.parent_path()) / absolute.filename()).string();
 }
+// Reject a regular file (or a link to one) followed by '..' before canonical
+// can report it as a platform-specific resolution failure. Empty and '.'
+// components are skipped like the walker below; any status error is ignored so
+// missing and unresolvable spellings keep their existing diagnostics.
+void reject_file_parent_traversal(const std::filesystem::path& absolute) {
+  auto prefix = absolute.root_path();
+  for (const auto& component : absolute.relative_path()) {
+    if (component.empty() || component == ".")
+      continue;
+    if (component == "..") {
+      std::error_code ec;
+      const auto      status = std::filesystem::status(prefix, ec);
+      if (!ec && std::filesystem::exists(status) && !std::filesystem::is_directory(status))
+        throw diagnostic{"io", "Cannot resolve explicit root directory"};
+    }
+    prefix /= component;
+  }
+}
 std::string host_directory(std::string_view input) {
   const auto absolute = std::filesystem::absolute(std::filesystem::path(input));
+  reject_file_parent_traversal(absolute);
   const auto resolved = std::filesystem::canonical(absolute);
   if (!std::filesystem::is_directory(resolved))
     throw diagnostic{"io", "Explicit root must be a directory"};

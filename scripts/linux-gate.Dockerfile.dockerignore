@@ -1,0 +1,47 @@
+# BuildKit context rules for scripts/linux-gate.Dockerfile (DECISIONS rows 9 and 10c).
+# scripts/linux-gate.sh mirrors these patterns in is_excluded(); change both together.
+# Every pattern below is gitignored or a round-evidence path, so the image context
+# equals the git-listed candidate (tracked plus untracked-unignored) after exclusions.
+
+# Git metadata and build products. "build" and "bin" (installed binaries) are root only.
+.git
+build
+bin
+dist
+doxygen-lint-output
+compile_commands.json
+
+# Local agent state, caches, editor clutter and vendor-local ignores.
+.claude
+.codex
+.copilot
+.cache
+.pytest_cache
+.worktrees
+.idea
+.vscode
+**/worktrees
+**/__pycache__
+**/*.pyc
+**/.DS_Store
+**/*.swp
+**/*.swo
+**/*.user
+**/*.o
+**/*.obj
+**/*.a
+**/*.lib
+**/*.db
+**/*.db-journal
+**/*.db-wal
+**/*.db-shm
+
+# Round evidence: raw logs and reports stay out of the image.
+tests/native/*-evidence/**
+docs/vernacular/rounds/*-evidence
+docs/vernacular/rounds/*-evidence/**
+
+# Re-included LAST (DECISIONS row 10b). The R12B ledger schema is gitignored, so it
+# is untracked and a public clone lacks it; the image then fails at the test -s
+# assertion in the Dockerfile. Relocating it to a tracked fixture path is a follow-up.
+!tests/native/r12b-evidence/expected-schema.sql

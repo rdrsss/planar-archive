@@ -1,0 +1,815 @@
+{
+ "images": {
+  "base_digest": "ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c",
+  "cmake": "4.4.5 (sha256 301d5063ab259577c1b57ce5490b1aab9ea5c56dc4c822f73499553dab94925f)",
+  "llvm": "1:23.1.5~++20261028083854+a738f2737189-1~exp1~20261028203912.92 (clang version 23.1.5)",
+  "ninja": "1.11.1"
+ },
+ "matrix": [
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 1,
+   "subclauses": [
+    {
+     "binary": [],
+     "name": "Caller bundle / S / catalog / codec-v2 tree",
+     "tests": [
+      "replacement.X07 closed factory registers exactly once for every family",
+      "replacement.X07 src cmd contains no profile VM creation site",
+      "replacement.X07 runtime has exactly one profile VM creation call",
+      "replacement.X06 B3 A profile invocation static surface offers no prepare, vm or upgrade access",
+      "replacement.X06 C profile completion surface accepts only the opaque prepared profile",
+      "replacement.X06 C C03 no passkey grant or test hook vocabulary remains under src",
+      "replacement.D2 A unbound caches cannot be upgraded to retained authority",
+      "replacement.C4 B3 manual native preparation cannot bypass once-only service and original receipt verification",
+      "replacement.X06 C C01 seam is unreachable from a plain acceptance importer",
+      "replacement.X07 exported command_vm invoke still refuses profile owners"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 2,
+   "subclauses": [
+    {
+     "binary": [],
+     "name": "Original snapshot aliases mutated/released; source owner moved/destroyed",
+     "tests": [
+      "replacement.acceptance prepared binds selected exact snapshot bytes after disk changes",
+      "replacement.X06 B3 C published data is immutable shared and independent of the prepared object",
+      "replacement.X06 B3 A owner moves preserve address and counters and moved-from owners refuse",
+      "replacement.C3 B2 creation refuses moved or poisoned original captures",
+      "replacement.C4 A original receipt mutation suppresses execution and first failure survives moves",
+      "replacement.D2 A retained receipt survives original wrapper moves and destruction",
+      "replacement.capture acceptance owns receipts after moves and session destruction",
+      "replacement.capture native receipt owns state through session destruction and moves",
+      "replacement.X07 closed factory keeps the original receipts through dispatch",
+      "replacement.X06 B3 C success consumes the owner, refuses retry and moved-from prepared objects refuse",
+      "replacement.X06 B3 C verify_native_receipts is repeatable on an untouched prepared profile and reads without consuming"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 3,
+   "subclauses": [
+    {
+     "binary": [
+      "x08.adv_hardlink_module_refuses_before_chunk"
+     ],
+     "name": "hard-linked selected module",
+     "tests": [
+      "x08.adv_hardlink_module_refuses_before_chunk",
+      "replacement.X07 ledger aliasing the profile or a module refuses for history export and load",
+      "replacement.X06 B3 A supplied slot aliasing a trusted module refuses with unsafe_path and no partial owner"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_missing_declaration_initial_admission"
+     ],
+     "name": "missing selected declaration refuses at initial admission before registration",
+     "tests": [
+      "x08.adv_missing_declaration_initial_admission",
+      "replacement.X06 B3 A missing declaration refuses with the declaration adapter and leaves no owner",
+      "replacement.X06 B3 A admission precedes registration so an invalid module never executes"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_opaque_ordering_binary"
+     ],
+     "name": "opaque final syntax precedes late checks",
+     "tests": [
+      "x08.adv_opaque_ordering_binary",
+      "replacement.X07 final syntax error in an extension tail precedes late slot overlap"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_opaque_ordering_binary",
+      "x08.e03_closure_separation_binary"
+     ],
+     "name": "overlap precedes handler/service",
+     "tests": [
+      "x08.adv_opaque_ordering_binary",
+      "x08.e03_closure_separation_binary",
+      "replacement.X07 role read overlaps and aliases refuse before the handler runs",
+      "replacement.X07 export refuses a target overlapping the trusted root before publication"
+     ]
+    },
+    {
+     "binary": [],
+     "name": "opaque owner cannot transition to built-in load (native only, binary limit recorded)",
+     "tests": [
+      "replacement.X07 run_known refuses opaque and known load owners",
+      "replacement.X06 B3 A opaque open needs no supplied slots, reads none and is never known load",
+      "replacement.X06 B3 B opaque consumed failed and moved-from owners refuse prepare_load",
+      "replacement.X06 B3 B known-load owner refuses into_extension terminally-free and stays usable"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 4,
+   "subclauses": [
+    {
+     "binary": [],
+     "name": "Parse continuation",
+     "tests": [
+      "replacement.X06 B3 A factories capture exactly once and adoption reads nothing",
+      "replacement.X06 B3 A registration count stays one across into_extension",
+      "replacement.X06 B3 A into_extension adopts the same VM and receipts without recapture",
+      "replacement.X06 B3 A factory registration counters are deterministic across factories",
+      "replacement.X07 cmd sources open the profile owner through one factory call per branch",
+      "replacement.X07 profile invocation reads cwd and environment once",
+      "replacement.X07 selected help bytes are exact sorted and escaped",
+      "replacement.X07 shipped tail under a profile keeps probe option state and scalar command words stay values"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 5,
+   "subclauses": [
+    {
+     "binary": [
+      "x08.adv_invalid_unselected_job_refuses_all"
+     ],
+     "name": "extra invalid unselected job",
+     "tests": [
+      "x08.adv_invalid_unselected_job_refuses_all",
+      "replacement.X06 B3 B an invalid unselected job fails all-job validation and publishes nothing"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_job_mix_and_phase_failures"
+     ],
+     "name": "many custom jobs and built-in/custom mix",
+     "tests": [
+      "x08.adv_job_mix_and_phase_failures",
+      "replacement.X06 B3 B prepare_load succeeds through phase 2 for custom and mixed jobs",
+      "replacement.X06 C C01 profile completion stores a built-in job beside a custom job"
+     ]
+    },
+    {
+     "binary": [],
+     "name": "every job validated exactly once (native only)",
+     "tests": [
+      "replacement.X06 B3 B every job is validated exactly once"
+     ]
+    },
+    {
+     "binary": [],
+     "name": "validated before role selection (native only)",
+     "tests": [
+      "replacement.X05 B3 C selection refuses caller models and validates all jobs before role lookup",
+      "replacement.X05 B1 all mandatory jobs validate before any selected callback",
+      "replacement.X05 B3 B all-job base failure prevents the first retained callable"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_job_mix_and_phase_failures"
+     ],
+     "name": "phase 0/1/2 failure publishes nothing",
+     "tests": [
+      "x08.adv_job_mix_and_phase_failures",
+      "replacement.X06 B3 B a route phase refusal is ordinary semantic data before any job is captured",
+      "replacement.X06 B3 B an invalid unselected job fails all-job validation and publishes nothing",
+      "replacement.X06 B3 B a custom job refusal after earlier shape dispatch is ordinary semantic data"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_job_mix_and_phase_failures"
+     ],
+     "name": "obligation/cycle/total-limit regressions",
+     "tests": [
+      "x08.adv_job_mix_and_phase_failures",
+      "replacement.X05 B1 obligation quota accepts 10000 and refuses 10001",
+      "replacement.X05 B1 accepted dependency base cycles precede every custom callback",
+      "replacement.X05 B1 added full graph detects cycles for grouped units",
+      "replacement.X05 B1 cumulative obligations share native instruction accounting",
+      "replacement.X05 B3 A cumulative count checks before normalization expansion",
+      "replacement.X05 B3 B additive graph obligations preserve base edges and report grouped cycles"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 6,
+   "subclauses": [
+    {
+     "binary": [],
+     "name": "leaf replaced between registration and first read, refusing terminally before content with no replacement authority or unbound retry (native only; cannot be interleaved from outside)",
+     "tests": [
+      "replacement.X06 B3 B declaration leaf replaced before prepare_load refuses terminally before content",
+      "replacement.X06 B3 B capture change before prepare_load refuses capture_changed with zero declaration reads",
+      "replacement.D2 B2 C01 first retained reads require original root selection",
+      "replacement.D2 A retained receipt rejects different actual opened file",
+      "replacement.D2 A unbound caches cannot be upgraded to retained authority"
+     ]
+    },
+    {
+     "binary": [
+      "x07.late_receipt_survives_to_seal",
+      "x07.receipt_races_refuse_before_authorization",
+      "x07.final_race_rolls_back_before_commit"
+     ],
+     "name": "root/file tokens survive parse, capture seal, prepared moves and precommit",
+     "tests": [
+      "replacement.C3 B2 verification retains original profile module workspace and late root receipts",
+      "replacement.capture admission root relocation and late addition retain original receipts",
+      "replacement.C4 D3 original root file and late slots refuse post admission changes before role publication",
+      "replacement.X06 C profile receipt race after staging is caught before commit",
+      "replacement.X06 C profile receipt race inside the pre-commit metadata check is caught",
+      "x07.late_receipt_survives_to_seal",
+      "x07.receipt_races_refuse_before_authorization",
+      "x07.final_race_rolls_back_before_commit"
+     ]
+    },
+    {
+     "binary": [],
+     "name": "changes after preparation or between transaction checks refuse/roll back",
+     "tests": [
+      "replacement.X06 B3 C verify_native_receipts fails with capture_changed after any captured input changes post publication",
+      "replacement.X06 B3 C a file replaced at any allocation inside prepare_load is never published as verified",
+      "replacement.X06 C profile capture receipt changes refuse capture_changed with rollback",
+      "replacement.X06 C profile source receipt changes refuse capture_changed with rollback"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_registry_colocation_binary"
+     ],
+     "name": "positive registry colocation succeeds with distinct files, selected-file aliases still refuse",
+     "tests": [
+      "x08.adv_registry_colocation_binary",
+      "replacement.C3 B2 selected file aliases refuse while registry directory colocation succeeds",
+      "replacement.capture acceptance retains standalone registry file and parent receipts"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 7,
+   "subclauses": [
+    {
+     "binary": [
+      "x07.substitute_history",
+      "x07.substitute_export",
+      "x07.substitute_init",
+      "x07.replay_same_selector_changed_bytes_new_provenance"
+     ],
+     "name": "Source/provenance substitution",
+     "tests": [
+      "replacement.X06 B3 C success publishes source registry effective tree and bound intent for each fixture shape",
+      "replacement.X06 C profile completion stores the derived trees and values from profile_acceptance_data",
+      "replacement.X06 C profile completion changed profile module creates a new revision",
+      "replacement.X07 profile load records request_v2 selector effective stdlib and v2 interpretation",
+      "x07.substitute_history",
+      "x07.substitute_export",
+      "x07.substitute_init",
+      "x07.replay_same_selector_changed_bytes_new_provenance"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 8,
+   "subclauses": [
+    {
+     "binary": [],
+     "name": "Failure caught by Lua stays terminal",
+     "tests": [
+      "replacement.X06 D a failure caught by Lua stays terminal with the first diagnostic",
+      "replacement.X06 D C02 a protocol failure caught by pcall in a known-load prepare frame stays terminal",
+      "replacement.X06 D C02 a protocol or semantic failure caught by pcall in a profile-owned frame stays terminal",
+      "replacement.X06 D C03 a caught illegal registration followed by exhaustion keeps the first failure in a direct shape call",
+      "replacement.X06 D C03 a recovered allocation refusal followed by an illegal registration keeps the resource failure in a direct shape call",
+      "replacement.X05 B2 C caught illegal registration stays sticky while ordinary caught Lua errors recover",
+      "replacement.X05 A3 resource ceilings remain sticky when protected calls catch",
+      "replacement.C4 B3 original typed service failures survive Lua catches later errors moves and retries",
+      "replacement.X06 B3 B failure paths release nested temporaries",
+      "replacement.X06 B3 B success releases nested temporaries to the exact pre invocation membership",
+      "replacement.profile capture move assignment and self move transfer retained receipts"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 9,
+   "subclauses": [
+    {
+     "binary": [
+      "x08.e10_removed_profile_replay_binary",
+      "x07.replay_after_inputs_deleted",
+      "x07.replay_conflict_matrix"
+     ],
+     "name": "Early replay with every input deleted; early conflict / format1 miss",
+     "tests": [
+      "x08.e10_removed_profile_replay_binary",
+      "x07.replay_after_inputs_deleted",
+      "x07.replay_conflict_matrix",
+      "replacement.X06 C profile replay precedes candidate inspection and needs no live inputs or profile",
+      "replacement.X07 profile load replays a saved request before touching the profile",
+      "replacement.X07 profile load with a different body conflicts before profile access",
+      "replacement.X07 profile load on a format1 ledger refuses before profile access",
+      "replacement.X07 early lookup scope closes before profile capture"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 10,
+   "subclauses": [
+    {
+     "binary": [
+      "x07.relookup_equal_replay_before_stale_cas",
+      "x07.relookup_unequal_conflicts",
+      "x07.two_process_cas_one_winner"
+     ],
+     "name": "Concurrent exact late replay, different body, stale CAS",
+     "tests": [
+      "x07.relookup_equal_replay_before_stale_cas",
+      "x07.relookup_unequal_conflicts",
+      "x07.two_process_cas_one_winner",
+      "replacement.X06 C racing profile completions have exactly one winner",
+      "replacement.X06 C profile stale head refuses revision_conflict with details and no row",
+      "replacement.X06 C profile same id with a different body conflicts before the head check",
+      "replacement.atomic identity bound receipt late replay owns bytes before stale CAS and unusable candidate",
+      "replacement.X06 C no Lua runs while the profile write transaction is open",
+      "replacement.X06 C profile replay precedes candidate inspection and needs no live inputs or profile"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 11,
+   "subclauses": [
+    {
+     "binary": [
+      "x07.post_commit_allocation_failure_keeps_receipt",
+      "x07.post_commit_encoding_failure_keeps_receipt",
+      "x07.post_commit_stdout_failure_keeps_receipt"
+     ],
+     "name": "Storage extraction and completion",
+     "tests": [
+      "x07.post_commit_allocation_failure_keeps_receipt",
+      "x07.post_commit_encoding_failure_keeps_receipt",
+      "x07.post_commit_stdout_failure_keeps_receipt",
+      "replacement.X06 C profile completion commit hook failure is commit_uncertain",
+      "replacement.X06 C profile completion busy commit keeps the proposed bytes",
+      "replacement.X06 C profile completion receipt phases committed and replayed",
+      "replacement.X06 C profile completion unchanged second request is noop and replay bytes equal the result",
+      "replacement.X06 C profile completion moved-from profile refuses after CAS before any row",
+      "replacement.X06 C C03 only the adapters call complete_native_candidate",
+      "replacement.X06 C C03 seam is a non-exported partition of the acceptance module",
+      "replacement.atomic final native receipt refusal rolls back all tentative history",
+      "replacement.atomic identity bound receipt busy commit proves rollback and preserves proposed saved bytes",
+      "replacement.command load retains exact native receipt for replay uncertain and ordinary completion"
+     ]
+    }
+   ]
+  },
+  {
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "row": 12,
+   "subclauses": [
+    {
+     "binary": [],
+     "name": "boundary allocations and retained sizes charged",
+     "tests": [
+      "replacement.X06 D C01 loader charges retained declaration values to the factory budget byte for byte",
+      "replacement.X06 D C01 retained declaration handle charges accumulate on every issue without refund",
+      "replacement.X06 D C01 admission charges the factory budget exactly once per charge",
+      "replacement.X06 D C01 capture charges the composed ceiling before reading or allocating a file",
+      "replacement.X06 D C01 refused capture allocates nothing near the file size",
+      "replacement.X06 D C01 native read charges each retained file exactly once",
+      "replacement.X06 B3 B owner allocation charge is observable and covers the owner's own storage",
+      "replacement.X06 B3 C each derivation charge scales exactly with the bytes it covers"
+     ]
+    },
+    {
+     "binary": [],
+     "name": "stages, nesting and moves cannot reset counters",
+     "tests": [
+      "replacement.X06 B3 B one frame cumulative counters never reset",
+      "replacement.X06 B3 C derivation is charged to the one frame and counters never reset",
+      "replacement.X06 D C01 a caught Lua error still leaves the budget counters monotone",
+      "replacement.X06 D C01 repeated direct shape calls never refund native bytes",
+      "replacement.X06 D C01 declaration chunks exhaust the composed invocation instruction ceiling across stages",
+      "replacement.X06 D C01 discovery staging is charged to the factory budget and never refunded",
+      "replacement.X06 B3 B cumulative instruction exhaustion preserves the first error and cleans nested roots",
+      "replacement.X06 B3 A owner moves preserve address and counters and moved-from owners refuse"
+     ]
+    },
+    {
+     "binary": [],
+     "name": "lower native admission/content ceilings stay distinct",
+     "tests": [
+      "replacement.X06 D C01 loader inherited chunk limits still win over the composed budget",
+      "replacement.X06 D C01 source capture bundle charges refuse at their own ceiling",
+      "replacement.codec X05 C2 B1 projection tighter output ceiling and semantic name separation",
+      "replacement.profile bounded native cached read honors newly tighter caller ceilings",
+      "replacement.acceptance prepared enforces source directory ceiling on genuine captured selections",
+      "replacement.X06 D C01 admission refuses at the composed ceiling with the existing resource message"
+     ]
+    },
+    {
+     "binary": [
+      "x08.adv_limits_cli"
+     ],
+     "name": "public binary",
+     "tests": [
+      "x08.adv_limits_cli"
+     ]
+    }
+   ]
+  }
+ ],
+ "platform": [
+  {
+   "branch": "src/engine/capture/native.cpp:46 __APPLE__/else st_mtimespec vs st_mtim branch in stable()",
+   "id": "G06a",
+   "pass_line": "151/1260 Test  #151: replacement.capture native seal performs full verification before transfer ...................................................................   Passed    0.00 sec",
+   "test_or_log": "replacement.capture native seal performs full verification before transfer (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/capture/admission.cpp:62 same_file mtime branch (st_mtimespec vs st_mtim)",
+   "id": "G06b",
+   "pass_line": "98/1260 Test   #98: replacement.capture admission retained modes and file metadata reject changes ................................................................   Passed    0.01 sec",
+   "test_or_log": "replacement.capture admission retained modes and file metadata reject changes (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/capture/admission.cpp:71 metadata_flags branch (O_EVTONLY on macOS, O_PATH on Linux)",
+   "id": "G06c",
+   "pass_line": "108/1260 Test  #108: replacement.capture admission selected inputs perform zero observed data reads before binding ................................................   Passed    0.00 sec",
+   "test_or_log": "replacement.capture admission selected inputs perform zero observed data reads before binding (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/export/source_export.cpp:7-12 platform includes (sys/stdio.h vs linux/fs.h and sys/syscall.h)",
+   "id": "G06d",
+   "pass_line": "1217/1260 Test #1217: replacement.X08 Linux publish and metadata branches keep their no-replace and path-only flags ................................................   Passed    0.01 sec",
+   "test_or_log": "replacement.X08 Linux publish and metadata branches keep their no-replace and path-only flags (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/export/source_export.cpp:179-188 publish(): renameat2 RENAME_NOREPLACE on Linux; the ENOTSUP fallback is not taken",
+   "id": "G06e",
+   "pass_line": "1047/1260 Test #1047: replacement.source export accepts relative target and old reverted revisions .................................................................   Passed    0.13 sec",
+   "test_or_log": "replacement.source export accepts relative target and old reverted revisions (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/runtime/runtime.t.cpp:2839 mtime branch in the in-place same-size edit test",
+   "id": "G06f",
+   "pass_line": "589/1260 Test  #589: replacement.X06 B3 C an in place same size edit at any allocation inside prepare_load is never published as verified .........................   Passed    9.77 sec",
+   "test_or_log": "replacement.X06 B3 C an in place same size edit at any allocation inside prepare_load is never published as verified (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/acceptance/source_capture.t.cpp:626 non-__APPLE__ arm of the unreadable declaration expectation",
+   "id": "G06g",
+   "pass_line": "1060/1260 Test #1060: replacement.source capture N1 unreadable declaration is not reported as missing ..............................................................   Passed    0.00 sec",
+   "test_or_log": "replacement.source capture N1 unreadable declaration is not reported as missing (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "cmake/llvm-toolchain.cmake Linux branches near lines 235, 252 and 283",
+   "id": "G06h",
+   "pass_line": "22/1260 Test   #22: x08.linux_recipe_pins ........................................................................................................................   Passed    0.02 sec",
+   "test_or_log": "x08.linux_recipe_pins (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  },
+  {
+   "branch": "src/engine/runtime/external_registration.t.cpp:4557 test-only #if defined(__APPLE__) arm that selects the per-platform c02_outputs_gap (4742 macOS, 4737 Linux) and c02_off_boundary (228586 macOS, 228612 Linux) pins; audited in audited_platform_counts() with count 1 (operator decision (a))",
+   "id": "G06i",
+   "pass_line": "652/1260 Test  #652: replacement.X08 C01 role preparation outputs-off boundary pins the request-record conversion charge ..........................................   Passed    5.54 sec",
+   "test_or_log": "replacement.X08 C01 role preparation outputs-off boundary pins the request-record conversion charge (Linux ctest: linux/container/debug-ctest.log and release-ctest.log)"
+  }
+ ],
+ "requirements": [
+  {
+   "binary": [
+    "x08.e01_no_discovery",
+    "x08.e01_registration_policy"
+   ],
+   "id": "E01",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e01_no_discovery",
+    "x08.e01_registration_policy",
+    "replacement.X07 profile environment variables are ignored without with-profile",
+    "replacement.X07 root level stdlib-profile flag is usage",
+    "replacement.X07 prefix count is three or four and dot slash help is a valid selector"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e02_envelope_rows_binary",
+    "x08.e08_projection_vector_binary",
+    "x08.e09_history_id_binary",
+    "x08.adv_opaque_ordering_binary"
+   ],
+   "id": "E02",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e02_envelope_rows_binary",
+    "x08.e08_projection_vector_binary",
+    "x08.e09_history_id_binary",
+    "x08.adv_opaque_ordering_binary",
+    "replacement.X07 production matrices enumerate every X01 row",
+    "replacement.X07 production envelope rows refused by syntax and prefix usage never access the profile",
+    "replacement.X07 production envelope rows refused by the probe never access the profile",
+    "replacement.X07 production envelope rows refused after capture and registration are final usage"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e03_closure_separation_binary",
+    "x08.adv_hardlink_module_refuses_before_chunk",
+    "x08.adv_missing_declaration_initial_admission",
+    "x08.adv_opaque_ordering_binary",
+    "x08.adv_registry_colocation_binary"
+   ],
+   "id": "E03",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e03_closure_separation_binary",
+    "x08.adv_hardlink_module_refuses_before_chunk",
+    "x08.adv_missing_declaration_initial_admission",
+    "x08.adv_opaque_ordering_binary",
+    "x08.adv_registry_colocation_binary",
+    "replacement.X07 ledger aliasing the profile or a module refuses for history export and load",
+    "replacement.X07 role read overlaps and aliases refuse before the handler runs",
+    "replacement.X06 B3 A admission precedes registration so an invalid module never executes",
+    "replacement.capture admission receipts report same admission and liveness"
+   ]
+  },
+  {
+   "binary": [
+    "x08.adv_limits_cli"
+   ],
+   "id": "E04",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.adv_limits_cli",
+    "replacement.profile capture exact structural node ceiling before container growth",
+    "replacement.profile capture module ceiling checked before observed module read",
+    "replacement.X05 A3 validates structural snapshot before any module evaluation",
+    "replacement.X05 A3 source only chunks require actual zero results"
+   ]
+  },
+  {
+   "binary": [
+    "x07.substitute_history",
+    "x07.substitute_export",
+    "x07.substitute_init"
+   ],
+   "id": "E05",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "replacement.X06 B3 C success publishes source registry effective tree and bound intent for each fixture shape",
+    "replacement.X07 closed factory keeps the original receipts through dispatch",
+    "replacement.command load altered retained callable carries its own original bytes and digest",
+    "x07.substitute_history",
+    "x07.substitute_export",
+    "x07.substitute_init"
+   ]
+  },
+  {
+   "binary": [
+    "x08.adv_job_mix_and_phase_failures",
+    "x07.workflow_shape_load",
+    "x07.workflow_render_external"
+   ],
+   "id": "E06",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.adv_job_mix_and_phase_failures",
+    "x07.workflow_shape_load",
+    "x07.workflow_render_external",
+    "replacement.X05 B1 all mandatory jobs validate before any selected callback",
+    "replacement.X05 B1 custom stages honor descriptor presence and worker sets",
+    "replacement.X05 B4 B native custom worker reviewer recovery retains assertions and policy exactly"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e07_old_goldens_unselected_profile",
+    "x08.e07_old_w_vectors_binary"
+   ],
+   "id": "E07",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e07_old_goldens_unselected_profile",
+    "x08.e07_old_w_vectors_binary",
+    "replacement.X05 B3 C shipped pipeline W and complete selection stay exact with a selected profile",
+    "replacement.X05 B3 C native custom selection matches independently authored W and domain oracle",
+    "replacement.X05 B4 B native shipped and mixed render outputs preserve ordinary exact bytes"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e08_projection_vector_binary"
+   ],
+   "id": "E08",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e08_projection_vector_binary",
+    "replacement.X07 projection omission vector reproduces 87 94 and 59 bytes through the CLI",
+    "replacement.X05 C1 exact projection omission vector preserves removal order and byte counts",
+    "replacement.C4 D4 default role budget and explicit override preserve reverse custom omissions"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e09_history_id_binary"
+   ],
+   "id": "E09",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e09_history_id_binary",
+    "replacement.X07 history_id vectors report Lua type and presence through the real CLI",
+    "replacement.X07 history_id invalid spellings refuse before the handler",
+    "replacement.X07 history_id selector conflicts are usage regardless of magnitude",
+    "replacement.X07 history_id after-event with limit pages through the real CLI",
+    "replacement.X07 decimal and limit boundary vectors through the real CLI"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e10_removed_profile_replay_binary",
+    "x07.replay_after_inputs_deleted",
+    "x07.replay_conflict_matrix",
+    "x07.relookup_equal_replay_before_stale_cas",
+    "x07.relookup_unequal_conflicts",
+    "x07.two_process_cas_one_winner"
+   ],
+   "id": "E10",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e10_removed_profile_replay_binary",
+    "x07.replay_after_inputs_deleted",
+    "x07.replay_conflict_matrix",
+    "x07.relookup_equal_replay_before_stale_cas",
+    "x07.relookup_unequal_conflicts",
+    "x07.two_process_cas_one_winner"
+   ]
+  },
+  {
+   "binary": [],
+   "id": "E11",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "replacement.X06 C profile format mismatch refuses unsupported_version before the head read",
+    "replacement.ledger format2 mixed request codecs preserve recorded history export and privacy",
+    "replacement.X07 embedded load on format1 keeps request_v1",
+    "replacement.X07 embedded format2 load keeps v1 interpretation and versions",
+    "replacement.X07 profile load on a format1 ledger refuses before profile access"
+   ]
+  },
+  {
+   "binary": [
+    "x08.e12_variant_reads_identically",
+    "x08.e12_variant_exports_identically",
+    "x08.e12_variant_poison_is_live",
+    "x08.e12_variant_poison_is_live_load",
+    "x08.e12_variant_poison_is_live_profile_render",
+    "x08.e12_variant_audit",
+    "x08.e12_sources_and_profile_removed",
+    "x07.substitute_history",
+    "x07.substitute_export"
+   ],
+   "id": "E12",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x08.e12_variant_reads_identically",
+    "x08.e12_variant_exports_identically",
+    "x08.e12_variant_poison_is_live",
+    "x08.e12_variant_poison_is_live_load",
+    "x08.e12_variant_poison_is_live_profile_render",
+    "x08.e12_variant_audit",
+    "x08.e12_sources_and_profile_removed",
+    "x07.substitute_history",
+    "x07.substitute_export"
+   ]
+  },
+  {
+   "binary": [
+    "x07.late_receipt_survives_to_seal",
+    "x07.receipt_races_refuse_before_authorization",
+    "x07.final_race_rolls_back_before_commit",
+    "x07.post_commit_allocation_failure_keeps_receipt",
+    "x07.post_commit_encoding_failure_keeps_receipt",
+    "x07.post_commit_stdout_failure_keeps_receipt",
+    "x07.two_process_cas_one_winner",
+    "x08.e10_removed_profile_replay_binary"
+   ],
+   "id": "E13",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": [
+    "x07.late_receipt_survives_to_seal",
+    "x07.receipt_races_refuse_before_authorization",
+    "x07.final_race_rolls_back_before_commit",
+    "x07.post_commit_allocation_failure_keeps_receipt",
+    "x07.post_commit_encoding_failure_keeps_receipt",
+    "x07.post_commit_stdout_failure_keeps_receipt",
+    "x07.two_process_cas_one_winner",
+    "x08.e10_removed_profile_replay_binary"
+   ]
+  },
+  {
+   "binary": [],
+   "id": "E14",
+   "logs": [
+    "raw/macos-debug.ctest.log",
+    "linux/container/debug-ctest.log"
+   ],
+   "tests": []
+  }
+ ]
+}

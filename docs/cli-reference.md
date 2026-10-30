@@ -37,13 +37,18 @@ build/rewrite-debug/bin/planar render \
 | --- | --- |
 | `--workspace FILE_OR_NAME` | Required declaration path or explicit-environment name; references its spec and all listed jobs. |
 | `--registry FILE` | Required, explicitly trusted driver JSON describing toolchain/check definitions. |
-| `--root ID=DIRECTORY` | Required existing source directory; ID must match the workspace root. |
+| `--root ID=DIRECTORY` | Required existing source directory; ID must match the workspace root. A spelling that names a regular file (or a link to one) followed by `..` is `io` "Cannot resolve explicit root directory" (exit 4) on macOS and Linux. |
 | `--job ID` | Required declared job selection. |
 | `--role ID` | Required role in that job. |
 | `--capture-outputs` | Capture complete current and base trees under declared exclusions. Requires `--base-root`. |
 | `--base-root ID=DIRECTORY` | Base tree with the same logical root ID; requires `--capture-outputs`. |
 | `--observations FILE` | Optional untrusted JSON assertions/checkpoint; defaults to empty observations. |
 | `--budget-bytes N` | Preview budget override, positive decimal without leading zeros, at most 1,048,576. |
+
+For `--root` and `--base-root`, a final-root alias spelled `alias/file/..` (a link to a root
+directory, then a regular file, then `..`) is that same `io` exit-4 refusal as of X08-C01;
+earlier it was `path_denied` "Explicit root is a symbolic link target" (exit 3) on macOS.
+No message text changed.
 
 CLI11 parses the command and option grammar; Planar supplies fixed help and
 canonical usage diagnostics without embedding library messages or host values.
@@ -295,3 +300,13 @@ profile is not accessed.
 
 Public `init` creates a format2 ledger. The design record is
 [x07-addendum](vernacular/x07-addendum.md).
+
+`with-profile` is the only profile selector. No environment variable selects a
+profile, and Planar does not discover a `stdlib.d` directory in the working
+directory or `HOME`. A root-level `--stdlib-profile` flag is usage (exit 2), and an
+extension verb without `with-profile` is usage (exit 2). Only an explicit
+`with-profile --stdlib-profile FILE` prefix can select a profile. The X08 binary
+cases for these rules are `x08.e01_no_discovery` and `x08.e01_registration_policy`;
+the envelope-row and closure-separation cases are `x08.e02_envelope_rows_binary`
+and `x08.e03_closure_separation_binary`. See the
+[X08 acceptance gate](testing.md#x08-acceptance-gate) for how they run.

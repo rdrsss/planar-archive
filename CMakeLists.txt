@@ -68,3 +68,4 @@ set_tests_properties(replacement.history_cli PROPERTIES TIMEOUT 120 LABELS accep
 add_test(NAME replacement.export_cli COMMAND "${Python3_EXECUTABLE}"
   "${PROJECT_SOURCE_DIR}/tests/acceptance/bootstrap_export.py" "$<TARGET_FILE:planar>" "$<TARGET_FILE:planar_history_fixture>")
 set_tests_properties(replacement.export_cli PROPERTIES TIMEOUT 120 LABELS acceptance)
+include("${PROJECT_SOURCE_DIR}/tests/native/v5-02-x08-support/x08.cmake")

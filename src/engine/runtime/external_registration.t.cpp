@@ -3076,9 +3076,21 @@ namespace {
 struct extension_fixture {
   std::filesystem::path path;
   std::string           cwd, workspace, registry, root, base, observations, ledger;
-  explicit extension_fixture(std::string capability = "role_context_read_v1") {
-    char pattern[] = "/tmp/planar-extension-XXXXXX";
-    auto created   = ::mkdtemp(pattern);
+  /// @param capability Capability named by the generated module.
+  /// @param root_bytes Nonzero pads the mkdtemp name so the canonical root has exactly this many bytes on every platform
+  ///        (the default keeps the 28-byte Linux and 36-byte macOS roots).
+  explicit extension_fixture(std::string capability = "role_context_read_v1", std::size_t root_bytes = 0) {
+    std::string pattern = "/tmp/planar-extension-XXXXXX";
+    if (root_bytes != 0) {
+      // The canonical spelling of /tmp differs by platform (/tmp or /private/tmp); the name absorbs the difference.
+      const auto                 tmp_bytes  = std::filesystem::canonical("/tmp").string().size();
+      const auto                 name_bytes = root_bytes - tmp_bytes - 1;
+      constexpr std::string_view stem       = "planar-extension-";
+      REQUIRE(root_bytes > tmp_bytes + 1 + stem.size() + 6);
+      pattern = "/tmp/" + std::string(stem) + std::string(name_bytes - stem.size() - 6, 'p') + "XXXXXX";
+      REQUIRE(tmp_bytes + 1 + (pattern.size() - 5) == root_bytes);
+    }
+    auto created = ::mkdtemp(pattern.data());
     REQUIRE(created);
     path = std::filesystem::canonical(created);
     for (auto directory : {"trusted", "workspaces/demo", "source", "base", "branch"})
@@ -4495,8 +4507,12 @@ TEST_CASE("X06 D C02 extension owners created without a factory keep role declar
 // enumeration and the registry and observation read charges (X11, X11b, M_REG and M_OBS) are killed by the X06 D C03 role
 // test below, not by this one.
 namespace {
+// Canonical byte length of the C02 budget fixture root on every platform. The default fixture roots (36 bytes on macOS, 28 on
+// Linux) shift the measured boundary gap, so the C02 fixture pads its mkdtemp name to this fixed length.
+constexpr std::size_t c02_root_bytes = 64;
+static_assert(c02_root_bytes > 36);
 c02_outcome c02_padded(std::size_t pad, bool outputs) {
-  extension_fixture f;
+  extension_fixture f{"role_context_read_v1", c02_root_bytes};
   d3_inputs(f);
   auto bytes = read_bytes(f.path / "workspaces/demo/workspace.lua");
   // The padding is spread over two .lua files so that no single text file crosses the 1 MiB text quota (C3-4e).
@@ -4533,9 +4549,33 @@ std::int64_t c02_boundary(bool outputs) {
 // here to isolate the snapshot and conversion charges; the tree enumeration and the registry and observation read charges
 // are pinned by the X06 D C03 role test below.
 // 4525 at the former ceilings; one padding byte of boundary quantization (slope about 58 native bytes per byte) at the
-// raised native ceiling.
-constexpr std::int64_t c02_outputs_gap = 4524;
+// raised native ceiling. The gap grows with the canonical fixture root length (about 7 padding bytes per 1 root byte), so it is
+// measured at the fixed c02_root_bytes root: 4742 in both Debug and RelWithDebInfo on macOS and 4737 in both on Linux (libc++
+// container and string sizing differ by a few native bytes). The pin is the measured value of the platform running the test, so
+// it leaves no slack there: a 2-byte charge deletion (snapshot/directories or exclusion lists) must fail on either platform.
+// The unpadded roots measured 4524 (macOS, 36 bytes) and 4468 (Linux, 28 bytes).
+#if defined(__APPLE__)
+constexpr std::int64_t c02_outputs_gap  = 4742;
+constexpr std::int64_t c02_off_boundary = 228586; // measured on macOS in Debug
+#else
+constexpr std::int64_t c02_outputs_gap  = 4737;
+constexpr std::int64_t c02_off_boundary = 228612; // measured on Linux in Debug and RelWithDebInfo
+#endif
+// The outputs-off boundary moves by one padding byte per about 58 native bytes charged. Deleting the request-record conversion
+// charge (6 * 320 + sizeof(value) native bytes, paid on both the outputs-off and outputs-on sides) raises the boundary by about
+// 33 padding bytes and shifts no gap, so the gap pin cannot see it; this window is the only observable. The window is far
+// smaller than that shift.
+constexpr std::int64_t c02_off_window = 8;
 } // namespace
+TEST_CASE("X08 C01 role preparation outputs-off boundary pins the request-record conversion charge",
+          "[external-registration][role-service][x08][c01]") {
+  // Mutant killed: runtime.cpp prepare_role charge(s, 6 * 320 + sizeof(value)) deleted (BUD-CONV); the boundary then rises by
+  // about 33 padding bytes, above the window.
+  const auto off = c02_boundary(false);
+  INFO("outputs-off boundary " << off << " pinned " << c02_off_boundary);
+  CHECK(off >= c02_off_boundary - c02_off_window);
+  CHECK(off <= c02_off_boundary + c02_off_window);
+}
 TEST_CASE("X06 D C02 role preparation charges enumeration and registry reads to the factory budget",
           "[external-registration][role-service][x06d]") {
   auto off = c02_boundary(false);
@@ -4551,6 +4591,16 @@ TEST_CASE("X06 D C02 role preparation charges enumeration and registry reads to 
   CHECK(subject.limit == "native_bytes");
   CHECK(subject.maximum == PLANAR_BUDGET_NATIVE_MAX);
   CHECK(off - on >= c02_outputs_gap);
+}
+
+// Pins the fixed canonical root of the C02 budget fixture the two gap tests share; a platform-dependent root would shift the
+// measured boundary gap (Linux 28 bytes versus macOS 36 bytes before the fixture padded its name).
+TEST_CASE("X08 C01 the C02 budget fixture root has a fixed canonical byte length",
+          "[external-registration][role-service][x08c01]") {
+  extension_fixture f{"role_context_read_v1", c02_root_bytes};
+  CHECK(f.path.string().size() == c02_root_bytes);
+  CHECK(f.path == std::filesystem::canonical(f.path));
+  CHECK(std::filesystem::is_directory(f.path));
 }
 
 // X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget. Workspace
