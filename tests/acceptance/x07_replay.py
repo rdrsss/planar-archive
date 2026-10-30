@@ -127,6 +127,14 @@ def run_case():
      status,out,err=finish(process,gate)
      assert status==3 and not out and code(err)=='capture_changed',(name,status,out,err)
      assert rows(ledger)==(0,0,1),(name,rows(ledger))
+  elif case=='x07.ledger_commit_after_admission_reports_revision_conflict':
+   ledger=w.init('l');process,gate=w.paused('AFTER_FACTORY_OPEN',w.load(ledger,'loser'))
+   rival=w.run(planar,w.load(ledger,'winner'));assert rival.returncode==0,rival
+   status,out,err=finish(process,gate)
+   assert status==3 and not out and code(err)=='revision_conflict',(status,out,err)
+   assert json.loads(err)['error']['details']=={'actual':'1','expected':'none'},err
+   assert rows(ledger)==(1,1,2),rows(ledger)
+   with sqlite3.connect(ledger) as db:assert db.execute("SELECT COUNT(*) FROM requests WHERE request_id='loser'").fetchone()[0]==0
   elif case=='x07.post_commit_allocation_failure_keeps_receipt':
    ledger=w.init('l');env={**w.env,'X07_FAULT_AFTER_COMMIT':'1'}
    got=w.run(variant,w.load(ledger,'k'),env)

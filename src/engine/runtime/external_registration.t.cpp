@@ -3196,6 +3196,17 @@ TEST_CASE("C3 B2 history admits its unused ledger without reading database conte
   REQUIRE_FALSE(changed);
   CHECK(changed.error().detail.code == "capture_changed");
 }
+TEST_CASE("C3 B2 appended observations file refuses verify and stays refused", "[external-registration][extension-admission]") {
+  extension_fixture f;
+  auto              owner = f.owner();
+  REQUIRE(owner.admit("inspect", f.role(true), f.cwd));
+  REQUIRE(owner.verify());
+  std::ofstream(f.path / "observations.json", std::ios::app) << "more bytes";
+  auto changed = owner.verify();
+  REQUIRE_FALSE(changed);
+  CHECK(changed.error().detail.code == "capture_changed");
+  CHECK_FALSE(owner.verify());
+}
 TEST_CASE("C3 B2 optional host slots are admitted even without later service use",
           "[external-registration][extension-admission]") {
   for (auto slot : {"base-root", "observations"}) {

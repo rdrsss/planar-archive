@@ -1002,3 +1002,157 @@ TEST_CASE("X06 D C01 admission charges the factory budget exactly once per charg
   auto longer  = delta("w" + std::string(999, 'x'));
   CHECK(longer - shorter == 999);
 }
+
+namespace {
+void grow(const std::filesystem::path& path) {
+  std::ofstream(path, std::ios::app) << "more bytes";
+}
+void refused_changed(capture_admission& admission) {
+  auto result = admission.verify();
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "capture_changed");
+  CHECK(result.error().message == "Captured external profile changed");
+}
+void expect_verifies(capture_admission& admission) {
+  auto result = admission.verify();
+  INFO((result ? std::string() : result.error().code + ": " + result.error().message));
+  CHECK(result);
+}
+} // namespace
+TEST_CASE("capture admission load ledger receipt tolerates committed content changes", "[capture][admission][load_ledger]") {
+  for (bool with_root : {false, true}) {
+    temporary t;
+    t.put("ledger.db", "seed");
+    auto admission = t.admitted();
+    auto admitted  = admission.admit_file("ledger", (t.path / "ledger.db").string(), admission_file_role::load_ledger);
+    REQUIRE(admitted);
+    if (with_root)
+      REQUIRE(admission.admit_root("workspace", (t.path / "workspace").string()));
+    expect_verifies(admission);
+    grow(t.path / "ledger.db");
+    expect_verifies(admission);
+    expect_verifies(admission);
+    grow(t.path / "ledger.db");
+    expect_verifies(admission);
+  }
+}
+TEST_CASE("capture admission load ledger receipt refuses a replaced or removed file", "[capture][admission][load_ledger]") {
+  for (bool remove : {false, true}) {
+    temporary t;
+    t.put("ledger.db", "seed");
+    auto admission = t.admitted();
+    REQUIRE(admission.admit_file("ledger", (t.path / "ledger.db").string(), admission_file_role::load_ledger));
+    REQUIRE(admission.verify());
+    if (remove) {
+      std::filesystem::remove(t.path / "ledger.db");
+    } else {
+      t.put("ledger.db.fresh", "seed");
+      std::filesystem::rename(t.path / "ledger.db.fresh", t.path / "ledger.db");
+    }
+    refused_changed(admission);
+    CHECK_FALSE(admission.verify());
+  }
+}
+TEST_CASE("capture admission load ledger receipt refuses a mode change", "[capture][admission][load_ledger]") {
+  for (auto mode : {0600, 0666}) {
+    temporary t;
+    t.put("ledger.db", "seed");
+    REQUIRE(::chmod((t.path / "ledger.db").c_str(), 0644) == 0);
+    auto admission = t.admitted();
+    REQUIRE(admission.admit_file("ledger", (t.path / "ledger.db").string(), admission_file_role::load_ledger));
+    REQUIRE(::chmod((t.path / "ledger.db").c_str(), static_cast<mode_t>(mode)) == 0);
+    refused_changed(admission);
+  }
+}
+TEST_CASE("capture admission verify refusal poisons the capability even when the change reverts",
+          "[capture][admission][load_ledger]") {
+  temporary t;
+  t.put("ledger.db", "seed");
+  REQUIRE(::chmod((t.path / "ledger.db").c_str(), 0644) == 0);
+  auto admission = t.admitted();
+  REQUIRE(admission.admit_file("ledger", (t.path / "ledger.db").string(), admission_file_role::load_ledger));
+  REQUIRE(admission.verify());
+  REQUIRE(::chmod((t.path / "ledger.db").c_str(), 0600) == 0);
+  refused_changed(admission);
+  REQUIRE(::chmod((t.path / "ledger.db").c_str(), 0644) == 0);
+  refused_changed(admission);
+  CHECK_FALSE(admission.healthy());
+}
+TEST_CASE("capture admission content changes still refuse for every other supplied file role",
+          "[capture][admission][load_ledger]") {
+  enum class kind { registry, observation, legacy_ledger, declaration };
+  for (auto strict : {kind::registry, kind::observation, kind::legacy_ledger, kind::declaration}) {
+    auto make = [&](temporary& t, capture_admission& admission) {
+      REQUIRE(admission.admit_file("ledger", (t.path / "ledger.db").string(), admission_file_role::load_ledger));
+      switch (strict) {
+      case kind::registry:
+        REQUIRE(admission.admit_file("registry", (t.path / "trusted/registry.json").string(), admission_file_role::registry));
+        break;
+      case kind::observation:
+        REQUIRE(admission.admit_file("observation", (t.path / "observation.json").string(), admission_file_role::observation));
+        break;
+      case kind::legacy_ledger:
+        REQUIRE(admission.admit_file("legacy", (t.path / "ledger2.db").string(), admission_file_role::ledger));
+        break;
+      case kind::declaration:
+        REQUIRE(admission.admit_root("workspace", (t.path / "workspace").string()));
+        REQUIRE(
+            admission.admit_file("declaration", (t.path / "workspace/workspace.lua").string(), admission_file_role::declaration));
+        break;
+      }
+    };
+    auto strict_path = [&](temporary& t) {
+      switch (strict) {
+      case kind::registry:
+        return t.path / "trusted/registry.json";
+      case kind::observation:
+        return t.path / "observation.json";
+      case kind::legacy_ledger:
+        return t.path / "ledger2.db";
+      case kind::declaration:
+        return t.path / "workspace/workspace.lua";
+      }
+      return t.path;
+    };
+    auto fresh = [&](auto&& body) {
+      temporary t;
+      t.put("ledger.db", "seed");
+      t.put("ledger2.db", "seed2");
+      t.put("trusted/registry.json", "{}");
+      auto admission = t.admitted();
+      make(t, admission);
+      REQUIRE(admission.verify());
+      body(t, admission);
+    };
+    fresh([&](temporary& t, capture_admission& a) {
+      grow(strict_path(t));
+      refused_changed(a);
+    });
+    fresh([&](temporary& t, capture_admission& a) {
+      grow(t.path / "ledger.db");
+      grow(strict_path(t));
+      refused_changed(a);
+    });
+    fresh([&](temporary& t, capture_admission& a) {
+      grow(t.path / "ledger.db");
+      expect_verifies(a);
+    });
+  }
+}
+TEST_CASE("capture admission load ledger role refuses trusted aliases and links", "[capture][admission][load_ledger]") {
+  {
+    temporary t;
+    std::filesystem::create_hard_link(t.path / "trusted/modules/a.lua", t.path / "alias");
+    auto admission = t.admitted();
+    unsafe(admission.admit_file("ledger", (t.path / "alias").string(), admission_file_role::load_ledger));
+  }
+  {
+    temporary t;
+    t.put("ledger.db", "seed");
+    std::filesystem::create_symlink(t.path / "ledger.db", t.path / "ledger.link");
+    auto admission = t.admitted();
+    auto result    = admission.admit_file("ledger", (t.path / "ledger.link").string(), admission_file_role::load_ledger);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "path_denied");
+  }
+}

@@ -767,3 +767,95 @@ TEST_CASE("X06 C C01 profile completion stores a built-in job beside a custom jo
   CHECK(count_rows(mixed.ledger_path, "revisions") == revisions);
   CHECK(read_file_bytes(mixed.ledger_path) == bytes_after_first);
 }
+
+namespace {
+class x07_c02_history_services final : public command_services {
+public:
+  int                    calls = 0;
+  command_service_result open_workspace(const command_render_options&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result capture_render(const command_render_options&, const value_ptr&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result initialize_ledger(const command_init_options&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result read_history(const command_history_options&, const command_history_selector&) override {
+    ++calls;
+    return {};
+  }
+  command_service_result export_source(const command_export_options&) override {
+    ++calls;
+    return {};
+  }
+};
+} // namespace
+TEST_CASE("X07 C02 loser prepared after a winner commit refuses revision_conflict and not capture_changed",
+          "[x07c02][profile_acceptance]") {
+  profile_fixture f;
+  auto            loser_intent = f.intent("req-2");
+  auto            opened       = profile_invocation::open_known_load(loser_intent, f.ledger_path.string());
+  REQUIRE(opened);
+  auto winner = prepare(f, "req-1");
+  REQUIRE(run(f, f.intent("req-1"), winner).result);
+  auto prepared = std::move(*opened).prepare_load(loser_intent);
+  if (!prepared) {
+    CAPTURE(prepared.error().failure.detail.code, prepared.error().failure.detail.message);
+    FAIL("prepare_load refused");
+  }
+  REQUIRE(prepared);
+  const auto before  = read_file_bytes(f.ledger_path);
+  auto       refused = run(f, loser_intent, *prepared);
+  expect_untouched(refused, format_error_code::revision_conflict, f.ledger_path, before);
+  REQUIRE(refused.result.error().detail);
+  const auto* detail = std::get_if<types::revision_conflict_detail>(&*refused.result.error().detail);
+  REQUIRE(detail);
+  CHECK_FALSE(detail->expected);
+  CHECK(detail->actual == 1);
+  CHECK(count_rows(f.ledger_path, "requests") == 1);
+  CHECK(count_rows(f.ledger_path, "revisions") == 1);
+  CHECK(count_rows(f.ledger_path, "events") == 2);
+}
+TEST_CASE("X07 C02 prepared profile native receipts ignore a committed ledger change", "[x07c02][profile_acceptance]") {
+  profile_fixture f;
+  auto            loser  = prepare(f, "req-2");
+  auto            winner = prepare(f, "req-1");
+  REQUIRE(run(f, f.intent("req-1"), winner).result);
+  auto verified = loser.verify_native_receipts();
+  if (!verified) {
+    CAPTURE(verified.error().code, verified.error().message);
+    CHECK(verified);
+  }
+  CHECK(loser.verify_native_receipts());
+}
+TEST_CASE("X07 C02 post-preparation input change plus winner commit still refuses revision_conflict",
+          "[x07c02][profile_acceptance]") {
+  profile_fixture f;
+  auto            stale  = prepare(f, "req-2");
+  auto            winner = prepare(f, "req-1");
+  REQUIRE(run(f, f.intent("req-1"), winner).result);
+  append_to(f.shared_text(), "\nchanged\n");
+  const auto before  = read_file_bytes(f.ledger_path);
+  auto       refused = run(f, f.intent("req-2"), stale);
+  expect_untouched(refused, format_error_code::revision_conflict, f.ledger_path, before);
+  CHECK(refused.result.error().code != format_error_code::capture_changed);
+  CHECK(count_rows(f.ledger_path, "requests") == 1);
+  CHECK(count_rows(f.ledger_path, "revisions") == 1);
+}
+TEST_CASE("X07 C02 history family ledger receipt stays strict at the built-in admission site", "[x07c02][profile_acceptance]") {
+  profile_fixture         f;
+  command_history_options options{f.ledger_path.string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+  auto                    owner = profile_invocation::open_with_profile(f.profile.string(), options);
+  REQUIRE(owner);
+  append_to(f.ledger_path, "x");
+  x07_c02_history_services services;
+  auto                     result = std::move(*owner).run_known(options, services);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "capture_changed");
+  CHECK(result.error().message == "Captured external profile changed");
+  CHECK(services.calls == 0);
+}

@@ -5291,7 +5291,10 @@ profile_invocation::open_known_load(const acceptance::request_intent& request_in
           "profile"});
     if (auto admitted = capture->admit_file("registry", v2.registry_argument, admission_file_role::registry); !admitted)
       return std::unexpected(from_profile_error(std::move(admitted.error())));
-    if (auto admitted = capture->admit_file("ledger", ledger_path, admission_file_role::ledger); !admitted)
+    // Ledger-contract load steps 3 to 5: the ledger is the store compared by the CAS (step 4 revision_conflict
+    // precedes the step-5 receipt recheck), so a winner's commit must not fail receipts; its identity and mode
+    // remain checked (step 5).
+    if (auto admitted = capture->admit_file("ledger", ledger_path, admission_file_role::load_ledger); !admitted)
       return std::unexpected(from_profile_error(std::move(admitted.error())));
     auto root = capture->retain_root("workspace");
     if (!root)

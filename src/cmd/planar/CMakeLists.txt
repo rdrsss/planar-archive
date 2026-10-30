@@ -231,7 +231,8 @@ foreach(group IN ITEMS services replay workflow)
     x07.replay_same_selector_changed_bytes_new_provenance x07.relookup_equal_replay_before_stale_cas
     x07.relookup_unequal_conflicts x07.two_process_cas_one_winner x07.receipt_races_refuse_before_authorization
     x07.final_race_rolls_back_before_commit x07.post_commit_allocation_failure_keeps_receipt
-    x07.post_commit_encoding_failure_keeps_receipt x07.post_commit_stdout_failure_keeps_receipt)
+    x07.post_commit_encoding_failure_keeps_receipt x07.post_commit_stdout_failure_keeps_receipt
+    x07.ledger_commit_after_admission_reports_revision_conflict)
   set(x07_cases_workflow x07.workflow_shape_load x07.workflow_render_external x07.workflow_verb_history_export)
   foreach(x07_case IN LISTS x07_cases_${group})
     add_test(NAME ${x07_case} COMMAND "${Python3_EXECUTABLE}"

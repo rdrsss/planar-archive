@@ -524,6 +524,17 @@ TEST_CASE("C4 B2 changed original profile or admitted ledger refuses before nati
     CHECK(std::get<registration_error>(retry.error()).detail.code == "capture_changed");
   }
 }
+TEST_CASE("C4 B2 appended admitted ledger refuses verify before any ledger read", "[runtime][c4b2]") {
+  native_history_fixture f;
+  auto                   owner = f.owner();
+  f.admit(owner);
+  std::ofstream(f.root / "ledger", std::ios::app) << "changed";
+  auto checked = owner.verify();
+  REQUIRE_FALSE(checked);
+  CHECK(checked.error().detail.code == "capture_changed");
+  CHECK(checked.error().detail.message == "Captured external profile changed");
+  CHECK_FALSE(owner.verify());
+}
 TEST_CASE("C4 B2 invalid and moved history owners refuse and invalid ledger keeps typed format error", "[runtime][c4b2]") {
   native_history_fixture f;
   auto                   owner = f.owner();

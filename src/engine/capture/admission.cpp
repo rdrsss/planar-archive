@@ -86,6 +86,7 @@ struct capture_admission::implementation {
     std::size_t parent;
     std::string name;
     bool        directory;
+    bool        identity_only = false;
   };
   struct selection {
     std::string              slot;
@@ -126,7 +127,14 @@ struct capture_admission::implementation {
         throw diagnostic{"internal", "Invalid external profile protocol"};
     charge(512 + slot.size());
   }
-  std::size_t retain(descriptor fd, struct stat metadata, std::size_t parent, std::string_view name, bool directory) {
+  // Ledger-contract load steps 3-5: the CAS precedes the receipt recheck, and step 5 keeps selected file
+  // identities and normalized modes checked. The load ledger is the compared store, not a closure input,
+  // so its receipt compares identity and mode only; every other file receipt stays strict.
+  static bool same_receipt(const receipt& r, const struct stat& current) {
+    return (r.directory || r.identity_only) ? same_directory(r.metadata, current) : same_file(r.metadata, current);
+  }
+  std::size_t retain(descriptor fd, struct stat metadata, std::size_t parent, std::string_view name, bool directory,
+                     bool identity_only = false) {
     if (directory) {
       for (std::size_t index = 0; index < receipts.size(); ++index) {
         const auto& known = receipts[index];
@@ -137,13 +145,14 @@ struct capture_admission::implementation {
     if (receipts.size() == max_receipts)
       exhausted();
     charge(512 + name.size());
-    receipts.push_back({std::move(fd), metadata, parent, std::string(name), directory});
+    receipts.push_back({std::move(fd), metadata, parent, std::string(name), directory, identity_only});
     return receipts.size() - 1;
   }
   // True only when the latest open() refused because the selected supplied file's final component was
   // absent (ENOENT); an internal signal that never alters a diagnostic and survives poisoning.
   bool      refused_absent = false;
-  selection open(std::string_view slot, std::string_view host, kind type, bool directory, bool allow_absent = false) {
+  selection open(std::string_view slot, std::string_view host, kind type, bool directory, bool allow_absent = false,
+                 admission_file_role role = admission_file_role::registry) {
     refused_absent = false;
     key(slot);
     // Host selectors use the existing native host-text ceiling, not portable module grammar.
@@ -151,7 +160,7 @@ struct capture_admission::implementation {
       exhausted();
     if (host.empty() || host.front() != '/' || !valid_text(host))
       invalid();
-    selection  result{std::string(slot), type, admission_file_role::registry, 0, {}, false, {}};
+    selection  result{std::string(slot), type, role, 0, {}, false, {}};
     descriptor start(::open("/", metadata_flags(true)));
     if (start.fd < 0)
       io_error();
@@ -205,10 +214,11 @@ struct capture_admission::implementation {
         refused_absent = errno == ENOENT && last && type == kind::supplied_file; // vanished after fstatat
         io_error();
       }
-      auto metadata = status(fd.fd);
-      if (!(is_directory ? same_directory(named, metadata) : same_file(named, metadata)))
+      auto       metadata = status(fd.fd);
+      const bool identity = last && !is_directory && role == admission_file_role::load_ledger;
+      if (!(is_directory || identity ? same_directory(named, metadata) : same_file(named, metadata)))
         changed();
-      auto retained = retain(std::move(fd), metadata, parent, name, is_directory);
+      auto retained = retain(std::move(fd), metadata, parent, name, is_directory, identity);
       if (name == "..") {
         // Retain the physical upward edge for verification, independently of
         // the final ancestry. An exited directory remains selected metadata,
@@ -261,12 +271,11 @@ struct capture_admission::implementation {
     for (std::size_t index = 0; index < receipts.size(); ++index) {
       const auto& r       = receipts[index];
       auto        current = status(r.fd.fd);
-      if (!(r.directory ? same_directory(r.metadata, current) : same_file(r.metadata, current)))
+      if (!same_receipt(r, current))
         changed();
       if (!r.name.empty()) {
         struct stat named{};
-        if (::fstatat(receipts[r.parent].fd.fd, r.name.c_str(), &named, AT_SYMLINK_NOFOLLOW) ||
-            !(r.directory ? same_directory(r.metadata, named) : same_file(r.metadata, named)))
+        if (::fstatat(receipts[r.parent].fd.fd, r.name.c_str(), &named, AT_SYMLINK_NOFOLLOW) || !same_receipt(r, named))
           changed();
       }
     }
@@ -355,12 +364,12 @@ std::expected<void, diagnostic> capture_admission::admit_file(std::string_view s
     _impl->refused_absent = false;
     _impl->check();
     if (role != admission_file_role::registry && role != admission_file_role::ledger &&
-        role != admission_file_role::observation && role != admission_file_role::declaration)
+        role != admission_file_role::observation && role != admission_file_role::declaration &&
+        role != admission_file_role::load_ledger)
       invalid();
     if (_impl->files == max_files)
       exhausted();
-    auto value = _impl->open(slot, file, implementation::kind::supplied_file, false);
-    value.role = role;
+    auto value = _impl->open(slot, file, implementation::kind::supplied_file, false, false, role);
     _impl->append(std::move(value));
     ++_impl->files;
     return {};

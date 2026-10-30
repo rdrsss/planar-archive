@@ -1,0 +1,13 @@
+replacement.C3 B2 appended observations file refuses verify and stays refused
+replacement.C4 B2 appended admitted ledger refuses verify before any ledger read
+replacement.capture admission content changes still refuse for every other supplied file role
+replacement.capture admission load ledger receipt refuses a mode change
+replacement.capture admission load ledger receipt refuses a replaced or removed file
+replacement.capture admission load ledger receipt tolerates committed content changes
+replacement.capture admission load ledger role refuses trusted aliases and links
+replacement.capture admission verify refusal poisons the capability even when the change reverts
+replacement.X07 C02 history family ledger receipt stays strict at the built-in admission site
+replacement.X07 C02 loser prepared after a winner commit refuses revision_conflict and not capture_changed
+replacement.X07 C02 post-preparation input change plus winner commit still refuses revision_conflict
+replacement.X07 C02 prepared profile native receipts ignore a committed ledger change
+x07.ledger_commit_after_admission_reports_revision_conflict

@@ -10,7 +10,10 @@ enum class admission_file_role {
   observation, ///< Must remain outside the trusted tree and distinct from trusted files.
   registry,    ///< Directory colocation is allowed; selected trusted aliases are forbidden.
   ledger,      ///< Native data; selected trusted aliases are forbidden.
-  declaration  ///< Discovered declaration; checked before its first content read.
+  declaration, ///< Discovered declaration; checked before its first content read.
+  load_ledger  ///< Native ledger admitted by load only; its receipt compares device, inode and mode (not size or
+               ///< times), by descriptor and by name. Ledger-contract load steps 3 to 5: step 5 keeps the selected
+               ///< file and root identities and normalized file modes checked.
 };
 class retained_file_receipt;
 class retained_root_receipt;
@@ -20,7 +23,9 @@ class retained_root_receipt;
 /// selected. Physical parent traversal retains every visited edge while only
 /// final ancestry governs containment; intermediate links never cancel away.
 /// Cooperative checks cannot detect change-and-revert or prevent a
-/// write after verification. File receipts include identity, mode, size and times.
+/// write after verification. File receipts include identity, mode, size and times,
+/// except load_ledger receipts, which keep only identity and mode (ledger-contract
+/// load steps 3 to 5).
 class capture_admission {
 public:
   /// @brief Admit an explicit trusted directory and its no-follow ancestors.
