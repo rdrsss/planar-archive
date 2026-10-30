@@ -37,6 +37,14 @@ The schema/response/byte mechanics below are independently reviewed implementati
 new verbs, arbitrary schemas and filesystem ownership attestation remain outside
 this gate's authority.
 
+Pointer (RA01-A): the [authoring contract](authoring-contract.md) adds six embedded-only verbs, whose root-help
+lines are the only amendment to "default root help stays byte-for-byte old" below; adds shipped-owned
+projection ID `orchestrator`; and reserves five more built-in section IDs
+(`orchestrator_authority`, `orchestrator_graph`, `orchestrator_roles`, `orchestrator_prescriptions`,
+`orchestrator_actions`) in the union of the X-PROJ reservation. `with-profile` plus an RA01 verb stays `usage`
+after profile admission until R15 widens the closed factory; the probe membership, precedence, name-collision,
+capacity and namespace consequences are in [RA-9](authoring-contract.md#ra-9-profiles-e3-a). No existing message of the closed table changes.
+
 ## X-CLI — Envelope and admission order
 
 Only these new forms exist (tokens separate):

@@ -17,6 +17,15 @@ The [external-profile amendment](external-profile-contract.md) and
 candidates awaiting independent review and P1/P2 disposition. Current commands
 include load; no external loading or v2 codec is shipped by this pointer.
 
+Status pointer (RA01-A): the [authoring contract](authoring-contract.md) specifies six more mandatory
+rows (`spec-prompt`, `critique`, `ingest`, `explain-rejection`, `observe`, `orchestrator`), so the catalog has
+eleven mandatory rows at the RA01 integrated gate; it adds the six root-help lines, the opaque host-path slots
+`diagnostic` and `from`, and the services `capture_authoring`, `capture_orchestrator`, `read_diagnostic` and
+`read_observation_directory`, with their exact result values in the authoring contract (RA-2, RA-5, RA-6),
+and it scopes the "no directory listing" sentence below to every family except `observe`. Nothing is shipped
+by this pointer; the rows and bytes below stay current until
+that gate.
+
 ## Catalog and structural ABI
 
 The embedded bundle registers through `registration.add(descriptor, callable)`.
@@ -187,7 +196,9 @@ Lua. Native owns original strings for capture, request intent and services.
 
 `context` contains only the methods in the selected row below. No generic op
 string dispatcher, SQL, arbitrary IO, commit callback, subprocess or directory
-listing is exposed. Each service is callable at most once, in the stated order;
+listing is exposed (scoped RA01-A amendment: the `observe` family's `read_observation_directory` service of the
+[authoring contract](authoring-contract.md#ra-6-observe-q11-a-e12-a) is the one bounded native directory
+listing; every other family still exposes none). Each service is callable at most once, in the stated order;
 failed service poisons further use and the invocation must return that exact
 native failure. Success returns `{ok:true,value:V}`; expected failure returns
 `{ok:false,error:E}` with the existing typed error value, retained natively for

@@ -100,6 +100,12 @@ existing capture restrictions remain unchanged. Added embedded Lua changes exact
 stdlib provenance, not W or interpretation_v1 shape. New naming behavior is the
 separately scoped V5-02-C amendment. Neither target is claimed implemented here.
 
+Pointer (RA01-A): authoring prompts reuse this capture boundary through the job-less authoring capture of the
+[authoring contract](authoring-contract.md#ra-2-authoring-capture-service), and `observe` assembles the
+observations value defined below without changing it
+([RA-6](authoring-contract.md#ra-6-observe-q11-a-e12-a)). Render remains database-free and refuses the same
+unsupported options.
+
 ## Capture boundary
 
 The engine first captures workspace.lua, the spec, **every listed job**, every

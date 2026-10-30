@@ -14,6 +14,10 @@ v1 declaration, record, request, interpretation, version, event/result and stora
 schemas remain unchanged. It grants no execution, source checkout, generic mutation
 or external-profile authority. [R14-D3](rounds/R14-D3.md) owns the review gate.
 
+Pointer (RA01-A): the [authoring contract](authoring-contract.md#ra-1-catalog-rows-options-and-capabilities)
+extends the completeness rule below from five to eleven mandatory rows at the RA01 integrated gate, and amends
+the fixed root help with six usage lines. The five-row rule stays current until then.
+
 ## Fixed catalog admission and typed intent
 
 At the integrated load gate, add exactly one mandatory descriptor to the existing
