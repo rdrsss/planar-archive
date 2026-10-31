@@ -127,7 +127,11 @@ Cumulative native bridge conversion retains its 512 MiB accounting ceiling.
 
 `main.cpp` performs checked process writes. `bootstrap` creates the CLI11 root,
 attaches render, init, history and export command handlers, counts
-bindings across all five, and dispatches exactly one selected command. The
+bindings across all five, and dispatches exactly one selected command. Six
+authoring families (spec-prompt, critique, ingest, explain-rejection, observe,
+orchestrator) are embedded-only and exist only in a bundle selected at compile
+time (see the authoring bundle paragraph below); the production binary refuses
+those verbs as usage. The
 render handler owns option bindings through parsing and execution, host path
 resolution, capture routing and trusted render composition. The shared response
 module sits below both bootstrap and handlers, avoiding a dependency cycle.
@@ -735,7 +739,7 @@ Planar does not schedule sessions or manage checkouts. Composition, impact/roadm
 and controlled measurements remain after R19.
 
 The internal `command_vm` registers exactly five shipped command callables from
-`planar/commands.lua`, copies and validates the complete catalog, and seals its
+`planar/commands.lua` by default (the default stays five rows until RA01-C), copies and validates the complete catalog, and seals its
 canonical descriptors, handler/module identities and exact embedded bundle digest.
 It retains callable registry references in the same VM. Registration is pure;
 execution receives typed native intent with opaque path userdata and only its
@@ -762,6 +766,23 @@ read wrappers are installed before registration, preserving captured next/rawget
 pairs aliases, indexed reads, ipairs and length; native result/codec conversion
 reads those same backings while preserving original tags. Invocation-local
 scratch tables are created after sealing and remain mutable.
+
+Authoring bundle selection is compile-time. Defining `PLANAR_AUTHORING_BUNDLE`
+selects eleven rows (the five shipped plus the six embedded-only authoring
+families) in the runtime and bootstrap; production targets never receive the
+definition, so the production binary keeps five rows, its root help is
+unchanged and it refuses the six authoring verbs as usage (exit 2, empty
+stdout). Live in the production binary, a with-profile
+profile registering any reserved authoring command, family or handler name,
+`orchestrator`, or one of the five `orchestrator_*` projection ids is refused as
+`External registration identity conflict` (reference; the field is the
+registration ordinal). The test-only inline stack `planar_authoring_stack` is built with the
+definition, together with 20 generated malformed-bundle variants that the
+validator must refuse. The `command_options` variant stays closed at five
+members; the six families live outside it. Until their behaviour lands, each
+authoring handler is a stub: after the selector and path stages it exits 4
+(internal) with `Invalid embedded command protocol`. The default stays five
+rows until RA01-C.
 
 The command bootstrap retains CLI11 bindings through registration, native services
 and encoding. Root help and usage refusals finish before registration. The complete
@@ -1595,6 +1616,14 @@ dispatch and refuses when the admitted options differ from the final parsed
 options. `into_extension()` adopts opaque owners only and refuses known-load
 owners. No generic service factory, mutable `command_vm` or reverse conversion
 exists. The extension handler is `src/cmd/planar/handlers/extension/`.
+
+The six authoring families are embedded-only and are not admitted under
+with-profile: a with-profile tail naming one stays usage after profile
+admission, and the family set of the closed factory stays the five shipped
+families. Compile-time selection of the authoring bundle (definition
+`PLANAR_AUTHORING_BUNDLE`, test-only stack `planar_authoring_stack`) leaves the
+production binary at five rows until RA01-C. The reserved section-ID union grows from 18 to 23
+(the five `orchestrator_*` ids) and is live in the production binary.
 
 `response.cpp` holds the one error adapter mapping registration refusals to
 closed code, message and exit, with redaction. Every message literal in

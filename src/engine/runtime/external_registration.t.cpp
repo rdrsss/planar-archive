@@ -4567,11 +4567,19 @@ std::int64_t c02_boundary(bool outputs) {
 // The unpadded roots measured 4524 (macOS, 36 bytes) and 4468 (Linux, 28 bytes).
 #if defined(__APPLE__)
 constexpr std::int64_t c02_outputs_gap  = 4742;
-constexpr std::int64_t c02_off_boundary = 228586; // measured on macOS in Debug
+constexpr std::int64_t c02_off_boundary = 227525; // measured on macOS in Debug and RelWithDebInfo
 #else
 constexpr std::int64_t c02_outputs_gap  = 4737;
-constexpr std::int64_t c02_off_boundary = 228612; // measured on Linux in Debug and RelWithDebInfo
+constexpr std::int64_t c02_off_boundary = 227551; // measured on Linux in Debug and RelWithDebInfo
 #endif
+// Both re-pins (macOS 228586 to 227593 and Linux 228612 to 227619 after gate run 1; macOS 227593 to 227525 and Linux 227619 to
+// 227551 after the probe repair, 68 padding bytes) are authorised by the operator decision of 2026-10-30 ('re-pin and resume').
+// RA01-B1 re-pin: the embedded commands.lua grew by the six authoring registrations (2618 source bytes), which the profile
+// preparation charges across its embedded payload passes. Both platforms moved by the same 993 padding bytes (macOS 228586 to
+// 227593, Linux 228612 to 227619), so the shift is the stdlib source size and not a sizing difference. The mutant window below
+// is unchanged. The probe repair then grew commands.lua again (fresh option tables per authoring row), moving both platforms by
+// a further 68 padding bytes (macOS 227593 to 227525, Linux 227619 to 227551). Any later change to the byte length of
+// commands.lua moves this pin again; re-measure it in that round.
 // The outputs-off boundary moves by one padding byte per about 58 native bytes charged. Deleting the request-record conversion
 // charge (6 * 320 + sizeof(value) native bytes, paid on both the outputs-off and outputs-on sides) raises the boundary by about
 // 33 padding bytes and shifts no gap, so the gap pin cannot see it; this window is the only observable. The window is far
@@ -5208,4 +5216,254 @@ TEST_CASE("X07 N30 history decode charges the factory budget owner", "[external-
   CHECK(big.error().code == "resource_limit");
   CHECK((big.error().limit == "native_bytes" || big.error().limit == "lua_bytes"));
   CHECK(big.error().maximum == PLANAR_BUDGET_NATIVE_MAX);
+}
+
+namespace {
+const std::array<std::string, 6> ra01_verbs{"spec-prompt", "critique", "ingest", "explain-rejection", "observe", "orchestrator"};
+const std::array<std::string, 6> ra01_handlers{"shipped.spec_prompt.v1",       "shipped.critique.v1", "shipped.ingest.v1",
+                                               "shipped.explain_rejection.v1", "shipped.observe.v1",  "shipped.orchestrator.v1"};
+const std::array<std::string, 6> ra01_projection_ids{"orchestrator",       "orchestrator_authority",     "orchestrator_graph",
+                                                     "orchestrator_roles", "orchestrator_prescriptions", "orchestrator_actions"};
+void                             ra01_conflict(const std::string& source, const std::string& field) {
+  INFO(source);
+  auto vm = command_vm::create(profile({source}));
+  REQUIRE_FALSE(vm);
+  CHECK(vm.error().detail.code == "reference");
+  CHECK(vm.error().detail.message == "External registration identity conflict");
+  CHECK(vm.error().field == field);
+  CHECK(vm.error().detail.message.find("private") == std::string::npos);
+}
+std::string ra01_projection(const std::string& id) {
+  return projection_callable(projection_section(), "role_context_v1", id);
+}
+} // namespace
+TEST_CASE("RA01-B1 profile registering a reserved authoring command name is refused as identity conflict",
+          "[external-registration][ra01-b1]") {
+  for (const auto& verb : ra01_verbs)
+    ra01_conflict(command(verb), "catalog.commands[6]");
+}
+TEST_CASE("RA01-B1 reserved command collision field follows registration order", "[external-registration][ra01-b1]") {
+  for (const auto& verb : ra01_verbs) {
+    ra01_conflict(command("zzz_first") + "; " + command(verb), "catalog.commands[7]");
+    ra01_conflict(command(verb) + "; " + command("aaa_second"), "catalog.commands[6]");
+  }
+}
+TEST_CASE("RA01-B1 profile registering a reserved authoring family name is refused as identity conflict",
+          "[external-registration][ra01-b1]") {
+  for (const auto& verb : ra01_verbs) {
+    auto source = command("mine");
+    auto at     = source.find("family='extension_read_v1'");
+    REQUIRE(at != std::string::npos);
+    source.replace(at, std::string("family='extension_read_v1'").size(), "family='" + verb + "'");
+    ra01_conflict(source, "catalog.commands[6]");
+  }
+}
+TEST_CASE("RA01-B1 profile registering a reserved authoring handler id is refused as identity conflict",
+          "[external-registration][ra01-b1]") {
+  for (const auto& handler : ra01_handlers) {
+    auto source = command("mine");
+    auto at     = source.find("custom.mine");
+    REQUIRE(at != std::string::npos);
+    source.replace(at, std::string("custom.mine").size(), handler);
+    ra01_conflict(source, "catalog.commands[6]");
+  }
+}
+TEST_CASE("RA01-B1 profile registering a reserved projection id is refused as identity conflict",
+          "[external-registration][ra01-b1]") {
+  for (const auto& id : ra01_projection_ids)
+    ra01_conflict(ra01_projection(id), "catalog.projections[1]");
+}
+TEST_CASE("RA01-B1 reserved projection collision field follows registration order", "[external-registration][ra01-b1]") {
+  for (const auto& id : ra01_projection_ids) {
+    ra01_conflict(ra01_projection("zzz") + "; " + ra01_projection(id), "catalog.projections[2]");
+    ra01_conflict(ra01_projection(id) + "; " + ra01_projection("aaa"), "catalog.projections[1]");
+  }
+}
+// Mutant: skip the reserved command pre-check whenever the catalog also lists a projection.
+TEST_CASE("RA01-B1 reserved command is refused when the profile also registers a projection",
+          "[external-registration][ra01-b1]") {
+  for (const auto& verb : ra01_verbs) {
+    ra01_conflict(command(verb) + "; " + ra01_projection("mine_projection"), "catalog.commands[6]");
+    ra01_conflict(ra01_projection("mine_projection") + "; " + command(verb), "catalog.commands[6]");
+  }
+  for (const auto& handler : ra01_handlers) {
+    auto source = command("mine");
+    auto at     = source.find("custom.mine");
+    REQUIRE(at != std::string::npos);
+    source.replace(at, std::string("custom.mine").size(), handler);
+    ra01_conflict(source + "; " + ra01_projection("mine_projection"), "catalog.commands[6]");
+  }
+}
+TEST_CASE("RA01-B1 non reserved near miss names stay registrable", "[external-registration][ra01-b1]") {
+  for (auto name : {"observer", "status", "orchestrate"}) {
+    INFO(name);
+    REQUIRE(command_vm::create(profile({command(name)})));
+  }
+  {
+    auto source = command("mine");
+    auto at     = source.find("custom.mine");
+    REQUIRE(at != std::string::npos);
+    source.replace(at, std::string("custom.mine").size(), "custom.observe");
+    REQUIRE(command_vm::create(profile({source})));
+  }
+  for (auto id : {"orchestrate", "orchestrator_extra", "observe"}) {
+    INFO(id);
+    REQUIRE(command_vm::create(profile({ra01_projection(id)})));
+  }
+  // An uppercase id is outside the existing id spelling rule, so it keeps that diagnostic and is never the reservation.
+  {
+    auto vm = command_vm::create(profile({ra01_projection("Orchestrator")}));
+    REQUIRE_FALSE(vm);
+    CHECK(vm.error().detail.message != "External registration identity conflict");
+  }
+}
+TEST_CASE("RA01-B1 reserved pre check skips malformed descriptors and keeps their diagnostic",
+          "[external-registration][ra01-b1]") {
+  const std::string common = "options=engine.array{},help='',response_kind='extension_v1',capabilities=engine.array{}";
+  for (const auto& source :
+       {"registration.add({name='mine',family='extension_read_v1',handler_id=5," + common + "},function() end)",
+        "registration.add({name='mine',family={},handler_id='custom.mine'," + common + "},function() end)"}) {
+    INFO(source);
+    auto vm = command_vm::create(profile({source}));
+    REQUIRE_FALSE(vm);
+    CHECK(vm.error().detail.code == "internal");
+    CHECK(vm.error().detail.message == "Invalid external profile protocol");
+  }
+}
+// Mutant E17 and its siblings: the reserved command pre-check also tests response_kind, help, an option name or a capability.
+// Each variant is compared with the same source carrying the neutral string 'mine'; the outcomes must be identical.
+TEST_CASE("RA01-B1 reserved strings in non reserved fields keep their HEAD diagnostic", "[external-registration][ra01-b1]") {
+  struct outcome {
+    bool        sealed;
+    std::string code, message, field;
+    bool        operator==(const outcome&) const = default;
+  };
+  const auto run = [](const std::string& source) {
+    auto vm = command_vm::create(profile({source}));
+    if (vm)
+      return outcome{true, {}, {}, {}};
+    return outcome{false, vm.error().detail.code, vm.error().detail.message, vm.error().field};
+  };
+  const auto build = [](const std::string& options, const std::string& help, const std::string& kind, const std::string& caps) {
+    return "registration.add({name='mine',family='extension_read_v1',handler_id='custom.mine',options=engine.array{" + options +
+           "},help='" + help + "',response_kind='" + kind + "',capabilities=engine.array{" + caps + "}},function() end)";
+  };
+  for (const std::string reserved : {"observe", "spec-prompt"}) {
+    INFO(reserved);
+    const auto option = [](const std::string& n) { return "{name='" + n + "',type='text',required=true,help=''}"; };
+    {
+      INFO("response_kind");
+      const auto got = run(build("", "", reserved, ""));
+      CHECK(got == run(build("", "", "mine", "")));
+      CHECK_FALSE(got.sealed);
+      CHECK(got.code == "internal");
+      CHECK(got.message == "Invalid external profile protocol");
+    }
+    {
+      INFO("help");
+      const auto got = run(build("", reserved, "extension_v1", ""));
+      CHECK(got == run(build("", "mine", "extension_v1", "")));
+      CHECK(got.message != "External registration identity conflict");
+    }
+    {
+      INFO("option name");
+      const auto got = run(build(option(reserved), "", "extension_v1", ""));
+      CHECK(got == run(build(option("mine"), "", "extension_v1", "")));
+      CHECK(got.message != "External registration identity conflict");
+    }
+    {
+      INFO("capability");
+      const auto got = run(build("", "", "extension_v1", "'" + reserved + "'"));
+      CHECK(got == run(build("", "", "extension_v1", "'mine'")));
+      CHECK_FALSE(got.sealed);
+      CHECK(got.code == "internal");
+      CHECK(got.message == "Invalid external profile protocol");
+    }
+  }
+  {
+    INFO("critique option name");
+    const auto got = run(build("{name='critique',type='text',required=true,help=''}", "", "extension_v1", ""));
+    CHECK(got == run(build("{name='mine',type='text',required=true,help=''}", "", "extension_v1", "")));
+    CHECK(got.message != "External registration identity conflict");
+  }
+}
+// Mutants: delete the handler_id skip, delete the family skip, delete all three skips. Variant (c) only pins behaviour: the
+// name skip is an equivalent mutant because collect_final_descriptors refuses a non-string name (text_field via command_refuse)
+// before the pre-check runs, so (c) cannot kill it.
+TEST_CASE("RA01-B1 reserved pre check skips an entry with any ill typed identity field", "[external-registration][ra01-b1]") {
+  const std::string common = "options=engine.array{},help='',response_kind='extension_v1',capabilities=engine.array{}";
+  const auto        make   = [&](const std::string& name, const std::string& family, const std::string& handler) {
+    return "registration.add({name=" + name + ",family=" + family + ",handler_id=" + handler + "," + common + "},function() end)";
+  };
+  struct variant {
+    std::string reserved, neutral;
+  };
+  const std::vector<variant> variants{
+      {make("'observe'", "'extension_read_v1'", "5"), make("'mine'", "'extension_read_v1'", "5")},
+      {make("'mine'", "{}", "'shipped.observe.v1'"), make("'mine'", "{}", "'custom.mine'")},
+      {make("5", "'extension_read_v1'", "'shipped.observe.v1'"), make("5", "'extension_read_v1'", "'custom.mine'")}};
+  for (const auto& v : variants) {
+    INFO(v.reserved);
+    auto vm      = command_vm::create(profile({v.reserved}));
+    auto control = command_vm::create(profile({v.neutral}));
+    REQUIRE_FALSE(vm);
+    REQUIRE_FALSE(control);
+    CHECK(vm.error().detail.code == "internal");
+    CHECK(vm.error().detail.message == "Invalid external profile protocol");
+    CHECK(vm.error().detail.message != "External registration identity conflict");
+    CHECK(vm.error().detail.code == control.error().detail.code);
+    CHECK(vm.error().detail.message == control.error().detail.message);
+    CHECK(vm.error().field == control.error().field);
+  }
+}
+TEST_CASE("RA01-B1 reserved pre check continues past a malformed entry sorted before a reserved entry",
+          "[external-registration][ra01-b1]") {
+  // 'a' sorts before 'observe' and has an ill typed family; the pre-check must skip it and still reach 'observe'.
+  auto malformed = command("a");
+  auto at        = malformed.find("family='extension_read_v1'");
+  REQUIRE(at != std::string::npos);
+  malformed.replace(at, std::string("family='extension_read_v1'").size(), "family={}");
+  auto vm = command_vm::create(profile({malformed + "; " + command("observe")}));
+  REQUIRE_FALSE(vm);
+  CHECK(vm.error().detail.code == "reference");
+  CHECK(vm.error().detail.message == "External registration identity conflict");
+  CHECK(vm.error().field == "catalog.commands[7]");
+}
+TEST_CASE("RA01-B1 a broken profile reports its own error before a reserved name collision", "[external-registration][ra01-b1]") {
+  // The broken statement follows the reserved registration inside the same module, so module execution fails first.
+  auto a = command_vm::create(profile({command("observe") + "; error('boom')"}));
+  auto b = command_vm::create(profile({"error('boom')"}));
+  REQUIRE_FALSE(a);
+  REQUIRE_FALSE(b);
+  CHECK(a.error().detail.code == b.error().detail.code);
+  CHECK(a.error().detail.message == b.error().detail.message);
+  CHECK(a.error().field == b.error().field);
+  CHECK(a.error().detail.code != "reference");
+}
+TEST_CASE("RA01-B1 projection response refuses the five orchestrator section ids for both input kinds",
+          "[external-registration][ra01-b1]") {
+  constexpr std::array ids{"orchestrator_authority", "orchestrator_graph", "orchestrator_roles", "orchestrator_prescriptions",
+                           "orchestrator_actions"};
+  for (auto kind : {projection_input_kind::role_context_v1, projection_input_kind::history_snapshot_v1}) {
+    auto name = kind == projection_input_kind::role_context_v1 ? "role_context_v1" : "history_snapshot_v1";
+    for (auto id : ids) {
+      INFO(id);
+      auto vm = command_vm::create(
+          profile({projection_callable(projection_section(std::string("id='") + id + "',text='x',mandatory=true"), name)}));
+      REQUIRE(vm);
+      auto result = vm->invoke_projection("custom", kind, projection_input());
+      REQUIRE_FALSE(result);
+      CHECK(result.error().detail.code == "internal");
+      CHECK(result.error().detail.message == "Invalid external profile protocol");
+      CHECK(result.error().field == "catalog.projections[1]");
+    }
+    for (auto id : {"orchestrator_extra", "orchestrate"}) {
+      INFO(id);
+      auto vm = command_vm::create(
+          profile({projection_callable(projection_section(std::string("id='") + id + "',text='x',mandatory=true"), name)}));
+      REQUIRE(vm);
+      auto result = vm->invoke_projection("custom", kind, projection_input());
+      REQUIRE(result);
+    }
+  }
 }

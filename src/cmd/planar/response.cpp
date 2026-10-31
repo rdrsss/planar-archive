@@ -308,6 +308,27 @@ response semantic_failed(value_ptr error) {
     return {4, "", ""};
   }
 }
+std::optional<std::string_view> authoring_envelope_kind(std::string_view response_kind) {
+  struct mapping {
+    std::string_view kind;
+    std::string_view envelope;
+  };
+  static constexpr std::array<mapping, 11> table{mapping{"spec_prompt_v1", "prompt"},
+                                                 mapping{"critique_v1", "prompt"},
+                                                 mapping{"ingest_v1", "prompt"},
+                                                 mapping{"explain_rejection_v1", "prompt"},
+                                                 mapping{"orchestrator_v1", "prompt"},
+                                                 mapping{"observe_v1", ""},
+                                                 mapping{"render_v1", "render"},
+                                                 mapping{"init_v1", "init"},
+                                                 mapping{"history_v1", "history"},
+                                                 mapping{"export_v1", "export"},
+                                                 mapping{"load_v1", "load"}};
+  for (const auto& entry : table)
+    if (entry.kind == response_kind)
+      return entry.envelope;
+  return std::nullopt;
+}
 } // namespace planar::cmd::detail
 namespace planar::cmd {
 using namespace detail;

@@ -229,7 +229,7 @@ therefore calling the opaque factory and later upgrading to known load is never
 needed. Unknown/extension final parse cannot claim that prior known-slot checks
 occurred. The closed factory for the other shipped families is defined in the [X07 design addendum](x07-addendum.md), and the rule is stated here:
 
-> Render, init, history and export are opened by the closed factory defined in the X07 design addendum; load is opened by open_known_load; no generic service factory exists, and a sixth family requires an amendment.
+> Render, init, history and export are opened by the closed factory defined in the X07 design addendum; load is opened by open_known_load; no generic service factory exists, and a sixth with-profile family requires an amendment.
 
 The X07 integration retains the **same profile_invocation** while borrowing its
 sealed catalog for final CLI11 parsing. For known load, final native parameters

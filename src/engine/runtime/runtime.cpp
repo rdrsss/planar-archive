@@ -23,7 +23,14 @@ import planar.engine.history.effective_catalog;
 import planar.engine.history.effective_provenance;
 namespace planar::engine {
 namespace {
-constexpr std::size_t command_catalog_size = 5;
+constexpr std::size_t command_catalog_size     = 5;
+constexpr std::size_t command_registration_cap = 64;
+// Compile-time bundle selection: only test variant targets define PLANAR_AUTHORING_BUNDLE.
+#ifdef PLANAR_AUTHORING_BUNDLE
+constexpr bool authoring_bundle_selected = true;
+#else
+constexpr bool authoring_bundle_selected = false;
+#endif
 // The four ceilings default to the contract values; verification variants override them at compile time.
 #ifndef PLANAR_RUNTIME_MEMORY_MAX
 #define PLANAR_RUNTIME_MEMORY_MAX 512 * 1024 * 1024
@@ -279,10 +286,29 @@ value_kind table_kind(lua_State* l, int index) {
   return kind;
 }
 // This sole union applies to both input kinds, including conditional and generated sections.
-constexpr std::array<std::string_view, 18> projection_reserved_ids{
-    "authority",    "goal",       "acceptance", "requirements",    "contracts",   "boundary",  "dependencies",
-    "shape_policy", "checks",     "outputs",    "observations",    "preferences", "rationale", "workspace_notes",
-    "job_notes",    "checkpoint", "omissions",  "recorded_history"};
+constexpr std::array<std::string_view, 23> projection_reserved_ids{"authority",
+                                                                   "goal",
+                                                                   "acceptance",
+                                                                   "requirements",
+                                                                   "contracts",
+                                                                   "boundary",
+                                                                   "dependencies",
+                                                                   "shape_policy",
+                                                                   "checks",
+                                                                   "outputs",
+                                                                   "observations",
+                                                                   "preferences",
+                                                                   "rationale",
+                                                                   "workspace_notes",
+                                                                   "job_notes",
+                                                                   "checkpoint",
+                                                                   "omissions",
+                                                                   "recorded_history",
+                                                                   "orchestrator_authority",
+                                                                   "orchestrator_graph",
+                                                                   "orchestrator_roles",
+                                                                   "orchestrator_prescriptions",
+                                                                   "orchestrator_actions"};
 struct projection_scan {
   std::array<projection_section_view, 64> sections{};
   std::size_t                             count = 0, text_bytes = 0;
@@ -1166,6 +1192,7 @@ struct command_state {
                                                  LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF};
   int                               shape_function     = LUA_NOREF;
   bool                              invocation_started = false, shape_baseline_ready = false, extension_execution = false;
+  bool                              authoring = false; ///< The eleven-row embedded bundle is selected (never for profile VMs).
   std::string                       seal, name;
   command_options                   options;
   std::vector<history::original_file_view> originals;
@@ -1206,7 +1233,7 @@ void command_failure(lua_State* l, diagnostic e) {
 // All C++ owners unwind before callbacks allocate Lua objects or raise errors.
 void collect_descriptor(lua_State* l) {
   auto& c = commands(l);
-  if (!c.registering || lua_gettop(l) != 2 || lua_type(l, 2) != LUA_TFUNCTION || c.entries.size() >= 64)
+  if (!c.registering || lua_gettop(l) != 2 || lua_type(l, 2) != LUA_TFUNCTION || c.entries.size() >= command_registration_cap)
     command_refuse();
   lua_Debug caller{}, function{};
   if (!lua_getstack(l, 1, &caller) || !lua_getinfo(l, "Sl", &caller))
@@ -1312,6 +1339,14 @@ std::vector<signature_option> command_signature(std::string_view name) {
             {"--at-event", "decimal", false}, {"--after-event", "decimal", false}, {"--limit", "decimal", false}};
   if (name == "export")
     return {{"--ledger", "text", true}, {"--target", "text", true}, {"--revision", "decimal", true}};
+  if (name == "spec-prompt" || name == "critique" || name == "ingest")
+    return {{"--registry", "text", true}, {"--workspace", "text", true}};
+  if (name == "explain-rejection")
+    return {{"--diagnostic", "text", true}};
+  if (name == "observe")
+    return {{"--from", "text", true}};
+  if (name == "orchestrator")
+    return {{"--job", "text", true}, {"--registry", "text", true}, {"--workspace", "text", true}};
   if (name == "load" && command_catalog_size == 5)
     return {{"--ledger", "text", true},          {"--workspace", "text", true},  {"--registry", "text", true},
             {"--expect-revision", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
@@ -1324,30 +1359,72 @@ void help_text(const std::string& text) {
     if ((ch < 32 && ch != '\n' && ch != '\t') || ch == 127)
       command_refuse();
 }
+struct bundle_row {
+  std::string_view name, handler, kind, capability;
+  bool             authoring_only;
+};
+constexpr std::array<bundle_row, 11> bundle_table{{
+    {"render", "shipped.render.v1", "render_v1", "render_capture_v1", false},
+    {"init", "shipped.init.v1", "init_v1", "initialize_ledger_v1", false},
+    {"history", "shipped.history.v1", "history_v1", "read_history_v1", false},
+    {"export", "shipped.export.v1", "export_v1", "export_source_v1", false},
+    {"load", "shipped.load.v1", "load_v1", "accept_load_v1", false},
+    {"spec-prompt", "shipped.spec_prompt.v1", "spec_prompt_v1", "authoring_capture_v1", true},
+    {"critique", "shipped.critique.v1", "critique_v1", "authoring_capture_v1", true},
+    {"ingest", "shipped.ingest.v1", "ingest_v1", "authoring_capture_v1", true},
+    {"explain-rejection", "shipped.explain_rejection.v1", "explain_rejection_v1", "diagnostic_read_v1", true},
+    {"observe", "shipped.observe.v1", "observe_v1", "observation_directory_v1", true},
+    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "orchestrator_capture_v1", true},
+}};
+const bundle_row*                    find_bundle_row(std::string_view name, bool authoring) {
+  for (const auto& row : bundle_table) {
+    if (row.authoring_only && !authoring)
+      continue;
+    if (row.name == name)
+      return &row;
+  }
+  return nullptr;
+}
+std::vector<bundle_row> bundle_rows(bool authoring) {
+  std::vector<bundle_row> rows;
+  for (const auto& row : bundle_table) {
+    if (row.authoring_only && !authoring)
+      continue;
+    rows.push_back(row);
+  }
+  return rows;
+}
 void seal_catalog(state& s) {
   auto& c = *s.command;
-  if (c.entries.size() != command_catalog_size || c.bridge_error)
+  if (c.bridge_error)
     command_refuse();
-  std::set<std::string>                    names;
-  std::vector<value_ptr>                   descriptors, bindings;
-  const std::map<std::string, std::string> capabilities{{"render", "render_capture_v1"},
-                                                        {"init", "initialize_ledger_v1"},
-                                                        {"history", "read_history_v1"},
-                                                        {"export", "export_source_v1"},
-                                                        {"load", "accept_load_v1"}};
+  std::set<std::string>  names;
+  std::vector<value_ptr> descriptors, bindings;
   for (auto& entry : c.entries) {
     auto d = entry.descriptor;
     exact(d, {"name", "family", "handler_id", "options", "help", "response_kind", "capabilities"});
-    auto name      = text_field(d, "name");
-    auto signature = command_signature(name);
-    if (!names.insert(name).second || text_field(d, "family") != name ||
-        text_field(d, "handler_id") != "shipped." + name + ".v1" || text_field(d, "response_kind") != name + "_v1")
+    const auto& name = text_field(d, "name");
+    auto        row  = find_bundle_row(name, c.authoring);
+    if (!row)
       command_refuse();
+    if (!names.insert(name).second)
+      command_refuse();
+    if (text_field(d, "family") != name)
+      command_refuse();
+    if (text_field(d, "handler_id") != row->handler)
+      command_refuse();
+    if (text_field(d, "response_kind") != row->kind)
+      command_refuse();
+    auto signature = command_signature(name);
     help_text(text_field(d, "help"));
     auto caps = d->fields.at("capabilities"), options = d->fields.at("options");
-    if (caps->kind != value_kind::list || caps->items.size() != 1 || caps->items[0]->kind != value_kind::string ||
-        caps->items[0]->string != capabilities.at(name) || options->kind != value_kind::list ||
-        options->items.size() != signature.size())
+    if (caps->kind != value_kind::list || caps->items.size() != 1 || caps->items[0]->kind != value_kind::string)
+      command_refuse();
+    if (caps->items[0]->string != row->capability)
+      command_refuse();
+    if (options->kind != value_kind::list)
+      command_refuse();
+    if (options->items.size() != signature.size())
       command_refuse();
     std::set<std::string>  option_names;
     std::vector<value_ptr> sorted_options;
@@ -1355,8 +1432,15 @@ void seal_catalog(state& s) {
       exact(option, {"name", "type", "required", "help"});
       auto option_name = text_field(option, "name");
       auto it          = std::ranges::find(signature, option_name, &signature_option::name);
-      if (it == signature.end() || !option_names.insert(option_name).second || text_field(option, "type") != it->type ||
-          option->fields.at("required")->kind != value_kind::boolean || option->fields.at("required")->boolean != it->required)
+      if (it == signature.end())
+        command_refuse();
+      if (!option_names.insert(option_name).second)
+        command_refuse();
+      if (text_field(option, "type") != it->type)
+        command_refuse();
+      if (option->fields.at("required")->kind != value_kind::boolean)
+        command_refuse();
+      if (option->fields.at("required")->boolean != it->required)
         command_refuse();
       help_text(text_field(option, "help"));
       sorted_options.push_back(option);
@@ -1369,6 +1453,9 @@ void seal_catalog(state& s) {
     bindings.push_back(
         command_record({{"handler_id", d->fields.at("handler_id")}, {"module", command_text("planar/commands.lua")}}));
   }
+  for (const auto& expected : bundle_rows(c.authoring))
+    if (!names.contains(std::string(expected.name)))
+      command_refuse();
   std::ranges::sort(c.entries, {}, [](auto& e) { return text_field(e.descriptor, "name"); });
   std::ranges::sort(descriptors, {}, [](auto& d) { return text_field(d, "name"); });
   std::ranges::sort(bindings, {}, [](auto& d) { return text_field(d, "handler_id"); });
@@ -2107,27 +2194,24 @@ int seal_environment(lua_State* l) {
     context(l).stack_exhausted = true;
     return 0;
   }
-  if (commands(l).entries.size() != command_catalog_size) {
-    context(l).seal_failed = true;
-    return luaL_error(l, "invalid_catalog");
-  }
-  std::array<int, command_catalog_size + 2 + std::tuple_size_v<decltype(command_state::shape_phases)>> roots{};
+  std::array<int, command_registration_cap + 2 + std::tuple_size_v<decltype(command_state::shape_phases)>> roots{};
+  const std::size_t count = commands(l).entries.size();
   lua_pushglobaltable(l);
   roots[0] = lua_gettop(l);
-  for (std::size_t i = 0; i < command_catalog_size; ++i) {
+  for (std::size_t i = 0; i < count; ++i) {
     lua_rawgeti(l, LUA_REGISTRYINDEX, commands(l).entries[i].reference);
     roots[i + 1] = lua_gettop(l);
   }
   if (commands(l).profile) {
     lua_rawgeti(l, LUA_REGISTRYINDEX, external_environment_index);
-    roots[command_catalog_size + 1] = lua_gettop(l);
+    roots[count + 1] = lua_gettop(l);
     for (std::size_t i = 0; i < commands(l).shape_phases.size(); ++i) {
       lua_rawgeti(l, LUA_REGISTRYINDEX, commands(l).shape_phases[i]);
-      roots[command_catalog_size + 2 + i] = lua_gettop(l);
+      roots[count + 2 + i] = lua_gettop(l);
     }
-    return seal_roots(l, roots, false);
+    return seal_roots(l, std::span<const int>(roots.data(), count + 2 + commands(l).shape_phases.size()), false);
   }
-  return seal_roots(l, std::span<const int>(roots.data(), command_catalog_size + 1), true);
+  return seal_roots(l, std::span<const int>(roots.data(), count + 1), true);
 }
 // Bound C-library multi-result growth before it can reserve an arbitrary stack.
 int bounded_codepoints(lua_State* l) {
@@ -2207,6 +2291,12 @@ int setup_commands(lua_State* l) {
   lua_newtable(l);
   lua_pushcfunction(l, register_command);
   lua_setfield(l, -2, "add");
+#ifdef PLANAR_AUTHORING_BUNDLE
+  if (!commands(l).profile) {
+    lua_pushboolean(l, 1);
+    lua_setfield(l, -2, "authoring");
+  }
+#endif
   lua_setglobal(l, "registration");
   if (commands(l).profile) {
     lua_getglobal(l, "registration");
@@ -3323,6 +3413,81 @@ value_ptr profile_catalog(command_state& c) {
                          {"shapes", command_array(std::move(lists[1]))},
                          {"projections", command_array(std::move(lists[2]))}});
 }
+bool reserved_authoring_text(std::string_view text) {
+  constexpr std::array<std::string_view, 6> names{"spec-prompt",       "critique", "ingest",
+                                                  "explain-rejection", "observe",  "orchestrator"};
+  return std::ranges::find(names, text) != names.end();
+}
+bool reserved_authoring_handler(std::string_view text) {
+  constexpr std::array<std::string_view, 6> ids{"shipped.spec_prompt.v1",       "shipped.critique.v1", "shipped.ingest.v1",
+                                                "shipped.explain_rejection.v1", "shipped.observe.v1",  "shipped.orchestrator.v1"};
+  return std::ranges::find(ids, text) != ids.end();
+}
+bool reserved_authoring_projection(std::string_view text) {
+  constexpr std::array<std::string_view, 6> ids{"orchestrator",       "orchestrator_authority",     "orchestrator_graph",
+                                                "orchestrator_roles", "orchestrator_prescriptions", "orchestrator_actions"};
+  return std::ranges::find(ids, text) != ids.end();
+}
+// Reads a string field without ever throwing; absent or ill-typed fields read as empty.
+std::string_view reserved_field(const value_ptr& record, std::string_view key) {
+  if (!record || record->kind != value_kind::record)
+    return {};
+  auto found = record->fields.find(std::string(key));
+  if (found == record->fields.end() || !found->second || found->second->kind != value_kind::string)
+    return {};
+  return found->second->string;
+}
+// True only for a record whose key holds a string; never throws.
+bool reserved_string_present(const value_ptr& record, std::string_view key) {
+  if (!record || record->kind != value_kind::record)
+    return false;
+  auto found = record->fields.find(std::string(key));
+  return found != record->fields.end() && found->second && found->second->kind == value_kind::string;
+}
+// Non-throwing pre-check over the unvalidated sorted catalog; N is the sorted 1-based position.
+std::optional<history::catalog_error> reserved_authoring_identity(const value_ptr& catalog) {
+  if (!catalog || catalog->kind != value_kind::record)
+    return std::nullopt;
+  auto commands_field = catalog->fields.find("commands");
+  if (commands_field != catalog->fields.end() && commands_field->second && commands_field->second->kind == value_kind::list) {
+    const auto& items = commands_field->second->items;
+    for (std::size_t i = 0; i < items.size(); ++i) {
+      if (!items[i] || items[i]->kind != value_kind::record)
+        continue;
+      auto descriptor = items[i]->fields.find("descriptor");
+      if (descriptor == items[i]->fields.end())
+        continue;
+      // A malformed entry falls through to history::validate_catalog and its existing diagnostics.
+      if (!reserved_string_present(descriptor->second, "name"))
+        continue;
+      if (!reserved_string_present(descriptor->second, "family"))
+        continue;
+      if (!reserved_string_present(descriptor->second, "handler_id"))
+        continue;
+      bool hit = reserved_authoring_text(reserved_field(descriptor->second, "name"));
+      hit      = hit || reserved_authoring_text(reserved_field(descriptor->second, "family"));
+      hit      = hit || reserved_authoring_handler(reserved_field(descriptor->second, "handler_id"));
+      if (hit)
+        return history::catalog_error{history::catalog_error_code::identity_conflict, std::format("catalog.commands[{}]", i + 1)};
+    }
+  }
+  auto projections_field = catalog->fields.find("projections");
+  if (projections_field != catalog->fields.end() && projections_field->second &&
+      projections_field->second->kind == value_kind::list) {
+    const auto& items = projections_field->second->items;
+    for (std::size_t i = 0; i < items.size(); ++i) {
+      if (!items[i] || items[i]->kind != value_kind::record)
+        continue;
+      auto descriptor = items[i]->fields.find("descriptor");
+      if (descriptor == items[i]->fields.end())
+        continue;
+      if (reserved_authoring_projection(reserved_field(descriptor->second, "id")))
+        return history::catalog_error{history::catalog_error_code::identity_conflict,
+                                      std::format("catalog.projections[{}]", i + 1)};
+    }
+  }
+  return std::nullopt;
+}
 void validate_profile_catalog(state& runtime) {
   auto& c = *runtime.command;
   // Catalog construction/validation has no selected entry until the pure error
@@ -3340,7 +3505,10 @@ void validate_profile_catalog(state& runtime) {
   validate(runtime, catalog, 1);
   // encode result, validated_catalog's owned bytes, then retained runtime bytes.
   charge(runtime, 3 * 1048576);
-  auto checked = history::validate_catalog(catalog, shipped, external);
+  auto reserved = reserved_authoring_identity(catalog);
+  auto checked  = reserved
+                      ? std::expected<history::validated_catalog, history::catalog_error>(std::unexpected(std::move(*reserved)))
+                      : history::validate_catalog(catalog, shipped, external);
   if (!checked) {
     auto code = checked.error().code;
     // Read the owned pure error in place. Prefix recognition, parsing, pointer
@@ -4189,6 +4357,7 @@ std::expected<command_vm, registration_error> command_vm::create_impl(profile_sn
     auto& s                         = owner->runtime;
     s.native_bytes                  = initial_native_bytes;
     auto& c                         = owner->command;
+    c.authoring                     = authoring_bundle_selected && !profile;
     if (profile) {
       check_profile(*profile);
       charge(s, profile->profile.bytes.size() + sizeof(profile_closure));

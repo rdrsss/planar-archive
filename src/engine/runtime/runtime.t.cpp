@@ -4265,3 +4265,123 @@ TEST_CASE("X06 D C02 a protocol failure caught by pcall in a known-load prepare 
     CHECK(p.field == first->field);
   }
 }
+
+namespace {
+struct ra01_option {
+  std::string name;
+  std::string type;
+  bool        required;
+};
+struct ra01_row {
+  std::string              name;
+  std::string              capability;
+  std::vector<ra01_option> options;
+};
+std::string ra01_text(const value_ptr& v, std::string_view field) {
+  REQUIRE(v);
+  REQUIRE(v->fields.contains(std::string(field)));
+  return v->fields.at(std::string(field))->string;
+}
+std::string ra01_read_file(const std::filesystem::path& path) {
+  std::ifstream in(path, std::ios::binary);
+  REQUIRE(in);
+  return std::string(std::istreambuf_iterator<char>{in}, {});
+}
+std::size_t ra01_count(const std::string& hay, const std::string& needle) {
+  std::size_t n = 0;
+  for (auto at = hay.find(needle); at != std::string::npos; at = hay.find(needle, at + 1))
+    ++n;
+  return n;
+}
+} // namespace
+TEST_CASE("RA01-B1 default embedded catalog stays the five HEAD rows", "[runtime][ra01-b1]") {
+  const std::vector<ra01_row> expected{
+      {"export", "export_source_v1", {{"--ledger", "text", true}, {"--revision", "decimal", true}, {"--target", "text", true}}},
+      {"history",
+       "read_history_v1",
+       {{"--after-event", "decimal", false},
+        {"--at-event", "decimal", false},
+        {"--ledger", "text", true},
+        {"--limit", "decimal", false},
+        {"--request-id", "text", false},
+        {"--revision", "decimal", false}}},
+      {"init", "initialize_ledger_v1", {{"--ledger", "text", true}, {"--workspace-id", "text", true}}},
+      {"load",
+       "accept_load_v1",
+       {{"--actor", "text", true},
+        {"--expect-revision", "text", true},
+        {"--ledger", "text", true},
+        {"--registry", "text", true},
+        {"--request-id", "text", true},
+        {"--workspace", "text", true}}},
+      {"render",
+       "render_capture_v1",
+       {{"--base-root", "text", false},
+        {"--budget-bytes", "decimal", false},
+        {"--capture-outputs", "flag", false},
+        {"--job", "text", true},
+        {"--observations", "text", false},
+        {"--registry", "text", true},
+        {"--role", "text", true},
+        {"--root", "text", true},
+        {"--workspace", "text", true}}}};
+  auto vm = command_vm::create();
+  REQUIRE(vm);
+  auto catalog = vm->catalog();
+  REQUIRE(catalog);
+  const auto& rows = catalog->fields.at("commands")->items;
+  REQUIRE(rows.size() == 5);
+  for (std::size_t i = 0; i < rows.size(); ++i) {
+    const auto& want = expected[i];
+    INFO(want.name);
+    CHECK(ra01_text(rows[i], "name") == want.name);
+    CHECK(ra01_text(rows[i], "family") == want.name);
+    CHECK(ra01_text(rows[i], "handler_id") == "shipped." + want.name + ".v1");
+    CHECK(ra01_text(rows[i], "response_kind") == want.name + "_v1");
+    const auto& caps = rows[i]->fields.at("capabilities")->items;
+    REQUIRE(caps.size() == 1);
+    CHECK(caps[0]->string == want.capability);
+    const auto&              opts = rows[i]->fields.at("options")->items;
+    std::vector<ra01_option> actual;
+    for (const auto& o : opts)
+      actual.push_back({ra01_text(o, "name"), ra01_text(o, "type"), o->fields.at("required")->boolean});
+    std::ranges::sort(actual, {}, &ra01_option::name);
+    REQUIRE(actual.size() == want.options.size());
+    for (std::size_t k = 0; k < actual.size(); ++k) {
+      CHECK(actual[k].name == want.options[k].name);
+      CHECK(actual[k].type == want.options[k].type);
+      CHECK(actual[k].required == want.options[k].required);
+    }
+  }
+}
+TEST_CASE("RA01-B1 command options variant stays closed at five members", "[runtime][ra01-b1]") {
+  CHECK(std::variant_size_v<planar::engine::command_options> == 5);
+}
+TEST_CASE("RA01-B1 commands.lua keeps one handler function and one registration line per authoring verb", "[runtime][ra01-b1]") {
+  const auto source = ra01_read_file(std::filesystem::path(__FILE__).parent_path() / "../../stdlib/planar/commands.lua");
+  const std::array<std::pair<std::string, std::string>, 6> verbs{{{"spec-prompt", "spec_prompt"},
+                                                                  {"critique", "critique"},
+                                                                  {"ingest", "ingest"},
+                                                                  {"explain-rejection", "explain_rejection"},
+                                                                  {"observe", "observe"},
+                                                                  {"orchestrator", "orchestrator"}}};
+  for (const auto& [verb, fn] : verbs) {
+    INFO(verb);
+    CHECK(ra01_count(source, "local function " + fn + "_command(") == 1);
+  }
+  const std::string gate_open = "\n  if registration.authoring then\n";
+  const auto        open_at   = source.find(gate_open);
+  REQUIRE(open_at != std::string::npos);
+  CHECK(ra01_count(source, gate_open) == 1);
+  const auto body_at  = open_at + gate_open.size();
+  const auto close_at = source.find("\n  end\n", body_at - 1);
+  REQUIRE(close_at != std::string::npos);
+  std::string expected;
+  for (const auto& [verb, fn] : verbs)
+    expected += "    registration.add(authoring_descriptor(\"" + verb + "\")," + fn + "_command)\n";
+  CHECK(source.substr(body_at, close_at + 1 - body_at) == expected);
+  // None of the authoring registrations may appear outside the gate.
+  CHECK(ra01_count(source, "registration.add(authoring_descriptor(") == 6);
+  for (const auto& [verb, fn] : verbs)
+    CHECK(ra01_count(source, "registration.add(authoring_descriptor(\"" + verb + "\"),") == 1);
+}

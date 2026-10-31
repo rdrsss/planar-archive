@@ -9,8 +9,30 @@ import planar.cmd.planar.handlers.history;
 import planar.cmd.planar.handlers.source_export;
 import planar.cmd.planar.handlers.load;
 import planar.cmd.planar.handlers.extension;
+#ifdef PLANAR_AUTHORING_BUNDLE
+import planar.cmd.authoring;
+import planar.cmd.authoring.spec_prompt;
+import planar.cmd.authoring.critique;
+import planar.cmd.authoring.ingest;
+import planar.cmd.authoring.explain_rejection;
+import planar.cmd.authoring.observe;
+import planar.cmd.authoring.orchestrator;
+#endif
 
 namespace planar::cmd {
+namespace {
+/// Default root help bytes; the bytes are the shipped contract.
+constexpr std::string_view default_root_help =
+    "Usage: planar render --workspace FILE --registry FILE --root ID=DIRECTORY --job ID --role ID\n"
+    "Optional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\n"
+    "planar init --ledger FILE --workspace-id ID\n"
+    "planar history --ledger FILE [--after-event ID] [--limit N]\n"
+    "  or --revision ID | --request-id ID | --at-event ID\n"
+    "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
+    "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
+    "--actor TEXT\n"
+    "planar --help\n";
+} // namespace
 namespace {
 bool catalog_matches(const engine::value_ptr& catalog, const CLI::App& root) {
   // The with-profile envelope is the one root subcommand that is not part of the embedded catalog.
@@ -95,6 +117,57 @@ struct shipped_families {
     return handlers::render_intent(render);
   }
 };
+
+#ifdef PLANAR_AUTHORING_BUNDLE
+/// Option storage and bindings of the six authoring families; alive from parsing through dispatch.
+struct authoring_families {
+  authoring::spec_prompt_options       spec_prompt;
+  authoring::critique_options          critique;
+  authoring::ingest_options            ingest;
+  authoring::explain_rejection_options explain_rejection;
+  authoring::observe_options           observe;
+  authoring::orchestrator_options      orchestrator;
+  std::array<CLI::App*, 6>             commands{};
+  void                                 attach(CLI::App& root) {
+    commands[0] = &authoring::attach_spec_prompt(root, spec_prompt);
+    commands[1] = &authoring::attach_critique(root, critique);
+    commands[2] = &authoring::attach_ingest(root, ingest);
+    commands[3] = &authoring::attach_explain_rejection(root, explain_rejection);
+    commands[4] = &authoring::attach_observe(root, observe);
+    commands[5] = &authoring::attach_orchestrator(root, orchestrator);
+  }
+  std::size_t selected() const {
+    std::size_t total = 0;
+    for (const auto* command : commands)
+      total += command->count();
+    return total;
+  }
+  /// Tokens CLI11 bound to the selected command: its name plus one per flag and two per scalar option.
+  std::size_t parsed_tokens() const {
+    std::size_t total = selected();
+    for (const auto* command : commands)
+      for (const auto* option : command->get_options())
+        total += option->count() * (option->get_expected_max() == 0 ? 1 : 2);
+    return total;
+  }
+  /// Dispatch the selected authoring verb, or answer nothing when none is selected.
+  std::optional<response> dispatch() const {
+    if (commands[0]->count() == 1)
+      return authoring::spec_prompt_command(spec_prompt);
+    if (commands[1]->count() == 1)
+      return authoring::critique_command(critique);
+    if (commands[2]->count() == 1)
+      return authoring::ingest_command(ingest);
+    if (commands[3]->count() == 1)
+      return authoring::explain_rejection_command(explain_rejection);
+    if (commands[4]->count() == 1)
+      return authoring::observe_command(observe);
+    if (commands[5]->count() == 1)
+      return authoring::orchestrator_command(orchestrator);
+    return std::nullopt;
+  }
+};
+#endif
 
 /// Stored text, decimal and history ID rules of a sealed extension option, matching the shipped validators.
 std::string explicit_text(std::string& token) {
@@ -318,6 +391,10 @@ response invoke(std::span<const std::string_view> arguments) {
     const auto&              prefix_command = envelope::attach_prefix(root, binding);
     shipped_families         families;
     families.attach(root);
+#ifdef PLANAR_AUTHORING_BUNDLE
+    authoring_families extra;
+    extra.attach(root);
+#endif
     std::vector<std::string> tokens(arguments.rbegin(), arguments.rend());
     try {
       root.parse(tokens);
@@ -326,22 +403,24 @@ response invoke(std::span<const std::string_view> arguments) {
     }
     if (prefix_command.count() != 0)
       return invoke_with_profile(binding, arguments.size());
-    if (help && arguments.size() == 1)
-      return {0,
-              "Usage: planar render --workspace FILE --registry FILE --root ID=DIRECTORY --job ID --role ID\n"
-              "Optional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\n"
-              "planar init --ledger FILE --workspace-id ID\n"
-              "planar history --ledger FILE [--after-event ID] [--limit N]\n"
-              "  or --revision ID | --request-id ID | --at-event ID\n"
-              "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
-              "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
-              "--actor TEXT\n"
-              "planar --help\n",
-              ""};
+    if (help && arguments.size() == 1) {
+#ifdef PLANAR_AUTHORING_BUNDLE
+      if (auto spliced = authoring::splice_root_help(default_root_help))
+        return {0, std::move(*spliced), ""};
+      return detail::failed(detail::native_error({"internal", "Invalid embedded command catalog"}));
+#else
+      return {0, std::string(default_root_help), ""};
+#endif
+    }
     // CLI11 can discard positional terminators after scalar values. Count only
     // library-parsed bindings against our exact separate-token interface.
+#ifdef PLANAR_AUTHORING_BUNDLE
+    const std::size_t selected_commands = families.selected() + extra.selected();
+    const std::size_t parsed_tokens     = root.count("--help") + families.parsed_tokens() + extra.parsed_tokens();
+#else
     const auto        selected_commands = families.selected();
     const std::size_t parsed_tokens     = root.count("--help") + families.parsed_tokens();
+#endif
     if (help || selected_commands != 1 || !root.remaining(true).empty() || parsed_tokens != arguments.size())
       return detail::usage();
     if (families.render_command->count() == 1 && !families.render_consistent())
@@ -351,6 +430,10 @@ response invoke(std::span<const std::string_view> arguments) {
       return detail::failed(detail::native_error(vm.error()));
     if (!catalog_matches(vm->catalog(), root))
       return detail::failed(detail::native_error({"internal", "Invalid embedded command catalog"}));
+#ifdef PLANAR_AUTHORING_BUNDLE
+    if (auto answered = extra.dispatch())
+      return std::move(*answered);
+#endif
     if (families.load_command->count() == 1)
       return handlers::load_command(families.load, &*vm);
     if (families.export_command->count() == 1)

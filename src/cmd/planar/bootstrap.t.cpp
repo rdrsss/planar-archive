@@ -2,6 +2,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
 import std;
 import cli11;
@@ -12,6 +13,7 @@ import planar.engine.acceptance.intent;
 import planar.cmd.planar.handlers.render;
 import planar.cmd.bootstrap;
 import planar.cmd.invocation;
+import planar.cmd.authoring_stack.bootstrap;
 import planar.engine.capture.host_path;
 import planar.cmd.planar.handlers.init;
 import planar.cmd.planar.handlers.history;
@@ -3153,4 +3155,304 @@ TEST_CASE("X08 Linux publish and metadata branches keep their no-replace and pat
   CHECK(x07::count_of(publish, "ENOTSUP") == 1);
   CHECK(publish.find("errno = ENOTSUP;") > final_else);
   CHECK(x07::count_of(exporter, "ENOTSUP") == 1);
+}
+
+// ---- RA01-B1: production never selects an authoring verb; the with-profile envelope is unchanged ----------------------
+
+namespace {
+namespace fs = std::filesystem;
+namespace ra01 {
+struct verb_row {
+  std::string              name;
+  std::vector<std::string> options;
+};
+const std::vector<verb_row>& verbs() {
+  static const std::vector<verb_row> table{
+      {"spec-prompt", {"--workspace", "--registry"}},
+      {"critique", {"--workspace", "--registry"}},
+      {"ingest", {"--workspace", "--registry"}},
+      {"explain-rejection", {"--diagnostic"}},
+      {"observe", {"--from"}},
+      {"orchestrator", {"--workspace", "--registry", "--job"}},
+  };
+  return table;
+}
+/// Existing files and a directory for every explicit path option, under `work`.
+void fixture(const fs::path& work) {
+  x07::put(work / "workspace.lua", "return {}\n");
+  x07::put(work / "registry.json", "{}\n");
+  x07::put(work / "diag.json", "{}\n");
+  x07::put(work / "obs/o.json", "{}\n");
+}
+std::string value(const fs::path& work, std::string_view option) {
+  if (option == "--workspace")
+    return (work / "workspace.lua").string();
+  if (option == "--registry")
+    return (work / "registry.json").string();
+  if (option == "--diagnostic")
+    return (work / "diag.json").string();
+  if (option == "--from")
+    return (work / "obs").string();
+  return "job-a";
+}
+std::vector<std::string> full(const verb_row& verb, const fs::path& work) {
+  std::vector<std::string> args{verb.name};
+  for (const auto& option : verb.options) {
+    args.push_back(option);
+    args.push_back(value(work, option));
+  }
+  return args;
+}
+/// Run the authoring stack entry under the same cwd and environment guard as x07::run_in.
+planar::cmd::response run_stack(const fs::path& cwd, const std::vector<std::string>& args,
+                                const std::optional<std::string>& workspace_env = {}) {
+  x07::invocation_guard         guard(cwd, workspace_env);
+  std::vector<std::string_view> views(args.begin(), args.end());
+  return planar::cmd::authoring_stack::invoke(views);
+}
+x07::bytes stub() {
+  return {4, "",
+          "{\"error\":{\"code\":\"internal\",\"field\":\"\",\"message\":\"Invalid embedded command protocol\"},"
+          "\"kind\":\"error\",\"version\":1}\n"};
+}
+/// Positive control that the verbs are live under the authoring stack: the full signature reaches the stub refusal.
+void require_live_stack(const fs::path& work) {
+  for (const auto& verb : verbs()) {
+    CAPTURE(verb.name);
+    const auto got = x07::of(run_stack(work, full(verb, work)));
+    CHECK(got == stub());
+    CHECK_FALSE(got == x07::usage_bytes());
+  }
+}
+std::string head_help() {
+  return "Usage: planar render --workspace FILE --registry FILE --root ID=DIRECTORY --job ID --role ID\n"
+         "Optional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\n"
+         "planar init --ledger FILE --workspace-id ID\n"
+         "planar history --ledger FILE [--after-event ID] [--limit N]\n"
+         "  or --revision ID | --request-id ID | --at-event ID\n"
+         "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
+         "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
+         "--actor TEXT\n"
+         "planar --help\n";
+}
+std::string quoted(const std::string& text) {
+  return "'" + text + "'";
+}
+/// Occurrences of the authoring definition token in a CMake text that are not inside an allowed definition statement.
+struct cmake_scan {
+  std::vector<std::string> bad;
+  bool                     stack_runtime   = false;
+  bool                     stack_bootstrap = false;
+  bool                     variant_guarded = false;
+};
+cmake_scan scan_cmake(const std::string& text, std::string_view token) {
+  cmake_scan             out;
+  const std::string_view call = "target_compile_definitions(";
+  for (auto pos = text.find(token); pos != std::string::npos; pos = text.find(token, pos + 1)) {
+    auto line        = text.rfind('\n', pos);
+    line             = line == std::string::npos ? 0 : line + 1;
+    const auto first = text.find_first_not_of(" \t", line);
+    if (first != std::string::npos && text[first] == '#')
+      continue;
+    const auto open = text.rfind(call, pos);
+    if (open == std::string::npos) {
+      out.bad.push_back("outside a definition statement");
+      continue;
+    }
+    const auto head = std::string_view(text).substr(open + call.size(), pos - open - call.size());
+    if (head.contains(')')) {
+      out.bad.push_back("not in the statement that opens before it");
+      continue;
+    }
+    const auto target = std::string(head.substr(0, head.find_first_of(" \t\n")));
+    if (target == "planar_authoring_stack_runtime")
+      out.stack_runtime = true;
+    else if (target == "planar_authoring_stack_bootstrap")
+      out.stack_bootstrap = true;
+    else if (target == "planar_authoring_variant_${variant}") {
+      const auto guard = text.rfind("if(", open);
+      const auto gate  = guard == std::string::npos ? std::string_view{} : std::string_view(text).substr(guard, open - guard);
+      if (gate.contains("NOT variant EQUAL 18") && !gate.contains("endif()"))
+        out.variant_guarded = true;
+      else
+        out.bad.push_back("variant target not guarded to skip 18");
+    } else
+      out.bad.push_back("target " + target);
+  }
+  return out;
+}
+} // namespace ra01
+} // namespace
+
+TEST_CASE("RA01-B1 default invoke and production binary refuse all six authoring verbs as usage", "[bootstrap][ra01]") {
+  x07::tree t(x07::kind::valid);
+  ra01::fixture(t.work);
+  // Root help is the five-command text, unchanged.
+  const std::array<std::string_view, 1> help_args = {"--help"};
+  const auto                            help      = planar::cmd::invoke(help_args);
+  CHECK(help.status == 0);
+  CHECK(help.error.empty());
+  CHECK(help.output == ra01::head_help());
+  for (const auto& verb : ra01::verbs()) {
+    CAPTURE(verb.name);
+    const auto args = ra01::full(verb, t.work);
+    // Control: the compile-time selected stack is the one place these verbs exist.
+    const auto selected = x07::of(ra01::run_stack(t.work, args));
+    CHECK_FALSE(selected == x07::usage_bytes());
+    CHECK(selected.status == 4);
+    // The default entry refuses with the existing usage bytes.
+    const auto got = x07::of(x07::run_in(t.work, args));
+    CHECK(got.status == 2);
+    CHECK(got.out.empty());
+    CHECK(got == x07::usage_bytes());
+    // The production binary does the same, as a process.
+    const auto  out_file = t.root / ("out-" + verb.name + ".txt");
+    const auto  err_file = t.root / ("err-" + verb.name + ".txt");
+    std::string command  = "cd " + ra01::quoted(t.work.string()) + " && env -u PLANAR_WORKSPACE_DIR " +
+                           ra01::quoted(std::string(PLANAR_PRODUCTION_BINARY));
+    for (const auto& token : args)
+      command += " " + ra01::quoted(token);
+    command += " > " + ra01::quoted(out_file.string()) + " 2> " + ra01::quoted(err_file.string());
+    const int status = std::system(command.c_str());
+    REQUIRE(WIFEXITED(status));
+    CHECK(WEXITSTATUS(status) == 2);
+    CHECK(x07::slurp(out_file).empty());
+    CHECK(x07::slurp(err_file) == x07::usage_bytes().err);
+  }
+  // The production binary help is the five-command text as well.
+  const auto help_out = t.root / "help-out.txt";
+  const int  status   = std::system(
+      (ra01::quoted(std::string(PLANAR_PRODUCTION_BINARY)) + " --help > " + ra01::quoted(help_out.string()) + " 2>&1").c_str());
+  REQUIRE(WIFEXITED(status));
+  CHECK(WEXITSTATUS(status) == 0);
+  CHECK(x07::slurp(help_out) == ra01::head_help());
+}
+
+TEST_CASE("RA01-B1 production targets never receive the authoring definition", "[bootstrap][ra01]") {
+  const std::string token = "PLANAR_AUTHORING_BUNDLE";
+  const auto        here  = fs::path(__FILE__).parent_path();
+  const auto        src   = here.parent_path().parent_path();
+  const auto        repo  = src.parent_path();
+  // (a) the command CMake file names the definition only on the stack runtime, the stack bootstrap and variants but 18.
+  const auto cmake_text = x07::slurp(here / "CMakeLists.txt");
+  REQUIRE_FALSE(cmake_text.empty());
+  const auto scan = ra01::scan_cmake(cmake_text, token);
+  CHECK(scan.bad.empty());
+  CHECK(scan.stack_runtime);
+  CHECK(scan.stack_bootstrap);
+  CHECK(scan.variant_guarded);
+  // Every other CMake file leaves the token out.
+  std::size_t           scanned = 0;
+  std::vector<fs::path> others{repo / "CMakeLists.txt"};
+  for (const auto& root : {src, repo / "cmake"})
+    for (const auto& entry : fs::recursive_directory_iterator(root))
+      if (entry.is_regular_file() && (entry.path().filename() == "CMakeLists.txt" || entry.path().extension() == ".cmake") &&
+          entry.path() != here / "CMakeLists.txt")
+        others.push_back(entry.path());
+  for (const auto& path : others) {
+    ++scanned;
+    CAPTURE(path.string());
+    CHECK_FALSE(x07::contains(x07::slurp(path), token));
+  }
+  CHECK(scanned >= 4);
+  // (b) in src the token appears only in runtime.cpp and bootstrap.cpp, never in an interface, main or invocation file.
+  std::set<std::string> sites;
+  for (const auto& entry : fs::recursive_directory_iterator(src)) {
+    const auto name = entry.path().filename().string();
+    const auto ext  = entry.path().extension();
+    if (!entry.is_regular_file() || name.ends_with(".t.cpp") || (ext != ".cpp" && ext != ".cppm" && ext != ".h" && ext != ".hpp"))
+      continue;
+    if (x07::contains(x07::slurp(entry.path()), token))
+      sites.insert(fs::relative(entry.path(), src).generic_string());
+  }
+  CHECK(sites == std::set<std::string>{"cmd/planar/bootstrap.cpp", "engine/runtime/runtime.cpp"});
+  // (c) no authoring entry points exist in the production interfaces or main.
+  for (const auto& path :
+       {here / "main.cpp", here / "bootstrap.cppm", src / "engine/runtime/runtime.cppm", here / "invocation.cppm"}) {
+    CAPTURE(path.string());
+    const auto text = x07::slurp(path);
+    REQUIRE_FALSE(text.empty());
+    CHECK_FALSE(x07::contains(text, "create_authoring"));
+    CHECK_FALSE(x07::contains(text, "invoke_authoring_bundle"));
+    CHECK_FALSE(x07::contains(text, token));
+  }
+  // (d) every production command_vm creation names no argument.
+  std::size_t creations = 0;
+  for (const auto& [name, code] : x07::command_sources())
+    for (auto at = code.find("command_vm::create("); at != std::string::npos; at = code.find("command_vm::create(", at + 1)) {
+      ++creations;
+      CAPTURE(name);
+      CHECK(code.compare(at, std::string_view("command_vm::create()").size(), "command_vm::create()") == 0);
+    }
+  CHECK(creations >= 1);
+}
+
+TEST_CASE("RA01-B1 with-profile probe stays five and a malformed authoring tail reaches profile capture", "[bootstrap][ra01]") {
+  x07::oracle o;
+  ra01::fixture(o.a.work);
+  ra01::require_live_stack(o.a.work);
+  for (const auto& verb : ra01::verbs())
+    for (const std::string tail : {"--from", "--bogus"}) {
+      CAPTURE(verb.name, tail);
+      const auto args = x07::with_profile({verb.name, tail});
+      x07::same(x07::of(x07::run(o.b, args)), o.bad);
+      x07::same(x07::of(x07::run(o.c, args)), o.spin);
+      CHECK_FALSE(x07::of(x07::run(o.b, args)) == o.usage);
+      CHECK_FALSE(x07::of(x07::run(o.c, args)) == o.usage);
+      // A valid profile reaches the final parser, which does not know the verb.
+      CHECK(x07::of(x07::run(o.a, args)) == o.usage);
+    }
+}
+
+TEST_CASE("RA01-B1 with-profile after admission an authoring tail is usage and a broken profile reports its own error",
+          "[bootstrap][ra01]") {
+  x07::oracle o;
+  ra01::fixture(o.a.work);
+  ra01::fixture(o.b.work);
+  ra01::fixture(o.c.work);
+  ra01::require_live_stack(o.a.work);
+  for (const auto& verb : ra01::verbs()) {
+    CAPTURE(verb.name);
+    x07::same(x07::of(x07::run(o.a, x07::with_profile(ra01::full(verb, o.a.work)))), o.usage);
+    x07::same(x07::of(x07::run(o.b, x07::with_profile(ra01::full(verb, o.b.work)))), o.bad);
+    x07::same(x07::of(x07::run(o.c, x07::with_profile(ra01::full(verb, o.c.work)))), o.spin);
+  }
+}
+
+TEST_CASE("RA01-B1 with-profile outputs are identical under the authoring bundle", "[bootstrap][ra01]") {
+  x07::oracle o;
+  for (const auto* t : {&o.a, &o.b, &o.c})
+    ra01::fixture(t->work);
+  ra01::require_live_stack(o.a.work);
+  // Positive control: the bundle differs from the default entry on root help.
+  const std::array<std::string_view, 1> help_args = {"--help"};
+  CHECK_FALSE(x07::of(planar::cmd::authoring_stack::invoke(help_args)) == x07::of(planar::cmd::invoke(help_args)));
+  std::vector<std::vector<std::string>> tails{x07::with_profile({"inspect", "--text", "v"}), x07::with_profile({"--help"}),
+                                              x07::with_profile({"history", "--ledger", "missing.db"}),
+                                              x07::with_profile({"inspect", "--bogus"})};
+  for (const auto& verb : ra01::verbs()) {
+    tails.push_back(x07::with_profile(ra01::full(verb, o.a.work)));
+    tails.push_back(x07::with_profile({verb.name, "--from"}));
+  }
+  for (const auto* t : {&o.a, &o.b, &o.c})
+    for (const auto& args : tails) {
+      CAPTURE(args);
+      const auto stack = x07::of(ra01::run_stack(t->work, args));
+      const auto plain = x07::of(x07::run_in(t->work, args));
+      x07::same(stack, plain);
+    }
+  // Selected help lists the five shipped rows only, exactly as the default entry does.
+  x07::same(x07::of(ra01::run_stack(o.a.work, x07::with_profile({"--help"}))), o.help);
+}
+
+TEST_CASE("RA01-B1 with-profile reserved command registration prints the existing identity conflict", "[bootstrap][ra01]") {
+  x07::tree t(x07::kind::valid);
+  x07::put(t.trusted / "modules/p.lua", x07::inspect_module("observe"));
+  const x07::bytes conflict{3, "", x07::error_json("reference", "External registration identity conflict")};
+  const auto       got = x07::of(x07::run(t, x07::with_profile({"observe", "--from", (t.work / "obs").string()})));
+  x07::same(got, conflict);
+  CHECK_FALSE(got == x07::usage_bytes());
+  // The same profile under another name registers normally.
+  x07::put(t.trusted / "modules/p.lua", x07::inspect_module("inspect"));
+  CHECK_FALSE(x07::of(x07::run(t, x07::with_profile({"inspect", "--text", "v"}))) == conflict);
 }

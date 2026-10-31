@@ -29,11 +29,29 @@ planar_rewrite_module(planar_command_envelope
 planar_rewrite_module(planar_extension_command
   INTERFACE handlers/extension/command.cppm SOURCES handlers/extension/command.cpp
   DEPENDS planar_command_invocation)
+# RA-1 authoring core and the six verb families (wave 1 skeleton); the product entry points do not import them without
+# the PLANAR_AUTHORING_BUNDLE definition.
+planar_rewrite_module(planar_command_authoring
+  INTERFACE authoring.cppm SOURCES authoring.cpp
+  DEPENDS planar_command_response planar_capture_host_path)
+set(planar_authoring_families spec_prompt:spec-prompt critique:critique ingest:ingest explain_rejection:explain-rejection
+  observe:observe orchestrator:orchestrator)
+set(planar_authoring_family_targets)
+foreach(pair IN LISTS planar_authoring_families)
+  string(REPLACE ":" ";" pair_parts "${pair}")
+  list(GET pair_parts 0 family_module)
+  list(GET pair_parts 1 family_directory)
+  planar_rewrite_module(planar_authoring_${family_module}
+    INTERFACE handlers/${family_directory}/command.cppm SOURCES handlers/${family_directory}/command.cpp
+    DEPENDS planar_command_authoring CLI11::CLI11_Module)
+  list(APPEND planar_authoring_family_targets planar_authoring_${family_module})
+endforeach()
 planar_rewrite_module(planar_command
   INTERFACE bootstrap.cppm
   SOURCES bootstrap.cpp
   DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command CLI11::CLI11_Module
-  TESTS bootstrap.t.cpp)
+    planar_command_authoring ${planar_authoring_family_targets}
+  TESTS bootstrap.t.cpp authoring.t.cpp)
 target_compile_definitions(planar_command_tests PRIVATE
   PLANAR_B2_WORKSPACE_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota/workspace/workspace.lua")
 add_executable(planar main.cpp)
@@ -244,3 +262,243 @@ endforeach()
 
 # The acceptance tests above run the production binary, so building the test aggregate must also link it.
 add_dependencies(planar_tests planar)
+
+# ---------------------------------------------------------------------------------------------------------------------
+# RA-1 authoring bundle, compile-time selection (D2, D10, D18). The product targets never receive PLANAR_AUTHORING_BUNDLE.
+# The inline renamed stack below is built exactly like the X07 stack from the shipped sources, with the definition set on
+# its runtime and bootstrap copies only. Every generated copy is written only when its bytes change.
+set(authoring_src_cmd "${CMAKE_CURRENT_SOURCE_DIR}")
+set(authoring_src_runtime "${PROJECT_SOURCE_DIR}/src/engine/runtime")
+set(authoring_stack_generated "${CMAKE_CURRENT_BINARY_DIR}/authoring-stack-generated")
+set(authoring_variant_generated "${CMAKE_CURRENT_BINARY_DIR}/authoring-variant-generated")
+
+# Write text to path only when the bytes differ, so a no-change build runs zero steps.
+function(planar_authoring_emit path text)
+  get_filename_component(directory "${path}" DIRECTORY)
+  file(MAKE_DIRECTORY "${directory}")
+  file(WRITE "${path}.tmp" "${text}")
+  file(COPY_FILE "${path}.tmp" "${path}" ONLY_IF_DIFFERENT)
+  file(REMOVE "${path}.tmp")
+endfunction()
+
+# Apply the D10 rename table to one source. kind is cmd, invocation, main or runtime; the order is part of the contract.
+function(planar_authoring_stack_file source destination kind)
+  file(READ "${source}" text)
+  if(kind STREQUAL "main")
+    string(REPLACE "planar.cmd.bootstrap" "planar.cmd.authoring_stack.bootstrap" text "${text}")
+    string(REPLACE "planar::cmd::invoke" "planar::cmd::authoring_stack::invoke" text "${text}")
+  elseif(kind STREQUAL "runtime")
+    string(REPLACE "planar.engine.runtime;" "planar.engine.authoring_stack;" text "${text}")
+    string(REPLACE "planar.engine.runtime_source;" "planar.engine.authoring_stack_source;" text "${text}")
+    string(REPLACE "namespace planar::engine {" "namespace planar::engine::authoring_stack {" text "${text}")
+  else()
+    string(REPLACE "import planar.engine.runtime; // X07-REAL-RUNTIME" "import planar.engine.authoring_real_runtime; // X07-REAL-RUNTIME" text "${text}")
+    string(REPLACE "planar.cmd.bootstrap" "planar.cmd.authoring_stack.bootstrap" text "${text}")
+    string(REPLACE "planar.cmd.invocation" "planar.cmd.authoring_stack.invocation" text "${text}")
+    string(REPLACE "planar.cmd.planar.handlers." "planar.cmd.authoring_stack.handlers." text "${text}")
+    string(REPLACE "namespace planar::cmd {" "namespace planar::cmd::authoring_stack {" text "${text}")
+    string(REPLACE "namespace planar::cmd::handlers {" "namespace planar::cmd::authoring_stack::handlers {" text "${text}")
+    string(REPLACE "planar.engine.runtime;" "planar.engine.authoring_stack;" text "${text}")
+    string(REPLACE "engine::command_" "engine::authoring_stack::command_" text "${text}")
+    string(REPLACE "engine::profile_invocation" "engine::authoring_stack::profile_invocation" text "${text}")
+    string(REPLACE "engine::registration_error" "engine::authoring_stack::registration_error" text "${text}")
+    string(REPLACE "engine::extension_" "engine::authoring_stack::extension_" text "${text}")
+    string(REPLACE "engine::prepared_profile" "engine::authoring_stack::prepared_profile" text "${text}")
+    string(REPLACE "import planar.engine.authoring_real_runtime; // X07-REAL-RUNTIME" "import planar.engine.runtime; // X07-REAL-RUNTIME" text "${text}")
+    if(kind STREQUAL "invocation")
+      string(CONCAT bound "using namespace engine;\n"
+        "using engine::authoring_stack::command_services;\n"
+        "using engine::authoring_stack::command_service_result;\n"
+        "using engine::authoring_stack::command_render_options;\n"
+        "using engine::authoring_stack::command_init_options;\n"
+        "using engine::authoring_stack::command_history_options;\n"
+        "using engine::authoring_stack::command_history_selector;\n"
+        "using engine::authoring_stack::command_export_options;\n"
+        "using engine::authoring_stack::command_load_options;")
+      string(REPLACE "using namespace engine;" "${bound}" text "${text}")
+    endif()
+  endif()
+  planar_authoring_emit("${destination}" "${text}")
+endfunction()
+
+set(authoring_stack_sources
+  bootstrap.cpp bootstrap.cppm invocation.cppm
+  handlers/render/command.cpp handlers/render/command.cppm handlers/init/command.cpp handlers/init/command.cppm
+  handlers/history/command.cpp handlers/history/command.cppm handlers/export/command.cpp handlers/export/command.cppm
+  handlers/load/command.cpp handlers/load/command.cppm handlers/extension/command.cpp handlers/extension/command.cppm)
+set(authoring_stack_inputs "${authoring_src_cmd}/main.cpp" "${authoring_src_cmd}/invocation.cpp"
+  "${authoring_src_runtime}/runtime.cpp" "${authoring_src_runtime}/runtime.cppm")
+foreach(file IN LISTS authoring_stack_sources)
+  list(APPEND authoring_stack_inputs "${authoring_src_cmd}/${file}")
+  planar_authoring_stack_file("${authoring_src_cmd}/${file}" "${authoring_stack_generated}/${file}" cmd)
+endforeach()
+planar_authoring_stack_file("${authoring_src_cmd}/invocation.cpp" "${authoring_stack_generated}/invocation.cpp" invocation)
+planar_authoring_stack_file("${authoring_src_cmd}/main.cpp" "${authoring_stack_generated}/main.cpp" main)
+planar_authoring_stack_file("${authoring_src_runtime}/runtime.cpp" "${authoring_stack_generated}/runtime.cpp" runtime)
+planar_authoring_stack_file("${authoring_src_runtime}/runtime.cppm" "${authoring_stack_generated}/runtime.cppm" runtime)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${authoring_stack_inputs}
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/commands.lua")
+
+set(authoring_lua_files
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/json.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/schema.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/semantic.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/selection.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua")
+set(authoring_runtime_depends planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture
+  planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance
+  planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec
+  planar_hash planar_json_codec planar_lua_trusted_libs)
+set(authoring_invocation_depends planar_command_response planar_capture planar_capture_host_path planar_ledger_format
+  planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
+
+# The stack embeds the shipped, unedited commands.lua.
+planar_embed_lua(planar_authoring_stack_source planar.engine.authoring_stack_source
+  ${authoring_lua_files}
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/commands.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
+planar_rewrite_module(planar_authoring_stack_runtime
+  INTERFACE "${authoring_stack_generated}/runtime.cppm" SOURCES "${authoring_stack_generated}/runtime.cpp"
+  DEPENDS ${authoring_runtime_depends} planar_authoring_stack_source)
+planar_rewrite_module(planar_authoring_stack_invocation
+  INTERFACE "${authoring_stack_generated}/invocation.cppm" SOURCES "${authoring_stack_generated}/invocation.cpp"
+  DEPENDS ${authoring_invocation_depends} planar_authoring_stack_runtime)
+set(authoring_stack_family_targets)
+foreach(family render init history export load extension)
+  planar_rewrite_module(planar_authoring_stack_${family}
+    INTERFACE "${authoring_stack_generated}/handlers/${family}/command.cppm"
+    SOURCES "${authoring_stack_generated}/handlers/${family}/command.cpp"
+    DEPENDS planar_authoring_stack_invocation CLI11::CLI11_Module)
+  set_target_properties(planar_authoring_stack_${family} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  list(APPEND authoring_stack_family_targets planar_authoring_stack_${family})
+endforeach()
+planar_rewrite_module(planar_authoring_stack_bootstrap
+  INTERFACE "${authoring_stack_generated}/bootstrap.cppm" SOURCES "${authoring_stack_generated}/bootstrap.cpp"
+  DEPENDS planar_command_envelope ${authoring_stack_family_targets} planar_command_authoring ${planar_authoring_family_targets})
+add_executable(planar_authoring_stack EXCLUDE_FROM_ALL "${authoring_stack_generated}/main.cpp")
+planar_native_target(planar_authoring_stack)
+target_link_libraries(planar_authoring_stack PRIVATE planar_authoring_stack_bootstrap)
+add_dependencies(planar_tests planar_authoring_stack)
+set_target_properties(planar_authoring_stack_runtime planar_authoring_stack_source planar_authoring_stack_invocation
+  planar_authoring_stack_bootstrap PROPERTIES EXCLUDE_FROM_ALL TRUE)
+target_compile_definitions(planar_authoring_stack_runtime PRIVATE PLANAR_AUTHORING_BUNDLE=1)
+target_compile_definitions(planar_authoring_stack_bootstrap PRIVATE PLANAR_AUTHORING_BUNDLE=1)
+# The bootstrap tests drive the authoring entry (STACK_INVOKE) and spawn the production binary (I25).
+target_link_libraries(planar_command_tests PRIVATE planar_authoring_stack_bootstrap)
+add_dependencies(planar_command_tests planar)
+target_compile_definitions(planar_command_tests PRIVATE PLANAR_PRODUCTION_BINARY="$<TARGET_FILE:planar>")
+
+# Malformed-bundle variants (D18). Each is a renamed copy of runtime.cpp and runtime.cppm embedding one edited commands.lua.
+# Index table (definition PLANAR_AUTHORING_BUNDLE on every variant except 18):
+#   0 control, unedited                              10 observe family mispaired with ingest
+#   1 spec-prompt row missing                        11 explain-rejection handler id spelled with a hyphen
+#   2 critique row missing                           12 observe response kind observe_v2
+#   3 ingest row missing                             13 observe capability authoring_capture_v1
+#   4 explain-rejection row missing                  14 orchestrator without --job
+#   5 observe row missing                            15 orchestrator --jobs instead of --job
+#   6 orchestrator row missing                       16 spec-prompt --registry typed decimal
+#   7 shipped load row missing                       17 explain-rejection --diagnostic optional
+#   8 extra twelfth row status                       18 gate if true, built WITHOUT the definition (leaky default)
+#   9 critique registered twice                      19 gate if false (five rows registered, eleven required)
+function(planar_authoring_once variable old new)
+  set(text "${${variable}}")
+  string(FIND "${text}" "${old}" first)
+  if(first EQUAL -1)
+    message(FATAL_ERROR "authoring variant anchor is absent: ${old}")
+  endif()
+  string(LENGTH "${old}" length)
+  math(EXPR after "${first} + ${length}")
+  string(SUBSTRING "${text}" ${after} -1 rest)
+  string(FIND "${rest}" "${old}" second)
+  if(NOT second EQUAL -1)
+    message(FATAL_ERROR "authoring variant anchor occurs more than once: ${old}")
+  endif()
+  string(REPLACE "${old}" "${new}" text "${text}")
+  set(${variable} "${text}" PARENT_SCOPE)
+endfunction()
+
+function(planar_authoring_variant_commands index variable)
+  file(READ "${PROJECT_SOURCE_DIR}/src/stdlib/planar/commands.lua" text)
+  set(verbs spec-prompt critique ingest explain-rejection observe orchestrator)
+  if(index GREATER_EQUAL 1 AND index LESS_EQUAL 6)
+    math(EXPR slot "${index} - 1")
+    list(GET verbs ${slot} verb)
+    planar_authoring_once(text "registration.add(authoring_descriptor(\"${verb}\")," ";(function() end)(authoring_descriptor(\"${verb}\"),")
+  elseif(index EQUAL 7)
+    planar_authoring_once(text "registration.add(descriptor(\"load\"," ";(function() end)(descriptor(\"load\",")
+  elseif(index EQUAL 8)
+    set(anchor "    registration.add(authoring_descriptor(\"orchestrator\"),orchestrator_command)\n")
+    planar_authoring_once(text "${anchor}" "${anchor}    registration.add(descriptor(\"status\",\"render_capture_v1\",{}),orchestrator_command)\n")
+  elseif(index EQUAL 9)
+    set(anchor "    registration.add(authoring_descriptor(\"critique\"),critique_command)\n")
+    planar_authoring_once(text "${anchor}" "${anchor}${anchor}")
+  elseif(index EQUAL 10)
+    planar_authoring_once(text "[\"observe\"]={family=\"observe\"," "[\"observe\"]={family=\"ingest\",")
+  elseif(index EQUAL 11)
+    planar_authoring_once(text "handler=\"shipped.explain_rejection.v1\"" "handler=\"shipped.explain-rejection.v1\"")
+  elseif(index EQUAL 12)
+    planar_authoring_once(text "kind=\"observe_v1\"" "kind=\"observe_v2\"")
+  elseif(index EQUAL 13)
+    planar_authoring_once(text "capability=\"observation_directory_v1\"" "capability=\"authoring_capture_v1\"")
+  elseif(index EQUAL 14)
+    planar_authoring_once(text "option(\"registry\",\"text\",true),option(\"job\",\"text\",true)}" "option(\"registry\",\"text\",true)}")
+  elseif(index EQUAL 15)
+    planar_authoring_once(text "option(\"job\",\"text\",true)}" "option(\"jobs\",\"text\",true)}")
+  elseif(index EQUAL 16)
+    set(row "[\"spec-prompt\"]={family=\"spec-prompt\",handler=\"shipped.spec_prompt.v1\",kind=\"spec_prompt_v1\",capability=\"authoring_capture_v1\",options={option(\"workspace\",\"text\",true),option(\"registry\",\"text\",true)}}")
+    string(REPLACE "option(\"registry\",\"text\",true)}}" "option(\"registry\",\"decimal\",true)}}" changed "${row}")
+    planar_authoring_once(text "${row}" "${changed}")
+  elseif(index EQUAL 17)
+    planar_authoring_once(text "option(\"diagnostic\",\"text\",true)" "option(\"diagnostic\",\"text\",false)")
+  elseif(index EQUAL 18)
+    planar_authoring_once(text "if registration.authoring then" "if true then")
+  elseif(index EQUAL 19)
+    planar_authoring_once(text "if registration.authoring then" "if false then")
+  endif()
+  set(${variable} "${text}" PARENT_SCOPE)
+endfunction()
+
+set(authoring_variant_objects)
+foreach(variant RANGE 0 19)
+  set(generated "${authoring_variant_generated}/${variant}")
+  planar_authoring_variant_commands(${variant} variant_commands)
+  planar_authoring_emit("${generated}/commands.lua" "${variant_commands}")
+  foreach(name runtime.cpp runtime.cppm)
+    file(READ "${authoring_src_runtime}/${name}" text)
+    string(REPLACE "planar.engine.runtime_source;" "planar.engine.authoring_source_${variant};" text "${text}")
+    string(REPLACE "module planar.engine.runtime;" "module planar.engine.authoring_variant_${variant};" text "${text}")
+    string(REPLACE "namespace planar::engine {" "namespace planar::engine::authoring_variant_${variant} {" text "${text}")
+    planar_authoring_emit("${generated}/${name}" "${text}")
+  endforeach()
+  planar_embed_lua(planar_authoring_source_${variant} planar.engine.authoring_source_${variant}
+    ${authoring_lua_files}
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
+    "${generated}/commands.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
+  # The altered file still occupies the exact shipped logical module slot.
+  set(source_module "${CMAKE_CURRENT_BINARY_DIR}/planar_authoring_source_${variant}.cppm")
+  file(READ "${source_module}" source_text)
+  file(RELATIVE_PATH generated_logical "${PROJECT_SOURCE_DIR}" "${generated}/commands.lua")
+  string(REPLACE "${generated_logical}" "planar/commands.lua" source_text "${source_text}")
+  file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
+  planar_rewrite_module(planar_authoring_variant_${variant}
+    INTERFACE "${generated}/runtime.cppm" SOURCES "${generated}/runtime.cpp"
+    DEPENDS ${authoring_runtime_depends} planar_authoring_source_${variant})
+  set_target_properties(planar_authoring_variant_${variant} planar_authoring_source_${variant} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  if(NOT variant EQUAL 18)
+    target_compile_definitions(planar_authoring_variant_${variant} PRIVATE PLANAR_AUTHORING_BUNDLE=1)
+  endif()
+  list(APPEND authoring_variant_objects planar_authoring_variant_${variant})
+endforeach()
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/commands.lua" "${authoring_src_runtime}/runtime.cpp" "${authoring_src_runtime}/runtime.cppm")
+
+add_executable(planar_authoring_catalog_tests EXCLUDE_FROM_ALL authoring_catalog.t.cpp)
+planar_native_target(planar_authoring_catalog_tests)
+target_link_libraries(planar_authoring_catalog_tests PRIVATE Catch2::Catch2WithMain planar_command_response planar_runtime
+  ${authoring_variant_objects})
+add_dependencies(planar_tests planar_authoring_catalog_tests)
+catch_discover_tests(planar_authoring_catalog_tests TEST_PREFIX "replacement." PROPERTIES LABELS unit TIMEOUT 60)

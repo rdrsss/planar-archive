@@ -1,7 +1,7 @@
 # Authoring and driver-prompt contract v1
 
 Status: exact contract text for RA01, written by round [V5-02-RA01-A](rounds/V5-02-RA01-A.md) and
-pending records-only review. It specifies behaviour; it ships nothing. RA01-B implements it and RA01-C
+approved and committed at 30702628. It specifies behaviour; it ships nothing. RA01-B implements it and RA01-C
 gates it. Until those rounds land, the current commands remain `render`, `init`, `history`, `export` and
 `load`.
 

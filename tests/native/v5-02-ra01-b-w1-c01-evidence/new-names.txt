@@ -1,0 +1,5 @@
+RA01-B1 missing leaf remap applies only to diagnostic and from
+RA01-B1 path text validation precedes the cwd read
+RA01-B1 reserved pre check continues past a malformed entry sorted before a reserved entry
+RA01-B1 reserved pre check skips an entry with any ill typed identity field
+RA01-B1 reserved strings in non reserved fields keep their HEAD diagnostic

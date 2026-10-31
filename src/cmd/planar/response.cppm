@@ -68,4 +68,8 @@ response extension_resource_failed(const diagnostic& detail);
 /// @param error Raw-validated inner error value; malformed payloads become the redacted protocol diagnostic.
 /// @return Buffered failure with the exit chosen by code.
 response semantic_failed(value_ptr error);
+/// Map a sealed response kind to the public envelope kind of its success value (the eleven RA-1 kinds).
+/// @param response_kind Catalog response kind such as `spec_prompt_v1` or `render_v1`.
+/// @return Envelope kind view with static lifetime, or `std::nullopt` for an unknown kind.
+std::optional<std::string_view> authoring_envelope_kind(std::string_view response_kind);
 } // namespace planar::cmd::detail

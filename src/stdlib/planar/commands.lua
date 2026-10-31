@@ -53,12 +53,29 @@ if registration then
     local facts=exported.value
     return result({version=1,kind="export",ledger=facts.ledger,revision=facts.revision,source=facts.source})
   end
+  local function authoring_refusal() return failed({code='internal',message='Invalid embedded command protocol',field=''}) end
+  local function spec_prompt_command(invocation,context) return authoring_refusal() end
+  local function critique_command(invocation,context) return authoring_refusal() end
+  local function ingest_command(invocation,context) return authoring_refusal() end
+  local function explain_rejection_command(invocation,context) return authoring_refusal() end
+  local function observe_command(invocation,context) return authoring_refusal() end
+  local function orchestrator_command(invocation,context) return authoring_refusal() end
   local function option(name,kind,required)
     return {name="--"..name,type=kind,required=required,help="Explicit "..name.." value"}
   end
   local function descriptor(name,capability,options)
     return {name=name,family=name,handler_id="shipped."..name..".v1",options=engine.array(options),help="Planar "..name,response_kind=name.."_v1",capabilities=engine.array({capability})}
   end
+  local authoring_rows={
+    ["spec-prompt"]={family="spec-prompt",handler="shipped.spec_prompt.v1",kind="spec_prompt_v1",capability="authoring_capture_v1",options={option("workspace","text",true),option("registry","text",true)}},
+    ["critique"]={family="critique",handler="shipped.critique.v1",kind="critique_v1",capability="authoring_capture_v1",options={option("workspace","text",true),option("registry","text",true)}},
+    ["ingest"]={family="ingest",handler="shipped.ingest.v1",kind="ingest_v1",capability="authoring_capture_v1",options={option("workspace","text",true),option("registry","text",true)}},
+    ["explain-rejection"]={family="explain-rejection",handler="shipped.explain_rejection.v1",kind="explain_rejection_v1",capability="diagnostic_read_v1",options={option("diagnostic","text",true)}},
+    ["observe"]={family="observe",handler="shipped.observe.v1",kind="observe_v1",capability="observation_directory_v1",options={option("from","text",true)}},
+    ["orchestrator"]={family="orchestrator",handler="shipped.orchestrator.v1",kind="orchestrator_v1",capability="orchestrator_capture_v1",options={option("workspace","text",true),option("registry","text",true),option("job","text",true)}},
+  }
+  local function fresh_options(list) local copy={} for i,o in ipairs(list) do copy[i]={name=o.name,type=o.type,required=o.required,help=o.help} end return copy end
+  local function authoring_descriptor(name) local row=authoring_rows[name] return {name=name,family=row.family,handler_id=row.handler,options=engine.array(fresh_options(row.options)),help="Planar "..name,response_kind=row.kind,capabilities=engine.array({row.capability})} end
   registration.add(descriptor("render","render_capture_v1",{
     option("workspace","text",true),option("registry","text",true),option("root","text",true),
     option("job","text",true),option("role","text",true),option("base-root","text",false),
@@ -78,4 +95,12 @@ if registration then
     option("ledger","text",true),option("workspace","text",true),option("registry","text",true),
     option("expect-revision","text",true),option("request-id","text",true),option("actor","text",true)
   }),load_command)
+  if registration.authoring then
+    registration.add(authoring_descriptor("spec-prompt"),spec_prompt_command)
+    registration.add(authoring_descriptor("critique"),critique_command)
+    registration.add(authoring_descriptor("ingest"),ingest_command)
+    registration.add(authoring_descriptor("explain-rejection"),explain_rejection_command)
+    registration.add(authoring_descriptor("observe"),observe_command)
+    registration.add(authoring_descriptor("orchestrator"),orchestrator_command)
+  end
 end

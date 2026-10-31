@@ -1,0 +1,66 @@
+replacement.RA01-B1 a broken profile reports its own error before a reserved name collision
+replacement.RA01-B1 authoring bundle runs shipped verbs like the default entry
+replacement.RA01-B1 authoring capabilities are the exact per row sets
+replacement.RA01-B1 authoring catalog keeps the five shipped descriptors identical
+replacement.RA01-B1 authoring catalog seals the eleven RA-1 rows in sorted order
+replacement.RA01-B1 authoring families refuse empty and dash prefixed values
+replacement.RA01-B1 authoring families refuse positionals unknown options and help
+replacement.RA01-B1 authoring families refuse repeated options
+replacement.RA01-B1 authoring families require every option
+replacement.RA01-B1 authoring handler ids and response kinds use underscores
+replacement.RA01-B1 authoring option signatures are exactly the RA-1 table
+replacement.RA01-B1 authoring root help inserts the six RA-1 lines before the final line
+replacement.RA01-B1 authoring verbs do not accept each others options
+replacement.RA01-B1 authoring verbs refuse missing required options as usage
+replacement.RA01-B1 authoring verbs refuse positionals unknown options and equals syntax as usage
+replacement.RA01-B1 authoring verbs refuse repeats empty and dash prefixed values as usage
+replacement.RA01-B1 command options variant stays closed at five members
+replacement.RA01-B1 commands.lua keeps one handler function and one registration line per authoring verb
+replacement.RA01-B1 control bundle seals and a refused bundle maps to internal exit 4
+replacement.RA01-B1 default catalog refuses authoring rows registered without the request
+replacement.RA01-B1 default embedded catalog stays the five HEAD rows
+replacement.RA01-B1 default invoke and production binary refuse all six authoring verbs as usage
+replacement.RA01-B1 defined runtime keeps profile VMs at five rows
+replacement.RA01-B1 each authoring family binds exactly its RA-1 option names
+replacement.RA01-B1 each authoring verb parses its signature through the bundle to the stub refusal
+replacement.RA01-B1 explain-rejection and observe ignore an invalid workspace environment
+replacement.RA01-B1 explicit path stage keeps the existing messages
+replacement.RA01-B1 explicit path stage precedes the stub refusal
+replacement.RA01-B1 help splice inserts six lines before the final line only
+replacement.RA01-B1 non reserved near miss names stay registrable
+replacement.RA01-B1 only workspace verbs read the workspace environment
+replacement.RA01-B1 orchestrator job value is text
+replacement.RA01-B1 orchestrator requires all three options
+replacement.RA01-B1 production targets never receive the authoring definition
+replacement.RA01-B1 profile registering a reserved authoring command name is refused as identity conflict
+replacement.RA01-B1 profile registering a reserved authoring family name is refused as identity conflict
+replacement.RA01-B1 profile registering a reserved authoring handler id is refused as identity conflict
+replacement.RA01-B1 profile registering a reserved projection id is refused as identity conflict
+replacement.RA01-B1 projection response refuses the five orchestrator section ids for both input kinds
+replacement.RA01-B1 reserved command collision field follows registration order
+replacement.RA01-B1 reserved command is refused when the profile also registers a projection
+replacement.RA01-B1 reserved pre check skips malformed descriptors and keeps their diagnostic
+replacement.RA01-B1 reserved projection collision field follows registration order
+replacement.RA01-B1 response kinds map to envelope kinds
+replacement.RA01-B1 selector stage precedes the explicit path stage
+replacement.RA01-B1 stages read the cwd at most once and only for relative paths
+replacement.RA01-B1 stub invocations write nothing and print no success document
+replacement.RA01-B1 stub refusal is the closed internal envelope on stderr only
+replacement.RA01-B1 usage precedes the workspace selector stage
+replacement.RA01-B1 validator refuses a catalog missing one row
+replacement.RA01-B1 validator refuses a duplicated authoring row
+replacement.RA01-B1 validator refuses a mispaired capability
+replacement.RA01-B1 validator refuses a mispaired family
+replacement.RA01-B1 validator refuses a mispaired handler id
+replacement.RA01-B1 validator refuses a mispaired response kind
+replacement.RA01-B1 validator refuses a missing option
+replacement.RA01-B1 validator refuses a renamed option
+replacement.RA01-B1 validator refuses a wrong option type
+replacement.RA01-B1 validator refuses a wrong required flag
+replacement.RA01-B1 validator refuses an extra twelfth row
+replacement.RA01-B1 validator refuses the five shipped rows when eleven are required
+replacement.RA01-B1 with-profile after admission an authoring tail is usage and a broken profile reports its own error
+replacement.RA01-B1 with-profile outputs are identical under the authoring bundle
+replacement.RA01-B1 with-profile probe stays five and a malformed authoring tail reaches profile capture
+replacement.RA01-B1 with-profile reserved command registration prints the existing identity conflict
+replacement.RA01-B1 workspace selector stage expands names and keeps files lexical
