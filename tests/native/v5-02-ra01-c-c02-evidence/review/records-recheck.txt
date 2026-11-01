@@ -1,0 +1,89 @@
+# Reviewer records re-check (V5-02-RA01-C-C02). Run from the repository root on 2026-11-01. <repo>, <home> and <scratch> stand for the repository path, the home path and the reviewer scratch directory outside the repository.
+
+== identity.py src
+| identity | value |
+|---|---|
+| HEAD | `93053c42a4c68fd3ecc8911edab6464e3d1307f3` |
+| sha256(git diff --binary HEAD -- src), tracked only | `6b23117bfb40136186fabf5515d97e0ac1da99c0b69b6d00584033cab0f4aeda` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src, evidence excluded | `6b23117bfb40136186fabf5515d97e0ac1da99c0b69b6d00584033cab0f4aeda` |
+
+| file | state | sha256 |
+|---|---|---|
+| `src/cmd/planar/authoring_orchestrator.t.cpp` | modified | `38d79424ab104ac3be416588bcc58d33715976fd781a6128e173b51c6a06a46f` |
+| `src/stdlib/planar/orchestrator.lua` | modified | `e7d9f570ef70b014e6b3facac55709c59ea8736958bb5ef7d5147eb227bc87a1` |
+exit: 0
+
+== identity.py over the three re-baselined files
+| identity | value |
+|---|---|
+| HEAD | `93053c42a4c68fd3ecc8911edab6464e3d1307f3` |
+| sha256(git diff --binary HEAD -- docs/vernacular/rounds/V5-02-RA01-C-C01.md tests/native/v5-02-ra01-c-c02-evidence/REPORT.md tests/native/v5-02-ra01-c-c01-evidence/REPORT.md), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec docs/vernacular/rounds/V5-02-RA01-C-C01.md tests/native/v5-02-ra01-c-c02-evidence/REPORT.md tests/native/v5-02-ra01-c-c01-evidence/REPORT.md, evidence excluded | `7e3c180b1457bc6bc5a2ba8a552ad81c95c901c0547b8a3775713a1a974b4a90` |
+
+| file | state | sha256 |
+|---|---|---|
+| `docs/vernacular/rounds/V5-02-RA01-C-C01.md` | untracked | `75a8055b612849475ee1706225e681381a3e6e0cf21802b4cdb5734bb0e2133d` |
+exit: 0
+
+== shasum -a 256 (files edited by the records fix, plus inventory.txt)
+75a8055b612849475ee1706225e681381a3e6e0cf21802b4cdb5734bb0e2133d  docs/vernacular/rounds/V5-02-RA01-C-C01.md
+b09ba231e1dba661d19492edfe959f71af6018fc535f469e62691d698361cbd6  tests/native/v5-02-ra01-c-c02-evidence/REPORT.md
+83a8434eed4c2aff9eadb8626d0c80c6015468dfd3a1b947502c40cf333c85e1  tests/native/v5-02-ra01-c-c01-evidence/REPORT.md
+28bd1674e83a4249d0af9cbccb76e5302d5670fa5df65d6d9d9d6e48333ac870  tests/native/v5-02-ra01-c-c02-evidence/inventory.txt
+
+== files newer than review/redaction-check.txt (find . excluding build and .git)
+./docs/vernacular/rounds/V5-02-RA01-C-C01.md
+./docs/vernacular/rounds/V5-02-RA01-C-C02-review.md
+./docs/vernacular/rounds/V5-02-RA01-C-C02.md
+./tests/native/v5-02-ra01-c-c01-evidence/REPORT.md
+./tests/native/v5-02-ra01-c-c02-evidence/REPORT.md
+./tests/native/v5-02-ra01-c-c02-evidence/review/records-recheck.txt
+
+== shasum -a 256 -c raw/c02-final-sha256.txt, non-OK lines
+docs/vernacular/rounds/V5-02-RA01-C-C01.md: FAILED
+docs/vernacular/rounds/V5-02-RA01-C-C02.md: FAILED
+tests/native/v5-02-ra01-c-c01-evidence/REPORT.md: FAILED
+tests/native/v5-02-ra01-c-c02-evidence/REPORT.md: FAILED
+shasum: WARNING: 4 computed checksums did NOT match
+
+== find rule D7/D32
+M: 10
+
+== C01 record lines differing from raw/c01-record-pre.md
+83c83
+85c85
+144c144
+159c159
+189c189
+191,192c191,192
+201c201
+220c220
+222c222
+226c226
+232,233c232,233
+235,236c235,236
+
+== C01 REPORT lines differing from raw/c01-report-pre.md
+40c40
+48c48
+71c71
+83c83
+87c87
+95c95
+101c101
+
+== redaction check, one argument per file (zsh array)
+command: python3 scripts/redact-local-paths.py --repo-path <repo> --home <home> check <each file below>
+files: 8
+docs/vernacular/rounds/V5-02-RA01-C-C01.md
+docs/vernacular/rounds/V5-02-RA01-C-C02.md
+docs/vernacular/rounds/V5-02-RA01-C-C02-review.md
+tests/native/v5-02-ra01-c-c01-evidence/REPORT.md
+tests/native/v5-02-ra01-c-c02-evidence/REPORT.md
+tests/native/v5-02-ra01-c-c02-evidence/inventory.txt
+tests/native/v5-02-ra01-c-c02-evidence/review/identity.txt
+tests/native/v5-02-ra01-c-c02-evidence/review/redaction-check.txt
+exit: 0
+control: same files plus <scratch>/ctl.txt holding the repository path
+local path in <scratch>/ctl.txt
+exit: 1

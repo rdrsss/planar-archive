@@ -1,0 +1,11 @@
+| identity | value |
+|---|---|
+| HEAD | `93053c42a4c68fd3ecc8911edab6464e3d1307f3` |
+| sha256(git diff --binary HEAD -- src), tracked only | `6b23117bfb40136186fabf5515d97e0ac1da99c0b69b6d00584033cab0f4aeda` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src, evidence excluded | `6b23117bfb40136186fabf5515d97e0ac1da99c0b69b6d00584033cab0f4aeda` |
+
+| file | state | sha256 |
+|---|---|---|
+| `src/cmd/planar/authoring_orchestrator.t.cpp` | modified | `38d79424ab104ac3be416588bcc58d33715976fd781a6128e173b51c6a06a46f` |
+| `src/stdlib/planar/orchestrator.lua` | modified | `e7d9f570ef70b014e6b3facac55709c59ea8736958bb5ef7d5147eb227bc87a1` |
+exit: 0

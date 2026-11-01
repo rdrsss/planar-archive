@@ -605,6 +605,14 @@
    "original_sha256": "257bcf527e5428d4c6c527f9539db9f4642b35c84c2be8c67a5c02e1fdfb0b6f",
    "redacted_sha256": "5716b101e39407878a2c6f6804ff0cdf8754cb9b2227ad4769cbbc9d54fd5180"
   },
+  "tests/native/v5-02-ra01-c-c01-evidence/plan/DECISIONS.md": {
+   "original_sha256": "aa8e7d9c33a85a27928c670d583edfa176d606250fd2e79b13b67d34c5c47cf0",
+   "redacted_sha256": "3cf30cd5739faf592462d99561389c83596edb732e3645626c804c4d218a32e2"
+  },
+  "tests/native/v5-02-ra01-c-c01-evidence/red-first.log": {
+   "original_sha256": "f138a4b93b9aef0c27a2606accc177ee3d58f1e25db558176e73a25eaa037158",
+   "redacted_sha256": "7c69cb0ae9ff5be912bd0618bd035ad74ba650c27d00dc9b59f3c9388816e42f"
+  },
   "tests/native/v5-02-ra01-c-evidence/plan/DECISIONS.md": {
    "original_sha256": "556f23f749a8130adb8feb769c4789392aaf11920628bbe67295fe28cf6c44a1",
    "redacted_sha256": "29048c072f00ba4a8ff39b90a95ea2961764f04ba11c6e192160943a90e19c11"

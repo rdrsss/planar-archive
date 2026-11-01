@@ -1,0 +1,35 @@
+Reviewer redaction check, 2026-11-01. Command, run from the repository root with one argument per file (xargs):
+  xargs python3 scripts/redact-local-paths.py check --repo-path <repo> --home <home> < files.txt
+Files checked (26):
+  tests/native/v5-02-ra01-c-c01-evidence/inventory-debug.txt
+  tests/native/v5-02-ra01-c-c01-evidence/inventory.txt
+  tests/native/v5-02-ra01-c-c01-evidence/plan/DECISIONS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/INVARIANTS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-1/DECISIONS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-1/INVARIANTS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-2/DECISIONS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-2/INVARIANTS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-3/DECISIONS.md
+  tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-3/INVARIANTS.md
+  tests/native/v5-02-ra01-c-c01-evidence/probes/PROBES.md
+  tests/native/v5-02-ra01-c-c01-evidence/probes/results.jsonl
+  tests/native/v5-02-ra01-c-c01-evidence/probes/superseded-1/PROBES.md
+  tests/native/v5-02-ra01-c-c01-evidence/probes/superseded-1/results.jsonl
+  tests/native/v5-02-ra01-c-c01-evidence/red-first.log
+  tests/native/v5-02-ra01-c-c01-evidence/red/RED.md
+  tests/native/v5-02-ra01-c-c01-evidence/red/snapshot/candidate.diff
+  tests/native/v5-02-ra01-c-c01-evidence/red/snapshot/SHA256SUMS
+  tests/native/v5-02-ra01-c-c01-evidence/REPORT.md
+  src/stdlib/planar/orchestrator.lua
+  src/cmd/planar/authoring_orchestrator.t.cpp
+  docs/vernacular/acceptance-matrix.md
+  docs/vernacular/rounds/V5-02-RA01-C.md
+  docs/vernacular/rounds/V5-02-RA01-C-C01.md
+  tests/native/v5-02-ra01-c-evidence/REPORT.md
+  tests/native/v5-02-ra01-c-evidence/acceptance-rows.md
+Output:
+local path in tests/native/v5-02-ra01-c-c01-evidence/plan/DECISIONS.md
+local path in tests/native/v5-02-ra01-c-c01-evidence/red-first.log
+exit=1
+Positive control: the same command on red-first.log alone prints 'local path in ...' and exits 1, so the check is not vacuous.
+Note: passing all paths as one unsplit word (zsh does not split an unquoted variable) makes candidate_files() drop the non-existent path and exit 0 with no output, which is one way to get the empty raw/g2-redact.log the gate recorded; the gate did not save its exact command line, so the cause is not proven.

@@ -4,6 +4,11 @@
 #include <catch2/catch_test_macros.hpp>
 #include <stdlib.h>
 #include <unistd.h>
+extern "C" {
+#include "lauxlib.h"
+#include "lua.h"
+#include "lualib.h"
+}
 import std;
 import planar.cmd.response;
 import planar.cmd.authoring_stack.bootstrap;
@@ -637,4 +642,272 @@ TEST_CASE("RA01-B2 C01 slot type checks are pinned in the Lua handlers", "[autho
     const auto at         = observe.find(check);
     CHECK((at != std::string::npos && at < bound));
   }
+}
+
+namespace {
+// One test-built Lua state with the base, table and string libraries only; closed when the owning test scope ends.
+struct ra01_cc01_vm {
+  lua_State* l = luaL_newstate();
+  ra01_cc01_vm() {
+    if (l == nullptr)
+      return;
+    luaL_requiref(l, "_G", luaopen_base, 1);
+    lua_pop(l, 1);
+    luaL_requiref(l, "table", luaopen_table, 1);
+    lua_pop(l, 1);
+    luaL_requiref(l, "string", luaopen_string, 1);
+    lua_pop(l, 1);
+  }
+  ra01_cc01_vm(const ra01_cc01_vm&)            = delete;
+  ra01_cc01_vm& operator=(const ra01_cc01_vm&) = delete;
+  ~ra01_cc01_vm() {
+    if (l)
+      lua_close(l);
+  }
+};
+
+// Text of the value at idx when it is a string, otherwise empty. Never converts a number in place.
+std::string ra01_cc01_text(lua_State* l, int idx) {
+  return lua_type(l, idx) == LUA_TSTRING ? std::string(lua_tostring(l, idx)) : std::string{};
+}
+
+// Text of field key of the table at the absolute index idx, empty when absent or not a string; the stack is unchanged.
+std::string ra01_cc01_field_text(lua_State* l, int idx, const char* key) {
+  lua_getfield(l, idx, key);
+  std::string text = ra01_cc01_text(l, -1);
+  lua_pop(l, 1);
+  return text;
+}
+
+// Loads and calls a chunk that returns one value, leaving that value on the stack; each failure reports the Lua text.
+void ra01_cc01_run(lua_State* l, std::string_view text, const char* name) {
+  const int loaded = luaL_loadbufferx(l, text.data(), text.size(), name, "t");
+  CAPTURE(ra01_cc01_text(l, -1));
+  REQUIRE(loaded == LUA_OK);
+  const int called = lua_pcall(l, 0, 1, 0);
+  CAPTURE(ra01_cc01_text(l, -1));
+  REQUIRE(called == LUA_OK);
+}
+
+// Loads the real orchestrator.lua bytes with the consumer return appended, finds the file-local project() as the upvalue
+// named project, calls it with the minimal context and leaves its runtime value as the only value on the stack. The
+// context has empty graph, roles, prescriptions and actions, so presentation_data, sorted and list_text are never reached.
+void ra01_cc01_project(lua_State* l) {
+  const fs::path file = fs::path(__FILE__).parent_path() / ".." / ".." / "stdlib" / "planar" / "orchestrator.lua";
+  std::ifstream  in(file, std::ios::binary);
+  std::string    data{std::istreambuf_iterator<char>(in), {}};
+  REQUIRE_FALSE(data.empty());
+  data += "\nreturn orchestrator_command_impl";
+  ra01_cc01_run(l, data, "orchestrator.lua");
+  REQUIRE(lua_isfunction(l, -1));
+  bool found = false;
+  for (int i = 1;; ++i) {
+    const char* name = lua_getupvalue(l, -1, i);
+    if (name == nullptr)
+      break;
+    if (std::string_view(name) == "project") {
+      found = true;
+      break;
+    }
+    lua_pop(l, 1);
+  }
+  REQUIRE(found);
+  lua_remove(l, -2);
+  REQUIRE(lua_isfunction(l, -1));
+  ra01_cc01_run(
+      l,
+      R"lua(return {workspace={id="ws"},spec={id="sp"},job={id="jb"},shape={kind="loop",max_rounds=3,stages={}},graph={vertices={},edges={}},roles={},prescriptions={},actions={}})lua",
+      "context");
+  const int called = lua_pcall(l, 1, 1, 0);
+  CAPTURE(ra01_cc01_text(l, -1));
+  REQUIRE(called == LUA_OK);
+}
+} // namespace
+
+// RA01-C-C01 projection wrapper. Mutants, all in orchestrator.lua: the wrapper version dropped, 2, "1" or 1.0 (I1, I2);
+// a bare `return sections`, an extra wrapper key, or the wrapper return moved outside project() (I1); the mandatory flag
+// dropped from the section helper, set false, stringified as "true", moved onto the wrapper, or reordered with
+// table.insert (I3a, I3b, I3d, I3e, I3f); one section given mandatory=false by a dot, bracket or string-built key (I3c);
+// the roles and graph calls swapped, one deleted or a sixth added (I4); and the consumer iterating project(c) directly,
+// bypassing the wrapper (I5). Kills per SECTION: wrapper shape kills I1 and I2 and the wrapper-level part of I3d;
+// sections order and count kills I4 and the I3e reorder; every section mandatory kills I3a, I3b, I3c (all three spellings),
+// I3d and I3f. Source pins is a supplement that kills the wrapper literal, helper literal, mandatory count and consumer
+// bypass (I5). Limit (D22): the test loads the same orchestrator.lua bytes in a test-built Lua state with base, table and
+// string libraries only, not through the embedded authoring stack; the minimal context leaves graph, roles, prescriptions
+// and actions empty, so non-empty section bodies are covered by the existing goldens (I6); orchestrator_command_impl, the
+// consumer, is pinned by source text in the supplement and by the existing behavioural test RA01-B2 orchestrator prompt
+// carries five sections in order (I5b, D20). No seam, hook or new public symbol.
+TEST_CASE("RA01-C-C01 orchestrator projection wrapper is versioned and mandatory", "[authoring][ra01][orchestrator]") {
+  SECTION("wrapper shape") {
+    ra01_cc01_vm vm;
+    REQUIRE(vm.l != nullptr);
+    lua_State* l = vm.l;
+    ra01_cc01_project(l);
+    REQUIRE(lua_istable(l, -1));
+    const int wrapper = lua_gettop(l);
+    // version must be the integer 1: a string "1", a float 1.0, 2 or an absent field all fail.
+    lua_getfield(l, wrapper, "version");
+    CHECK(lua_type(l, -1) == LUA_TNUMBER);
+    CHECK(lua_isinteger(l, -1) != 0);
+    CHECK(lua_tointeger(l, -1) == 1);
+    lua_settop(l, wrapper);
+    // No array part, and exactly the two keys version and sections (a bare array or an extra key fails).
+    CHECK(static_cast<std::size_t>(lua_rawlen(l, wrapper)) == 0);
+    std::size_t keys = 0;
+    lua_pushnil(l);
+    while (lua_next(l, wrapper) != 0) {
+      CHECK(lua_type(l, -2) == LUA_TSTRING);
+      const std::string key = ra01_cc01_text(l, -2);
+      CHECK((key == "version" || key == "sections"));
+      ++keys;
+      lua_pop(l, 1);
+    }
+    CHECK(keys == 2);
+    lua_getfield(l, wrapper, "sections");
+    CHECK(lua_istable(l, -1) != 0);
+    lua_settop(l, wrapper);
+  }
+  SECTION("sections order and count") {
+    ra01_cc01_vm vm;
+    REQUIRE(vm.l != nullptr);
+    lua_State* l = vm.l;
+    ra01_cc01_project(l);
+    REQUIRE(lua_istable(l, -1));
+    const int wrapper = lua_gettop(l);
+    lua_getfield(l, wrapper, "sections");
+    REQUIRE(lua_istable(l, -1));
+    const int sections = lua_gettop(l);
+    CHECK(static_cast<std::size_t>(lua_rawlen(l, sections)) == 5);
+    std::size_t keys = 0;
+    lua_pushnil(l);
+    while (lua_next(l, sections) != 0) {
+      ++keys;
+      lua_pop(l, 1);
+    }
+    CHECK(keys == 5);
+    const std::array<std::string_view, 5> expected{"orchestrator_authority", "orchestrator_graph", "orchestrator_roles",
+                                                   "orchestrator_prescriptions", "orchestrator_actions"};
+    for (int i = 0; i < 5; ++i) {
+      CAPTURE(i + 1);
+      CAPTURE(expected[static_cast<std::size_t>(i)]);
+      lua_rawgeti(l, sections, i + 1);
+      const int  entry    = lua_gettop(l);
+      const bool is_table = lua_istable(l, entry) != 0;
+      CHECK(is_table);
+      const std::string id = is_table ? ra01_cc01_field_text(l, entry, "id") : std::string{};
+      CHECK(std::string_view(id) == expected[static_cast<std::size_t>(i)]);
+      lua_settop(l, sections);
+    }
+  }
+  SECTION("every section mandatory") {
+    ra01_cc01_vm vm;
+    REQUIRE(vm.l != nullptr);
+    lua_State* l = vm.l;
+    ra01_cc01_project(l);
+    REQUIRE(lua_istable(l, -1));
+    const int wrapper = lua_gettop(l);
+    lua_getfield(l, wrapper, "sections");
+    REQUIRE(lua_istable(l, -1));
+    const int sections = lua_gettop(l);
+    for (int i = 0; i < 5; ++i) {
+      CAPTURE(i + 1);
+      lua_rawgeti(l, sections, i + 1);
+      const int  entry    = lua_gettop(l);
+      const bool is_table = lua_istable(l, entry) != 0;
+      CHECK(is_table);
+      if (is_table) {
+        // mandatory is the Lua boolean true; the string "true", false and a missing key all fail.
+        lua_getfield(l, entry, "mandatory");
+        CHECK(lua_type(l, -1) == LUA_TBOOLEAN);
+        CHECK(lua_toboolean(l, -1) != 0);
+        lua_settop(l, entry);
+        // text is a string beginning with the heading marker.
+        const std::string text = ra01_cc01_field_text(l, entry, "text");
+        CHECK(text.starts_with("## "));
+        // Exactly three keys, and each key is one of id, text, mandatory; a fourth key or a misspelt key fails.
+        std::size_t keys  = 0;
+        bool        named = true;
+        lua_pushnil(l);
+        while (lua_next(l, entry) != 0) {
+          const std::string key = ra01_cc01_text(l, -2);
+          named                 = named && (key == "id" || key == "text" || key == "mandatory");
+          ++keys;
+          lua_pop(l, 1);
+        }
+        CHECK(named);
+        CHECK(keys == 3);
+      }
+      lua_settop(l, sections);
+    }
+  }
+  SECTION("source pins") {
+    // Supplement only (D16): the consumer and the literal wrapper and helper shapes, read from the squashed source.
+    const auto squashed =
+        c01_squashed_lua(fs::path(__FILE__).parent_path() / ".." / ".." / "stdlib" / "planar" / "orchestrator.lua");
+    REQUIRE_FALSE(squashed.empty());
+    const std::string_view text = squashed;
+    CHECK(c01_occurrences(text, "localfunctionproject(c)") == 1);
+    const auto project_begin = squashed.find("localfunctionproject(c)");
+    REQUIRE(project_begin != std::string::npos);
+    CHECK(c01_occurrences(text, "orchestrator_command_impl=function") == 1);
+    const auto project_end = squashed.find("orchestrator_command_impl=function");
+    REQUIRE(project_end != std::string::npos);
+    REQUIRE(project_begin < project_end);
+    const std::string_view project_span = text.substr(project_begin, project_end - project_begin);
+    const std::string_view tail_span    = text.substr(project_begin);
+    // (i) one versioned wrapper return inside project(), and no bare return of the sections array.
+    const std::string_view wrapper_return = "return{version=1,sections=sections}";
+    CAPTURE(wrapper_return);
+    CHECK(c01_occurrences(project_span, wrapper_return) == 1);
+    CHECK(c01_occurrences(text, wrapper_return) == 1);
+    CHECK(c01_occurrences(project_span, "returnsectionsend") == 0);
+    // (ii) the section helper with mandatory=true, inside project().
+    const std::string_view helper =
+        R"lua(localfunctionsection(id,heading,body)sections[#sections+1]={id=id,text="##"..heading.."\n"..body,mandatory=true}end)lua";
+    CAPTURE(helper);
+    CHECK(c01_occurrences(text, helper) == 1);
+    const auto helper_at = squashed.find(helper);
+    CHECK((helper_at != std::string::npos && helper_at >= project_begin && helper_at < project_end));
+    // (iii) mandatory appears once in the tail, once as mandatory= in the file, and never as mandatory=false.
+    CHECK(c01_occurrences(tail_span, "mandatory") == 1);
+    CHECK(c01_occurrences(text, "mandatory=") == 1);
+    CHECK(c01_occurrences(text, "mandatory=false") == 0);
+    // (iv) five section calls in the contract order, each once.
+    const std::array<std::string_view, 5> calls{"section(\"orchestrator_authority\"", "section(\"orchestrator_graph\"",
+                                                "section(\"orchestrator_roles\"", "section(\"orchestrator_prescriptions\"",
+                                                "section(\"orchestrator_actions\""};
+    std::size_t                           previous = 0;
+    for (std::size_t k = 0; k < calls.size(); ++k) {
+      CAPTURE(calls[k]);
+      CHECK(c01_occurrences(text, calls[k]) == 1);
+      const auto at = squashed.find(calls[k]);
+      CHECK((at != std::string::npos && (k == 0 || at > previous)));
+      if (at != std::string::npos)
+        previous = at;
+    }
+    CHECK(c01_occurrences(text, "section(\"orchestrator_") == 5);
+    // (v) the consumer iterates the wrapper's sections and binds project(c) once.
+    CHECK(c01_occurrences(text, "ipairs(result.sections)") == 1);
+    CHECK(c01_occurrences(text, "ipairs(project(c))") == 0);
+    CHECK(c01_occurrences(text, "localresult=project(c)") == 1);
+  }
+}
+
+// Mutant (I6): orchestrator.lua changes the title, the heading marker or text, the authority sentences, or the section
+// join (for example LF to a double LF), so the markdown bytes differ from the RA-3 golden prefix and separators.
+TEST_CASE("RA01-C-C01 orchestrator markdown bytes keep the golden title authority and joins", "[authoring][ra01][orchestrator]") {
+  or_scratch s;
+  s.put("split.lua", pipeline_split);
+  const auto        doc = parse_prompt(orchestrate(s, "split"));
+  const std::string md  = doc.markdown;
+  CHECK(md.starts_with("# Planar orchestrator prompt\n\n## Orchestrator authority\nThis prompt describes the graph of job "));
+  CHECK(md.contains("\nThe driver schedules sessions; Planar does not. Planar prints this prompt and states no execution state.\n"
+                    "Use only the actions marked as available below; actions marked as future are unavailable.\n\n"
+                    "## Orchestrator graph\n- shape: "));
+  CHECK(md.contains("\n\n## Orchestrator roles\n- "));
+  CHECK(md.contains("\n\n## Orchestrator prescriptions\n- "));
+  CHECK(md.contains("\n\n## Orchestrator actions\n- "));
+  // Exactly one blank line between blocks: no run of three LFs anywhere.
+  CHECK_FALSE(md.contains("\n\n\n"));
+  CHECK(md.ends_with("\n"));
 }

@@ -111,7 +111,7 @@ do
   -- The projection sees only the context value.
   local function project(c)
     local sections={}
-    local function section(id,heading,body) sections[#sections+1]={id=id,text="## "..heading.."\n"..body} end
+    local function section(id,heading,body) sections[#sections+1]={id=id,text="## "..heading.."\n"..body,mandatory=true} end
     section("orchestrator_authority","Orchestrator authority",
       "This prompt describes the graph of job "..c.job.id.." in workspace "..c.workspace.id.." and spec "..c.spec.id..".\n"..
       "The driver schedules sessions; Planar does not. Planar prints this prompt and states no execution state.\n"..
@@ -137,7 +137,7 @@ do
     body={}
     for _,a in ipairs(c.actions) do body[#body+1]="- "..a.command.." ("..a.status.."): "..a.purpose.."\n" end
     section("orchestrator_actions","Orchestrator actions",table.concat(body))
-    return sections
+    return {version=1,sections=sections}
   end
   orchestrator_command_impl=function(invocation,context)
     local opened=context.open_workspace({workspace=invocation.options.workspace})
@@ -153,7 +153,8 @@ do
     local c=build_context(validated.value,value,build_actions(value.commands))
     if not c then return refusal() end
     local parts={"# Planar orchestrator prompt\n"}
-    for _,s in ipairs(project(c)) do parts[#parts+1]=s.text end
+    local result=project(c)
+    for _,s in ipairs(result.sections) do parts[#parts+1]=s.text end
     local markdown=table.concat(parts,"\n")
     local digest=engine.fragment_digest(markdown)
     if type(digest)~="string" then return refusal() end

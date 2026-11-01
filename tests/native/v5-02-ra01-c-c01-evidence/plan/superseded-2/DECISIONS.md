@@ -1,0 +1,26 @@
+# Decisions table, V5-02-RA01-C-C01 (search stage, revision 2)
+
+Revision 2 answers the plan reviewer's five gaps: gate rows, red-first row, I4 expectRed false, span-anchored I1/I3 pins, coordinator package. The superseded revision is in superseded-1/.
+
+| # | Choice | Status | Source |
+|---|---|---|---|
+| D1 | Option (a): product fix in orchestrator.lua, no contract amendment | Delegated by the coordinator under the operator's standing delegation of 2026-10-31 (recorded as delegated, not live) | round record Objective; authoring-contract.md:422 |
+| D2 | Wrapper shape `{version=1, sections={...}}`, order authority, graph, roles, prescriptions, actions, all `mandatory=true` | contract-decided | authoring-contract.md:422-424 |
+| D3 | `project` stays a file-local function inside orchestrator.lua (line 112); no export, no engine binding, no new public field | contract-decided (lesson 7, round record item 3) | orchestrator.lua:5-6, 112 |
+| D4 | Mandatory flag set once, centrally, in the local `section(id,heading,body)` helper (orchestrator.lua:114), not per call. The pin is span-anchored (see D16) so moving the flag to the wrapper or to one call site is killed | NEW implementation choice, not authority; reviewer confirms. Per-call flag rejected (five edit points, no gain) | |
+| D5 | Consumer: `orchestrator_command_impl` binds `local result=project(c)` and iterates `ipairs(result.sections)` (orchestrator.lua:156); output bytes unchanged | contract-decided (round record item 2) | orchestrator.lua:154-157 |
+| D6 | Wrapper built inside project(); command does not validate it; runtime projection reader (runtime.cpp:366/420) not on this command's path and untouched | round record item 5 | |
+| D7 | Section order is contract order, identical to existing emission order; no change | contract-decided | authoring-contract.md:422 |
+| D8 | Diagnostics: none touched; closed external-profile message table untouched (lesson 3) | contract-decided | round record Out of scope |
+| D9 | Budget composition: none; this prompt has no budget path, `mandatory` carries contract shape only | contract-decided | acceptance-rows.md RA01-C-F1 |
+| D10 | Test strategy: no behavioural path exists (project local, wrapper never exposed, reply bytes carry no flag, runtime reader off path). Only honest observation is a squashed-source pin in the precedent style (authoring_orchestrator.t.cpp:591-637), reported with its limit: proves source text, not runtime values. No hook, no seam | round record item 3 | |
+| D11 | One new TEST_CASE with SECTIONs version, mandatory, order, consumer; tags `[authoring][ra01][orchestrator]`; name does not start with `-` | NEW naming choice (non-authority); reviewer confirms | ctest hygiene |
+| D12 | Source pin reads orchestrator.lua via `__FILE__`-relative path, same on macOS and Linux, no platform branch | precedent | authoring_orchestrator.t.cpp:615 |
+| D13 | Boundary pin: orchestrator.lua is embedded only in the authoring stack (src/cmd/planar/CMakeLists.txt:354), so c02_off_boundary should not move; runtime.cpp, commands.lua, schema.lua, semantic.lua verified byte-identical to HEAD against tests/native/v5-02-ra01-b-w2-evidence/c02-pin.md; re-pin under the boundary-pin rule if not | round record item 5 | |
+| D14 | Records: acceptance-matrix.md:29 A07 owner text and acceptance-rows.md rows C-15r (:48) and RA01-C-F1 (:68); RR-A1..A3 already applied at RA01-C close (rounds/V5-02-RA01-C.md:266), fold-in is a no-op unless REPORT.md still shows stale text | round record item 6 | |
+| D15 | Red-first is per SECTION on the pre-fix product, behavioural assertion failure: version, mandatory and consumer SECTIONs fail, order SECTION passes (guard of existing behaviour, I4 expectRed false). testFirst=true, test-only wave 1, no stubs (test reads Lua text and compiles against current product) | NEW process note | lesson 5 |
+| D16 | Span-anchored pins. Helper span = squashed text from `localfunctionsection(id,heading,body)` to the next `end`; project span = from `localfunctionproject(c)` to `orchestrator_command_impl=function`. I3 requires `,mandatory=true}` inside the helper span (and the full helper literal `sections[#sections+1]={id=id,text="##"..heading.."\n"..body,mandatory=true}` is acceptable as the equivalent pin), `mandatory=` occurs exactly once in the whole file, `mandatory=false` zero times. I1 requires exactly one `return{version=1,sections=sections}` inside the project span, none outside it, and no `returnsectionsend` | closes reviewer gap 4 (survivable mutant: flag on wrapper) | |
+| D17 | Gate rows G1..G9 and red-first row R1 are first-class rows (no TEST_CASE; checked by runner evidence and final reviewer), following prior plan tests/native/v5-02-ra01-c-evidence/plan/INVARIANTS.md C-05..C-17 | closes reviewer gaps 1, 2 | |
+| D18 | Coordinator/runner package K1 (wave 3) owns the round record, roadmap opening and Next work, and all new files under tests/native/v5-02-ra01-c-c01-evidence/ except plan/ | closes reviewer gap 5; round record Owned files | |
+
+No new operator-level decision found. D4 and D11 flagged for reviewer confirmation only. Operator answers of 2026-10-27..11-01 applied: no contract amendment (E16 not extended), F2-F8 carried to R15 or later, Q17 still owed before R19, halt on push/merge/install, Docker or machine change.

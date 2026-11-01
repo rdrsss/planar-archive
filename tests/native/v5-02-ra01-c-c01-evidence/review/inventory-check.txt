@@ -1,0 +1,9 @@
+Reviewer inventory check, 2026-11-01 (ctest -N on build/rewrite-debug and build/rewrite-release, names sorted C locale).
+baseline tests/native/v5-02-ra01-c-evidence/inventory.txt (HEAD 93053c42): 1437
+ctest -N Debug: 1439  RelWithDebInfo: 1439  Debug list == RelWithDebInfo list: True
+inventory.txt: 1439  set equal to ctest -N Debug: True
+removed from baseline: []
+added to baseline:
+  replacement.RA01-C-C01 orchestrator markdown bytes keep the golden title authority and joins
+  replacement.RA01-C-C01 orchestrator projection wrapper is versioned and mandatory
+inventory-debug.txt: 1438  missing vs inventory.txt: ['replacement.RA01-C-C01 orchestrator markdown bytes keep the golden title authority and joins']  (equals the gate run 1 list raw/gate-names-debug.txt)

@@ -1,0 +1,58 @@
+# Reviewer redaction check (V5-02-RA01-C-C02 review). Run from the repository root. <repo> and <home> stand for the absolute paths; <scratch> for the reviewer scratch directory outside the repository.
+# List: the P4 check list raw/c02-redact-files.txt (42 paths) plus tests/native/v5-02-ra01-c-c02-evidence/inventory.txt (written by the gate runner after P4). docs/vernacular/rounds/V5-02-RA01-C-C02.md is already among the 42. Sorted, unique.
+files: 43
+docs/vernacular/acceptance-matrix.md
+docs/vernacular/roadmap.md
+docs/vernacular/rounds/V5-02-RA01-C-C01-review.md
+docs/vernacular/rounds/V5-02-RA01-C-C01.md
+docs/vernacular/rounds/V5-02-RA01-C-C02.md
+docs/vernacular/rounds/V5-02-RA01-C.md
+src/cmd/planar/authoring_orchestrator.t.cpp
+src/stdlib/planar/orchestrator.lua
+tests/native/path-redaction.json
+tests/native/v5-02-ra01-c-c01-evidence/inventory-debug.txt
+tests/native/v5-02-ra01-c-c01-evidence/inventory.txt
+tests/native/v5-02-ra01-c-c01-evidence/plan/DECISIONS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/INVARIANTS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-1/DECISIONS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-1/INVARIANTS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-2/DECISIONS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-2/INVARIANTS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-3/DECISIONS.md
+tests/native/v5-02-ra01-c-c01-evidence/plan/superseded-3/INVARIANTS.md
+tests/native/v5-02-ra01-c-c01-evidence/probes/PROBES.md
+tests/native/v5-02-ra01-c-c01-evidence/probes/results.jsonl
+tests/native/v5-02-ra01-c-c01-evidence/probes/superseded-1/PROBES.md
+tests/native/v5-02-ra01-c-c01-evidence/probes/superseded-1/results.jsonl
+tests/native/v5-02-ra01-c-c01-evidence/red-first.log
+tests/native/v5-02-ra01-c-c01-evidence/red/RED.md
+tests/native/v5-02-ra01-c-c01-evidence/red/snapshot/candidate.diff
+tests/native/v5-02-ra01-c-c01-evidence/red/snapshot/SHA256SUMS
+tests/native/v5-02-ra01-c-c01-evidence/REPORT.md
+tests/native/v5-02-ra01-c-c01-evidence/review/identity.txt
+tests/native/v5-02-ra01-c-c01-evidence/review/inventory-check.txt
+tests/native/v5-02-ra01-c-c01-evidence/review/redaction-check.txt
+tests/native/v5-02-ra01-c-c02-evidence/inventory.txt
+tests/native/v5-02-ra01-c-c02-evidence/plan/DECISIONS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/INVARIANTS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/superseded-1/DECISIONS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/superseded-1/INVARIANTS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/superseded-2/DECISIONS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/superseded-2/INVARIANTS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/superseded-3/DECISIONS.md
+tests/native/v5-02-ra01-c-c02-evidence/plan/superseded-3/INVARIANTS.md
+tests/native/v5-02-ra01-c-c02-evidence/REPORT.md
+tests/native/v5-02-ra01-c-evidence/acceptance-rows.md
+tests/native/v5-02-ra01-c-evidence/REPORT.md
+$ tr '\n' '\0' < LIST | xargs -0 python3 scripts/redact-local-paths.py check --repo-path <repo> --home <home>
+output: []
+exit: 0
+# grep -cF of the repository path and the home path, per file, nonzero counts only (none expected):
+grep done
+# Positive control 1: <scratch>/rvctl/ctl.txt holds one line with the repository path, passed alone
+control 1 exit: 1
+# Positive control 2: the first 42 listed files plus <scratch>/rvctl/rf.log (a copy of the redacted red-first.log with one appended line holding the repository path), in one xargs call
+control 2 exit: 1 (non-zero: the one leaking argument among 43 is reported)
+# Manifest verify (supporting only; it ignores file arguments):
+verified 515 entries, 0 mismatches
+verify exit: 0

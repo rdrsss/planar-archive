@@ -1,0 +1,86 @@
+# V5-02-RA01-C-C02 decisions table (search stage, revision 2, 2026-11-01)
+
+Round: [docs/vernacular/rounds/V5-02-RA01-C-C02.md](../../../../docs/vernacular/rounds/V5-02-RA01-C-C02.md). Evidence-only corrective for
+RA01-C-C01 (request-changes review: docs/vernacular/rounds/V5-02-RA01-C-C01-review.md). The absolute repository path is written
+as `<repo>` throughout, because this file is committable and must pass the redaction check. Revision 1 is in superseded-1/.
+
+Legend: CD = contract-decided, RS = decided in docs/vernacular/remaining-steps-design.md or orchestration.md, REC = decided by a
+prior record or the reviewer, NEW = new procedural choice. No row is a product or authority choice, so no operator question.
+
+## Scope map (file:line, as read 2026-11-01)
+
+| item | file:line | fact |
+|---|---|---|
+| R1 leak 1 | tests/native/v5-02-ra01-c-c01-evidence/red-first.log | 33 lines hold the repo path (`Test project <repo>/build/rewrite-debug`, Catch2 `<repo>/src/cmd/planar/authoring_orchestrator.t.cpp:NNN`) |
+| R1 leak 2 | tests/native/v5-02-ra01-c-c01-evidence/plan/DECISIONS.md:27 (row D21) | `-isystem <repo>/vendor/lua/...` (1 line) |
+| other path holders | `raw/*`, `raw/linux*`, `red/raw/*`, `probes/raw/*`, `probes/superseded-1/raw/*` of C01 evidence; `tests/native/v5-02-ra01-c-evidence/raw/*` | non-committable raw logs; never staged, never redacted, never deleted |
+| redaction tool | scripts/redact-local-paths.py:27-34 `candidate_files` | with explicit args silently drops any argument that is not an existing regular non-symlink file: an unsplit list gives exit 0 and no output (the vacuous check) |
+| redaction CLI | scripts/redact-local-paths.py:68-73 | modes redact, check, verify; `--repo-path` and `--home` required; `files` nargs `*` |
+| manifest | tests/native/path-redaction.json | rewritten by `redact` only; original_sha256 and redacted_sha256 per file |
+| vacuous record, REPORT | C01 REPORT.md:40 (row 13), :93-95 (Redaction section) | wrong |
+| vacuous record, round | C01 record :159, :189, :220, :232 | wrong or stale |
+| A1 | C01 inventory-debug.txt (1438 names, no T2). `LC_ALL=C sort raw/gate-names-debug.txt \| cmp - inventory-debug.txt` exits 0 today; a plain `cmp inventory-debug.txt raw/gate-names-debug.txt` exits 1 (raw list is in ctest order, differs at line 1) | stale; referenced at C01 record :85, :144 and REPORT :95 |
+| A2 | C01 REPORT.md:87; C01 record :135 (Gaps bullet already states "RED.md states its hashes in prose rather than pasting identity.py output") and :234 (A2 listed) | limit already stated in the record at :135/:234; REPORT :87 needs the reviewer reconstruction |
+| A3 | docs/vernacular/acceptance-matrix.md:29 (A07); tests/native/v5-02-ra01-c-evidence/acceptance-rows.md:48 (C-15r: leading `pending gate.` and trailing `Gate pending until round close.`) and :68 (RA01-C-F1: trailing `Gate pending until round close.`) | whole-file `pending gate\|gate pending` matches 45 lines today because line 5 sets the convention that every C-15* Result cell reads `pending gate` and line 7 (review R4) says to read those as superseded: the observer is therefore restricted to lines 48 and 68 (baseline: line 48 = 2 phrase occurrences, line 68 = 1; target 0 and 0; whole-file matching lines 45 to 43) |
+| A4 | C01 REPORT.md:71 (`NOT mutation-probed`), :83 (T2 row, begins `\| T2 `, says "no red-first evidence exists"), :87, :101 (`no red-first or mutation evidence`) | `probes/PROBES.md` already occurs on 3 lines (67, 87, 95): baseline 3, plus 3 new |
+| stale state text in C01 record | :83 ("State at this sync ... roadmap.md unmodified ... round is not complete"), :201 (Limits bullet "A07 text still says gate pending until round close"), :222 (record hashes at that sync) | historical sync snapshots made false by C02; handled by supersession statement in the C02 record (D23), not by editing them |
+| roadmap | docs/vernacular/roadmap.md:40 (`RA01 gate green, findings open; RA01 is not complete.`), :41 (`Under review (2026-11-01): RA01-C-C01`), :44 (`Committed inventory is 1437`), :55 (`RA01-C-C02, then R15-R19` row) | all stale at close; `V5-02-RA01-C-C02` and `F2` already occur at :55 and :40-41, so a grep for presence cannot detect a half update |
+| src identity | src/cmd/planar/authoring_orchestrator.t.cpp, src/stdlib/planar/orchestrator.lua | equal the frozen C01 candidate; nothing under src/ or any *.t.cpp is edited |
+| gate run 2 facts | C01 REPORT.md | ctest 1439 of 1439 macOS Debug and RelWithDebInfo; Linux Debug and RelWithDebInfo 1439 of 1439; lint `Formatting and Doxygen checked 171 active source files`; no-work builds `ninja: no work to do.` (cite, never re-run) |
+
+## Decisions
+
+| id | design choice | status | citation or reasoning |
+|---|---|---|---|
+| D1 | No C++ or Lua module, header, export or public field is added or changed; no file under src/ and no *.t.cpp is touched. | CD | round record C02 Objective; lesson 7 |
+| D2 | The leak is of machine-local absolute paths (`<repo>`, `<home>`) in committable evidence; the failure being fixed is a vacuous check. | CD | scripts/redact-local-paths.py tokens |
+| D3 | Redaction is enforced by the existing script run by the coder (`redact` then `check`); no new script, test or gate hook. | CD | round record C02 R1; CLAUDE.md |
+| D4 | Ordering: (0) P0 snapshots before any other package starts (identity, status, pre-redaction hashes and counts, sha256 manifest of committable and non-owned files, recursive raw manifest); (1) `redact` on exactly two files and P3 rows edit in parallel; (2) C01 REPORT, inventory-debug and C01 record rows; (3) P4 final verification, controls, manifests compare, C02 record and report; (4) P5 roadmap, commit-set check, commit after Opus approval. The authoritative check runs after the last byte edit of any committable file other than the roadmap; P5's separate commit check covers the roadmap and the staged set. | NEW (procedural) | review R1 fix steps 1-3; fixes 4, 8, 10 of this revision |
+| D5 | `redact` touches exactly red-first.log and plan/DECISIONS.md of the C01 evidence. Raw logs keep the path, are never staged, never redacted. | CD | round record C02 R1 |
+| D6 | Check invocation: one argument per file via `tr '\n' '\0' < list \| xargs -0 python3 scripts/redact-local-paths.py check ...`; the wrapper prints `files: N` and every path, fails on any listed path that is missing, a symlink or not a regular file, and prints `exit: <code>` read from a variable, not through a pipe. | NEW (procedural) | scripts/redact-local-paths.py:27-34; review R1 |
+| D7 | TWO lists. (a) STAGED list (exactly 33 paths, enumerated below): decided by the C02 record Acceptance ("reports, READMEs, manifests, inventory, plan and probe notes only"), orchestration.md:136-140 (commit only REPORT/README and top-level .md/.json manifests; support folders and frozen snapshots "committed normally") and precedent commits 93053c42 and afb927dc, which staged no red-first.log, no results.jsonl and no snapshot. (b) CHECK set (38 paths) = staged list + the five non-raw files that are not staged (red-first.log, probes/results.jsonl, probes/superseded-1/results.jsonl, red/snapshot/candidate.diff, red/snapshot/SHA256SUMS), so the larger set of every non-raw file is redaction-checked. `git diff --cached --name-only` must equal the staged list exactly (sorted, no more, no less). | RS + REC | orchestration.md:136-140; round record C02 Acceptance and Owned files; review fix 6 |
+| D8 | Positive controls. (1) scratch file outside the repo (session scratchpad) holding the repo path, sole argument, exits 1. (2) P4 rebuilds the pre-redaction red-first.log in its OWN scratch directory (`sed` replacing `<repo>` with the repo path, then `<home>` with the home path, in a copy of the redacted file), confirms its sha256 equals original_sha256 for red-first.log in tests/native/path-redaction.json (which also strengthens I4), runs `check` on it and expects exit 1. If the rebuilt sha256 differs from original_sha256, control 2 is recorded as a limit (not a pass) and the round reports it rather than improvising. Scratch copies are deleted by P4 before returning (round record rule); no cross-wave scratch copy is relied on. | CD | round record C02 R1 and line 69; review fix 9 |
+| D9 | No diagnostic message is produced or changed; the closed external-profile message table is untouched. | CD | lesson 3 |
+| D10 | No budget, ceiling or no-work build step: nothing under src/ or build inputs changes. | CD | round record C02 Acceptance |
+| D11 | No TEST_CASE. Each invariant is observed by a saved command; mutants are applied only by the prober in a scratch copy. | NEW (procedural) | lessons 1, 7 |
+| D12 | macOS and Linux unaffected; no Linux re-run. | CD | round record C02 Acceptance |
+| D13 | A1: replace inventory-debug.txt with the run 2 Debug list (`LC_ALL=C sort raw/g2-names-debug.txt`). Before replacing, P2 saves the old file as raw/c02-inventory-debug-old.txt (C01 raw, new c02-* file) and verifies `LC_ALL=C sort raw/gate-names-debug.txt \| cmp - inventory-debug.txt` exits 0 (nothing lost; NOT a plain cmp against the unsorted raw list, which exits 1). After: cmp with inventory.txt exit 0, 1439 lines, T1 and T2 names present. | REC | review A1; fix 2 |
+| D14 | A2: record the limit, never fabricate identity output. REPORT.md:87 cites the review reconstruction (candidate.diff c2a1fda1...f09f74, SHA256SUMS f9147844...a88b36, red test file 379d82d7...2a3d, accepted non-blocking), full hashes copied from red/RED.md or the review file. The C01 record already states the limit at :135 and :234; no C01-record edit is made for A2. | REC | review A2; fix 7 |
+| D15 | A3 text: A07 (matrix :29), C-15r (rows :48) and RA01-C-F1 (rows :68) replace the pending-gate wording with: gate run 2 green on the frozen candidate (macOS Debug and RelWithDebInfo 1439 of 1439, Linux Debug and RelWithDebInfo 1439 of 1439), the C01 review, closed by C01 and C02. The F1 D22 limit wording, statuses and F2-F8 rows stay. | REC | review A3 |
+| D16 | A4 text: pointer to probes/PROBES.md (T2 probed, 9 of 9 I6 mutants killed by T2, no survivors) on :71, on the T2 row (:83, the line beginning `\| T2 `) and on :101. | REC | review A4; fix 3 |
+| D17 | Redaction wording is POINTER-ONLY with no numbers: the gate-run check (raw/g2-redact.log, empty) was vacuous (command line not saved; unsplit argument silently dropped; cause not proven; log kept); redact step ran on the two files; manifest updated by the script; the corrected check's file count and exit code are in raw/c02-redact-check.log and the control in raw/c02-redact-control.log. P2 writes this text before those logs exist (P4 creates them); no number is hard-coded in the C01 REPORT or C01 record. | REC + NEW | review R1; fix 8 |
+| D18 | Logs: authoritative check and controls under tests/native/v5-02-ra01-c-c01-evidence/raw/ (c02-redact-check.log, c02-redact-control.log, c02-redact-check.sh, c02-redact-files.txt, c02-redact-staged.txt, c02-lint.log), mirrored under the C02 evidence raw dir. Baselines and snapshots (identity, status, pre-redaction facts, manifests) go ONLY in the C02 raw dir so the C01 raw manifest stays clean. Raw dirs are never staged. | CD | round record C02 R1 |
+| D19 | path-redaction.json is rewritten by the script only, never hand-edited, and is staged. | CD | round record C02 Owned files |
+| D20 | Commit: C01 plus C02 together; only the 33 enumerated paths by explicit `git add -f`/`git add`; `git commit -s`; NO Co-Authored-By or Claude trailer (user CLAUDE.md and memory override the attribution reminder; flag the conflict once); branch must be dev/planar-v2-vernacular; no push, merge or install; only after Opus approval. | CD | round record C02 Acceptance; user CLAUDE.md |
+| D21 | Roadmap close (P5): Current status says RA01 complete (RA01-A, B wave 1, B wave 2, C, C-C01, C-C02), removes `RA01 is not complete` and the C01 `Under review` bullet, sets committed inventory to 1439, F2 to F8 carried as coverage gaps to R15 or later, next R15-A1 and R15-A2; :55 row rewritten accordingly. | CD | round record C02 Acceptance; fix 11 |
+| D22 | Identity: workflow identity.py (path in the task context; never any script under tests/native/) over `src` before and after; if any byte differs stop and run the full code gate. | CD | round record C02 Acceptance |
+| D23 | Widened C01-record edit scope (recorded here and restated in the C02 record): the C02 record Owned files says "C01 record (Redaction row and G6 only)"; review R1 fix step 3 says to correct "acceptance row, G6, Limits" and A1 requires the inventory label. Exact permitted C01-record lines, shared by I9 and P2 (replacement is line-for-line, no line added or removed): :85 (Evidence paragraph, inventory-debug label), :144 (inventory-debug reference), :159 (Redaction row), :189 (G6), :220 (owed files, path-redaction.json), :232 (R1 outcome), :233 (A1 outcome). NOT edited: :83, :201, :222, :234 (see D24). | REC | review R1 step 3, A1; round record C02 Owned files; fix 7 |
+| D24 | Stale historical text in the C01 record (:83 "State at this sync", :201 Limits bullet on A07 "gate pending", :222 record-file hashes) is NOT edited. The C02 record carries a "Supersedes" paragraph stating that C02 supersedes those three passages (A07 and rows text, roadmap and review state, record hashes at that sync). A2 is satisfied by the existing C01 record :135 and :234 plus the C02 record. | NEW (procedural) | review R1 step 3; lowers C01-record edits to the minimum |
+| D25 | Non-owned drift guard: before wave 2 P0 saves a sha256 manifest of (a) every file in `git ls-files -m -o --exclude-standard`, (b) every non-raw file of the C01, RA01-C and C02 evidence folders, (c) the 7 modified repository files, 3 untracked records and path-redaction.json, in C02 raw/c02-snap-files.sha256. P0 also verifies the four hashes pinned at C01 record :222 (matrix a722c38e..., rounds/V5-02-RA01-C.md 2d4aa6d7..., ra01-c REPORT.md 502905a5..., acceptance-rows.md fa372592...) still match (matrix differs after P3, which owns it). After P4, the manifest compare may differ only on owned paths (list O in INVARIANTS.md). P0 runs before P1 and P3 because P1 and P3 run in parallel. | NEW (procedural) | fix 4 |
+| D26 | Raw-evidence guard: P0 saves a recursive sha256 manifest of every directory named `raw` under the C01 evidence (raw, raw/linux*, red/raw, probes/raw, probes/superseded-1/raw) and of tests/native/v5-02-ra01-c-evidence/raw. After P4: every old line identical, no file missing, only new files whose basename starts `c02-` added. | NEW (procedural) | lesson 6; fix 5 |
+| D27 | Close sequence: P5's roadmap edit is followed by a separate log tests/native/v5-02-ra01-c-c02-evidence/raw/c02-redact-check-commit.log (check over `git diff --cached --name-only`, `files: 33`, exit 0). It never overwrites c02-redact-check.log. No committable byte is edited after that log; P5 does not edit the C02 record (P4 wrote it pointer-only about the commit). P5 first verifies every staged path except the roadmap is byte-identical to the hashes P4 saved in raw/c02-final-sha256.txt. | NEW (procedural) | fix 10 |
+
+## Enumerated STAGED list (exactly 33 paths, sorted)
+
+Repository (7 modified): docs/vernacular/acceptance-matrix.md; docs/vernacular/roadmap.md; docs/vernacular/rounds/V5-02-RA01-C.md;
+src/cmd/planar/authoring_orchestrator.t.cpp; src/stdlib/planar/orchestrator.lua; tests/native/v5-02-ra01-c-evidence/REPORT.md;
+tests/native/v5-02-ra01-c-evidence/acceptance-rows.md.
+
+Records and manifest (4): docs/vernacular/rounds/V5-02-RA01-C-C01.md; docs/vernacular/rounds/V5-02-RA01-C-C01-review.md;
+docs/vernacular/rounds/V5-02-RA01-C-C02.md; tests/native/path-redaction.json.
+
+C01 evidence (17), prefix tests/native/v5-02-ra01-c-c01-evidence/: REPORT.md; inventory.txt; inventory-debug.txt; plan/DECISIONS.md;
+plan/INVARIANTS.md; plan/superseded-1/DECISIONS.md; plan/superseded-1/INVARIANTS.md; plan/superseded-2/DECISIONS.md;
+plan/superseded-2/INVARIANTS.md; plan/superseded-3/DECISIONS.md; plan/superseded-3/INVARIANTS.md; probes/PROBES.md;
+probes/superseded-1/PROBES.md; red/RED.md; review/identity.txt; review/inventory-check.txt; review/redaction-check.txt.
+
+C02 evidence (5), prefix tests/native/v5-02-ra01-c-c02-evidence/: REPORT.md; plan/DECISIONS.md; plan/INVARIANTS.md;
+plan/superseded-1/DECISIONS.md; plan/superseded-1/INVARIANTS.md.
+
+Never staged (checked but not committed): C01 red-first.log, probes/results.jsonl, probes/superseded-1/results.jsonl,
+red/snapshot/candidate.diff, red/snapshot/SHA256SUMS, and every file under any `raw` directory.
+
+## NEW choices needing an operator
+
+None. All decisions are procedural evidence choices inside the round's authority. The attribution-reminder conflict is resolved by the
+user's global CLAUDE.md and memory (no trailer).
