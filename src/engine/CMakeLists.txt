@@ -33,8 +33,12 @@ planar_rewrite_module(planar_capture_profile
 target_link_libraries(planar_capture_profile_tests PRIVATE planar_admission_syscalls)
 planar_rewrite_module(planar_capture
   INTERFACE capture/capture.cppm SOURCES capture/capture.cpp
-  DEPENDS planar_capture_native planar_value planar_lua_loader TESTS capture/capture.t.cpp
+  DEPENDS planar_capture_native planar_value planar_lua_loader planar_hash TESTS capture/capture.t.cpp
   TEST_TIMEOUT 120)
+
+planar_rewrite_module(planar_capture_directory
+  INTERFACE capture/directory.cppm capture/directory_recheck.cppm SOURCES capture/directory.cpp
+  DEPENDS planar_capture_native planar_value TESTS capture/directory.t.cpp)
 
 planar_rewrite_module(planar_canonical
   INTERFACE canonical/canonical.cppm SOURCES canonical/canonical.cpp

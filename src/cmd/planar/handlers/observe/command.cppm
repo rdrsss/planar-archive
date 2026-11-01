@@ -18,6 +18,7 @@ CLI::App& attach_observe(CLI::App& root, observe_options& options);
 /// Run `observe` for already parsed options.
 /// @param options Parsed values.
 /// @param io Process observation seam.
+/// @param execute Native execution step; empty answers the stub refusal.
 /// @return Buffered response.
-response observe_command(const observe_options& options, const readers& io = process_readers());
+response observe_command(const observe_options& options, const readers& io = process_readers(), const executor& execute = {});
 } // namespace planar::cmd::authoring

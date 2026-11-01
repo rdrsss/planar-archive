@@ -62,11 +62,37 @@ ra01_bytes ra01_of(const planar::cmd::response& r) {
 ra01_bytes ra01_usage() {
   return ra01_of(planar::cmd::detail::usage());
 }
-/// The wave-1 stub refusal, typed literally.
+/// The wave-1 stub refusal bytes, typed literally; only ever compared negatively, since the stub is gone.
 ra01_bytes ra01_stub() {
   return {4, "",
           "{\"error\":{\"code\":\"internal\",\"field\":\"\",\"message\":\"Invalid embedded command protocol\"},"
           "\"kind\":\"error\",\"version\":1}\n"};
+}
+/// The prompt kind a verb's envelope names (RA-3).
+std::string ra01_prompt_kind(std::string_view verb) {
+  if (verb == "spec-prompt")
+    return "spec";
+  if (verb == "ingest")
+    return "job";
+  if (verb == "explain-rejection")
+    return "rejection";
+  return std::string(verb);
+}
+/// True when `got` is the real success document of `verb` over the valid fixtures: exit 0, empty stderr, the RA-3 prompt
+/// envelope with the verb's kind, or for observe exactly the canonical empty observations document.
+bool ra01_is_document(const ra01_bytes& got, std::string_view verb) {
+  if (got.status != 0 || !got.err.empty() || got.out.empty() || !got.out.ends_with("\n"))
+    return false;
+  if (verb == "observe")
+    return got.out == "{\"checks\":[],\"findings\":[],\"version\":1}\n";
+  return got.out.starts_with("{\"kind\":\"prompt\",\"prompt\":{\"bytes\":") && got.out.ends_with(",\"version\":1}\n") &&
+         got.out.contains(",\"kind\":\"" + ra01_prompt_kind(verb) + "\",\"markdown\":\"");
+}
+/// True when `got` passed the usage, selector and explicit path stages: it is neither usage nor an io or path_denied
+/// refusal of the path stage. Used by guard tests whose subject is an earlier stage; it holds for the real outcome and for
+/// any later-stage refusal alike.
+bool ra01_past_stage(const ra01_bytes& got) {
+  return !(got == ra01_usage()) && !got.err.contains("\"code\":\"io\"") && !got.err.contains("\"code\":\"path_denied\"");
 }
 planar::engine::diagnostic ra01_diagnostic(std::string_view code, std::string_view message) {
   planar::engine::diagnostic d;
@@ -110,10 +136,16 @@ struct ra01_scratch {
     fs::create_directories(work);
     fs::create_directories(workspace.parent_path());
     fs::create_directories(observations);
-    write(workspace, "return {}\n");
-    write(registry, "{}\n");
-    write(diagnostic, "{\"code\":\"schema\"}\n");
-    write(observations / "o.json", "{}\n");
+    // Real inputs: the quota workspace tree (twice, so the bare name `quota` resolves under the environment directory
+    // `wsdir`; the name `ws` stays absent there), its registry,
+    // a canonical load diagnostic and an empty (valid) observation directory.
+    const fs::path fixture = fs::path(PLANAR_B2_WORKSPACE_FIXTURE).parent_path();
+    fs::copy(fixture, workspace.parent_path(), fs::copy_options::recursive);
+    fs::create_directories(root / "wsdir");
+    fs::copy(fixture, root / "wsdir" / "quota", fs::copy_options::recursive);
+    fs::copy_file(fixture.parent_path() / "registry" / "quota-tools.json", registry);
+    write(diagnostic, "{\"error\":{\"code\":\"schema\",\"field\":\"workspace.id\",\"message\":\"Invalid value\"},"
+                      "\"kind\":\"error\",\"version\":1}\n");
     write(work / "keep.txt", "keep\n");
   }
   ra01_scratch(const ra01_scratch&)            = delete;
@@ -136,7 +168,7 @@ struct ra01_scratch {
       return diagnostic.string();
     if (option == "--from")
       return observations.string();
-    return "job-a";
+    return "combined";
   }
   /// Verb name and its full valid signature.
   std::vector<std::string> full(const ra01_verb& verb) const {
@@ -483,12 +515,18 @@ TEST_CASE("RA01-B1 orchestrator job value is text", "[authoring][ra01]") {
   }
 }
 
+// W2-02. Mutant killed: any commands.lua delegate left returning authoring_refusal (or a prompts_/observe_/orchestrator_
+// function returning failed internal) makes that verb exit 4 instead of 0 with its document, so is_document is false.
+// The name is kept from wave 1; the valid signature now reaches the real document through the bundle.
 TEST_CASE("RA01-B1 each authoring verb parses its signature through the bundle to the stub refusal", "[authoring][ra01]") {
   const ra01_scratch s;
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
-    CHECK(ra01_stack(s, s.full(verb)) == ra01_stub());
-    CHECK_FALSE(ra01_stack(s, s.full(verb)) == ra01_usage());
+    const auto got = ra01_stack(s, s.full(verb));
+    CAPTURE(got.status, got.err);
+    CHECK(ra01_is_document(got, verb.name));
+    CHECK_FALSE(got == ra01_usage());
+    CHECK_FALSE(got == ra01_stub());
   }
 }
 
@@ -511,7 +549,8 @@ TEST_CASE("RA01-B1 authoring bundle runs shipped verbs like the default entry", 
   CHECK(ra01_stack(s, cases.front()).status == ra01_default(s, cases.front()).status);
   // Positive control: the same stack does run an authoring verb that the default entry refuses.
   const auto& observe = ra01_verbs()[4];
-  CHECK(ra01_stack(s, s.full(observe)) == ra01_stub());
+  CHECK_FALSE(ra01_stack(s, s.full(observe)) == ra01_usage());
+  CHECK(ra01_past_stage(ra01_stack(s, s.full(observe))));
   CHECK(ra01_default(s, s.full(observe)) == ra01_usage());
 }
 
@@ -519,7 +558,7 @@ TEST_CASE("RA01-B1 authoring verbs refuse missing required options as usage", "[
   const ra01_scratch s;
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
-    CHECK(ra01_stack(s, s.full(verb)) == ra01_stub());
+    CHECK(ra01_past_stage(ra01_stack(s, s.full(verb))));
     CHECK(ra01_stack(s, {verb.name}) == ra01_usage());
     for (const auto& option : verb.options) {
       CAPTURE(option);
@@ -532,7 +571,7 @@ TEST_CASE("RA01-B1 authoring verbs refuse repeats empty and dash prefixed values
   const ra01_scratch s;
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
-    CHECK(ra01_stack(s, s.full(verb)) == ra01_stub());
+    CHECK(ra01_past_stage(ra01_stack(s, s.full(verb))));
     for (const auto& option : verb.options) {
       CAPTURE(option);
       CHECK(ra01_stack(s, ra01_cat(s.full(verb), {option, s.value(option)})) == ra01_usage());
@@ -550,7 +589,7 @@ TEST_CASE("RA01-B1 authoring verbs refuse positionals unknown options and equals
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
     const auto full = s.full(verb);
-    CHECK(ra01_stack(s, full) == ra01_stub());
+    CHECK(ra01_past_stage(ra01_stack(s, full)));
     CHECK(ra01_stack(s, ra01_cat(full, {"extra"})) == ra01_usage());
     CHECK(ra01_stack(s, ra01_cat({verb.name, "extra"}, std::vector<std::string>(full.begin() + 1, full.end()))) == ra01_usage());
     CHECK(ra01_stack(s, ra01_cat(full, {"--bogus", "v"})) == ra01_usage());
@@ -576,10 +615,18 @@ TEST_CASE("RA01-B1 orchestrator requires all three options", "[authoring][ra01]"
   const ra01_scratch s;
   const auto&        orchestrator = ra01_verbs()[5];
   REQUIRE(orchestrator.name == "orchestrator");
-  CHECK(ra01_stack(s, s.full(orchestrator)) == ra01_stub());
-  CHECK(ra01_stack(s, s.with(orchestrator, "--job", "12")) == ra01_stub());
+  // W2-72. Mutant killed: skipping prepare_inputs for orchestrator turns the explicit-path refusal below into a later one.
+  CHECK(ra01_past_stage(ra01_stack(s, s.full(orchestrator))));
+  CHECK(ra01_past_stage(ra01_stack(s, s.with(orchestrator, "--job", "12"))));
   for (const auto& option : orchestrator.options)
     CHECK(ra01_stack(s, s.without(orchestrator, option)) == ra01_usage());
+  {
+    const auto before = ra01_snapshot(s.root);
+    CHECK(ra01_stack(s, s.with(orchestrator, "--registry", (s.root / "missing").string())) ==
+          ra01_native("io", "Explicit input must be a regular file"));
+    CHECK(ra01_stack(s, s.without(orchestrator, "--job")) == ra01_usage());
+    CHECK(ra01_snapshot(s.root) == before);
+  }
   CHECK(ra01_stack(s, {"orchestrator", "--job", "job-a"}) == ra01_usage());
   CHECK(ra01_stack(s, {"orchestrator", "--workspace", s.workspace.string(), "--registry", s.registry.string()}) == ra01_usage());
 }
@@ -606,43 +653,81 @@ TEST_CASE("RA01-B1 authoring verbs do not accept each others options", "[authori
     CAPTURE(row);
     CHECK(ra01_stack(s, row) == ra01_usage());
   }
-  CHECK(ra01_stack(s, {"observe", "--from", ob}) == ra01_stub());
+  CHECK(ra01_past_stage(ra01_stack(s, {"observe", "--from", ob})));
 }
 
+// W2-03. Mutant killed: authoring.cpp or invocation.cpp writing a file, or printing to stdout, on a failing capture.
+// The name is kept from wave 1; the failing invocations are now real typed failures of each verb's own input.
 TEST_CASE("RA01-B1 stub invocations write nothing and print no success document", "[authoring][ra01]") {
   const ra01_scratch s;
+  // A successful run writes nothing either.
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
     const auto before = ra01_snapshot(s.root);
     const auto got    = ra01_stack(s, s.full(verb));
-    CHECK(got.status == 4);
+    CHECK(got.err.empty() == (got.status == 0));
+    CHECK(ra01_snapshot(s.root) == before);
+  }
+  // One failing capture per verb: an unreadable workspace, a schema-invalid diagnostic and an unsafe observation entry.
+  ra01_scratch::write(s.workspace, "return {}\n");
+  ra01_scratch::write(s.diagnostic, "{\"code\":\"schema\"}\n");
+  ra01_scratch::write(s.observations / "extra.txt", "x\n");
+  for (const auto& verb : ra01_verbs()) {
+    CAPTURE(verb.name);
+    const auto before = ra01_snapshot(s.root);
+    const auto got    = ra01_stack(s, s.full(verb));
+    CAPTURE(got.status, got.err);
+    CHECK(got.status != 0);
     CHECK(got.out.empty());
-    CHECK(got == ra01_stub());
+    CHECK(got.err.starts_with("{\"error\":{\"code\":\""));
+    CHECK(got.err.ends_with("\"kind\":\"error\",\"version\":1}\n"));
+    CHECK(std::ranges::count(got.err, '\n') == 1);
     CHECK(ra01_snapshot(s.root) == before);
   }
   CHECK(ra01_snapshot(s.root).contains("work/keep.txt"));
 }
 
+// Name kept from wave 1. The refusals of the stage function and of the stack stay the closed envelope on stderr only, and
+// the executor seam runs exactly once, after the stage, with the resolved values (W2-01 mutant: executor before prepare).
 TEST_CASE("RA01-B1 stub refusal is the closed internal envelope on stderr only", "[authoring][ra01]") {
-  const auto direct = authoring::refuse_stub();
-  CHECK(direct.status == 4);
-  CHECK(direct.output.empty());
-  CHECK(direct.error == ra01_stub().err);
   const ra01_scratch s;
+  const auto         missing = (s.root / "missing").string();
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
-    const auto got = ra01_stack(s, s.full(verb));
+    const bool diagnostic = verb.name == "explain-rejection";
+    const bool from       = verb.name == "observe";
+    const auto option     = diagnostic ? "--diagnostic" : from ? "--from" : "--registry";
+    const auto expected   = from         ? ra01_native("io", "Cannot resolve explicit root directory")
+                            : diagnostic ? ra01_native("io", "Cannot resolve explicit input path")
+                                         : ra01_native("io", "Explicit input must be a regular file");
+    const auto got        = ra01_stack(s, s.with(verb, option, missing));
+    CHECK(got == expected);
     CHECK(got.status == 4);
     CHECK(got.out.empty());
-    CHECK(got.err == ra01_stub().err);
+    CHECK(std::ranges::count(got.err, '\n') == 1);
     CHECK_FALSE(got.err == ra01_usage().err);
   }
-  // The stage function followed by the stub is the same refusal.
-  ra01_counts       counts;
-  const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
+  // The stage function followed by the executor: one call, resolved values, response passed through verbatim.
+  ra01_counts               counts;
+  const auto                io    = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
+  int                       calls = 0;
+  authoring::inputs         seen;
+  const authoring::executor execute = [&](authoring::verb, const authoring::inputs& values) {
+    ++calls;
+    seen = values;
+    return planar::cmd::response{0, "document\n", ""};
+  };
   authoring::inputs values;
-  values.from = s.observations.string();
-  CHECK(ra01_of(authoring::run_stub(authoring::verb::observe, values, io)) == ra01_stub());
+  values.from = "obs";
+  CHECK(ra01_of(authoring::run(authoring::verb::observe, values, io, execute)) == ra01_bytes{0, "document\n", ""});
+  CHECK(calls == 1);
+  CHECK(seen.from == s.observations.string());
+  // A path-stage refusal is never replaced and the executor is not called.
+  authoring::inputs bad;
+  bad.from = missing;
+  CHECK(ra01_of(authoring::run(authoring::verb::observe, bad, io, execute)) ==
+        ra01_native("io", "Cannot resolve explicit root directory"));
+  CHECK(calls == 1);
 }
 
 TEST_CASE("RA01-B1 usage precedes the workspace selector stage", "[authoring][ra01]") {
@@ -675,6 +760,8 @@ TEST_CASE("RA01-B1 selector stage precedes the explicit path stage", "[authoring
   CHECK(ra01_stack(s, {"orchestrator", "--workspace", s.workspace.string(), "--registry", missing, "--job", "j"}) == unresolved);
 }
 
+// W2-01. Mutant killed: authoring.cpp run() calling the executor before prepare_inputs, or swallowing the prepare_inputs
+// diagnostic. A path-stage refusal reaches the caller byte-identical, and the executor is never entered after it.
 TEST_CASE("RA01-B1 explicit path stage precedes the stub refusal", "[authoring][ra01]") {
   const ra01_scratch s;
   const auto         missing     = (s.root / "missing").string();
@@ -683,7 +770,7 @@ TEST_CASE("RA01-B1 explicit path stage precedes the stub refusal", "[authoring][
   const ra01_bytes   no_root     = ra01_native("io", "Cannot resolve explicit root directory");
   for (const auto& verb : ra01_verbs()) {
     CAPTURE(verb.name);
-    CHECK(ra01_stack(s, s.full(verb)) == ra01_stub());
+    CHECK(ra01_past_stage(ra01_stack(s, s.full(verb))));
     for (const auto& option : verb.options) {
       if (option == "--workspace" || option == "--job")
         continue;
@@ -792,17 +879,23 @@ TEST_CASE("RA01-B1 explain-rejection and observe ignore an invalid workspace env
   const std::optional<std::string> relative{"relative/dir"};
   const auto                       diagnostic = *std::ranges::find(ra01_verbs(), "explain-rejection", &ra01_verb::name);
   const auto                       observe    = *std::ranges::find(ra01_verbs(), "observe", &ra01_verb::name);
-  CHECK(ra01_stack(s, s.full(diagnostic), relative) == ra01_stub());
-  CHECK(ra01_stack(s, s.full(observe), relative) == ra01_stub());
+  // W2-41. Mutant killed: prepare_inputs reading PLANAR_WORKSPACE_DIR for explain_rejection (the relative value would
+  // refuse as usage), or either verb creating a file.
+  const auto before = ra01_snapshot(s.root);
+  CHECK(ra01_past_stage(ra01_stack(s, s.full(diagnostic), relative)));
+  CHECK(ra01_past_stage(ra01_stack(s, s.full(observe), relative)));
+  CHECK(ra01_stack(s, s.full(diagnostic), relative) == ra01_stack(s, s.full(diagnostic)));
+  CHECK(ra01_stack(s, s.full(observe), relative) == ra01_stack(s, s.full(observe)));
+  CHECK(ra01_snapshot(s.root) == before);
   // A bare workspace name reads the environment and refuses its relative value as usage.
   const auto spec = *std::ranges::find(ra01_verbs(), "spec-prompt", &ra01_verb::name);
-  const auto got  = ra01_stack(s, s.with(spec, "--workspace", "ws"), relative);
+  const auto got  = ra01_stack(s, s.with(spec, "--workspace", "quota"), relative);
   CHECK(got.status == 2);
   CHECK(got.out.empty());
   CHECK(got.err.contains("\"code\":\"usage\""));
   // Controls: a valid directory or an explicit workspace file does not refuse.
-  CHECK(ra01_stack(s, s.with(spec, "--workspace", "ws"), (s.root / "wsdir").string()) == ra01_stub());
-  CHECK(ra01_stack(s, s.full(spec), relative) == ra01_stub());
+  CHECK(ra01_past_stage(ra01_stack(s, s.with(spec, "--workspace", "quota"), (s.root / "wsdir").string())));
+  CHECK(ra01_past_stage(ra01_stack(s, s.full(spec), relative)));
 }
 
 TEST_CASE("RA01-B1 explicit path stage keeps the existing messages", "[authoring][ra01]") {
@@ -854,6 +947,11 @@ TEST_CASE("RA01-B1 explicit path stage keeps the existing messages", "[authoring
     CHECK(result.error().code == r.code);
     CHECK(result.error().message == r.message);
   }
+  // W2-63 at the stack: observe keeps the three root messages (mutant: resolving --from as an explicit file).
+  CHECK(ra01_stack(s, {"observe", "--from", missing}) == ra01_native("io", "Cannot resolve explicit root directory"));
+  CHECK(ra01_stack(s, {"observe", "--from", s.registry.string()}) == ra01_native("io", "Explicit root must be a directory"));
+  CHECK(ra01_stack(s, {"observe", "--from", (s.root / "obs-link").string()}) ==
+        ra01_native("path_denied", "Explicit root is a symbolic link target"));
   // Controls: the valid spellings pass the same stage.
   authoring::inputs valid;
   valid.diagnostic = s.diagnostic.string();

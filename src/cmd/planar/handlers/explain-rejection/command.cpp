@@ -19,9 +19,9 @@ CLI::App& attach_explain_rejection(CLI::App& root, explain_rejection_options& op
   add("--diagnostic", options.diagnostic);
   return command;
 }
-response explain_rejection_command(const explain_rejection_options& options, const readers& io) {
+response explain_rejection_command(const explain_rejection_options& options, const readers& io, const executor& execute) {
   inputs values;
   values.diagnostic = options.diagnostic;
-  return run_stub(verb::explain_rejection, std::move(values), io);
+  return run(verb::explain_rejection, std::move(values), io, execute);
 }
 } // namespace planar::cmd::authoring

@@ -19,9 +19,9 @@ CLI::App& attach_observe(CLI::App& root, observe_options& options) {
   add("--from", options.from);
   return command;
 }
-response observe_command(const observe_options& options, const readers& io) {
+response observe_command(const observe_options& options, const readers& io, const executor& execute) {
   inputs values;
   values.from = options.from;
-  return run_stub(verb::observe, std::move(values), io);
+  return run(verb::observe, std::move(values), io, execute);
 }
 } // namespace planar::cmd::authoring

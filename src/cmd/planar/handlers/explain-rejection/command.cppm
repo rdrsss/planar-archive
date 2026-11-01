@@ -18,6 +18,8 @@ CLI::App& attach_explain_rejection(CLI::App& root, explain_rejection_options& op
 /// Run `explain-rejection` for already parsed options.
 /// @param options Parsed values.
 /// @param io Process observation seam.
+/// @param execute Native execution step; empty answers the stub refusal.
 /// @return Buffered response.
-response explain_rejection_command(const explain_rejection_options& options, const readers& io = process_readers());
+response explain_rejection_command(const explain_rejection_options& options, const readers& io = process_readers(),
+                                   const executor& execute = {});
 } // namespace planar::cmd::authoring

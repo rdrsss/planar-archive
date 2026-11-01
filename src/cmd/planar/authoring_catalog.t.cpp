@@ -23,6 +23,8 @@ import planar.engine.authoring_variant_16;
 import planar.engine.authoring_variant_17;
 import planar.engine.authoring_variant_18;
 import planar.engine.authoring_variant_19;
+import planar.engine.authoring_variant_21;
+import planar.engine.capture;
 namespace {
 using planar::engine::value_kind;
 using planar::engine::value_ptr;
@@ -174,6 +176,160 @@ planar::engine::profile_snapshot inspect_profile() {
                             "registration.add(D,function() return D.help end); D.help='final'"});
   return p;
 }
+
+// ---- W2-05: native include protocol with a positive control ----------------------------------------------------------
+
+namespace fs = std::filesystem;
+
+/// The quota fixture workspace file, found by walking up from this source file (and the cwd) to the repository root.
+fs::path quota_workspace_file() {
+  const fs::path relative = "fixtures/render/quota/workspace/workspace.lua";
+  for (fs::path start : {fs::path(__FILE__).parent_path(), fs::current_path()})
+    for (auto at = start; !at.empty(); at = at.parent_path()) {
+      if (fs::exists(at / relative))
+        return fs::canonical(at / relative);
+      if (at == at.parent_path())
+        break;
+    }
+  return {};
+}
+
+struct drive_result {
+  int                      status = -1; ///< Exit status the command layer would give: 0, or the failed() status.
+  value_ptr                document;    ///< The successful response envelope, empty on failure.
+  std::string              code, message;
+  int                      opens = 0;
+  std::vector<std::string> includes;
+};
+
+/// Test-owned services returning a canned but real RA-2 capture of the quota fixture: the render capture value restricted
+/// to the captured set (no job, role or budget), the spec only for include `spec`. Parameterised over the types of one
+/// generated variant namespace.
+template <class Services, class Render, class Init, class History, class Selector, class Export, class Auth>
+class canned_services final : public Services {
+  using result_type = decltype(std::declval<Services&>().capture_authoring(std::declval<const Auth&>(),
+                                                                           std::declval<const value_ptr&>(), std::string_view{}));
+  planar::engine::capture_session _session;
+  std::string                     _file;
+  value_ptr                       _workspace;
+  static result_type              refusal() {
+    return {{}, planar::cmd::detail::native_error({"internal", "Invalid embedded command protocol"})};
+  }
+  template <class T> static T unwrap(std::expected<T, planar::engine::diagnostic> result) {
+    if (!result)
+      throw result.error();
+    return std::move(*result);
+  }
+  static void unwrap(std::expected<void, planar::engine::diagnostic> result) {
+    if (!result)
+      throw result.error();
+  }
+
+public:
+  int                      opens = 0;
+  std::vector<std::string> includes;
+  using Services::capture_authoring;
+  using Services::open_workspace;
+  result_type open_workspace(const Render&) override {
+    return refusal();
+  }
+  result_type capture_render(const Render&, const value_ptr&) override {
+    return refusal();
+  }
+  result_type initialize_ledger(const Init&) override {
+    return refusal();
+  }
+  result_type read_history(const History&, const Selector&) override {
+    return refusal();
+  }
+  result_type export_source(const Export&) override {
+    return refusal();
+  }
+  result_type open_workspace(const Auth& options) override {
+    using namespace planar::cmd::detail;
+    try {
+      ++opens;
+      const fs::path file(options.workspace);
+      unwrap(_session.add_root("workspace", file.parent_path().string()));
+      _file      = file.filename().string();
+      _workspace = unwrap(_session.load(_file)).root;
+      return {object({{"file", text(_file)}, {"workspace", _workspace}}), {}};
+    } catch (const planar::engine::diagnostic& e) {
+      return {{}, native_error(e)};
+    }
+  }
+  result_type capture_authoring(const Auth& options, const value_ptr& route, std::string_view include) override {
+    using namespace planar::cmd::detail;
+    includes.emplace_back(include);
+    try {
+      std::map<std::string, value_ptr> bundle{{"workspace", object({{"file", text(_file)}, {"value", _workspace}})},
+                                              {"jobs", array()}};
+      if (include == "spec") {
+        auto spec_path = route->fields.at("spec");
+        auto spec      = unwrap(_session.load(spec_path->string));
+        bundle["spec"] = object({{"file", spec_path}, {"value", spec.root}});
+      }
+      unwrap(_session.add_input("registry", options.registry));
+      auto registry                   = unwrap(_session.read("registry", "input.json"));
+      bundle["registry"]              = object({{"file", text("input.json")}, {"bytes", text(registry.bytes)}});
+      auto                   snapshot = unwrap(_session.finish());
+      std::vector<value_ptr> retained, workspace_files;
+      for (const auto& file : *snapshot) {
+        retained.push_back(object(
+            {{"root", text(file.root)}, {"path", text(file.path)}, {"mode", text(file.mode)}, {"bytes", text(file.bytes)}}));
+        if (file.root == "workspace")
+          workspace_files.push_back(object({{"path", text(file.path)}, {"bytes", text(file.bytes)}}));
+      }
+      bundle["files"] = array(workspace_files);
+      return {object({{"bundle", object(std::move(bundle))},
+                      {"capture", object({{"status", text("not_captured")}})},
+                      {"files", array(retained)}}),
+              {}};
+    } catch (const planar::engine::diagnostic& e) {
+      return {{}, native_error(e)};
+    }
+  }
+};
+
+/// Run spec-prompt through one generated variant with the canned services and map the result as the command layer does.
+template <class Vm, class Services, class Render, class Init, class History, class Selector, class Export, class Auth, class Verb>
+drive_result drive_spec_prompt(const fs::path& workspace_file, const fs::path& registry_file) {
+  drive_result out;
+  auto         vm = Vm::create();
+  REQUIRE(vm);
+  canned_services<Services, Render, Init, History, Selector, Export, Auth> services;
+  Auth                                                                     options;
+  options.verb      = Verb::spec_prompt;
+  options.workspace = workspace_file.string();
+  options.registry  = registry_file.string();
+  auto result       = vm->invoke_authoring(options, services);
+  out.opens         = services.opens;
+  out.includes      = services.includes;
+  if (!result) {
+    const auto response = planar::cmd::detail::failed(planar::cmd::detail::native_error(result.error()));
+    out.status          = response.status;
+    out.code            = result.error().code;
+    out.message         = result.error().message;
+    return out;
+  }
+  if (!(*result)->fields.at("ok")->boolean) {
+    const auto error    = (*result)->fields.at("error");
+    const auto response = planar::cmd::detail::failed(error);
+    out.status          = response.status;
+    out.code            = error->fields.at("code")->string;
+    out.message         = error->fields.at("message")->string;
+    return out;
+  }
+  out.status   = 0;
+  out.document = (*result)->fields.at("value");
+  return out;
+}
+#define RA01_DRIVE_SPEC_PROMPT(ns, workspace, registry)                                                                          \
+  drive_spec_prompt<planar::engine::ns::command_vm, planar::engine::ns::command_services,                                        \
+                    planar::engine::ns::command_render_options, planar::engine::ns::command_init_options,                        \
+                    planar::engine::ns::command_history_options, planar::engine::ns::command_history_selector,                   \
+                    planar::engine::ns::command_export_options, planar::engine::ns::command_authoring_options,                   \
+                    planar::engine::ns::command_authoring_verb>(workspace, registry)
 } // namespace
 
 TEST_CASE("RA01-B1 authoring catalog seals the eleven RA-1 rows in sorted order", "[authoring-catalog]") {
@@ -340,4 +496,35 @@ TEST_CASE("RA01-B1 defined runtime keeps profile VMs at five rows", "[authoring-
   for (auto& r : rows)
     names.push_back(name_of(r->fields.at("descriptor")));
   CHECK(names == std::vector<std::string>{"export", "history", "init", "inspect", "load", "render"});
+}
+
+// W2-05. Mutant killed: runtime.cpp call_service_native, operation capture_authoring, dropping the check that the include
+// equals the verb mapping (workspace for spec-prompt). Native refusal and the wave 1 stub refusal are byte-identical, so a
+// refusal alone proves nothing: variant 0 (matching include, test-owned services, canned valid RA-2 capture of the quota
+// fixture) must first exit 0 with a spec prompt, and only then variant 21 (the prompts.lua anchor swapped to include spec,
+// D-38) must exit internal 4 without the provider ever being asked to capture. With the check dropped variant 21 succeeds
+// and its assertions fail. Variant 18 is not named: it needs no authoring types.
+TEST_CASE("RA01-B2 native refuses an authoring capture whose include does not match the verb", "[authoring-catalog]") {
+  const auto workspace = quota_workspace_file();
+  REQUIRE_FALSE(workspace.empty());
+  const auto registry = workspace.parent_path().parent_path() / "registry" / "quota-tools.json";
+  REQUIRE(fs::exists(registry));
+
+  // Positive control: the matching include succeeds with a spec prompt.
+  const auto control = RA01_DRIVE_SPEC_PROMPT(authoring_variant_0, workspace, registry);
+  INFO(control.code << ": " << control.message);
+  REQUIRE(control.status == 0);
+  CHECK(control.opens == 1);
+  CHECK(control.includes == std::vector<std::string>{"workspace"});
+  REQUIRE(control.document);
+  CHECK(control.document->fields.at("kind")->string == "prompt");
+  CHECK(control.document->fields.at("prompt")->fields.at("kind")->string == "spec");
+
+  // The swapped binding passes include spec for spec-prompt: native refuses internal 4 before the provider captures.
+  const auto swapped = RA01_DRIVE_SPEC_PROMPT(authoring_variant_21, workspace, registry);
+  CHECK(swapped.status == 4);
+  CHECK(swapped.code == "internal");
+  CHECK(swapped.message == "Invalid embedded command protocol");
+  CHECK(swapped.includes.empty());
+  CHECK_FALSE(swapped.document);
 }

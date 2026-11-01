@@ -64,6 +64,20 @@ struct command_load_options {
   std::string                 actor;           ///< Bounded nonempty UTF-8 driver assertion.
   std::optional<std::int64_t> expected_head;   ///< Numeric expected head, absent exactly for none.
 };
+#ifdef PLANAR_AUTHORING_BUNDLE
+/// The six embedded-only authoring verbs; exists only in the authoring stack and its variants.
+enum class command_authoring_verb { spec_prompt, critique, ingest, explain_rejection, observe, orchestrator };
+/// Embedded-only authoring intent, deliberately outside `command_options` (which stays closed at five alternatives).
+/// Path members are private normalized host spellings; unused members stay empty.
+struct command_authoring_options {
+  command_authoring_verb verb = command_authoring_verb::spec_prompt; ///< Selected authoring verb.
+  std::string            workspace;                                  ///< Normalized workspace path or empty.
+  std::string            registry;                                   ///< Normalized registry path or empty.
+  std::string            diagnostic;                                 ///< Normalized diagnostic file path or empty.
+  std::string            from;                                       ///< Normalized observation directory or empty.
+  std::string            job;                                        ///< Selected job ID or empty.
+};
+#endif
 /// Exactly one compiled family intent, copied into the invocation owner.
 using command_options = std::variant<command_render_options, command_init_options, command_history_options,
                                      command_export_options, command_load_options>;
@@ -127,6 +141,34 @@ public:
   virtual command_service_result accept_load(const command_load_options& options, const value_ptr& bundle,
                                              const value_ptr& semantic, std::span<const history::tree_file> provenance,
                                              ledger::completion_receipt& completion);
+#ifdef PLANAR_AUTHORING_BUNDLE
+  /// @brief Open the private authoring workspace, synchronously and once.
+  /// @param options Retained authoring intent; no Lua-selected host path.
+  /// @return Exact {file,workspace} or typed failure. Default refuses unsupported authoring.
+  virtual command_service_result open_workspace(const command_authoring_options& options);
+  /// @brief Capture the declaration routes an authoring prompt needs.
+  /// @param options Retained authoring intent.
+  /// @param route Bounded copied route from this VM.
+  /// @param include Capture scope, `workspace` or `spec`; must match the verb.
+  /// @return Authoring capture or typed failure. Default refuses unsupported authoring.
+  virtual command_service_result capture_authoring(const command_authoring_options& options, const value_ptr& route,
+                                                   std::string_view include);
+  /// @brief Capture the declaration routes and the selected job for the orchestrator.
+  /// @param options Retained authoring intent.
+  /// @param route Bounded copied route from this VM.
+  /// @param job Selected job ID.
+  /// @return Orchestrator capture or typed failure. Default refuses unsupported authoring.
+  virtual command_service_result capture_orchestrator(const command_authoring_options& options, const value_ptr& route,
+                                                      std::string_view job);
+  /// @brief Read the bounded diagnostic file named by the authoring intent.
+  /// @param options Retained authoring intent.
+  /// @return Diagnostic bytes facts or typed failure. Default refuses unsupported authoring.
+  virtual command_service_result read_diagnostic(const command_authoring_options& options);
+  /// @brief Read the observation directory named by the authoring intent.
+  /// @param options Retained authoring intent.
+  /// @return Observation directory facts or typed failure. Default refuses unsupported authoring.
+  virtual command_service_result read_observation_directory(const command_authoring_options& options);
+#endif
 };
 /// Redacted selected-profile refusal retaining its native logical location.
 struct registration_error {
@@ -308,6 +350,13 @@ public:
   /// @param services Invocation-local synchronous provider; retained only until this call returns.
   /// @return Exact ok/value or ok/error result, or sanitized bridge failure. Native service errors always win.
   std::expected<value_ptr, diagnostic> invoke(command_options options, command_services& services);
+#ifdef PLANAR_AUTHORING_BUNDLE
+  /// @brief Execute one embedded-only authoring verb once with a copied intent and finite native provider.
+  /// @param options Authoring intent; never argv or Lua source.
+  /// @param services Invocation-local synchronous provider; retained only until this call returns.
+  /// @return Exact ok/value or ok/error result, or sanitized bridge failure.
+  std::expected<value_ptr, diagnostic> invoke_authoring(command_authoring_options options, command_services& services);
+#endif
 
 private:
   friend class extension_invocation;

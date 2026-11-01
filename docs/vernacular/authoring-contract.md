@@ -149,8 +149,11 @@ The orchestrator uses its own capture service `capture_orchestrator({route:R,job
 lists for `ID`. An `ID` that the workspace does not list is `reference` exit 3, field `selection.job`, message
 `Unknown selected job` (the existing message of render's unlisted `--job`, `selection.lua`). That job file is
 evaluated and validated as `load` would, so a malformed job gives the same typed error. Other listed job files
-are never read. Result `V`: exactly `{bundle:B,capture:C,files:[F...],job:ID}`, where `bundle.jobs` holds only the
-selected job and there is no `role` or `budget_bytes`.
+are never read. Result `V`: exactly `{bundle:B,capture:C,commands:[N...],files:[F...],job:ID}`, where `bundle.jobs` holds only the
+selected job and there is no `role` or `budget_bytes`. `commands` is the array of the sealed catalog's command
+names in strictly increasing unsigned-byte order; native appends it after the provider returns exactly
+`{bundle,capture,files,job}`, so a provider can neither supply nor alter it, and a provider result carrying a
+fifth key is refused as `internal`.
 
 ## RA-3 Prompt envelope
 
@@ -409,7 +412,7 @@ graph-only and never receives worker facets, outputs or observations. Services: 
 
 `actions` has one entry per name in the union of (a) the sealed catalog's command names for this invocation
 and (b) the future list below. `status` is `available` exactly when the name is in the invocation's sealed
-catalog (native passes the sealed command names), otherwise `future`. `purpose` is a fixed one-sentence UTF-8
+catalog (native passes the sealed command names; native passes them as the `commands` key of the `capture_orchestrator` result (RA-2)), otherwise `future`. `purpose` is a fixed one-sentence UTF-8
 string of at most 200 bytes owned by `orchestrator.lua`. The future list is exactly the verbs of the E1
 [verb table](execution-design.md#proposed-verb-surface-subject-to-e1) not shipped by RA01:
 `activate`, `status`, `preview`, `claim`, `takeover`, `refresh`, `checkpoint`, `release`, `recover`, `check`,
@@ -495,6 +498,7 @@ values, `limit` names being details values, not codes):
 | Observation entry symlink, FIFO, socket, device or other special file | `path_denied` / `Links and special files forbidden` |
 | Observation entry with a disallowed name or kind (layout violation, bad name, `checks` or `findings` not a directory, `checkpoint.json` not a file) | `path_denied` / `Invalid captured path` |
 | Observation hard-link alias | `path_denied` / `Hard-link input alias` |
+| The observation directory, or an entry in it, that exists but cannot be opened, listed, read or stat-ed (an unreadable `--from` root, `checks` directory or check file; a root swapped for a symlink by race; a failed read) | `io` / `Cannot inspect confined input` (exit 4) |
 | Observation directory membership or identity changed | `capture_changed` / `Directory membership or identity changed` |
 | Diagnostic or observation file changed during read | `capture_changed` / `File changed during read` |
 | Bounds `diagnostic_bytes`, `prompt_bytes`, `observation_entries`, `observation_file_bytes`, `observation_total_bytes`, `observation_bytes` | `resource_limit` / `Capture limit exceeded` |
@@ -528,6 +532,16 @@ Short, additive; none narrows an approved clause. Each is recorded in the pointe
    the with-profile mechanics of RA-9 (probe membership, precedence, collision, capacity and namespace) are
    recorded by pointer. The X-LIMIT table is unedited.
 5. [CLAUDE.md](../../CLAUDE.md): this contract joins the exact-contract authority list (E14 A).
+6. RA-2 (operator decision 2026-10-31, D-18 option A): the `capture_orchestrator` result gains the key
+   `commands`, native-appended from the sealed catalog; RA-7 cites it. The Messages table is unchanged.
+7. Q-C01-1, D-C01-05 option A and Q2 (operator decisions 2026-10-31, V5-02-RA01-B-W2-C01): the Messages table gains
+   one row for an observation directory, or an entry in it, that cannot be opened, listed, read or stat-ed, mapped to
+   the existing `io` / `Cannot inspect confined input` (exit 4). No new code or message text is added, and the
+   Messages introduction stays true. Q-C01-1, D-C01-05 option A and Q2 option A (live operator answers, 2026-10-31) remain
+   attributed to the operator for the Messages row. The `capture_diagnostic` post-gate remap of a kind or identity change or a
+   vanished file to the existing `capture_changed` / `File changed during read` row is Q1 option B (live operator answer,
+   2026-10-31, overriding the Messages closing paragraph for `capture_diagnostic` only). The post-gate residual remap is a
+   delegated decision of 2026-10-31 (standing delegation, not a live answer), and it departs from the same Messages closing paragraph (D-C01-25); the departure is recorded here, not by a live answer.
 
 ## Traceability
 

@@ -3088,7 +3088,9 @@ std::map<std::string, std::size_t> audited_platform_counts() {
           {"engine/acceptance/source_capture.t.cpp", 1},
           {"engine/export/source_export.cpp", 4},
           // Test-only allocator and string sizing differs between libc++ on macOS and Linux (c02_outputs_gap pin).
-          {"engine/runtime/external_registration.t.cpp", 1}};
+          {"engine/runtime/external_registration.t.cpp", 1},
+          // Invalid UTF-8 file names can be created on Linux only (APFS refuses them); RA01-B2 observe name grammar test.
+          {"cmd/planar/authoring_observe.t.cpp", 1}};
 }
 
 // Full text of one source file under src; the caller's REQUIRE fails when the file cannot be read.
@@ -3178,11 +3180,17 @@ const std::vector<verb_row>& verbs() {
   return table;
 }
 /// Existing files and a directory for every explicit path option, under `work`.
+/// The quota workspace tree and registry (so every verb has real valid inputs), a canonical load diagnostic and an empty
+/// observation directory.
 void fixture(const fs::path& work) {
-  x07::put(work / "workspace.lua", "return {}\n");
-  x07::put(work / "registry.json", "{}\n");
-  x07::put(work / "diag.json", "{}\n");
-  x07::put(work / "obs/o.json", "{}\n");
+  const fs::path workspace_directory = fs::path(PLANAR_B2_WORKSPACE_FIXTURE).parent_path();
+  fs::create_directories(work);
+  fs::copy(workspace_directory, work, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+  fs::copy_file(workspace_directory.parent_path() / "registry" / "quota-tools.json", work / "registry.json",
+                fs::copy_options::overwrite_existing);
+  x07::put(work / "diag.json", "{\"error\":{\"code\":\"schema\",\"field\":\"workspace.id\",\"message\":\"Invalid value\"},"
+                               "\"kind\":\"error\",\"version\":1}\n");
+  fs::create_directories(work / "obs");
 }
 std::string value(const fs::path& work, std::string_view option) {
   if (option == "--workspace")
@@ -3193,7 +3201,7 @@ std::string value(const fs::path& work, std::string_view option) {
     return (work / "diag.json").string();
   if (option == "--from")
     return (work / "obs").string();
-  return "job-a";
+  return "combined";
 }
 std::vector<std::string> full(const verb_row& verb, const fs::path& work) {
   std::vector<std::string> args{verb.name};
@@ -3210,18 +3218,16 @@ planar::cmd::response run_stack(const fs::path& cwd, const std::vector<std::stri
   std::vector<std::string_view> views(args.begin(), args.end());
   return planar::cmd::authoring_stack::invoke(views);
 }
-x07::bytes stub() {
-  return {4, "",
-          "{\"error\":{\"code\":\"internal\",\"field\":\"\",\"message\":\"Invalid embedded command protocol\"},"
-          "\"kind\":\"error\",\"version\":1}\n"};
-}
-/// Positive control that the verbs are live under the authoring stack: the full signature reaches the stub refusal.
+/// Positive control that the verbs are live under the authoring stack: the full signature over the valid fixtures is not
+/// usage and not a path-stage refusal (it exits 0 with the real document; see the authoring tests for the exact bytes).
 void require_live_stack(const fs::path& work) {
   for (const auto& verb : verbs()) {
     CAPTURE(verb.name);
     const auto got = x07::of(run_stack(work, full(verb, work)));
-    CHECK(got == stub());
     CHECK_FALSE(got == x07::usage_bytes());
+    CHECK(got.status != 2);
+    CHECK_FALSE(got.err.contains("\"code\":\"io\""));
+    CHECK_FALSE(got.err.contains("\"code\":\"path_denied\""));
   }
 }
 std::string head_help() {
@@ -3241,9 +3247,10 @@ std::string quoted(const std::string& text) {
 /// Occurrences of the authoring definition token in a CMake text that are not inside an allowed definition statement.
 struct cmake_scan {
   std::vector<std::string> bad;
-  bool                     stack_runtime   = false;
-  bool                     stack_bootstrap = false;
-  bool                     variant_guarded = false;
+  bool                     stack_runtime    = false;
+  bool                     stack_bootstrap  = false;
+  bool                     stack_invocation = false;
+  bool                     variant_guarded  = false;
 };
 cmake_scan scan_cmake(const std::string& text, std::string_view token) {
   cmake_scan             out;
@@ -3269,6 +3276,8 @@ cmake_scan scan_cmake(const std::string& text, std::string_view token) {
       out.stack_runtime = true;
     else if (target == "planar_authoring_stack_bootstrap")
       out.stack_bootstrap = true;
+    else if (target == "planar_authoring_stack_invocation")
+      out.stack_invocation = true;
     else if (target == "planar_authoring_variant_${variant}") {
       const auto guard = text.rfind("if(", open);
       const auto gate  = guard == std::string::npos ? std::string_view{} : std::string_view(text).substr(guard, open - guard);
@@ -3299,7 +3308,8 @@ TEST_CASE("RA01-B1 default invoke and production binary refuse all six authoring
     // Control: the compile-time selected stack is the one place these verbs exist.
     const auto selected = x07::of(ra01::run_stack(t.work, args));
     CHECK_FALSE(selected == x07::usage_bytes());
-    CHECK(selected.status == 4);
+    CHECK(selected.status != 2);
+    CHECK_FALSE(selected.err.contains("\"code\":\"io\""));
     // The default entry refuses with the existing usage bytes.
     const auto got = x07::of(x07::run_in(t.work, args));
     CHECK(got.status == 2);
@@ -3340,6 +3350,7 @@ TEST_CASE("RA01-B1 production targets never receive the authoring definition", "
   CHECK(scan.bad.empty());
   CHECK(scan.stack_runtime);
   CHECK(scan.stack_bootstrap);
+  CHECK(scan.stack_invocation);
   CHECK(scan.variant_guarded);
   // Every other CMake file leaves the token out.
   std::size_t           scanned = 0;
@@ -3355,7 +3366,8 @@ TEST_CASE("RA01-B1 production targets never receive the authoring definition", "
     CHECK_FALSE(x07::contains(x07::slurp(path), token));
   }
   CHECK(scanned >= 4);
-  // (b) in src the token appears only in runtime.cpp and bootstrap.cpp, never in an interface, main or invocation file.
+  // (b) in src the token appears only in the guarded engine runtime and command invocation units and in bootstrap.cpp,
+  // never in main or the bootstrap interface; the production target defines no such macro (checked in (a)).
   std::set<std::string> sites;
   for (const auto& entry : fs::recursive_directory_iterator(src)) {
     const auto name = entry.path().filename().string();
@@ -3365,8 +3377,10 @@ TEST_CASE("RA01-B1 production targets never receive the authoring definition", "
     if (x07::contains(x07::slurp(entry.path()), token))
       sites.insert(fs::relative(entry.path(), src).generic_string());
   }
-  CHECK(sites == std::set<std::string>{"cmd/planar/bootstrap.cpp", "engine/runtime/runtime.cpp"});
-  // (c) no authoring entry points exist in the production interfaces or main.
+  CHECK(sites == std::set<std::string>{"cmd/planar/bootstrap.cpp", "cmd/planar/invocation.cpp", "cmd/planar/invocation.cppm",
+                                       "engine/runtime/runtime.cpp", "engine/runtime/runtime.cppm"});
+  // (c) no authoring entry points exist in the production interfaces or main, and in the two interfaces that declare the
+  // guarded authoring types every occurrence of the token is an #ifdef opener or a doc comment (nothing is declared unguarded).
   for (const auto& path :
        {here / "main.cpp", here / "bootstrap.cppm", src / "engine/runtime/runtime.cppm", here / "invocation.cppm"}) {
     CAPTURE(path.string());
@@ -3374,7 +3388,15 @@ TEST_CASE("RA01-B1 production targets never receive the authoring definition", "
     REQUIRE_FALSE(text.empty());
     CHECK_FALSE(x07::contains(text, "create_authoring"));
     CHECK_FALSE(x07::contains(text, "invoke_authoring_bundle"));
-    CHECK_FALSE(x07::contains(text, token));
+    const bool interface_with_guard = path.filename() == "runtime.cppm" || path.filename() == "invocation.cppm";
+    if (!interface_with_guard)
+      CHECK_FALSE(x07::contains(text, token));
+    for (auto at = text.find(token); at != std::string::npos; at = text.find(token, at + 1)) {
+      const auto line = text.rfind('\n', at);
+      const auto from = line == std::string::npos ? 0 : line + 1;
+      CHECK((text.compare(from, std::string("#ifdef ").size(), "#ifdef ") == 0 ||
+             text.compare(from, std::string("///").size(), "///") == 0));
+    }
   }
   // (d) every production command_vm creation names no argument.
   std::size_t creations = 0;

@@ -21,10 +21,11 @@ CLI::App& attach_orchestrator(CLI::App& root, orchestrator_options& options) {
   add("--job", options.job);
   return command;
 }
-response orchestrator_command(const orchestrator_options& options, const readers& io) {
+response orchestrator_command(const orchestrator_options& options, const readers& io, const executor& execute) {
   inputs values;
   values.workspace = options.workspace;
   values.registry  = options.registry;
-  return run_stub(verb::orchestrator, std::move(values), io);
+  values.job       = options.job;
+  return run(verb::orchestrator, std::move(values), io, execute);
 }
 } // namespace planar::cmd::authoring

@@ -19,6 +19,7 @@ CLI::App& attach_ingest(CLI::App& root, ingest_options& options);
 /// Run `ingest` for already parsed options.
 /// @param options Parsed values.
 /// @param io Process observation seam.
+/// @param execute Native execution step; empty answers the stub refusal.
 /// @return Buffered response.
-response ingest_command(const ingest_options& options, const readers& io = process_readers());
+response ingest_command(const ingest_options& options, const readers& io = process_readers(), const executor& execute = {});
 } // namespace planar::cmd::authoring

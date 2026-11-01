@@ -19,6 +19,8 @@ CLI::App& attach_spec_prompt(CLI::App& root, spec_prompt_options& options);
 /// Run `spec-prompt` for already parsed options.
 /// @param options Parsed values.
 /// @param io Process observation seam.
+/// @param execute Native execution step; empty answers the stub refusal.
 /// @return Buffered response.
-response spec_prompt_command(const spec_prompt_options& options, const readers& io = process_readers());
+response spec_prompt_command(const spec_prompt_options& options, const readers& io = process_readers(),
+                             const executor& execute = {});
 } // namespace planar::cmd::authoring

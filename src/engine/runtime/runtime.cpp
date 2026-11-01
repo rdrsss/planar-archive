@@ -1195,6 +1195,9 @@ struct command_state {
   bool                              authoring = false; ///< The eleven-row embedded bundle is selected (never for profile VMs).
   std::string                       seal, name;
   command_options                   options;
+#ifdef PLANAR_AUTHORING_BUNDLE
+  std::optional<command_authoring_options> authoring_options; ///< Set only for an embedded authoring invocation.
+#endif
   std::vector<history::original_file_view> originals;
   std::string_view                         separator, assembly;
   std::vector<history::tree_file>          provenance;
@@ -2524,6 +2527,69 @@ void prepare_invocation(command_state& c) {
                                  {"options", command_record(std::move(options))},
                                  {"present", command_record(std::move(present))}});
 }
+#ifdef PLANAR_AUTHORING_BUNDLE
+/// The command name an authoring verb is registered under.
+std::string_view authoring_verb_name(command_authoring_verb verb) {
+  switch (verb) {
+  case command_authoring_verb::spec_prompt:
+    return "spec-prompt";
+  case command_authoring_verb::critique:
+    return "critique";
+  case command_authoring_verb::ingest:
+    return "ingest";
+  case command_authoring_verb::explain_rejection:
+    return "explain-rejection";
+  case command_authoring_verb::observe:
+    return "observe";
+  case command_authoring_verb::orchestrator:
+    return "orchestrator";
+  }
+  command_refuse();
+}
+/// True for the verbs that open a workspace and capture declarations (every verb except explain-rejection and observe).
+bool authoring_has_workspace(command_authoring_verb verb) {
+  return verb == command_authoring_verb::spec_prompt || verb == command_authoring_verb::critique ||
+         verb == command_authoring_verb::ingest || verb == command_authoring_verb::orchestrator;
+}
+/// The separate authoring branch of the invocation builder: opaque path slots per verb and the job as text. The intent is
+/// retained so the service protocol can check every later native call against it.
+void prepare_authoring_invocation(command_state& c, const command_authoring_options& o) {
+  std::map<std::string, value_ptr> options, present;
+  auto                             slot = [&](std::string name, const std::string& text) {
+    require_token(text);
+    c.handles.emplace(name, nullptr);
+    present[name] = command_boolean(true);
+  };
+  if (!c.authoring)
+    command_refuse();
+  const bool workspace = authoring_has_workspace(o.verb);
+  const bool job       = o.verb == command_authoring_verb::orchestrator;
+  // Unused intent members must stay empty: a populated slot of another verb is a protocol violation.
+  if ((!workspace && (!o.workspace.empty() || !o.registry.empty())) ||
+      (o.verb != command_authoring_verb::explain_rejection && !o.diagnostic.empty()) ||
+      (o.verb != command_authoring_verb::observe && !o.from.empty()) || (!job && !o.job.empty()))
+    command_refuse();
+  c.name              = std::string(authoring_verb_name(o.verb));
+  c.authoring_options = o;
+  if (workspace) {
+    slot("workspace", o.workspace);
+    slot("registry", o.registry);
+  }
+  if (o.verb == command_authoring_verb::explain_rejection)
+    slot("diagnostic", o.diagnostic);
+  if (o.verb == command_authoring_verb::observe)
+    slot("from", o.from);
+  if (job) {
+    require_token(o.job);
+    options["job"] = command_text(o.job);
+    present["job"] = command_boolean(true);
+  }
+  c.invocation = command_record({{"version", command_integer(1)},
+                                 {"command", command_text(c.name)},
+                                 {"options", command_record(std::move(options))},
+                                 {"present", command_record(std::move(present))}});
+}
+#endif
 void native_error_schema(const value_ptr& e) {
   if (!e || e->kind != value_kind::record || !e->fields.contains("code") || !e->fields.contains("message") ||
       !e->fields.contains("field"))
@@ -3018,7 +3084,13 @@ void call_service_native(lua_State* l, int operation) {
     throw command_resource(s);
   command_service_result result;
   if (operation == 0) {
-    if ((c.name != "render" && c.name != "load") || c.calls != 0 || lua_type(l, 1) != LUA_TTABLE || lua_getmetatable(l, 1))
+#ifdef PLANAR_AUTHORING_BUNDLE
+    const bool authoring_open = c.authoring_options && authoring_has_workspace(c.authoring_options->verb);
+#else
+    constexpr bool authoring_open = false;
+#endif
+    if ((!authoring_open && c.name != "render" && c.name != "load") || c.calls != 0 || lua_type(l, 1) != LUA_TTABLE ||
+        lua_getmetatable(l, 1))
       command_refuse();
     lua_pushnil(l);
     int fields = 0;
@@ -3031,7 +3103,12 @@ void call_service_native(lua_State* l, int operation) {
     }
     if (fields != 1)
       command_refuse();
-    if (c.name == "load")
+#ifdef PLANAR_AUTHORING_BUNDLE
+    if (authoring_open)
+      result = c.services->open_workspace(*c.authoring_options);
+    else
+#endif
+        if (c.name == "load")
       result = c.services->open_workspace(std::get<command_load_options>(c.options));
     else
       result = c.services->open_workspace(std::get<command_render_options>(c.options));
@@ -3095,6 +3172,39 @@ void call_service_native(lua_State* l, int operation) {
       c.provenance = std::move(provenance->files);
       result       = c.services->accept_load(std::get<command_load_options>(c.options), args->fields.at("bundle"),
                                              args->fields.at("semantic"), c.provenance, c.completion);
+#ifdef PLANAR_AUTHORING_BUNDLE
+    } else if (operation == 7) {
+      // spec-prompt captures the workspace only; critique and ingest capture the spec as well (RA-2).
+      if (!c.authoring_options || c.calls != 1)
+        command_refuse();
+      const auto verb = c.authoring_options->verb;
+      if (verb != command_authoring_verb::spec_prompt && verb != command_authoring_verb::critique &&
+          verb != command_authoring_verb::ingest)
+        command_refuse();
+      exact(args, {"route", "include"});
+      validate_route(c, args->fields.at("route"));
+      if (text_field(args, "include") != (verb == command_authoring_verb::spec_prompt ? "workspace" : "spec"))
+        command_refuse();
+      result = c.services->capture_authoring(*c.authoring_options, args->fields.at("route"), text_field(args, "include"));
+    } else if (operation == 8) {
+      if (!c.authoring_options || c.calls != 1 || c.authoring_options->verb != command_authoring_verb::orchestrator)
+        command_refuse();
+      exact(args, {"route", "job"});
+      validate_route(c, args->fields.at("route"));
+      if (text_field(args, "job") != c.authoring_options->job)
+        command_refuse();
+      result = c.services->capture_orchestrator(*c.authoring_options, args->fields.at("route"), text_field(args, "job"));
+    } else if (operation == 9) {
+      if (!c.authoring_options || c.calls != 0 || c.authoring_options->verb != command_authoring_verb::explain_rejection)
+        command_refuse();
+      exact(args, {});
+      result = c.services->read_diagnostic(*c.authoring_options);
+    } else if (operation == 10) {
+      if (!c.authoring_options || c.calls != 0 || c.authoring_options->verb != command_authoring_verb::observe)
+        command_refuse();
+      exact(args, {});
+      result = c.services->read_observation_directory(*c.authoring_options);
+#endif
     } else
       command_refuse();
   }
@@ -3131,6 +3241,50 @@ void call_service_native(lua_State* l, int operation) {
           !decimal_id(text_field(copied, "last_event"), true))
         command_refuse();
     }
+#ifdef PLANAR_AUTHORING_BUNDLE
+    if (operation == 7)
+      exact(copied, {"bundle", "capture", "files"});
+    if (operation == 8) {
+      // The provider owns exactly four keys; native alone appends the sealed names, so a fifth key is a protocol violation.
+      exact(copied, {"bundle", "capture", "files", "job"});
+      if (text_field(copied, "job") != c.authoring_options->job)
+        command_refuse();
+      std::vector<std::string> names;
+      for (auto& e : c.entries)
+        names.push_back(text_field(e.descriptor, "name"));
+      std::ranges::sort(
+          names, [](const std::string& a, const std::string& b) { return std::string_view(a).compare(std::string_view(b)) < 0; });
+      if (std::ranges::adjacent_find(names) != names.end())
+        command_refuse();
+      std::vector<value_ptr> sealed;
+      for (auto& name : names)
+        sealed.push_back(command_text(name));
+      auto fields        = copied->fields;
+      fields["commands"] = command_array(std::move(sealed));
+      copied             = command_record(std::move(fields));
+    }
+    if (operation == 9) {
+      exact(copied, {"bytes", "size", "digest"});
+      text_field(copied, "digest");
+      if (copied->fields.at("size")->kind != value_kind::integer ||
+          static_cast<std::uint64_t>(copied->fields.at("size")->integer) != text_field(copied, "bytes").size())
+        command_refuse();
+    }
+    if (operation == 10) {
+      exact(copied, {"entries"});
+      if (copied->fields.at("entries")->kind != value_kind::list)
+        command_refuse();
+      for (auto& entry : copied->fields.at("entries")->items) {
+        exact(entry, {"category", "name", "size", "digest", "bytes"});
+        text_field(entry, "category");
+        text_field(entry, "name");
+        text_field(entry, "digest");
+        if (entry->fields.at("size")->kind != value_kind::integer ||
+            static_cast<std::uint64_t>(entry->fields.at("size")->integer) != text_field(entry, "bytes").size())
+          command_refuse();
+      }
+    }
+#endif
     if (operation == 5)
       exact(copied, {"bundle"});
     if (operation == 6) {
@@ -3191,19 +3345,89 @@ int execute_command(lua_State* l) {
   }
   lua_pop(l, 1);
   lua_newtable(l);
-  const char* methods[] = {"open_workspace", "capture_render", "initialize_ledger", "read_history",
-                           "export_source",  "capture_load",   "accept_load"};
-  for (int i = 0; i < 7; ++i)
-    if ((commands(l).name == "render" && i < 2) || (commands(l).name == "init" && i == 2) ||
-        (commands(l).name == "history" && i == 3) || (commands(l).name == "export" && i == 4) ||
-        (commands(l).name == "load" && (i == 0 || i == 5 || i == 6))) {
+  const char* methods[] = {"open_workspace",
+                           "capture_render",
+                           "initialize_ledger",
+                           "read_history",
+                           "export_source",
+                           "capture_load",
+                           "accept_load"
+#ifdef PLANAR_AUTHORING_BUNDLE
+                           ,
+                           "capture_authoring",
+                           "capture_orchestrator",
+                           "read_diagnostic",
+                           "read_observation_directory"
+#endif
+  };
+  for (int i = 0; i < static_cast<int>(std::size(methods)); ++i) {
+    bool offered = (commands(l).name == "render" && i < 2) || (commands(l).name == "init" && i == 2) ||
+                   (commands(l).name == "history" && i == 3) || (commands(l).name == "export" && i == 4) ||
+                   (commands(l).name == "load" && (i == 0 || i == 5 || i == 6));
+#ifdef PLANAR_AUTHORING_BUNDLE
+    if (auto& authoring = commands(l).authoring_options) {
+      using verb = command_authoring_verb;
+      offered = (authoring_has_workspace(authoring->verb) && i == 0) || (authoring->verb == verb::orchestrator        ? i == 8
+                                                                         : authoring_has_workspace(authoring->verb)   ? i == 7
+                                                                         : authoring->verb == verb::explain_rejection ? i == 9
+                                                                                                                      : i == 10);
+    }
+#endif
+    if (offered) {
       lua_pushinteger(l, i);
       lua_pushcclosure(l, call_service, 1);
       lua_setfield(l, -2, methods[i]);
     }
+  }
   lua_call(l, 2, LUA_MULTRET);
   return lua_gettop(l);
 }
+#ifdef PLANAR_AUTHORING_BUNDLE
+/// Shape of an `xxh3_128:` digest string: the prefix and 32 lowercase hexadecimal digits.
+bool digest_shape(const std::string& d) {
+  constexpr std::string_view prefix = "xxh3_128:";
+  return d.size() == prefix.size() + 32 && d.starts_with(prefix) &&
+         std::ranges::all_of(std::string_view(d).substr(prefix.size()),
+                             [](char ch) { return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f'); });
+}
+/// Success envelope rows of the six authoring verbs: the prompt envelope of RA-3 and the bare observations of RA-6.
+void validate_authoring_response(command_state& c, const value_ptr& envelope) {
+  using verb          = command_authoring_verb;
+  const auto which    = c.authoring_options->verb;
+  const bool two_call = which != verb::explain_rejection && which != verb::observe;
+  if (c.calls != (two_call ? 2u : 1u))
+    command_refuse();
+  if (!envelope || envelope->kind != value_kind::record || !envelope->fields.contains("version") ||
+      envelope->fields.at("version")->kind != value_kind::integer || envelope->fields.at("version")->integer != 1)
+    command_refuse();
+  if (which == verb::observe) {
+    if (envelope->fields.size() == 4)
+      exact(envelope, {"version", "checks", "findings", "checkpoint"});
+    else
+      exact(envelope, {"version", "checks", "findings"});
+    if (envelope->fields.at("checks")->kind != value_kind::list || envelope->fields.at("findings")->kind != value_kind::list)
+      command_refuse();
+  } else {
+    exact(envelope, {"version", "kind", "prompt"});
+    if (text_field(envelope, "kind") != "prompt")
+      command_refuse();
+    auto prompt = envelope->fields.at("prompt");
+    exact(prompt, {"kind", "markdown", "bytes", "digest", "inputs"});
+    const char* kind = which == verb::spec_prompt         ? "spec"
+                       : which == verb::critique          ? "critique"
+                       : which == verb::ingest            ? "job"
+                       : which == verb::explain_rejection ? "rejection"
+                                                          : "orchestrator";
+    if (text_field(prompt, "kind") != kind || prompt->fields.at("bytes")->kind != value_kind::integer ||
+        static_cast<std::uint64_t>(prompt->fields.at("bytes")->integer) != text_field(prompt, "markdown").size() ||
+        !digest_shape(text_field(prompt, "digest")) || prompt->fields.at("inputs")->kind != value_kind::record)
+      command_refuse();
+  }
+  auto encoded = codec_encode(envelope);
+  if (!encoded)
+    throw encoded.error().detail;
+}
+#endif
 void validate_response(command_state& c, const value_ptr& response) {
   if (!response || response->kind != value_kind::record || !response->fields.contains("ok") ||
       response->fields.at("ok")->kind != value_kind::boolean)
@@ -3216,6 +3440,12 @@ void validate_response(command_state& c, const value_ptr& response) {
     return;
   }
   exact(response, {"ok", "value"});
+#ifdef PLANAR_AUTHORING_BUNDLE
+  if (c.authoring_options) {
+    validate_authoring_response(c, response->fields.at("value"));
+    return;
+  }
+#endif
   if (c.calls != (c.name == "render" ? 2 : c.name == "load" ? 3 : 1))
     command_refuse();
   auto envelope = response->fields.at("value");
@@ -3838,6 +4068,24 @@ command_service_result command_services::accept_load(const command_load_options&
                                                      std::span<const history::tree_file>, ledger::completion_receipt&) {
   command_refuse();
 }
+#ifdef PLANAR_AUTHORING_BUNDLE
+command_service_result command_services::open_workspace(const command_authoring_options&) {
+  command_refuse();
+}
+command_service_result command_services::capture_authoring(const command_authoring_options&, const value_ptr&, std::string_view) {
+  command_refuse();
+}
+command_service_result command_services::capture_orchestrator(const command_authoring_options&, const value_ptr&,
+                                                              std::string_view) {
+  command_refuse();
+}
+command_service_result command_services::read_diagnostic(const command_authoring_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_observation_directory(const command_authoring_options&) {
+  command_refuse();
+}
+#endif
 std::expected<command_vm, diagnostic> command_vm::create() {
   auto result = create_impl({});
   if (!result)
@@ -5025,6 +5273,9 @@ struct command_terminal_release {
     owner.command.handles.clear();
     owner.command.entries.clear();
     owner.command.options = command_render_options{};
+#ifdef PLANAR_AUTHORING_BUNDLE
+    owner.command.authoring_options.reset();
+#endif
     owner.command.pending_descriptor.reset();
     owner.command.invocation.reset();
     owner.command.response.reset();
@@ -5038,8 +5289,9 @@ struct command_terminal_release {
 };
 /// The shared command invocation body: one retained handler call over the supplied native services.
 /// The caller decides whether a profile VM may enter; this body only refuses a consumed or failed VM.
-std::expected<value_ptr, diagnostic> invoke_command_body(command_vm::implementation& owner, command_options options,
-                                                         command_services& services) {
+template <class Prepare>
+std::expected<value_ptr, diagnostic> run_command_body(command_vm::implementation& owner, command_services& services,
+                                                      Prepare&& prepare) {
   if (owner.runtime.seal_failed || owner.command.invoked)
     return std::unexpected(diagnostic{"internal", "Command invocation already consumed"});
   auto& s   = owner.runtime;
@@ -5048,8 +5300,7 @@ std::expected<value_ptr, diagnostic> invoke_command_body(command_vm::implementat
   c.invoked = true;
   command_terminal_release release{owner};
   try {
-    c.options = std::move(options);
-    prepare_invocation(c);
+    prepare(c);
     begin_invocation(s, c);
     // Conversion charges include registration transfers; only Lua instructions restart.
     s.active.clear();
@@ -5078,6 +5329,13 @@ std::expected<value_ptr, diagnostic> invoke_command_body(command_vm::implementat
     return std::unexpected(diagnostic{"internal", "Command execution failed"});
   }
 }
+std::expected<value_ptr, diagnostic> invoke_command_body(command_vm::implementation& owner, command_options options,
+                                                         command_services& services) {
+  return run_command_body(owner, services, [&](command_state& c) {
+    c.options = std::move(options);
+    prepare_invocation(c);
+  });
+}
 } // namespace
 std::expected<value_ptr, diagnostic> command_vm::invoke(command_options options, command_services& services) {
   if (_owner && _owner->command.profile)
@@ -5086,6 +5344,15 @@ std::expected<value_ptr, diagnostic> command_vm::invoke(command_options options,
     return std::unexpected(diagnostic{"internal", "Command invocation already consumed"});
   return invoke_command_body(*_owner, std::move(options), services);
 }
+#ifdef PLANAR_AUTHORING_BUNDLE
+std::expected<value_ptr, diagnostic> command_vm::invoke_authoring(command_authoring_options options, command_services& services) {
+  if (_owner && _owner->command.profile)
+    return std::unexpected(external_protocol());
+  if (!_owner)
+    return std::unexpected(diagnostic{"internal", "Command invocation already consumed"});
+  return run_command_body(*_owner, services, [&](command_state& c) { prepare_authoring_invocation(c, options); });
+}
+#endif
 namespace {
 /// Render under a profile: the same two native services as the shipped handler, with the approved render_profile phases
 /// replacing the embedded renderer so that render_external_v1 and custom shapes apply. The VM never began a profile frame.

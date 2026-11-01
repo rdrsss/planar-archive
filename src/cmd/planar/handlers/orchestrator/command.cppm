@@ -20,6 +20,8 @@ CLI::App& attach_orchestrator(CLI::App& root, orchestrator_options& options);
 /// Run `orchestrator` for already parsed options.
 /// @param options Parsed values.
 /// @param io Process observation seam.
+/// @param execute Native execution step; empty answers the stub refusal.
 /// @return Buffered response.
-response orchestrator_command(const orchestrator_options& options, const readers& io = process_readers());
+response orchestrator_command(const orchestrator_options& options, const readers& io = process_readers(),
+                              const executor& execute = {});
 } // namespace planar::cmd::authoring

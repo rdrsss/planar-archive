@@ -20,10 +20,10 @@ CLI::App& attach_ingest(CLI::App& root, ingest_options& options) {
   add("--registry", options.registry);
   return command;
 }
-response ingest_command(const ingest_options& options, const readers& io) {
+response ingest_command(const ingest_options& options, const readers& io, const executor& execute) {
   inputs values;
   values.workspace = options.workspace;
   values.registry  = options.registry;
-  return run_stub(verb::ingest, std::move(values), io);
+  return run(verb::ingest, std::move(values), io, execute);
 }
 } // namespace planar::cmd::authoring

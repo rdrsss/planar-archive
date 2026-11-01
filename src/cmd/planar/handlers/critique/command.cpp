@@ -20,10 +20,10 @@ CLI::App& attach_critique(CLI::App& root, critique_options& options) {
   add("--registry", options.registry);
   return command;
 }
-response critique_command(const critique_options& options, const readers& io) {
+response critique_command(const critique_options& options, const readers& io, const executor& execute) {
   inputs values;
   values.workspace = options.workspace;
   values.registry  = options.registry;
-  return run_stub(verb::critique, std::move(values), io);
+  return run(verb::critique, std::move(values), io, execute);
 }
 } // namespace planar::cmd::authoring

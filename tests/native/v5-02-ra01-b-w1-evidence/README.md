@@ -3,7 +3,7 @@
 Round record: [V5-02-RA01-B-W1.md](../../../docs/vernacular/rounds/V5-02-RA01-B-W1.md) (section "Coordinator sync before review" holds the
 wave 1 candidate identity at the 2026-10-30 sync, the wave 1 invariant table and acceptance table). The C01 corrective changed that candidate;
 the final candidate, its 1344-test inventory and its probe results are in [V5-02-RA01-B-W1-C01.md](../../../docs/vernacular/rounds/V5-02-RA01-B-W1-C01.md)
-and `tests/native/v5-02-ra01-b-w1-c01-evidence/`. "Final" below means the wave 1 candidate (gate run 6), not the lineage's final candidate.
+and `tests/native/v5-02-ra01-b-w1-c01-evidence/`. "Final" below means the wave 1 candidate (gate run 6), not the lineage's final candidate (the C01 candidate was in turn superseded by the wave 2 candidate: see [V5-02-RA01-B-W2.md](../../../docs/vernacular/rounds/V5-02-RA01-B-W2.md)).
 
 | path | content |
 | --- | --- |

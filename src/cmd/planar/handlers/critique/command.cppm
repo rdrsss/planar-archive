@@ -19,6 +19,7 @@ CLI::App& attach_critique(CLI::App& root, critique_options& options);
 /// Run `critique` for already parsed options.
 /// @param options Parsed values.
 /// @param io Process observation seam.
+/// @param execute Native execution step; empty answers the stub refusal.
 /// @return Buffered response.
-response critique_command(const critique_options& options, const readers& io = process_readers());
+response critique_command(const critique_options& options, const readers& io = process_readers(), const executor& execute = {});
 } // namespace planar::cmd::authoring

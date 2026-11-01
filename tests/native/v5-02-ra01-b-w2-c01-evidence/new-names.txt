@@ -1,0 +1,21 @@
+replacement.RA01-B2 C01 capture_diagnostic bad_alloc refusal carries diagnostic_bytes
+replacement.RA01-B2 C01 capture_diagnostic maps a failed open to cannot resolve
+replacement.RA01-B2 C01 capture_diagnostic maps a post-gate add_input failure to file changed
+replacement.RA01-B2 C01 capture_diagnostic post-gate failures are remapped at every native call
+replacement.RA01-B2 C01 capture_diagnostic refuses a non-regular file as io
+replacement.RA01-B2 C01 capture_diagnostic refuses a symlink as a symbolic link
+replacement.RA01-B2 C01 critique global prescription needs a nonempty check
+replacement.RA01-B2 C01 observe applies precedence in sorted name order
+replacement.RA01-B2 C01 observe bad_alloc refusal carries observation_total_bytes
+replacement.RA01-B2 C01 observe checkpoint canonical size is bounded at exactly 8192 bytes
+replacement.RA01-B2 C01 observe digest allocation failure is a bound refusal
+replacement.RA01-B2 C01 observe maps a failed entry inspection after listing to cannot inspect
+replacement.RA01-B2 C01 observe maps an unreadable entry to cannot inspect
+replacement.RA01-B2 C01 observe recheck bad_alloc is a limit and not a membership change
+replacement.RA01-B2 C01 observe recheck growth past the total bound stays membership changed
+replacement.RA01-B2 C01 observe refuses a symlink root
+replacement.RA01-B2 C01 observe refuses an unreadable entry as io exit 4
+replacement.RA01-B2 C01 observe refuses an unreadable root as io exit 4
+replacement.RA01-B2 C01 prompt of exactly 1048576 bytes is accepted and one more byte is refused
+replacement.RA01-B2 C01 rejection excerpt with a non-digit index is the fixed line
+replacement.RA01-B2 C01 slot type checks are pinned in the Lua handlers

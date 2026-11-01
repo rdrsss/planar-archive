@@ -8,6 +8,10 @@ import planar.engine.ledger.acceptance;
 import planar.engine.history.read;
 import planar.engine.source_export;
 import planar.engine.runtime; // X07-REAL-RUNTIME
+#ifdef PLANAR_AUTHORING_BUNDLE
+import planar.engine.capture.directory;
+import planar.engine.hash;
+#endif
 namespace planar::cmd {
 namespace {
 using namespace detail;
@@ -112,6 +116,16 @@ std::expected<std::string, diagnostic> process_workspace_directory() {
   return snapshot_workspace_directory(process_workspace_environment());
 }
 using snapshot_reader = std::function<std::expected<std::string, diagnostic>()>;
+#ifdef PLANAR_AUTHORING_BUNDLE
+/// Maps both digest allocation failures (Hash and Canonical allocation failed) of an observation entry to the observation
+/// total bound (D-C01-32); other errors pass.
+diagnostic observation_digest_failure(diagnostic error) {
+  if (error.code == "resource_limit" &&
+      (error.message == "Hash allocation failed" || error.message == "Canonical allocation failed"))
+    return capture_limit("observation_total_bytes", 4194304);
+  return error;
+}
+#endif
 
 class native_services final : public command_services {
   capture_session                                  _session;
@@ -308,6 +322,119 @@ public:
                     {"source", text(std::to_string(result->source))}}),
             {}};
   }
+#ifdef PLANAR_AUTHORING_BUNDLE
+  /// Open the authoring workspace exactly like render: resolve the explicit file, root its directory, load the declaration.
+  command_service_result open_workspace(const command_authoring_options& options) override {
+    return capture_boundary([&]() -> command_service_result {
+      const std::filesystem::path file(required(resolve_explicit_file(options.workspace)));
+      required(_session.add_root("workspace", file.parent_path().string()));
+      _workspace_path = file.filename().string();
+      _workspace      = required(_session.load(_workspace_path)).root;
+      return {object({{"file", text(_workspace_path)}, {"workspace", _workspace}}), {}};
+    });
+  }
+  /// Capture the workspace, optionally the spec, and the registry. Job files are never read, listed or required.
+  command_service_result capture_authoring(const command_authoring_options& options, const value_ptr& route,
+                                           std::string_view include) override {
+    return capture_boundary([&]() -> command_service_result {
+      std::map<std::string, value_ptr> bundle_fields;
+      if (include == "spec") {
+        auto spec_path = route->fields.at("spec");
+        auto spec      = required(_session.load(spec_path->string));
+        bundle_fields.emplace("spec", object({{"file", spec_path}, {"value", spec.root}}));
+      }
+      auto captured = finish_authoring(options.registry, std::move(bundle_fields), {});
+      return {object({{"bundle", captured.bundle}, {"capture", captured.capture}, {"files", captured.files}}), {}};
+    });
+  }
+  /// Capture the spec, the registry and exactly the selected job; other listed jobs are neither read nor required.
+  command_service_result capture_orchestrator(const command_authoring_options& options, const value_ptr& route,
+                                              std::string_view job) override {
+    return capture_boundary([&]() -> command_service_result {
+      auto      spec_path = route->fields.at("spec");
+      auto      spec      = required(_session.load(spec_path->string));
+      value_ptr job_path;
+      for (const auto& entry : route->fields.at("jobs")->items)
+        if (entry->fields.at("id")->string == job)
+          job_path = entry->fields.at("file");
+      if (!job_path)
+        throw refusal{unknown_selected_job()};
+      auto                             loaded = required(_session.load(job_path->string));
+      std::map<std::string, value_ptr> bundle_fields;
+      bundle_fields.emplace("spec", object({{"file", spec_path}, {"value", spec.root}}));
+      auto captured =
+          finish_authoring(options.registry, std::move(bundle_fields), {object({{"file", job_path}, {"value", loaded.root}})});
+      return {object({{"bundle", captured.bundle},
+                      {"capture", captured.capture},
+                      {"files", captured.files},
+                      {"job", text(std::string(job))}}),
+              {}};
+    });
+  }
+  /// Read the diagnostic file through the bounded no-follow capture of the engine.
+  command_service_result read_diagnostic(const command_authoring_options& options) override {
+    return capture_boundary([&]() -> command_service_result {
+      capture_session session;
+      auto            facts = required(capture_diagnostic(session, options.diagnostic, 65536));
+      return {object({{"bytes", text(facts.bytes)},
+                      {"size", integer(static_cast<std::int64_t>(facts.size))},
+                      {"digest", text(facts.digest)}}),
+              {}};
+    });
+  }
+  /// Read the observation directory through the directory module.
+  command_service_result read_observation_directory(const command_authoring_options& options) override {
+    return capture_boundary([&]() -> command_service_result {
+      auto                   directory = required(engine::read_observation_directory(options.from));
+      std::vector<value_ptr> entries;
+      for (const auto& entry : directory.entries) {
+        auto digest = engine::file_digest(entry.bytes);
+        if (!digest)
+          throw observation_digest_failure(std::move(digest.error()));
+        entries.push_back(object({{"category", text(entry.category)},
+                                  {"name", text(entry.name)},
+                                  {"size", integer(static_cast<std::int64_t>(entry.size))},
+                                  {"digest", text(*digest)},
+                                  {"bytes", text(entry.bytes)}}));
+      }
+      return {object({{"entries", array(entries)}}), {}};
+    });
+  }
+
+private:
+  /// The value render's selection stage gives for a job the workspace does not list, byte for byte.
+  static value_ptr unknown_selected_job() {
+    // Render's selection stage owns this existing message; kept out of a literal pair so no source adds a message to the table.
+    static const std::string unknown_job = "Unknown selected job";
+    return object({{"code", text("reference")},
+                   {"message", text(unknown_job)},
+                   {"file", text("")},
+                   {"field", text("selection.job")},
+                   {"details", object({})}});
+  }
+  struct authoring_capture {
+    value_ptr bundle, capture, files;
+  };
+  /// Register the registry, seal the session and build the render-shaped bundle, capture and files values.
+  authoring_capture finish_authoring(const std::string& registry_path, std::map<std::string, value_ptr> bundle_fields,
+                                     std::vector<value_ptr> jobs) {
+    required(_session.add_input("registry", required(resolve_explicit_file(registry_path))));
+    auto                   registry = required(_session.read("registry", "input.json"));
+    auto                   snapshot = required(_session.finish());
+    std::vector<value_ptr> retained, workspace_files;
+    for (const auto& file : *snapshot) {
+      retained.push_back(
+          object({{"root", text(file.root)}, {"path", text(file.path)}, {"mode", text(file.mode)}, {"bytes", text(file.bytes)}}));
+      if (file.root == "workspace")
+        workspace_files.push_back(object({{"path", text(file.path)}, {"bytes", text(file.bytes)}}));
+    }
+    bundle_fields.emplace("workspace", object({{"file", text(_workspace_path)}, {"value", _workspace}}));
+    bundle_fields.emplace("jobs", array(jobs));
+    bundle_fields.emplace("registry", object({{"file", text("input.json")}, {"bytes", text(registry.bytes)}}));
+    bundle_fields.emplace("files", array(workspace_files));
+    return {object(std::move(bundle_fields)), object({{"status", text("not_captured")}}), array(retained)};
+  }
+#endif
 };
 } // namespace
 std::expected<void, engine::diagnostic>
@@ -542,6 +669,46 @@ response execute_profile_load(const engine::acceptance::request_intent& intent, 
     return {4, "", ""};
   }
 }
+#ifdef PLANAR_AUTHORING_BUNDLE
+response execute_authoring(engine::command_authoring_options options, engine::command_vm* registered) {
+  using namespace detail;
+  // Both ceilings of RA-3 and RA-6: checked before the generic 16 MiB output ceiling, each with its own limit name.
+  constexpr std::size_t prompt_ceiling = 1048576;
+  try {
+    std::optional<engine::command_vm> local;
+    engine::command_vm*               vm = registered;
+    if (!vm) {
+      auto created = engine::command_vm::create();
+      if (!created)
+        return failed(native_error(created.error()));
+      local.emplace(std::move(*created));
+      vm = &*local;
+    }
+    const bool observing = options.verb == engine::command_authoring_verb::observe;
+    auto       services  = std::make_unique<native_services>();
+    auto       result    = vm->invoke_authoring(std::move(options), *services);
+    if (!result)
+      return failed(native_error(result.error()));
+    if (!(*result)->fields.at("ok")->boolean)
+      return failed((*result)->fields.at("error"));
+    auto envelope = (*result)->fields.at("value");
+    if (!observing && envelope->fields.at("prompt")->fields.at("markdown")->string.size() > prompt_ceiling)
+      return failed(native_error(capture_limit("prompt_bytes", prompt_ceiling)));
+    auto encoded = engine::codec_encode(envelope, {response_ceiling, 256, 4000000});
+    if (!encoded) {
+      auto error = encoded.error().detail;
+      if (error.code == "resource_limit" && error.limit == "output_bytes")
+        error.maximum = response_ceiling + 1;
+      return failed(native_error(error));
+    }
+    if (observing && encoded->size() > prompt_ceiling)
+      return failed(native_error(capture_limit("observation_bytes", prompt_ceiling)));
+    return {0, *encoded + "\n", ""};
+  } catch (...) {
+    return {4, "", ""};
+  }
+}
+#endif
 response native_export_failure(const engine::source_export::export_error& error) {
   auto result = detail::failed(export_error(error));
   if (error.code == engine::source_export::error_code::cleanup_incomplete)

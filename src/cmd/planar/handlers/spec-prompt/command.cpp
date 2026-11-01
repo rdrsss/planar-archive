@@ -20,10 +20,10 @@ CLI::App& attach_spec_prompt(CLI::App& root, spec_prompt_options& options) {
   add("--registry", options.registry);
   return command;
 }
-response spec_prompt_command(const spec_prompt_options& options, const readers& io) {
+response spec_prompt_command(const spec_prompt_options& options, const readers& io, const executor& execute) {
   inputs values;
   values.workspace = options.workspace;
   values.registry  = options.registry;
-  return run_stub(verb::spec_prompt, std::move(values), io);
+  return run(verb::spec_prompt, std::move(values), io, execute);
 }
 } // namespace planar::cmd::authoring

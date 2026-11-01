@@ -1,0 +1,72 @@
+replacement.RA01-B2 A35 five prompt kinds are byte-equal across two fresh processes and reordered declarations
+replacement.RA01-B2 A36 rejected load stderr round-trips through explain-rejection
+replacement.RA01-B2 a present job file is neither read nor listed
+replacement.RA01-B2 an oversize prompt is refused as prompt_bytes
+replacement.RA01-B2 authoring capture succeeds when a listed job file is absent for all three prompts
+replacement.RA01-B2 authoring reports no job file errors
+replacement.RA01-B2 capture_diagnostic bounds the file at 65536 bytes from the descriptor
+replacement.RA01-B2 capture_diagnostic refuses a file changed before verification
+replacement.RA01-B2 captured text is escaped as data in prompts
+replacement.RA01-B2 checks section is the sorted allow-list intersected with the registry
+replacement.RA01-B2 critique findings are sorted advisory and exit zero
+replacement.RA01-B2 critique prints the fixed line when no rule fires
+replacement.RA01-B2 critique rule blocking_question_unanswered covers start and complete
+replacement.RA01-B2 critique rule facet_dependency_without_output_vector needs an output_vector check
+replacement.RA01-B2 critique rule prescription_unchecked fires only without a nonempty check
+replacement.RA01-B2 diagnostic and from reach Lua only as opaque slots
+replacement.RA01-B2 explain-rejection accepts 65536 bytes and refuses 65537 as diagnostic_bytes
+replacement.RA01-B2 explain-rejection refuses malformed diagnostic JSON as schema
+replacement.RA01-B2 explain-rejection validates the diagnostic envelope and code grammar
+replacement.RA01-B2 ingest and critique with an invalid spec fail with the typed error load gives
+replacement.RA01-B2 job prompt lists sorted constructors and the job tier statement
+replacement.RA01-B2 native appends the sorted sealed command names to the orchestrator capture
+replacement.RA01-B2 native refuses an authoring capture whose include does not match the verb
+replacement.RA01-B2 observe applies structural checks only
+replacement.RA01-B2 observe bounds listed names at 1024 counting dot names
+replacement.RA01-B2 observe empty directory prints canonical empty observations
+replacement.RA01-B2 observe enforces the checkpoint bounds
+replacement.RA01-B2 observe errors carry the logical file and object-relative field
+replacement.RA01-B2 observe ignores dot names
+replacement.RA01-B2 observe lists entries sorted by category and name
+replacement.RA01-B2 observe output is independent of creation order
+replacement.RA01-B2 observe output is structurally accepted by render observations
+replacement.RA01-B2 observe output over one MiB is refused as observation_bytes
+replacement.RA01-B2 observe prints sorted bare observations
+replacement.RA01-B2 observe refuses a FIFO entry
+replacement.RA01-B2 observe refuses a directory changed before the recheck
+replacement.RA01-B2 observe refuses a hard-link alias
+replacement.RA01-B2 observe refuses a symlink entry
+replacement.RA01-B2 observe refuses an oversize file as observation_file_bytes
+replacement.RA01-B2 observe refuses duplicate ids within checks and within findings
+replacement.RA01-B2 observe refuses layout violations without echoing names
+replacement.RA01-B2 observe refuses more than four MiB as observation_total_bytes
+replacement.RA01-B2 observe reports an unsafe entry before a later size limit
+replacement.RA01-B2 observe reports the first error in checks, findings, checkpoint order
+replacement.RA01-B2 orchestrator label flips to available for a catalog stub verb
+replacement.RA01-B2 orchestrator labels every catalog verb available and every future verb future
+replacement.RA01-B2 orchestrator lists only the prescriptions that drive the job
+replacement.RA01-B2 orchestrator prompt carries five sections in order
+replacement.RA01-B2 orchestrator prompt is graph only
+replacement.RA01-B2 orchestrator reads only the selected job
+replacement.RA01-B2 orchestrator refuses an unlisted job as reference selection.job
+replacement.RA01-B2 orchestrator sections render shape roles and graph
+replacement.RA01-B2 orchestrator selected-job mode refuses an unlisted job declaration
+replacement.RA01-B2 orchestrator selected-job mode still checks the listed job identity
+replacement.RA01-B2 orchestrator_context_v1 is refused as an external projection input
+replacement.RA01-B2 prompt envelope fields digest bytes and kind per verb
+replacement.RA01-B2 prompt inputs list sorted file entries and registry header
+replacement.RA01-B2 prompts carry their sections in contract order
+replacement.RA01-B2 raw_error block equals the diagnostic bytes with DEL and C1 raw
+replacement.RA01-B2 raw_error fence outgrows backtick runs and adds one LF only when missing
+replacement.RA01-B2 read_diagnostic refuses links and special files with the existing messages
+replacement.RA01-B2 rejection excerpt for an unresolvable path is the fixed line
+replacement.RA01-B2 rejection excerpt resolves job.roles[1].work to the work field
+replacement.RA01-B2 rejection inputs carry the diagnostic size and file digest
+replacement.RA01-B2 render and load keep Listed job not captured outside the authoring modes
+replacement.RA01-B2 schema text format sorts fields and nests records
+replacement.RA01-B2 schema text lists spec job and workspace fields generated from the schema tables
+replacement.RA01-B2 shape catalog lists pipeline then fanout_review
+replacement.RA01-B2 spec prompt ends with the critique step line and embeds no host path
+replacement.RA01-B2 spec summary lists work checks and paths sorted by id
+replacement.RA01-B2 spec-prompt captures the workspace without the spec while critique and ingest capture the spec
+replacement.RA01-B2 spec-prompt validates the workspace and registry only

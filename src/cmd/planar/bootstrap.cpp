@@ -151,19 +151,50 @@ struct authoring_families {
     return total;
   }
   /// Dispatch the selected authoring verb, or answer nothing when none is selected.
-  std::optional<response> dispatch() const {
+  /// @param vm Stack VM retained for the one authoring invocation.
+  std::optional<response> dispatch(engine::command_vm* vm) const {
+    const authoring::executor execute = [vm](authoring::verb which, const authoring::inputs& values) {
+      engine::command_authoring_options options;
+      switch (which) {
+      case authoring::verb::spec_prompt:
+        options.verb = engine::command_authoring_verb::spec_prompt;
+        break;
+      case authoring::verb::critique:
+        options.verb = engine::command_authoring_verb::critique;
+        break;
+      case authoring::verb::ingest:
+        options.verb = engine::command_authoring_verb::ingest;
+        break;
+      case authoring::verb::explain_rejection:
+        options.verb = engine::command_authoring_verb::explain_rejection;
+        break;
+      case authoring::verb::observe:
+        options.verb = engine::command_authoring_verb::observe;
+        break;
+      case authoring::verb::orchestrator:
+        options.verb = engine::command_authoring_verb::orchestrator;
+        break;
+      }
+      options.workspace  = values.workspace;
+      options.registry   = values.registry;
+      options.diagnostic = values.diagnostic;
+      options.from       = values.from;
+      options.job        = values.job;
+      return execute_authoring(std::move(options), vm);
+    };
+    const authoring::readers io = authoring::process_readers();
     if (commands[0]->count() == 1)
-      return authoring::spec_prompt_command(spec_prompt);
+      return authoring::spec_prompt_command(spec_prompt, io, execute);
     if (commands[1]->count() == 1)
-      return authoring::critique_command(critique);
+      return authoring::critique_command(critique, io, execute);
     if (commands[2]->count() == 1)
-      return authoring::ingest_command(ingest);
+      return authoring::ingest_command(ingest, io, execute);
     if (commands[3]->count() == 1)
-      return authoring::explain_rejection_command(explain_rejection);
+      return authoring::explain_rejection_command(explain_rejection, io, execute);
     if (commands[4]->count() == 1)
-      return authoring::observe_command(observe);
+      return authoring::observe_command(observe, io, execute);
     if (commands[5]->count() == 1)
-      return authoring::orchestrator_command(orchestrator);
+      return authoring::orchestrator_command(orchestrator, io, execute);
     return std::nullopt;
   }
 };
@@ -431,7 +462,7 @@ response invoke(std::span<const std::string_view> arguments) {
     if (!catalog_matches(vm->catalog(), root))
       return detail::failed(detail::native_error({"internal", "Invalid embedded command catalog"}));
 #ifdef PLANAR_AUTHORING_BUNDLE
-    if (auto answered = extra.dispatch())
+    if (auto answered = extra.dispatch(&*vm))
       return std::move(*answered);
 #endif
     if (families.load_command->count() == 1)

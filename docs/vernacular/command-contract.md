@@ -22,6 +22,8 @@ rows (`spec-prompt`, `critique`, `ingest`, `explain-rejection`, `observe`, `orch
 eleven mandatory rows at the RA01 integrated gate; it adds the six root-help lines, the opaque host-path slots
 `diagnostic` and `from`, and the services `capture_authoring`, `capture_orchestrator`, `read_diagnostic` and
 `read_observation_directory`, with their exact result values in the authoring contract (RA-2, RA-5, RA-6),
+`capture_orchestrator` returns the sealed catalog's command names as a fifth key `commands` (authoring-contract
+RA-2, operator decision 2026-10-31),
 and it scopes the "no directory listing" sentence below to every family except `observe`. Nothing is shipped
 by this pointer; the rows and bytes below stay current until
 that gate.

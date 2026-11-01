@@ -37,6 +37,7 @@ struct inputs {
   std::string registry;   ///< Registry argument.
   std::string diagnostic; ///< Diagnostic argument.
   std::string from;       ///< Observation directory argument.
+  std::string job;        ///< Job ID argument of `orchestrator`; never a path, untouched by prepare_inputs.
 };
 /// Resolve the host paths a verb names into canonical spellings.
 /// @param which Selected verb.
@@ -47,6 +48,15 @@ std::expected<void, engine::diagnostic> prepare_inputs(verb which, inputs& value
 /// The refusal response of an authoring verb whose implementation is not wired.
 /// @return Buffered response.
 response refuse_stub();
+/// Native execution step of one verb: receives the prepared inputs and answers the final response.
+using executor = std::function<response(verb, const inputs&)>;
+/// Run one authoring verb end to end: prepare the inputs, then hand them to the executor.
+/// @param which Selected verb.
+/// @param values Raw option values.
+/// @param io Process observation seam.
+/// @param execute Native execution step; an empty executor answers the stub refusal.
+/// @return Buffered response; a path-stage refusal is never replaced by the executor.
+response run(verb which, inputs values, const readers& io, const executor& execute);
 /// Run one authoring verb end to end.
 /// @param which Selected verb.
 /// @param values Raw option values.

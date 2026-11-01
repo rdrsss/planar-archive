@@ -53,13 +53,12 @@ if registration then
     local facts=exported.value
     return result({version=1,kind="export",ledger=facts.ledger,revision=facts.revision,source=facts.source})
   end
-  local function authoring_refusal() return failed({code='internal',message='Invalid embedded command protocol',field=''}) end
-  local function spec_prompt_command(invocation,context) return authoring_refusal() end
-  local function critique_command(invocation,context) return authoring_refusal() end
-  local function ingest_command(invocation,context) return authoring_refusal() end
-  local function explain_rejection_command(invocation,context) return authoring_refusal() end
-  local function observe_command(invocation,context) return authoring_refusal() end
-  local function orchestrator_command(invocation,context) return authoring_refusal() end
+  local function spec_prompt_command(invocation,context) return prompts_spec_prompt(invocation,context) end
+  local function critique_command(invocation,context) return prompts_critique(invocation,context) end
+  local function ingest_command(invocation,context) return prompts_ingest(invocation,context) end
+  local function explain_rejection_command(invocation,context) return prompts_explain_rejection(invocation,context) end
+  local function observe_command(invocation,context) return observe_directory_command(invocation,context) end
+  local function orchestrator_command(invocation,context) return orchestrator_command_impl(invocation,context) end
   local function option(name,kind,required)
     return {name="--"..name,type=kind,required=required,help="Explicit "..name.." value"}
   end

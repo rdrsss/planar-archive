@@ -4567,10 +4567,10 @@ std::int64_t c02_boundary(bool outputs) {
 // The unpadded roots measured 4524 (macOS, 36 bytes) and 4468 (Linux, 28 bytes).
 #if defined(__APPLE__)
 constexpr std::int64_t c02_outputs_gap  = 4742;
-constexpr std::int64_t c02_off_boundary = 227525; // measured on macOS in Debug and RelWithDebInfo
+constexpr std::int64_t c02_off_boundary = 227275; // macOS final pin of RA01-B-W2 (was 227525; see c02-pin.md)
 #else
 constexpr std::int64_t c02_outputs_gap  = 4737;
-constexpr std::int64_t c02_off_boundary = 227551; // measured on Linux in Debug and RelWithDebInfo
+constexpr std::int64_t c02_off_boundary = 227301; // Linux final pin of RA01-B-W2 (was 227551; Debug, see c02-pin.md)
 #endif
 // Both re-pins (macOS 228586 to 227593 and Linux 228612 to 227619 after gate run 1; macOS 227593 to 227525 and Linux 227619 to
 // 227551 after the probe repair, 68 padding bytes) are authorised by the operator decision of 2026-10-30 ('re-pin and resume').
@@ -5277,6 +5277,18 @@ TEST_CASE("RA01-B1 reserved projection collision field follows registration orde
   for (const auto& id : ra01_projection_ids) {
     ra01_conflict(ra01_projection("zzz") + "; " + ra01_projection(id), "catalog.projections[2]");
     ra01_conflict(ra01_projection(id) + "; " + ra01_projection("aaa"), "catalog.projections[1]");
+  }
+}
+// W2-73. Mutant killed: the registration input check (runtime.cpp, projection descriptor input) accepting
+// orchestrator_context_v1, which is reserved for the embedded orchestrator projection and is never an external input.
+// Controls in the same case: the admitted role_context_v1 spelling registers, and the reserved projection IDs stay refused.
+TEST_CASE("RA01-B2 orchestrator_context_v1 is refused as an external projection input", "[external-registration][ra01-b2]") {
+  REQUIRE(command_vm::create(profile({projection_callable(projection_section(), "role_context_v1")})));
+  REQUIRE(command_vm::create(profile({projection_callable(projection_section(), "history_snapshot_v1")})));
+  refused(projection_callable(projection_section(), "orchestrator_context_v1"), "internal");
+  refused(projection_callable(projection_section(), "orchestrator_context_v1", "mine_projection"), "internal");
+  for (const auto& id : ra01_projection_ids) {
+    ra01_conflict(ra01_projection(id), "catalog.projections[1]");
   }
 }
 // Mutant: skip the reserved command pre-check whenever the catalog also lists a projection.

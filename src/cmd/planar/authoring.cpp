@@ -197,4 +197,15 @@ response run_stub(verb which, inputs values, const readers& io) {
     return {4, "", ""};
   }
 }
+response run(verb which, inputs values, const readers& io, const executor& execute) {
+  try {
+    if (auto prepared = prepare_inputs(which, values, io); !prepared)
+      return detail::failed(detail::native_error(prepared.error()));
+    if (!execute)
+      return refuse_stub();
+    return execute(which, values);
+  } catch (...) {
+    return {4, "", ""};
+  }
+}
 } // namespace planar::cmd::authoring

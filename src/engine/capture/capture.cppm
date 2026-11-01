@@ -77,4 +77,29 @@ private:
   native_capture_session       _native;
   std::shared_ptr<budget_sink> _budget;
 };
+/// @brief Build the shared capture resource refusal for a named bound.
+/// @param limit Bound name reported in the details, such as `diagnostic_bytes` or `prompt_bytes`.
+/// @param maximum Bound value reported in the details.
+/// @return `resource_limit` with the existing message `Capture limit exceeded`; no new message exists.
+diagnostic capture_limit(std::string_view limit, std::size_t maximum);
+/// Facts of one bounded diagnostic file read through a capture session.
+struct captured_diagnostic {
+  std::string   bytes;  ///< Exact retained file bytes.
+  std::uint64_t size;   ///< Byte count of the retained file.
+  std::string   digest; ///< `file_bytes_v1` digest of the retained bytes.
+};
+/// @brief Read one already path-stage-resolved diagnostic file under the session's no-follow confinement and recheck.
+/// @param session Discovery session that registers the file and verifies it at finish.
+/// @param file Absolute canonical host file path.
+/// @param maximum Largest accepted size in bytes, checked from the descriptor before allocation.
+/// @return Bytes, size and digest, or a typed capture refusal with existing messages only.
+/// @note A size over `maximum`, the post-read bound and digest or allocation failures (`bad_alloc`, `Hash allocation
+/// failed`, `Canonical allocation failed`) are `resource_limit` `diagnostic_bytes`. After the gate passes, `add_input` and
+/// `read` failures are `capture_changed` `File changed during read`; a `finish` result of `capture_changed` stays
+/// `capture_changed`, a detail-less `finish` `resource_limit` is `diagnostic_bytes`, and any other `finish` or digest
+/// result passes through unchanged (unreachable from this function). A symbolic link is `path_denied`; a failed open or a
+/// non-regular file is `io`.
+/// @note Not thread-safe with respect to `session`.
+std::expected<captured_diagnostic, diagnostic> capture_diagnostic(capture_session& session, std::string_view file,
+                                                                  std::size_t maximum);
 } // namespace planar::engine

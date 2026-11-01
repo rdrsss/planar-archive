@@ -232,10 +232,10 @@ local function route_workspace(input)
   end
   return ctx.finish(engine.object(out))
 end
-local function normalize_bundle(input,context)
+local function normalize_bundle(input,context,mode)
   local ctx=schema_context({},false)
   -- Envelope is driver data, but reject malformed provenance rather than echoing it.
-  local envelope=record({workspace=req(record({file=req(PATH),value=req(primitive("any"))})),spec=req(record({file=req(PATH),value=req(primitive("any"))})),jobs=req(list(record({file=req(PATH),value=req(primitive("any"))}))),registry=req(record({file=req(PATH),bytes=req(primitive("raw"))})),files=req(list(record({path=req(PATH),bytes=req(primitive("raw"))})))})
+  local envelope=record({workspace=req(record({file=req(PATH),value=req(primitive("any"))})),spec=(mode=="workspace" and opt(primitive("any")) or req(record({file=req(PATH),value=req(primitive("any"))}))),jobs=req(list(record({file=req(PATH),value=req(primitive("any"))}))),registry=req(record({file=req(PATH),bytes=req(primitive("raw"))})),files=req(list(record({path=req(PATH),bytes=req(primitive("raw"))})))})
   local safe=ctx.normalize(input,envelope,"","bundle")
   if #ctx.errors>0 then return ctx.finish({}) end
   local files={}
@@ -251,9 +251,9 @@ local function normalize_bundle(input,context)
   -- diagnostics use only validated logical paths.
   local w=ctx.normalize(safe.workspace.value,workspace_schema,safe.workspace.file,"workspace")
   workspace_rules(ctx,w,safe.workspace.file)
-  local s=ctx.normalize(safe.spec.value,spec_schema,safe.spec.file,"spec")
+  local s=mode~="workspace" and ctx.normalize(safe.spec.value,spec_schema,safe.spec.file,"spec") or nil
   for _,f in ipairs(s and s.facets or {}) do f.kind="files"; f.normalizer="exact_bytes_v1" end
-  if s and s.goal and s.goal.bytes=="" then ctx.issue(safe.spec.file,"spec.goal","Goal must be nonempty") end
+  if mode~="workspace" and s and s.goal and s.goal.bytes=="" then ctx.issue(safe.spec.file,"spec.goal","Goal must be nonempty") end
   local selected_job_schema=job_schema
   if context then
     profile_shape(context,"")
@@ -264,7 +264,7 @@ local function normalize_bundle(input,context)
   end
   local jobs=engine.array({})
   local supplied,seen_jobs={},{}
-  for _,entry in ipairs(safe.jobs) do
+  for _,entry in ipairs(mode~="workspace" and safe.jobs or {}) do
     if seen_jobs[entry.file] then ctx.issue(entry.file,"job","Duplicate job declaration","reference") end
     local j=ctx.normalize(entry.value,selected_job_schema,entry.file,"job")
     job_rules(ctx,j,entry.file,context)
@@ -287,19 +287,21 @@ local function normalize_bundle(input,context)
     local valid=true
     for _,e in ipairs(ctx.errors) do if e.code=="path_denied" then valid=false end end
     if valid then
-      if spec_path and safe.spec.file~=spec_path then ctx.issue(safe.spec.file,"spec","Spec path does not match workspace","reference") end
+      if mode~="workspace" and spec_path and safe.spec.file~=spec_path then ctx.issue(safe.spec.file,"spec","Spec path does not match workspace","reference") end
       local wanted={}
-      for _,entry in ipairs(w.jobs or {}) do
+      local match_jobs=mode~="workspace" and mode~="spec_without_jobs"
+      for _,entry in ipairs(match_jobs and w.jobs or {}) do
         local path=paths[entry]
         if path then
           local j=supplied[path]
           wanted[path]=true
-          if not seen_jobs[path] then ctx.issue(path,"job","Listed job not captured","reference")
+          if not seen_jobs[path] then
+            if mode~="selected_job" then ctx.issue(path,"job","Listed job not captured","reference") end
           elseif j and j.id and j.id~=entry.id then ctx.issue(path,"job.id","Returned job ID does not match workspace","reference")
           elseif j then jobs[#jobs+1]=engine.object({file=path,value=j}) end
         end
       end
-      for path in pairs(seen_jobs) do if not wanted[path] then ctx.issue(path,"job","Unlisted job declaration","reference") end end
+      for path in pairs(match_jobs and seen_jobs or {}) do if not wanted[path] then ctx.issue(path,"job","Unlisted job declaration","reference") end end
     end
   end
   local ok,r=pcall(json_parse,safe.registry.bytes,safe.registry.file)
@@ -314,5 +316,5 @@ local function normalize_bundle(input,context)
   if ok and r then
     for i,t in ipairs(r.toolchains or {}) do if t.command and t.command[1]=="" then ctx.issue(safe.registry.file,"registry.toolchains["..ctx.index(t,i).."].command[1]","Executable must be nonempty") end end
   end
-  return ctx.finish(engine.object({workspace=w,spec=s,jobs=jobs,registry=ok and r or nil,workspace_file=safe.workspace.file,spec_file=safe.spec.file,registry_file=safe.registry.file}))
+  return ctx.finish(engine.object({workspace=w,spec=s,jobs=jobs,registry=ok and r or nil,workspace_file=safe.workspace.file,spec_file=mode~="workspace" and safe.spec.file or nil,registry_file=safe.registry.file}))
 end

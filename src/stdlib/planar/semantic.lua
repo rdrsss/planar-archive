@@ -54,11 +54,11 @@ local function semantic_cycle(vertices,adjacency)
     end
   end
 end
-local function prepare_shapes(input,context)
+local function prepare_shapes(input,context,mode)
   local ctx=schema_context({},false)
   local envelope=ctx.normalize(input,record({bundle=req(primitive("any")),capture=req(primitive("any"))}),"","validation")
   if #ctx.errors>0 then return ctx.finish({}) end
-  local normalized=normalize_bundle(envelope.bundle,context)
+  local normalized=normalize_bundle(envelope.bundle,context,mode)
   if normalized.error then return normalized end
   local b=normalized.value
   local capture=envelope.capture
@@ -71,6 +71,12 @@ local function prepare_shapes(input,context)
   else ctx.issue("","capture.status","Expected captured or not_captured") end
   if #ctx.errors>0 then return ctx.finish({}) end
   local w,s=b.workspace,b.spec
+  local raw_spec
+  if mode=="workspace" then
+    -- No spec is normalized in this mode; empty collections make every spec rule vacuous.
+    s={work={},contracts={},facets={},milestones={},constraints={},prescriptions={},questions={},frozen={},dependencies={}}
+    raw_spec={}
+  else raw_spec=envelope.bundle.spec.value end
   local raw_registry=json_parse(envelope.bundle.registry.bytes,b.registry_file)
   local work,contracts,facets=semantic_map(s.work),semantic_map(s.contracts),semantic_map(s.facets)
   local checks,toolchains=semantic_map(b.registry.checks),semantic_map(b.registry.toolchains)
@@ -83,7 +89,6 @@ local function prepare_shapes(input,context)
     end
     return 1
   end
-  local raw_spec=envelope.bundle.spec.value
   local function sf(collection,id,suffix)
     return "spec."..collection.."["..original_index(raw_spec[collection],id).."]"..(suffix or "")
   end
@@ -486,8 +491,8 @@ local function finish_shapes(input,legacy)
   return ctx.finish(base)
 end
 
-local function validate_bundle(input,context)
-  local prepared=prepare_shapes(input,context)
+local function validate_bundle(input,context,mode)
+  local prepared=prepare_shapes(input,context,mode)
   if prepared.error then return prepared end
   if not context then return engine.object({value=prepared.value.base}) end
   local results=engine.array({})

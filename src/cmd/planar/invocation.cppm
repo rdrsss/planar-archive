@@ -13,6 +13,14 @@ export namespace planar::cmd {
 /// @return Complete buffered response; export publication uncertainty survives every later failure.
 /// @note Independent calls share no mutable state. No Lua callback executes under a native write lock.
 response execute(engine::command_options options, engine::command_vm* registered = nullptr);
+#ifdef PLANAR_AUTHORING_BUNDLE
+/// Execute one embedded-only authoring verb through the runtime's separate authoring entry; no profile, no ledger.
+/// @param options Authoring intent built from already prepared inputs; host spellings are absolute.
+/// @param registered Optional already created VM retained by the caller; a fresh one is created when null.
+/// @return Complete buffered response; prompt and observation outputs over 1048576 bytes are `resource_limit`.
+/// @note Compiled only with PLANAR_AUTHORING_BUNDLE; the production module has no such entry (I25).
+response execute_authoring(engine::command_authoring_options options, engine::command_vm* registered = nullptr);
+#endif
 /// Prepare all selected private paths after catalog admission and before native service creation.
 /// @param options Invocation-local typed options; paths become absolute with parent spelling preserved.
 /// @param cwd_reader Read cwd once only when at least one selected path is relative; failures stay redacted.

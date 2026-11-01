@@ -48,6 +48,54 @@ struct temporary {
     std::ofstream(p, std::ios::binary) << bytes;
   }
 };
+/// Whole text of a product source file, read by the source-guard tests.
+std::string read_source(const std::filesystem::path& source) {
+  std::ifstream in(source, std::ios::binary);
+  return std::string{std::istreambuf_iterator<char>(in), {}};
+}
+/// Whitespace-stripped text: the spelling every source guard compares against.
+std::string squash_space(std::string_view text) {
+  std::string out;
+  for (const char c : text)
+    if (!std::isspace(static_cast<unsigned char>(c)))
+      out += c;
+  return out;
+}
+/// Number of non-overlapping occurrences of needle in text.
+std::size_t occurrences(std::string_view text, std::string_view needle) {
+  std::size_t n = 0;
+  for (auto at = text.find(needle); at != std::string_view::npos; at = text.find(needle, at + needle.size()))
+    ++n;
+  return n;
+}
+bool has_text(std::string_view text, std::string_view needle) {
+  return text.find(needle) != std::string_view::npos;
+}
+/// Body of a helper from its squashed signature to the earliest following helper signature or capture_limit.
+std::string_view helper_body(std::string_view text, std::string_view signature) {
+  const auto start = text.find(signature);
+  if (start == std::string_view::npos)
+    return {};
+  auto end = text.size();
+  for (const std::string_view next :
+       {"diagnosticpost_gate_failure(diagnosticerror,std::size_tmaximum){",
+        "diagnosticseal_failure(diagnosticerror,std::size_tmaximum){",
+        "diagnosticdigest_failure(diagnosticerror,std::size_tmaximum){", "diagnosticcapture_limit("}) {
+    const auto at = text.find(next, start + signature.size());
+    if (at != std::string_view::npos && at < end)
+      end = at;
+  }
+  return text.substr(start, end - start);
+}
+/// Restores a path's permission bits on scope exit so the temporary tree can be removed.
+struct mode_guard {
+  std::filesystem::path  path;
+  std::filesystem::perms restore;
+  ~mode_guard() {
+    std::error_code ignored;
+    std::filesystem::permissions(path, restore, std::filesystem::perm_options::replace, ignored);
+  }
+};
 } // namespace
 TEST_CASE("capture retains sorted bytes and discovered references", "[capture]") {
   temporary t;
@@ -783,4 +831,273 @@ TEST_CASE("X06 D C01 capture session threads the factory budget through declarat
   CHECK(sink->native >= reference.size() + declaration_source.size());
   // The 5000-iteration loop executes inside the declaration VM and reaches the same sink.
   CHECK(sink->instructions >= 4000);
+}
+TEST_CASE("RA01-B2 capture_diagnostic refuses a file changed before verification", "[capture][ra01]") {
+  // Mutants: capture_diagnostic never calls session.finish() (no recheck: every replacement case is accepted);
+  // the file is opened without no-follow (the symlink case reads the target); regular-file check dropped (FIFO case).
+  // C01-14: the symlink and FIFO sections assert the Messages pairs of authoring-contract.md:492-494 (symlink ->
+  // path_denied / Explicit input file is a symbolic link; FIFO -> io / Explicit input must be a regular file); restoring
+  // the old pair (path_denied / Only regular files can be captured in capture.cpp:89 or :96) fails both sections.
+  SECTION("unchanged control reads bytes, size and digest") {
+    temporary t;
+    t.put("diag.json", "{\"code\":\"schema\"}\n");
+    capture_session c;
+    int             hook = 0;
+    c.before_verification([&] { ++hook; });
+    const auto result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE(result);
+    CHECK(hook == 1);
+    CHECK(result->bytes == "{\"code\":\"schema\"}\n");
+    CHECK(result->size == 18);
+    CHECK(result->digest.starts_with("xxh3_128:"));
+    CHECK(result->digest.size() == 9 + 32);
+  }
+  SECTION("bytes replaced in place") {
+    temporary t;
+    t.put("diag.json", "old");
+    capture_session c;
+    c.before_verification([&] { t.put("diag.json", "new"); });
+    const auto result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "capture_changed");
+    CHECK(result.error().message == "File changed during read");
+  }
+  SECTION("file replaced by a new inode") {
+    temporary t;
+    t.put("diag.json", "old");
+    capture_session c;
+    c.before_verification([&] {
+      t.put("other.json", "old");
+      std::filesystem::rename(t.path / "other.json", t.path / "diag.json");
+    });
+    const auto result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "capture_changed");
+  }
+  SECTION("file removed") {
+    temporary t;
+    t.put("diag.json", "old");
+    capture_session c;
+    c.before_verification([&] { std::filesystem::remove(t.path / "diag.json"); });
+    const auto result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "capture_changed");
+  }
+  SECTION("symlink leaf is refused and not followed") {
+    temporary t;
+    t.put("target.json", "secret");
+    std::filesystem::create_symlink("target.json", t.path / "diag.json");
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "path_denied");
+    CHECK(result.error().message == "Explicit input file is a symbolic link");
+  }
+  SECTION("special file is refused without blocking") {
+    temporary t;
+    REQUIRE(::mkfifo((t.path / "diag.json").c_str(), 0600) == 0);
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "io");
+    CHECK(result.error().message == "Explicit input must be a regular file");
+  }
+}
+
+TEST_CASE("RA01-B2 capture_diagnostic bounds the file at 65536 bytes from the descriptor", "[capture][ra01]") {
+  // Mutants: comparison against 65537 or >= (the boundary pair flips); size read before the check is not observable
+  // here; the grown-by-hook case is refused by the recheck, not by the size gate.
+  SECTION("exactly 65536 bytes is accepted") {
+    temporary t;
+    t.put("diag.json", std::string(65536, 'x'));
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE(result);
+    CHECK(result->size == 65536);
+    CHECK(result->bytes.size() == 65536);
+  }
+  SECTION("65537 bytes is refused from the descriptor size") {
+    temporary t;
+    t.put("diag.json", std::string(65537, 'x'));
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "resource_limit");
+    CHECK(result.error().limit == "diagnostic_bytes");
+    CHECK(result.error().maximum == 65536);
+  }
+  SECTION("the limit is the caller's maximum") {
+    temporary t;
+    t.put("diag.json", std::string(11, 'x'));
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 10);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().limit == "diagnostic_bytes");
+    CHECK(result.error().maximum == 10);
+  }
+  SECTION("a file grown by the verification hook is refused by the recheck") {
+    temporary t;
+    t.put("diag.json", std::string(65536, 'x'));
+    capture_session c;
+    c.before_verification([&] { t.put("diag.json", std::string(65537, 'x')); });
+    const auto result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "capture_changed");
+  }
+}
+
+TEST_CASE("RA01-B2 C01 capture_diagnostic refuses a symlink as a symbolic link", "[capture][ra01]") {
+  // Kills C01-09: dropping O_NOFOLLOW from the gate open. Without it the dangling link gives io / Cannot resolve explicit
+  // input path, the 70000-byte link gives resource_limit diagnostic_bytes, and the small-file link passes the gate and then
+  // the native read's fstatat(AT_SYMLINK_NOFOLLOW) fails path_denied, which post_gate_failure remaps to capture_changed /
+  // File changed during read (not success); each outcome differs from the required pair. Kills C01-10: the ELOOP branch
+  // restored to path_denied / Only regular files can be captured.
+  SECTION("dangling symlink") {
+    temporary t;
+    std::filesystem::create_symlink("missing.json", t.path / "diag.json");
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "path_denied");
+    CHECK(result.error().message == "Explicit input file is a symbolic link");
+  }
+  SECTION("symlink to a 70000-byte regular file") {
+    temporary t;
+    t.put("target.json", std::string(70000, 'x'));
+    std::filesystem::create_symlink("target.json", t.path / "diag.json");
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "path_denied");
+    CHECK(result.error().message == "Explicit input file is a symbolic link");
+  }
+  SECTION("symlink to a small regular file") {
+    temporary t;
+    t.put("target.json", "{}");
+    std::filesystem::create_symlink("target.json", t.path / "diag.json");
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "path_denied");
+    CHECK(result.error().message == "Explicit input file is a symbolic link");
+  }
+}
+
+TEST_CASE("RA01-B2 C01 capture_diagnostic refuses a non-regular file as io", "[capture][ra01]") {
+  // Kills C01-11: restoring path_denied / Only regular files can be captured at capture.cpp:96, or deleting the S_ISREG
+  // refusal. The FIFO is opened O_NONBLOCK by the gate, so this case cannot block; the directory is opened read-only and
+  // refused by the same check.
+  SECTION("FIFO") {
+    temporary t;
+    REQUIRE(::mkfifo((t.path / "diag.json").c_str(), 0600) == 0);
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "io");
+    CHECK(result.error().message == "Explicit input must be a regular file");
+  }
+  SECTION("directory") {
+    temporary t;
+    std::filesystem::create_directory(t.path / "diag.json");
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "io");
+    CHECK(result.error().message == "Explicit input must be a regular file");
+  }
+}
+
+TEST_CASE("RA01-B2 C01 capture_diagnostic maps a failed open to cannot resolve", "[capture][ra01]") {
+  // Kills C01-12: restoring io / Cannot inspect confined input at capture.cpp:90 for a failed open that is not ELOOP.
+  // The unreadable section is root-aware: as root, mode-000 files still open, so it records SUCCEED.
+  SECTION("missing path") {
+    temporary       t;
+    capture_session c;
+    const auto      result = capture_diagnostic(c, (t.path / "missing.json").string(), 65536);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "io");
+    CHECK(result.error().message == "Cannot resolve explicit input path");
+  }
+  SECTION("unreadable file") {
+    if (::geteuid() == 0) {
+      SUCCEED("permission denial is not observable as root");
+    } else {
+      temporary t;
+      t.put("diag.json", "{}");
+      mode_guard restore{t.path / "diag.json", std::filesystem::perms::owner_read | std::filesystem::perms::owner_write};
+      std::filesystem::permissions(t.path / "diag.json", std::filesystem::perms::none, std::filesystem::perm_options::replace);
+      capture_session c;
+      const auto      result = capture_diagnostic(c, (t.path / "diag.json").string(), 65536);
+      REQUIRE_FALSE(result);
+      CHECK(result.error().code == "io");
+      CHECK(result.error().message == "Cannot resolve explicit input path");
+    }
+  }
+}
+
+TEST_CASE("RA01-B2 C01 capture_diagnostic maps a post-gate add_input failure to file changed", "[capture][ra01]") {
+  // Kills C01-34: the add_input branch returning std::move(added.error()) unmapped. The gate path sub/../diag.json passes
+  // the gate (sub exists and the last component is a regular file), then native add_input refuses path_denied /
+  // Parent root traversal forbidden, which the remap must turn into capture_changed / File changed during read.
+  // Deterministic and seam-free: no hook between the gate and add_input is needed.
+  temporary t;
+  t.put("diag.json", "{\"code\":\"schema\"}\n");
+  std::filesystem::create_directories(t.path / "sub");
+  capture_session c;
+  const auto      result = capture_diagnostic(c, (t.path / "sub" / ".." / "diag.json").string(), 65536);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == "capture_changed");
+  CHECK(result.error().message == "File changed during read");
+}
+
+TEST_CASE("RA01-B2 C01 capture_diagnostic bad_alloc refusal carries diagnostic_bytes", "[capture][ra01]") {
+  // Kills C01-13: the outer bad_alloc catch returning the two-argument diagnostic again (no limit name, no maximum).
+  // SOURCE GUARD with a stated limit: no allocator fault hook and no seam exists, and none may be added, so the handler is
+  // pinned by its anchored spelling and by the absence of the bare two-argument pair.
+  const auto text = squash_space(read_source(std::filesystem::path(__FILE__).parent_path() / "capture.cpp"));
+  REQUIRE_FALSE(text.empty());
+  CHECK(occurrences(text, "catch(conststd::bad_alloc&){returnstd::unexpected(capture_limit(\"diagnostic_bytes\",maximum));}") ==
+        1);
+  CHECK_FALSE(has_text(text, "diagnostic{\"resource_limit\",\"Capturelimitexceeded\"}"));
+}
+
+TEST_CASE("RA01-B2 C01 capture_diagnostic post-gate failures are remapped at every native call", "[capture][ra01]") {
+  // Kills C01-35 (the add_input, read and finish remaps deleted or the finish pass-through), C01-36 (the detail-less
+  // resource_limit rule deleted from post_gate_failure or seal_failure) and C01-37 (the file_digest allocation remap
+  // deleted). The digest_failure assertions also kill C02-01 (the Canonical allocation alternative dropped), C02-03 (the
+  // || turned into &&, or a wrong limit name or maximum in the return) and C02-35 (a separate canonical_bytes branch
+  // before the Hash branch). SOURCE GUARD with a stated limit: no allocator fault seam exists, and no seam exists between
+  // the gate and add_input or read, so those failures are pinned by source spelling only.
+  const auto text = squash_space(read_source(std::filesystem::path(__FILE__).parent_path() / "capture.cpp"));
+  REQUIRE_FALSE(text.empty());
+  SECTION("add_input site") {
+    CHECK(has_text(text, "post_gate_failure(std::move(added.error()),maximum)"));
+  }
+  SECTION("read site") {
+    CHECK(has_text(text, "post_gate_failure(std::move(read.error()),maximum)"));
+  }
+  SECTION("finish site") {
+    CHECK(has_text(text, "seal_failure(std::move(sealed.error()),maximum)"));
+  }
+  SECTION("detail-less limit sites in the post_gate_failure and seal_failure bodies") {
+    const auto post = helper_body(text, "diagnosticpost_gate_failure(diagnosticerror,std::size_tmaximum){");
+    const auto seal = helper_body(text, "diagnosticseal_failure(diagnosticerror,std::size_tmaximum){");
+    CHECK_FALSE(post.empty());
+    CHECK_FALSE(seal.empty());
+    for (const auto body : {post, seal}) {
+      CHECK(has_text(body, "limit.empty()"));
+      CHECK(has_text(body, "capture_limit(\"diagnostic_bytes\",maximum)"));
+    }
+  }
+  SECTION("file_digest allocation site") {
+    CHECK(has_text(text, "digest_failure(std::move(digest.error()),maximum)"));
+    const auto digest = helper_body(text, "diagnosticdigest_failure(diagnosticerror,std::size_tmaximum){");
+    CHECK_FALSE(digest.empty());
+    CHECK(has_text(digest, "Hashallocationfailed"));
+    CHECK(has_text(digest, "Canonicalallocationfailed"));
+    CHECK(occurrences(digest, "if(error.code==\"resource_limit\"&&(error.message==\"Hashallocationfailed\"||error.message=="
+                              "\"Canonicalallocationfailed\"))"
+                              "returncapture_limit(\"diagnostic_bytes\",maximum);") == 1);
+    CHECK(occurrences(digest, "capture_limit(") == 1);
+  }
 }

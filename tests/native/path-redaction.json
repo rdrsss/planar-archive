@@ -585,6 +585,26 @@
    "original_sha256": "39454e6fa3f6302fbff6b3d1b4442a2eb6f5cf1474945e6a4071c53cf5f7e372",
    "redacted_sha256": "080d8f8c2bc36247503ba306b5345c454a44409d358cb1b43c89ccdac76b9235"
   },
+  "tests/native/v5-02-ra01-b-w2-evidence/probes/raw/driver/chain.sh": {
+   "original_sha256": "31b98ce7a871e218faee273b5f4a029a944ce06e3d746aeaf0ccd96546d3743f",
+   "redacted_sha256": "415941b9be707204bfdd93474dad9320680d5fffbb46df33a964c26250c9ed89"
+  },
+  "tests/native/v5-02-ra01-b-w2-evidence/probes/raw/driver/drv.py": {
+   "original_sha256": "5b74cf8babc4a5126873f8d94932dd69bc58917c25d56871da1b4d4f55d1c307",
+   "redacted_sha256": "f3ab7a648f2c38dc253e98d2440b967e8e913e7556f211e1e53d5fcbc17fa6f7"
+  },
+  "tests/native/v5-02-ra01-b-w2-evidence/probes/raw/driver/gen.py": {
+   "original_sha256": "2a92685dc846c6ec98bd7a45199d5e9f07ad3b4c496edf773ed2375dc5307c45",
+   "redacted_sha256": "f9fee88ecd61208e6e4a3461134362442386c59fb65f6bb6914d24ae6bcd23f2"
+  },
+  "tests/native/v5-02-ra01-b-w2-evidence/probes/raw/driver/w81.py": {
+   "original_sha256": "c79a9db9becb9cf62c680aa400318ea391c500c423eebc7b5375efcf5fe4cf5b",
+   "redacted_sha256": "b2dfe9267b4496081aa5b1a650ebce5bb839cad3bbbb2bac51c7fcbf3496891c"
+  },
+  "tests/native/v5-02-ra01-b-w2-evidence/red/rows.tsv": {
+   "original_sha256": "257bcf527e5428d4c6c527f9539db9f4642b35c84c2be8c67a5c02e1fdfb0b6f",
+   "redacted_sha256": "5716b101e39407878a2c6f6804ff0cdf8754cb9b2227ad4769cbbc9d54fd5180"
+  },
   "tests/native/v5-02-x01-evidence/commands.json": {
    "original_sha256": "397ef2f41b5d362b0e2049abe0ac849314c4e8178383db8bd77fd38e7f85566a",
    "redacted_sha256": "c4381e41c4f966aa0f30254ff869706405f4ae5d4f78d9344bb4387e72b0c38c"

@@ -10,9 +10,9 @@ command fleet or operational agent workflow in the source tree.
 
 | Layer | Source | Responsibility |
 | --- | --- | --- |
-| Command | `src/cmd/planar/` | Parse explicit arguments once, validate the embedded catalog, invoke retained Lua command handlers through finite native render/init/history/export/load services, buffer canonical output and check process writes. |
+| Command | `src/cmd/planar/` | Parse explicit arguments once, validate the embedded catalog, invoke retained Lua command handlers through finite native render/init/history/export/load services and, in the embedded authoring bundle only, the native authoring services of `invocation.cpp` for the six authoring handlers (`handlers/spec-prompt`, `critique`, `ingest`, `explain-rejection`, `observe`, `orchestrator`), buffer canonical output and check process writes. |
 | Values and declaration loading | `src/engine/value/`, `src/engine/lua/` | Immutable typed values, text-only restricted constructors, bounded protected Lua evaluation. |
-| Capture | `src/engine/capture/` | Confined no-follow reads, logical provenance, stable retained bytes and directory topology, final verification. |
+| Capture | `src/engine/capture/` | Confined no-follow reads, logical provenance, stable retained bytes and directory topology, final verification; the bounded observation-directory read (`planar_capture_directory`, `directory.cpp`) and `capture_diagnostic` for the authoring diagnostic file. |
 | Identity | `src/engine/canonical/`, `src/engine/hash/` | Typed canonical_v1 binary encoding and bounded decoding, domain-separated seed-zero XXH3-128. |
 | Trusted runtime | `src/engine/runtime/` | Fresh fixed-export states, invocation-local retained command VMs, bounded typed bridges and native structural/hash capabilities; internal original-receipt-bound native history preparation closes its ledger snapshot before returning. |
 | Transport | `src/engine/json_codec/` | Pinned Glaze parsing and buffered canonical UTF-8 JSON with a 16 MiB payload ceiling. |
@@ -22,7 +22,7 @@ command fleet or operational agent workflow in the source tree.
 | Native acceptance preparation | `src/engine/acceptance/` | Declaration-closure load capture and immutable prepared candidates backed by native receipts; identity-bound atomic completion. |
 | Recorded reads | `src/engine/history/read.cppm`, `read.cpp` | Bounded history projections from one verified snapshot, without replaying recorded policy; the current retained handler selects the verified envelope. |
 | Exact source export | `src/engine/export/` | Reconstruct recorded source and publish a new target without replacing existing entries. |
-| Product policy | `src/stdlib/planar/` | Schema validation, semantic resolution, selection, observations, Markdown projection, budgeting and render orchestration. |
+| Product policy | `src/stdlib/planar/` | Schema validation, semantic resolution, selection, observations, Markdown projection, budgeting and render orchestration; the embedded authoring prompts (`prompts.lua`), observe (`observe.lua`) and orchestrator (`orchestrator.lua`) Lua. |
 
 First-party product implementation lives under `src/`, including native C++ and
 trusted Lua; future product workflows follow the same rule. Build and integrity
@@ -777,12 +777,24 @@ profile registering any reserved authoring command, family or handler name,
 `orchestrator`, or one of the five `orchestrator_*` projection ids is refused as
 `External registration identity conflict` (reference; the field is the
 registration ordinal). The test-only inline stack `planar_authoring_stack` is built with the
-definition, together with 20 generated malformed-bundle variants that the
-validator must refuse. The `command_options` variant stays closed at five
-members; the six families live outside it. Until their behaviour lands, each
-authoring handler is a stub: after the selector and path stages it exits 4
-(internal) with `Invalid embedded command protocol`. The default stays five
-rows until RA01-C.
+definition, together with 22 generated variants (`foreach(variant RANGE 0 21)` in
+`src/cmd/planar/CMakeLists.txt`): variant 0 is the unmodified control, variants 1
+to 19 each plant one catalog defect that the validator refuses, variant 20 seals a
+twelfth `status` row that the orchestrator variant tests run as a valid runtime, and
+variant 21 seals with a swapped prompts include that native capture refuses at
+spec-prompt time. The `command_options` variant stays closed at five members; the
+six families live outside it, in `command_authoring_options` and
+`invoke_authoring` on the command VM. Each authoring verb is a real handler
+(`src/cmd/planar/handlers/<verb>/`): after the selector and path stages, bootstrap
+passes an executor that calls `execute_authoring` (`invocation.cpp`), which runs the
+verb's embedded Lua on the authoring stack. Spec-prompt, critique, ingest and
+explain-rejection run `prompts.lua`; observe runs `observe.lua`; orchestrator runs
+`orchestrator.lua`. Native services supply the diagnostic file through
+`capture_diagnostic` (bounded at 65536 bytes) and the observation directory through
+the bounded `planar_capture_directory` read. The stub refusal (internal,
+`Invalid embedded command protocol`, exit 4) survives only as the fallback for an
+absent executor, which bootstrap never passes. The default stays five rows until
+RA01-C.
 
 The command bootstrap retains CLI11 bindings through registration, native services
 and encoding. Root help and usage refusals finish before registration. The complete
