@@ -1,0 +1,56 @@
+# ninja -C build/rewrite-debug planar_tests (reviewer, before focused run)
+ninja: Entering directory `build/rewrite-debug'
+[0/2] Re-checking globbed directories...
+ninja: no work to do.
+
+# ctest --test-dir build/rewrite-debug --no-tests=error -R "RA01-B2 orchestrator|RA01-B2 diagnostic and from|capture_diagnostic|RA01-B2 C01 slot type" (exit 0)
+Test project <repo>/build/rewrite-debug
+      Start  226: replacement.RA01-B2 C01 capture_diagnostic bad_alloc refusal carries diagnostic_bytes
+ 1/21 Test  #226: replacement.RA01-B2 C01 capture_diagnostic bad_alloc refusal carries diagnostic_bytes ...............   Passed    0.02 sec
+      Start  227: replacement.RA01-B2 C01 capture_diagnostic maps a failed open to cannot resolve
+ 2/21 Test  #227: replacement.RA01-B2 C01 capture_diagnostic maps a failed open to cannot resolve .....................   Passed    0.02 sec
+      Start  228: replacement.RA01-B2 C01 capture_diagnostic maps a post-gate add_input failure to file changed
+ 3/21 Test  #228: replacement.RA01-B2 C01 capture_diagnostic maps a post-gate add_input failure to file changed .......   Passed    0.02 sec
+      Start  229: replacement.RA01-B2 C01 capture_diagnostic post-gate failures are remapped at every native call
+ 4/21 Test  #229: replacement.RA01-B2 C01 capture_diagnostic post-gate failures are remapped at every native call .....   Passed    0.02 sec
+      Start  230: replacement.RA01-B2 C01 capture_diagnostic refuses a non-regular file as io
+ 5/21 Test  #230: replacement.RA01-B2 C01 capture_diagnostic refuses a non-regular file as io .........................   Passed    0.02 sec
+      Start  231: replacement.RA01-B2 C01 capture_diagnostic refuses a symlink as a symbolic link
+ 6/21 Test  #231: replacement.RA01-B2 C01 capture_diagnostic refuses a symlink as a symbolic link .....................   Passed    0.02 sec
+      Start  232: replacement.RA01-B2 capture_diagnostic bounds the file at 65536 bytes from the descriptor
+ 7/21 Test  #232: replacement.RA01-B2 capture_diagnostic bounds the file at 65536 bytes from the descriptor ...........   Passed    0.02 sec
+      Start  233: replacement.RA01-B2 capture_diagnostic refuses a file changed before verification
+ 8/21 Test  #233: replacement.RA01-B2 capture_diagnostic refuses a file changed before verification ...................   Passed    0.02 sec
+      Start  463: replacement.RA01-B2 orchestrator_context_v1 is refused as an external projection input
+ 9/21 Test  #463: replacement.RA01-B2 orchestrator_context_v1 is refused as an external projection input ..............   Passed    0.21 sec
+      Start 1245: replacement.RA01-B2 C01 slot type checks are pinned in the Lua handlers
+10/21 Test #1245: replacement.RA01-B2 C01 slot type checks are pinned in the Lua handlers .............................   Passed    0.05 sec
+      Start 1257: replacement.RA01-B2 diagnostic and from reach Lua only as opaque slots
+11/21 Test #1257: replacement.RA01-B2 diagnostic and from reach Lua only as opaque slots ..............................   Passed    0.08 sec
+      Start 1278: replacement.RA01-B2 orchestrator labels every catalog verb available and every future verb future
+12/21 Test #1278: replacement.RA01-B2 orchestrator labels every catalog verb available and every future verb future ...   Passed    0.06 sec
+      Start 1279: replacement.RA01-B2 orchestrator lists only the prescriptions that drive the job
+13/21 Test #1279: replacement.RA01-B2 orchestrator lists only the prescriptions that drive the job ....................   Passed    0.06 sec
+      Start 1280: replacement.RA01-B2 orchestrator prompt carries five sections in order
+14/21 Test #1280: replacement.RA01-B2 orchestrator prompt carries five sections in order ..............................   Passed    0.06 sec
+      Start 1281: replacement.RA01-B2 orchestrator prompt is graph only
+15/21 Test #1281: replacement.RA01-B2 orchestrator prompt is graph only ...............................................   Passed    0.06 sec
+      Start 1282: replacement.RA01-B2 orchestrator reads only the selected job
+16/21 Test #1282: replacement.RA01-B2 orchestrator reads only the selected job ........................................   Passed    0.18 sec
+      Start 1283: replacement.RA01-B2 orchestrator refuses an unlisted job as reference selection.job
+17/21 Test #1283: replacement.RA01-B2 orchestrator refuses an unlisted job as reference selection.job .................   Passed    0.13 sec
+      Start 1284: replacement.RA01-B2 orchestrator sections render shape roles and graph
+18/21 Test #1284: replacement.RA01-B2 orchestrator sections render shape roles and graph ..............................   Passed    0.08 sec
+      Start 1285: replacement.RA01-B2 orchestrator selected-job mode still checks the listed job identity
+19/21 Test #1285: replacement.RA01-B2 orchestrator selected-job mode still checks the listed job identity .............   Passed    0.11 sec
+      Start 1413: replacement.RA01-B2 orchestrator label flips to available for a catalog stub verb
+20/21 Test #1413: replacement.RA01-B2 orchestrator label flips to available for a catalog stub verb ...................   Passed    0.10 sec
+      Start 1414: replacement.RA01-B2 orchestrator selected-job mode refuses an unlisted job declaration
+21/21 Test #1414: replacement.RA01-B2 orchestrator selected-job mode refuses an unlisted job declaration ..............   Passed    0.07 sec
+
+100% tests passed out of 21
+
+Label Time Summary:
+unit    =   1.42 sec*proc (21 tests)
+
+Total Test time (real) =   1.47 sec

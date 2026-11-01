@@ -93,7 +93,7 @@ struct captured_diagnostic {
 /// @param file Absolute canonical host file path.
 /// @param maximum Largest accepted size in bytes, checked from the descriptor before allocation.
 /// @return Bytes, size and digest, or a typed capture refusal with existing messages only.
-/// @note A size over `maximum`, the post-read bound and digest or allocation failures (`bad_alloc`, `Hash allocation
+/// @note A size over `maximum`, the post-read bound and the mapped failures (`bad_alloc`, `Hash allocation
 /// failed`, `Canonical allocation failed`) are `resource_limit` `diagnostic_bytes`. After the gate passes, `add_input` and
 /// `read` failures are `capture_changed` `File changed during read`; a `finish` result of `capture_changed` stays
 /// `capture_changed`, a detail-less `finish` `resource_limit` is `diagnostic_bytes`, and any other `finish` or digest

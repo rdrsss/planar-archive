@@ -1,0 +1,23 @@
+# git diff -U0 HEAD -- src
+diff --git a/src/cmd/planar/authoring_orchestrator.t.cpp b/src/cmd/planar/authoring_orchestrator.t.cpp
+index 4e730537..47415f31 100644
+--- a/src/cmd/planar/authoring_orchestrator.t.cpp
++++ b/src/cmd/planar/authoring_orchestrator.t.cpp
+@@ -208,2 +208 @@ const std::vector<std::string> future_names  = {"activate",   "status",  "previe
+-// the shipped stack (the slots are always userdata). Only mutant W2-06n fails this test; deleting a check is killed by
+-// the source
++// the shipped stack (the slots are always userdata). Only mutant W2-06n fails this test; deleting a check is killed by the source
+diff --git a/src/engine/capture/capture.cppm b/src/engine/capture/capture.cppm
+index 258e90cc..a61829f9 100644
+--- a/src/engine/capture/capture.cppm
++++ b/src/engine/capture/capture.cppm
+@@ -96 +96 @@ struct captured_diagnostic {
+-/// @note A size over `maximum`, the post-read bound and digest or allocation failures (`bad_alloc`, `Hash allocation
++/// @note A size over `maximum`, the post-read bound and the mapped failures (`bad_alloc`, `Hash allocation
+
+# changed +/- lines in src whose first non-blank token is not // (expect 0):
+0
+# git diff --quiet HEAD -- runtime.cpp commands.lua schema.lua semantic.lua exit:
+0
+# git diff HEAD -- src | sha256
+0cfcd4f7227c01d4dea5ca041af165cb8fa2ddc5e7ff5b680246a08aaeed288c

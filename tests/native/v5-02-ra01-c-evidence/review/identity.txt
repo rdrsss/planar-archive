@@ -1,0 +1,11 @@
+| identity | value |
+|---|---|
+| HEAD | `afb927dc72d6ff4b85a44985dd2cba565ae21352` |
+| sha256(git diff --binary HEAD -- src tests/native), tracked only | `1c52c3d07d47ea5e581aadc943da858d6e2a7c2abf91887480142258706b196d` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src tests/native, evidence excluded | `1c52c3d07d47ea5e581aadc943da858d6e2a7c2abf91887480142258706b196d` |
+
+| file | state | sha256 |
+|---|---|---|
+| `src/cmd/planar/authoring_orchestrator.t.cpp` | modified | `8e649c01784485b0cadd61e3b86ca57f3bd972257393a9b2aa83a536b1accd4c` |
+| `src/engine/capture/capture.cppm` | modified | `4d05dab7b864adb943825e6c092847e1ce3a016153919c4b6e083274b0b11bd8` |
+| `tests/native/path-redaction.json` | modified | `952c239ec19ca8b94d3baf8234099d27986d49d81ddbbe516fd9d1355c99c45d` |

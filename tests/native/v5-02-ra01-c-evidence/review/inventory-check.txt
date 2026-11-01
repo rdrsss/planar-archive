@@ -1,0 +1,12 @@
+# reviewer inventory check (names parsed from ctest -N logs, LC_ALL=C sorted)
+ctestN-debug.log: 1437 names
+ctestN-release.log: 1437 names
+macOS debug vs release names: equal
+inventory.txt vs macOS debug: equal
+Linux debug sorted vs macOS: equal
+Linux release sorted vs macOS: equal
+afb927dc committed baseline (v5-02-ra01-b-w2-c02-evidence/inventory.txt) comm -3 lines: 0
+gate2/ctest-debug.log: 100% tests passed out of 1437; Passed lines 1437; Not Run/Failed lines 0; x07 1
+gate2/ctest-release.log: 100% tests passed out of 1437; Passed lines 1437; Not Run/Failed lines 0; x07 1
+container/debug-ctest.log: 100% tests passed out of 1437; Passed lines 1437; Not Run/Failed lines 0; x07 1
+container/release-ctest.log: 100% tests passed out of 1437; Passed lines 1437; Not Run/Failed lines 0; x07 1

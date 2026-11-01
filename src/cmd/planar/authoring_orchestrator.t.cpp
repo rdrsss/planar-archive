@@ -205,8 +205,7 @@ const std::vector<std::string> future_names  = {"activate",   "status",  "previe
 // Mutant (W2-06n): runtime.cpp prepare_authoring_invocation passes command_text(path) instead of the opaque handle for
 // diagnostic or from. The Lua type check added in package I-B, wave 3 of the C01 plan (prompts.lua for explain-rejection,
 // observe.lua for observe) then refuses internal exit 4, so both verbs would not exit 0. Those checks are unreachable on
-// the shipped stack (the slots are always userdata). Only mutant W2-06n fails this test; deleting a check is killed by
-// the source
+// the shipped stack (the slots are always userdata). Only mutant W2-06n fails this test; deleting a check is killed by the source
 // guard "RA01-B2 C01 slot type checks are pinned in the Lua handlers" at the end of this file.
 TEST_CASE("RA01-B2 diagnostic and from reach Lua only as opaque slots", "[authoring][ra01][orchestrator]") {
   or_scratch s;
