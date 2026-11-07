@@ -45,6 +45,21 @@ projection ID `orchestrator`; and reserves five more built-in section IDs
 after profile admission until R15 widens the closed factory; the probe membership, precedence, name-collision,
 capacity and namespace consequences are in [RA-9](authoring-contract.md#ra-9-profiles-e3-a). No existing message of the closed table changes.
 
+Pointer (R15-A2): the shipped families admitted under `with-profile` are the five of X08 plus `activate`, `status`, `preview`, `claim`, `takeover` (ten), so the R15 verbs add five families. Their known slots are `ledger` and, per verb, `workspace`, `registry` and `provenance`; the admission rows, the `command_options` variant change and the x07-addendum amendment are R15-B and R15-C work. Also, the six RA01 verbs stay embedded-only (RA-9 item 5), under option A of the delegated question on RA-9 (D134). Reserved section IDs gain `run` and `orchestrator_state` in the X-PROJ union, and both are reserved in every build including production: the reservation is not build-qualified, because `runtime.cpp` already reserves the RA01 `orchestrator_*` IDs in every build, although `orchestrator_state` is rendered only in the authoring bundle. Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause.
+
+Pointer (R15-A2): root help follows the command-contract pointer. The production help lines are identical to those there, and default root help stays byte-for-byte old until the R15 integrated gate. The production lines are:
+
+```text
+  or --revision ID | --request-id ID | --at-event ID | --event ID
+planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor TEXT
+planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE_OR_NAME --registry FILE]
+planar preview --ledger PATH --role ID
+planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]
+planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]
+```
+
+Pointer (R15-A2): consequences, modelled on RA-9 item 6: valid today, refused after R15. A profile that registers a command or family named `activate`, `status`, `preview`, `claim` or `takeover`, a handler ID `shipped.activate.v1`, `shipped.status.v1`, `shipped.preview.v1`, `shipped.claim.v1` or `shipped.takeover.v1`, or a section ID `run` or `orchestrator_state`, is valid today and is refused after R15 by the existing registration collision error (`reference`). X-LIMIT counts 64 commands including shipped, so admitting five more shipped families under `with-profile` cuts external command capacity by five (59 to 54); projections are unchanged, with no new projection ID. The embedded probe gains the five families, and the `history` probe signature gains `--event ID`, so `with-profile P history --event ID` is `usage` today and accepted after R15. Also, the with-profile completeness rule moves from five to ten. The message tables are untouched, and the X-LIMIT table is unedited. Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause.
+
 ## X-CLI — Envelope and admission order
 
 Only these new forms exist (tokens separate):

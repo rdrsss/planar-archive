@@ -1,0 +1,44 @@
+# tree-verify attempt 2 (V5-02-R15-A2-C01, P3). Labels are relative; each line is the exit status of cmp.
+# Expected: every exit 0. Reference snapshot = base/ at base commit cdcfe829c466bf6338815ff6f5b6ea90ffddc570.
+## (a) redtree: scratch tree built only from base/ (docs/vernacular and base copies)
+cmp base/execution-contract.md redtree/docs/vernacular/execution-contract.md: exit 0
+cmp base/execution-contract.md redtree/base/execution-contract.md: exit 0
+cmp base/command-contract.md redtree/docs/vernacular/command-contract.md: exit 0
+cmp base/command-contract.md redtree/base/command-contract.md: exit 0
+cmp base/render-contract.md redtree/docs/vernacular/render-contract.md: exit 0
+cmp base/render-contract.md redtree/base/render-contract.md: exit 0
+cmp base/load-command-contract.md redtree/docs/vernacular/load-command-contract.md: exit 0
+cmp base/load-command-contract.md redtree/base/load-command-contract.md: exit 0
+cmp base/ledger-contract.md redtree/docs/vernacular/ledger-contract.md: exit 0
+cmp base/ledger-contract.md redtree/base/ledger-contract.md: exit 0
+cmp base/external-profile-contract.md redtree/docs/vernacular/external-profile-contract.md: exit 0
+cmp base/external-profile-contract.md redtree/base/external-profile-contract.md: exit 0
+cmp base/execution-design.md redtree/docs/vernacular/execution-design.md: exit 0
+cmp base/execution-design.md redtree/base/execution-design.md: exit 0
+cmp base/authoring-contract.md redtree/docs/vernacular/authoring-contract.md: exit 0
+cmp base/authoring-contract.md redtree/base/authoring-contract.md: exit 0
+cmp base/acceptance-matrix.md redtree/docs/vernacular/acceptance-matrix.md: exit 0
+cmp base/acceptance-matrix.md redtree/base/acceptance-matrix.md: exit 0
+cmp base/v5-alignment.md redtree/docs/vernacular/v5-alignment.md: exit 0
+cmp base/v5-alignment.md redtree/base/v5-alignment.md: exit 0
+## (b) stubtree: headings-present stub tree built by a scratch copy of make-stub-tree.py from redtree/base (base copy compared with base/, and with the git blob at the base commit)
+cmp base/execution-contract.md stubtree/base/execution-contract.md: exit 0
+cmp base/command-contract.md stubtree/base/command-contract.md: exit 0
+cmp base/render-contract.md stubtree/base/render-contract.md: exit 0
+cmp base/load-command-contract.md stubtree/base/load-command-contract.md: exit 0
+cmp base/ledger-contract.md stubtree/base/ledger-contract.md: exit 0
+cmp base/external-profile-contract.md stubtree/base/external-profile-contract.md: exit 0
+cmp base/execution-design.md stubtree/base/execution-design.md: exit 0
+cmp base/authoring-contract.md stubtree/base/authoring-contract.md: exit 0
+cmp base/acceptance-matrix.md stubtree/base/acceptance-matrix.md: exit 0
+cmp base/v5-alignment.md stubtree/base/v5-alignment.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/execution-contract.md | cmp - stubtree/base/execution-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/command-contract.md | cmp - stubtree/base/command-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/render-contract.md | cmp - stubtree/base/render-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/load-command-contract.md | cmp - stubtree/base/load-command-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/ledger-contract.md | cmp - stubtree/base/ledger-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/external-profile-contract.md | cmp - stubtree/base/external-profile-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/execution-design.md | cmp - stubtree/base/execution-design.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/authoring-contract.md | cmp - stubtree/base/authoring-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/acceptance-matrix.md | cmp - stubtree/base/acceptance-matrix.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/v5-alignment.md | cmp - stubtree/base/v5-alignment.md: exit 0

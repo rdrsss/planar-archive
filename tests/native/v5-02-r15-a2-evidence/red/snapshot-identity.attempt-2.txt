@@ -1,0 +1,61 @@
+# Snapshot identity, V5-02-R15-A2-C01 package P3 (rewritten; attempt-1 kept as snapshot-identity.attempt-1.txt)
+
+HEAD: cdcfe829c466bf6338815ff6f5b6ea90ffddc570
+Base commit: cdcfe829c466bf6338815ff6f5b6ea90ffddc570 (the pre-edit snapshot of the ten files in base/)
+
+The snapshot folder `tests/native/v5-02-r15-a2-evidence/base/` is matched by `.gitignore` rule `/tests/native/*-evidence/`
+(checked with `git check-ignore -v`). The workflow identity tool therefore reports the empty diff for it. The output
+below is verbatim and the hash `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` is the sha256 of an
+EMPTY diff, not a snapshot hash. It is quoted only for that reason. The identity tool cannot cover ignored paths, so the
+snapshot is pinned per file by `shasum -a 256` and `git ls-tree` blob IDs (C01-D14 scoped exception; hand-computed hashes
+are not used anywhere in this file).
+
+## 1. Workflow identity tool (verbatim)
+
+Command, from the repository root: `python3 <identity.py> tests/native/v5-02-r15-a2-evidence/base`
+(`<identity.py>` is the workflow script path, kept out of this file).
+
+| identity | value |
+|---|---|
+| HEAD | `cdcfe829c466bf6338815ff6f5b6ea90ffddc570` |
+| sha256(git diff --binary HEAD -- tests/native/v5-02-r15-a2-evidence/base), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec tests/native/v5-02-r15-a2-evidence/base, evidence excluded | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+
+| file | state | sha256 |
+|---|---|---|
+
+## 2. Byte equality of the scratch trees with base/
+
+The two scratch trees (redtree, built only from base/, and the headings-present stubtree) are byte-equal to base/ by
+forty `cmp` exits (twenty per tree), all 0. See `tree-verify.txt` (the original redtree check, unchanged) and
+`tree-verify.attempt-2.txt` (sections (a) redtree and (b) stubtree, twenty exits each).
+
+## 3. Git blob IDs of the ten base files at the base commit (`git ls-tree`, verbatim)
+
+Command, from the repository root: `git ls-tree cdcfe829c466bf6338815ff6f5b6ea90ffddc570 docs/vernacular/<file>` for each of the ten files.
+
+100644 blob c7b131c8e363126d89f0a559ec664f5962ad4df1	docs/vernacular/acceptance-matrix.md
+100644 blob 41c44d4de2f14c9630e6c598050c5858a8749197	docs/vernacular/authoring-contract.md
+100644 blob 81163e5458f8c3f63861a10fe37b13cf7940f0f0	docs/vernacular/command-contract.md
+100644 blob 1a5398f916dcad4d309b29d4e0e945ff8f93bc7d	docs/vernacular/execution-contract.md
+100644 blob a3bf60b6c16336039e645c8d2c83009f8a5efbe1	docs/vernacular/execution-design.md
+100644 blob 407d5cbd3a344b53752d85ccac1e47f4f885b434	docs/vernacular/external-profile-contract.md
+100644 blob b292cbabf72472661699fec024b78ba67a0f5636	docs/vernacular/ledger-contract.md
+100644 blob e96e9b173c7e0d69778e897c8dd5d891c0889ed8	docs/vernacular/load-command-contract.md
+100644 blob 47a50c2cfc7d255ca85d8ba0b274e81307fc218c	docs/vernacular/render-contract.md
+100644 blob 474546ea0f7d4dcacc7824e8c3c8e103b033f7e7	docs/vernacular/v5-alignment.md
+
+## 4. Per-file sha256 of the ten files in base/ (`shasum -a 256`, verbatim, repository-relative paths)
+
+Command, from the repository root: `shasum -a 256 tests/native/v5-02-r15-a2-evidence/base/*.md`
+
+6370cb09d99eaa33bf068f787e6ed040c3a81d160d6d2cbba47b3944e7178be5  tests/native/v5-02-r15-a2-evidence/base/acceptance-matrix.md
+3ffdd2e42fbd89bbf709338c33df23dcbc6a1f5402206bf65461bea9a0476b5c  tests/native/v5-02-r15-a2-evidence/base/authoring-contract.md
+185bc18a35c8dda9314fdf2d788160ecba34488781401a72ab3b2fef7b3ac30b  tests/native/v5-02-r15-a2-evidence/base/command-contract.md
+2d909b8adea509d7140e2ba9f719891b549838949535a5f0de52c20f71e572d3  tests/native/v5-02-r15-a2-evidence/base/execution-contract.md
+fd2cf72a234e46406b087452b2bf595f139ed231b1655589824d98580caef93a  tests/native/v5-02-r15-a2-evidence/base/execution-design.md
+e190e2d1d88ad0a40cab3bd4bb31bbe826774a58f729224d083abcac877577da  tests/native/v5-02-r15-a2-evidence/base/external-profile-contract.md
+3e595653feeaa63f824f1f0bbf929a4923f10854dbcdd3e35725b8ff6223ceaf  tests/native/v5-02-r15-a2-evidence/base/ledger-contract.md
+d72870d6446aee8e5396c05f62ac68b16850a52974a2cf837bbec129487a30d3  tests/native/v5-02-r15-a2-evidence/base/load-command-contract.md
+5695452c7b19aa88e1e1d822ae61f61f325ff7a777b6fdd067a052bba71d629b  tests/native/v5-02-r15-a2-evidence/base/render-contract.md
+58f5d441281c9b6d0dbf5049b604ba9a7f8129610e6a084a55959d4282449bd6  tests/native/v5-02-r15-a2-evidence/base/v5-alignment.md

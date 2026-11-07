@@ -1,0 +1,1 @@
+The role is unknown and the refusal uses message `Unknown selected job`.

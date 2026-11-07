@@ -451,6 +451,8 @@ only. RA01 authoring/scaffolding must be separately contracted.
 
 On format3, `planar history --ledger <path> --request-id <id>` also returns execution results as specified in [EX-2](execution-contract.md#ex-2-request-framing-and-replay); format1 and format2 behaviour is unchanged.
 
+Pointer (R15-A2): the command-surface row text `planar history --ledger <path> --event <id>` returns the event with its transitions and, for execution events, the expanded records ([P2-5](execution-contract.md#p2-5-history-event-selector-and-request-results)); it is mutually exclusive with all other selectors and paging. Also, the data selector `event` joins `page`, `revision`, `request`, `state` in the `data` sentence, and the format3 event summary and `--at-event` state extensions are those of P2-5. Format1 and format2 text is unchanged. Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause. The command-surface table and the data-selector paragraph are not edited by this pointer.
+
 No-selector history includes current head even for an empty ledger. CLI-visible
 metadata never contains BLOB payloads or host paths. Init returns
 `{version:1,kind:"init",ledger:<hex>,workspace:<id>,active_revision:"none",event:"1"}`.

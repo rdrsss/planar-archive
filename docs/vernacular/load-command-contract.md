@@ -18,6 +18,17 @@ Pointer (RA01-A): the [authoring contract](authoring-contract.md#ra-1-catalog-ro
 extends the completeness rule below from five to eleven mandatory rows at the RA01 integrated gate, and amends
 the fixed root help with six usage lines. The five-row rule stays current until then.
 
+Pointer (R15-A2): on format3 only, the services are, in order, `open_workspace`, `capture_load`, `read_execution({})` and `accept_load({bundle,semantic,execution})`, with a `read_execution({})` row `{version:1,ledger,last_seq,snapshot}` described in the pointer (not inserted into the services table); `accept_load` takes the extra key `execution`. Also, format1 and format2 loads keep three services and `{bundle,semantic}`, and the sentence "It receives exactly three context methods" stays current for them (format3 receives four). Also, the load family's capability set stays `accept_load_v1`; it covers `read_execution({})` on format3 and adds no capability, because the load handler cannot call `commit_execution`, which belongs to the execution families. Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause. The production root help lines are identical to those in the command-contract pointer, `JOB_OR_NONE` included, and are:
+
+```text
+  or --revision ID | --request-id ID | --at-event ID | --event ID
+planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor TEXT
+planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE_OR_NAME --registry FILE]
+planar preview --ledger PATH --role ID
+planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]
+planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]
+```
+
 ## Fixed catalog admission and typed intent
 
 At the integrated load gate, add exactly one mandatory descriptor to the existing

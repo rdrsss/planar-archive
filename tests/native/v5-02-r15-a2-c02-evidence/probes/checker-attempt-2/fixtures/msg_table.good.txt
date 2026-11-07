@@ -1,0 +1,25 @@
+## Messages
+
+| Code | Existing message (byte-exact) | Owner | Execution sites |
+| --- | --- | --- | --- |
+| `reference` | `Unknown selected job` | authoring-contract.md | An unknown job |
+| `revision_conflict` | `Ledger revision does not match the expected revision` | load-command-contract.md | The load compare-and-swap |
+
+| Refusal site | Code | Message | Defined by |
+| --- | --- | --- | --- |
+| Any other failed precondition at commit | `state_conflict` | `Execution state changed since the request was prepared` | EX-3 |
+
+## Next
+---NEW---
+## Messages
+
+| Code | Existing message (byte-exact) | Owner | Execution sites |
+| --- | --- | --- | --- |
+| `reference` | `Unknown selected job` | authoring-contract.md | An unknown job |
+| `revision_conflict` | `Ledger revision does not match the expected revision` | load-command-contract.md | The load compare-and-swap |
+
+| Refusal site | Code | Message | Defined by |
+| --- | --- | --- | --- |
+| Any other failed precondition at commit | `state_conflict` | `Execution state changed since the request was prepared` | EX-3 |
+
+## Next

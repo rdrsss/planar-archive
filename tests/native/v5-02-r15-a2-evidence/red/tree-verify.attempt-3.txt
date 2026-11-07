@@ -1,0 +1,264 @@
+# tree-verify attempt 3 (V5-02-R15-A2-C02, P2). Scratch checker identity first (C02-D26, scoped exception), then cmp exits.
+# Reference snapshot = base/ at base commit cdcfe829c466bf6338815ff6f5b6ea90ffddc570. Expected: every cmp exit 0.
+
+## (0) Scratch checker and fixtures actually run (verbatim command and output)
+$ cd <scratch>/checks-copy && shasum -a 256 contract_checks.py fixtures/*
+cc248dd7a059049ec0e685666a06a619edabdf9b48d57c46d7ae451108e83092  contract_checks.py
+a7d13d526610ddb9b89182feefad46e443fa980a17eb3956b0159cc864eddd9c  fixtures/absent.bad.txt
+8075da1108f6738991be8e411d5d6ef9d86c57cccd877b634ba7da525dd45520  fixtures/absent.good.txt
+0ee819c6db5fa0ba3d781f004dc9e494f7e8a9b01cd5cb0e45d889c5f5509d32  fixtures/allow.bad.txt
+7c2edda7d3e254ab6294547bfcf10d0649cbac3449b8fed5cd7e3e56a79a5e61  fixtures/allow.good.txt
+bdebab40f09db28c01a8b8b8c1cab4a528f497e659c36f6a73ecc2a9f7b45d6e  fixtures/allowed.bad.txt
+04cdb3171caebd608221eee93ffcf7fbd7b2536b380a1660b5ced6354edd8610  fixtures/allowed.good.txt
+9a11326b3bd05a0dc565887c17971e75c320418d91139373be75279f6c113fcb  fixtures/codes.bad.txt
+2967f72c075306981b6152846b96a0553617eaa305956fea803385f3bed31889  fixtures/codes.good.txt
+91d3863d9199673799bec1330a0c9fbe9e753a95813e7f8202d0ff5c85378dff  fixtures/exempt.bad.txt
+87377775d816a88f0c6b1fe9e8d5a01ca5fce77d52ec3d6768498c5232c1a7b3  fixtures/exempt.good.txt
+430268624e4902c334a18b722fbc0ae04c0bb7244620db972f390f6f607c30f7  fixtures/expectjob.bad.txt
+8e9fe96a2e769990afa06a85a081185acba05cd7200569a5b7fb7aa91d64f545  fixtures/expectjob.good.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/frozen.bad.txt
+4c011d3915632a267b978b8afed07bb7aee24aa13c380f850d2123a4e6493446  fixtures/frozen.good.txt
+140397e8609d4345c4b44d3da4709db626f6c5599889fc400f5cf188c9db7eb1  fixtures/headings.bad.txt
+b605083c6d57e372f209ec89c83c3fce8ae2c5943ddb6b48f8fdadc55fde1a7d  fixtures/headings.good.txt
+377c71835aad20ffdd4b5073b715b3fd59aebc31fb14f7006ed03235effe81c3  fixtures/lines.bad.txt
+4066801f80cecb34db3a6cb29dfc8200e62b1496d4dcf50896ddb66865d2580e  fixtures/lines.good.txt
+6d99d11ec522f5d8d54745143ed8175a88134eeb58c6bba10f054af7ac611bab  fixtures/link.bad.txt
+a7d881777fe8471f6d0fae280ac6f88b40a2847426888940164938a434bbd752  fixtures/link.good.txt
+787d02f7ba3f6c469b1859d438980745531f063b7e9c9df1f50f2fa39eb9df0f  fixtures/local.bad.txt
+e250f227146148284a888751a120893795b3dc1ec212f04b6691176edd606445  fixtures/local.good.txt
+a8cbf84b83145e9070ab56286977cb953abbdd8acda29bb844a88ced9707bac5  fixtures/messages_cells.bad.txt
+6fb4deeefc57d358a29b49bd214c4a8c1fed26dec96841bfd46926e85515f30c  fixtures/messages_cells.good.txt
+8dc0f2f21ef0f193e813d21a498e16fc100548d8095b8770997651e0c4a4fb9a  fixtures/messages_then.bad.txt
+efff62a33a74e620a680231debd1a97f24c55136603e6d48ef3ae4b0995749b9  fixtures/messages_then.good.txt
+0fee243dc9e72667dd928525167b6f5de0edc8d214366215934a35b3c30cfb77  fixtures/messages.bad.txt
+6dd4a66cda47d7d18658e6e4fe9b87e805b781bb827f5a24083ed942d1740025  fixtures/messages.good.txt
+7ccfb1d21261c84e49fc32571901f3e6e74ecabca377261dca5b5bd9d0f8c10d  fixtures/msg_table.bad.txt
+e431302351bb23f81cb4c3b053601cee4a86cc8e197d16f6a88ac04720f64733  fixtures/msg_table.good.txt
+a8f36fb6d0e1edbdfe488228c46118464ec49edba30588db5f42ff3939f6c346  fixtures/names.bad.txt
+d47a82b1c2be0b8764be8083ce8f86549e51401eecbf554857e60e482f3161eb  fixtures/names.good.txt
+4c8c3dc4b45942be1d44b2f665b4a98a46effee4e5bb8bea8374c94615f3f8d8  fixtures/one_change.bad.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/one_change.good.txt
+6ac1d2f2b7a96c8f52e2de04787189950e58a86767bd042052324565a6dbbf38  fixtures/ordered.bad.txt
+7e17bbb5afd9acf459f00333da7b8b931f5ea0059eb21c9771d22927bd1ded87  fixtures/ordered.good.txt
+b82607e5f2b55004617ad95e888551c8629537667d97c1b4fb8eeeab7dc33cf9  fixtures/paragraphs.bad.txt
+20a6ff454f81cccf462c98e4599b16965355e1fe4c3f214563b122edd45b7486  fixtures/paragraphs.good.txt
+05d917fec20815e252ed1ce707cfeb5f4ed1cae76f92d6bec7db383717c90455  fixtures/present.bad.txt
+c3ed797d5dc2676bafb066d689207d649bd202e24c41cae129741daf1cb64279  fixtures/present.good.txt
+0e4c4b09e05cc49a3dbf0b648233fa4325ec4738bc92ceb3aeb9c3b44ad97ab3  fixtures/raw.bad.txt
+95d9178605f8536ed1f9befaf2e898401f0c02ff1647a4005e5fe470df8e07c8  fixtures/raw.good.txt
+77c245b6a806174d04399357b95597158afa58deeae2eca3b33f808287e44f38  fixtures/removed.bad.txt
+842717ba36b12972e2f504987b1536ebd665b7e9fe1ccdf284c12536ece47e03  fixtures/removed.good.txt
+ac61db1fc41e128d2d02ad2cfea114bd032bcccdda63845f4af0116b3e2d8eac  fixtures/rows.bad.txt
+7369ff973efa967251e2c99add906f4f4964ce6481cd16014b19a3b4d670837b  fixtures/rows.good.txt
+ddb4b4d095ec7851fb894d0b1a7441b8490aeb3b4b9461f826f0f2ca3a484306  fixtures/tags.bad.txt
+b933bcc058de456b00a86f0eb90dc66ec0e8f373365ea1f40c8183bb9b9873fd  fixtures/tags.good.txt
+# checkout copies, for comparison:
+$ cd <repo>/tests/native/v5-02-r15-a2-evidence/checks && shasum -a 256 contract_checks.py fixtures/*
+cc248dd7a059049ec0e685666a06a619edabdf9b48d57c46d7ae451108e83092  contract_checks.py
+a7d13d526610ddb9b89182feefad46e443fa980a17eb3956b0159cc864eddd9c  fixtures/absent.bad.txt
+8075da1108f6738991be8e411d5d6ef9d86c57cccd877b634ba7da525dd45520  fixtures/absent.good.txt
+0ee819c6db5fa0ba3d781f004dc9e494f7e8a9b01cd5cb0e45d889c5f5509d32  fixtures/allow.bad.txt
+7c2edda7d3e254ab6294547bfcf10d0649cbac3449b8fed5cd7e3e56a79a5e61  fixtures/allow.good.txt
+bdebab40f09db28c01a8b8b8c1cab4a528f497e659c36f6a73ecc2a9f7b45d6e  fixtures/allowed.bad.txt
+04cdb3171caebd608221eee93ffcf7fbd7b2536b380a1660b5ced6354edd8610  fixtures/allowed.good.txt
+9a11326b3bd05a0dc565887c17971e75c320418d91139373be75279f6c113fcb  fixtures/codes.bad.txt
+2967f72c075306981b6152846b96a0553617eaa305956fea803385f3bed31889  fixtures/codes.good.txt
+91d3863d9199673799bec1330a0c9fbe9e753a95813e7f8202d0ff5c85378dff  fixtures/exempt.bad.txt
+87377775d816a88f0c6b1fe9e8d5a01ca5fce77d52ec3d6768498c5232c1a7b3  fixtures/exempt.good.txt
+430268624e4902c334a18b722fbc0ae04c0bb7244620db972f390f6f607c30f7  fixtures/expectjob.bad.txt
+8e9fe96a2e769990afa06a85a081185acba05cd7200569a5b7fb7aa91d64f545  fixtures/expectjob.good.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/frozen.bad.txt
+4c011d3915632a267b978b8afed07bb7aee24aa13c380f850d2123a4e6493446  fixtures/frozen.good.txt
+140397e8609d4345c4b44d3da4709db626f6c5599889fc400f5cf188c9db7eb1  fixtures/headings.bad.txt
+b605083c6d57e372f209ec89c83c3fce8ae2c5943ddb6b48f8fdadc55fde1a7d  fixtures/headings.good.txt
+377c71835aad20ffdd4b5073b715b3fd59aebc31fb14f7006ed03235effe81c3  fixtures/lines.bad.txt
+4066801f80cecb34db3a6cb29dfc8200e62b1496d4dcf50896ddb66865d2580e  fixtures/lines.good.txt
+6d99d11ec522f5d8d54745143ed8175a88134eeb58c6bba10f054af7ac611bab  fixtures/link.bad.txt
+a7d881777fe8471f6d0fae280ac6f88b40a2847426888940164938a434bbd752  fixtures/link.good.txt
+787d02f7ba3f6c469b1859d438980745531f063b7e9c9df1f50f2fa39eb9df0f  fixtures/local.bad.txt
+e250f227146148284a888751a120893795b3dc1ec212f04b6691176edd606445  fixtures/local.good.txt
+a8cbf84b83145e9070ab56286977cb953abbdd8acda29bb844a88ced9707bac5  fixtures/messages_cells.bad.txt
+6fb4deeefc57d358a29b49bd214c4a8c1fed26dec96841bfd46926e85515f30c  fixtures/messages_cells.good.txt
+8dc0f2f21ef0f193e813d21a498e16fc100548d8095b8770997651e0c4a4fb9a  fixtures/messages_then.bad.txt
+efff62a33a74e620a680231debd1a97f24c55136603e6d48ef3ae4b0995749b9  fixtures/messages_then.good.txt
+0fee243dc9e72667dd928525167b6f5de0edc8d214366215934a35b3c30cfb77  fixtures/messages.bad.txt
+6dd4a66cda47d7d18658e6e4fe9b87e805b781bb827f5a24083ed942d1740025  fixtures/messages.good.txt
+7ccfb1d21261c84e49fc32571901f3e6e74ecabca377261dca5b5bd9d0f8c10d  fixtures/msg_table.bad.txt
+e431302351bb23f81cb4c3b053601cee4a86cc8e197d16f6a88ac04720f64733  fixtures/msg_table.good.txt
+a8f36fb6d0e1edbdfe488228c46118464ec49edba30588db5f42ff3939f6c346  fixtures/names.bad.txt
+d47a82b1c2be0b8764be8083ce8f86549e51401eecbf554857e60e482f3161eb  fixtures/names.good.txt
+4c8c3dc4b45942be1d44b2f665b4a98a46effee4e5bb8bea8374c94615f3f8d8  fixtures/one_change.bad.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/one_change.good.txt
+6ac1d2f2b7a96c8f52e2de04787189950e58a86767bd042052324565a6dbbf38  fixtures/ordered.bad.txt
+7e17bbb5afd9acf459f00333da7b8b931f5ea0059eb21c9771d22927bd1ded87  fixtures/ordered.good.txt
+b82607e5f2b55004617ad95e888551c8629537667d97c1b4fb8eeeab7dc33cf9  fixtures/paragraphs.bad.txt
+20a6ff454f81cccf462c98e4599b16965355e1fe4c3f214563b122edd45b7486  fixtures/paragraphs.good.txt
+05d917fec20815e252ed1ce707cfeb5f4ed1cae76f92d6bec7db383717c90455  fixtures/present.bad.txt
+c3ed797d5dc2676bafb066d689207d649bd202e24c41cae129741daf1cb64279  fixtures/present.good.txt
+0e4c4b09e05cc49a3dbf0b648233fa4325ec4738bc92ceb3aeb9c3b44ad97ab3  fixtures/raw.bad.txt
+95d9178605f8536ed1f9befaf2e898401f0c02ff1647a4005e5fe470df8e07c8  fixtures/raw.good.txt
+77c245b6a806174d04399357b95597158afa58deeae2eca3b33f808287e44f38  fixtures/removed.bad.txt
+842717ba36b12972e2f504987b1536ebd665b7e9fe1ccdf284c12536ece47e03  fixtures/removed.good.txt
+ac61db1fc41e128d2d02ad2cfea114bd032bcccdda63845f4af0116b3e2d8eac  fixtures/rows.bad.txt
+7369ff973efa967251e2c99add906f4f4964ce6481cd16014b19a3b4d670837b  fixtures/rows.good.txt
+ddb4b4d095ec7851fb894d0b1a7441b8490aeb3b4b9461f826f0f2ca3a484306  fixtures/tags.bad.txt
+b933bcc058de456b00a86f0eb90dc66ec0e8f373365ea1f40c8183bb9b9873fd  fixtures/tags.good.txt
+scratch vs checkout hash lists cmp exit: 0
+
+## (a) redtree (cmp base/X redtree/...)
+cmp base/execution-contract.md redtree/docs/vernacular/execution-contract.md: exit 0
+cmp base/execution-contract.md redtree/base/execution-contract.md: exit 0
+cmp base/command-contract.md redtree/docs/vernacular/command-contract.md: exit 0
+cmp base/command-contract.md redtree/base/command-contract.md: exit 0
+cmp base/render-contract.md redtree/docs/vernacular/render-contract.md: exit 0
+cmp base/render-contract.md redtree/base/render-contract.md: exit 0
+cmp base/load-command-contract.md redtree/docs/vernacular/load-command-contract.md: exit 0
+cmp base/load-command-contract.md redtree/base/load-command-contract.md: exit 0
+cmp base/ledger-contract.md redtree/docs/vernacular/ledger-contract.md: exit 0
+cmp base/ledger-contract.md redtree/base/ledger-contract.md: exit 0
+cmp base/external-profile-contract.md redtree/docs/vernacular/external-profile-contract.md: exit 0
+cmp base/external-profile-contract.md redtree/base/external-profile-contract.md: exit 0
+cmp base/execution-design.md redtree/docs/vernacular/execution-design.md: exit 0
+cmp base/execution-design.md redtree/base/execution-design.md: exit 0
+cmp base/authoring-contract.md redtree/docs/vernacular/authoring-contract.md: exit 0
+cmp base/authoring-contract.md redtree/base/authoring-contract.md: exit 0
+cmp base/acceptance-matrix.md redtree/docs/vernacular/acceptance-matrix.md: exit 0
+cmp base/acceptance-matrix.md redtree/base/acceptance-matrix.md: exit 0
+cmp base/v5-alignment.md redtree/docs/vernacular/v5-alignment.md: exit 0
+cmp base/v5-alignment.md redtree/base/v5-alignment.md: exit 0
+
+## (b) stubtree base copies vs base/ and vs git blobs at the base commit
+cmp base/execution-contract.md stubtree/base/execution-contract.md: exit 0
+cmp base/command-contract.md stubtree/base/command-contract.md: exit 0
+cmp base/render-contract.md stubtree/base/render-contract.md: exit 0
+cmp base/load-command-contract.md stubtree/base/load-command-contract.md: exit 0
+cmp base/ledger-contract.md stubtree/base/ledger-contract.md: exit 0
+cmp base/external-profile-contract.md stubtree/base/external-profile-contract.md: exit 0
+cmp base/execution-design.md stubtree/base/execution-design.md: exit 0
+cmp base/authoring-contract.md stubtree/base/authoring-contract.md: exit 0
+cmp base/acceptance-matrix.md stubtree/base/acceptance-matrix.md: exit 0
+cmp base/v5-alignment.md stubtree/base/v5-alignment.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/execution-contract.md | cmp - stubtree/base/execution-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/command-contract.md | cmp - stubtree/base/command-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/render-contract.md | cmp - stubtree/base/render-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/load-command-contract.md | cmp - stubtree/base/load-command-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/ledger-contract.md | cmp - stubtree/base/ledger-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/external-profile-contract.md | cmp - stubtree/base/external-profile-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/execution-design.md | cmp - stubtree/base/execution-design.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/authoring-contract.md | cmp - stubtree/base/authoring-contract.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/acceptance-matrix.md | cmp - stubtree/base/acceptance-matrix.md: exit 0
+git show cdcfe829c466bf6338815ff6f5b6ea90ffddc570:docs/vernacular/v5-alignment.md | cmp - stubtree/base/v5-alignment.md: exit 0
+
+## (c) attempt-2 copies vs unsuffixed sources
+cmp red-run.txt red-run.attempt-2.txt: exit 0
+cmp red-run.exit red-run.attempt-2.exit: exit 0
+cmp stub-run.txt stub-run.attempt-2.txt: exit 0
+cmp stub-run.exit stub-run.attempt-2.exit: exit 0
+cmp snapshot-identity.txt snapshot-identity.attempt-2.txt: exit 0
+cmp tests.txt tests.attempt-2.txt: exit 0
+
+## (d) summaries, exits, tracebacks
+red-run.attempt-3: SUMMARY pass=8 fail=115 exit=1 Traceback_count=0 internal_error=0
+red-run.attempt-2: SUMMARY pass=8 fail=115 exit=1
+stub-run.attempt-3: SUMMARY pass=10 fail=113 exit=1 Traceback_count=0 internal_error=0
+stub-run.attempt-2: SUMMARY pass=10 fail=113 exit=1
+per-check logs: checker.attempt-3=     123 stub.attempt-3=     123; Traceback in logs: 0
+per-check result line vs full run, checker: 0 mismatches
+per-check result line vs full run, stub: 0 mismatches
+
+## (e) name lists vs attempt 2 (comm -3 prints only differences)
+red-run FAIL attempt2=115 attempt3=115; comm -3 lines: 0
+red-run PASS attempt2=8 attempt3=8; comm -3 lines: 0
+stub-run FAIL attempt2=113 attempt3=113; comm -3 lines: 0
+stub-run PASS attempt2=10 attempt3=10; comm -3 lines: 0
+PASS names red attempt3: CHK-A2-000 CHK-A2-004 CHK-A2-021 CHK-A2-023 CHK-A2-100 CHK-A2-116 CHK-A2-133 CHK-A2-160 
+PASS names stub attempt3: CHK-A2-000 CHK-A2-001 CHK-A2-003 CHK-A2-004 CHK-A2-021 CHK-A2-023 CHK-A2-100 CHK-A2-116 CHK-A2-133 CHK-A2-160 
+
+## (f) tests.attempt-3.txt vs tests.attempt-2.txt
+rows attempt2=108 attempt3=108
+outcome rows compared (columns 4 and 6): 106
+differing lines (diff tests.attempt-2.txt tests.attempt-3.txt, cut to 260 chars):
+23c23
+< | CHK-A2-025 status_v1_schema | I21 | true | FAIL | heading ### P2-1 Verbs and services occurs 0 times | FAIL | P2-1 status_v1: missing literal: `{version:1,kind:"status",ledger,active_revision,active_job,last_event,roles,drafts?,role_detail?,request?}` |
+---
+> | CHK-A2-025 status_v1_schema | I21 | true | FAIL | heading ### P2-1 Verbs and services occurs 0 times | FAIL | P2-1 status_v1: missing literal: A role that `status_v1` lists as `retired` but that the active revision no longer declares has no current W: `...
+35c35
+< | CHK-A2-044 manifest_run_by_request | I33 | true | FAIL | heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times | FAIL | P2-2 run row: missing exact row or line: \| `run` \| `{request,kind}`: `request` is the claim or takeover request
+---
+> | CHK-A2-044 manifest_run_by_request | I33 | true | FAIL | heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times | FAIL | P2-2 run row: missing exact row or line: \| `run` \| `{request,kind}` for a dispatch: `request` is the claim or t
+
+## (g) lines of the six tightened checks and the unchanged ones, copied from the attempt-3 logs
+red:  FAIL CHK-A2-011 expect_job_spelling: heading ### P2-1 Verbs and services occurs 0 times
+stub: FAIL CHK-A2-011 expect_job_spelling: P2-1 activate option row: missing exact row or line: | `activate` | mutation | `--ledger`, `--job`, `--expect-revision`, `--expect-job`, `--request-id`, `--actor` ...
+red:  FAIL CHK-A2-016 exempt_reads: heading ### P2-1 Verbs and services occurs 0 times
+stub: FAIL CHK-A2-016 exempt_reads: P2-1 exempt reads: missing literal: `status` without `--role` (bare, `--request-id`, `--workspace` with `--registry`, or both of the last two), `h...
+red:  FAIL CHK-A2-022 no_new_message: heading ## Part 2: execution verbs, projections and reads (R15-A2) occurs 0 times
+stub: FAIL CHK-A2-022 no_new_message: P2-1: missing literal: No twentieth message
+red:  FAIL CHK-A2-025 status_v1_schema: heading ### P2-1 Verbs and services occurs 0 times
+stub: FAIL CHK-A2-025 status_v1_schema: P2-1 status_v1: missing literal: A role that `status_v1` lists as `retired` but that the active revision no longer declares has no current W: `...
+red:  FAIL CHK-A2-084 orch_ra7_pointer: heading ### P2-6 Orchestrator live form occurs 0 times
+stub: FAIL CHK-A2-084 orch_ra7_pointer: P2-6 RA-7 pointer: missing literal: Pointer: `authoring-contract.md` RA-7 is the base definition; this contract extends it by insertion and `autho...
+red:  FAIL CHK-A2-098 lg_selector_row: ledger-contract pointer: missing literal: the command-surface row text `planar history --ledger <path> --event <id>`
+stub: FAIL CHK-A2-098 lg_selector_row: ledger-contract pointer: missing literal: the command-surface row text `planar history --ledger <path> --event <id>`
+red:  FAIL CHK-A2-092 cc_services_rows: command-contract services: missing literal: Services: the five families have the service lists of
+stub: FAIL CHK-A2-092 cc_services_rows: command-contract services: missing literal: Services: the five families have the service lists of
+red:  PASS CHK-A2-000 selftest_positive_negative
+stub: PASS CHK-A2-000 selftest_positive_negative
+
+## (h) selftest (scratch checker)
+$ python3 -I contract_checks.py --selftest
+PASS CHK-A2-000 selftest_positive_negative
+SUMMARY pass=1 fail=0
+
+## (i) sha256 of every pre-existing red/ file vs work/before-files.full.txt
+before-inventory lines under red/: 923
+equal=923 differ=0 missing=0
+
+## (j) A22 observer, read-only on red/RED.md
+# (1) grep -niE '(red-run|stub-run|snapshot-identity|tests)\.(txt|exit)' RED.md | grep -iE 'attempt[- ]?[12]|pass=[0-9]+ fail=[0-9]+|[0-9]+ PASS'
+6:Scope of this package: `red/` only (new files, `RED.md`, `snapshot-identity.txt` rewritten after an attempt-1 copy).
+19:  `red/snapshot-identity.txt`. The earlier file is kept as `red/snapshot-identity.attempt-1.txt`.
+61:| red (base bytes) | `red/red-run.txt` | 1 | `SUMMARY pass=8 fail=115` | 0 |
+62:| stub (headings present) | `red/stub-run.txt` | 1 | `SUMMARY pass=10 fail=113` | 0 |
+68:- The attempt-1 runs are kept: `red/red-run.attempt-1.txt` and `.exit` (byte-copies of the earlier `red-run.txt` and
+125:Computed from `red/stub-run.txt` (10 PASS lines: `000 001 003 004 021 023 100 116 133 160`). Of these, the checks
+# (2) grep -niE '(attempt[- ]?[12][^`]*(red|stub) run|(red|stub) run[^`]*attempt[- ]?[12])' RED.md
+137:finisher's mutant probes against the final text, which are not claimed here. The previous stub run (attempt 1) also
+# (3a) table header lines and PASS-count statements (manual-read aids)
+59:| run | output | exit | summary line | Traceback lines |
+61:| red (base bytes) | `red/red-run.txt` | 1 | `SUMMARY pass=8 fail=115` | 0 |
+62:| stub (headings present) | `red/stub-run.txt` | 1 | `SUMMARY pass=10 fail=113` | 0 |
+69:  `.exit`, `cmp` exit 0 against `red/checker-run.txt`; `SUMMARY pass=7 fail=99`), and `red/stub-run.attempt-1.txt`
+70:  and `.exit` (`SUMMARY pass=9 fail=97`). Reason for the re-run: see section 7.
+83:| category | red run (`red-run.txt`) | stub run (`stub-run.txt`) |
+107:PASS lines of the red run (8): `CHK-A2-000`, `004`, `021`, `023`, `100`, `116`, `133`, `160`. All are guards.
+125:Computed from `red/stub-run.txt` (10 PASS lines: `000 001 003 004 021 023 100 116 133 160`). Of these, the checks
+127:and C01 `plan/INVARIANTS.md`) are exactly two: `CHK-A2-001` and `CHK-A2-003`. The other eight PASS lines are guards
+# (3b) broader read aid: every line of RED.md naming an unsuffixed red file, an attempt label or raw/
+6:Scope of this package: `red/` only (new files, `RED.md`, `snapshot-identity.txt` rewritten after an attempt-1 copy).
+15:- The re-run trees are verified in `red/tree-verify.attempt-2.txt`: section (a) `redtree` (20 `cmp` exits, the
+19:  `red/snapshot-identity.txt`. The earlier file is kept as `red/snapshot-identity.attempt-1.txt`.
+42:Exact red-run command (snapshot, base bytes; output `red/red-run.txt`, exit `red/red-run.exit`):
+48:Exact stub-run command (headings present, no contract text; output `red/stub-run.txt`, exit `red/stub-run.exit`):
+55:`red/raw/checker.attempt-2/` (redtree) and `red/raw/stub.attempt-2/` (stubtree).
+61:| red (base bytes) | `red/red-run.txt` | 1 | `SUMMARY pass=8 fail=115` | 0 |
+62:| stub (headings present) | `red/stub-run.txt` | 1 | `SUMMARY pass=10 fail=113` | 0 |
+64:- All 123 checks ran in each tree. Each per-check log's result line equals the line of the full run for the same
+68:- The attempt-1 runs are kept: `red/red-run.attempt-1.txt` and `.exit` (byte-copies of the earlier `red-run.txt` and
+69:  `.exit`, `cmp` exit 0 against `red/checker-run.txt`; `SUMMARY pass=7 fail=99`), and `red/stub-run.attempt-1.txt`
+83:| category | red run (`red-run.txt`) | stub run (`stub-run.txt`) |
+125:Computed from `red/stub-run.txt` (10 PASS lines: `000 001 003 004 021 023 100 116 133 160`). Of these, the checks
+137:finisher's mutant probes against the final text, which are not claimed here. The previous stub run (attempt 1) also
+142:- The red-run FAIL set (115) equals the set of checks with `expectRed` true in the checker flags, and it matches the
+158:Kept, not overwritten: `red-run.attempt-1.txt`, `red-run.attempt-1.exit`, `stub-run.attempt-1.txt`,
+159:`stub-run.attempt-1.exit`, `snapshot-identity.attempt-1.txt`.
+161:Reason: the attempt-1 `CHK-A2-022 no_new_message` extraction defect. The helper that collected allowed messages paired
+164:give different string sets for these files. The attempt-1 red log of `CHK-A2-022` could not show this, because the
+167:The attempt-2 runs use the repaired checker.
+171:- New folders: `red/raw/checker.attempt-2/` (123 per-check logs, `CHK-A2-NNN_<name>.log`, redtree) and
+172:  `red/raw/stub.attempt-2/` (123 logs, stubtree). Each log has the header `tree: ...`, the `$ <command>` line, the
+173:  result line, `SUMMARY` and `exit=`, in the attempt-1 format.
+174:- New file: `red/raw/RED-A2-002_attempt2.log` (the before and after listings of `red/raw` with `shasum -a 256`, the
+176:- Existing files under `red/raw/` were not written: `checker/`, `stub/`, `checker-pre-020-fix/`, `stub-pre-020-fix/`,
+179:- The per-check logs show `contract_checks.py` run from `<scratch>/checks-copy` (the attempt-1 logs show the path
+187:- `tree-verify.txt` has no git-blob lines. Section (b) of `tree-verify.attempt-2.txt` adds ten git-blob comparisons

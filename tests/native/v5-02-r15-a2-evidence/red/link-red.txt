@@ -1,0 +1,10 @@
+FAIL LINK-A2-001 anchors_resolve: 9 problem(s)
+  required anchor missing from execution-contract.md: #part-2-execution-verbs-projections-and-reads-r15-a2
+  required anchor missing from execution-contract.md: #p2-1-verbs-and-services
+  required anchor missing from execution-contract.md: #p2-2-dispatch-projection-and-dispatch_manifest_v1
+  required anchor missing from execution-contract.md: #p2-3-work_exec_v1
+  required anchor missing from execution-contract.md: #p2-4-provenance-driver_provenance_v1
+  required anchor missing from execution-contract.md: #p2-5-history-event-selector-and-request-results
+  required anchor missing from execution-contract.md: #p2-6-orchestrator-live-form
+  required anchor missing from execution-contract.md: #p2-7-command-render-load-ledger-and-external-profile-pointers
+  required anchor missing from execution-contract.md: #part-1-amendments-r15-a2

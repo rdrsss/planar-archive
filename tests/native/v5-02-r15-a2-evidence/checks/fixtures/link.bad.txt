@@ -1,0 +1,5 @@
+See [the target](#missing) for the rule.
+
+## Target
+
+Text.

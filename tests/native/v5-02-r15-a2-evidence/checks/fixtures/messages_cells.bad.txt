@@ -1,0 +1,4 @@
+| Condition | Code | Message |
+| --- | --- | --- |
+| path missing or unresolvable | `io` | `Cannot resolve explicit input path` |
+| provenance file cannot be opened | `io` | `Cannot resolve provenance path` |

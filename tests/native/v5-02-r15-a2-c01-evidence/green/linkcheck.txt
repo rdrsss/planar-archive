@@ -1,0 +1,32 @@
+# Link and anchor check, V5-02-R15-A2-C01 (docs evidence finisher, 2026-11-06)
+
+## 1. The round's link_check.py over the seven contract documents
+command: python3 -I -B <scratch>/link_check.py --repo <repo> --git-repo <repo> --base-commit cdcfe829c466bf6338815ff6f5b6ea90ffddc570
+exit code: 0
+PASS LINK-A2-001 anchors_resolve
+self-test: python3 -I -B <scratch>/link_check.py --selftest ; exit code: 0
+PASS LINK-A2-001 anchors_resolve selftest
+
+## 2. Every changed document of git status (11 files, .md), using link_check.py's Resolver and check_document
+command: python3 -I -B <scratch>/linkall.py (run from <repo>; the file list is the .md paths under docs/ from 'git status --porcelain')
+exit code: 0
+changed docs checked: 11
+docs/vernacular/command-contract.md links=17 problems=0
+docs/vernacular/execution-contract.md links=234 problems=0
+docs/vernacular/execution-design.md links=7 problems=0
+docs/vernacular/external-profile-contract.md links=18 problems=0
+docs/vernacular/ledger-contract.md links=23 problems=0
+docs/vernacular/load-command-contract.md links=17 problems=0
+docs/vernacular/render-contract.md links=11 problems=0
+docs/vernacular/roadmap.md links=98 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-C01.md links=3 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-review.md links=1 problems=0
+docs/vernacular/rounds/V5-02-R15-A2.md links=145 problems=0
+non-md changed paths (not link-checked): none
+TOTAL problems=0
+NEGATIVE CONTROL problems=2 (must be 2)
+  docs/vernacular/negative-control.md:1 missing anchor execution-contract.md#no-such-anchor-zzz
+  docs/vernacular/negative-control.md:1 missing file docs/vernacular/missing-file-zzz.md (link missing-file-zzz.md)
+
+## 3. Negative control
+The last block above checks a synthetic document holding a missing anchor and a missing file; it reports 2 problems (required: 2), so the checker can fail.

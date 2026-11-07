@@ -1,0 +1,1 @@
+Plain relative text with links such as (../README.md).

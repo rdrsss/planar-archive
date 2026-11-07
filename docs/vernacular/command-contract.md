@@ -28,6 +28,64 @@ and it scopes the "no directory listing" sentence below to every family except `
 by this pointer; the rows and bytes below stay current until
 that gate.
 
+Pointer (R15-A2): at the R15 integrated gate, the embedded catalog, the ABI rows, the option signatures, the services and the root help change as stated in this pointer. Catalog counts at that gate, per build (D148): ten mandatory rows in the production build (the current five plus the five R15 rows) and sixteen in a build that compiles the authoring bundle (the ten plus the six RA01 rows; the RA01 rows and the `orchestrator` verb exist only there). The history family gains `--event` in both builds; the orchestrator family gains the ledger form only where the orchestrator is compiled. Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and this pointer narrows no approved clause.
+
+ABI rows at that gate (handler IDs, response kinds and capability sets of the execution contract's P2-1 and P2-7):
+
+| name / family | handler_id | response_kind | capabilities |
+| --- | --- | --- | --- |
+| activate / activate | `shipped.activate.v1` | `activate_v1` | `execution_commit_v1` |
+| status / status | `shipped.status.v1` | `status_v1` | `execution_read_v1`, `draft_capture_v1` |
+| preview / preview | `shipped.preview.v1` | `preview_v1` | `execution_read_v1` |
+| claim / claim | `shipped.claim.v1` | `claim_v1` | `execution_commit_v1`, `provenance_read_v1` |
+| takeover / takeover | `shipped.takeover.v1` | `claim_v1` | `execution_commit_v1`, `provenance_read_v1` |
+
+The response kind `claim_v1` is shared by `claim` and `takeover`. Also, only where the orchestrator is compiled, `orchestrator` gains capability `execution_read_v1` beside `orchestrator_capture_v1`; `orchestrator --ledger` exists only there.
+
+Option signatures at that gate (`!` marks a required option):
+
+- activate text `--ledger!`, `--job!`, `--expect-revision!`, `--expect-job!`, `--request-id!`, `--actor!`; the help metavariable of `--expect-job` is `JOB_OR_NONE` (the value `NONE` means no active job, and any other value is a job ID).
+- status text `--ledger!`, `--role`, `--request-id`, `--workspace`, `--registry` (`--role` excludes `--request-id` and nothing else; `--workspace` and `--registry` both or neither).
+- preview text `--ledger!`, `--role!`.
+- claim text `--ledger!`, `--job!`, `--role!`, `--request-id!`, `--actor!`, `--provenance`.
+- takeover text `--ledger!`, `--job!`, `--role!`, `--request-id!`, `--actor!`, `--provenance` and decimal `--run-id!`.
+- history gains decimal `--event` (excluding `--revision`, `--request-id`, `--at-event`, `--after-event`, `--limit`).
+- orchestrator text `--ledger`, `--workspace`, `--registry`, `--job` all optional with the native both-or-exactly-one-form rule.
+
+Lua boundary: the rule that database IDs and cursors (`revision`, `at-event`, `after-event`) cross into Lua only as canonical decimal strings, absent `"0"`, extends to `run-id` and `event`. Opaque slots gain `provenance`.
+
+Services: the five families have the service lists of [P2-1](execution-contract.md#p2-1-verbs-and-services); `orchestrator` gains `read_execution({})` where the orchestrator is compiled; `read_history` gains the selector `event` and is called as `read_history({selector:"event",id:ID,request_id:"",limit:50})`, `limit` being the existing absent-limit value 50 that `commands.lua` passes (the event selector ignores it, no `limit:1`).
+
+Fixed root help at that gate, per build (exact bytes; the current bytes stay in force until that gate). Production build (no authoring path, D148): the second line of the history block becomes the first line below, and five lines are inserted immediately before the final `planar --help` line, in this order, with no orchestrator line.
+
+```text
+  or --revision ID | --request-id ID | --at-event ID | --event ID
+```
+
+```text
+planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor TEXT
+planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE_OR_NAME --registry FILE]
+planar preview --ledger PATH --role ID
+planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]
+planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]
+planar --help
+```
+
+Authoring bundle (sixteen rows): the production bytes above, then the splice of `authoring::splice_root_help`, which inserts the six RA01 lines immediately before the final `planar --help` line and the continuation `  or --ledger PATH` directly after the `planar orchestrator` line. The relative order is therefore the history block, the export and load lines, the five R15 lines, the six RA01 lines, the continuation line (a seventh spliced line), then `planar --help`. The spliced lines are:
+
+```text
+planar spec-prompt --workspace FILE_OR_NAME --registry FILE
+planar critique --workspace FILE_OR_NAME --registry FILE
+planar ingest --workspace FILE_OR_NAME --registry FILE
+planar explain-rejection --diagnostic FILE
+planar observe --from DIRECTORY
+planar orchestrator --workspace FILE_OR_NAME --registry FILE --job ID
+  or --ledger PATH
+planar --help
+```
+
+Every other help byte, the `with-profile` help bytes and the parse and usage precedence are unchanged.
+
 ## Catalog and structural ABI
 
 The embedded bundle registers through `registration.add(descriptor, callable)`.

@@ -1,0 +1,160 @@
+id	expected_killer	verdict	killing_check	other_failing_checks	exit	file	line	diff_sha256_16	changed_lines	log	earlier_attempt_logs	source
+I01	CHK-A2-001	KILLED	CHK-A2-001	-	1	EC	line 894	e9f6be9bfd5061b3	2	probes/raw/I01.log	-	crafted from the row text
+I02	CHK-A2-002	KILLED	CHK-A2-002	-	1	EC	line 894	4ef3ac00ba92bf35	2	probes/raw/I02.log	-	crafted from the row text
+I03	CHK-A2-003	KILLED	CHK-A2-003	CHK-A2-050,CHK-A2-051,CHK-A2-052,CHK-A2-053,CHK-A2-054,CHK-A2-127,CHK-A2-096,CHK-A2-149,CHK-A2-150	1	EC	line 1092	527fd96687110876	1	probes/raw/I03.log	-	crafted from the row text
+I04	CHK-A2-004	KILLED	CHK-A2-004	CHK-A2-005	1	EC	line 84	ebfbb2a9e5f84ccd	2	probes/raw/I04.log	-	crafted from the row text
+I05	CHK-A2-005	KILLED	CHK-A2-005	-	1	EC	line 670	e747124df2f445f6	2	probes/raw/I05.log	-	crafted from the row text
+I06	CHK-A2-010	KILLED	CHK-A2-010	CHK-A2-011	1	EC	line 913	5e39c9284d0111b9	2	probes/raw/I06.log	-	crafted from the row text
+I07	CHK-A2-011	KILLED	CHK-A2-011	CHK-A2-010	1	EC	line 913	3cc3d60815ad8af2	4	probes/raw/I07.log	probes/raw/I07.attempt-1.log	crafted from the row text
+I08	CHK-A2-012	KILLED	CHK-A2-012	CHK-A2-010	1	EC	line 914	94eb8bca61a1f147	2	probes/raw/I08.log	-	crafted from the row text
+I09	CHK-A2-013	KILLED	CHK-A2-013	-	1	EC	line 940	76122285d3472100	2	probes/raw/I09.log	-	crafted from the row text
+I10	CHK-A2-014	KILLED	CHK-A2-014	-	1	EC	line 941	bdd466b76c7663c8	2	probes/raw/I10.log	-	crafted from the row text
+I11	CHK-A2-015	KILLED	CHK-A2-015	CHK-A2-013	1	EC	line 940	7a52e520b873faca	2	probes/raw/I11.log	-	crafted from the row text
+I12	CHK-A2-016	KILLED	CHK-A2-016	-	1	EC	line 987	cfe26d913ef6c9cc	2	probes/raw/I12.log	probes/raw/I12.attempt-1.log	crafted from the row text
+I13	CHK-A2-017	KILLED	CHK-A2-017	-	1	EC	line 972	1d3ea358b1a87430	2	probes/raw/I13.log	-	crafted from the row text
+I14	CHK-A2-018	KILLED	CHK-A2-018	-	1	EC	line 1009	c5fcee3f3207e659	2	probes/raw/I14.log	-	crafted from the row text
+I15	CHK-A2-019	KILLED	CHK-A2-019	CHK-A2-020	1	EC	line 971	0fda58ebdf6a6960	2	probes/raw/I15.log	-	crafted from the row text
+I16	CHK-A2-020	KILLED	CHK-A2-020	-	1	EC	line 971	f0018b8c9d391cd2	2	probes/raw/I16.log	-	crafted from the row text
+I17	CHK-A2-021	KILLED	CHK-A2-021	CHK-A2-004,CHK-A2-005	1	EC	line 763	7a3f535ed7fccd11	2	probes/raw/I17.log	-	crafted from the row text
+I18	CHK-A2-022	KILLED	CHK-A2-022	CHK-A2-017,CHK-A2-019	1	EC	line 972	2305ed5bdc97f8a4	2	probes/raw/I18.log	probes/raw/I18.attempt-1.log	crafted from the row text
+I19	CHK-A2-023	KILLED	CHK-A2-023	CHK-A2-100	1	XP	line 558	88b6ff676d7a082f	2	probes/raw/I19.log	-	crafted from the row text
+I20	CHK-A2-024	KILLED	CHK-A2-024	-	1	EC	line 991	d88df8d6edd4c16f	2	probes/raw/I20.log	-	crafted from the row text
+I21	CHK-A2-025	KILLED	CHK-A2-025	-	1	EC	line 997	51f1e727751814ab	2	probes/raw/I21.log	probes/raw/I21.attempt-1.log	crafted from the row text
+I22	CHK-A2-026	KILLED	CHK-A2-026	-	1	EC	line 999	36e3f7f74a353d54	2	probes/raw/I22.log	-	crafted from the row text
+I23	CHK-A2-027	KILLED	CHK-A2-027	-	1	EC	line 993	19e0b5d5550aa4fd	2	probes/raw/I23.log	-	crafted from the row text
+I24	CHK-A2-028	KILLED	CHK-A2-028	-	1	EC	line 995	8c348089d2a4e551	2	probes/raw/I24.log	-	crafted from the row text
+I25	CHK-A2-029	KILLED	CHK-A2-029	-	1	EC	line 931	c754411ebb431646	2	probes/raw/I25.log	-	crafted from the row text
+I26	CHK-A2-030	KILLED	CHK-A2-030	-	1	EC	line 1018	3e6216b77afc7ab4	2	probes/raw/I26.log	-	crafted from the row text
+I27	CHK-A2-031	KILLED	CHK-A2-031	-	1	EC	line 1022	745e9a7d75778106	2	probes/raw/I27.log	-	crafted from the row text
+I28	CHK-A2-032	KILLED	CHK-A2-032	CHK-A2-018	1	EC	line 1014	1be233922be284e9	2	probes/raw/I28.log	-	crafted from the row text
+I29	CHK-A2-040	KILLED	CHK-A2-040	-	1	EC	line 999	084a2415b5d1b680	4	probes/raw/I29.log	probes/raw/I29.attempt-1.log	crafted from the row text
+I30	CHK-A2-041	KILLED	CHK-A2-041	-	1	EC	line 1041	dc0b65ecf514bd02	2	probes/raw/I30.log	-	crafted from the row text
+I31	CHK-A2-042	KILLED	CHK-A2-042	CHK-A2-043	1	EC	line 1083	546fae3318b6750a	2	probes/raw/I31.log	-	crafted from the row text
+I32	CHK-A2-043	KILLED	CHK-A2-043	-	1	EC	line 1087	4dfe5843e14f0311	2	probes/raw/I32.log	-	crafted from the row text
+I33	CHK-A2-044	KILLED	CHK-A2-044	CHK-A2-043,CHK-A2-144	1	EC	line 1079	daed2a5df15ed814	2	probes/raw/I33.log	-	crafted from the row text
+I34	CHK-A2-045	KILLED	CHK-A2-045	CHK-A2-043,CHK-A2-144	1	EC	line 1084	73eb5b2cdcd8e372	1	probes/raw/I34.log	-	crafted from the row text
+I35	CHK-A2-046	KILLED	CHK-A2-046	-	1	EC	line 1063	f50194d65cf26cfb	2	probes/raw/I35.log	-	crafted from the row text
+I36	CHK-A2-047	KILLED	CHK-A2-047	-	1	EC	line 1071	e6be35cb9d53dbd5	2	probes/raw/I36.log	-	crafted from the row text
+I37	CHK-A2-050	KILLED	CHK-A2-050	-	1	EC	line 1095	a981dfea9d20a59c	2	probes/raw/I37.log	-	crafted from the row text
+I38	CHK-A2-051	KILLED	CHK-A2-051	-	1	EC	line 1103	748b91348a5784fb	2	probes/raw/I38.log	-	crafted from the row text
+I39	CHK-A2-052	KILLED	CHK-A2-052	-	1	EC	line 1100	ae95e2d3a456dc3e	2	probes/raw/I39.log	-	crafted from the row text
+I40	CHK-A2-053	KILLED	CHK-A2-053	-	1	EC	line 1099	c6607d21390aba0a	2	probes/raw/I40.log	-	crafted from the row text
+I41	CHK-A2-054	KILLED	CHK-A2-054	-	1	EC	line 1098	f1e62f9cecd2eecc	2	probes/raw/I41.log	-	crafted from the row text
+I42	CHK-A2-060	KILLED	CHK-A2-060	-	1	EC	line 1108	1977f9952654ff25	2	probes/raw/I42.log	-	crafted from the row text
+I43	CHK-A2-061	KILLED	CHK-A2-061	-	1	EC	line 1110	d51797dc2d37739e	2	probes/raw/I43.log	-	crafted from the row text
+I44	CHK-A2-062	KILLED	CHK-A2-062	-	1	EC	line 1114	ca0d640fdb78f260	2	probes/raw/I44.log	-	crafted from the row text
+I45	CHK-A2-063	KILLED	CHK-A2-063	-	1	EC	line 1114	ca15ec3e7e2764d1	4	probes/raw/I45.log	-	crafted from the row text
+I46	CHK-A2-064	KILLED	CHK-A2-064	-	1	EC	line 1116	05225489ca098b73	2	probes/raw/I46.log	-	crafted from the row text
+I47	CHK-A2-065	KILLED	CHK-A2-065	-	1	EC	line 1112	36c808794be87481	2	probes/raw/I47.log	probes/raw/I47.attempt-1.log	crafted from the row text
+I48	CHK-A2-066	KILLED	CHK-A2-066	-	1	EC	line 1144	a47ad7b4edc8f18c	2	probes/raw/I48.log	-	crafted from the row text
+I49	CHK-A2-070	KILLED	CHK-A2-070	-	1	EC	line 1135	a357e06f1c1d881b	2	probes/raw/I49.log	-	crafted from the row text
+I50	CHK-A2-071	KILLED	CHK-A2-071	-	1	EC	line 1141	a67e51fa84548b5a	2	probes/raw/I50.log	-	crafted from the row text
+I51	CHK-A2-072	KILLED	CHK-A2-072	-	1	EC	line 1146	4ac6a03df9cac239	2	probes/raw/I51.log	-	crafted from the row text
+I52	CHK-A2-073	KILLED	CHK-A2-073	CHK-A2-071	1	EC	line 1144	1ddd74988d92bbd3	2	probes/raw/I52.log	-	crafted from the row text
+I53	CHK-A2-074	KILLED	CHK-A2-074	-	1	EC	line 1148	bbc60a25a242288b	2	probes/raw/I53.log	-	crafted from the row text
+I54	CHK-A2-075	KILLED	CHK-A2-075	-	1	EC	line 1141	a2ab252d918e52a1	2	probes/raw/I54.log	-	crafted from the row text
+I55	CHK-A2-076	KILLED	CHK-A2-076	-	1	EC	line 1001	15943b5b71ce707d	4	probes/raw/I55.log	-	crafted from the row text
+I56	CHK-A2-080	KILLED	CHK-A2-080	-	1	EC	line 1152	e94448060e37d4d0	2	probes/raw/I56.log	-	crafted from the row text
+I57	CHK-A2-081	KILLED	CHK-A2-081	-	1	EC	line 1154	e5982cc449abe142	2	probes/raw/I57.log	-	crafted from the row text
+I58	CHK-A2-082	KILLED	CHK-A2-082	-	1	EC	line 1156	01236f80f05227d2	2	probes/raw/I58.log	-	crafted from the row text
+I59	CHK-A2-083	KILLED	CHK-A2-083	-	1	EC	line 1154	f74a2bcb56d2f8a1	2	probes/raw/I59.log	-	crafted from the row text
+I60	CHK-A2-084	KILLED	CHK-A2-084	-	1	EC	line 1156	83eff04923587c5c	2	probes/raw/I60.log	probes/raw/I60.attempt-1.log	crafted from the row text
+I61	CHK-A2-090	KILLED	CHK-A2-090	CHK-A2-101	1	CC	line 41	d455e7f849e98c62	2	probes/raw/I61.log	-	crafted from the row text
+I62	CHK-A2-091	KILLED	CHK-A2-091	-	1	CC	line 52	ca453b09c8c348f7	2	probes/raw/I62.log	-	crafted from the row text
+I63	CHK-A2-092	KILLED	CHK-A2-092	-	1	CC	line 57	7001dcbd1b3383ae	2	probes/raw/I63.log	probes/raw/I63.attempt-1.log	crafted from the row text
+I64	CHK-A2-093	KILLED	CHK-A2-093	-	1	CC	line 55	b6e24ae1d7f641ed	2	probes/raw/I64.log	-	crafted from the row text
+I65	CHK-A2-094	KILLED	CHK-A2-094	CHK-A2-095	1	CC	line 62	603e3077812162a1	2	probes/raw/I65.log	-	crafted from the row text
+I66	CHK-A2-095	KILLED	CHK-A2-095	-	1	XP	line 53	590eb20b032b843f	2	probes/raw/I66.log	-	crafted from the row text
+I67	CHK-A2-096	KILLED	CHK-A2-096	-	1	RC	line 416	ef14995acbfe982b	2	probes/raw/I67.log	-	crafted from the row text
+I67b	CHK-A2-096	KILLED	CHK-A2-096	CHK-A2-150	1	RC	line 416	c8c119d897ebf04b	2	probes/raw/I67b.log	-	crafted from the row text
+I68	CHK-A2-097	KILLED	CHK-A2-097	-	1	LC	line 21	34c687eb03e71fce	2	probes/raw/I68.log	-	crafted from the row text
+I69	CHK-A2-098	KILLED	CHK-A2-098	-	1	LG	line 454	c53afa9dc53beb18	2	probes/raw/I69.log	probes/raw/I69.attempt-1.log	crafted from the row text
+I70	CHK-A2-099	KILLED	CHK-A2-099	-	1	XP	line 48	4210e76b9c79ffff	2	probes/raw/I70.log	-	crafted from the row text
+I71	CHK-A2-100	KILLED	CHK-A2-100	-	1	AM	line 1	16667a5a1a2ec23f	2	probes/raw/I71.log	-	crafted from the row text
+I72	CHK-A2-101	KILLED	CHK-A2-101	CHK-A2-020	1	EC	line 1167	b7b9b86041c1d78d	2	probes/raw/I72.log	-	crafted from the row text
+I73	CHK-A2-110	KILLED	CHK-A2-110	-	1	EC	line 1300	bc90aa845af529a2	1	probes/raw/I73.log	-	crafted from the row text
+I74	CHK-A2-111	KILLED	CHK-A2-111	-	1	EC	line 1441	aeffbf22963a2570	2	probes/raw/I74.log	probes/raw/I74.attempt-1.log	crafted from the row text
+I75	CHK-A2-112	KILLED	CHK-A2-112	CHK-A2-155	1	EC	line 1354	02f4ed97575a7ef4	1	probes/raw/I75.log	-	crafted from the row text
+I76	CHK-A2-113	KILLED	CHK-A2-113	-	1	ED	line 704	b3f6755c2c6423c8	2	probes/raw/I76.log	-	crafted from the row text
+I77	CHK-A2-114	KILLED	CHK-A2-114	-	1	EC	line 1225	e61de2a8df9f0957	2	probes/raw/I77.log	-	crafted from the row text
+I78	CHK-A2-115	KILLED	CHK-A2-115	-	1	EC	line 912	3b87ed68d8703484	1	probes/raw/I78.log	-	crafted from the row text
+I79	LINK-A2-001	KILLED	LINK-A2-001	-	1	EC	line 1106	c9b57673508b0f6c	2	probes/raw/I79.log	-	crafted from the row text
+I80	CHK-A2-116	KILLED	CHK-A2-116	-	1	EC	line 1160	5c12953de5065466	2	probes/raw/I80.log	-	crafted from the row text
+I81	RED-A2-001	KILLED	RED-A2-001	-	1	scratch copy of execution-contract.md	line 894	-	1	probes/raw/I81.log	-	redaction mutant (positive control in the log)
+I82	CHK-A2-000	KILLED	CHK-A2-000	-	1	CHK	line 393	5248ed77f0d26a31	1	probes/raw/I82.log	-	crafted from the row text
+I84	CHK-A2-117	KILLED	CHK-A2-117	-	1	EC	line 960	bbbe09ebf7f81242	2	probes/raw/I84.log	-	crafted from the row text
+I85	CHK-A2-118	KILLED	CHK-A2-118	-	1	EC	line 957	a59a3e43302d56e0	2	probes/raw/I85.log	-	crafted from the row text
+I86	CHK-A2-119	KILLED	CHK-A2-119	-	1	EC	line 995	1380a9758a28dc86	2	probes/raw/I86.log	-	crafted from the row text
+I87	CHK-A2-120	KILLED	CHK-A2-120	-	1	EC	line 1137	8aca461d89274f2c	2	probes/raw/I87.log	-	crafted from the row text
+I88	CHK-A2-121	KILLED	CHK-A2-121	-	1	EC	line 1139	0728307c416b7254	2	probes/raw/I88.log	-	crafted from the row text
+I89	CHK-A2-122	KILLED	CHK-A2-122	-	1	EC	line 1139	434a4cce802cbf75	2	probes/raw/I89.log	-	crafted from the row text
+I90	CHK-A2-123	KILLED	CHK-A2-123	-	1	EC	line 1144	7681237cc5c9c2c2	2	probes/raw/I90.log	-	crafted from the row text
+I91	CHK-A2-124	KILLED	CHK-A2-124	-	1	EC	line 987	af2de453229886c3	2	probes/raw/I91.log	-	crafted from the row text
+I92	CHK-A2-125	KILLED	CHK-A2-125	CHK-A2-005	1	EC	line 1227	600b32da9a18d730	1	probes/raw/I92.log	-	crafted from the row text
+I94	CHK-A2-127	KILLED	CHK-A2-127	CHK-A2-043	1	EC	line 1087	dadf0ebe26e3d4c9	2	probes/raw/I94.log	-	crafted from the row text
+I95	CHK-A2-128	KILLED	CHK-A2-128	-	1	XP	line 61	534bcbcba2654b2a	2	probes/raw/I95.log	-	crafted from the row text
+I96	CHK-A2-129	KILLED	CHK-A2-129	-	1	EC	line 1283	4cb3a90473af244b	2	probes/raw/I96.log	-	crafted from the row text
+I97	CHK-A2-130	KILLED	CHK-A2-130	-	1	LG	line 454	e32608715ff28824	2	probes/raw/I97.log	-	crafted from the row text
+I98	CHK-A2-131	KILLED	CHK-A2-131	CHK-A2-092	1	CC	line 57	7f2ff3be599cb9b2	2	probes/raw/I98.log	-	crafted from the row text
+I99	CHK-A2-132	KILLED	CHK-A2-132	-	1	LC	line 21	428d15017f5458de	2	probes/raw/I99.log	-	crafted from the row text
+I100	CHK-A2-133	KILLED	CHK-A2-133	CHK-A2-022,CHK-A2-084,CHK-A2-160	1	B:authoring-contract.md	line 1	065fc64ff8293cbc	622	probes/raw/I100.log	-	delete scratch base/authoring-contract.md
+I101	CHK-A2-134	KILLED	CHK-A2-134	-	1	EC	line 1131	0d9c9c290a9000da	2	probes/raw/I101.log	-	crafted from the row text
+I102	CHK-A2-135	KILLED	CHK-A2-135	-	1	EC	line 1051	2b3f695b4cf55533	2	probes/raw/I102.log	-	crafted from the row text
+I103	CHK-A2-136	KILLED	CHK-A2-136	CHK-A2-101	1	CC	line 31	d4a39a1cb16dcdb7	2	probes/raw/I103.log	-	crafted from the row text
+I104	CHK-A2-137	KILLED	CHK-A2-137	-	1	EC	line 970	e69197bfd885eb44	2	probes/raw/I104.log	-	crafted from the row text
+I105	CHK-A2-138	KILLED	CHK-A2-138	-	1	EC	line 997	c55a15a5c6faa147	4	probes/raw/I105.log	-	crafted from the row text
+I107	CHK-A2-139	KILLED	CHK-A2-139	-	1	EC	line 942	f2ad298005ddce7e	2	probes/raw/I107.log	-	crafted from the row text
+I108	CHK-A2-140	KILLED	CHK-A2-140	-	1	EC	line 949	6d8fd616bc5c080f	2	probes/raw/I108.log	-	crafted from the row text
+I109	CHK-A2-141	KILLED	CHK-A2-141	-	1	EC	line 983	f7161ad5d027d174	2	probes/raw/I109.log	-	crafted from the row text
+I110	CHK-A2-142	KILLED	CHK-A2-142	-	1	EC	line 1148	ac8830423e91c0d4	2	probes/raw/I110.log	-	crafted from the row text
+I111	CHK-A2-143	KILLED	CHK-A2-143	-	1	XP	line 48	468e3b9f29d0a664	2	probes/raw/I111.log	-	crafted from the row text
+I112	CHK-A2-144	KILLED	CHK-A2-144	CHK-A2-043,CHK-A2-044	1	EC	line 1079	63f2630fd46720c0	2	probes/raw/I112.log	probes/raw/I112.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I113	CHK-A2-145	KILLED	CHK-A2-145	-	1	EC	line 1091	5e2095adf82f532f	2	probes/raw/I113.log	probes/raw/I113.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I113b	CHK-A2-145	KILLED	CHK-A2-145	-	1	EC	line 999	1496ca11097a872d	2	probes/raw/I113b.log	probes/raw/I113b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I113c	CHK-A2-145	KILLED	CHK-A2-145	-	1	EC	line 1091	997430bfa2f7abde	2	probes/raw/I113c.log	probes/raw/I113c.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I114	CHK-A2-146	KILLED	CHK-A2-146	CHK-A2-042,CHK-A2-145	1	EC	line 1047	4566d46b2274f5fd	4	probes/raw/I114.log	probes/raw/I114.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I114b	CHK-A2-146	KILLED	CHK-A2-146	CHK-A2-042,CHK-A2-145	1	EC	line 1047	a2f0afb80190d65c	4	probes/raw/I114b.log	probes/raw/I114b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I114c	CHK-A2-146	KILLED	CHK-A2-146	CHK-A2-042,CHK-A2-111,CHK-A2-145	1	EC	line 1047	8f3f1ecb71265582	6	probes/raw/I114c.log	probes/raw/I114c.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I115	CHK-A2-147	KILLED	CHK-A2-147	-	1	EC	line 1034	8b69e120babf9c95	1	probes/raw/I115.log	probes/raw/I115.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I116	CHK-A2-148	KILLED	CHK-A2-148	-	1	RC	line 253	b1e3d914f8503a1c	2	probes/raw/I116.log	probes/raw/I116.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I117	CHK-A2-149	KILLED	CHK-A2-149	CHK-A2-150	1	EC	line 1438	6dbf5f9d08d3fd67	2	probes/raw/I117.log	probes/raw/I117.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I117b	CHK-A2-149	KILLED	CHK-A2-149	CHK-A2-096,CHK-A2-150	1	RC	line 416	c2f094f7afc52e7e	2	probes/raw/I117b.log	probes/raw/I117b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I117c	CHK-A2-149	KILLED	CHK-A2-149	CHK-A2-096,CHK-A2-150	1	EC	line 1102	389556a9c0b16792	2	probes/raw/I117c.log	probes/raw/I117c.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I118	CHK-A2-150	KILLED	CHK-A2-150	CHK-A2-096,CHK-A2-149	1	EC	line 1102	94b81534a2bdff20	2	probes/raw/I118.log	probes/raw/I118.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I118b	CHK-A2-150	KILLED	CHK-A2-150	-	1	EC	line 1199	5adf92721f2894e6	2	probes/raw/I118b.log	probes/raw/I118b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I119	CHK-A2-151	KILLED	CHK-A2-151	-	1	EC	line 1137	bc0d72be5d099633	2	probes/raw/I119.log	probes/raw/I119.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I120	CHK-A2-152	KILLED	CHK-A2-152	CHK-A2-151	1	EC	line 1461	031f81ff8c2a634d	2	probes/raw/I120.log	probes/raw/I120.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I121	CHK-A2-153	KILLED	CHK-A2-153	CHK-A2-076	1	EC	line 540	840c8207db6c28d9	2	probes/raw/I121.log	probes/raw/I121.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I122	CHK-A2-154	KILLED	CHK-A2-154	-	1	LC	line 21	2077e35b27e30c80	3	probes/raw/I122.log	probes/raw/I122.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I123	CHK-A2-155	KILLED	CHK-A2-155	-	1	EC	line 1354	e1d10af7c742b829	2	probes/raw/I123.log	probes/raw/I123.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I123b	CHK-A2-155	KILLED	CHK-A2-155	CHK-A2-112	1	EC	line 1357	ca745175f1a26e06	1	probes/raw/I123b.log	probes/raw/I123b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I124	CHK-A2-156	KILLED	CHK-A2-156	-	1	EC	line 1323	56d5b228975e96a7	2	probes/raw/I124.log	probes/raw/I124.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I125	CHK-A2-157	KILLED	CHK-A2-157	-	1	EC	line 1324	e96d75188078eb10	2	probes/raw/I125.log	probes/raw/I125.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I126	CHK-A2-158	KILLED	CHK-A2-158	-	1	EC	line 1225	42b5a952df2b4f3a	2	probes/raw/I126.log	probes/raw/I126.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I126b	CHK-A2-158	KILLED	CHK-A2-158	-	1	EC	line 1225	df63b72256979fa8	2	probes/raw/I126b.log	probes/raw/I126b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I127	CHK-A2-159	KILLED	CHK-A2-159	-	1	EC	line 1216	fdc3fe36bead0d31	2	probes/raw/I127.log	probes/raw/I127.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I128	CHK-A2-111	KILLED	CHK-A2-111	-	1	EC	line 1472	1426c6d92a07187c	2	probes/raw/I128.log	probes/raw/I128.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I129	CHK-A2-160	KILLED	CHK-A2-160	CHK-A2-022,CHK-A2-000	1	CHK	line 639	bb2ba0cc23570b56	4	probes/raw/I129.log	probes/raw/I129.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I130	CHK-A2-022	KILLED	CHK-A2-022	CHK-A2-017	1	EC	line 972	3dd06cdf9ab08873	2	probes/raw/I130.log	probes/raw/I130.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I131	CHK-A2-022	KILLED	CHK-A2-022	CHK-A2-021,CHK-A2-084,CHK-A2-160,CHK-A2-133	1	B:execution-contract.md	line 953	e3df3360d4f17e6a	6	probes/raw/I131.log	probes/raw/I131.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I132	CHK-A2-000	KILLED	CHK-A2-000	CHK-A2-022,CHK-A2-160	1	CHK	line 639	bb2ba0cc23570b56	4	probes/raw/I132.log	probes/raw/I132.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I133	CHK-A2-043	KILLED	CHK-A2-043	CHK-A2-044,CHK-A2-144	1	EC	line 1079	2912a72498e7060e	2	probes/raw/I133.log	probes/raw/I133.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I134	CHK-A2-005	KILLED	CHK-A2-005	-	1	EC	line 659	36ea516687cf8c6d	2	probes/raw/I134.log	probes/raw/I134.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I135	CHK-A2-100	KILLED	CHK-A2-100	-	1	LC	line 5	43925b76785435d0	1	probes/raw/I135.log	probes/raw/I135.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I136	CHK-A2-021	KILLED	CHK-A2-021	CHK-A2-004,CHK-A2-005	1	EC	line 763	7a3f535ed7fccd11	2	probes/raw/I136.log	probes/raw/I136.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I144	CHK-A2-096	KILLED	CHK-A2-096	CHK-A2-150	1	RC	line 416	6597e80ffc18e790	2	probes/raw/I144.log	probes/raw/I144.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I144b	CHK-A2-096	KILLED	CHK-A2-096	CHK-A2-150	1	RC	line 416	81a717cb572097b2	2	probes/raw/I144b.log	probes/raw/I144b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I148	CHK-A2-111	KILLED	CHK-A2-111	-	1	EC	line 1471	ee3e1501abd86273	2	probes/raw/I148.log	probes/raw/I148.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I148b	CHK-A2-111	KILLED	CHK-A2-111	-	1	EC	line 1471	0abd35a1085328f5	2	probes/raw/I148b.log	probes/raw/I148b.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I148c	CHK-A2-111	KILLED	CHK-A2-111	-	1	EC	line 1473	6e3901f04ac550cf	4	probes/raw/I148c.log	probes/raw/I148c.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X01	CHK-A2-151	KILLED	CHK-A2-151	CHK-A2-011	1	EC	line 921	c19e6e1e1f7f2d01	2	probes/raw/X01.log	probes/raw/X01.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X02	CHK-A2-147	KILLED	CHK-A2-147	-	1	EC	line 1034	4fce13dee092c17f	2	probes/raw/X02.log	probes/raw/X02.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X03	CHK-A2-145	KILLED	CHK-A2-145	-	1	EC	line 1091	af5d7e8279d70027	2	probes/raw/X03.log	probes/raw/X03.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X04	CHK-A2-145	KILLED	CHK-A2-145	-	1	EC	line 1091	765fa546094db050	2	probes/raw/X04.log	probes/raw/X04.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X05	CHK-A2-148	KILLED	CHK-A2-148	-	1	EC	line 1199	017b2b0c202c88b1	2	probes/raw/X05.log	probes/raw/X05.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X06	CHK-A2-155	KILLED	CHK-A2-155	-	1	EC	line 1356	9f8784362d84d8aa	1	probes/raw/X06.log	probes/raw/X06.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X07	CHK-A2-156	KILLED	CHK-A2-156	-	1	EC	line 1323	9018cdf12650ada0	2	probes/raw/X07.log	probes/raw/X07.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X08	CHK-A2-146	KILLED	CHK-A2-146	-	1	EC	line 1057	8824c56f817b933e	2	probes/raw/X08.log	probes/raw/X08.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+X09	CHK-A2-042	SURVIVED	-	CHK-A2-146	1	EC	line 1047	8570dba2ff0000ba	2	probes/raw/X09.log	probes/raw/X09.attempt-1.log	C01 prober-stage mutant replayed from its saved diff on the final bytes
+I83	-	NOT RUN	-	-	-	-	-	-	0	-	-	workflow row: red run on a scratch tree, not a checker mutation (RED-A2-002); verified by the P3 red evidence, not probed
+I106	-	NOT RUN	-	-	-	-	-	-	0	-	-	workflow row: the probe positive control itself (PRB-A2-001); satisfied by raw/baseline.attempt-2.log

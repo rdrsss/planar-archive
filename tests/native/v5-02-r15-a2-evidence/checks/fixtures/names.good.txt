@@ -1,0 +1,3 @@
+| Operation | Members (all checked under the lock) |
+| --- | --- |
+| `claim` | `request_unused`, `role_state(target) == (state, drifted, run)` |

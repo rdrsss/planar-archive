@@ -1,0 +1,3 @@
+| Item | Contract section |
+| --- | --- |
+| R15-2 Active job and activate | [P2-1](#p2-1-verbs-and-services) |

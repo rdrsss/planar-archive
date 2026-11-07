@@ -1,0 +1,7 @@
+The activate row uses `--expect-job NONE` or `--expect-job JOB`. The uppercase value `NONE` is the no-active-job expectation; any other value is a job ID. `none` is a legal job ID.
+---NEW---
+## Decisions table
+
+| id | design choice | mark | basis |
+| --- | --- | --- | --- |
+| D104 | `--expect-job` spelling: the uppercase value `NONE` means "no active job"; any other value is a job ID. | operator-decided | design |

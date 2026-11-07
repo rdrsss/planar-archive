@@ -1,0 +1,1 @@
+Pointer (R15-A2): nothing is shipped until the R15 integrated gate.

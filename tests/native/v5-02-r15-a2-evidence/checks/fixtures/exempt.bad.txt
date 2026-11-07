@@ -1,0 +1,7 @@
+Exempt reads (D108, D142): `init`, `status` without `--role` (bare, `--request-id`, `--workspace` with `--registry`, or both of the last two), `history`, `export` and `orchestrator --ledger` skip step (4) only. `preview` is bound, not exempt.
+---NEW---
+## Decisions table
+
+| id | design choice | mark | basis |
+| --- | --- | --- | --- |
+| D108 | Exempt reads (D51): `status` without `--role`, `history`, `export`, `orchestrator --ledger`. Bound (not exempt): `activate`, `claim`, `takeover`, `preview`, `status --role`. `init` is classified `not bound`. | new-engineering | design |

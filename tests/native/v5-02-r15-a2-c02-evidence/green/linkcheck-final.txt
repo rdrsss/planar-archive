@@ -1,0 +1,61 @@
+# Final link and anchor check, V5-02-R15-A2-C03 (2026-11-07, after the last record edit and the hash audit)
+
+## 1. link_check.py (scratch copy, byte-equal to the checkout checks/link_check.py, with a copy of its link fixtures) over the seven contract documents
+command: python3 -I -B <scratch>/link_check.py --repo <repo> --git-repo <repo> --base-commit cdcfe829c466bf6338815ff6f5b6ea90ffddc570
+PASS LINK-A2-001 anchors_resolve
+exit code: 0
+self-test: python3 -I -B <scratch>/link_check.py --selftest ; exit code follows
+PASS LINK-A2-001 anchors_resolve selftest
+exit code: 0
+
+## 2. Every staged .md file of green/staging-list.txt, using link_check.py's Resolver and check_document
+command: python3 -I -B <scratch>/linkfinal.py green/staging-list.txt (run from <repo>)
+staged .md documents checked: 38
+docs/vernacular/command-contract.md links=17 problems=0
+docs/vernacular/execution-contract.md links=234 problems=0
+docs/vernacular/execution-design.md links=7 problems=0
+docs/vernacular/external-profile-contract.md links=18 problems=0
+docs/vernacular/ledger-contract.md links=23 problems=0
+docs/vernacular/load-command-contract.md links=17 problems=0
+docs/vernacular/render-contract.md links=11 problems=0
+docs/vernacular/roadmap.md links=102 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-C01-review.md links=2 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-C01.md links=7 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-C02-review.md links=3 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-C02.md links=6 problems=0
+docs/vernacular/rounds/V5-02-R15-A2-review.md links=1 problems=0
+docs/vernacular/rounds/V5-02-R15-A2.md links=162 problems=0
+tests/native/v5-02-r15-a2-c01-evidence/plan/DECISIONS.md links=4 problems=4 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-c01-evidence/plan/INVARIANTS.md links=0 problems=0 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-c01-evidence/probes/PROBES.md links=0 problems=0
+tests/native/v5-02-r15-a2-c01-evidence/probes/PROBES.prober-stage.attempt-1.md links=0 problems=0
+tests/native/v5-02-r15-a2-c02-evidence/plan/DECISIONS.md links=0 problems=0 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-c02-evidence/plan/INVARIANTS.md links=0 problems=0 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-c02-evidence/probes/PROBES.md links=0 problems=0
+tests/native/v5-02-r15-a2-c02-evidence/probes/PROBES.prober-p3.md links=0 problems=0
+tests/native/v5-02-r15-a2-evidence/README.md links=3 problems=0
+tests/native/v5-02-r15-a2-evidence/base/acceptance-matrix.md links=82 problems=66 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/authoring-contract.md links=52 problems=9 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/command-contract.md links=16 problems=6 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/execution-contract.md links=156 problems=7 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/execution-design.md links=7 problems=7 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/external-profile-contract.md links=18 problems=10 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/ledger-contract.md links=22 problems=11 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/load-command-contract.md links=17 problems=13 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/render-contract.md links=9 problems=2 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/base/v5-alignment.md links=56 problems=43 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/plan/DECISIONS.md links=20 problems=19 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/plan/INVARIANTS.md links=0 problems=0 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/plan/SUPERSEDED-BY-C01.md links=0 problems=0 (relocated snapshot or plan file, informational, not in TOTAL)
+tests/native/v5-02-r15-a2-evidence/red/RED.attempt-3.md links=0 problems=0
+tests/native/v5-02-r15-a2-evidence/red/RED.md links=0 problems=0
+staged non-md paths (not link-checked): 157
+relocated base/ and plan/ files: 17, informational problems 197 (their links are relative to the original docs/vernacular or brief location and do not resolve in place)
+TOTAL problems=0 (all staged .md except relocated base/ and plan/ files)
+NEGATIVE CONTROL problems=2 (must be 2)
+  docs/vernacular/negative-control.md:1 missing anchor execution-contract.md#no-such-anchor-zzz
+  docs/vernacular/negative-control.md:1 missing file docs/vernacular/missing-file-zzz.md (link missing-file-zzz.md)
+exit code: 0
+
+## 3. Negative control
+The synthetic document in section 2 holds a missing anchor and a missing file and must report 2 problems; the exit code of section 2 is non-zero if it does not or if TOTAL is not 0. The P6 text of this file is kept as linkcheck-final.c02.txt.

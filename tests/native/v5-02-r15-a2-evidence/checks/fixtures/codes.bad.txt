@@ -1,0 +1,1 @@
+A claim of a role that is not ready is refused as `role_not_ready`.

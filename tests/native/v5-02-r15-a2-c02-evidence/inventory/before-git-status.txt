@@ -1,0 +1,13 @@
+ M docs/vernacular/command-contract.md
+ M docs/vernacular/execution-contract.md
+ M docs/vernacular/execution-design.md
+ M docs/vernacular/external-profile-contract.md
+ M docs/vernacular/ledger-contract.md
+ M docs/vernacular/load-command-contract.md
+ M docs/vernacular/render-contract.md
+ M docs/vernacular/roadmap.md
+?? docs/vernacular/rounds/V5-02-R15-A2-C01-review.md
+?? docs/vernacular/rounds/V5-02-R15-A2-C01.md
+?? docs/vernacular/rounds/V5-02-R15-A2-C02.md
+?? docs/vernacular/rounds/V5-02-R15-A2-review.md
+?? docs/vernacular/rounds/V5-02-R15-A2.md

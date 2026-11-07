@@ -1,0 +1,8 @@
+# Check names, C01 green/checks.txt vs C02 green/checks.txt (P4)
+command: grep -E '^(PASS|FAIL) CHK' <file> | sort -u (the self-test line CHK-A2-000 appears in both files, so sort -u)
+C01 names: 123  C02 names: 123
+comm -23 (in C01 only):
+count: 0
+comm -13 (in C02 only):
+count: 0
+grep -c '^PASS' of the full-run section: 123

@@ -524,7 +524,7 @@ touched. **NEW** (engineering).
   `future`; probe by registering a test-bundle stub verb and seeing the label flip.
 - Authoring capture with a listed job file absent succeeds for all three prompts; `ingest` with an
   invalid spec fails with the same typed error load would give.
-- Hard to observe: none beyond capture races, which reuse the render capture receipt tests.
+- Hard to observe: the RA01 capture races are covered by `RA01-B2 capture_diagnostic refuses a file changed before verification` (`src/engine/capture/capture.t.cpp`, authoring diagnostics) and `RA01-B2 observe refuses a directory changed before the recheck` (`src/engine/capture/directory.t.cpp`, observe); the receipt-reuse claim is limited to what the render and load capture paths exercise, because the RA01 paths do not reach the admission receipt code (RA01-C-F2).
 
 ### 5. Split, waves and size
 

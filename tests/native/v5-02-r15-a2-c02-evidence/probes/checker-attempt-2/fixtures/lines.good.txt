@@ -1,0 +1,3 @@
+| Verb | Kind |
+| --- | --- |
+| `activate` | mutation | `--ledger`, `--job`, `--expect-revision`, `--expect-job`, `--request-id`, `--actor` | none | `--expect-revision` is `ID_OR_NONE` as load spells it (a canonical positive decimal revision ID or `none`); `--expect-job` is `NONE` or a job ID (D104; its help metavariable is `JOB_OR_NONE`) | `activate_v1` |

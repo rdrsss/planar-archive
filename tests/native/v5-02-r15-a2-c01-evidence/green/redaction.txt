@@ -1,0 +1,36 @@
+# Redaction check, V5-02-R15-A2-C01 (docs evidence finisher, 2026-11-06; last step, after the final record edit)
+command per file: python3 scripts/redact-local-paths.py --repo-path <repo> --home <home> check <FILE>   (one invocation, one file argument each)
+files: the 11 changed or untracked documents of git status (CLAUDE.md is not changed) and the 14 non-raw evidence files under tests/native/v5-02-r15-a2-c01-evidence (probes/raw/ logs are not staged and are not listed; this file is written after the check and is not in the list)
+
+exit=0 file=docs/vernacular/command-contract.md
+exit=0 file=docs/vernacular/execution-contract.md
+exit=0 file=docs/vernacular/execution-design.md
+exit=0 file=docs/vernacular/external-profile-contract.md
+exit=0 file=docs/vernacular/ledger-contract.md
+exit=0 file=docs/vernacular/load-command-contract.md
+exit=0 file=docs/vernacular/render-contract.md
+exit=0 file=docs/vernacular/roadmap.md
+exit=0 file=docs/vernacular/rounds/V5-02-R15-A2-C01.md
+exit=0 file=docs/vernacular/rounds/V5-02-R15-A2-review.md
+exit=0 file=docs/vernacular/rounds/V5-02-R15-A2.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/green/checks.exit
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/green/checks.txt
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/green/linkcheck.txt
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/DECISIONS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/INVARIANTS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/superseded-1/DECISIONS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/superseded-1/INVARIANTS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/superseded-2/DECISIONS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/superseded-2/INVARIANTS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/superseded-3/DECISIONS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/plan/superseded-3/INVARIANTS.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/probes/mutants.tsv
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/probes/PROBES.md
+exit=0 file=tests/native/v5-02-r15-a2-c01-evidence/probes/PROBES.prober-stage.attempt-1.md
+
+files checked:       25   exit 0: 25   non-zero: 0
+
+positive control: a scratch file (outside the checkout) that contains the repository root path and the home directory
+command: python3 scripts/redact-local-paths.py --repo-path <repo> --home <home> check <scratch>/redact/control.txt
+exit=1 (required: 1)
+local path in <scratch>/redact/control.txt

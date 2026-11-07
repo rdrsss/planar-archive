@@ -1,0 +1,7 @@
+| Condition | Code | Message |
+| --- | --- | --- |
+| path missing or unresolvable | `io` | `Cannot resolve explicit input path` |
+
+| Name | Note |
+| --- | --- |
+| `other` | `Not a message column` |

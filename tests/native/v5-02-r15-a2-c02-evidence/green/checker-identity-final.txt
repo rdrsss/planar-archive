@@ -1,0 +1,111 @@
+# Checker identity, final, V5-02-R15-A2-C02 (P6, C02-D26 (b), A23; scoped exception to C02-D15)
+
+## (1) Checkout, read-only hashing, taken by P6
+$ cd <repo>/tests/native/v5-02-r15-a2-evidence/checks && shasum -a 256 contract_checks.py fixtures/*
+cc248dd7a059049ec0e685666a06a619edabdf9b48d57c46d7ae451108e83092  contract_checks.py
+a7d13d526610ddb9b89182feefad46e443fa980a17eb3956b0159cc864eddd9c  fixtures/absent.bad.txt
+8075da1108f6738991be8e411d5d6ef9d86c57cccd877b634ba7da525dd45520  fixtures/absent.good.txt
+0ee819c6db5fa0ba3d781f004dc9e494f7e8a9b01cd5cb0e45d889c5f5509d32  fixtures/allow.bad.txt
+7c2edda7d3e254ab6294547bfcf10d0649cbac3449b8fed5cd7e3e56a79a5e61  fixtures/allow.good.txt
+bdebab40f09db28c01a8b8b8c1cab4a528f497e659c36f6a73ecc2a9f7b45d6e  fixtures/allowed.bad.txt
+04cdb3171caebd608221eee93ffcf7fbd7b2536b380a1660b5ced6354edd8610  fixtures/allowed.good.txt
+9a11326b3bd05a0dc565887c17971e75c320418d91139373be75279f6c113fcb  fixtures/codes.bad.txt
+2967f72c075306981b6152846b96a0553617eaa305956fea803385f3bed31889  fixtures/codes.good.txt
+91d3863d9199673799bec1330a0c9fbe9e753a95813e7f8202d0ff5c85378dff  fixtures/exempt.bad.txt
+87377775d816a88f0c6b1fe9e8d5a01ca5fce77d52ec3d6768498c5232c1a7b3  fixtures/exempt.good.txt
+430268624e4902c334a18b722fbc0ae04c0bb7244620db972f390f6f607c30f7  fixtures/expectjob.bad.txt
+8e9fe96a2e769990afa06a85a081185acba05cd7200569a5b7fb7aa91d64f545  fixtures/expectjob.good.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/frozen.bad.txt
+4c011d3915632a267b978b8afed07bb7aee24aa13c380f850d2123a4e6493446  fixtures/frozen.good.txt
+140397e8609d4345c4b44d3da4709db626f6c5599889fc400f5cf188c9db7eb1  fixtures/headings.bad.txt
+b605083c6d57e372f209ec89c83c3fce8ae2c5943ddb6b48f8fdadc55fde1a7d  fixtures/headings.good.txt
+377c71835aad20ffdd4b5073b715b3fd59aebc31fb14f7006ed03235effe81c3  fixtures/lines.bad.txt
+4066801f80cecb34db3a6cb29dfc8200e62b1496d4dcf50896ddb66865d2580e  fixtures/lines.good.txt
+6d99d11ec522f5d8d54745143ed8175a88134eeb58c6bba10f054af7ac611bab  fixtures/link.bad.txt
+a7d881777fe8471f6d0fae280ac6f88b40a2847426888940164938a434bbd752  fixtures/link.good.txt
+787d02f7ba3f6c469b1859d438980745531f063b7e9c9df1f50f2fa39eb9df0f  fixtures/local.bad.txt
+e250f227146148284a888751a120893795b3dc1ec212f04b6691176edd606445  fixtures/local.good.txt
+a8cbf84b83145e9070ab56286977cb953abbdd8acda29bb844a88ced9707bac5  fixtures/messages_cells.bad.txt
+6fb4deeefc57d358a29b49bd214c4a8c1fed26dec96841bfd46926e85515f30c  fixtures/messages_cells.good.txt
+8dc0f2f21ef0f193e813d21a498e16fc100548d8095b8770997651e0c4a4fb9a  fixtures/messages_then.bad.txt
+efff62a33a74e620a680231debd1a97f24c55136603e6d48ef3ae4b0995749b9  fixtures/messages_then.good.txt
+0fee243dc9e72667dd928525167b6f5de0edc8d214366215934a35b3c30cfb77  fixtures/messages.bad.txt
+6dd4a66cda47d7d18658e6e4fe9b87e805b781bb827f5a24083ed942d1740025  fixtures/messages.good.txt
+7ccfb1d21261c84e49fc32571901f3e6e74ecabca377261dca5b5bd9d0f8c10d  fixtures/msg_table.bad.txt
+e431302351bb23f81cb4c3b053601cee4a86cc8e197d16f6a88ac04720f64733  fixtures/msg_table.good.txt
+a8f36fb6d0e1edbdfe488228c46118464ec49edba30588db5f42ff3939f6c346  fixtures/names.bad.txt
+d47a82b1c2be0b8764be8083ce8f86549e51401eecbf554857e60e482f3161eb  fixtures/names.good.txt
+4c8c3dc4b45942be1d44b2f665b4a98a46effee4e5bb8bea8374c94615f3f8d8  fixtures/one_change.bad.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/one_change.good.txt
+6ac1d2f2b7a96c8f52e2de04787189950e58a86767bd042052324565a6dbbf38  fixtures/ordered.bad.txt
+7e17bbb5afd9acf459f00333da7b8b931f5ea0059eb21c9771d22927bd1ded87  fixtures/ordered.good.txt
+b82607e5f2b55004617ad95e888551c8629537667d97c1b4fb8eeeab7dc33cf9  fixtures/paragraphs.bad.txt
+20a6ff454f81cccf462c98e4599b16965355e1fe4c3f214563b122edd45b7486  fixtures/paragraphs.good.txt
+05d917fec20815e252ed1ce707cfeb5f4ed1cae76f92d6bec7db383717c90455  fixtures/present.bad.txt
+c3ed797d5dc2676bafb066d689207d649bd202e24c41cae129741daf1cb64279  fixtures/present.good.txt
+0e4c4b09e05cc49a3dbf0b648233fa4325ec4738bc92ceb3aeb9c3b44ad97ab3  fixtures/raw.bad.txt
+95d9178605f8536ed1f9befaf2e898401f0c02ff1647a4005e5fe470df8e07c8  fixtures/raw.good.txt
+77c245b6a806174d04399357b95597158afa58deeae2eca3b33f808287e44f38  fixtures/removed.bad.txt
+842717ba36b12972e2f504987b1536ebd665b7e9fe1ccdf284c12536ece47e03  fixtures/removed.good.txt
+ac61db1fc41e128d2d02ad2cfea114bd032bcccdda63845f4af0116b3e2d8eac  fixtures/rows.bad.txt
+7369ff973efa967251e2c99add906f4f4964ce6481cd16014b19a3b4d670837b  fixtures/rows.good.txt
+ddb4b4d095ec7851fb894d0b1a7441b8490aeb3b4b9461f826f0f2ca3a484306  fixtures/tags.bad.txt
+b933bcc058de456b00a86f0eb90dc66ec0e8f373365ea1f40c8183bb9b9873fd  fixtures/tags.good.txt
+(49 lines)
+
+## (2) Comparison with the sets recorded by P2, P3 and P4 (every block of a recorded file that holds a contract_checks.py line)
+P2 red/tree-verify.attempt-3.txt line 6 (49 lines): EQUAL to checkout
+P2 red/tree-verify.attempt-3.txt line 57 (49 lines): EQUAL to checkout
+P3 probes/PROBES.md line 34 (41 lines): EQUAL to probes/checker-attempt-2 (the pre-fix attempt-2 copy, expected to differ from the checkout)
+P3 probes/PROBES.md line 76 (49 lines): EQUAL to checkout
+P4 green/checker-identity.txt line 5 (49 lines): EQUAL to checkout
+P4 green/checker-identity.txt line 57 (49 lines): EQUAL to checkout
+P4 green/checker-identity.txt line 110 (49 lines): EQUAL to checkout
+P4 green/checker-identity.txt line 160 (49 lines): EQUAL to checkout
+P4 green/checker-identity.txt line 211 (49 lines): EQUAL to checkout
+
+## (3) probes/checker-attempt-2 current bytes (read-only), for reference
+6283fdd174af7b4601991d3f9f8bf22c05c3dc6bd67b31b57a9824860ea52272  contract_checks.py
+a7d13d526610ddb9b89182feefad46e443fa980a17eb3956b0159cc864eddd9c  fixtures/absent.bad.txt
+8075da1108f6738991be8e411d5d6ef9d86c57cccd877b634ba7da525dd45520  fixtures/absent.good.txt
+0ee819c6db5fa0ba3d781f004dc9e494f7e8a9b01cd5cb0e45d889c5f5509d32  fixtures/allow.bad.txt
+7c2edda7d3e254ab6294547bfcf10d0649cbac3449b8fed5cd7e3e56a79a5e61  fixtures/allow.good.txt
+bdebab40f09db28c01a8b8b8c1cab4a528f497e659c36f6a73ecc2a9f7b45d6e  fixtures/allowed.bad.txt
+04cdb3171caebd608221eee93ffcf7fbd7b2536b380a1660b5ced6354edd8610  fixtures/allowed.good.txt
+9a11326b3bd05a0dc565887c17971e75c320418d91139373be75279f6c113fcb  fixtures/codes.bad.txt
+2967f72c075306981b6152846b96a0553617eaa305956fea803385f3bed31889  fixtures/codes.good.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/frozen.bad.txt
+4c011d3915632a267b978b8afed07bb7aee24aa13c380f850d2123a4e6493446  fixtures/frozen.good.txt
+140397e8609d4345c4b44d3da4709db626f6c5599889fc400f5cf188c9db7eb1  fixtures/headings.bad.txt
+b605083c6d57e372f209ec89c83c3fce8ae2c5943ddb6b48f8fdadc55fde1a7d  fixtures/headings.good.txt
+377c71835aad20ffdd4b5073b715b3fd59aebc31fb14f7006ed03235effe81c3  fixtures/lines.bad.txt
+4066801f80cecb34db3a6cb29dfc8200e62b1496d4dcf50896ddb66865d2580e  fixtures/lines.good.txt
+6d99d11ec522f5d8d54745143ed8175a88134eeb58c6bba10f054af7ac611bab  fixtures/link.bad.txt
+a7d881777fe8471f6d0fae280ac6f88b40a2847426888940164938a434bbd752  fixtures/link.good.txt
+787d02f7ba3f6c469b1859d438980745531f063b7e9c9df1f50f2fa39eb9df0f  fixtures/local.bad.txt
+e250f227146148284a888751a120893795b3dc1ec212f04b6691176edd606445  fixtures/local.good.txt
+0fee243dc9e72667dd928525167b6f5de0edc8d214366215934a35b3c30cfb77  fixtures/messages.bad.txt
+6dd4a66cda47d7d18658e6e4fe9b87e805b781bb827f5a24083ed942d1740025  fixtures/messages.good.txt
+7ccfb1d21261c84e49fc32571901f3e6e74ecabca377261dca5b5bd9d0f8c10d  fixtures/msg_table.bad.txt
+e431302351bb23f81cb4c3b053601cee4a86cc8e197d16f6a88ac04720f64733  fixtures/msg_table.good.txt
+a8f36fb6d0e1edbdfe488228c46118464ec49edba30588db5f42ff3939f6c346  fixtures/names.bad.txt
+d47a82b1c2be0b8764be8083ce8f86549e51401eecbf554857e60e482f3161eb  fixtures/names.good.txt
+4c8c3dc4b45942be1d44b2f665b4a98a46effee4e5bb8bea8374c94615f3f8d8  fixtures/one_change.bad.txt
+2060bb5092c84eb6757d78f012a495e208dbb55c5b412bcfa5c9cc751ac69dc3  fixtures/one_change.good.txt
+6ac1d2f2b7a96c8f52e2de04787189950e58a86767bd042052324565a6dbbf38  fixtures/ordered.bad.txt
+7e17bbb5afd9acf459f00333da7b8b931f5ea0059eb21c9771d22927bd1ded87  fixtures/ordered.good.txt
+b82607e5f2b55004617ad95e888551c8629537667d97c1b4fb8eeeab7dc33cf9  fixtures/paragraphs.bad.txt
+20a6ff454f81cccf462c98e4599b16965355e1fe4c3f214563b122edd45b7486  fixtures/paragraphs.good.txt
+05d917fec20815e252ed1ce707cfeb5f4ed1cae76f92d6bec7db383717c90455  fixtures/present.bad.txt
+c3ed797d5dc2676bafb066d689207d649bd202e24c41cae129741daf1cb64279  fixtures/present.good.txt
+0e4c4b09e05cc49a3dbf0b648233fa4325ec4738bc92ceb3aeb9c3b44ad97ab3  fixtures/raw.bad.txt
+95d9178605f8536ed1f9befaf2e898401f0c02ff1647a4005e5fe470df8e07c8  fixtures/raw.good.txt
+77c245b6a806174d04399357b95597158afa58deeae2eca3b33f808287e44f38  fixtures/removed.bad.txt
+842717ba36b12972e2f504987b1536ebd665b7e9fe1ccdf284c12536ece47e03  fixtures/removed.good.txt
+ac61db1fc41e128d2d02ad2cfea114bd032bcccdda63845f4af0116b3e2d8eac  fixtures/rows.bad.txt
+7369ff973efa967251e2c99add906f4f4964ce6481cd16014b19a3b4d670837b  fixtures/rows.good.txt
+ddb4b4d095ec7851fb894d0b1a7441b8490aeb3b4b9461f826f0f2ca3a484306  fixtures/tags.bad.txt
+b933bcc058de456b00a86f0eb90dc66ec0e8f373365ea1f40c8183bb9b9873fd  fixtures/tags.good.txt
+
+## Result
+checkout lines: 49; the attempt-3 sets recorded by P2, P3 and P4 are all equal to the checkout set; mismatch would be STOP

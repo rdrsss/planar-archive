@@ -1,0 +1,1 @@
+The refusal is `reference` with message `Unknown selected job` and field `selection.job`, then `Unknown selected role` and field `selection.role`. A code follows: then `state_conflict` applies.

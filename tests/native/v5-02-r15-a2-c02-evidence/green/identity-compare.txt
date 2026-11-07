@@ -1,0 +1,11 @@
+# Identity compare, seven contract documents vs C01 record Identity table (P4)
+now: green/identity.txt file rows; before: docs/vernacular/rounds/V5-02-R15-A2-C01.md lines 352-358 (Identity per-file table)
+cmp exit code: 0 (0 = the seven file|state|sha256 rows are byte-equal)
+per-file:
+docs/vernacular/command-contract.md EQUAL
+docs/vernacular/execution-contract.md EQUAL
+docs/vernacular/execution-design.md EQUAL
+docs/vernacular/external-profile-contract.md EQUAL
+docs/vernacular/ledger-contract.md EQUAL
+docs/vernacular/load-command-contract.md EQUAL
+docs/vernacular/render-contract.md EQUAL

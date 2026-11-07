@@ -1,0 +1,10 @@
+| identity | value |
+|---|---|
+| HEAD | `cdcfe829c466bf6338815ff6f5b6ea90ffddc570` |
+| sha256(git diff --binary HEAD -- tests/native/v5-02-r15-a2-evidence/base), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec tests/native/v5-02-r15-a2-evidence/base, evidence excluded | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+
+| file | state | sha256 |
+|---|---|---|
+base commit: cdcfe829c466bf6338815ff6f5b6ea90ffddc570
+cdcfe829c466bf6338815ff6f5b6ea90ffddc570

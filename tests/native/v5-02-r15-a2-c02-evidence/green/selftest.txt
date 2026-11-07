@@ -1,0 +1,5 @@
+# Self-test, V5-02-R15-A2-C02 (P4, 2026-11-07)
+command: python3 -I -B <scratch>/contract_checks.py --selftest
+PASS CHK-A2-000 selftest_positive_negative
+SUMMARY pass=1 fail=0
+exit code: 0

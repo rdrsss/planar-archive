@@ -1,0 +1,107 @@
+FAIL CHK-A2-001 no_placeholder_text: execution-contract.md: forbidden text present: Not yet written
+FAIL CHK-A2-002 leadin_normative: heading ## Part 2: execution verbs, projections and reads (R15-A2) occurs 0 times
+FAIL CHK-A2-003 seven_headings_once: execution-contract.md: heading ## Part 2: execution verbs, projections and reads (R15-A2) occurs 0 times
+PASS CHK-A2-004 part1_frozen_blocks
+FAIL CHK-A2-005 part1_amendments_listed: heading ## Part 1 amendments (R15-A2) occurs 0 times
+FAIL CHK-A2-010 option_maps: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-011 expect_job_spelling: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-012 status_exclusions: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-013 claim_precondition_set: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-014 takeover_precondition_set: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-015 closed_vocabulary_only: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-016 exempt_reads: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-017 reference_field_values: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-018 service_lists_ordered: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-019 refusal_order: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-020 error_codes_closed: heading ## Part 2: execution verbs, projections and reads (R15-A2) occurs 0 times
+PASS CHK-A2-021 ex7_messages_identical
+FAIL CHK-A2-022 no_new_message: heading ## Part 2: execution verbs, projections and reads (R15-A2) occurs 0 times
+PASS CHK-A2-023 xp_message_table_identical
+FAIL CHK-A2-024 activate_v1_schema: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-025 status_v1_schema: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-026 preview_v1_schema: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-027 claim_v1_schema: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-028 takeover_mapping: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-029 request_parameter_maps: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-030 read_execution_schema: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-031 change_schema: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-032 accept_load_format3: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-040 dispatch_mode: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-041 authority_templates: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-042 run_section: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-043 manifest_fields: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-044 manifest_run_by_request: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-045 manifest_no_bytes_no_secret: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-046 projection_ids: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-047 manifest_bound: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-050 wexec_fields: heading ### P2-3 work_exec_v1 occurs 0 times
+FAIL CHK-A2-051 wexec_digest: heading ### P2-3 work_exec_v1 occurs 0 times
+FAIL CHK-A2-052 wexec_start_facets: heading ### P2-3 work_exec_v1 occurs 0 times
+FAIL CHK-A2-053 wexec_base: heading ### P2-3 work_exec_v1 occurs 0 times
+FAIL CHK-A2-054 wexec_versions: heading ### P2-3 work_exec_v1 occurs 0 times
+FAIL CHK-A2-127 wexec_repair_string: heading ### P2-3 work_exec_v1 occurs 0 times
+FAIL CHK-A2-060 prov_fields: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-061 prov_leaf_rule: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-062 prov_absent: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-063 prov_label: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-064 prov_attachment: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-065 prov_bounds: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-066 prov_native_fields: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-070 event_selector_grammar: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-071 event_expansion_fields: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-072 event_no_lua_bounded: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-073 event_no_secret: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-074 request_id_results: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-075 event_format12: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-076 token_exposure_list: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-080 orch_forms: heading ### P2-6 Orchestrator live form occurs 0 times
+FAIL CHK-A2-081 orch_live_keys: heading ### P2-6 Orchestrator live form occurs 0 times
+FAIL CHK-A2-082 orch_actions: heading ### P2-6 Orchestrator live form occurs 0 times
+FAIL CHK-A2-083 orch_state_section: heading ### P2-6 Orchestrator live form occurs 0 times
+FAIL CHK-A2-084 orch_ra7_pointer: heading ### P2-6 Orchestrator live form occurs 0 times
+FAIL CHK-A2-090 cc_abi_rows: command-contract ABI rows: missing exact row or line: | activate / activate | `shipped.activate.v1` | `activate_v1` | `execution_commit_v1` |
+FAIL CHK-A2-091 cc_option_signatures: command-contract option signatures: missing literal: activate text `--ledger!`, `--job!`, `--expect-revision!`, `--expect-job!`, `--request-id!`, `--actor!`
+FAIL CHK-A2-092 cc_services_rows: command-contract services: missing literal: Services: the five families have the service lists of
+FAIL CHK-A2-093 cc_opaque_slot: command-contract opaque slots: missing literal: Opaque slots gain `provenance`.
+FAIL CHK-A2-094 root_help_bytes: command-contract root help: missing exact text:   or --revision ID | --request-id ID | --at-event ID | --event ID
+FAIL CHK-A2-095 help_cross_file: heading ### P2-7 Command, render, load, ledger and external-profile pointers occurs 0 times
+FAIL CHK-A2-096 rc_pointers: render-contract pointers: missing literal: `repair` enters W
+FAIL CHK-A2-097 lc_services_format3: load-command-contract pointer: missing literal: format1 and format2 loads keep three services and `{bundle,semantic}`
+FAIL CHK-A2-098 lg_selector_row: ledger-contract pointer: missing literal: the command-surface row text `planar history --ledger <path> --event <id>`
+FAIL CHK-A2-099 xp_family_and_ids: external-profile pointer: missing literal: the shipped families admitted under `with-profile` are the five of X08 plus `activate`, `status`, `preview`, `...
+PASS CHK-A2-100 pointers_narrow_nothing
+FAIL CHK-A2-101 cross_file_constants: heading ### P2-7 Command, render, load, ledger and external-profile pointers occurs 0 times
+FAIL CHK-A2-110 traceability_rows: Traceability: row R15-2 lacks #p2-1-verbs-and-services
+FAIL CHK-A2-111 decisions_rows: Decisions table: decision D104 occurs 0 times
+FAIL CHK-A2-112 checklist_items: Acceptance checklist: missing literal: status explain separation (A20/A22)
+FAIL CHK-A2-113 design_f2_only: execution-design.md: expected exactly one changed line, found 0 change block(s)
+FAIL CHK-A2-114 pointer_item7: execution-contract.md: forbidden text present: Not made by this round
+FAIL CHK-A2-115 reserved_verbs: heading ### P2-1 Verbs and services occurs 0 times
+PASS CHK-A2-116 no_local_paths
+FAIL CHK-A2-117 closed_details_rule: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-118 lock_mismatch_mapping: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-119 takeover_unknown_run: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-120 event_summary_format3: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-121 at_event_state_format3: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-122 history_format12_unchanged: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-123 event_native_provenance_always: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-124 exempt_read_formats: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-125 messages_amendments_reasoned: revision_conflict sites cell lacks the A-8 text
+FAIL CHK-A2-134 prov_input_handling: heading ### P2-4 Provenance (driver_provenance_v1) occurs 0 times
+FAIL CHK-A2-135 run_section_purposes: heading ### P2-2 Dispatch projection and dispatch_manifest_v1 occurs 0 times
+FAIL CHK-A2-136 build_variant_bytes_counts: command-contract counts: missing literal: ten mandatory rows in the production build (the current five plus the five R15 rows) and sixteen in a build th...
+FAIL CHK-A2-137 state_conflict_snapshot_sites: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-138 status_roles_retired_kind: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-139 reserved_op_preconditions_deferred: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-140 native_enforcement_expected: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-141 role_reference_reads: heading ### P2-1 Verbs and services occurs 0 times
+FAIL CHK-A2-142 request_id_output_bound: heading ### P2-5 History event selector and request results occurs 0 times
+FAIL CHK-A2-143 section_ids_every_build: external-profile section IDs: missing literal: in every build including production
+FAIL CHK-A2-128 xp_consequences: external-profile consequences: missing literal: valid today, refused after R15
+FAIL CHK-A2-129 authoring_ref_amendments: Pointer amendments authoring items: missing literal: RA-9
+FAIL CHK-A2-130 pointers_marked_not_shipped: command-contract.md: 0 paragraph(s) labelled Pointer (R15-A2):, need 1
+FAIL CHK-A2-131 cc_decimal_and_history_limit: command-contract history limit: missing literal: extends to `run-id` and `event`
+FAIL CHK-A2-132 lc_capability_format3: load-command-contract capability: missing literal: the load family's capability set stays `accept_load_v1`; it covers `read_execution({})` on format3
+PASS CHK-A2-133 base_snapshot_complete
+PASS CHK-A2-000 selftest_positive_negative
+SUMMARY pass=7 fail=99

@@ -250,6 +250,8 @@ Interpretation identifiers are exactly `declarations_v1`, `selection_v1`,
 `xxh3_128_v1`. They identify shipped semantics, not caller-chosen strings. Any
 semantic change needs a new corresponding identifier and reviewed vectors.
 
+Pointer (R15-A2): execution adds the interpretation identifiers `work_exec_v1` and `dispatch_v1` to this list; render never emits them, `dispatch_v1` names the dispatch projection rules of P2-2 (packet mode, section order, authority templates, run-section bytes and the `dispatch_manifest_v1` recipe), and the list above stays unchanged for render. Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause.
+
 Canonical **binary** encoding C is independent of JSON presentation:
 
 | Value | Bytes (hex tags; concatenation in listed order) |
@@ -411,6 +413,8 @@ a complete-only facet's observed-byte change moves output/target data, not
 source-work identity. Changing its declared paths/producer/normalizer changes
 subscription policy in W even when its ID and observed bytes are unchanged.
 
+Pointer (R15-A2): execution adds `work_exec_v1` as the versioned recipe that the sentence "no repair revision or generation is fabricated. Later execution must add those through a versioned recipe" anticipates, defined in [P2-3](execution-contract.md#p2-3-work_exec_v1). `repair` enters W as the repair revision in its structural lineage, so a repair changes the execution fingerprint. Generation is not a W field: execution-design EX-5 (operator decision E5 A) takes only the lineage's `repair` into W, and the execution contract records that the generation is the `generation` key of `dispatch_manifest_v1` and the `{generation}` of the authority statement, not a W field, so a takeover generation never moves W, which applies the rule that takeover must not move W. Render emits only `work_v1` and render stays database-free (no `--claim`, `--refresh` or `--since`). Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause.
+
 ## Packet and manifest schemas
 
 **P** has exactly `version:1`, `mode:"preview"`, `workspace` (ID), `spec` (ID),
@@ -418,6 +422,8 @@ subscription policy in W even when its ID and observed bytes are unchanged.
 array<work ID>), `markdown` (UTF-8 string). Markdown has LF structural separators,
 no BOM, one final LF. Embedded text bytes remain exact and may contain CRLF.
 The packet does not embed its own render digest, avoiding recursive identity.
+
+Pointer (R15-A2): execution adds packet mode `dispatch` for claim, takeover and `preview`; all other `P` keys stay unchanged, and render's `mode:"preview"` is unchanged. The execution analogue of `M` is `dispatch_manifest_v1`, which has record IDs for files and is defined in [P2-2](execution-contract.md#p2-2-dispatch-projection-and-dispatch_manifest_v1). Nothing is shipped until the R15 integrated gate; the rows, tables and bytes beside this pointer stay current until that gate, and it narrows no approved clause.
 
 **M** has exactly these required fields:
 

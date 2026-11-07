@@ -1,0 +1,34 @@
+# Tally of probes/mutants.tsv, V5-02-R15-A2-C02 (docs evidence finisher P4, 2026-11-07)
+command: awk -F'	' 'NR>1{c[$14" "$17]++; n++} END{for(k in c)print k, c[k]; print "rows", n}' probes/mutants.tsv | sort
+checker-attempt-2 EMPTY 1
+checker-attempt-2 KILLED 6
+checker-attempt-2 KILLED-OTHER 6
+checker-attempt-2 PASS 1
+checker-attempt-2 SURVIVED 16
+checker-attempt-3 EMPTY 1
+checker-attempt-3 KILLED 46
+checker-attempt-3 NOT RUN 2
+checker-attempt-3 PASS 1
+rows 80
+
+## Sections A to C (30 rows per checker): ids not matching ^K8 and not ^I[0-9]+$ and not ^X
+command: awk -F'	' 'NR>1 && $1 !~ /^K8/ && $1 !~ /^I[0-9]+$/ && $1 !~ /^X/{c[$14" "$17]++} END{for(k in c)print k, c[k]}' | sort
+checker-attempt-2 EMPTY 1
+checker-attempt-2 KILLED 6
+checker-attempt-2 KILLED-OTHER 6
+checker-attempt-2 PASS 1
+checker-attempt-2 SURVIVED 16
+checker-attempt-3 EMPTY 1
+checker-attempt-3 KILLED 28
+checker-attempt-3 PASS 1
+
+## Section D (K80 to K83)
+checker-attempt-3 KILLED 4
+
+## Regression replay (ids ^I[0-9]+$ and X01, attempt-3 only)
+checker-attempt-3 KILLED 14
+checker-attempt-3 NOT RUN 2
+
+## Comparison with probes/PROBES.md Result
+PROBES.md: attempt-2 KILLED 6, KILLED-OTHER 6, SURVIVED 16, EMPTY 1, PASS 1 (30); attempt-3 sections A-C KILLED 28, EMPTY 1, PASS 1 (30); section D KILLED 4; replay KILLED 14, NOT RUN 2; 80 rows.
+attempt-3 KILLED 46 = 28 + 4 + 14. Result: EQUAL

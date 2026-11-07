@@ -1,0 +1,23 @@
+# Hash-pin audit of the final staging list, V5-02-R15-A2-C03 (2026-11-07)
+
+Question: does any staged file contain a 64-hex token equal to the sha256 of a round record, review, README, plan file, PROBES.md report or the roadmap?
+Method: a scratch script (run with python3 -I -B from the repository root) hashes the files below from their bytes, then scans every file of green/staging-list.txt for 64-hex tokens (not embedded in longer hex runs, case-insensitive) and compares each token with the hash set. Hashes are computed from file bytes by the script, never by hand, and the hash values are not printed here.
+
+Forbidden set (files hashed; distinct hashes):
+  round records and reviews (docs/vernacular/rounds/*.md): 417 files, 417 distinct hashes
+  roadmap (current): 1 files, 1 distinct hashes
+  roadmap (HEAD blob): 1 files, 1 distinct hashes
+  PROBES*.md reports (including .c02. copy and prober tables): 5 files, 5 distinct hashes
+  plan files (including superseded copies and .c02. copy): 26 files, 26 distinct hashes
+  evidence READMEs (including .c02. copy): 2 files, 2 distinct hashes
+  scratch copies of records before the C03 edits: 3 files, 3 distinct hashes
+  total distinct hashes in the forbidden set: 455
+
+Scanned: 194 listed files present (of 195 listed); 1 listed file not yet present or skipped by construction: tests/native/v5-02-r15-a2-c02-evidence/green/hash-audit.txt
+  green/hash-audit.txt (this file) is skipped because it is the output; it contains no 64-hex token (its text prints no hash value).
+64-hex tokens found in the scanned files: 1856, in 25 files (these are the allowed pins: contract documents, src files, data files, snapshot and tool output; see green/hash-audit-final.txt for P6 allowed-set classification)
+Tokens equal to the sha256 of a forbidden file: 0
+
+Positive control: a scratch line holding the (upper-case) sha256 of the roadmap is FOUND by the same scan and lookup.
+
+RESULT: PASS (no staged file pins a record, review, README, plan file, PROBES.md or the roadmap)
