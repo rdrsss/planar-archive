@@ -1,0 +1,340 @@
+R15-A1-C03 ASRR red run: record assertions against the pre-REC tree
+date: 2026-11-06
+commands (run from the repository root; S is the c03 scratchpad, the scripts are cmp-identical copies of green/record_asserts_c03.py and green/rec_preflight_c03.py):
+  python3 <home>/.claude/projects/-Users-mn-projects-github-rdrsss-planar/aa194b3a-a2f1-48b9-a031-343fdb418741/workflows/scripts/identity.py docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md
+  python3 -I S/rec_preflight_c03.py --repo .
+  python3 -I S/record_asserts_c03.py --repo . --phase all   (non-final mode)
+
+identity (seven candidate documents):
+| identity | value |
+|---|---|
+| HEAD | `d536922b59bf9118b91e4188a26d770f9745d600` |
+| sha256(git diff --binary HEAD -- docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md, evidence excluded | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+
+| file | state | sha256 |
+|---|---|---|
+
+preflight (exit 0; run after this file existed, as the preflight lists it as a required input):
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/PROBES.md
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/mutants.tsv
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C5-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C24-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C25-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C26-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C27-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C27-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C28-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C34-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C35-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C35-c1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C36-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C37-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C38-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C44-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C45-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C46-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C47-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C49-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C50-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C51-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C52-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C52-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C53-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C54-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C55-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C55-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C55-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C56-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C56-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C58-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C59-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C59b-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C59b-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C60-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G1-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G2-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G2-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G3-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G4-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G5-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G6-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G7-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G8-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G8-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G8-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/G8-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F1-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F1-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F1-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-A6-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N1-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N2-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N2-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N3-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N3-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N3-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N3-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N3-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N4-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N5-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N5-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N5-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N6-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N6-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m6.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m7.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N7-m8.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m6.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N8-m7.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N10-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N10-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N11-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N11-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N11-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N11-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N12-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N12-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N13-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N13-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N14-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N14-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N15-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N15-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N15-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N15-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N15-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-c1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-c2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-c3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-c1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F2-c1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F3-c1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C30-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C30-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C30-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C30-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C30-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C30-m6.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C29-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C29-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C29-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C29-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m6.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m7.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m8.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m13.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C32-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C32-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C33-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C33-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C61-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C61-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C61-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C61-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m6.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m7.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m8.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m9.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m10.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m11.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m12.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m13.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m14.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m15.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m16.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m17.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m18.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N9-m19.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N16-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N16-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-m3.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-m4.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-m5.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/N17-m6.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F2-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F2-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F3-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-F3-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-A2-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-A3a-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-A3a-m2.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C3-A3c-m1.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m9.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m10.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m11.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C31-m12.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/baseline-c02-default.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/baseline-c02-audit.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/probes/raw/baseline-c02-audit-closed.log
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/checks.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/sql-final.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/linkcheck-c02.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/redaction-c02.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/identity-c02.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/messages-diff-c03.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/audit-pre-rec-c02.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/staging-candidates-c03.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/record_asserts_c03.py
+PASS tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-red-c03.txt
+PASS tests/native/v5-02-r15-a1-c01-evidence/raw/pre-rec-record-c03.md
+PASS tests/native/v5-02-r15-a1-c01-evidence/raw/ex_checks-c02-preedit-c03.py
+Preflight exit code: 0
+
+assertions:
+PASS ASSERT-C03-msgs: 757 messages present
+PASS ASSERT-C03-freeze-red: pre-edit checker hash matches, 1 FAIL, 112 PASS
+FAIL ASSERT-C03-paths: heading "## V5-02-R15-A1-C03 outcome" is missing | heading "### Final results (C03)" is absent | heading "### C03 closure table" is absent | heading "### Owned files (C03)" is absent | heading "### Checker amendments (C03)" is absent | 4 unresolved path token(s): line 437 `ledger-contract.md:9999`; line 882 `ledger-contract.md:9999`; line 1241 `review-c01/redaction-c01-review.txt`; line 1246 `ledger-contract.md:9999`
+FAIL ASSERT-C03-closure: heading "## V5-02-R15-A1-C03 outcome" is missing; heading "### C03 closure table" is absent
+FAIL ASSERT-C03-C55: the record D81 resolution does not say that C55-m1 is killed by the row-count pin of CHK-I60-role-rows
+FAIL ASSERT-C03-R4: C02 red/RED.md lacks "irrelevant first attempt"; lacks "red-c02-run.txt"; lacks the number 58 (ctest runs)
+FAIL ASSERT-C03-R5: stale header text "red/RED.md, pre-fix tree" is still present | the red-check column header does not name red-c02-run.txt and red-c02-audit-run.txt | 39 row(s) disagree with the red logs: PR-C5: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C24: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C25: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C26: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C27: cell starts "red (FAIL on an assertio", expected "PASS (guard)"; PR-C28: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C34: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C35: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C36: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C37: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C38: cell starts "passed (PASS on the pre-", expected "PASS (guard)"; PR-C44: cell starts "passed (PASS on the pre-", expected "PASS (guard)"
+FAIL ASSERT-C03-R6: red/RED.md still says "one log per failing check"
+FAIL ASSERT-C03-R7: Checker amendments (C02) still says "no message changed"
+FAIL ASSERT-C03-probe-column: 136 cell(s) disagree with mutants.tsv: PR-C5: cell reads not run, pending or placeholder; PR-C24: cell reads not run, pending or placeholder; PR-C25: cell reads not run, pending or placeholder; PR-C26: cell reads not run, pending or placeholder; PR-C27: cell reads not run, pending or placeholder; PR-C28: cell reads not run, pending or placeholder; PR-C34: cell reads not run, pending or placeholder; PR-C35: cell reads not run, pending or placeholder; PR-C36: cell reads not run, pending or placeholder; PR-C37: cell reads not run, pending or placeholder; PR-C38: cell reads not run, pending or placeholder; PR-C44: cell reads not run, pending or placeholder
+FAIL ASSERT-C03-owned: heading "## V5-02-R15-A1-C03 outcome" is missing; heading "### Owned files (C03)" is absent; heading "### Checker amendments (C03)" is absent
+FAIL ASSERT-C03-staging: the Staging list intro still says "First draft (REC1; REC3 finalizes)" | "### Unstaged paths (C03)" is not the heading directly after the Staging list | the record has no "### Unstaged paths (C03)" subsection | the Staging list does not name docs/vernacular/rounds/V5-02-R15-A1-C02-review.md | the Staging list does not name tests/native/v5-02-r15-a1-evidence/REPORT.md | the Staging list does not name tests/native/v5-02-r15-a1-evidence/README.md | the Staging list does not name tests/native/v5-02-r15-a1-evidence/plan/DECISIONS.md | the Staging list does not name tests/native/v5-02-r15-a1-evidence/plan/INVARIANTS.md | the Staging list does not name tests/native/v5-02-r15-a1-c01-evidence/plan/DECISIONS.md | the Staging list does not name tests/native/v5-02-r15-a1-c01-evidence/plan/INVARIANTS.md (+41 more)
+FAIL ASSERT-C03-final-results: heading "## V5-02-R15-A1-C03 outcome" is missing; heading "### Final results (C03)" is absent
+PASS ASSERT-C03-identity-ref: identity values agree
+PASS ASSERT-C03-runner: 168 logs and 3 baselines satisfy the runner rule
+FAIL ASSERT-C03-sections: 27 problem(s): line 329 mentions "Final results (C02)" but no heading "Final results (C02)" exists; line 376 mentions "C02 Final results" but no heading "Final results (C02)" exists; line 380 mentions "C02 Final results" but no heading "Final results (C02)" exists; line 610 mentions "Final results (C02)" but no heading "Final results (C02)" exists; line 756 mentions "Final results (C02)" but no heading "Final results (C02)" exists; line 811 mentions "Final results (C02)" but no heading "Final results (C02)" exists; line 1151 mentions "Final results (C02)" but no heading "Final results (C02)" exists; line 1257 mentions "Final results (C02)" but no heading "Final results (C02)" exists; line 1257 mentions "C01 Final results" but no heading "Final results (C01)" exists; line 1263 mentions "Final results (C02)" but no heading "Final results (C02)" exists; (l2) row 3: cites no log under green/, red/, probes/ or raw/; (l2) row 4: cites no log under green/, red/, probes/ or raw/
+PASS ASSERT-C03-order: 3 of 9 files present, mtime chain holds
+PASS ASSERT-C03-reprobe: deferred (reprobe-c03.txt absent in non-final mode)
+PASS ASSERT-C03-record-rule: 30 files scanned against 560 hash sources
+exemptions used: 110
+EXEMPT E2 line 116 `reconcile.lua`: non-file identifier
+EXEMPT E3 line 135 `identity.py`: external tool name
+EXEMPT E3 line 146 `identity.py`: external tool name
+EXEMPT E3 line 175 `identity.py`: external tool name
+EXEMPT E2 line 273 `dev/planar-v2-vernacular`: non-file identifier
+EXEMPT E3 line 273 `identity.py`: external tool name
+EXEMPT E6 line 327 `tests/native/v5-02-r15-a1-evidence/probes/PROBES.md`: negative existence sentence
+EXEMPT E2 line 403 `job_activations.id`: non-file identifier
+EXEMPT E2 line 413 `events.type`: non-file identifier
+EXEMPT E1 line 442 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E2 line 444 `run_state.state`: non-file identifier
+EXEMPT E2 line 459 `events.job/role/generation_id/run_id`: non-file identifier
+EXEMPT E2 line 459 `events.role`: non-file identifier
+EXEMPT E2 line 463 `blockers.kind`: non-file identifier
+EXEMPT E2 line 463 `dispatches.kind`: non-file identifier
+EXEMPT E3 line 471 `identity.py`: external tool name
+EXEMPT E3 line 474 `identity.py`: external tool name
+EXEMPT E3 line 569 `identity.py`: external tool name
+EXEMPT E3 line 586 `identity.py`: external tool name
+EXEMPT E3 line 589 `identity.py`: external tool name
+EXEMPT E1 line 595 `green/identity*.txt`: placeholder or glob
+EXEMPT E1 line 595 `probes/baseline*.txt`: placeholder or glob
+EXEMPT E2 line 632 `dev/planar-v2-vernacular`: non-file identifier
+EXEMPT E3 line 632 `identity.py`: external tool name
+EXEMPT E1 line 709 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 793 `frozen*.txt`: placeholder or glob
+EXEMPT E1 line 793 `identity*.txt`: placeholder or glob
+EXEMPT E1 line 793 `linkcheck*.txt`: placeholder or glob
+EXEMPT E1 line 793 `probes/baseline*.txt`: placeholder or glob
+EXEMPT E1 line 793 `redaction*.txt`: placeholder or glob
+EXEMPT E1 line 793 `scope*.txt`: placeholder or glob
+EXEMPT E1 line 794 `<scratchpad>/ex_checks.py`: placeholder or glob
+EXEMPT E1 line 794 `<scratchpad>/ex_checks_orig.py`: placeholder or glob
+EXEMPT E1 line 794 `<scratchpad>/frozen/`: placeholder or glob
+EXEMPT E1 line 794 `<scratchpad>/linkcheck.py`: placeholder or glob
+EXEMPT E1 line 794 `<scratchpad>/sql_c01.py`: placeholder or glob
+EXEMPT E3 line 804 `identity.py`: external tool name
+EXEMPT E2 line 823 `events.job`: non-file identifier
+EXEMPT E2 line 823 `events.role`: non-file identifier
+EXEMPT E2 line 827 `events.role`: non-file identifier
+EXEMPT E1 line 836 `.../INVARIANTS.md`: placeholder or glob
+EXEMPT E7 line 845 `C7-m2.txt`: mutant-log name in an invariant table cell
+EXEMPT E7 line 845 `I67-m3.txt`: mutant-log name in an invariant table cell
+EXEMPT E7 line 845 `probes/raw/C7-m1.txt`: mutant-log name in an invariant table cell
+EXEMPT E1 line 847 `<scratchpad>/ex_checks_orig.py`: placeholder or glob
+EXEMPT E3 line 847 `identity.py`: external tool name
+EXEMPT E1 line 867 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 877 `green/*.txt`: placeholder or glob
+EXEMPT E1 line 877 `plan/*.md`: placeholder or glob
+EXEMPT E1 line 877 `plan/superseded-1/*`: placeholder or glob
+EXEMPT E1 line 877 `plan/superseded-2/*`: placeholder or glob
+EXEMPT E1 line 877 `red/*.txt`: placeholder or glob
+EXEMPT E3 line 878 `identity.py`: external tool name
+EXEMPT E3 line 902 `identity.py`: external tool name
+EXEMPT E1 line 918 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E1 line 961 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 971 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 984 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E3 line 995 `identity.py`: external tool name
+EXEMPT E5 line 995 `scripts/identity.py`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1008 `identity.py`: external tool name
+EXEMPT FIN line 1055 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1056 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1057 `tests/native/v5-02-r15-a1-c01-evidence/green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1088 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E6 line 1151 `green/audit-final.txt`: negative existence sentence
+EXEMPT E3 line 1155 `identity.py`: external tool name
+EXEMPT FIN line 1180 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1180 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1180 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E6 line 1198 `green/audit-final.txt`: negative existence sentence
+EXEMPT E3 line 1202 `identity.py`: external tool name
+EXEMPT E1 line 1232 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1241 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1241 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1242 `identity.py`: external tool name
+EXEMPT E1 line 1251 `.survived-1.log`: placeholder or glob
+EXEMPT E1 line 1251 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT FIN line 1252 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1261 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1262 `<frozen-dir>/reports/<tree>__<basename>`: placeholder or glob
+EXEMPT E1 line 1263 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1263 `audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1263 `audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1263 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1263 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1263 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1263 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1271 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1271 `green/*-c02.txt`: placeholder or glob
+EXEMPT E1 line 1271 `probes/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1271 `red/red-c02-*.txt`: placeholder or glob
+EXEMPT E1 line 1271 `tests/native/*-evidence/**/REPORT*`: placeholder or glob
+EXEMPT FIN line 1271 `audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1271 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1271 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1271 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1271 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1288 `identity.py`: external tool name
+EXEMPT E1 line 1293 `e3b0c442...b855`: placeholder or glob
+EXEMPT E5 line 1301 `audit-final.txt`: coordinator dispatch or review-outcome section
+EXEMPT E1 line 1323 `probes/raw/*.log`: placeholder or glob
+EXEMPT E5 line 1325 `audit-final.txt`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1333 `identity.py`: external tool name
+EXEMPT E1 line 1342 `<scratchpad>/c02/ex_checks-c02.py`: placeholder or glob
+EXEMPT E1 line 1361 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E5 line 1366 `green/audit-final.txt`: coordinator dispatch or review-outcome section
+EXEMPT E5 line 1390 `scripts/identity.py`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1405 `identity.py`: external tool name
+EXEMPT E1 line 1408 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+mode: non-final, phase: all
+
+Command exit code: 1
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

@@ -1,0 +1,30 @@
+R15-A1-C03 GRN staging candidates (table 8.1 of INVARIANTS): redaction check per existing candidate, one file per invocation
+command: python3 scripts/redact-local-paths.py --repo-path <repo root> --home <home> check <file>
+date: 2026-11-06
+exit 0 docs/vernacular/rounds/V5-02-R15-A1-C02-review.md
+exit 0 tests/native/v5-02-r15-a1-evidence/REPORT.md
+exit 0 tests/native/v5-02-r15-a1-evidence/README.md
+exit 0 tests/native/v5-02-r15-a1-evidence/plan/DECISIONS.md
+exit 0 tests/native/v5-02-r15-a1-evidence/plan/INVARIANTS.md
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/plan/DECISIONS.md
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/plan/INVARIANTS.md
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/red/snapshot/SHA256SUMS
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/red/snapshot-2/SHA256SUMS
+exit 0 tests/native/v5-02-r15-a1-c02-evidence/red/snapshot/SHA256SUMS
+exit 0 tests/native/v5-02-r15-a1-c02-evidence/red/snapshot-2/SHA256SUMS
+exit 0 tests/native/v5-02-r15-a1-c03-evidence/plan/DECISIONS.md
+exit 0 tests/native/v5-02-r15-a1-c03-evidence/plan/INVARIANTS.md
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/green/messages-before-c03.txt
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/green/freeze-c03.txt
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/green/freeze-red-c03.txt
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/green/messages-diff-c03.txt
+exit 0 tests/native/v5-02-r15-a1-c01-evidence/green/audit-pre-rec-c02.txt
+not checked (this file) tests/native/v5-02-r15-a1-c01-evidence/green/staging-candidates-c03.txt
+absent (written by a later wave, checked by the redaction run that follows its creation) tests/native/v5-02-r15-a1-c01-evidence/green/record_asserts_c03.py
+absent (written by a later wave, checked by the redaction run that follows its creation) tests/native/v5-02-r15-a1-c01-evidence/green/rec_preflight_c03.py
+absent (written by a later wave, checked by the redaction run that follows its creation) tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-red-c03.txt
+absent (written by a later wave, checked by the redaction run that follows its creation) tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-c03.txt
+absent (written by a later wave, checked by the redaction run that follows its creation) tests/native/v5-02-r15-a1-c01-evidence/green/reprobe-c03.txt
+absent (written by a later wave, checked by the redaction run that follows its creation) tests/native/v5-02-r15-a1-c01-evidence/green/identity-compare-c03.txt
+exit 1 scratch file holding the repository root (positive control)
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

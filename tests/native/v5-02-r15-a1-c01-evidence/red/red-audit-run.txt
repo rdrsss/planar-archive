@@ -1,0 +1,113 @@
+# Behavioural red run, audit mode (T1 red-fix, wave 1). Same pre-C01 snapshot as red-run.txt (identity above).
+# Command: python3 -I <scratchpad>/ex_checks.py --repo <repo root> --audit
+# Run before this file existed, so CHK-C01-red-evidence fails on absence (allowed for audit rows).
+# Evidence folders at this run: green/ and probes/ hold files from an earlier attempt (dated 2026-11-06) that
+# later waves regenerate; CHK-C01-sql-evidence-recorded therefore fails on its text, not on absence.
+# Full output follows (unpiped, redirected to this file), then the exit code of the command.
+PASS CHK-I1-skeleton 16 H2 headings in order; 7 placeholder ### subsections inside Part 2
+PASS CHK-I2-tables-strict 24 tables, all STRICT, creation order as required
+PASS CHK-I3-format-markers format=3, user_version=3, codec CHECK, events 14-type CHECK, typed columns, requests 10-op CHECK
+PASS CHK-I4-triggers 43 explicit triggers; sqlite_master holds exactly them
+PASS CHK-I5-fk-resolve REFERENCES set matches the design arrows; reader-verified columns carry none
+PASS CHK-I6-reserved-labels all ten reserved tables carry their Reserved for R16/R17/R18 label
+PASS CHK-I7-cross-row nine design invariants plus D89 additions present
+PASS CHK-I8-cutover cutover text: format3 only after R15-B/C, refusal before capture or Lua, XD5
+PASS CHK-I9-request-v3 request_v3 framing, kind 4 codec 3, contents never in body, replay and conflict
+PASS CHK-I10-history-lookup history --request-id execution results on format3 only; disposition vocabulary of five
+PASS CHK-I11-seven-steps seven EX-3 steps in design order
+PASS CHK-I12-precondition-vocab eight precondition members; bump set of seven facts
+PASS CHK-I13-delta-guard delta write: role_state only for transitioned roles, locked before-state, no row exists
+PASS CHK-I14-conflict-mapping loser is claim_conflict; other precondition failures are state_conflict
+PASS CHK-I15-load-activate load/activate reconciliation: CAS, noop writes nothing, absent job retires, fencing
+PASS CHK-I16-precedence six precedence rules in order with exact v5 cites
+PASS CHK-I17-event-types 14 SQL event types equal the three format2 types plus the 11 added
+PASS CHK-I18-reasons-payload 16 reasons in SQL equal prose; payload v2 shape; reachability split stated
+PASS CHK-I19-explain explain separates work change, output applicability and prerequisites
+PASS CHK-I20-structure-lineage role_structure_v1 fields, digest-driven generations, takeover lineage, work_exec_v1 pointer
+PASS CHK-I21-interpretation-binding EX-6 binding: digest equality, early replay order, exempt reads, with-profile, five factories
+PASS CHK-I22-code-table nine codes, exit 3, rounds, details per D88, field empty
+PASS CHK-I23-message-table 19 new messages byte-exact; no 20th message
+PASS CHK-I24-no-removed-diagnostics no removed diagnostic lines in edited docs (acceptance-matrix seven lines allowed)
+PASS CHK-I25-bounds ten EX-8 rows with design numbers; E15 row numbers; new-site message scope
+PASS CHK-I26-role-transitions 41 role rows; every state and reason used; required transitions present
+PASS CHK-I27-run-transitions 11 run rows; interrupted via run_interrupted only; terminal states have no outgoing rows
+PASS CHK-I28-run-role-coupling run rows paired with the matching role reason
+PASS CHK-I29-placeholders seven placeholders with clause lists; no normative words
+PASS CHK-I30-no-part2-leak no Part 2 content in normative text
+PASS CHK-I31-traceability traceability rows for every required id; anchors resolve
+FAIL CHK-I32-decisions-table OP1 tag is not the delegated tag (operator-pending, recommended option applied)
+FAIL CHK-I33-confirm-stopped OP1 says it changes the external-profile rule
+PASS CHK-I34-acceptance-checklist acceptance checklist lists the R15 tests and lost-update guard
+PASS CHK-I35-claude-md-symlink one inserted line in CLAUDE.md; AGENTS.md still a symlink
+PASS CHK-I36-ledger-pointers ledger pointers link existing anchors; zero removed lines
+PASS CHK-I37-xstore-row format3 row inserted; supersede statement; load keeps request_v2
+PASS CHK-I38-matrix-pointers seven matrix lines changed in place with appended links; status words unchanged
+PASS CHK-I39-v5-alignment v5-alignment records E2 and E5 with the execution contract
+PASS CHK-I40-implementation-pointer one inserted pointer sentence; zero removed lines
+PASS CHK-I41-citation-range M-table v5 cites equal DECISIONS section M; state-table cites hit exact rows
+PASS CHK-I42-links-anchors relative links and fixed anchors resolve
+PASS CHK-I43-redaction redaction check passes for the contract; positive control refused
+PASS CHK-I44-identity-src-tests no tracked or untracked change under src or tests (evidence folder is gitignored)
+PASS CHK-I45-diff-scope changed and untracked paths are within the owned file list (10)
+PASS CHK-I46-record-no-hash round record, C01 evidence and REPORT/review files carry no sha256 of rounds or roadmap
+PASS CHK-I47-sql-executes SQL executes; immutable UPDATE/DELETE refused; reservation before request row inserts; indexes exact
+FAIL CHK-I48-enum-checks role_state accepts {'state': 'ready', 'run_id': 5} (D97)
+PASS CHK-I49-active-run-uniqueness partial unique index refuses a second active run; fenced row frees the slot
+PASS CHK-I50-no-tbd no TBD, no question marks in normative text, no emoji
+PASS CHK-I51-header header states status, authority, amendment and source rules
+PASS CHK-I52-format2-exact unmodified format2 SQL lines byte-exact in format3
+PASS CHK-I53-ex1-columns design columns present; BLOB, UNIQUE and key choices as required
+FAIL CHK-I54-run-token run token shown places omit status --request-id
+PASS CHK-I55-request-outcomes nine-value union CHECK; pairing table; no reserved value
+PASS CHK-I56-cause-reason every cause carries its pinned reason; fenced only for retirement with an active run
+FAIL CHK-I57-payload-version event reason is ordinal 1 or empty string missing
+PASS CHK-I58-fallbacks nine execution fallbacks, io exit 4, stdout variant, load fallback unchanged
+FAIL CHK-I59-record-additions HALT-1 section (b) lacks the delegated tag text
+PASS CHK-I60-role-rows coverage rows, carrying-event cells and v5 cites as pinned
+PASS CHK-I61-load-activate-preconditions load and activate assert fact_version and role_state for every role
+PASS CHK-I62-reactivation M7/M8 re-activation rows with reason activated; N5 fenced by job_activated
+PASS CHK-I63-event-payload-columns Q table: payload versions, reference keys, typed columns and reserved types
+PASS CHK-I64-limit-names limit names pinned; existing observe names keep Capture limit exceeded
+PASS CHK-I65-fact-version fact_version rules: exactly-one, no other role, first row 1, no exception, SQL >=1
+PASS CHK-I66-reused-messages reused existing codes named byte-exact with owners; none in the 19-message set
+FAIL CHK-I67-column-conventions role_state run_id/drifted coupling CHECK missing (D97)
+PASS CHK-I68-carrying-events carrying-event rule stated; check_recorded and verdict_recorded labelled
+PASS CHK-I69-stale-done M40 and M41 rows present, no stale -> ready, OP3 options in decisions table
+PASS CHK-I70-absent-active-job absent-job rows named; scripted replay keeps non-active rows retired
+FAIL CHK-C01-R1-token-status-lookup shown-only list of the run token omits status --request-id of a claim or takeover request
+FAIL CHK-C01-R1-status-qualifier token is never shown in status without the request-lookup qualifier
+FAIL CHK-C01-R1-a09-lookup A09 item does not name status --request-id as the recovery lookup returning the run token
+FAIL CHK-C01-R2-event-reason-ordinal1 EX-4 event payload does not take the reason from the lowest ordinal, ordinal 1
+PASS CHK-C01-R2-ordinal-check transitions ordinal 0 refused, ordinal 1 accepted
+FAIL CHK-C01-R3-op1-rule-unchanged OP1 does not say the external-profile rule is unchanged
+FAIL CHK-C01-R4-role-state-run-drift role_state accepts {'state': 'ready', 'run_id': 5, 'drifted': 0} (D97)
+FAIL CHK-C01-R4-transitions-drifted transitions accepts {'after_state': 'ready', 'after_drifted': 1} (D98)
+FAIL CHK-C01-R4-run-id-replay-text invariant 6 lacks the run_claimed or run_taken_over source sentence
+FAIL CHK-C01-R4-states-text EX-4 States does not say drifted is 0 and run_id NULL for every state other than running
+FAIL CHK-C01-R5-c6-text C6 does not say evidence.reason is native-writer enforced and reader-verified only
+FAIL CHK-C01-R5-evidence-reason-check decisions table lacks row D100
+FAIL CHK-C01-decisions-rows decisions table lacks D97
+FAIL CHK-C01-R7-header-scope header does not say part 1 holds EX-1 to EX-8
+FAIL CHK-C01-R8-m-note role-table note lacks the M5 before-cell sentence
+FAIL CHK-C01-R9-d56-basis D56 is not new-engineering with a basis naming EX-8 and D78
+FAIL CHK-C01-R9-d55-corruption D55 exit 4 is not I/O, corruption, busy and disk-full
+FAIL CHK-C01-R10-alignment-pointers E2 does not end with the EX-4 and EX-5 sentence (C.20)
+FAIL CHK-C01-R11-cutover-target cutover bullet does not say format3 is created at a new explicit target
+FAIL CHK-C01-R12-ex8-label EX-8 check-output existing-site cell does not say None yet and label output_limit an R17 fact
+FAIL CHK-C01-relabel-contract contract still says 'operator-pending'
+FAIL CHK-C01-relabel-record round record still has pending wording: ['operator-pending', 'recommended option applied']
+FAIL CHK-C01-relabel-no-live OP1 is not recorded as delegated
+PASS CHK-C01-sql-counts 24 STRICT tables in order; 43 triggers; two explicit indexes; foreign_key_check clean
+PASS CHK-C01-sql-legal-rows legal rows insert; I47 SQL probes pass
+PASS CHK-C01-names-preserved 70 old ids kept in order; 35 CHK-C01 ids appended; 105 registered
+PASS CHK-C01-frozen-files frozen docs keep their baseline hashes; roadmap matches its frozen copy; src and tests unchanged
+PASS CHK-C01-message-bytes 19 new messages and the resource message byte-identical; external profile removes no line
+FAIL CHK-C01-sql-evidence-recorded a clean foreign_key_check is not recorded
+FAIL CHK-C01-green-evidence missing file: green/checks.txt
+FAIL CHK-C01-prober-evidence missing file: probes/mutants.tsv
+FAIL CHK-C01-record-closure the record has no C01 closure section
+FAIL CHK-C01-red-evidence missing file: red/red-audit-run.txt
+PASS CHK-C01-extractor-comments the extractor keeps 24 tables past comment lines and detects a deleted table
+FAIL CHK-C01-record-d81 the record has no C01 closure section
+# exit code of the command: 1
+# PASS lines: 70; FAIL lines: 35 (core 29, audit 6)

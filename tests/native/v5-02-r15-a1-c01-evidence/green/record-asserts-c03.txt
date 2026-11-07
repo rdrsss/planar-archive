@@ -1,0 +1,281 @@
+R15-A1-C03 FIN1 step 1: record assertions on the live files, assertion mutants and controls
+date: 2026-11-06
+command: python3 -I <scratchpad>/c03/record_asserts_c03.py --repo <repo root> --phase early (scratch copy cmp-identical to green/record_asserts_c03.py)
+Command exit code: 0
+scope: this file records the early phase (msgs to sections, 16 assertions) on the live files. The assertions order and reprobe are not part of this phase: they run in the final phase (FIN2 step 7); their mutants below were run on a synthetic final-mode tree and are the only can-fail proof of those two assertions.
+mode: non-final; the nine FIN-only paths are the only path exemptions, each listed below with its category, line and reason
+
+--- live-file run output ---
+PASS ASSERT-C03-msgs: 757 messages present
+PASS ASSERT-C03-freeze-red: pre-edit checker hash matches, 1 FAIL, 112 PASS
+PASS ASSERT-C03-paths: 153 exemption(s) used
+PASS ASSERT-C03-closure: rows C02-R1..C02-R7 present
+PASS ASSERT-C03-C55: PROBES.md and D81 text agree
+PASS ASSERT-C03-R4: label present in RED.md and in the record row
+PASS ASSERT-C03-R5: 66 rows agree with the red logs
+PASS ASSERT-C03-R6: raw/red-checks holds 72 logs; both files say so
+PASS ASSERT-C03-R7: no-message-changed sentence gone, diff cited with counts
+PASS ASSERT-C03-probe-column: 136 cells agree with mutants.tsv
+PASS ASSERT-C03-owned: owned paths and amendment statements present
+PASS ASSERT-C03-staging: 25 additions, 23 unstaged entries
+PASS ASSERT-C03-final-results: Final results (C03) holds the pinned facts
+PASS ASSERT-C03-identity-ref: identity values agree
+PASS ASSERT-C03-runner: 168 logs and 3 baselines satisfy the runner rule
+PASS ASSERT-C03-sections: section references and status rows agree
+exemptions used: 142
+EXEMPT E2 line 116 `reconcile.lua`: non-file identifier
+EXEMPT E3 line 135 `identity.py`: external tool name
+EXEMPT E3 line 146 `identity.py`: external tool name
+EXEMPT E3 line 175 `identity.py`: external tool name
+EXEMPT E2 line 273 `dev/planar-v2-vernacular`: non-file identifier
+EXEMPT E3 line 273 `identity.py`: external tool name
+EXEMPT E6 line 327 `tests/native/v5-02-r15-a1-evidence/probes/PROBES.md`: negative existence sentence
+EXEMPT E2 line 403 `job_activations.id`: non-file identifier
+EXEMPT E2 line 413 `events.type`: non-file identifier
+EXEMPT E1 line 442 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E2 line 444 `run_state.state`: non-file identifier
+EXEMPT E2 line 459 `events.job/role/generation_id/run_id`: non-file identifier
+EXEMPT E2 line 459 `events.role`: non-file identifier
+EXEMPT E2 line 463 `blockers.kind`: non-file identifier
+EXEMPT E2 line 463 `dispatches.kind`: non-file identifier
+EXEMPT E3 line 471 `identity.py`: external tool name
+EXEMPT E3 line 474 `identity.py`: external tool name
+EXEMPT E3 line 569 `identity.py`: external tool name
+EXEMPT E3 line 586 `identity.py`: external tool name
+EXEMPT E3 line 589 `identity.py`: external tool name
+EXEMPT E1 line 595 `green/identity*.txt`: placeholder or glob
+EXEMPT E1 line 595 `probes/baseline*.txt`: placeholder or glob
+EXEMPT E2 line 634 `dev/planar-v2-vernacular`: non-file identifier
+EXEMPT E3 line 634 `identity.py`: external tool name
+EXEMPT E1 line 711 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 766 `probes/raw/*.survived-1.log`: placeholder or glob
+EXEMPT E1 line 795 `frozen*.txt`: placeholder or glob
+EXEMPT E1 line 795 `identity*.txt`: placeholder or glob
+EXEMPT E1 line 795 `linkcheck*.txt`: placeholder or glob
+EXEMPT E1 line 795 `probes/baseline*.txt`: placeholder or glob
+EXEMPT E1 line 795 `redaction*.txt`: placeholder or glob
+EXEMPT E1 line 795 `scope*.txt`: placeholder or glob
+EXEMPT E1 line 796 `<scratchpad>/ex_checks.py`: placeholder or glob
+EXEMPT E1 line 796 `<scratchpad>/ex_checks_orig.py`: placeholder or glob
+EXEMPT E1 line 796 `<scratchpad>/frozen/`: placeholder or glob
+EXEMPT E1 line 796 `<scratchpad>/linkcheck.py`: placeholder or glob
+EXEMPT E1 line 796 `<scratchpad>/sql_c01.py`: placeholder or glob
+EXEMPT E3 line 806 `identity.py`: external tool name
+EXEMPT E2 line 825 `events.job`: non-file identifier
+EXEMPT E2 line 825 `events.role`: non-file identifier
+EXEMPT E2 line 829 `events.role`: non-file identifier
+EXEMPT E1 line 838 `.../INVARIANTS.md`: placeholder or glob
+EXEMPT E7 line 847 `C7-m2.txt`: mutant-log name in an invariant table cell
+EXEMPT E7 line 847 `I67-m3.txt`: mutant-log name in an invariant table cell
+EXEMPT E7 line 847 `probes/raw/C7-m1.txt`: mutant-log name in an invariant table cell
+EXEMPT E1 line 849 `<scratchpad>/ex_checks_orig.py`: placeholder or glob
+EXEMPT E3 line 849 `identity.py`: external tool name
+EXEMPT E1 line 869 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 879 `green/*.txt`: placeholder or glob
+EXEMPT E1 line 879 `plan/*.md`: placeholder or glob
+EXEMPT E1 line 879 `plan/superseded-1/*`: placeholder or glob
+EXEMPT E1 line 879 `plan/superseded-2/*`: placeholder or glob
+EXEMPT E1 line 879 `red/*.txt`: placeholder or glob
+EXEMPT E3 line 880 `identity.py`: external tool name
+EXEMPT E3 line 904 `identity.py`: external tool name
+EXEMPT E1 line 920 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E1 line 963 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 973 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 986 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E3 line 997 `identity.py`: external tool name
+EXEMPT E5 line 997 `scripts/identity.py`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1010 `identity.py`: external tool name
+EXEMPT FIN line 1057 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1058 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1059 `tests/native/v5-02-r15-a1-c01-evidence/green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1171 `tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1172 `tests/native/v5-02-r15-a1-c01-evidence/green/reprobe-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1173 `tests/native/v5-02-r15-a1-c01-evidence/green/identity-compare-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1185 `tests/native/v5-02-r15-a1-c01-evidence/green/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1186 `tests/native/v5-02-r15-a1-c01-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1187 `tests/native/v5-02-r15-a1-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1188 `tests/native/v5-02-r15-a1-c02-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1189 `tests/native/v5-02-r15-a1-c03-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1202 `tests/native/v5-02-r15-a1-c01-evidence/red/snapshot*/`: placeholder or glob
+EXEMPT E1 line 1203 `tests/native/v5-02-r15-a1-c02-evidence/red/snapshot*/`: placeholder or glob
+EXEMPT FIN line 1205 `tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-final-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E6 line 1209 `green/audit-final.txt`: negative existence sentence
+EXEMPT E3 line 1213 `identity.py`: external tool name
+EXEMPT FIN line 1238 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1238 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1238 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E6 line 1256 `green/audit-final.txt`: negative existence sentence
+EXEMPT E3 line 1260 `identity.py`: external tool name
+EXEMPT E1 line 1290 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1299 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1299 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1300 `identity.py`: external tool name
+EXEMPT E1 line 1309 `.survived-1.log`: placeholder or glob
+EXEMPT E1 line 1309 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT FIN line 1310 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1319 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1320 `<frozen-dir>/reports/<tree>__<basename>`: placeholder or glob
+EXEMPT E1 line 1321 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1321 `audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1321 `audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1321 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1321 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1321 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1321 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1329 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1329 `green/*-c02.txt`: placeholder or glob
+EXEMPT E1 line 1329 `probes/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1329 `red/red-c02-*.txt`: placeholder or glob
+EXEMPT E1 line 1329 `tests/native/*-evidence/**/REPORT*`: placeholder or glob
+EXEMPT FIN line 1329 `audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1329 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1329 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1329 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1329 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1346 `identity.py`: external tool name
+EXEMPT E1 line 1351 `e3b0c442...b855`: placeholder or glob
+EXEMPT E5 line 1359 `audit-final.txt`: coordinator dispatch or review-outcome section
+EXEMPT E1 line 1381 `probes/raw/*.log`: placeholder or glob
+EXEMPT E5 line 1383 `audit-final.txt`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1391 `identity.py`: external tool name
+EXEMPT E1 line 1400 `<scratchpad>/c02/ex_checks-c02.py`: placeholder or glob
+EXEMPT E1 line 1419 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E5 line 1424 `green/audit-final.txt`: coordinator dispatch or review-outcome section
+EXEMPT E5 line 1448 `scripts/identity.py`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1463 `identity.py`: external tool name
+EXEMPT E1 line 1466 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1480 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1480 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1480 `green/identity-compare-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1480 `green/record-asserts-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1480 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1480 `green/reprobe-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1484 `identity.py`: external tool name
+EXEMPT FIN line 1490 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1492 `green/identity-compare-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1493 `green/record-asserts-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1494 `green/record-asserts-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1502 `green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1503 `green/record-asserts-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1552 `tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1553 `tests/native/v5-02-r15-a1-c01-evidence/green/reprobe-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1555 `tests/native/v5-02-r15-a1-c01-evidence/green/superseded-4/`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1556 `tests/native/v5-02-r15-a1-c01-evidence/green/identity-compare-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1557 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-final.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1558 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1559 `tests/native/v5-02-r15-a1-c01-evidence/green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1560 `tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-final-c03.txt`: FIN-only path, written after the record (non-final mode)
+mode: non-final, phase: early
+
+--- assertion mutants and controls (scratch copies of the live tree, --repo scratch) ---
+columns: id | row | assertion | verdict | observed line (shortened)
+C3-F4-m1 | C3-F4 | msgs | KILLED | FAIL ASSERT-C03-msgs: 1 message(s) of messages-before-c03.txt are no longer present in the checker, first: CHK-I45-diff-scope / changes outside owned files: %s
+C3-F5-m1 | C3-F5 | freeze-red | KILLED | FAIL ASSERT-C03-freeze-red: expected exactly one FAIL CHK-I45-diff-scope line naming V5-02-R15-A1-C02-review.md (found 0 FAIL lines)
+C3-F5-m2 | C3-F5 | freeze-red | KILLED | FAIL ASSERT-C03-freeze-red: the line "Command exit code: 1" is missing or another exit code is present
+C3-F5-m3 | C3-F5 | freeze-red | KILLED | FAIL ASSERT-C03-freeze-red: the "pre-edit checker sha256:" line is missing
+C3-F5-m4 | C3-F5 | freeze-red | KILLED | FAIL ASSERT-C03-freeze-red: the pinned pre-edit checker sha256 differs from the saved file
+C3-F5-m5 | C3-F5 | freeze-red | KILLED | FAIL ASSERT-C03-freeze-red: raw/ex_checks-c02-preedit-c03.py is missing
+C3-F5-m6 | C3-F5 | freeze-red | KILLED | FAIL ASSERT-C03-freeze-red: the pinned pre-edit checker sha256 differs from the saved file
+C3-R1-m1 | C3-R1 | C55 | KILLED | FAIL ASSERT-C03-C55: no line of probes/PROBES.md says that C55-m1 is killed by the row-count pin of CHK-I60-role-rows
+C3-R4-m1 | C3-R4 | R4 | KILLED | FAIL ASSERT-C03-R4: C02 red/RED.md lacks "irrelevant first attempt"
+C3-R4-m2 | C3-R4 | R4 | KILLED | FAIL ASSERT-C03-R4: the record C02-R4 row lacks "irrelevant first attempt"; lacks "red-c02-run.txt"
+C3-R5-m1 | C3-R5 | R5 | KILLED | FAIL ASSERT-C03-R5: 1 row(s) disagree with the red logs: PR-C27: cell starts "red (FAIL on an assertio", expected "PASS (guard)"
+C3-R5-m2 | C3-R5 | R5 | KILLED | FAIL ASSERT-C03-R5: 1 row(s) disagree with the red logs: AU-C30: cell starts "PASS (guard)", expected "red (FAIL"
+C3-R5-m3 | C3-R5 | R5 | KILLED | FAIL ASSERT-C03-R5: 1 row(s) disagree with the red logs: PR-C59b: cell starts "red (FAIL on an assertio", expected "PASS (guard)"
+C3-R6-m1 | C3-R6 | R6 | KILLED | FAIL ASSERT-C03-R6: red/RED.md still says "one log per failing check"
+C3-R6-m2 | C3-R6 | R6 | KILLED | FAIL ASSERT-C03-R6: README.md does not say that raw/red-checks holds 72 logs, one per C01 invariant row
+C3-R7-m1 | C3-R7 | R7 | KILLED | FAIL ASSERT-C03-R7: Checker amendments (C02) still says "no message changed"
+C3-R7-m2 | C3-R7 | R7 | KILLED | FAIL ASSERT-C03-R7: Checker amendments (C02) does not cite green/messages-diff-c03.txt
+C3-P-m1 | C3-P | probe-column | KILLED | FAIL ASSERT-C03-probe-column: 1 cell(s) disagree with mutants.tsv: PR-C5: cell reads not run, pending or placeholder
+C3-P-m2 | C3-P | probe-column | KILLED | FAIL ASSERT-C03-probe-column: 2 cell(s) disagree with mutants.tsv: PR-C5: expected "KILLED 0/1"; C5: expected "KILLED 0/1"
+C3-P-m3 | C3-P | probe-column | KILLED | FAIL ASSERT-C03-probe-column: 1 cell(s) disagree with mutants.tsv: PR-C5: killing check CHK-C01-R2-ordinal-check is not named
+C3-O-m1 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Owned files (C03) does not name 1 path(s), first: tests/native/v5-02-r15-a1-c01-evidence/probes/PROBES.md
+C3-O-m2 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Checker amendments (C03) lacks the CHK-I45-diff-scope frozen-map change
+C3-O-m3 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Checker amendments (C03) lacks a citation of messages-diff-c03.txt
+C3-O-m4 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Checker amendments (C03) lacks "decided by wave 1"
+C3-O-m5 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Checker amendments (C03) lacks "new engineering choice"
+C3-O-m6 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Checker amendments (C03) has fewer than two "exception to the Owned files clause" phrases
+C3-O-m7 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: heading "### Owned files (C03)" does not lie under the outcome heading
+C3-O-m8 | C3-O | owned | KILLED | FAIL ASSERT-C03-owned: Owned files (C03) does not name 1 path(s), first: tests/native/v5-02-r15-a1-c01-evidence/raw/ex_checks-c02-preedit-c03.py
+C3-S-m1 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the Staging list does not name docs/vernacular/rounds/V5-02-R15-A1-C02-review.md
+C3-S-m2 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the Staging list intro still says "First draft (REC1; REC3 finalizes)"
+C3-S-m3 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the Staging list holds a forbidden path: tests/native/v5-02-r15-a1-c01-evidence/green/frozen
+C3-S-m4 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: "### Unstaged paths (C03)" is not the heading directly after the Staging list | the record has no "### Unstaged paths (C03)" subsection | the uns
+C3-S-m5 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the Staging list does not name tests/native/v5-02-r15-a1-evidence/REPORT.md
+C3-S-m6 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the Staging list does not name tests/native/v5-02-r15-a1-c02-evidence/red/snapshot-2/SHA256SUMS
+C3-S-m7 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the unstaged subsection has no bullet for tests/native/v5-02-r15-a1-c02-review-evidence/
+C3-S-m8 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: the unstaged subsection has no bullet for tests/native/v5-02-r15-a1-evidence/inventory.txt
+C3-S-m9 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: staging constants differ from the pinned set (only in plan: 1, only in script: 0)
+C3-S-m10 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: staging-candidates-c03.txt has no line for tests/native/v5-02-r15-a1-evidence/README.md
+C3-S-m11 | C3-S | staging | KILLED | FAIL ASSERT-C03-staging: "### Unstaged paths (C03)" is not the heading directly after the Staging list
+C3-FR-m1 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: lacks "green/sql-final.txt"
+C3-FR-m2 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: lacks "25 of 25"
+C3-FR-m3 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: lacks "probes/mutants.tsv"
+C3-FR-m4 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: criterion row 5 is missing
+C3-FR-m5 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: states a "links checked" figure for a log FIN2 rewrites
+C3-FR-m6 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: lacks "positive control"
+C3-FR-m7 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: states a count after audit-final.txt
+C3-FR-m8 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: states a count of exit 0 lines
+C3-FR-m9 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: heading "### Final results (C03)" does not lie under the outcome heading
+C3-FR-m10 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: lacks "negative control"
+C3-FR-m11 | C3-FR | final-results | KILLED | FAIL ASSERT-C03-final-results: criterion row 1 reads "not met"
+C3-ID-m1 | C3-ID | identity-ref | KILLED | FAIL ASSERT-C03-identity-ref: 1 identity row(s) of the pre-REC record changed or lost, first: | `CLAUDE.md` | modified | `7cdf4eadca490e6d3f6c6c697cd373c2
+C3-ID-m2 | C3-ID | identity-ref | KILLED | FAIL ASSERT-C03-identity-ref: Candidate currency combined differs from green/identity-c02.txt
+C3-ID-m3 | C3-ID | identity-ref | KILLED | FAIL ASSERT-C03-identity-ref: per-file row of CLAUDE.md differs between green/identity-c02.txt and Final candidate identity
+C3-ID-m4 | C3-ID | identity-ref | KILLED | FAIL ASSERT-C03-identity-ref: 1 identity row(s) of the pre-REC record changed or lost, first: | `CLAUDE.md` | modified | `7cdf4eadca490e6d3f6c6c697cd373c2
+C3-RN-m1 | C3-RN | runner | KILLED | FAIL ASSERT-C03-runner: 1 log(s) break the runner rule: C5-m1: expected one "runner counts:" line, found 0
+C3-RN-m2 | C3-RN | runner | KILLED | FAIL ASSERT-C03-runner: 1 log(s) break the runner rule: C5-m1: KILLED needs F >= 1 and P + F = R (P 111, F 0, R 113)
+C3-RN-m3 | C3-RN | runner | KILLED | FAIL ASSERT-C03-runner: 1 log(s) break the runner rule: baseline-c02-default.log: baseline needs F = 0, P = R = 113 (P 111, F 0, R 113)
+C3-RN-m4 | C3-RN | runner | KILLED | FAIL ASSERT-C03-runner: 1 log(s) break the runner rule: C24-m1: KILLED needs F >= 1 and P + F = R (P 100, F 3, R 113)
+C3-SEC-m1 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): line 380 mentions "C02 Final results" but no heading "Final results (C02)" exists
+C3-SEC-m2 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): line 612 mentions "Final results (C02)" but no heading "Final results (C02)" exists
+C3-SEC-m3 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): (l2) row 3: cites no log under green/, red/, probes/ or raw/
+C3-SEC-m4 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): line 1085 still holds "Provisional (REC1 first draft)"
+C3-SEC-m5 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): (l2) row 5: the status "" is not exactly one of met or "shown by FIN log"
+C3-SEC-m6 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): C02 acceptance status row 1: the status "not met" is not exactly one of met or "shown by FIN log"
+C3-SEC-m7 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): C02 acceptance status row G1: cites a log that does not exist: green/nonexistent-c03.txt
+C3-SEC-m8 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): line 329 mentions "Final results (C02)" but no heading "Final results (C02)" exists
+C3-SEC-m9 | C3-SEC | sections | KILLED | FAIL ASSERT-C03-sections: 1 problem(s): line 376 mentions "C02 Final results" but no heading "Final results (C02)" exists
+C3-SEC-c1 | C3-SEC | sections | control-ok | rc=0; PASS ASSERT-C03-sections: section references and status rows agree
+C3-A7-m1 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 1496 `green/nonexistent-c03.txt`
+C3-A7-m2 | C3-A7 | closure | KILLED | FAIL ASSERT-C03-closure: no row for C02-R5
+C3-A7-m3 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 3 `green/nonexistent-c03.txt`
+C3-A7-m4 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 612 `green/nonexistent-c03.txt`
+C3-A7-m5 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: exemption constants differ from the pinned set (only in plan: 1, only in script: 1)
+C3-A7-m6 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 1496 `nonexistent-c03.txt`
+C3-A7-m7 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 1496 `execution-contract.md:99999`
+C3-A7-m8 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 1496 `green/nonexistent-c03.txt`
+C3-A7-m9 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 1 unresolved path token(s): line 1496 `probes/raw/Z9-m1.log`
+C3-A7-m10 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: 53 unresolved path token(s): line 1057 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-final.txt`; line 1058 `tests/native/v5-02-r15-a1-c01-evi
+C3-A7-m11 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: heading "### Final results (C03)" does not lie under the outcome heading
+C3-A7-m12 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: heading "## V5-02-R15-A1-C03 outcome" is missing | heading "### Final results (C03)" does not lie under the outcome heading | heading "### C03 clos
+C3-A7-m13 | C3-A7 | paths+closure | KILLED | FAIL ASSERT-C03-paths: heading "### C03 closure table" does not lie under the outcome heading; FAIL ASSERT-C03-closure: heading "### C03 closure table" does not lie under the outcome heading
+C3-A7-m14 | C3-A7 | paths | KILLED | FAIL ASSERT-C03-paths: heading "## V5-02-R15-A1-C03 outcome" is missing | heading "### Final results (C03)" does not lie under the outcome heading | heading "### C03 clos
+C3-A7-c1 | C3-A7 | paths | control-ok | rc=0; PASS ASSERT-C03-paths: 156 exemption(s) used
+C3-A7-c2 | C3-A7 | paths | control-ok | rc=0; PASS ASSERT-C03-paths: 156 exemption(s) used
+C3-A7-c3 | C3-A7 | paths | control-ok | rc=0; PASS ASSERT-C03-paths: 155 exemption(s) used
+C3-RR-m1 | C3-RR | record-rule | KILLED | FAIL ASSERT-C03-record-rule: tests/native/v5-02-r15-a1-c03-evidence/plan/DECISIONS.md line 97 holds the sha256 of tests/native/v5-02-r15-a1-evidence/REPORT.md
+C3-RR-m2 | C3-RR | record-rule | KILLED | FAIL ASSERT-C03-record-rule: tests/native/v5-02-r15-a1-evidence/README.md line 19 holds the sha256 of docs/vernacular/rounds/V5-02-R15-A1-C02-review.md
+C3-RR-m3 | C3-RR | record-rule | KILLED | FAIL ASSERT-C03-record-rule: tests/native/v5-02-r15-a1-c01-evidence/green/freeze-c03.txt line 152 holds the sha256 of docs/vernacular/roadmap.md
+C3-RR-m4 | C3-RR | record-rule | KILLED | FAIL ASSERT-C03-record-rule: tests/native/v5-02-r15-a1-c02-evidence/red/RED.md line 74 holds the sha256 of tests/native/v5-02-r15-a1-c01-evidence/raw/pre-rec-record-c03.m
+C3-RR-m5 | C3-RR | record-rule | KILLED | FAIL ASSERT-C03-record-rule: tests/native/v5-02-r15-a1-c02-evidence/red/snapshot/SHA256SUMS line 3 holds the sha256 of tests/native/v5-02-r15-a1-evidence/REPORT.md
+C3-RR-c1 | C3-RR | record-rule | control-ok | rc=1; PASS ASSERT-C03-record-rule: 52 files scanned against 561 hash sources
+C3-PF-c0 | C3-PF | preflight | control-ok | rc=0; 185 PASS lines, 0 MISSING
+C3-PF-m1 | C3-PF | preflight | KILLED | rc=1; MISSING tests/native/v5-02-r15-a1-c01-evidence/green/messages-diff-c03.txt
+C3-PF-m2 | C3-PF | preflight | KILLED | rc=1; MISSING tests/native/v5-02-r15-a1-c01-evidence/probes/raw/C5-m1.log
+C3-PF-m3 | C3-PF | preflight | KILLED | rc=1; MISSING tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-red-c03.txt
+C3-PF-m4 | C3-PF | preflight | KILLED | rc=1; MISSING tests/native/v5-02-r15-a1-c01-evidence/raw/pre-rec-record-c03.md
+C3-FO-c0 | C3-FO | order | control-ok | rc=1; PASS ASSERT-C03-order: 9 of 9 files present, mtime chain holds
+C3-FO-m1 | C3-FO | order | KILLED | FAIL ASSERT-C03-order: docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/record-asserts-c03.txt; docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/repro
+C3-FO-m2 | C3-FO | order | KILLED | FAIL ASSERT-C03-order: docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/redaction-c02.txt; green/record-asserts-c03.txt is newer than green/redaction-c02.txt; g
+C3-FO-m3 | C3-FO | order | KILLED | FAIL ASSERT-C03-order: green/redaction-c02.txt has no line for record-asserts-c03.txt
+C3-FO-m4 | C3-FO | order | KILLED | FAIL ASSERT-C03-order: green/reprobe-c03.txt is newer than green/identity-compare-c03.txt; green/reprobe-c03.txt is newer than green/checks.txt; green/reprobe-c03.txt is 
+C3-FO-m5 | C3-FO | order | KILLED | FAIL ASSERT-C03-order: green/redaction-final-c02.txt is absent in final mode
+C3-RP-c0 | C3-RP | reprobe | control-ok | rc=1; PASS ASSERT-C03-reprobe: 41 re-probes verified
+C3-RP-m1 | C3-RP | reprobe | KILLED | FAIL ASSERT-C03-reprobe: probes/reprobe/N3-m1-r.log is missing
+C3-RP-m2 | C3-RP | reprobe | KILLED | FAIL ASSERT-C03-reprobe: the re-probe totals differ from the lines (41, 0, 0)
+C3-RP-m3 | C3-RP | reprobe | KILLED | FAIL ASSERT-C03-reprobe: no line for N7-m4-r; the re-probe totals differ from the lines (40, 0, 0)
+
+assertion mutant totals: killed 98, survived 0, not run 0; controls ok 8
+notes: C3-A7 defines controls c1 to c3 only (no c4 exists in the plan row). C3-PF mutants run the preflight script (exit non-zero and a MISSING line naming the path). C3-RR mutants and control judge the record-rule line of a --phase all run only. C3-FO and C3-RP mutants ran in final mode on a synthetic tree whose nine FIN files are placeholders with an ordered mtime chain.
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

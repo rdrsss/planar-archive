@@ -1,0 +1,36 @@
+# R15-A1-C03 FIN2 scope evidence
+date: 2026-11-06
+commands (repository root): git status --short ; git diff --stat HEAD ; git diff --stat HEAD -- src tests ; git ls-files --others --exclude-standard -- src tests
+
+--- git status --short ---
+ M CLAUDE.md
+ M docs/vernacular/acceptance-matrix.md
+ M docs/vernacular/external-profile-contract.md
+ M docs/vernacular/implementation.md
+ M docs/vernacular/ledger-contract.md
+ M docs/vernacular/roadmap.md
+ M docs/vernacular/v5-alignment.md
+?? docs/vernacular/execution-contract.md
+?? docs/vernacular/rounds/V5-02-R15-A1-C01-review.md
+?? docs/vernacular/rounds/V5-02-R15-A1-C02-review.md
+?? docs/vernacular/rounds/V5-02-R15-A1-review.md
+?? docs/vernacular/rounds/V5-02-R15-A1.md
+exit 0
+
+--- git diff --stat HEAD ---
+ CLAUDE.md                                    |  1 +
+ docs/vernacular/acceptance-matrix.md         | 14 +++++++-------
+ docs/vernacular/external-profile-contract.md |  2 ++
+ docs/vernacular/implementation.md            |  2 ++
+ docs/vernacular/ledger-contract.md           |  6 ++++++
+ docs/vernacular/roadmap.md                   |  3 ++-
+ docs/vernacular/v5-alignment.md              | 12 ++++++++++++
+ 7 files changed, 32 insertions(+), 8 deletions(-)
+exit 0
+
+--- git diff --stat HEAD -- src tests (empty expected) ---
+exit 0
+
+--- git ls-files --others --exclude-standard -- src tests (empty expected) ---
+exit 0
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

@@ -1,0 +1,58 @@
+Command: sh <scratchpad>/c03/sql_final.sh <repo root> <scratchpad>/c03/sqlw3
+Command exit code: 0
+
+identity begin (seven documents)
+| identity | value |
+|---|---|
+| HEAD | `d536922b59bf9118b91e4188a26d770f9745d600` |
+| sha256(git diff --binary HEAD -- docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md), tracked only | `f48088154adefb428bdfc3187df4e9d55558c5a5955bc951201e3785aaec8b1f` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md, evidence excluded | `499d95b7cd77a6476c4c50390d2b500c9f782dfa01676c2808b2d6bb00b756c7` |
+
+| file | state | sha256 |
+|---|---|---|
+| `CLAUDE.md` | modified | `7cdf4eadca490e6d3f6c6c697cd373c2c8a683f41612de02f98dce8b69b72163` |
+| `docs/vernacular/acceptance-matrix.md` | modified | `6370cb09d99eaa33bf068f787e6ed040c3a81d160d6d2cbba47b3944e7178be5` |
+| `docs/vernacular/external-profile-contract.md` | modified | `e190e2d1d88ad0a40cab3bd4bb31bbe826774a58f729224d083abcac877577da` |
+| `docs/vernacular/implementation.md` | modified | `486a80a78d247e45badd73b2b96184bb952317d1229dbdba94d93cdd734e35fb` |
+| `docs/vernacular/ledger-contract.md` | modified | `3e595653feeaa63f824f1f0bbf929a4923f10854dbcdd3e35725b8ff6223ceaf` |
+| `docs/vernacular/v5-alignment.md` | modified | `58f5d441281c9b6d0dbf5049b604ba9a7f8129610e6a084a55959d4282449bd6` |
+| `docs/vernacular/execution-contract.md` | untracked | `2d909b8adea509d7140e2ba9f719891b549838949535a5f0de52c20f71e572d3` |
+identity end
+
+--- output ---
+sqlite3 version: 3.51.0
+sql block: execution-contract.md lines 82 to 355, 274 lines
+schema load exit: 0
+PRAGMA foreign_keys after ON in session: 1
+tables: 24
+strict tables: 24
+triggers: 43
+explicit indexes: records_digest, run_state_one_active
+foreign_key_check rows: 0
+[1] expect refuse | role_state running, run_id NULL | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[2] expect accept | role_state running, run_id 5, drifted 1 | accepted
+[3] expect refuse | role_state ready, run_id 5 | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[4] expect refuse | role_state ready, drifted 1 | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[5] expect refuse | role_state blocked, drifted 1 | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[6] expect refuse | role_state done, drifted 1 | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[7] expect refuse | role_state stale, run_id 7 | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[8] expect refuse | role_state retired, run_id 3 | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[9] expect accept | role_state stale, run_id NULL, drifted 0 (control) | accepted
+[10] expect refuse | role_state update ready to running keeping run_id NULL | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[11] expect refuse | role_state update running+drift to done keeping run_id and drifted | refused: CHECK constraint failed: (state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0) (19)
+[12] expect refuse | transitions after ready, after_drifted 1 | refused: CHECK constraint failed: after_state='running' OR after_drifted=0 (19)
+[13] expect refuse | transitions after done, after_drifted 1 | refused: CHECK constraint failed: after_state='running' OR after_drifted=0 (19)
+[14] expect accept | transitions after running, after_drifted 1 | accepted
+[15] expect refuse | transitions before ready, before_drifted 1 | refused: CHECK constraint failed: before_state IS NULL OR before_state='running' OR before_drifted=0 (19)
+[16] expect accept | transitions before running, before_drifted 1 | accepted
+[17] expect refuse | transitions before NULL, before_drifted 0 | refused: CHECK constraint failed: (before_state IS NULL AND before_drifted IS NULL) OR (before_state IS NOT NULL AND before_drifted IS NOT NULL) (19)
+[18] expect refuse | transitions before ready, before_drifted NULL | refused: CHECK constraint failed: (before_state IS NULL AND before_drifted IS NULL) OR (before_state IS NOT NULL AND before_drifted IS NOT NULL) (19)
+[19] expect refuse | transitions ordinal 0 | refused: CHECK constraint failed: ordinal>0 (19)
+[20] expect accept | transitions ordinal 1 | accepted
+[21] expect accept | evidence pass, reason 'anything' (D100: no SQL CHECK, reader-verified only) | accepted
+[22] expect accept | evidence fail, reason 'bogus' (D100: no SQL CHECK) | accepted
+[23] expect refuse | evidence reason NULL | refused: NOT NULL constraint failed: evidence.reason (19)
+[24] expect refuse | evidence outcome skipped | refused: CHECK constraint failed: outcome IN ('pass','fail','inconclusive') (19)
+[25] expect refuse | evidence definition_id 99 (no record) | refused: FOREIGN KEY constraint failed (19)
+probe statements: 25
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

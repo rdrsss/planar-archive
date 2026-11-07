@@ -1,0 +1,50 @@
+R15-A1-C03 FIN1 step 1b: re-probes of the record-text mutants on a scratch fixture of the final tree
+date: 2026-11-06
+fixture: the final checkout (record, README, RED.md, PROBES.md, logs) regenerated inside the scratch; fixture-only edit: 13 occurrences of audit-final renamed in record lines that clause 9 of CHK-C02-evidence-logs would reject (see the FIN1 report)
+baselines: BR-D (default mode) exit 0, PASS 113, FAIL 0; BR-A (audit mode, no --pending) exit 0, PASS 122, FAIL 0 (logs probes/reprobe/BR-D.log, probes/reprobe/BR-A.log)
+verdict rule: exit != 0, a FAIL line naming the row test, the test a PASS line of its baseline, P + F = R
+
+N3-m1-r KILLED
+N3-m2-r KILLED
+N3-m3-r KILLED
+N3-m4-r KILLED
+N3-m5-r KILLED
+N4-m1-r KILLED
+N5-m1-r KILLED
+N5-m2-r KILLED
+N5-m3-r KILLED
+N6-m1-r KILLED
+N6-m2-r KILLED
+N7-m1-r KILLED
+N7-m2-r KILLED
+N7-m3-r KILLED
+N7-m4-r KILLED
+N7-m5-r KILLED
+N7-m6-r KILLED
+N7-m7-r KILLED
+N7-m8-r KILLED
+N10-m1-r KILLED
+N11-m1-r KILLED
+N11-m2-r KILLED
+N11-m3-r KILLED
+N11-m4-r KILLED
+N12-m1-r KILLED
+N12-m2-r KILLED
+N13-m1-r KILLED
+N13-m2-r KILLED
+N14-m1-r KILLED
+N14-m2-r KILLED
+C3-A6-m1-r KILLED
+C32-m1-r KILLED
+C32-m2-r KILLED
+C61-m1-r KILLED
+C61-m2-r KILLED
+C61-m3-r KILLED
+C61-m4-r KILLED
+N16-m1-r KILLED
+N16-m2-r KILLED
+N9-m9-r KILLED
+N9-m14-r KILLED
+
+re-probe totals: killed 41, survived 0, not run 0
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

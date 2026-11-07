@@ -324,6 +324,8 @@ in v1. Future execution formats must add typed affected role/run, acknowledged
 revision, exact before/after state and input/output/check/verdict references;
 they cannot squeeze execution into an untyped message or rerun modern policy.
 
+Format3 adds the execution event types and payload version 2 listed in [EX-4](execution-contract.md#ex-4-facts-derived-state-and-reconcile-rules); this section is unchanged for format1 and format2.
+
 For a new load request:
 
 1. Apply the [workspace selector rules](command-contract.md#workspace-selector-and-environment)
@@ -447,6 +449,8 @@ only. RA01 authoring/scaffolding must be separately contracted.
 | `planar history --ledger <path> --at-event <id>` | Return reconstructed state after that event plus event/revision metadata; mutually exclusive with all selectors/paging. This is a read, never activation. |
 | `planar export --ledger <path> --revision <id> --target <new-directory>` | Reconstruct source tree exact bytes and normalized modes into a new target; no registry/stdlib injection into authored paths, no interpretation regenerated as source. No activation or ledger mutation. |
 
+On format3, `planar history --ledger <path> --request-id <id>` also returns execution results as specified in [EX-2](execution-contract.md#ex-2-request-framing-and-replay); format1 and format2 behaviour is unchanged.
+
 No-selector history includes current head even for an empty ledger. CLI-visible
 metadata never contains BLOB payloads or host paths. Init returns
 `{version:1,kind:"init",ledger:<hex>,workspace:<id>,active_revision:"none",event:"1"}`.
@@ -544,6 +548,8 @@ primitives using a quiescent source and new explicit target, not a new public
 backup CLI. Copying only a live database file is not the backup protocol. Restore
 validates identity/version/schema/integrity/history before opening the copied
 ledger for writes. No legacy import/export promise is implied.
+
+Format3 (execution ledgers) is specified in [execution contract EX-1](execution-contract.md#ex-1-format3); format1 and format2 text here is unchanged.
 
 ## Bounded implementation and acceptance
 

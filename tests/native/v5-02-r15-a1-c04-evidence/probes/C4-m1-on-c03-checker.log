@@ -1,0 +1,10 @@
+probe: C4-m1 (mutant)
+checker: the C03 final checker, reconstructed by reverting the three C04 edits (sha256 8745c3bf..., equal to the C03 record)
+mutation: drop the line "exit 0 CLAUDE.md" from the scratch redaction-c02.txt (C03-R2)
+command: python3 -I -B <scratchpad>/c04/ex_checks-c03-final-reconstructed.py --repo <clone> --frozen-dir <scratchpad>/c04/frozen --audit CHK-C02-evidence-logs
+Command exit code: 0
+verdict: SURVIVES-on-C03-checker (expected: red-first)
+--- full output ---
+command: ex_checks-c03-final-reconstructed.py --repo <scratchpad>/c04/probe-work --frozen-dir <scratchpad>/c04/frozen --audit CHK-C02-evidence-logs
+PASS CHK-C02-evidence-logs staging list, redaction, links, identity, cmp, owned files and final logs agree
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

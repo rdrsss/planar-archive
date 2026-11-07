@@ -1,0 +1,78 @@
+--- record_asserts_c03.py
++++ record_asserts_c04.py
+@@ -1,5 +1,9 @@
+ #!/usr/bin/env python3
+-"""Record assertions of round V5-02-R15-A1-C03 (ASSERT-C03-*).
++"""Record assertions of round V5-02-R15-A1-C03 (ASSERT-C03-*), C04 copy.
++
++C04 copy of record_asserts_c03.py with exactly two patches (see record_asserts_c04.diff):
++(1) the outcome heading may be followed by the two sections written after C03; (2) ASSERT-C03-order
++checks the C04 FIN chain. Everything else, including the pinned constants, is unchanged.
+ 
+ Stdlib only, read only, deterministic. Observes record claims that no registered
+ check of ex_checks-c02.py observes (DECISIONS D12, INVARIANTS section 0).
+@@ -583,8 +587,12 @@
+         out_i, out_t = outs[0]
+         if any(out_t.startswith(p) for p in cvals('COORD_PREFIX')):
+             probs.append('the outcome heading starts with a COORD prefix')
+-        if h2s and h2s[-1][0] != out_i:
+-            probs.append('the outcome heading is not the last ## heading')
++        # C04 patch: later ## headings are allowed when they are the two sections written after C03.
++        later = [t for (i, t) in h2s if i > out_i]
++        bad = [t for t in later if not (t.lstrip('# ').startswith('V5-02-R15-A1-C03 review outcome')
++                                        or t.lstrip('# ').startswith('V5-02-R15-A1-C04 outcome'))]
++        if bad:
++            probs.append('the outcome heading is followed by an unexpected ## heading: %s' % bad[0][:60])
+         after = [i for (i, t) in h2s if t.startswith(cval('OUTCOME_AFTER'))]
+         if not after:
+             probs.append('heading "%s" is missing' % cval('OUTCOME_AFTER'))
+@@ -1572,24 +1580,32 @@
+ 
+ 
+ def a_order(c):
+-    names = [('docs/vernacular/rounds/V5-02-R15-A1.md', c.record_path),
+-             ('green/record-asserts-c03.txt', os.path.join(c.E, 'green/record-asserts-c03.txt')),
+-             ('green/reprobe-c03.txt', os.path.join(c.E, 'green/reprobe-c03.txt')),
+-             ('green/identity-compare-c03.txt', os.path.join(c.E, 'green/identity-compare-c03.txt')),
++    # C04 patch: the chain is the one of the C04 FIN phase. The inputs (record, README, RED.md, checker)
++    # must be older than every FIN log, and the FIN logs must follow the order checks, linkcheck,
++    # redaction-c02, audit-final, redaction-final-c04, record-asserts-final-c04. The three C03 FIN1 logs
++    # (record-asserts-c03, reprobe-c03, identity-compare-c03) are not part of the chain: C04 does not rewrite them.
++    names = [('docs/vernacular/rounds/V5-02-R15-A1.md', c.record_path),
++             ('README.md', os.path.join(c.E, 'README.md')),
++             ('red/RED.md', os.path.join(c.E, 'red/RED.md')),
++             ('green/ex_checks-c02.py', os.path.join(c.E, 'green/ex_checks-c02.py')),
+              ('green/checks.txt', os.path.join(c.E, 'green/checks.txt')),
++             ('green/linkcheck-c02.txt', os.path.join(c.E, 'green/linkcheck-c02.txt')),
+              ('green/redaction-c02.txt', os.path.join(c.E, 'green/redaction-c02.txt')),
+              ('green/audit-final.txt', os.path.join(c.E, 'green/audit-final.txt')),
+-             ('green/audit-verify-c02.txt', os.path.join(c.E, 'green/audit-verify-c02.txt')),
+-             ('green/redaction-final-c02.txt', os.path.join(c.E, 'green/redaction-final-c02.txt'))]
++             ('green/redaction-final-c04.txt', os.path.join(c.E, 'green/redaction-final-c04.txt')),
++             ('green/record-asserts-final-c04.txt', os.path.join(c.E, 'green/record-asserts-final-c04.txt'))]
+     msgs = []
+     present = []
+     for (lab, p) in names:
+         if os.path.isfile(p):
+             present.append((lab, os.stat(p).st_mtime_ns))
+-        elif c.final:
+-            msgs.append('%s is absent in final mode' % lab)
++        else:
++            msgs.append('%s is absent' % lab)
++    firsts = 4
+     for i in range(len(present)):
+         for j in range(i + 1, len(present)):
++            if i < firsts and j < firsts:
++                continue
+             if present[i][1] > present[j][1]:
+                 msgs.append('%s is newer than %s' % (present[i][0], present[j][0]))
+     rp = os.path.join(c.E, 'green/redaction-c02.txt')
+@@ -1600,7 +1616,7 @@
+             if (exists or c.final) and not re.search(r'^exit \d+ .*' + re.escape(n) + r'\s*$', rt, re.M):
+                 msgs.append('green/redaction-c02.txt has no line for %s' % n)
+     need(not msgs, '; '.join(msgs[:10]))
+-    return '%d of 9 files present, mtime chain holds' % len(present)
++    return '%d of 10 files present, mtime chain holds' % len(present)
+ 
+ 
+ RP_IDS = (['N3-m%d' % k for k in range(1, 6)] + ['N4-m1'] + ['N5-m%d' % k for k in range(1, 4)]

@@ -652,6 +652,8 @@ records, source membership, outcome or receipts.
 | Old binary, format2 | Existing unsupported-version refusal, no journal/schema/data changes. |
 | Unknown format/request/interpretation/manifest | Refuse typed unsupported format/codec/interpretation as appropriate; no best-effort parse or implicit conversion. Unsupported interpretation may still permit raw source export when record/tree format supported. |
 
+Format3 (R15 execution ledgers, [EX-1](execution-contract.md#ex-1-format3)) is format2 with modified events, requests, current_state plus execution tables, `ledger_meta.format` 3, `PRAGMA user_version=3`, and records codec CHECK `IN (2,3)` for kind 4; kind 4 codec 3 is `request_v3`, the execution framing in [EX-2](execution-contract.md#ex-2-request-framing-and-replay). After the R15 cutover this format3 paragraph supersedes the sentence "New init creates format2 only" below by insertion; that sentence is not edited. On format3, load keeps `request_v2`, including the profile and `effective_stdlib_v1` path.
+
 New init creates format2 only at a **new explicit target** after X admission;
 there is no public format selector or format1 creation path. Native test fixtures
 retain explicit format1 creation for backward-reader checks. Publication and

@@ -25,6 +25,7 @@ Before working, read [the implementation plan](docs/vernacular/implementation.md
    [render](docs/vernacular/render-contract.md), [ledger](docs/vernacular/ledger-contract.md),
    [command/workspace](docs/vernacular/command-contract.md),
    [authoring](docs/vernacular/authoring-contract.md),
+   [execution](docs/vernacular/execution-contract.md),
    [load](docs/vernacular/load-command-contract.md) and
    [external profile](docs/vernacular/external-profile-contract.md) — until a scoped,
    reviewed amendment.

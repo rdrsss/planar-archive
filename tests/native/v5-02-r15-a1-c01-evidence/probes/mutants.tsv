@@ -1,0 +1,169 @@
+mutant id	source row	test	verdict	mutant
+C5-m1	C5	CHK-C01-R2-ordinal-check	KILLED	-  ordinal INTEGER NOT NULL CHECK(ordinal>0), / +  ordinal INTEGER NOT NULL CHECK(ordinal>=0),
+C24-m1	C24	CHK-C01-sql-counts	KILLED	-CREATE TRIGGER transitions_no_delete BEFORE DELETE ON transitions BEGIN SELECT RAISE(ABORT,'immutable ledger 
+C25-m1	C25	CHK-C01-sql-legal-rows	KILLED	-  CHECK((state='running' AND run_id IS NOT NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0)) / +  CHECK((state='running' AND run_id IS NULL) OR (state<>'running' AND run_id IS NULL AND drifted=0))
+C26-m1	C26	CHK-C01-names-preserved	KILLED	-@check('CHK-I33-confirm-stopped')
+C27-m1	C27	CHK-C01-frozen-files	KILLED	-and the acceptance cases above require fresh independent rounds and evidence. / +and the acceptance cases above require fresh independent rounds and evidence. A sentence appended by the prob
+C27-m2	C27	CHK-C01-frozen-files	KILLED	-Acceptance: exact bytes and digest representation match independently specified / +Acceptance: exact bytes and digest representation matdh independently specified
+C28-m1	C28	CHK-C01-message-bytes	KILLED	-| `activate` | `io` | 4 | `""` | `Activate may be complete; retry the same request ID or inspect request hist / +| `activate` | `io` | 4 | `""` | `Activate may be completed; retry the same request ID or inspect request his
+C34-m1	C34	CHK-I2-tables-strict	KILLED	-CREATE TABLE reservations ( / -  id INTEGER PRIMARY KEY CHECK(id>0),
+C35-m1	C35	CHK-C01-extractor-comments	KILLED	-CREATE TABLE evidence (
+C35-c1	C35	CHK-C01-extractor-comments	control-ok	control: neutral edit (second leading comment line before CREATE TABLE evidence)
+C36-m1	C36	CHK-I50-no-tbd	KILLED	+-- Reserved for R17 TBD
+C37-m1	C37	CHK-I6-reserved-labels	KILLED	file added or removed
+C38-m1	C38	CHK-I1-skeleton	KILLED	-## EX-6 Interpretation binding / +## EX-6 Interpretation bindings
+C44-m1	C44	CHK-I2-tables-strict	KILLED	-CREATE TABLE reservations ( / +CREATE TABLE evidence (
+C45-m1	C45	CHK-I5-fk-resolve	KILLED	-  request_id TEXT NOT NULL UNIQUE, / +  request_id TEXT NOT NULL UNIQUE REFERENCES requests(request_id),
+C46-m1	C46	CHK-I47-sql-executes	KILLED	-CREATE INDEX records_digest ON records(codec,kind,digest);
+C47-m1	C47	CHK-I53-ex1-columns	KILLED	-  secret BLOB NOT NULL CHECK(length(secret)=16), / +  secret BLOB NOT NULL CHECK(length(secret)=32),
+C49-m1	C49	CHK-I8-cutover	KILLED	-- An older binary that opens a format3 ledger refuses it unchanged. The ledger contract already requires a bi / -  refuse a future or unsupported database unchanged ([ledger-contract](ledger-contract.md), the initializatio
+C50-m1	C50	CHK-I39-v5-alignment	KILLED	-  line 241, which lists applicable contracts, declared ownership, and root and base identities as / +  the line, which lists applicable contracts, declared ownership, and root and base identities as
+C51-m1	C51	CHK-I42-links-anchors	KILLED	+See [nothing](#ex-9-nothing). / +
+C52-m1	C52	CHK-I46-record-no-hash	KILLED	+ / +Pasted by the probe: <sha256>
+C52-m2	C52	CHK-I46-record-no-hash	KILLED	+ / +Pasted by the probe: <sha256>
+C53-m1	C53	CHK-I64-limit-names	KILLED	-| Observe directory (RA01) | At most 1024 entries; file at most 64 KiB; total at most 4 MiB; output at most 1 / +| Observe directory (RA01) | At most 1024 entries; file at most 64 KiB; total at most 4 MiB; output at most 1
+C54-m1	C54	CHK-I66-reused-messages	KILLED	-| `resource_limit` | `Capture limit exceeded` | `authoring-contract.md:504`, row `Bounds`, for the existing o / +| `resource_limit` | `Capture limit exceed` | `authoring-contract.md:504`, row `Bounds`, for the existing obs
+C55-m1	C55	CHK-I60-role-rows	KILLED	+| M42 | stale | extra probe row | ready | prerequisite_available | `declaration_accepted` (R15) | :374 | R15 
+C55-m2	C55	CHK-I60-role-rows	KILLED	-| M8 | blocked, ready, done, stale, running, running+drift | activate the job that is already active: same as / +| M8 | blocked, ready, done, stale, running, running+drift | activate the job that is already active: same as
+C55-m3	C55	CHK-I60-role-rows	KILLED	-| M7 | blocked, ready, done, stale, running, running+drift | activate the job that is already active (re-acti / +| M7 | blocked, ready, done, stale, running, running+drift | activate the job that is already active (re-acti
+C56-m1	C56	CHK-I69-stale-done	KILLED	-No `stale` to `ready` row exists within one generation, because `ready` requires that the role never complete / +A `stale` to `ready` row may exist, because `ready` requires that the role never completed (v5 `planar-design
+C56-m2	C56	CHK-I69-stale-done	KILLED	-| OP3 | Row M41 (stale to done when an output vector is restored) has no reason of the sixteen that fits. Opt / +| OP3 | Row M41 (stale to done when an output vector is restored) has no reason of the sixteen that fits. Opt
+C58-m1	C58	CHK-I10-history-lookup	KILLED	-  head and `last_seq`. It adds no `disposition` field. Disposition is reported by `status --request-id` only. / +  head and `last_seq`. It adds a `disposition` field. Disposition is reported by `status --request-id` only.
+C59-m1	C59	CHK-I27-run-transitions	KILLED	-| N7 | active | load, two causes with the same row: (a) role removed; (b) the active job absent from the new 
+C59b-m1	C59b	CHK-I28-run-role-coupling	KILLED	-| N1 | none (no row) | claim creates the run | active | `run_claimed` (R15) | claimed (M26) | R15 | / +| N1 | none (no row) | claim creates the run | active | `run_claimed` (R15) | (M26) | R15 |
+C59b-m2	C59b	CHK-I70-absent-active-job	KILLED	-| M14 | running, running+drift | load, two causes with the same row: (a) role removed from the active job, ac
+C60-m1	C60	CHK-I51-header	KILLED	-narrows no clause of any approved contract. It specifies no check, no verdict and no R16 to R19 behaviour. Th / +narrows nothing. It specifies no check, no verdict and no R16 to R19 behaviour. The
+G1-m1	G1	CHK-I43-redaction	KILLED	+Host path: <home>/docs/x. / +
+G2-m1	G2	CHK-I44-identity-src-tests	KILLED	file added or removed
+G2-m2	G2	CHK-I44-identity-src-tests	KILLED	-      if (resolved.error().message == "Cannot resolve explicit input path") / +      if (resolved.error().messbge == "Cannot resolve explicit input path")
+G3-m1	G3	CHK-I35-claude-md-symlink	KILLED	+ / +- Second entry added by the probe.
+G4-m1	G4	CHK-I24-no-removed-diagnostics	KILLED	-| Module portable spelling | `path` / `Invalid external module path` |
+G5-m1	G5	CHK-I36-ledger-pointers	KILLED	-CREATE INDEX records_digest ON records(codec,kind,digest);
+G6-m1	G6	CHK-I41-citation-range	KILLED	+See `ledger-contract.md:9999`. / +
+G7-m1	G7	CHK-I22-code-table	KILLED	-| `fenced` | 3 | `""` | `{run_state}`, where run_state is one of `active`, `released`, `interrupted`, `comple / +| `fenced` | 4 | `""` | `{run_state}`, where run_state is one of `active`, `released`, `interrupted`, `comple
+G8-m1	G8	CHK-I45-diff-scope	KILLED	+ / +Probe edit.
+G8-m2	G8	CHK-I45-diff-scope	KILLED	-invariant and is killed by the named check. This matters most for the rows whose check passed on the pre-C01  / +invariant and is killed by the named check. This matters most for the rows whose check passed on tie pre-C01 
+G8-m3	G8	CHK-I45-diff-scope	KILLED	-Acceptance criterion 2 and gate bullets G1 to G4 require these logs on the final candidate: `green/checks.txt / +Acceptance criterion 2 and gate bullets G1 to G4 require these logs on the final candidate: `green/checks.txt
+G8-m4	G8	CHK-I45-diff-scope	KILLED	file added or removed
+C3-F1-m1	C3-F1	CHK-I45-diff-scope	KILLED	file added or removed
+C3-F1-m2	C3-F1	CHK-I45-diff-scope	KILLED	-Acceptance criterion 2 and gate bullets G1 to G4 require these logs on the final candidate: `green/checks.txt / +Acceptance criterion 2 and gate bullets G1 to G4 require these logs on the final candidate: `green/checks.txt
+C3-F1-m3	C3-F1	CHK-I45-diff-scope	KILLED	file added or removed
+C3-A6-m1	C3-A6	CHK-I46-record-no-hash	KILLED	file added or removed
+N1-m1	N1	CHK-C02-op2-history-tag	KILLED	-`history --request-id` on format3. Decision OP2, tagged `operator-decided (delegated 2026-10-31, option A)`,  / +`history --request-id` on format3. Decision OP2 (operator-decided, delegated 2026-10-31, option A) applies.
+N2-m1	N2	CHK-C02-contract-one-line	KILLED	- / + word
+N2-m2	N2	CHK-C02-contract-one-line	KILLED	-- On format3, `history --request-id` also returns the execution results of its request. For claim and takeove
+N3-m1	N3	CHK-C02-record-status	KILLED	-Status (2026-11-06): R15-A1 candidate with correctives C01 and C02 as evidence and records, pending independe / +Status (2026-11-06): R15-A1 candidate with correctives C01 and C02 as evidence and records, pending independe
+N3-m2	N3	CHK-C02-record-status	KILLED	-Superseded in C02: the prober has since run; see probes/PROBES.md and Final results (C02).
+N3-m3	N3	CHK-C02-record-status	KILLED	-Superseded in C02: the prober has since run; see probes/PROBES.md and Final results (C02).
+N3-m4	N3	CHK-C02-record-status	KILLED	-Superseded in C02: the prober has since run; see probes/PROBES.md and Final results (C02).
+N3-m5	N3	CHK-C02-record-status	KILLED	-- Mutation prober and closing probes C31-m1, C31-m2, C61-m1, C61-m2, C32-m3, C32-m4, C61-m3: not run, no verd / +- Mutation prober and closing probes C31-m1, C31-m2, C61-m1, C61-m2, C32-m3, C32-m4, C61-m3: was not run. See
+N4-m1	N4	CHK-C02-record-section-c	KILLED	+The standing delegation of 2026-10-31 covers the recommendation for a halt, but it does not record an operato
+N5-m1	N5	CHK-C02-record-post-c01-ac	KILLED	-| 7 | every citation read, every link and anchor resolves | met | I41 and I42 pass; links and anchors in `gre
+N5-m2	N5	CHK-C02-record-post-c01-ac	KILLED	-| 3 | nine codes, one new message, reused messages named, no other new code | met | met, as amended by HALT-1 / +| 3 | nine codes, one new message, reused messages named, no other new code | met | met: nine codes, nine fal
+N5-m3	N5	CHK-C02-record-post-c01-ac	KILLED	-| 5 | Part 2 placeholders without normative text | met | I29 and I30 pass | / +| 5 | Part 2 placeholders without normative text |  | I29 and I30 pass |
+N6-m1	N6	CHK-C02-record-r8	KILLED	-- Constraint amendment: the original brief said the original checker failed 13 checks on the pre-C01 candidat / +The extra ids (I45, I59) are not reconciled here. - Constraint amendment: the original brief said the origina
+N6-m2	N6	CHK-C02-record-r8	KILLED	-- Constraint amendment: the original brief said the original checker failed 13 checks on the pre-C01 candidat / +- Constraint amendment: the original brief said the original checker failed 13 checks on the pre-C01 candidat
+N7-m1	N7	CHK-C02-red-md	KILLED	-The earlier text of this file described a `cmake --build build/rewrite-debug --target planar_tests` build and / +The earlier text of this file described a `cmake --build build/rewrite-debug --target planar_tests` build and
+N7-m2	N7	CHK-C02-red-md	KILLED	-- CHK-C01-R1-a09-lookup / +- CHK-C01-R1-a09
+N7-m3	N7	CHK-C02-red-md	KILLED	-- Red run (pre-C01 candidate): `tests/native/v5-02-r15-a1-c01-evidence/red/red-run.txt` (default mode, 70 PAS / +- Red run (pre-C01 candidate): `tests/native/v5-02-r15-a1-c01-evidence/red/red-run.txt` (default mode, 70 PAS
+N7-m4	N7	CHK-C02-red-md	KILLED	-- Red run (pre-C01 candidate): `tests/native/v5-02-r15-a1-c01-evidence/red/red-run.txt` (default mode, 70 PAS / +- Red run (pre-C01 candidate): `tests/native/v5-02-r15-a1-c01-evidence/red/red-run.txt` (default mode, 70 PAS
+N7-m5	N7	CHK-C02-red-md	KILLED	-| `red/` | `RED.md` (rewritten in C02), `ex_checks.py` (evidence copy of the repaired checker), the real red: / +| `red/` | `RED.md` (rewritten in C02), `ex_checks.py` (evidence copy of the repaired checker), the real red:
+N7-m6	N7	CHK-C02-red-md	KILLED	-| `red/` | `RED.md` (rewritten in C02), `ex_checks.py` (evidence copy of the repaired checker), the real red: / +| `red/` | `RED.md` (rewritten in C02), `ex_checks.py` (evidence copy of the repaired checker), the real red:
+N7-m7	N7	CHK-C02-red-md	KILLED	+ / +Nothing here is committed.
+N7-m8	N7	CHK-C02-red-md	KILLED	-| `red/` | `RED.md` (rewritten in C02), `ex_checks.py` (evidence copy of the repaired checker), the real red: / +| `red/` | `RED.md` (rewritten in C02), `ex_checks.py` (evidence copy of the repaired checker), the real red:
+N8-m1	N8	CHK-C02-raw-preserved	KILLED	file added or removed
+N8-m2	N8	CHK-C02-raw-preserved	KILLED	+x
+N8-m3	N8	CHK-C02-raw-preserved	KILLED	-exit 0 tests/native/v5-02-r15-a1-c01-evidence/README.md / +exit 0 tests/native/v5-02-r15-a1-c01-fvidence/README.md
+N8-m4	N8	CHK-C02-raw-preserved	KILLED	file added or removed
+N8-m5	N8	CHK-C02-raw-preserved	KILLED	file added or removed
+N8-m6	N8	CHK-C02-raw-preserved	KILLED	file added or removed
+N8-m7	N8	CHK-C02-raw-preserved	KILLED	-| 1 | EX-1 to EX-8, state machines, reconcile rules exact; format3 SQL complete | EX-1 line 42 (SQL block 81- / +| 1 | EX-1 to EX-8, state machines, reconcile rules fxact; format3 SQL complete | EX-1 line 42 (SQL block 81-
+N10-m1	N10	CHK-C02-snapshot-baseline	KILLED	-History, before C02: the table above lists the C01 values of six candidate files (unchanged by C02). The C01  / +History, before C02: the table above lists the C01 values of six candidate files (unchanged by C02). The C01 
+N10-m2	N10	CHK-C02-snapshot-baseline	KILLED	+x
+N11-m1	N11	CHK-C02-record-c02-ac	KILLED	-| 4 | status line, section (c), post-C01 status of criteria 1 to 10 and the C01-R8 explanation are correct | 
+N11-m2	N11	CHK-C02-record-c02-ac	KILLED	-| G3 | redaction exit 0 per staged file, positive control non-zero | not met | pending (wave GREEN): `green/r
+N11-m3	N11	CHK-C02-record-c02-ac	KILLED	-| 3 | checker runs to zero FAIL; D81 prober ran or D81 withdrawn; survivors listed | not met | core checker 0 / +| 3 | checker runs to zero FAIL; D81 prober ran or D81 withdrawn; survivors listed | not met | core checker 0
+N11-m4	N11	CHK-C02-record-c02-ac	KILLED	-| 2 | final-candidate logs exist: zero FAIL, 25 of 25 SQL results, a resolved audit run | not met | pending ( / +| 2 | final-candidate logs exist: zero FAIL, 25 of 25 SQL results, a resolved audit run | ok | pending (wave 
+N12-m1	N12	CHK-C02-record-owned-files	KILLED	-- `tests/native/v5-02-r15-a1-c01-evidence/green/mask_log.py`
+N12-m2	N12	CHK-C02-record-owned-files	KILLED	-- `tests/native/v5-02-r15-a1-c01-evidence/probes/mutants.tsv`
+N13-m1	N13	CHK-C02-record-reviewer-control	KILLED	-The reviewer's redaction positive control is `tests/native/v5-02-r15-a1-evidence/review-c01/redaction-c01-rev / +The reviewer's redaction positive control is `review-c01/redaction.txt`: its inventory.txt line exits 1 becau
+N13-m2	N13	CHK-C02-record-reviewer-control	KILLED	-exit 1 tests/native/v5-02-r15-a1-evidence/inventory.txt / -exit 1 tests/native/v5-02-r15-a1-c01-evidence/raw/orig-checker-run.txt
+N14-m1	N14	CHK-C02-record-d6-labels	KILLED	-- `CHK-I45-diff-scope`: the untracked C01 review file is now a frozen file, compared byte for byte with its f / +- `CHK-I45-x`: the untracked C01 review file is now a frozen file, compared byte for byte with its frozen cop
+N14-m2	N14	CHK-C02-record-d6-labels	KILLED	-- `CHK-C01-record-d81`: the D81 resolution states killed and survived counts from `probes/PROBES.md`. / +- `CHK-C01-x`: the D81 resolution states killed and survived counts from `probes/PROBES.md`.
+N15-m1	N15	CHK-C02-red-logs	KILLED	-FAIL CHK-C02-record-status record line 3 does not name the post-C01 status
+N15-m2	N15	CHK-C02-red-logs	KILLED	-| `docs/vernacular/execution-contract.md` | untracked | `28635996d17a17f81af671c96c0bde33b5f4fd4b20be826755d2 / +| `docs/vernacular/execution-contract.md` | untracked | `28635996d17a17f81af671c96c0bde33b5f4fd4b20be826755d2
+N15-m3	N15	CHK-C02-red-logs	KILLED	-Command exit code: 1
+N15-m4	N15	CHK-C02-red-logs	KILLED	+FAIL CHK-I1-skeleton probe added assertion failure
+N15-m5	N15	CHK-C02-red-logs	KILLED	+path: <scratchpad>
+N9-c1	N9	CHK-C02-evidence-logs	control-ok	control: unmutated closing fixture run (with a synthetic audit-final.txt)
+N9-c2	N9	CHK-C02-evidence-logs	control-ok	control: unmutated closing fixture run (no edit)
+N9-c3	N9	CHK-C02-evidence-logs	control-ok	control: unmutated closing fixture run (with a synthetic audit-final.txt)
+N17-c1	N17	CHK-C02-logs-masked	control-ok	control: unmutated closing fixture run (with a synthetic audit-final.txt)
+C3-F2-c1	AU-C3-F2	CHK-C02-evidence-logs	control-ok	control: unmutated closing fixture run (no edit)
+C3-F3-c1	AU-C3-F3	CHK-C02-record-status	control-ok	control: unmutated closing fixture run (no edit)
+C30-m1	AU-C30	CHK-C01-green-evidence	KILLED	-PASS CHK-I4-triggers 43 explicit triggers; sqlite_master holds exactly them / +FAIL CHK-I4-triggers 43 explicit triggers; sqlite_master holds exactly them
+C30-m2	AU-C30	CHK-C01-green-evidence	KILLED	-Command exit code: 0
+C30-m3	AU-C30	CHK-C01-green-evidence	KILLED	-# Scratch checks for the V5-02-R15-A1 execution contract (CHK-I* ids from / +# Scrbtch checks for the V5-02-R15-A1 execution contract (CHK-I* ids from
+C30-m4	AU-C30	CHK-C01-green-evidence	KILLED	-checker sha256: <sha256>
+C30-m5	AU-C30	CHK-C01-green-evidence	KILLED	-| `CLAUDE.md` | modified | `<sha256>` | / +| `CLAUDE.md` | modified | `<sha256>` |
+C30-m6	AU-C30	CHK-C01-green-evidence	KILLED	-# V5 direction assessment and alignment / +# V5 direction bssessment and alignment
+C29-m1	AU-C29	CHK-C01-sql-evidence-recorded	KILLED	-[3] expect refuse | role_state ready, run_id 5 | refused: CHECK constraint failed: (state='running' AND run_i / +[3] expect refuse | role_state ready, run_id 5 | accepted: CHECK constraint failed: (state='running' AND run_
+C29-m2	AU-C29	CHK-C01-sql-evidence-recorded	KILLED	-foreign_key_check rows: 0
+C29-m3	AU-C29	CHK-C01-sql-evidence-recorded	KILLED	-| `docs/vernacular/v5-alignment.md` | modified | `58f5d441281c9b6d0dbf5049b604ba9a7f8129610e6a084a55959d42824 / +| `docs/vernacular/v5-alignment.md` | modified | `58f5d441281c9b6d0dbf5049b604ba9a7f8129610e6a084a55959d42824
+C29-m4	AU-C29	CHK-C01-sql-evidence-recorded	KILLED	-identity end
+C31-m1	AU-C31	CHK-C01-prober-evidence	KILLED	file added or removed
+C31-m2	AU-C31	CHK-C01-prober-evidence	KILLED	-- C26-m1: KILLED by CHK-C01-names-preserved; FAIL message: registered old check ids differ from the preserved
+C31-m3	AU-C31	CHK-C01-prober-evidence	KILLED	-FAIL CHK-C01-message-bytes message not byte-identical in the contract: Activate may be complete; retry the sa / +PASS CHK-C01-message-bytes message not byte-identical in the contract: Activate may be complete; retry the sa
+C31-m4	AU-C31	CHK-C01-prober-evidence	KILLED	-main section totals: killed 95, survived 0, not run 0 / +main section totals: killed 94, survived 0, not run 0
+C31-m5	AU-C31	CHK-C01-prober-evidence	KILLED	-scratch differs from pristine: yes
+C31-m6	AU-C31	CHK-C01-prober-evidence	KILLED	+FAIL CHK-I1-skeleton probe added line
+C31-m7	AU-C31	CHK-C01-prober-evidence	KILLED	-PASS CHK-C01-message-bytes 19 new messages and the resource message byte-identical; external profile removes 
+C31-m8	AU-C31	CHK-C01-prober-evidence	KILLED	-- C58-m1: first verdict SURVIVED (log `probes/raw/C58-m1.survived-1.log`); CHK-I10-history-lookup only requir
+C31-m13	AU-C31	CHK-C01-prober-evidence	KILLED	-C35-c1 C35 CHK-C01-extractor-comments control-ok control: neutral edit (second leading comment line before CR / +C35-c1 C35 CHK-C01-extractor-comments KILLED control: neutral edit (second leading comment line before CREATE
+C32-m1	AU-C32	CHK-C01-record-closure	KILLED	-| R7 | The header states that part 1 holds EX-1 to EX-8 and the state machines, and no longer says that the r
+C32-m2	AU-C32	CHK-C01-record-closure	KILLED	-| R6 | The checker repair (leading comment lines of a SQL statement no longer stop the table extraction; ever
+C33-m1	AU-C33	CHK-C01-red-evidence	KILLED	-| sha256(git diff --binary HEAD -- docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs
+C33-m2	AU-C33	CHK-C01-red-evidence	KILLED	-FAIL CHK-C01-sql-evidence-recorded a clean foreign_key_check is not recorded
+C61-m1	AU-C61	CHK-C01-record-d81	KILLED	-D81 resolution: RUN. The mutation prober ran in C03; killed 95, survived 0, see `probes/PROBES.md` (main sect / +D81 resolution: RUN. The mutation prober ran in C03; killed 96, survived 0, see `probes/PROBES.md` (main sect
+C61-m2	AU-C61	CHK-C01-record-d81	KILLED	+PLACEHOLDER / +
+C61-m3	AU-C61	CHK-C01-record-d81	KILLED	+Closing probes: not RUN, open. / +
+C61-m4	AU-C61	CHK-C01-record-d81	KILLED	+This record does not choose. / +
+N9-m1	N9	CHK-C02-evidence-logs	KILLED	+- `tests/native/v5-02-r15-a1-evidence/inventory.txt`
+N9-m2	N9	CHK-C02-evidence-logs	KILLED	+- `tests/native/v5-02-r15-a1-evidence/plan/superseded-1/INVARIANTS.md`
+N9-m3	N9	CHK-C02-evidence-logs	KILLED	-exit 0 docs/vernacular/execution-contract.md / +exit 1 docs/vernacular/execution-contract.md
+N9-m4	N9	CHK-C02-evidence-logs	KILLED	-exit 1 leak-ctl.txt (positive control)
+N9-m5	N9	CHK-C02-evidence-logs	KILLED	-links checked: 424; ok: 424; broken: 0 / +links checked: 424; ok: 424; broken: 1
+N9-m6	N9	CHK-C02-evidence-logs	KILLED	-cmp checker exit 0 / +cmp checker exit 1
+N9-m7	N9	CHK-C02-evidence-logs	KILLED	-cmp link checker exit 0
+N9-m8	N9	CHK-C02-evidence-logs	KILLED	-| 1 | prober: every listed guard row has a mutant, a raw log and a verdict; survivors zero or fixed and re-pr / +| 1 | prober: every listed guard row has a mutant, a raw log and a verdict; survivors zero or fixed and re-pr
+N9-m9	N9	CHK-C02-evidence-logs	KILLED	-PASS count: 113 / +PASS count: 114
+N9-m10	N9	CHK-C02-evidence-logs	KILLED	file added or removed
+N9-m11	N9	CHK-C02-evidence-logs	KILLED	file added or removed
+N9-m12	N9	CHK-C02-evidence-logs	KILLED	-files checked: 11 / +files checked: 10
+N9-m13	N9	CHK-C02-evidence-logs	KILLED	-Command: python3 -I <scratchpad>/linkcheck_c02.py <clone> docs/vernacular/execution-contract.md docs/vernacul / +Command: python3 -I <scratchpad>/linkcheck_c02.py <clone> docs/vernacular/execution-contract.md docs/vernacul
+N9-m14	N9	CHK-C02-evidence-logs	KILLED	+ / +audit-final.txt: 122 PASS
+N9-m15	N9	CHK-C02-evidence-logs	KILLED	file added or removed
+N9-m16	N9	CHK-C02-evidence-logs	KILLED	-negative control exit 1
+N9-m17	N9	CHK-C02-evidence-logs	KILLED	-| `CLAUDE.md` | modified | `<sha256>` | / +| `CLAUDE.md` | modified | `<sha256>` |
+N9-m18	N9	CHK-C02-evidence-logs	KILLED	file added or removed
+N9-m19	N9	CHK-C02-evidence-logs	KILLED	file added or removed
+N16-m1	N16	CHK-C02-identity-block	KILLED	-| `CLAUDE.md` | modified | `<sha256>` | / +| `CLAUDE.md` | modified | `<sha256>` |
+N16-m2	N16	CHK-C02-identity-block	KILLED	-| `docs/vernacular/execution-contract.md` | untracked | `2d909b8adea509d7140e2ba9f719891b549838949535a5f0de52
+N17-m1	N17	CHK-C02-logs-masked	KILLED	-masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)
+N17-m2	N17	CHK-C02-logs-masked	KILLED	+path: <scratchpad>
+N17-m3	N17	CHK-C02-logs-masked	KILLED	+<sha256>
+N17-m4	N17	CHK-C02-logs-masked	KILLED	+<sha256>
+N17-m5	N17	CHK-C02-logs-masked	KILLED	file added or removed
+N17-m6	N17	CHK-C02-logs-masked	KILLED	+exit 0 green/audit-final.txt
+C3-F2-m1	AU-C3-F2	CHK-C02-evidence-logs	KILLED	-PASS count: 113 / +PASS count: 114
+C3-F2-m2	AU-C3-F2	CHK-C02-evidence-logs	KILLED	-### Final results (C03) / +### Final results (C04)
+C3-F3-m1	AU-C3-F3	CHK-C02-record-status	KILLED	-Superseded in C02: the prober has since run; see probes/PROBES.md and Final results (C03). / +Superseded in C02: the prober has since run; see probes/PROBES.md and Final results (C04).
+C3-F3-m2	AU-C3-F3	CHK-C02-record-status	KILLED	-Superseded in C02: the prober has since run; see probes/PROBES.md and Final results (C03).
+C3-A2-m1	AU-C3-A2	CHK-C01-prober-evidence	KILLED	-C5-m1 C5 CHK-C01-R2-ordinal-check KILLED -  ordinal INTEGER NOT NULL CHECK(ordinal>0), / +  ordinal INTEGER N / +C5-m1 C5 CHK-C01-R2-ordinal-check SURVIVED -  ordinal INTEGER NOT NULL CHECK(ordinal>0), / +  ordinal INTEGER
+C3-A3a-m1	AU-C3-A3a	CHK-C01-sql-evidence-recorded	KILLED	-probe statements: 25 / +probe statements: 24
+C3-A3a-m2	AU-C3-A3a	CHK-C01-sql-evidence-recorded	KILLED	-| `docs/vernacular/execution-contract.md` | untracked | `2d909b8adea509d7140e2ba9f719891b549838949535a5f0de52 / +| `docs/vernacular/execution-contract.md` | untracked | `28635996d17a17f81af671c96c0bde33b5f4fd4b20be826755d2
+C3-A3c-m1	AU-C3-A3c	CHK-C02-evidence-logs	KILLED	+- `tests/native/v5-02-r15-a1-c01-evidence/green/nonexistent-c03.txt`
+C31-m9	AU-C31	CHK-C01-prober-evidence	KILLED	file added or removed
+C31-m10	AU-C31	CHK-C01-prober-evidence	KILLED	-## Closing probes
+C31-m11	AU-C31	CHK-C01-prober-evidence	KILLED	-mutant id: N17-m1 / -source row: N17
+C31-m12	AU-C31	CHK-C01-prober-evidence	KILLED	-N16-m1 N16 CHK-C02-identity-block KILLED -| `CLAUDE.md` | modified | `<sha256>` | / +| `CLAUDE.md` | modified

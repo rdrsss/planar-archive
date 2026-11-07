@@ -1,0 +1,156 @@
+R15-A1-C03 GRN audit run before REC (record not yet updated; run after every other GRN log was written)
+Command: python3 -I <scratchpad>/c03/ex_checks-c02.py --repo . --frozen-dir <scratchpad>/c03/frozen --audit
+Date: 2026-11-06
+Command exit code: 1 (read directly from the command, not through a pipe)
+Result: PASS 120, FAIL 2 (122 registered ids)
+
+FAIL explanations (every FAIL line of the run, verbatim, with its cause):
+FAIL CHK-C01-record-d81 the D81 resolution lacks killed and survived counts
+  explanation: record-dependent. The record still holds the pre-C03 D81 text; REC writes the D81 counts equal to the PROBES.md totals. Expected before REC.
+FAIL CHK-C02-evidence-logs C02 acceptance row 1 basis still says pending
+  explanation: record-dependent (clause 7). All log files named by the Staging list exist and satisfy clauses 1 to 6; the C02 acceptance table of the record still says pending in row 1; REC replaces it. An earlier GRN audit run stopped at clause 1 because green/redaction-c02.txt, written last, did not yet exist; that is resolved. Expected before REC.
+Any other FAIL: none.
+
+--- full output ---
+command: ex_checks-c02.py --repo . --frozen-dir <scratchpad>/frozen --audit
+PASS CHK-I1-skeleton 16 H2 headings in order; 7 placeholder ### subsections inside Part 2
+PASS CHK-I2-tables-strict 24 tables, all STRICT, creation order as required
+PASS CHK-I3-format-markers format=3, user_version=3, codec CHECK, events 14-type CHECK, typed columns, requests 10-op CHECK
+PASS CHK-I4-triggers 43 explicit triggers; sqlite_master holds exactly them
+PASS CHK-I5-fk-resolve REFERENCES set matches the design arrows; reader-verified columns carry none
+PASS CHK-I6-reserved-labels all ten reserved tables carry their Reserved for R16/R17/R18 label
+PASS CHK-I7-cross-row nine design invariants plus D89 additions present
+PASS CHK-I8-cutover cutover text: format3 only after R15-B/C, refusal before capture or Lua, XD5
+PASS CHK-I9-request-v3 request_v3 framing, kind 4 codec 3, contents never in body, replay and conflict
+PASS CHK-I10-history-lookup history --request-id execution results on format3 only; disposition vocabulary of five
+PASS CHK-I11-seven-steps seven EX-3 steps in design order
+PASS CHK-I12-precondition-vocab eight precondition members; bump set of seven facts
+PASS CHK-I13-delta-guard delta write: role_state only for transitioned roles, locked before-state, no row exists
+PASS CHK-I14-conflict-mapping loser is claim_conflict; other precondition failures are state_conflict
+PASS CHK-I15-load-activate load/activate reconciliation: CAS, noop writes nothing, absent job retires, fencing
+PASS CHK-I16-precedence six precedence rules in order with exact v5 cites
+PASS CHK-I17-event-types 14 SQL event types equal the three format2 types plus the 11 added
+PASS CHK-I18-reasons-payload 16 reasons in SQL equal prose; payload v2 shape; reachability split stated
+PASS CHK-I19-explain explain separates work change, output applicability and prerequisites
+PASS CHK-I20-structure-lineage role_structure_v1 fields, digest-driven generations, takeover lineage, work_exec_v1 pointer
+PASS CHK-I21-interpretation-binding EX-6 binding: digest equality, early replay order, exempt reads, with-profile, five factories
+PASS CHK-I22-code-table nine codes, exit 3, rounds, details per D88, field empty
+PASS CHK-I23-message-table 19 new messages byte-exact; no 20th message
+PASS CHK-I24-no-removed-diagnostics no removed diagnostic lines in edited docs (acceptance-matrix seven lines allowed)
+PASS CHK-I25-bounds ten EX-8 rows with design numbers; E15 row numbers; new-site message scope
+PASS CHK-I26-role-transitions 41 role rows; every state and reason used; required transitions present
+PASS CHK-I27-run-transitions 11 run rows; interrupted via run_interrupted only; terminal states have no outgoing rows
+PASS CHK-I28-run-role-coupling run rows paired with the matching role reason
+PASS CHK-I29-placeholders seven placeholders with clause lists; no normative words
+PASS CHK-I30-no-part2-leak no Part 2 content in normative text
+PASS CHK-I31-traceability traceability rows for every required id; anchors resolve
+PASS CHK-I32-decisions-table decisions table complete; OP1-OP3, D54, D67, D68 carry the delegated tag
+PASS CHK-I33-confirm-stopped OP1 requires --confirm-stopped true; rule unchanged; cites the located external-profile line
+PASS CHK-I34-acceptance-checklist acceptance checklist lists the R15 tests and lost-update guard
+PASS CHK-I35-claude-md-symlink one inserted line in CLAUDE.md; AGENTS.md still a symlink
+PASS CHK-I36-ledger-pointers ledger pointers link existing anchors; zero removed lines
+PASS CHK-I37-xstore-row format3 row inserted; supersede statement; load keeps request_v2
+PASS CHK-I38-matrix-pointers seven matrix lines changed in place with appended links; status words unchanged
+PASS CHK-I39-v5-alignment v5-alignment records E2 and E5 with the execution contract
+PASS CHK-I40-implementation-pointer one inserted pointer sentence; zero removed lines
+PASS CHK-I41-citation-range M-table v5 cites equal DECISIONS section M; state-table cites hit exact rows
+PASS CHK-I42-links-anchors relative links and fixed anchors resolve
+PASS CHK-I43-redaction redaction check passes for the contract; positive control refused
+PASS CHK-I44-identity-src-tests no tracked or untracked change under src or tests (evidence folder is gitignored)
+PASS CHK-I45-diff-scope changed and untracked paths are within the owned file list (12)
+PASS CHK-I46-record-no-hash round record, C01 evidence and REPORT/review files carry no sha256 of rounds or roadmap
+PASS CHK-I47-sql-executes SQL executes; immutable UPDATE/DELETE refused; reservation before request row inserts; indexes exact
+PASS CHK-I48-enum-checks enum CHECKs refuse out-of-set values and accept every design value; D97/D98 probes
+PASS CHK-I49-active-run-uniqueness partial unique index refuses a second active run; fenced row frees the slot
+PASS CHK-I50-no-tbd no TBD, no question marks in normative text, no emoji
+PASS CHK-I51-header header states status, authority, amendment and source rules
+PASS CHK-I52-format2-exact unmodified format2 SQL lines byte-exact in format3
+PASS CHK-I53-ex1-columns design columns present; BLOB, UNIQUE and key choices as required
+PASS CHK-I54-run-token run token grammar, 16-byte secret, places shown and never shown, fenced on mismatch
+PASS CHK-I55-request-outcomes nine-value union CHECK; pairing table; no reserved value
+PASS CHK-I56-cause-reason every cause carries its pinned reason; fenced only for retirement with an active run
+PASS CHK-I57-payload-version payload versions pinned; event reason rule
+PASS CHK-I58-fallbacks nine execution fallbacks, io exit 4, stdout variant, load fallback unchanged
+PASS CHK-I59-record-additions round record carries the agreed verification additions and HALT-1 delegation
+PASS CHK-I60-role-rows coverage rows, carrying-event cells and v5 cites as pinned
+PASS CHK-I61-load-activate-preconditions load and activate assert fact_version and role_state for every role
+PASS CHK-I62-reactivation M7/M8 re-activation rows with reason activated; N5 fenced by job_activated
+PASS CHK-I63-event-payload-columns Q table: payload versions, reference keys, typed columns and reserved types
+PASS CHK-I64-limit-names limit names pinned; existing observe names keep Capture limit exceeded
+PASS CHK-I65-fact-version fact_version rules: exactly-one, no other role, first row 1, no exception, SQL >=1
+PASS CHK-I66-reused-messages reused existing codes named byte-exact with owners; none in the 19-message set
+PASS CHK-I67-column-conventions column conventions: PK, booleans, identifiers, enums, projection tables, D97/D98, D100
+PASS CHK-I68-carrying-events carrying-event rule stated; check_recorded and verdict_recorded labelled
+PASS CHK-I69-stale-done M40 and M41 rows present, no stale -> ready, OP3 options in decisions table
+PASS CHK-I70-absent-active-job absent-job rows named; scripted replay keeps non-active rows retired
+PASS CHK-C01-R1-token-status-lookup run token shown-only list names status --request-id of claim and takeover requests
+PASS CHK-C01-R1-status-qualifier token is never shown in status other than its request lookup
+PASS CHK-C01-R1-a09-lookup A09 names status --request-id as the recovery lookup; Disposition says the saved result carries the token
+PASS CHK-C01-R2-event-reason-ordinal1 event reason from the lowest ordinal (ordinal 1); C5 contiguous from 1; no ordinal 0
+PASS CHK-C01-R2-ordinal-check transitions ordinal 0 refused, ordinal 1 accepted
+PASS CHK-C01-R3-op1-rule-unchanged OP1 is a required scalar; the external-profile rule is unchanged; located cite
+PASS CHK-C01-R4-role-state-run-drift role_state: running needs run_id, other states need run_id NULL and drifted 0
+PASS CHK-C01-R4-transitions-drifted transitions: drifted 1 only for the running state; NULL-first coupling still refuses
+PASS CHK-C01-R4-run-id-replay-text invariant 6 restricts the run_id source to the target role and cross-checks run_state
+PASS CHK-C01-R4-states-text EX-4 States and invariant 12 state the drifted and run_id coupling (D97) and before_drifted (D97)
+PASS CHK-C01-R5-c6-text C6 states evidence.reason is writer enforced, reader verified, with no SQL CHECK
+PASS CHK-C01-R5-evidence-reason-check evidence.reason has no CHECK; NULL refused; any text value accepted (D100)
+PASS CHK-C01-decisions-rows D97 to D103 present with closed tags; no D104; D99, D100, D101, D43, D55, D56 as required
+PASS CHK-C01-R7-header-scope header states part 1 holds EX-1 to EX-8 and the state machines
+PASS CHK-C01-R8-m-note role-table note matches C.16; M7 and M8 cells list running and running+drift
+PASS CHK-C01-R9-d56-basis D56 is new-engineering (EX-8, D78); 13 operator-decided rows all valid under C.23
+PASS CHK-C01-R9-d55-corruption D55 and EX-7 say I/O, corruption, busy and disk-full for exit 4
+PASS CHK-C01-R10-alignment-pointers E2 and E5 point to EX-4 and EX-5 with the C.20 sentences; zero removed lines
+PASS CHK-C01-R11-cutover-target cutover: init creates format3 only at a new explicit target
+PASS CHK-C01-R12-ex8-label EX-8 check-output row: None yet; output_limit is an R17 fact
+PASS CHK-C01-relabel-contract contract relabelled: delegated tags on OP1-OP3, D54, D67, D68; M41 and preamble agree
+PASS CHK-C01-relabel-record record and old plan files carry no pending wording; correction notes present
+PASS CHK-C01-relabel-no-live delegation recorded as delegated; no live-answer phrase in contract, record or old plan
+PASS CHK-C01-sql-counts 24 STRICT tables in order; 43 triggers; two explicit indexes; foreign_key_check clean
+PASS CHK-C01-sql-legal-rows legal rows insert; I47 SQL probes pass
+PASS CHK-C01-names-preserved 70 old ids kept in order; 35 CHK-C01 and 17 CHK-C02 ids appended; 122 registered
+PASS CHK-C01-frozen-files frozen docs keep their baseline hashes; roadmap matches its frozen copy; src and tests unchanged
+PASS CHK-C01-message-bytes 19 new messages and the resource message byte-identical; external profile removes no line
+PASS CHK-C01-sql-evidence-recorded sql-final.txt records versions, counts, foreign_key_check, 25 of 25 statements and the identity block
+PASS CHK-C01-green-evidence green/checks.txt: default-mode run of the C02 checker, exit 0, PASS equals the core count, checker and identity tie
+PASS CHK-C01-prober-evidence probes/mutants.tsv covers every row; logs, baselines, controls and totals agree
+PASS CHK-C01-record-closure closure table R1 to R12 with cites; the record cites green/audit-final.txt
+PASS CHK-C01-red-evidence red-run and red-audit-run carry the expected FAIL sets with assertion messages
+PASS CHK-C01-extractor-comments the extractor keeps 24 tables past comment lines and detects a deleted table
+FAIL CHK-C01-record-d81 the D81 resolution lacks killed and survived counts
+PASS CHK-C02-op2-history-tag the OP2 line carries the exact delegated tag
+PASS CHK-C02-contract-one-line the contract differs from the C01 snapshot at line 520 only
+PASS CHK-C02-record-status record line 3 states the C02 status; the three C01 passages carry superseding notes
+PASS CHK-C02-record-section-c section (c) uses the contract preamble wording
+PASS CHK-C02-record-post-c01-ac Post-C01 status holds criteria 1 to 10 with a status and a basis; row 3 states the HALT-1 amendment
+PASS CHK-C02-record-r8 the record explains 15 FAIL lines against 13 (I45 and I59)
+PASS CHK-C02-red-md RED.md, the record pointer block and the README row describe the real red and the first attempt
+PASS CHK-C02-raw-preserved 320 manifest files exist unchanged; allowlisted files exist
+FAIL CHK-C02-evidence-logs C02 acceptance row 1 basis still says pending
+PASS CHK-C02-snapshot-baseline raw/pre-c02-contract.md is the C01 candidate named in the identity block
+PASS CHK-C02-record-c02-ac C02 acceptance status holds rows 1 to 5 and G1 to G5; Acceptance (C01) row 3 points to C02
+PASS CHK-C02-record-owned-files Owned files (C02) names all 34 owned paths
+PASS CHK-C02-record-reviewer-control the record cites the reviewer positive control, which exits non-zero
+PASS CHK-C02-record-d6-labels Checker amendments (C02) labels every amended check
+PASS CHK-C02-red-logs the C02 red logs carry the expected FAIL sets on assertion messages and the record describes them
+PASS CHK-C02-identity-block every current per-file row of the Final candidate identity block equals the live sha256
+PASS CHK-C02-logs-masked 188 C02 logs end with the mask line and hold no host path or forbidden hash
+
+identity begin (seven documents)
+| identity | value |
+|---|---|
+| HEAD | `d536922b59bf9118b91e4188a26d770f9745d600` |
+| sha256(git diff --binary HEAD -- docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md), tracked only | `f48088154adefb428bdfc3187df4e9d55558c5a5955bc951201e3785aaec8b1f` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec docs/vernacular/execution-contract.md docs/vernacular/v5-alignment.md docs/vernacular/ledger-contract.md docs/vernacular/external-profile-contract.md docs/vernacular/acceptance-matrix.md docs/vernacular/implementation.md CLAUDE.md, evidence excluded | `499d95b7cd77a6476c4c50390d2b500c9f782dfa01676c2808b2d6bb00b756c7` |
+
+| file | state | sha256 |
+|---|---|---|
+| `CLAUDE.md` | modified | `7cdf4eadca490e6d3f6c6c697cd373c2c8a683f41612de02f98dce8b69b72163` |
+| `docs/vernacular/acceptance-matrix.md` | modified | `6370cb09d99eaa33bf068f787e6ed040c3a81d160d6d2cbba47b3944e7178be5` |
+| `docs/vernacular/external-profile-contract.md` | modified | `e190e2d1d88ad0a40cab3bd4bb31bbe826774a58f729224d083abcac877577da` |
+| `docs/vernacular/implementation.md` | modified | `486a80a78d247e45badd73b2b96184bb952317d1229dbdba94d93cdd734e35fb` |
+| `docs/vernacular/ledger-contract.md` | modified | `3e595653feeaa63f824f1f0bbf929a4923f10854dbcdd3e35725b8ff6223ceaf` |
+| `docs/vernacular/v5-alignment.md` | modified | `58f5d441281c9b6d0dbf5049b604ba9a7f8129610e6a084a55959d4282449bd6` |
+| `docs/vernacular/execution-contract.md` | untracked | `2d909b8adea509d7140e2ba9f719891b549838949535a5f0de52c20f71e572d3` |
+identity end
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

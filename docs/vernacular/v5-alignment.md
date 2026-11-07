@@ -92,6 +92,18 @@ These findings describe the unchanged input, not silent corrections to it.
   positional CLI and `render orchestrator` are illustrative. Exact schemas and
   separate-token CLI stay unchanged. The historical external fixture does not prove
   native execution; current quota computed packets prove only their stated scope.
+- Recorded deviation E2 (operator answer A, 2026-10-28): the active job is set by a separate
+  `activate` mutation with expected revision and expected job, one active job per ledger, and
+  load reconciles only that job. This departs from v5 `planar-design-spec-v5.md` line 110, which
+  lists active jobs among workspace declarations, and line 497, which makes switching jobs one
+  revision change. The contract is [execution contract EX-4](execution-contract.md#ex-4-facts-derived-state-and-reconcile-rules)
+  for activation and re-activation and [EX-5](execution-contract.md#ex-5-role-structure-lineage-and-work_exec_v1)
+  for the generations and fencing that activation causes.
+- Recorded narrowing E5 (operator answer A, 2026-10-28): the execution work fingerprint is
+  ledger-closed (`work_exec_v1`) and does not read a checkout. It narrows v5 `planar-design-spec-v5.md`
+  line 241, which lists applicable contracts, declared ownership, and root and base identities as
+  inputs. The contract is [execution contract EX-5](execution-contract.md#ex-5-role-structure-lineage-and-work_exec_v1)
+  for the fingerprint.
 
 ## Ordered delivery and decision gates
 

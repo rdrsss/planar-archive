@@ -119,6 +119,8 @@ Use these repository files:
   acceptance, replay and exact export contract; applicable R14 integration is approved through D8.
 - `load-command-contract.md`: R14-D3 approved exact load ABI, replay/transport,
   typed native diagnostics and bounded follow-on slices; independently approved in D3.
+- [`execution-contract.md`](execution-contract.md): the R15 execution contract (format3, request framing,
+  execution commit protocol, reconcile rules and role lineage) that R15-B to R15-E implement.
 - `v5-alignment.md`: retained/new/pending direction, conflicts and contract gates.
 - `acceptance-matrix.md`: every v5 matrix row, current evidence and remaining owner.
 - `rounds/<id>.md`: brief, search findings, implementation evidence, reviewer

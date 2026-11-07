@@ -1,0 +1,757 @@
+(helper) ac_rows	%s has no table with status and basis columns
+(helper) ac_rows	%s lacks the row for %s
+(helper) ac_rows	%s row %s has an empty basis
+(helper) ac_rows	%s row %s status %r is not one of met, partly met, not met
+(helper) baseline_pass	probes/raw/%s holds a FAIL line
+(helper) baseline_pass	probes/raw/%s lacks "exit code of the command: 0"
+(helper) check_identity_block	%s identity block differs from green/identity-c02.txt
+(helper) check_identity_block	%s lacks the identity markers (identity begin (seven documents) / identity end)
+(helper) check_identity_block	green/identity-c02.txt lacks the identity markers
+(helper) check_identity_rows	%s identity row for %s differs from the live file
+(helper) check_identity_rows	%s identity rows differ from the seven candidate documents: %s
+(helper) check_red_log	red/%s FAIL set differs: extra %s, missing %s
+(helper) check_red_log	red/%s command %s --auditlackscarries
+(helper) check_red_log	red/%s contract row differs from the sha256 of raw/pre-c02-contract.md
+(helper) check_red_log	red/%s does not end with the mask line
+(helper) check_red_log	red/%s holds a host path
+(helper) check_red_log	red/%s holds a traceback
+(helper) check_red_log	red/%s identity row for %s differs from the file
+(helper) check_red_log	red/%s identity rows differ from the seven candidate documents
+(helper) check_red_log	red/%s lacks "Command exit code: 1"
+(helper) check_red_log	red/%s lacks the exact command (ex_checks-c02.py --repo)
+(helper) check_red_log	red/%s lacks the identity.py output (HEAD row)
+(helper) check_red_log	red/%s lacks the src tests identity (empty-input hash)
+(helper) check_red_log	red/%s: %s fails by absence, not on an assertion
+(helper) drow	decisions table lacks row %s
+(helper) evid_text	missing file: %s/
+(helper) note_ok	no "Superseded in C02:" note naming probes/PROBES.md and Final results (C02) %s
+(helper) rec_sub	the record has no %s subsection
+CHK-C01-R1-a09-lookup	A09 item does not name status --request-id as the recovery lookup returning the run token
+CHK-C01-R1-a09-lookup	Disposition paragraph does not say the saved result carries the run token
+CHK-C01-R1-status-qualifier	the never-shown list lacks the qualified status wording
+CHK-C01-R1-status-qualifier	token is never shown in status without the request-lookup qualifier
+CHK-C01-R1-token-status-lookup	run token "shown only in" sentence missing
+CHK-C01-R1-token-status-lookup	shown-only list of the run token omits status --request-id of a claim or takeover request
+CHK-C01-R10-alignment-pointers	E2 does not end with the EX-4 and EX-5 sentence (C.20)
+CHK-C01-R10-alignment-pointers	E2 still points to EX-2
+CHK-C01-R10-alignment-pointers	E5 does not end with the EX-5 sentence (C.20)
+CHK-C01-R10-alignment-pointers	E5 still points to EX-2
+CHK-C01-R10-alignment-pointers	anchor #%s does not resolve
+CHK-C01-R10-alignment-pointers	v5-alignment.md has %d removed lines against HEAD
+CHK-C01-R11-cutover-target	cutover bullet does not say format3 is created at a new explicit target
+CHK-C01-R11-cutover-target	cutover bullet still says the same explicit target as format2
+CHK-C01-R12-ex8-label	EX-8 bounds table missing
+CHK-C01-R12-ex8-label	EX-8 check-output existing-site cell does not say None yet and label output_limit an R17 fact
+CHK-C01-R12-ex8-label	EX-8 check-output lists the output_limit outcome as an existing site
+CHK-C01-R12-ex8-label	EX-8 check-output row missing
+CHK-C01-R2-event-reason-ordinal1	C5 does not say the ordinals of one event are contiguous from 1
+CHK-C01-R2-event-reason-ordinal1	D101 does not name ordinal 1
+CHK-C01-R2-event-reason-ordinal1	D43 does not take the reason from ordinal 1
+CHK-C01-R2-event-reason-ordinal1	EX-4 event payload does not take the reason from the lowest ordinal, ordinal 1
+CHK-C01-R2-event-reason-ordinal1	EX-4 event payload paragraph not found once
+CHK-C01-R2-event-reason-ordinal1	the contract still names ordinal 0 for the event reason
+CHK-C01-R2-ordinal-check	transitions accepts ordinal 0
+CHK-C01-R2-ordinal-check	transitions refuses ordinal 1
+CHK-C01-R3-op1-rule-unchanged	OP1 does not cite the located external-profile line (%d)
+CHK-C01-R3-op1-rule-unchanged	OP1 does not say --confirm-stopped is a required scalar
+CHK-C01-R3-op1-rule-unchanged	OP1 does not say the external-profile rule is unchanged
+CHK-C01-R3-op1-rule-unchanged	the contract says OP1 changes the external-profile rule
+CHK-C01-R4-role-state-run-drift	role_state accepts %s (D97)
+CHK-C01-R4-role-state-run-drift	role_state refuses %s with run_id NULL and drifted 0
+CHK-C01-R4-role-state-run-drift	role_state refuses running %s (D97)
+CHK-C01-R4-run-id-replay-text	a bullet 21 was added to the invariants
+CHK-C01-R4-run-id-replay-text	invariant 6 does not restrict the previous row to running
+CHK-C01-R4-run-id-replay-text	invariant 6 lacks the previous-row derivation for other running rows
+CHK-C01-R4-run-id-replay-text	invariant 6 lacks the run_claimed or run_taken_over source sentence
+CHK-C01-R4-run-id-replay-text	invariant 6 lacks the run_state cross-check
+CHK-C01-R4-run-id-replay-text	invariant 6 lacks the target-role restriction
+CHK-C01-R4-states-text	EX-4 States does not say drifted is 0 and run_id NULL for every state other than running
+CHK-C01-R4-states-text	EX-4 States lacks after_drifted 0 unless running
+CHK-C01-R4-states-text	EX-4 States lacks the running non-NULL run_id
+CHK-C01-R4-states-text	EX-4 States paragraph not found once
+CHK-C01-R4-states-text	invariant 12 lacks the after_drifted rule
+CHK-C01-R4-states-text	invariant 12 lacks the before_drifted NULL and 0 rule
+CHK-C01-R4-states-text	invariant 12 lacks the non-running run_id NULL and drifted 0 rule
+CHK-C01-R4-states-text	invariant 12 lacks the running non-NULL run_id
+CHK-C01-R4-states-text	text says before_drifted is 0 when before_state is NULL
+CHK-C01-R4-transitions-drifted	transitions accepts %s (D98)
+CHK-C01-R4-transitions-drifted	transitions refuses %s (D98)
+CHK-C01-R5-c6-text	C6 does not say evidence.reason is native-writer enforced and reader-verified only
+CHK-C01-R5-c6-text	C6 does not say there is no SQL CHECK on evidence.reason
+CHK-C01-R5-c6-text	C6 lacks the R17-3 pass-outcome sentence
+CHK-C01-R5-c6-text	C6 still says evidence.reason has no value list
+CHK-C01-R5-evidence-reason-check	C6 lacks the writer-enforced and no-SQL-CHECK wording
+CHK-C01-R5-evidence-reason-check	D100 row lacks %r
+CHK-C01-R5-evidence-reason-check	evidence accepts a NULL reason
+CHK-C01-R5-evidence-reason-check	evidence has a table-level CHECK on reason
+CHK-C01-R5-evidence-reason-check	evidence refuses (%s, %r)
+CHK-C01-R5-evidence-reason-check	evidence.reason is not TEXT NOT NULL without a CHECK
+CHK-C01-R7-header-scope	header does not name the state machines
+CHK-C01-R7-header-scope	header does not say part 1 holds EX-1 to EX-8
+CHK-C01-R7-header-scope	header says the reconcile rules or the execution bounds follow
+CHK-C01-R8-m-note	M%d before cell lacks running and running+drift
+CHK-C01-R8-m-note	role-table note lacks the M13 and M14 sentence
+CHK-C01-R8-m-note	role-table note lacks the M5 before-cell sentence
+CHK-C01-R8-m-note	role-table note lacks the M7 and M8 before-cell sentence
+CHK-C01-R8-m-note	the old role-table note sentence remains
+CHK-C01-R9-d55-corruption	D55 exit 4 is not I/O, corruption, busy and disk-full
+CHK-C01-R9-d55-corruption	D55 still lists internal for exit 4
+CHK-C01-R9-d55-corruption	EX-7 exit 4 wording is not I/O, corruption, busy and disk-full
+CHK-C01-R9-d56-basis	D56 is not new-engineering with a basis naming EX-8 and D78
+CHK-C01-R9-d56-basis	fewer than ten operator-decided rows (%d)
+CHK-C01-R9-d56-basis	operator-decided rows without an E or Q basis and without a delegated tag: %s
+CHK-C01-decisions-rows	%s tag is not %s
+CHK-C01-decisions-rows	D100 row lacks the fallback wording (no CHECK, writer enforced, no SQL CHECK, R17-3 pass)
+CHK-C01-decisions-rows	D100 uses the superseded phrase
+CHK-C01-decisions-rows	D101 lacks contiguous from 1
+CHK-C01-decisions-rows	D102 basis is not E11 A; R15-9; R15-7
+CHK-C01-decisions-rows	D43 does not name ordinal 1
+CHK-C01-decisions-rows	D55 is not the contract-decided corruption wording with its basis
+CHK-C01-decisions-rows	D56 is not new-engineering with basis EX-8; the E15 row is D78
+CHK-C01-decisions-rows	D99 lacks the target-role restriction
+CHK-C01-decisions-rows	decisions table has a D104 row (D104 belongs in the plan only)
+CHK-C01-decisions-rows	decisions table lacks %s
+CHK-C01-extractor-comments	a second leading comment line hides a table: %s
+CHK-C01-extractor-comments	deleting the CREATE TABLE evidence line is not detected
+CHK-C01-extractor-comments	the CREATE TABLE evidence line is not unique in the SQL block
+CHK-C01-frozen-files	%s differs from the baseline candidate
+CHK-C01-frozen-files	%s has no baseline hash in raw/baseline-identity.txt
+CHK-C01-frozen-files	AGENTS.md is not a symlink to CLAUDE.md
+CHK-C01-frozen-files	roadmap.md differs from its frozen copy
+CHK-C01-frozen-files	src or tests/native changed outside the evidence folders: %s
+CHK-C01-green-evidence	checker sha256 in green/checks.txt differs from green/ex_checks-c02.py
+CHK-C01-green-evidence	green run PASS count %d differs from %d core checks
+CHK-C01-green-evidence	green run exit code 0 is not recorded
+CHK-C01-green-evidence	green run has %d FAIL lines
+CHK-C01-green-evidence	green/checks.txt does not end with the mask line
+CHK-C01-green-evidence	green/checks.txt does not record the checker command (ex_checks-c02.py --repo)
+CHK-C01-green-evidence	green/checks.txt lacks the "checker sha256:" line
+CHK-C01-green-evidence	missing file: green/ex_checks-c02.py
+CHK-C01-green-evidence	the audit-not-run line is missing from green/checks.txt
+CHK-C01-message-bytes	external-profile-contract.md removes %d diagnostic lines
+CHK-C01-message-bytes	message not byte-identical in the contract: %s
+CHK-C01-message-bytes	resource message not byte-identical in the contract
+CHK-C01-names-preserved	CHK-C01 and CHK-C02 ids are not appended in the stated order
+CHK-C01-names-preserved	registered old check ids differ from the preserved original (names or order)
+CHK-C01-names-preserved	the preserved original registers no unique check ids
+CHK-C01-prober-evidence	PENDING log: probes/raw/%s
+CHK-C01-prober-evidence	PROBES.md has no Survivors section
+CHK-C01-prober-evidence	PROBES.md has no closing probes section
+CHK-C01-prober-evidence	PROBES.md lacks a line for %s
+CHK-C01-prober-evidence	PROBES.md lacks the "main section totals" line
+CHK-C01-prober-evidence	PROBES.md totals (%s, %s, %s) differ from mutants.tsv (%d, %d, %d)KILLEDSURVIVEDnot run
+CHK-C01-prober-evidence	control %s has verdict %r, not control-ok
+CHK-C01-prober-evidence	control log %s holds a FAIL line
+CHK-C01-prober-evidence	control log %s lacks "exit code of the command: 0"
+CHK-C01-prober-evidence	control log %s lacks a PASS line for %s
+CHK-C01-prober-evidence	control log %s lacks the line "control: yes"
+CHK-C01-prober-evidence	killed mutant %s has no FAIL line naming its test
+CHK-C01-prober-evidence	killed mutant %s has no non-zero command exit code
+CHK-C01-prober-evidence	killed mutant %s: test %s is not a PASS line of its baseline
+CHK-C01-prober-evidence	mutant %s has no verdict
+CHK-C01-prober-evidence	mutants.tsv header lacks %s
+CHK-C01-prober-evidence	mutants.tsv lacks closing row %s
+CHK-C01-prober-evidence	mutants.tsv lacks row %s
+CHK-C01-prober-evidence	mutants.tsv lacks the control C35-c1
+CHK-C01-prober-evidence	probes/raw/%s.log holds no applied diff
+CHK-C01-prober-evidence	probes/raw/%s.log is a PENDING log
+CHK-C01-prober-evidence	probes/raw/%s.log is missing or empty
+CHK-C01-prober-evidence	probes/raw/%s.log lacks the line "scratch differs from pristine: yes"
+CHK-C01-prober-evidence	the Survivors section does not name %s
+CHK-C01-record-closure	R%d row cites no file:line whose text within three lines contains %r
+CHK-C01-record-closure	R6 row cites a missing evidence file: %s
+CHK-C01-record-closure	R6 row cites no evidence file
+CHK-C01-record-closure	closure table lacks one row each for R1 to R12: %s
+CHK-C01-record-closure	the record does not cite green/audit-final.txt
+CHK-C01-record-closure	the record has no C01 closure section
+CHK-C01-record-d81	D81 counts (%s killed, %s survived) differ from PROBES.md totals
+CHK-C01-record-d81	PLACEHOLDER marker remains in the D81 resolution
+CHK-C01-record-d81	PROBES.md lacks the main section totals line
+CHK-C01-record-d81	the D81 resolution does not name probes/PROBES.md
+CHK-C01-record-d81	the D81 resolution lacks killed and survived counts
+CHK-C01-record-d81	the D81 resolution still says "This record does not choose"
+CHK-C01-record-d81	the D81 resolution still says "not RUN, open"
+CHK-C01-record-d81	the record has no C01 closure section
+CHK-C01-record-d81	the record has no D81 resolution subsection
+CHK-C01-red-evidence	identity output in red-run.txt has a round-record or roadmap row
+CHK-C01-red-evidence	identity.py output is not pasted verbatim in red-run.txt: %s
+CHK-C01-red-evidence	orig-checker-run.txt does not record exit code 1
+CHK-C01-red-evidence	red FAIL set differs: extra %s, missing %s
+CHK-C01-red-evidence	red-audit-run.txt core FAIL set differs from red-run.txt
+CHK-C01-red-evidence	red-audit-run.txt does not FAIL every audit id: %s
+CHK-C01-red-evidence	red-run.txt has a non-assertion failure
+CHK-C01-red-evidence	red-run.txt lacks the exact command
+CHK-C01-relabel-contract	%s tag cell is not the delegated tag
+CHK-C01-relabel-contract	Decisions preamble differs from DECISIONS C.8
+CHK-C01-relabel-contract	M41 note lacks the delegated tag
+CHK-C01-relabel-contract	M41 row lacks the delegated tag
+CHK-C01-relabel-contract	contract still says %r
+CHK-C01-relabel-no-live	%s is not recorded as delegated
+CHK-C01-relabel-no-live	%s states a live answer: %s
+CHK-C01-relabel-no-live	Decisions preamble does not say delegated
+CHK-C01-relabel-record	%s still has pending wording: %s
+CHK-C01-relabel-record	old DECISIONS row %s lacks a correction note
+CHK-C01-relabel-record	old INVARIANTS row %s lacks a correction note
+CHK-C01-relabel-record	record row %s lacks a Corrected by C01 note
+CHK-C01-sql-counts	PRAGMA foreign_key_check reports rows
+CHK-C01-sql-counts	PRAGMA user_version=3 text missing
+CHK-C01-sql-counts	SQL trigger count %d differs from %dtriggers
+CHK-C01-sql-counts	a CREATE TABLE does not end with ) STRICT;
+CHK-C01-sql-counts	explicit indexes differ: %s
+CHK-C01-sql-counts	sqlite_master trigger count %d differs from %d
+CHK-C01-sql-counts	table set or creation order differs
+CHK-C01-sql-evidence-recorded	
+CHK-C01-sql-evidence-recorded	sqlite3 version not recorded
+CHK-C01-sql-evidence-recorded	statement [%d] expected %s but the log records %s
+CHK-C01-sql-evidence-recorded	statements [1] to [25] are not all recorded: %s
+CHK-C01-sql-legal-rows	legal first transition into %s refused
+CHK-C01-sql-legal-rows	legal non-running role_state row refused: %s
+CHK-C01-sql-legal-rows	legal running before cell with before_drifted 1 refused
+CHK-C01-sql-legal-rows	legal running role_state row refused: %s
+CHK-C02-contract-one-line	contract line count %d differs from the snapshot %d
+CHK-C02-contract-one-line	contract lines differing from the snapshot are %s, expected [520]
+CHK-C02-evidence-logs	C02 acceptance row %s basis still says pending
+CHK-C02-evidence-logs	Final results (C02) PASS count %s differs from green/checks.txt (%d)
+CHK-C02-evidence-logs	Final results (C02) lacks "PASS count: N"
+CHK-C02-evidence-logs	a Staging list path does not exist: %s
+CHK-C02-evidence-logs	green/audit-final.txt command carries --pending
+CHK-C02-evidence-logs	green/audit-final.txt command lacks --audit
+CHK-C02-evidence-logs	green/audit-final.txt does not end with the mask line
+CHK-C02-evidence-logs	green/audit-final.txt does not record exit code 0
+CHK-C02-evidence-logs	green/audit-final.txt holds a FAIL line
+CHK-C02-evidence-logs	green/audit-final.txt records no command
+CHK-C02-evidence-logs	green/cmp-c02.txt lacks "cmp %s exit 0"
+CHK-C02-evidence-logs	green/identity-c02.txt lacks the empty-input src tests hash
+CHK-C02-evidence-logs	green/identity-c02.txt lacks the identity markers
+CHK-C02-evidence-logs	green/linkcheck-c02.txt command does not name %s
+CHK-C02-evidence-logs	green/linkcheck-c02.txt does not record exit code 0
+CHK-C02-evidence-logs	green/linkcheck-c02.txt lacks "files checked: 11"
+CHK-C02-evidence-logs	green/linkcheck-c02.txt lacks "links checked: X; ok: X; broken: 0" with X above zero
+CHK-C02-evidence-logs	green/linkcheck-c02.txt lacks the negative control
+CHK-C02-evidence-logs	green/linkcheck-c02.txt records no command
+CHK-C02-evidence-logs	green/redaction-c02.txt does not end with the mask line
+CHK-C02-evidence-logs	green/redaction-c02.txt lacks "exit 0 %s"
+CHK-C02-evidence-logs	green/redaction-c02.txt lacks the positive control line (non-zero exit)
+CHK-C02-evidence-logs	green/redaction-final-c02.txt does not end with the mask line
+CHK-C02-evidence-logs	green/redaction-final-c02.txt lacks "exit 0 green/audit-final.txt" or audit-final.txt is absent
+CHK-C02-evidence-logs	green/redaction-final-c02.txt lacks "exit 0 green/audit-verify-c02.txt"
+CHK-C02-evidence-logs	owned file does not exist: %s
+CHK-C02-evidence-logs	the C02 acceptance table is missing
+CHK-C02-evidence-logs	the Staging list holds no backticked path
+CHK-C02-evidence-logs	the Staging list names a path under raw/: %s
+CHK-C02-evidence-logs	the Staging list names a superseded INVARIANTS.md: %s
+CHK-C02-evidence-logs	the Staging list names inventory.txt
+CHK-C02-evidence-logs	the record has no Final results (C02) subsection
+CHK-C02-evidence-logs	the record quotes a result of audit-final: %s
+CHK-C02-identity-block	identity block row for %s differs from the live file
+CHK-C02-identity-block	the identity block lacks a current row for: %s
+CHK-C02-logs-masked	%s does not end with the mask line
+CHK-C02-logs-masked	%s holds a host path
+CHK-C02-logs-masked	%s holds the sha256 of a forbidden file (%s)
+CHK-C02-logs-masked	no probes/raw log exists
+CHK-C02-op2-history-tag	the OP2 line lacks the exact tag %s
+CHK-C02-op2-history-tag	the OP2 line still has the nested parenthesis tag
+CHK-C02-op2-history-tag	the history --request-id format3 line is not unique or is missing (%d)
+CHK-C02-raw-preserved	REPORT file differs from its frozen copy: %s
+CHK-C02-raw-preserved	manifest line has %d columns: %s
+CHK-C02-raw-preserved	raw evidence file changed size: %s
+CHK-C02-raw-preserved	raw evidence file deleted: %s
+CHK-C02-raw-preserved	raw evidence file edited: %s
+CHK-C02-raw-preserved	rewritten file missing: %s
+CHK-C02-raw-preserved	the manifest lacks the "# rewritten-by-c02" section
+CHK-C02-raw-preserved	the manifest lists no file
+CHK-C02-record-c02-ac	Acceptance (C01) row 3 does not mention C02
+CHK-C02-record-c02-ac	Acceptance (C01) row 3 still says "D81 neither run nor withdrawn"
+CHK-C02-record-c02-ac	the Acceptance (C01) table is missing
+CHK-C02-record-c02-ac	the Acceptance (C01) table lacks row 3
+CHK-C02-record-d6-labels	Checker amendments (C02) does not name %s
+CHK-C02-record-owned-files	Owned files (C02) does not name %s
+CHK-C02-record-post-c01-ac	Post-C01 status row 3 does not state the HALT-1 amendment
+CHK-C02-record-r8	no paragraph or bullet explains raw/orig-checker-run.txt (15 FAIL against 13, I45 and I59 ran on a grown tree)
+CHK-C02-record-r8	the record still says "are not reconciled here"
+CHK-C02-record-reviewer-control	the record does not cite the reviewer redaction positive control outside the Staging list
+CHK-C02-record-reviewer-control	the reviewer file holds no non-zero "exit" line for the positive control
+CHK-C02-record-reviewer-control	the reviewer redaction file does not exist: %s
+CHK-C02-record-section-c	section (c) lacks %r
+CHK-C02-record-section-c	section (c) still says %r
+CHK-C02-record-status	bullet not found exactly once: %s
+CHK-C02-record-status	no "Superseded in C02:" note naming probes/PROBES.md and Final results (C02) %s
+CHK-C02-record-status	record line 3 does not mention C02
+CHK-C02-record-status	record line 3 does not name the post-C01 status
+CHK-C02-record-status	record line 3 still says %r
+CHK-C02-record-status	the C01 invariant table header (probe outcome (probes/PROBES.md)) is missing
+CHK-C02-record-status	the original text "not run, no verdict" was rewritten
+CHK-C02-red-logs	the record has no 'C02 red evidence' paragraph describing the C02 red logs
+CHK-C02-red-logs	the record's 'C02 red evidence' paragraph does not name %s
+CHK-C02-red-md	README.md has no single path-table row for red/
+CHK-C02-red-md	README.md red/ row lacks %r
+CHK-C02-red-md	README.md red/ row still says "per-check logs"
+CHK-C02-red-md	README.md still says "Nothing here is committed"
+CHK-C02-red-md	red/RED.md lacks %r
+CHK-C02-red-md	red/RED.md lacks an identity line of red-run.txt: %s
+CHK-C02-red-md	red/RED.md lacks the failing check name %s
+CHK-C02-red-md	the record block Evidence by pointer lacks %r
+CHK-C02-snapshot-baseline	no line of the Final candidate identity block names execution-contract.md with the snapshot sha256
+CHK-I1-skeleton	H2 headings differ from the 16 required in order: %s
+CHK-I1-skeleton	Part 2 placeholders are not exactly the seven ### subsections: %s
+CHK-I10-history-lookup	deferred history --event selector placeholder not named
+CHK-I10-history-lookup	disposition vocabulary of five missing
+CHK-I10-history-lookup	format1/2 history said to return execution results
+CHK-I10-history-lookup	format1/2 history unchanged statement missing
+CHK-I10-history-lookup	format3 history --request-id execution results missing
+CHK-I10-history-lookup	history adds no disposition field statement missing
+CHK-I11-seven-steps	EX-3 must have exactly seven numbered steps: %s
+CHK-I11-seven-steps	EX-3 numbered steps missing
+CHK-I11-seven-steps	EX-3 step %d is not %s (order wrong)
+CHK-I12-precondition-vocab	"No other precondition exists" missing
+CHK-I12-precondition-vocab	bump set lacks %s
+CHK-I12-precondition-vocab	fact_version bump statement missing
+CHK-I12-precondition-vocab	ninth precondition any_run_active present
+CHK-I12-precondition-vocab	precondition member missing: %s
+CHK-I13-delta-guard	"no row exists" first-transition wording missing
+CHK-I13-delta-guard	Lua vector validated statement missing
+CHK-I13-delta-guard	complete vector is written: %s
+CHK-I13-delta-guard	delta write only for roles with transitions row missing
+CHK-I13-delta-guard	locked before-state check missing
+CHK-I13-delta-guard	run_state claim "no row exists" wording missing
+CHK-I14-conflict-mapping	check completion as only internal retry missing
+CHK-I14-conflict-mapping	loser of concurrent claims is claim_conflict missing
+CHK-I14-conflict-mapping	other precondition failure as state_conflict missing
+CHK-I14-conflict-mapping	same-ID retry statement missing
+CHK-I14-conflict-mapping	state_conflict is retried internally
+CHK-I14-conflict-mapping	state_conflict nothing-changed statement missing
+CHK-I15-load-activate	CAS step of load reconciliation missing
+CHK-I15-load-activate	absent active job retires generations and clears active job missing
+CHK-I15-load-activate	activation fences previous-job runs missing
+CHK-I15-load-activate	active runs keep acknowledged revision statement missing
+CHK-I15-load-activate	no_active_job missing
+CHK-I15-load-activate	noop load writes no transitions missing
+CHK-I15-load-activate	re-activation reuses old generations
+CHK-I16-precedence	ordered six-rule precedence list (starting with retired) missing
+CHK-I16-precedence	precedence rule %d is not %s
+CHK-I16-precedence	precedence rule %s cites %s, required %s
+CHK-I16-precedence	prerequisites from ledger facts missing
+CHK-I16-precedence	running-with-new-blocker rule missing
+CHK-I16-precedence	v5 line %d is not the expected row
+CHK-I17-event-types	added event type missing from prose: %s
+CHK-I17-event-types	events.type CHECK is not exactly the 14 types: %s
+CHK-I17-event-types	load keeps declaration_accepted/load_noop with attached transitions missing
+CHK-I17-event-types	one request one event statement missing
+CHK-I17-event-types	role_reconciled added
+CHK-I18-reasons-payload	after active_job empty-string statement missing
+CHK-I18-reasons-payload	after written literally as after:{...}
+CHK-I18-reasons-payload	completed R17 missing
+CHK-I18-reasons-payload	drift_cleared R15/R16 missing
+CHK-I18-reasons-payload	evidence_inapplicable R17 missing
+CHK-I18-reasons-payload	no prose list of the reasons found in EX-4 or State machines
+CHK-I18-reasons-payload	payload v2 shape not exact
+CHK-I18-reasons-payload	prose reason list differs from SQL: extra %s missing %s
+CHK-I18-reasons-payload	released/interrupted R16 missing
+CHK-I18-reasons-payload	repair_admitted R18 missing
+CHK-I18-reasons-payload	transitions.reason CHECK is not exactly the 16 reasons: %s
+CHK-I18-reasons-payload	work_changed R15/R17 reachability missing
+CHK-I19-explain	explain requirement does not cite v5-alignment.md
+CHK-I19-explain	explain three-causes sentence (work, output applicability, prerequisite) missing
+CHK-I19-explain	v5-alignment explain lines not found by text
+CHK-I2-tables-strict	CREATE TABLE not ending ") STRICT;": %s
+CHK-I2-tables-strict	table set or creation order differs: %s
+CHK-I20-structure-lineage	digest-driven generation fence statement missing
+CHK-I20-structure-lineage	full W recipe spelled out
+CHK-I20-structure-lineage	only activated, structural_change and recreated start empty statement missing
+CHK-I20-structure-lineage	role_structure_v1 field list not exact
+CHK-I20-structure-lineage	role_structure_v1 missing
+CHK-I20-structure-lineage	takeover generations start empty
+CHK-I20-structure-lineage	takeover lineage carry statement missing
+CHK-I20-structure-lineage	work_exec_v1 pointer to Part 2 placeholder missing
+CHK-I21-interpretation-binding	check after early replay missing
+CHK-I21-interpretation-binding	exempt-read class sentence missing
+CHK-I21-interpretation-binding	factory family closed at five missing
+CHK-I21-interpretation-binding	interpretation check moved before replay
+CHK-I21-interpretation-binding	interpretation_mismatch before mutation missing
+CHK-I21-interpretation-binding	profile revisions with-profile same bytes missing
+CHK-I21-interpretation-binding	stdlib digest equality / interpretation_mismatch missing
+CHK-I22-code-table	"no other new code" sentence missing
+CHK-I22-code-table	E16 A amendment reference missing
+CHK-I22-code-table	EX-7 code table (code|exit) missing
+CHK-I22-code-table	EX-7 code table must have exactly the nine codes: %s
+CHK-I22-code-table	XD4 amended for execution only missing
+CHK-I22-code-table	claim_conflict details must be {state} with four states
+CHK-I22-code-table	code %s exit is not 3
+CHK-I22-code-table	code %s field is not empty
+CHK-I22-code-table	code %s introduced in wrong round (want %s)
+CHK-I22-code-table	code %s message not the fixed D67 text
+CHK-I22-code-table	code %s must carry no details
+CHK-I22-code-table	fenced details must be {run_state} with five run states
+CHK-I23-message-table	"no other new message" sentence missing
+CHK-I23-message-table	closed message missing or altered: %s
+CHK-I23-message-table	forbidden message text present: %s
+CHK-I24-no-removed-diagnostics	%s removes a message table row
+CHK-I24-no-removed-diagnostics	acceptance-matrix removes line %d (not one of the seven)
+CHK-I25-bounds	E15 row is "As E15 decides"
+CHK-I25-bounds	E15 row lacks operator-decided, R17 or digest-only limit
+CHK-I25-bounds	E15 row numbers missing
+CHK-I25-bounds	EX-8 bounds table missing
+CHK-I25-bounds	EX-8 row missing: %s
+CHK-I25-bounds	EX-8 table must have ten rows, found %drows
+CHK-I25-bounds	check output bounds changed
+CHK-I25-bounds	checked before allocation / checked addition missing
+CHK-I25-bounds	checkpoint bound not 8 KiB
+CHK-I25-bounds	eleven rows claimed
+CHK-I25-bounds	every row exhausts to the resource message
+CHK-I25-bounds	facet bounds changed
+CHK-I25-bounds	history expansion bound changed
+CHK-I25-bounds	lower inherited bound rule missing
+CHK-I25-bounds	no budget reset statement missing
+CHK-I25-bounds	observe bounds changed
+CHK-I25-bounds	observe row message changed
+CHK-I25-bounds	packet bounds
+CHK-I25-bounds	provenance bounds changed
+CHK-I25-bounds	resource message not scoped to new sites
+CHK-I25-bounds	snapshot bound not 16 MiB
+CHK-I25-bounds	verdict bounds changed
+CHK-I26-role-transitions	M%d first-ever row has a before state
+CHK-I26-role-transitions	M%d has before retired with reason %s
+CHK-I26-role-transitions	M%d labelled %s without "fact defined by"
+CHK-I26-role-transitions	M%d reason %r is not one of the 16
+CHK-I26-role-transitions	after states missing: %s
+CHK-I26-role-transitions	reasons never used: %s
+CHK-I26-role-transitions	required role transitions missing: %s
+CHK-I26-role-transitions	role table must have 41 rows M1-M41, found %drows
+CHK-I27-run-transitions	N%d after state not a run state
+CHK-I27-run-transitions	N10 must be check_recorded labelled R17
+CHK-I27-run-transitions	N11 must be verdict_recorded labelled R18
+CHK-I27-run-transitions	N5 re-activation row missing
+CHK-I27-run-transitions	at most one active run statement missing
+CHK-I27-run-transitions	check-recover appears in a run row
+CHK-I27-run-transitions	completion row says the event R17 defines
+CHK-I27-run-transitions	fenced run has an outgoing row
+CHK-I27-run-transitions	interrupted not reached by run_interrupted (N%d)
+CHK-I27-run-transitions	run table must have 11 rows N1-N11, found %drows
+CHK-I27-run-transitions	terminal states have no outgoing transitions statement missing
+CHK-I28-run-role-coupling	N%d paired role reason must name %s (cell: %s)
+CHK-I28-run-role-coupling	N5 re-activation paired with fenced
+CHK-I28-run-role-coupling	run table rows != 11
+CHK-I29-placeholders	Part 2 subsections differ from the seven required titles
+CHK-I29-placeholders	history selector clause list lacks --request-id execution-result shape
+CHK-I29-placeholders	history selector clause list lacks command-surface pointer
+CHK-I29-placeholders	placeholder contains a normative word: %s
+CHK-I29-placeholders	placeholder lacks "Not yet written": %s
+CHK-I29-placeholders	pointer amendments list lacks X-CLI family
+CHK-I29-placeholders	pointer amendments list lacks the reserved run section
+CHK-I29-placeholders	verbs list lacks "none is a legal job ID" reason
+CHK-I29-placeholders	verbs list lacks --expect-job
+CHK-I3-format-markers	PRAGMA user_version=3 text missing
+CHK-I3-format-markers	current_state lacks active_job or active_activation_id
+CHK-I3-format-markers	events version CHECK(version IN (1,2)) missing
+CHK-I3-format-markers	events.%s is not a nullable typed column
+CHK-I3-format-markers	events.type CHECK is not the 14 values: %s
+CHK-I3-format-markers	ledger_meta lacks CHECK(format=3)
+CHK-I3-format-markers	records codec CHECK not byte-exact
+CHK-I3-format-markers	requests.attachment_id missing
+CHK-I3-format-markers	requests.operation CHECK is not the 10 values: %s
+CHK-I30-no-part2-leak	--confirm-stopped spelled outside the one OP1 mention (%d times)
+CHK-I30-no-part2-leak	a --claim grammar table row is present
+CHK-I30-no-part2-leak	dispatch_manifest_v1 field list present
+CHK-I30-no-part2-leak	driver_provenance_v1 field list present
+CHK-I31-traceability	traceability anchor does not resolve: #%s
+CHK-I31-traceability	traceability has no section anchors
+CHK-I31-traceability	traceability row missing for %s
+CHK-I31-traceability	traceability v5 line %s missing
+CHK-I32-decisions-table	%s tag is not the delegated tag (%s)
+CHK-I32-decisions-table	OP3 options A, B, C missing
+CHK-I32-decisions-table	decisions table lacks %s
+CHK-I32-decisions-table	decisions table lacks row %s
+CHK-I33-confirm-stopped	--confirm-stopped required scalar (only true, else usage) statement missing
+CHK-I33-confirm-stopped	--confirm-stopped stated to remain a flag
+CHK-I33-confirm-stopped	OP1 does not cite the external-profile line (%d) by text
+CHK-I33-confirm-stopped	OP1 does not say the external-profile rule is unchanged
+CHK-I33-confirm-stopped	OP1 says it changes the external-profile rule
+CHK-I33-confirm-stopped	external-profile "Flags cannot be required" not found by text
+CHK-I34-acceptance-checklist	checklist has fewer than nine items
+CHK-I34-acceptance-checklist	checklist lacks %s
+CHK-I34-acceptance-checklist	checklist lacks the lost-update item
+CHK-I35-claude-md-symlink	AGENTS.md is not a symlink to CLAUDE.md
+CHK-I35-claude-md-symlink	execution line not inserted after the authoring line
+CHK-I35-claude-md-symlink	git diff --numstat CLAUDE.md is %s, want 1 0
+CHK-I36-ledger-pointers	ledger links a nonexistent anchor #%s
+CHK-I36-ledger-pointers	ledger pointer target #%s does not exist
+CHK-I36-ledger-pointers	ledger pointer to #%s missing
+CHK-I36-ledger-pointers	ledger-contract.md has %d removed lines
+CHK-I36-ledger-pointers	ledger-contract.md has fewer than three inserted pointer lines
+CHK-I37-xstore-row	external-profile-contract.md has removed or altered lines (%d)
+CHK-I37-xstore-row	format3 row does not link EX-1
+CHK-I37-xstore-row	format3 row lacks codec CHECK IN (2,3)
+CHK-I37-xstore-row	format3 row lacks request_v3 kind 4 codec 3
+CHK-I37-xstore-row	format3 row lacks user_version statement
+CHK-I37-xstore-row	load on format3 keeps request_v2 missing
+CHK-I37-xstore-row	supersede statement missing
+CHK-I37-xstore-row	the original init sentence was edited away
+CHK-I38-matrix-pointers	acceptance-matrix changed lines %s, want %s
+CHK-I38-matrix-pointers	line %d changed a status word
+CHK-I38-matrix-pointers	line %d changed its pipe-cell count
+CHK-I38-matrix-pointers	line %d is not %s
+CHK-I38-matrix-pointers	line %d lacks an appended execution-contract link
+CHK-I39-v5-alignment	E2 deviation (v5 :110, :497) entry missing
+CHK-I39-v5-alignment	E5 narrowing of v5 :241 entry missing
+CHK-I39-v5-alignment	operator answer date 2026-10-28 missing
+CHK-I39-v5-alignment	v5-alignment.md has removed lines (%d)
+CHK-I4-triggers	sqlite_master triggers differ: extra %s missing %s
+CHK-I4-triggers	trigger name/table mismatch: %s
+CHK-I4-triggers	trigger not in the D69 explicit form: %s
+CHK-I4-triggers	trigger set differs: missing %s extra %s
+CHK-I40-implementation-pointer	implementation.md has removed or rewrapped lines (%d)
+CHK-I40-implementation-pointer	implementation.md must gain exactly one pointer line (found %d)
+CHK-I41-citation-range	DECISIONS section M v5 column not parsed
+CHK-I41-citation-range	M rows: contract %d, decisions %d
+CHK-I41-citation-range	M%d v5 cites %s, DECISIONS says %s
+CHK-I41-citation-range	citation %s:%d is not the exact v5 row (window 0)
+CHK-I41-citation-range	citation %s:%d points past end of file
+CHK-I41-citation-range	stale citation %s used
+CHK-I41-citation-range	v5 row %d changed
+CHK-I42-links-anchors	%s links a missing file %s
+CHK-I42-links-anchors	%s links missing anchor #%s in %s
+CHK-I42-links-anchors	fixed anchor missing: #%s
+CHK-I43-redaction	positive control with the repository root was not refused
+CHK-I43-redaction	redaction check failed for the contract: %s
+CHK-I43-redaction	scripts/redact-local-paths.py missing
+CHK-I44-identity-src-tests	src or tests changed: %s %s
+CHK-I45-diff-scope	%s differs from its frozen copy
+CHK-I45-diff-scope	changes outside owned files: %s
+CHK-I46-record-no-hash	record contains a sha256 of a forbidden file: %s
+CHK-I47-sql-executes	DELETE error is not immutable ledger row: %s
+CHK-I47-sql-executes	SQLite older than 3.37 (STRICT)
+CHK-I47-sql-executes	UPDATE of records error is not immutable ledger row: %s
+CHK-I47-sql-executes	explicit indexes differ: %s
+CHK-I48-enum-checks	before_state NULL with before_drifted NOT NULL accepted
+CHK-I48-enum-checks	evidence reason outside the writer set refused (D100 has no CHECK)
+CHK-I48-enum-checks	generations reason %s rejected
+CHK-I48-enum-checks	generations.reason outside four accepted
+CHK-I48-enum-checks	requests.operation outside ten accepted
+CHK-I48-enum-checks	requests.outcome outside nine accepted
+CHK-I48-enum-checks	requests.outcome reserved accepted
+CHK-I48-enum-checks	role_state %s rejected (D97)
+CHK-I48-enum-checks	role_state accepts %s (D97)
+CHK-I48-enum-checks	run_state state %s rejected
+CHK-I48-enum-checks	run_state.state outside five accepted
+CHK-I48-enum-checks	running drifted role_state rejected (D97)
+CHK-I48-enum-checks	running role_state rejected (D97)
+CHK-I48-enum-checks	transitions after done drifted accepted (D98)
+CHK-I48-enum-checks	transitions after ready drifted accepted (D98)
+CHK-I48-enum-checks	transitions after running drifted rejected (D98)
+CHK-I48-enum-checks	transitions after_state outside six accepted
+CHK-I48-enum-checks	transitions before ready drifted accepted (D98)
+CHK-I48-enum-checks	transitions before running drifted rejected (D98)
+CHK-I48-enum-checks	transitions reason %s rejected
+CHK-I48-enum-checks	transitions reason outside the 16 accepted
+CHK-I49-active-run-uniqueness	run_state_one_active index statement is not the D85 partial unique index
+CHK-I49-active-run-uniqueness	two active runs for one job-role accepted
+CHK-I5-fk-resolve	%s.%s REFERENCES %s, design says %s
+CHK-I5-fk-resolve	%s.%s has REFERENCES but no design arrow
+CHK-I5-fk-resolve	%s.%s has a design arrow but no REFERENCES
+CHK-I5-fk-resolve	%s.%s must carry no REFERENCES
+CHK-I5-fk-resolve	%s.%s references %s which is not created earlier
+CHK-I5-fk-resolve	REFERENCES target table %s does not exist
+CHK-I5-fk-resolve	design EX-1 table not parsed
+CHK-I5-fk-resolve	design table %s has no SQL table
+CHK-I5-fk-resolve	design table %s missing from the SQL
+CHK-I5-fk-resolve	reader-verified column list (with reservations.request_id) missing
+CHK-I5-fk-resolve	reservation reason for reservations.request_id missing
+CHK-I50-no-tbd	closed-text hygiene: %s present
+CHK-I50-no-tbd	emoji present
+CHK-I51-header	header claims narrowing of v5 :241 without citing E5
+CHK-I51-header	header does not name the design as source
+CHK-I51-header	header lacks Authority E1..E17
+CHK-I51-header	header lacks Status
+CHK-I51-header	header lacks the no-check/verdict statement
+CHK-I51-header	header lacks the v1-bodies amendment statement
+CHK-I52-format2-exact	%s differs from format2 SQL
+CHK-I52-format2-exact	%s format2 column line not byte-exact: %s
+CHK-I52-format2-exact	%s format2 line not byte-exact in format3: %s
+CHK-I52-format2-exact	format2 records_digest index statement not byte-exact
+CHK-I52-format2-exact	ledger_meta format check not format3
+CHK-I53-ex1-columns	%s.%s lacks CHECK %s
+CHK-I53-ex1-columns	%s.%s lacks UNIQUE
+CHK-I53-ex1-columns	design EX-1 columns missing from SQL: %s
+CHK-I53-ex1-columns	role_state PK (job, role) missing
+CHK-I53-ex1-columns	transitions PK (event_seq, ordinal) missing
+CHK-I54-run-token	run token grammar missing
+CHK-I54-run-token	run token has no ### subsection in EX-2
+CHK-I54-run-token	run token shown places omit status --request-id
+CHK-I54-run-token	secret 16 OS-random bytes missing
+CHK-I54-run-token	secret stated as 8 bytes
+CHK-I54-run-token	wrong secret fenced statement missing
+CHK-I54-run-token	wrong secret mapped to state_conflict
+CHK-I55-request-outcomes	%s paired with reserved
+CHK-I55-request-outcomes	%s pairing lacks %s
+CHK-I55-request-outcomes	R17-A fenced-completion not pre-decided statement missing
+CHK-I55-request-outcomes	no check request row at reserve time statement missing
+CHK-I55-request-outcomes	pairing row for %s missing
+CHK-I55-request-outcomes	requests.outcome CHECK is not the nine-value union
+CHK-I56-cause-reason	M%d fenced reason outside retirement
+CHK-I56-cause-reason	cause-to-reason rows missing or wrong: %s
+CHK-I57-payload-version	event reason is ordinal 1 or empty string missing
+CHK-I57-payload-version	event reason stated from ordinal 0
+CHK-I57-payload-version	ledger_initialized payload version 1 missing
+CHK-I57-payload-version	load_noop payload version 2 missing
+CHK-I57-payload-version	load_noop stated as payload version 1
+CHK-I57-payload-version	operation name allowed as event reason
+CHK-I58-fallbacks	fallback message set differs: %s
+CHK-I58-fallbacks	fallback messages missing: %s
+CHK-I58-fallbacks	fallback row is not io exit 4: %s
+CHK-I58-fallbacks	load fallback not stated byte-exact
+CHK-I58-fallbacks	stdout variant missing
+CHK-I59-record-additions	%s bullet in section (c) lacks the delegated tag text
+CHK-I59-record-additions	HALT-1 bullet lacks the delegated tag text
+CHK-I59-record-additions	HALT-1 delegated decision (2026-10-31) missing
+CHK-I59-record-additions	HALT-1 recorded as a live answer: %s
+CHK-I59-record-additions	HALT-1 section (b) lacks the delegated tag text
+CHK-I59-record-additions	OP1/OP2 not flagged
+CHK-I59-record-additions	verification-addition paragraph missing
+CHK-I6-reserved-labels	reserved table %s missing
+CHK-I6-reserved-labels	table %s must be preceded by "Reserved for %s" (found %s)
+CHK-I60-role-rows	M table row count != 41
+CHK-I60-role-rows	M%d event cell lacks %s
+CHK-I60-role-rows	M%d event cell lacks %s
+CHK-I60-role-rows	M%d event cell lacks check_recorded
+CHK-I60-role-rows	M18 v5 cite is not :381
+CHK-I60-role-rows	M39 event cell lacks verdict_recorded
+CHK-I60-role-rows	coverage rows missing: %s
+CHK-I60-role-rows	stale -> ready rows without a new-generation cause and an allowed reason: %s
+CHK-I61-load-activate-preconditions	claim during snapshot-commit refusal as state_conflict missing
+CHK-I61-load-activate-preconditions	fact_version and role_state for every role missing
+CHK-I61-load-activate-preconditions	load and activate precondition set missing
+CHK-I61-load-activate-preconditions	load checks role_state only for transitioned roles
+CHK-I61-load-activate-preconditions	per-verb precondition sets pointer missing
+CHK-I62-reactivation	M7/M8 event is not job_activated
+CHK-I62-reactivation	N5 re-activation run row missing
+CHK-I62-reactivation	literal re-activation reuses generations
+CHK-I62-reactivation	re-activation is a noop
+CHK-I62-reactivation	re-activation rows (M7/M8) missing: %s
+CHK-I63-event-payload-columns	%s not labelled reserved
+CHK-I63-event-payload-columns	%s payload version 2 missing
+CHK-I63-event-payload-columns	%s typed columns must be NULL
+CHK-I63-event-payload-columns	Q payload/typed-column table missing
+CHK-I63-event-payload-columns	after written literally
+CHK-I63-event-payload-columns	job_activated must set job only
+CHK-I63-event-payload-columns	job_activated v2 keys activation, revision missing
+CHK-I63-event-payload-columns	ledger_initialized payload version 1 missing
+CHK-I63-event-payload-columns	run_claimed must set job, role, generation and run
+CHK-I63-event-payload-columns	run_claimed reference keys missing
+CHK-I63-event-payload-columns	run_taken_over lacks previous_run
+CHK-I63-event-payload-columns	run_taken_over must set job, role, generation and run
+CHK-I64-limit-names	details limit/maximum statement missing
+CHK-I64-limit-names	field empty statement missing
+CHK-I64-limit-names	limit %s not pinned to %s
+CHK-I64-limit-names	observe limit %s not kept with Capture limit exceeded
+CHK-I65-fact-version	blocker change deferral to R18 missing
+CHK-I65-fact-version	exactly-one increment rule missing
+CHK-I65-fact-version	fact_version column lacks CHECK(fact_version>=1)
+CHK-I65-fact-version	first row written with fact_version 1 missing
+CHK-I65-fact-version	load_noop bumps nothing missing
+CHK-I65-fact-version	no exception to the delta rule statement missing
+CHK-I65-fact-version	no-bump-no-increment statement missing
+CHK-I65-fact-version	no-other-role rule missing
+CHK-I66-reused-messages	Reused existing codes table missing
+CHK-I66-reused-messages	fewer than the ten code families in the reused table: %s
+CHK-I66-reused-messages	message %r not byte-equal in authoring-contract
+CHK-I66-reused-messages	message %r not byte-equal in load-command-contract
+CHK-I66-reused-messages	message %r not found in existing source
+CHK-I66-reused-messages	response.cpp lacks unsupported text
+CHK-I66-reused-messages	reused message not found in any owner: %s
+CHK-I66-reused-messages	reused row %s has no message
+CHK-I66-reused-messages	reused row %s has no owner
+CHK-I66-reused-messages	reused row %s is in the 19-message set
+CHK-I67-column-conventions	%s.%s enum differs: %s
+CHK-I67-column-conventions	%s.%s lacks boolean CHECKname
+CHK-I67-column-conventions	%s.%s lacks length 1..64 CHECKname
+CHK-I67-column-conventions	PK %s.%s lacks CHECK(%s>0)name
+CHK-I67-column-conventions	blocker kind outside set accepted
+CHK-I67-column-conventions	blocker_state columns differ
+CHK-I67-column-conventions	blocker_state.state enum differs
+CHK-I67-column-conventions	boolean 2 accepted
+CHK-I67-column-conventions	cleared blocker without cleared_seq accepted
+CHK-I67-column-conventions	conforming blocker_state rejected
+CHK-I67-column-conventions	conforming cleared blocker_state rejected
+CHK-I67-column-conventions	conforming reservation_state rejected
+CHK-I67-column-conventions	conforming role_state rejected
+CHK-I67-column-conventions	conforming run_state rejected
+CHK-I67-column-conventions	dispatch kind outside set accepted
+CHK-I67-column-conventions	evidence has a table-level CHECK on reason (D100)
+CHK-I67-column-conventions	evidence outcome outside set accepted
+CHK-I67-column-conventions	evidence.reason is not TEXT NOT NULL without a CHECK (D100)
+CHK-I67-column-conventions	open blocker with cleared_seq accepted
+CHK-I67-column-conventions	ordinal 0 accepted
+CHK-I67-column-conventions	reservation_state columns differ
+CHK-I67-column-conventions	reservation_state enum outside set accepted
+CHK-I67-column-conventions	reservation_state.state enum differs
+CHK-I67-column-conventions	role of 65 bytes accepted
+CHK-I67-column-conventions	role_state enum outside set accepted
+CHK-I67-column-conventions	role_state fact_version 0 accepted
+CHK-I67-column-conventions	role_state run_id/drifted coupling CHECK missing (D97)
+CHK-I67-column-conventions	run_state enum outside set accepted
+CHK-I67-column-conventions	transition reason outside set accepted
+CHK-I67-column-conventions	transitions after_drifted CHECK missing (D98)
+CHK-I67-column-conventions	transitions before_drifted CHECK missing (D98)
+CHK-I67-column-conventions	verdict decision outside set accepted
+CHK-I67-column-conventions	zero id accepted
+CHK-I68-carrying-events	M%d carries check_recorded without the R17 label
+CHK-I68-carrying-events	M%d carries verdict_recorded without the R18 label
+CHK-I68-carrying-events	M%d lacks check_recorded
+CHK-I68-carrying-events	carrying-event rule sentence missing
+CHK-I68-carrying-events	derived-transition carrying rule missing
+CHK-I68-carrying-events	reconcile must not read declaration_accepted as the only event
+CHK-I69-stale-done	M40 event cell lacks declaration_accepted and check_recorded
+CHK-I69-stale-done	M40 stale -> done work_changed missing
+CHK-I69-stale-done	M41 event cell lacks check_recorded
+CHK-I69-stale-done	M41 stale -> done evidence_inapplicable missing
+CHK-I69-stale-done	M8 and M10 open-a-new-generation statement missing
+CHK-I69-stale-done	OP3 missing from the decisions table
+CHK-I69-stale-done	OP3 options A, B, C missing
+CHK-I69-stale-done	R17-6 not narrowed statement missing
+CHK-I69-stale-done	no stale -> ready statement missing
+CHK-I69-stale-done	stale -> ready rows without a new-generation cause and an allowed reason: %s
+CHK-I7-cross-row	--at-event replays without Lua statement missing
+CHK-I7-cross-row	D59 coupling bullet missing
+CHK-I7-cross-row	NULL-first-transition rule missing
+CHK-I7-cross-row	active_activation_id equals latest bullet missing
+CHK-I7-cross-row	all-rows-retired-when-active_job-NULL missing
+CHK-I7-cross-row	at-most-one-active-run bullet missing
+CHK-I7-cross-row	check exception missing
+CHK-I7-cross-row	fact_version replay rule missing
+CHK-I7-cross-row	generation ordinal contiguity bullet missing
+CHK-I7-cross-row	native writer / reader-verified labelling missing
+CHK-I7-cross-row	non-active-job rows retired bullet missing
+CHK-I7-cross-row	prose says eight design invariants
+CHK-I7-cross-row	run_state derivation bullet missing
+CHK-I7-cross-row	the prose does not say nine design invariants
+CHK-I70-absent-active-job	M%d must name both causes (role removed and active job absent)
+CHK-I70-absent-active-job	N7 names only one cause
+CHK-I70-absent-active-job	NULL active_job after commit with active_activation_id unchanged missing
+CHK-I70-absent-active-job	after payload active_job empty-string statement missing
+CHK-I70-absent-active-job	invariant fails after activating J1
+CHK-I70-absent-active-job	invariant fails after activating J2 (M5 transitions omitted?)
+CHK-I70-absent-active-job	invariant fails after load without J2 (M14(b) transitions omitted?)
+CHK-I70-absent-active-job	non-active-job rows retired invariant missing
+CHK-I70-absent-active-job	transitions for M5 (non-running previous-job roles) missing
+CHK-I70-absent-active-job	transitions for M6 (previous-job running role) missing
+CHK-I8-cutover	XD5 test-name rule missing
+CHK-I8-cutover	fixtures keep format1/format2 creation missing
+CHK-I8-cutover	format1/2 refusal missing
+CHK-I8-cutover	init creates format3 after R15-B/C missing
+CHK-I8-cutover	init keeps a format selector
+CHK-I8-cutover	init unchanged CLI signature / bytes missing
+CHK-I8-cutover	no-selector statement missing
+CHK-I8-cutover	old binary refusal missing
+CHK-I8-cutover	phrase "before any capture or Lua" missing
+CHK-I9-request-v3	PLANAR-REQUEST framing missing
+CHK-I9-request-v3	byte 03 framing missing
+CHK-I9-request-v3	contents never in body statement missing
+CHK-I9-request-v3	different-version conflict missing
+CHK-I9-request-v3	failed operations reserve nothing missing
+CHK-I9-request-v3	file contents enter the body
+CHK-I9-request-v3	host-path normalization missing
+CHK-I9-request-v3	load keeps request_v2 missing
+CHK-I9-request-v3	native packet assembly missing
+CHK-I9-request-v3	request_conflict missing
+CHK-I9-request-v3	request_v3 field order not byte-exact
+CHK-I9-request-v3	request_v3 record kind 4 codec 3 missing

@@ -1,0 +1,187 @@
+R15-A1-C04: the unmodified C03 record assertion script, final phase, on the C04 record (taken after the last record edit before the FIN phase)
+date: 2026-11-06
+command: python3 -I -B <scratchpad>/c04/record_asserts_c03.py --repo . --phase final (scratch copy, cmp-identical to green/record_asserts_c03.py)
+purpose: shows why the C04 copy record_asserts_c04.py exists; the paths assertion fails on the outcome heading being followed by later sections and the order assertion requires logs that C04 does not rewrite or never wrote; other FAIL lines name files that the FIN phase has not yet written
+FAIL ASSERT-C03-paths: the outcome heading is not the last ## heading | 9 unresolved path token(s): line 1709 `green/redaction-final-c04.txt`; line 1709 `green/record-asserts-final-c04.txt`; line 1861 `green/redaction-final-c04.txt`; line 1862 `green/record-asserts-final-c04.txt`; line 1872 `green/redaction-final-c04.txt`; line 1872 `green/record-asserts-final-c04.txt`; line 1912 `green/redaction-final-c04.txt`; line 1912 `green/record-asserts-final-c04.txt`; line 1921 `green/redaction-final-c04.txt`
+PASS ASSERT-C03-staging: 25 additions, 23 unstaged entries
+PASS ASSERT-C03-identity-ref: identity values agree
+PASS ASSERT-C03-sections: section references and status rows agree
+FAIL ASSERT-C03-order: docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/record-asserts-c03.txt; docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/reprobe-c03.txt; docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/identity-compare-c03.txt; docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/checks.txt; docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/redaction-c02.txt; docs/vernacular/rounds/V5-02-R15-A1.md is newer than green/audit-final.txt; green/checks.txt is newer than green/redaction-c02.txt
+PASS ASSERT-C03-reprobe: 41 re-probes verified
+PASS ASSERT-C03-record-rule: 67 files scanned against 563 hash sources
+exemptions used: 172
+EXEMPT E2 line 116 `reconcile.lua`: non-file identifier
+EXEMPT E3 line 135 `identity.py`: external tool name
+EXEMPT E3 line 146 `identity.py`: external tool name
+EXEMPT E3 line 175 `identity.py`: external tool name
+EXEMPT E2 line 273 `dev/planar-v2-vernacular`: non-file identifier
+EXEMPT E3 line 273 `identity.py`: external tool name
+EXEMPT E6 line 327 `tests/native/v5-02-r15-a1-evidence/probes/PROBES.md`: negative existence sentence
+EXEMPT E2 line 403 `job_activations.id`: non-file identifier
+EXEMPT E2 line 413 `events.type`: non-file identifier
+EXEMPT E1 line 442 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E2 line 444 `run_state.state`: non-file identifier
+EXEMPT E2 line 459 `events.job/role/generation_id/run_id`: non-file identifier
+EXEMPT E2 line 459 `events.role`: non-file identifier
+EXEMPT E2 line 463 `blockers.kind`: non-file identifier
+EXEMPT E2 line 463 `dispatches.kind`: non-file identifier
+EXEMPT E3 line 471 `identity.py`: external tool name
+EXEMPT E3 line 474 `identity.py`: external tool name
+EXEMPT E3 line 569 `identity.py`: external tool name
+EXEMPT E3 line 586 `identity.py`: external tool name
+EXEMPT E3 line 589 `identity.py`: external tool name
+EXEMPT E1 line 595 `green/identity*.txt`: placeholder or glob
+EXEMPT E1 line 595 `probes/baseline*.txt`: placeholder or glob
+EXEMPT E2 line 638 `dev/planar-v2-vernacular`: non-file identifier
+EXEMPT E3 line 638 `identity.py`: external tool name
+EXEMPT E1 line 715 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 772 `probes/raw/*.survived-1.log`: placeholder or glob
+EXEMPT E1 line 801 `frozen*.txt`: placeholder or glob
+EXEMPT E1 line 801 `identity*.txt`: placeholder or glob
+EXEMPT E1 line 801 `linkcheck*.txt`: placeholder or glob
+EXEMPT E1 line 801 `probes/baseline*.txt`: placeholder or glob
+EXEMPT E1 line 801 `redaction*.txt`: placeholder or glob
+EXEMPT E1 line 801 `scope*.txt`: placeholder or glob
+EXEMPT E1 line 802 `<scratchpad>/ex_checks.py`: placeholder or glob
+EXEMPT E1 line 802 `<scratchpad>/ex_checks_orig.py`: placeholder or glob
+EXEMPT E1 line 802 `<scratchpad>/frozen/`: placeholder or glob
+EXEMPT E1 line 802 `<scratchpad>/linkcheck.py`: placeholder or glob
+EXEMPT E1 line 802 `<scratchpad>/sql_c01.py`: placeholder or glob
+EXEMPT E3 line 812 `identity.py`: external tool name
+EXEMPT E2 line 831 `events.job`: non-file identifier
+EXEMPT E2 line 831 `events.role`: non-file identifier
+EXEMPT E2 line 835 `events.role`: non-file identifier
+EXEMPT E1 line 844 `.../INVARIANTS.md`: placeholder or glob
+EXEMPT E7 line 853 `C7-m2.txt`: mutant-log name in an invariant table cell
+EXEMPT E7 line 853 `I67-m3.txt`: mutant-log name in an invariant table cell
+EXEMPT E7 line 853 `probes/raw/C7-m1.txt`: mutant-log name in an invariant table cell
+EXEMPT E1 line 855 `<scratchpad>/ex_checks_orig.py`: placeholder or glob
+EXEMPT E3 line 855 `identity.py`: external tool name
+EXEMPT E1 line 875 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 885 `green/*.txt`: placeholder or glob
+EXEMPT E1 line 885 `plan/*.md`: placeholder or glob
+EXEMPT E1 line 885 `plan/superseded-1/*`: placeholder or glob
+EXEMPT E1 line 885 `plan/superseded-2/*`: placeholder or glob
+EXEMPT E1 line 885 `red/*.txt`: placeholder or glob
+EXEMPT E3 line 886 `identity.py`: external tool name
+EXEMPT E3 line 910 `identity.py`: external tool name
+EXEMPT E1 line 926 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E1 line 969 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 979 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 992 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E3 line 1003 `identity.py`: external tool name
+EXEMPT E5 line 1003 `scripts/identity.py`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1016 `identity.py`: external tool name
+EXEMPT FIN line 1064 `tests/native/v5-02-r15-a1-c01-evidence/green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1065 `tests/native/v5-02-r15-a1-c01-evidence/green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1207 `tests/native/v5-02-r15-a1-c01-evidence/green/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1208 `tests/native/v5-02-r15-a1-c01-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1209 `tests/native/v5-02-r15-a1-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1210 `tests/native/v5-02-r15-a1-c02-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1211 `tests/native/v5-02-r15-a1-c03-evidence/plan/superseded-*/`: placeholder or glob
+EXEMPT E1 line 1224 `tests/native/v5-02-r15-a1-c01-evidence/red/snapshot*/`: placeholder or glob
+EXEMPT E1 line 1225 `tests/native/v5-02-r15-a1-c02-evidence/red/snapshot*/`: placeholder or glob
+EXEMPT E6 line 1228 `tests/native/v5-02-r15-a1-c01-evidence/green/record-asserts-final-c03.txt`: negative existence sentence
+EXEMPT E3 line 1238 `identity.py`: external tool name
+EXEMPT FIN line 1263 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1263 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1285 `identity.py`: external tool name
+EXEMPT E1 line 1315 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1324 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1324 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1324 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1325 `identity.py`: external tool name
+EXEMPT E1 line 1334 `.survived-1.log`: placeholder or glob
+EXEMPT E1 line 1334 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 1344 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1345 `<frozen-dir>/reports/<tree>__<basename>`: placeholder or glob
+EXEMPT E1 line 1346 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1346 `audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1346 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1346 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1346 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1354 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1354 `green/*-c02.txt`: placeholder or glob
+EXEMPT E1 line 1354 `probes/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1354 `red/red-c02-*.txt`: placeholder or glob
+EXEMPT E1 line 1354 `tests/native/*-evidence/**/REPORT*`: placeholder or glob
+EXEMPT FIN line 1354 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1354 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1354 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1371 `identity.py`: external tool name
+EXEMPT E1 line 1376 `e3b0c442...b855`: placeholder or glob
+EXEMPT E1 line 1406 `probes/raw/*.log`: placeholder or glob
+EXEMPT E3 line 1416 `identity.py`: external tool name
+EXEMPT E1 line 1425 `<scratchpad>/c02/ex_checks-c02.py`: placeholder or glob
+EXEMPT E1 line 1444 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E5 line 1473 `scripts/identity.py`: coordinator dispatch or review-outcome section
+EXEMPT E3 line 1488 `identity.py`: external tool name
+EXEMPT E1 line 1491 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT E6 line 1507 `green/audit-verify-c02.txt`: negative existence sentence
+EXEMPT E6 line 1507 `green/record-asserts-final-c03.txt`: negative existence sentence
+EXEMPT E6 line 1507 `green/redaction-final-c02.txt`: negative existence sentence
+EXEMPT E3 line 1511 `identity.py`: external tool name
+EXEMPT E3 line 1606 `identity.py`: external tool name
+EXEMPT E1 line 1665 `probes/raw/*.survived-1.log`: placeholder or glob
+EXEMPT E6 line 1684 `green/audit-verify-c02.txt`: negative existence sentence
+EXEMPT E6 line 1684 `green/record-asserts-final-c03.txt`: negative existence sentence
+EXEMPT E6 line 1684 `green/redaction-final-c02.txt`: negative existence sentence
+EXEMPT E6 line 1709 `green/audit-verify-c02.txt`: negative existence sentence
+EXEMPT E6 line 1709 `green/record-asserts-final-c03.txt`: negative existence sentence
+EXEMPT E6 line 1709 `green/redaction-final-c02.txt`: negative existence sentence
+EXEMPT E6 line 1716 `green/audit-verify-c02.txt`: negative existence sentence
+EXEMPT E6 line 1716 `green/record-asserts-final-c03.txt`: negative existence sentence
+EXEMPT E6 line 1716 `green/redaction-final-c02.txt`: negative existence sentence
+EXEMPT E3 line 1728 `identity.py`: external tool name
+EXEMPT E1 line 1730 `.survived-1.log`: placeholder or glob
+EXEMPT FIN line 1732 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1732 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1733 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1734 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1734 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1735 `identity.py`: external tool name
+EXEMPT E1 line 1736 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1736 `rounds/*.md`: placeholder or glob
+EXEMPT E7 line 1737 `probes/raw/Z9-m1.log`: mutant-log name in an invariant table cell
+EXEMPT FIN line 1749 `audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1749 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1750 `<id>-r.log`: placeholder or glob
+EXEMPT E1 line 1750 `probes/reprobe/<id>-r.log`: placeholder or glob
+EXEMPT E1 line 1756 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1756 `tests/native/*-evidence/**/REPORT*`: placeholder or glob
+EXEMPT FIN line 1756 `record-asserts-final-c03.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1775 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1784 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1784 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1784 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E3 line 1785 `identity.py`: external tool name
+EXEMPT E1 line 1794 `.survived-1.log`: placeholder or glob
+EXEMPT E1 line 1794 `probes/raw/<id>.log`: placeholder or glob
+EXEMPT E1 line 1804 `red/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1805 `<frozen-dir>/reports/<tree>__<basename>`: placeholder or glob
+EXEMPT E1 line 1806 `plan/superseded-*/INVARIANTS.md`: placeholder or glob
+EXEMPT FIN line 1806 `audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1806 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1806 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1806 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1814 `docs/vernacular/rounds/*.md`: placeholder or glob
+EXEMPT E1 line 1814 `green/*-c02.txt`: placeholder or glob
+EXEMPT E1 line 1814 `probes/raw/*.log`: placeholder or glob
+EXEMPT E1 line 1814 `red/red-c02-*.txt`: placeholder or glob
+EXEMPT E1 line 1814 `tests/native/*-evidence/**/REPORT*`: placeholder or glob
+EXEMPT FIN line 1814 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1814 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1814 `redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1828 `e3b0c442...b855`: placeholder or glob
+EXEMPT E3 line 1828 `identity.py`: external tool name
+EXEMPT E6 line 1834 `green/audit-verify-c02.txt`: negative existence sentence
+EXEMPT E6 line 1834 `green/record-asserts-final-c03.txt`: negative existence sentence
+EXEMPT E6 line 1834 `green/redaction-final-c02.txt`: negative existence sentence
+EXEMPT E6 line 1855 `scripts/identity.py`: negative existence sentence
+EXEMPT FIN line 1888 `green/audit-verify-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT FIN line 1888 `green/redaction-final-c02.txt`: FIN-only path, written after the record (non-final mode)
+EXEMPT E1 line 1900 `<id>.attempt-<n>.log`: placeholder or glob
+EXEMPT E6 line 1918 `scripts/identity.py`: negative existence sentence
+mode: non-final, phase: final
+Command exit code: 1
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

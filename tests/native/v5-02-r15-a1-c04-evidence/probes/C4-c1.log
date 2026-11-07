@@ -1,0 +1,10 @@
+probe: C4-c1 (control)
+checker: green/ex_checks-c02.py (C04)
+mutation: control: the clean scratch clone (redaction log holds CLAUDE.md, record unchanged)
+command: python3 -I -B <scratchpad>/c04/ex_checks-c02.py --repo <clone> --frozen-dir <scratchpad>/c04/frozen --audit CHK-C02-evidence-logs
+Command exit code: 0
+verdict: control-ok
+--- full output ---
+command: ex_checks-c02.py --repo <scratchpad>/c04/probe-work --frozen-dir <scratchpad>/c04/frozen --audit CHK-C02-evidence-logs
+PASS CHK-C02-evidence-logs staging list, redaction, links, identity, cmp, owned files and final logs agree
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

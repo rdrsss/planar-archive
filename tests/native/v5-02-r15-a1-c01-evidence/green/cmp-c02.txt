@@ -1,0 +1,5 @@
+cmp checker exit 0
+cmp sql script exit 0
+cmp link checker exit 0
+cmp mask script exit 0
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

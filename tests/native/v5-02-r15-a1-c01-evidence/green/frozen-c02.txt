@@ -1,0 +1,16 @@
+# R15-A1-C03 FIN2 evidence: frozen files (verdicts only, no hash for roadmap or reviews)
+command: cmp <file> <scratchpad>/c03/frozen/<name> for roadmap.md, V5-02-R15-A1-review.md, V5-02-R15-A1-C01-review.md, V5-02-R15-A1-C02-review.md
+date: 2026-11-06
+
+docs/vernacular/roadmap.md against frozen copy: cmp exit 0
+docs/vernacular/rounds/V5-02-R15-A1-review.md against frozen copy: cmp exit 0
+docs/vernacular/rounds/V5-02-R15-A1-C01-review.md against frozen copy: cmp exit 0
+docs/vernacular/rounds/V5-02-R15-A1-C02-review.md against frozen copy: cmp exit 0
+
+MATCH docs/vernacular/ledger-contract.md (hash equals the baseline line)
+MATCH docs/vernacular/external-profile-contract.md (hash equals the baseline line)
+MATCH docs/vernacular/acceptance-matrix.md (hash equals the baseline line)
+MATCH docs/vernacular/implementation.md (hash equals the baseline line)
+MATCH CLAUDE.md (hash equals the baseline line)
+AGENTS.md -> CLAUDE.md
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

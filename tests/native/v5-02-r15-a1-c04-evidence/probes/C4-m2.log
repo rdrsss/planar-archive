@@ -1,0 +1,10 @@
+probe: C4-m2 (mutant)
+checker: green/ex_checks-c02.py (C04)
+mutation: add the table row '| audit-final.txt: 122 PASS |' to the scratch record (C03-R5)
+command: python3 -I -B <scratchpad>/c04/ex_checks-c02.py --repo <clone> --frozen-dir <scratchpad>/c04/frozen --audit CHK-C02-evidence-logs
+Command exit code: 1
+verdict: KILLED
+--- full output ---
+command: ex_checks-c02.py --repo <scratchpad>/c04/probe-work --frozen-dir <scratchpad>/c04/frozen --audit CHK-C02-evidence-logs
+FAIL CHK-C02-evidence-logs the record quotes a result of audit-final: | audit-final.txt: 122 PASS |
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)

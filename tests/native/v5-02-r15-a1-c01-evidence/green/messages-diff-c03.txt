@@ -1,0 +1,90 @@
+R15-A1-C03 GRN: checker message comparison (need()/fail() first message argument per check, stdlib ast)
+date: 2026-11-06
+extractor: python3 -I <scratchpad>/c03/extract_msgs.py <checker> (string constants of the first message argument, sorted, tab separated: check id or helper, message)
+amended checker sha256: 9a0e3d2711d5963a98b5b46f9cedaab0dcf9f5d93bc536267565d7836f792ce1
+
+== Part 1: C01 checker (red/ex_checks.py) against the amended checker (green/ex_checks-c02.py), the eight amended checks ==
+check CHK-C01-sql-evidence-recorded: C01 messages 7, C02 messages 4, removed 6, added 3
+  removed: a clean foreign_key_check is not recorded
+  removed: evidence rows other than the NULL reason are refused: %s
+  removed: scratch case %s is not recorded as %s
+  removed: the 24-table count is not recorded
+  removed: the 43-trigger count is not recorded
+  removed: the two-index count is not recorded
+  added: 
+  added: statement [%d] expected %s but the log records %s
+  added: statements [1] to [25] are not all recorded: %s
+check CHK-C01-green-evidence: C01 messages 4, C02 messages 9, removed 0, added 5
+  added: checker sha256 in green/checks.txt differs from green/ex_checks-c02.py
+  added: green/checks.txt does not end with the mask line
+  added: green/checks.txt does not record the checker command (ex_checks-c02.py --repo)
+  added: green/checks.txt lacks the "checker sha256:" line
+  added: missing file: green/ex_checks-c02.py
+check CHK-C01-prober-evidence: C01 messages 11, C02 messages 25, removed 6, added 20
+  removed: closing probe %s is decided but its log is PENDING
+  removed: mutants.tsv header lacks mutant id, test or verdict
+  removed: mutants.tsv lacks replaced row %s (%s)
+  removed: mutants.tsv lacks row %s
+  removed: pending mutant %s lacks a PENDING log
+  removed: probes/raw/%s.txt is missing or empty
+  added: PENDING log: probes/raw/%s
+  added: PROBES.md has no Survivors section
+  added: PROBES.md lacks the "main section totals" line
+  added: PROBES.md totals (%s, %s, %s) differ from mutants.tsv (%d, %d, %d)KILLEDSURVIVEDnot run
+  added: control %s has verdict %r, not control-ok
+  added: control log %s holds a FAIL line
+  added: control log %s lacks "exit code of the command: 0"
+  added: control log %s lacks a PASS line for %s
+  added: control log %s lacks the line "control: yes"
+  added: killed mutant %s has no non-zero command exit code
+  added: killed mutant %s: test %s is not a PASS line of its baseline
+  added: mutants.tsv header lacks %s
+  added: mutants.tsv lacks closing row %s
+  added: mutants.tsv lacks the control C35-c1
+  added: probes/raw/%s has no row in mutants.tsv
+  added: probes/raw/%s.log holds no applied diff
+  added: probes/raw/%s.log is a PENDING log
+  added: probes/raw/%s.log is missing or empty
+  added: probes/raw/%s.log lacks the line "scratch differs from pristine: yes"
+  added: the Survivors section does not name %s
+check CHK-C01-record-closure: C01 messages 9, C02 messages 6, removed 4, added 1
+  removed: Final audit run line differs from checks-final.txt
+  removed: Final results lacks an existing green/%s
+  removed: checks-final.txt exists but the C01 section has no Final results subsection
+  removed: checks-final.txt records no exit code
+  added: the record does not cite green/audit-final.txt
+check CHK-C01-record-d81: C01 messages 8, C02 messages 9, removed 5, added 6
+  removed: Closing probe %s verdict differs from PROBES.md
+  removed: D81 sentence does not name closing probe %s
+  removed: PLACEHOLDER marker remains in the C01 section
+  removed: the C01 section has no D81 sentence
+  removed: the D81 sentence lacks killed and survived counts
+  added: PLACEHOLDER marker remains in the D81 resolution
+  added: the D81 resolution does not name probes/PROBES.md
+  added: the D81 resolution lacks killed and survived counts
+  added: the D81 resolution still says "This record does not choose"
+  added: the D81 resolution still says "not RUN, open"
+  added: the record has no D81 resolution subsection
+check CHK-C01-red-evidence: C01 messages 8, C02 messages 8, removed 0, added 0
+check CHK-C01-names-preserved: C01 messages 3, C02 messages 3, removed 1, added 1
+  removed: CHK-C01 ids are not appended in the stated order
+  added: CHK-C01 and CHK-C02 ids are not appended in the stated order
+check CHK-I45-diff-scope: C01 messages 2, C02 messages 2, removed 0, added 0
+TOTAL over the eight amended checks: removed 22, added 36
+removed messages in all other checks and helpers (C01 checker vs C02 checker): 0
+
+Part 1 counts by distinct string (set comparison): removed 21, added 36 over the eight amended checks (the multiset total of removed is 22 because one removed string occurs twice); the C02 review counted 17 and is superseded by this count. Messages of all other checks and helpers: none removed. The assertion messages of the eight amended bodies were replaced; the messages of the other checks are byte-identical.
+Note on the extractor: where a message is built by concatenating constants (the 'KILLEDSURVIVEDnot run' string, the empty string of a computed message), the extractor joins the constants; that is an extraction artifact, not a changed message.
+
+== Part 2: amended checker now against green/messages-before-c03.txt (the extraction taken before the C03 edits) ==
+diff exit 1 (1 means additions only below; no line starting with '<' means no existing message changed or removed)
+155a156
+> CHK-C01-prober-evidence	probes/raw/%s has no row in mutants.tsv
+301a303
+> CHK-I10-history-lookup	history --request-id is said to add a disposition field
+565a568
+> CHK-I51-header	header lacks the statement that it narrows no clause of any approved contract
+removed or changed existing messages: 0
+added messages (survivor repairs): 3
+The FRZ, PRA and PRB edits of C03 changed no existing message; they added the survivor-repair messages listed above (lines starting with '>').
+masked: yes (paths and forbidden-file hashes replaced after the run; exit codes and FAIL ids untouched)
