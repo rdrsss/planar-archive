@@ -241,7 +241,7 @@ planar_rewrite_module(planar_ledger_types
 
 planar_rewrite_module(planar_ledger_storage_types
   INTERFACE ledger/storage_types.cppm
-  DEPENDS planar_ledger_types planar_ledger_history_codec)
+  DEPENDS planar_ledger_types planar_ledger_history_codec planar_value)
 
 planar_rewrite_module(planar_ledger_storage
   INTERFACE ledger/storage.cppm SOURCES ledger/storage.cpp
