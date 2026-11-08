@@ -542,3 +542,11 @@ target_link_libraries(planar_authoring_catalog_tests PRIVATE Catch2::Catch2WithM
   ${authoring_variant_objects})
 add_dependencies(planar_tests planar_authoring_catalog_tests)
 catch_discover_tests(planar_authoring_catalog_tests TEST_PREFIX "replacement." PROPERTIES LABELS unit TIMEOUT 60)
+
+# R18-B-core P4: review.lua is not embedded yet (DB-R4); its standalone harness loads the source from PLANAR_SOURCE_ROOT.
+add_executable(planar_review_lua_tests EXCLUDE_FROM_ALL review_lua.t.cpp)
+planar_native_target(planar_review_lua_tests)
+target_link_libraries(planar_review_lua_tests PRIVATE Catch2::Catch2WithMain planar_lua_trusted_libs)
+target_compile_definitions(planar_review_lua_tests PRIVATE PLANAR_SOURCE_ROOT="${PROJECT_SOURCE_DIR}")
+add_dependencies(planar_tests planar_review_lua_tests)
+catch_discover_tests(planar_review_lua_tests TEST_PREFIX "replacement." PROPERTIES LABELS unit TIMEOUT 60)

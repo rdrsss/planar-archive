@@ -3651,3 +3651,111 @@ TEST_CASE("execution refuses a snapshot taken from a replaced ledger") {
   REQUIRE(commit_execution(path, snapA, change).has_value());
   require_verifies(path);
 }
+
+TEST_CASE("R17 ledger reservation survives restart and recovery closes both request ids") {
+  scratch dir;
+  auto    path  = activated_ledger(dir);
+  auto    claim = commit_claim(path, "claim-check", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto token = parse_run_token(*claim.token);
+  REQUIRE(token);
+  hist::request_v3 request{
+      .operation  = "check",
+      .actor      = "tester",
+      .parameters = params_bytes(
+          {{"base_root", "/base"}, {"root", "/root"}, {"run_id", std::to_string(token->run_id)}, {"scratch", "/scratch"}}),
+      .profile_argument = std::nullopt};
+  auto reserved = reserve_check(path, snapshot_of(path), "check-1", "tester", request, *claim.token);
+  INFO((reserved.has_value() ? -1 : static_cast<int>(reserved.error().code)));
+  REQUIRE(reserved);
+  auto read = read_execution_snapshot(path);
+  INFO((read.has_value() ? -1 : static_cast<int>(read.error().code)));
+  REQUIRE(read);
+  REQUIRE(read->reservations.size() == 1);
+  auto pending = lookup_execution_request(path, "check-1", request);
+  REQUIRE_FALSE(pending);
+  REQUIRE(pending.error().code == execution_error_code::check_in_progress);
+  auto again = reserve_check(path, *read, "check-2", "tester", request, *claim.token);
+  REQUIRE_FALSE(again);
+  REQUIRE(again.error().code == execution_error_code::check_in_progress);
+  hist::request_v3 recovery{.operation        = "check-recover",
+                            .actor            = "tester",
+                            .parameters       = params_bytes({{"confirm_stopped", "true"},
+                                                              {"reservation", std::to_string(reserved->id)},
+                                                              {"run_id", std::to_string(token->run_id)}}),
+                            .profile_argument = std::nullopt};
+  auto             recovered = recover_check(path, "recover-check", "tester", recovery, token->run_id, reserved->id);
+  INFO((recovered.has_value() ? -1 : static_cast<int>(recovered.error().code)));
+  REQUIRE(recovered);
+  REQUIRE(verify_execution_ledger(path));
+  REQUIRE(read_execution_snapshot(path)->reservations.empty());
+  auto replay = lookup_execution_request(path, "check-1", request);
+  REQUIRE(replay);
+  REQUIRE(replay->state == request_state::replay);
+  REQUIRE(replay->result == recovered->saved_result);
+  REQUIRE(authorize_run_token(path, *claim.token));
+}
+
+TEST_CASE("R17 ledger completion retains evidence and changes run to completed atomically") {
+  scratch dir;
+  auto    path  = activated_ledger(dir);
+  auto    claim = commit_claim(path, "claim-check", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto token = parse_run_token(*claim.token);
+  REQUIRE(token);
+  hist::request_v3 request{
+      .operation  = "check",
+      .actor      = "tester",
+      .parameters = params_bytes(
+          {{"base_root", "/base"}, {"root", "/root"}, {"run_id", std::to_string(token->run_id)}, {"scratch", "/scratch"}}),
+      .profile_argument = std::nullopt};
+  auto reserved = reserve_check(path, snapshot_of(path), "check-1", "tester", request, *claim.token);
+  REQUIRE(reserved);
+  auto                   output = "xxh3_128:" + std::string(32, 'a');
+  auto                   units  = vlist({vrec({{"work", vstr("alpha_work")}, {"output", vstr(output)}})});
+  execution_check_result result;
+  result.recapture_matches = true;
+  result.observation       = vrec({{"version", vint(1)},
+                                   {"root", vstr("root")},
+                                   {"base", vstr(output)},
+                                   {"observation", vstr(output)},
+                                   {"units", units},
+                                   {"contracts", vlist({})}});
+  execution_check_evidence evidence;
+  evidence.work       = "alpha_work";
+  evidence.check      = "planar.boundary_v1";
+  evidence.outcome    = "pass";
+  evidence.reason     = "passed";
+  evidence.vector     = vrec({{"version", vint(1)}, {"targets", units}});
+  evidence.definition = vrec({{"version", vint(1)},
+                              {"work", vstr("alpha_work")},
+                              {"check", vstr("planar.boundary_v1")},
+                              {"gate", vstr("boundary_v1")},
+                              {"inputs", vstrs({"own_output", "output_vector"})},
+                              {"owned", vstrs({"src/"})},
+                              {"frozen", vlist({})},
+                              {"excluded", vlist({})},
+                              {"producers", vlist({})}});
+  result.evidence.push_back(evidence);
+  auto snapshot = read_execution_snapshot(path);
+  REQUIRE(snapshot);
+  execution_transition_input t{.job            = "alpha",
+                               .role           = "builder",
+                               .before_state   = "running",
+                               .before_drifted = false,
+                               .after_state    = "done",
+                               .after_drifted  = false,
+                               .reason         = "completed"};
+  auto                       completed = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
+  INFO((completed.has_value() ? -1 : static_cast<int>(completed.error().code)));
+  REQUIRE(completed);
+  auto after = read_execution_snapshot(path);
+  INFO((after.has_value() ? -1 : static_cast<int>(after.error().code)));
+  REQUIRE(after);
+  REQUIRE(after->completions.size() == 1);
+  REQUIRE(after->evidence.size() == 1);
+  REQUIRE(after->reservations.empty());
+  auto authorization = authorize_run_token(path, *claim.token);
+  REQUIRE_FALSE(authorization);
+  REQUIRE(authorization.error().state == "completed");
+}

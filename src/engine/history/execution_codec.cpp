@@ -39,7 +39,14 @@ constexpr std::array<std::string_view, 16> transition_reasons{"activated",
                                                               "retired",
                                                               "recreated",
                                                               "drift_cleared"};
-constexpr std::array<std::string_view, 4>  payload_operations{"load", "activate", "claim", "takeover"};
+constexpr std::array<std::string_view, 7>  payload_operations{"load",    "activate", "claim",        "takeover",
+                                                              "verdict", "check",    "check-recover"};
+// R18-2 and EX-8 row "Verdict file (R18)".
+constexpr std::size_t verdict_targets_ceiling       = 256;
+constexpr std::size_t verdict_findings_ceiling      = 256;
+constexpr std::size_t verdict_finding_bytes_ceiling = 4096;
+constexpr std::size_t verdict_summary_bytes_ceiling = 16384;
+constexpr std::size_t verdict_path_bytes_ceiling    = 4096;
 
 [[noreturn]] void invalid() {
   throw execution_codec_error{execution_codec_code::invalid, {}, 0};
@@ -131,7 +138,8 @@ bool strictly_increasing(const std::vector<std::string>& items) {
 
 bool known_codec(std::string_view codec) {
   return codec == codec_dispatch_manifest_v1 || codec == codec_work_exec_v1 || codec == codec_driver_provenance_v1 ||
-         codec == codec_role_structure_v1;
+         codec == codec_role_structure_v1 || codec == codec_verdict_v1 || codec == codec_check_definition_v1 ||
+         codec == codec_output_vector_v1 || codec == codec_check_observation_v1 || codec == codec_boundary_diff_v1;
 }
 
 // ---- value construction --------------------------------------------------------------------------------------------
@@ -298,6 +306,18 @@ void validate_references(std::string_view event_type, const std::map<std::string
   } else if (event_type == "run_taken_over") {
     required           = {"run", "previous_run", "dispatch", "packet", "manifest", "work"};
     provenance_allowed = true;
+  } else if (event_type == "check_reserved") {
+    required           = {"reservation", "run", "dispatch"};
+    provenance_allowed = true;
+  } else if (event_type == "check_recorded") {
+    required = {"reservation", "observation"};
+    if (refs.contains("completion"))
+      required.push_back("completion");
+  } else if (event_type == "check_interrupted") {
+    required = {"reservation"};
+  } else if (event_type == "verdict_recorded") {
+    // R18-4: value record id, runs.id and verdicts.id; a verdict attaches no provenance (P2-4).
+    required = {"body", "run", "verdict"};
   } else {
     invalid();
   }
@@ -320,7 +340,10 @@ void validate_payload(std::string_view event_type, const event_payload_v2& p) {
   // EX-4 event payload and D101: the event reason is the reason of transition ordinal 1, or empty when the event has none.
   // Only a load event can carry no transition (a noop, or a first acceptance with no active job); every other event
   // carries a transition reason.
-  const bool empty_reason_allowed = (event_type == "load_noop" || event_type == "declaration_accepted") && p.reason.empty();
+  const bool empty_reason_allowed =
+      (event_type == "load_noop" || event_type == "declaration_accepted" || event_type == "check_reserved" ||
+       event_type == "check_recorded" || event_type == "check_interrupted") &&
+      p.reason.empty();
   if (!empty_reason_allowed && !one_of(p.reason, transition_reasons))
     invalid();
   validate_references(event_type, p.references);
@@ -725,6 +748,455 @@ activate_result_v1 activate_from(const value& v) {
   return r;
 }
 
+// ---- verdict documents (R18-2) -----------------------------------------------------------------------------------
+
+// A field-table failure, thrown inside the verdict checks and returned as verdict_violation at the boundary.
+struct verdict_failure {
+  std::string field;
+  std::string message;
+};
+
+[[noreturn]] void violate(std::string field, std::string_view message) {
+  throw verdict_failure{std::move(field), std::string(message)};
+}
+
+std::string at(std::string_view base, std::string_view key) {
+  std::string out(base);
+  out += '.';
+  out += key;
+  return out;
+}
+
+std::string at(std::string_view base, std::size_t index) {
+  std::string out(base);
+  out += std::format(".{}", index);
+  return out;
+}
+
+// Finding identifier grammar [A-Za-z0-9_.:-]{1,128}.
+bool finding_identifier(std::string_view s) {
+  return request_token(s);
+}
+
+// Portable source path: the declaration path segment rules with the R18-2 length of 1 to 4096 bytes.
+bool verdict_source_path(std::string_view p) {
+  if (p.empty() || p.size() > verdict_path_bytes_ceiling || p.back() == '/')
+    return false;
+  while (true) {
+    const auto end  = p.find('/');
+    const auto part = p.substr(0, end);
+    if (part.empty() || part.size() > 128 || part == "." || part == "..")
+      return false;
+    if (part.size() == 4 && part[0] == '.' && (part[1] == 'g' || part[1] == 'G') && (part[2] == 'i' || part[2] == 'I') &&
+        (part[3] == 't' || part[3] == 'T'))
+      return false;
+    for (char c : part)
+      if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_' || c == '.' || c == '-'))
+        return false;
+    if (end == std::string_view::npos)
+      return true;
+    p.remove_prefix(end + 1);
+  }
+}
+
+// Unknown keys first (sorted, the first wins), then missing required keys in the listed order.
+void verdict_keys(const value& v, std::string_view field, std::initializer_list<std::string_view> required,
+                  std::initializer_list<std::string_view> optional) {
+  for (const auto& entry : v.fields) {
+    const bool known = std::ranges::find(required, std::string_view(entry.first)) != required.end() ||
+                       std::ranges::find(optional, std::string_view(entry.first)) != optional.end();
+    if (!known)
+      violate(at(field, entry.first), "Unknown field");
+  }
+  for (std::string_view key : required)
+    if (!v.fields.contains(std::string(key)))
+      violate(at(field, key), "Required field");
+}
+
+const value& verdict_child(const value& v, std::string_view key) {
+  const auto& p = v.fields.at(std::string(key));
+  if (!p)
+    invalid();
+  return *p;
+}
+
+const value* verdict_optional(const value& v, std::string_view key) {
+  auto it = v.fields.find(std::string(key));
+  if (it == v.fields.end())
+    return nullptr;
+  if (!it->second)
+    invalid();
+  return it->second.get();
+}
+
+std::string verdict_identifier(const value& v, const std::string& field) {
+  if (v.kind != value_kind::string || !identifier(v.string))
+    violate(field, "Invalid ID");
+  return v.string;
+}
+
+std::string verdict_digest(const value& v, const std::string& field) {
+  if (v.kind != value_kind::string || !fingerprint_text(v.string))
+    violate(field, "Malformed output digest");
+  return v.string;
+}
+
+std::string verdict_string(const value& v, const std::string& field, std::size_t minimum, std::size_t maximum) {
+  if (v.kind != value_kind::string || v.string.size() < minimum || v.string.size() > maximum || !valid_text(v.string))
+    violate(field, "Invalid string");
+  return v.string;
+}
+
+const std::vector<value_ptr>& verdict_list(const value& v, const std::string& field) {
+  if (v.kind != value_kind::list)
+    violate(field, "Expected list");
+  return v.items;
+}
+
+const value& verdict_record(const value_ptr& p, const std::string& field) {
+  if (!p)
+    invalid();
+  if (p->kind != value_kind::record)
+    violate(field, "Expected object");
+  return *p;
+}
+
+verdict_target verdict_target_from(const value_ptr& item, const std::string& field) {
+  const auto& v = verdict_record(item, field);
+  verdict_keys(v, field, {"work", "output", "work_fp"}, {});
+  verdict_target t;
+  t.work    = verdict_identifier(verdict_child(v, "work"), at(field, "work"));
+  t.output  = verdict_digest(verdict_child(v, "output"), at(field, "output"));
+  t.work_fp = verdict_digest(verdict_child(v, "work_fp"), at(field, "work_fp"));
+  return t;
+}
+
+verdict_finding verdict_finding_from(const value_ptr& item, const std::string& field, const std::set<std::string>& works) {
+  const auto& v = verdict_record(item, field);
+  verdict_keys(v, field, {"id", "severity", "work", "text"}, {"path", "line", "prescription"});
+  verdict_finding f;
+  const auto&     id = verdict_child(v, "id");
+  if (id.kind != value_kind::string || !finding_identifier(id.string))
+    violate(at(field, "id"), "Invalid ID");
+  f.id                 = id.string;
+  const auto& severity = verdict_child(v, "severity");
+  if (severity.kind != value_kind::string ||
+      (severity.string != "must" && severity.string != "should" && severity.string != "note"))
+    violate(at(field, "severity"), "Invalid enum value");
+  f.severity = severity.string;
+  f.work     = verdict_identifier(verdict_child(v, "work"), at(field, "work"));
+  if (!works.contains(f.work))
+    violate(at(field, "work"), "Invalid enum value");
+  if (const auto* path = verdict_optional(v, "path")) {
+    if (path->kind != value_kind::string || !verdict_source_path(path->string))
+      violate(at(field, "path"), "Invalid portable path");
+    f.path = path->string;
+  }
+  if (const auto* line = verdict_optional(v, "line")) {
+    if (line->kind != value_kind::integer || line->integer < 1 || static_cast<std::uint64_t>(line->integer) > int32_maximum)
+      violate(at(field, "line"), "Integer out of range");
+    if (!f.path)
+      violate(at(field, "path"), "Required field");
+    f.line = line->integer;
+  }
+  if (const auto* prescription = verdict_optional(v, "prescription"))
+    f.prescription = verdict_identifier(*prescription, at(field, "prescription"));
+  f.text = verdict_string(verdict_child(v, "text"), at(field, "text"), 1, verdict_finding_bytes_ceiling);
+  return f;
+}
+
+// R18-2 step 5. Key order: version, targets, policy, decision, findings, repair, summary, authority.
+verdict_v1 verdict_document(const value_ptr& document) {
+  const std::string root = "verdict";
+  const auto&       v    = verdict_record(document, root);
+  verdict_keys(v, root, {"version", "targets", "policy", "decision", "findings", "repair", "summary"}, {"authority"});
+  const auto& version = verdict_child(v, "version");
+  if (version.kind != value_kind::integer)
+    violate(at(root, "version"), "Expected version integer");
+  if (version.integer != 1)
+    violate(at(root, "version"), "Unsupported schema version");
+  verdict_v1  out;
+  const auto  targets_field = at(root, "targets");
+  const auto& targets       = verdict_list(verdict_child(v, "targets"), targets_field);
+  if (targets.empty())
+    violate(targets_field, "List is too short");
+  if (targets.size() > verdict_targets_ceiling)
+    violate(targets_field, "Expected list");
+  std::set<std::string> works;
+  for (std::size_t i = 0; i < targets.size(); ++i) {
+    const auto field = at(targets_field, i);
+    auto       t     = verdict_target_from(targets[i], field);
+    if (i > 0 && !(out.targets.back().work < t.work))
+      violate(at(field, "work"), "Duplicate value");
+    works.insert(t.work);
+    out.targets.push_back(std::move(t));
+  }
+  out.policy           = verdict_digest(verdict_child(v, "policy"), at(root, "policy"));
+  const auto& decision = verdict_child(v, "decision");
+  if (decision.kind != value_kind::string || (decision.string != "approve" && decision.string != "reject"))
+    violate(at(root, "decision"), "Invalid enum value");
+  out.decision                         = decision.string;
+  const auto            findings_field = at(root, "findings");
+  const auto&           findings       = verdict_list(verdict_child(v, "findings"), findings_field);
+  std::set<std::string> ids;
+  for (std::size_t i = 0; i < findings.size(); ++i) {
+    const auto field = at(findings_field, i);
+    auto       f     = verdict_finding_from(findings[i], field, works);
+    if (!ids.insert(f.id).second)
+      violate(at(field, "id"), "Duplicate value");
+    out.findings.push_back(std::move(f));
+  }
+  const auto  repair_field = at(root, "repair");
+  const auto& repair       = verdict_list(verdict_child(v, "repair"), repair_field);
+  for (std::size_t i = 0; i < repair.size(); ++i) {
+    const auto field = at(repair_field, i);
+    if (!repair[i])
+      invalid();
+    auto role = verdict_identifier(*repair[i], field);
+    if (i > 0 && !(out.repair.back() < role))
+      violate(field, "Duplicate value");
+    out.repair.push_back(std::move(role));
+  }
+  out.summary = verdict_string(verdict_child(v, "summary"), at(root, "summary"), 0, verdict_summary_bytes_ceiling);
+  if (const auto* authority = verdict_optional(v, "authority")) {
+    if (authority->kind != value_kind::string || !valid_text(authority->string))
+      violate(at(root, "authority"), "Invalid string");
+    out.authority = authority->string;
+  }
+  return out;
+}
+
+// R18-2 step 4, in the order findings count, finding text, summary. Only applies where the shape is as expected.
+void verdict_bounds(const value_ptr& document) {
+  if (!document || document->kind != value_kind::record)
+    return;
+  const auto findings = document->fields.find("findings");
+  if (findings != document->fields.end() && findings->second && findings->second->kind == value_kind::list) {
+    if (findings->second->items.size() > verdict_findings_ceiling)
+      exceeded("verdict_findings", verdict_findings_ceiling);
+    for (const auto& item : findings->second->items) {
+      if (!item || item->kind != value_kind::record)
+        continue;
+      const auto text = item->fields.find("text");
+      if (text != item->fields.end() && text->second && text->second->kind == value_kind::string &&
+          text->second->string.size() > verdict_finding_bytes_ceiling)
+        exceeded("verdict_finding_bytes", verdict_finding_bytes_ceiling);
+    }
+  }
+  const auto summary = document->fields.find("summary");
+  if (summary != document->fields.end() && summary->second && summary->second->kind == value_kind::string &&
+      summary->second->string.size() > verdict_summary_bytes_ceiling)
+    exceeded("verdict_summary_bytes", verdict_summary_bytes_ceiling);
+}
+
+void verdict_decision(const verdict_v1& verdict) {
+  if (verdict.decision != "approve")
+    return;
+  if (!verdict.repair.empty() ||
+      std::ranges::any_of(verdict.findings, [](const verdict_finding& f) { return f.severity == "must"; }))
+    violate("verdict.decision", "Invalid enum value");
+}
+
+value_ptr verdict_structure(const verdict_v1& verdict) {
+  std::vector<value_ptr> targets;
+  targets.reserve(verdict.targets.size());
+  for (const auto& t : verdict.targets)
+    targets.push_back(
+        make_record({{"work", make_text(t.work)}, {"output", make_text(t.output)}, {"work_fp", make_text(t.work_fp)}}));
+  std::vector<value_ptr> findings;
+  findings.reserve(verdict.findings.size());
+  for (const auto& f : verdict.findings) {
+    std::map<std::string, value_ptr> fields{
+        {"id", make_text(f.id)}, {"severity", make_text(f.severity)}, {"work", make_text(f.work)}, {"text", make_text(f.text)}};
+    if (f.path)
+      fields["path"] = make_text(*f.path);
+    if (f.line)
+      fields["line"] = make_integer(*f.line);
+    if (f.prescription)
+      fields["prescription"] = make_text(*f.prescription);
+    findings.push_back(make_record(std::move(fields)));
+  }
+  return make_record({{"version", make_integer(1)},
+                      {"targets", make_list(std::move(targets))},
+                      {"policy", make_text(verdict.policy)},
+                      {"decision", make_text(verdict.decision)},
+                      {"findings", make_list(std::move(findings))},
+                      {"repair", make_texts(verdict.repair)},
+                      {"summary", make_text(verdict.summary)},
+                      {"authority", make_text(verdict.authority)}});
+}
+
+// Every stored or encoded verdict is normalized: all R18-2 rules hold and authority is reviewer_role_v1.
+verdict_v1 normalized_verdict(const value_ptr& structure) {
+  verdict_bounds(structure);
+  try {
+    auto typed = verdict_document(structure);
+    if (typed.authority != verdict_authority_reviewer)
+      invalid();
+    verdict_decision(typed);
+    return typed;
+  } catch (const verdict_failure&) {
+    invalid();
+  }
+}
+
+// ---- verdict saved result ------------------------------------------------------------------------------------------
+
+bool nonnegative_decimal(std::string_view s) {
+  return s == "0" || positive_decimal(s);
+}
+
+// Canonical decimals order numerically by length, then bytes.
+bool decimal_less(std::string_view a, std::string_view b) {
+  return a.size() != b.size() ? a.size() < b.size() : a < b;
+}
+
+void validate_verdict_result(const verdict_result_v1& r) {
+  if (!ledger_text(r.ledger) || !request_token(r.request_id))
+    invalid();
+  if (!identifier(r.job) || !identifier(r.role))
+    invalid();
+  if (!positive_decimal(r.revision) || !positive_decimal(r.run) || !positive_decimal(r.event) || !positive_decimal(r.verdict_id))
+    invalid();
+  if (r.applicability != "current" && r.applicability != "historical")
+    invalid();
+  if (r.decision != "approve" && r.decision != "reject")
+    invalid();
+  // An admitted rejection is current, has repairs, and only it has repairs.
+  if (r.admitted != !r.repairs.empty())
+    invalid();
+  if (r.admitted && (r.decision != "reject" || r.applicability != "current"))
+    invalid();
+  std::vector<std::string> names;
+  for (const auto& repair : r.repairs) {
+    if (!identifier(repair.role) || !positive_decimal(repair.generation) || !positive_decimal(repair.revision))
+      invalid();
+    names.push_back(repair.role);
+  }
+  if (!strictly_increasing(names))
+    invalid();
+  if (!nonnegative_decimal(r.count) || !nonnegative_decimal(r.max_rounds))
+    invalid();
+  const std::string* previous = nullptr;
+  for (const auto& blocker : r.opened) {
+    if (!positive_decimal(blocker.id) || (blocker.kind != "max_rounds" && blocker.kind != "unowned_rejection"))
+      invalid();
+    if (previous && !decimal_less(*previous, blocker.id))
+      invalid();
+    previous = &blocker.id;
+  }
+  previous = nullptr;
+  for (const auto& id : r.cleared) {
+    if (!positive_decimal(id) || (previous && !decimal_less(*previous, id)))
+      invalid();
+    previous = &id;
+  }
+  names.clear();
+  for (const auto& role : r.roles) {
+    if (!identifier(role.role) || !one_of(role.state, role_states) || (role.drifted && role.state != "running"))
+      invalid();
+    names.push_back(role.role);
+  }
+  if (!strictly_increasing(names))
+    invalid();
+}
+
+value_ptr make_boolean(bool b) {
+  auto p     = make_node(value_kind::boolean);
+  p->boolean = b;
+  return p;
+}
+
+value_ptr verdict_result_value(const verdict_result_v1& r) {
+  std::vector<value_ptr> repairs;
+  for (const auto& repair : r.repairs)
+    repairs.push_back(make_record({{"role", make_text(repair.role)},
+                                   {"generation", make_text(repair.generation)},
+                                   {"revision", make_text(repair.revision)}}));
+  std::vector<value_ptr> opened;
+  for (const auto& blocker : r.opened)
+    opened.push_back(make_record({{"id", make_text(blocker.id)}, {"kind", make_text(blocker.kind)}}));
+  std::vector<value_ptr> roles;
+  for (const auto& role : r.roles)
+    roles.push_back(
+        make_record({{"role", make_text(role.role)}, {"state", make_text(role.state)}, {"drifted", make_boolean(role.drifted)}}));
+  return make_record({{"version", make_integer(1)},
+                      {"kind", make_text("verdict")},
+                      {"ledger", make_text(r.ledger)},
+                      {"request_id", make_text(r.request_id)},
+                      {"job", make_text(r.job)},
+                      {"role", make_text(r.role)},
+                      {"revision", make_text(r.revision)},
+                      {"run", make_text(r.run)},
+                      {"event", make_text(r.event)},
+                      {"verdict", make_record({{"id", make_text(r.verdict_id)},
+                                               {"applicability", make_text(r.applicability)},
+                                               {"decision", make_text(r.decision)},
+                                               {"admitted", make_boolean(r.admitted)}})},
+                      {"repairs", make_list(std::move(repairs))},
+                      {"review", make_record({{"count", make_text(r.count)}, {"max_rounds", make_text(r.max_rounds)}})},
+                      {"blockers", make_record({{"opened", make_list(std::move(opened))}, {"cleared", make_texts(r.cleared)}})},
+                      {"roles", make_list(std::move(roles))}});
+}
+
+bool boolean_field(const value& v, std::string_view key) {
+  const auto& f = child(v, key);
+  if (f.kind != value_kind::boolean)
+    invalid();
+  return f.boolean;
+}
+
+verdict_result_v1 verdict_result_from(const value& v) {
+  if (!exact_keys(v, {"version", "kind", "ledger", "request_id", "job", "role", "revision", "run", "event", "verdict", "repairs",
+                      "review", "blockers", "roles"}))
+    invalid();
+  if (integer_field(v, "version") != 1 || text_field(v, "kind") != "verdict")
+    invalid();
+  verdict_result_v1 r;
+  r.ledger            = text_field(v, "ledger");
+  r.request_id        = text_field(v, "request_id");
+  r.job               = text_field(v, "job");
+  r.role              = text_field(v, "role");
+  r.revision          = text_field(v, "revision");
+  r.run               = text_field(v, "run");
+  r.event             = text_field(v, "event");
+  const auto& verdict = object_field(v, "verdict");
+  if (!exact_keys(verdict, {"id", "applicability", "decision", "admitted"}))
+    invalid();
+  r.verdict_id    = text_field(verdict, "id");
+  r.applicability = text_field(verdict, "applicability");
+  r.decision      = text_field(verdict, "decision");
+  r.admitted      = boolean_field(verdict, "admitted");
+  for (const auto& item : list_field(v, "repairs")) {
+    if (!item || !exact_keys(*item, {"role", "generation", "revision"}))
+      invalid();
+    r.repairs.push_back(
+        verdict_result_repair{text_field(*item, "role"), text_field(*item, "generation"), text_field(*item, "revision")});
+  }
+  const auto& review = object_field(v, "review");
+  if (!exact_keys(review, {"count", "max_rounds"}))
+    invalid();
+  r.count              = text_field(review, "count");
+  r.max_rounds         = text_field(review, "max_rounds");
+  const auto& blockers = object_field(v, "blockers");
+  if (!exact_keys(blockers, {"opened", "cleared"}))
+    invalid();
+  for (const auto& item : list_field(blockers, "opened")) {
+    if (!item || !exact_keys(*item, {"id", "kind"}))
+      invalid();
+    r.opened.push_back(verdict_result_blocker{text_field(*item, "id"), text_field(*item, "kind")});
+  }
+  r.cleared = texts_field(blockers, "cleared");
+  for (const auto& item : list_field(v, "roles")) {
+    if (!item || !exact_keys(*item, {"role", "state", "drifted"}))
+      invalid();
+    r.roles.push_back(
+        verdict_result_role{text_field(*item, "role"), text_field(*item, "state"), boolean_field(*item, "drifted")});
+  }
+  validate_verdict_result(r);
+  return r;
+}
+
 } // namespace
 
 std::expected<std::string, execution_codec_error> encode_execution_value_record(std::string_view codec,
@@ -928,6 +1400,66 @@ std::expected<activate_result_v1, execution_codec_error> decode_activate_result_
   return guarded<activate_result_v1>([&]() -> activate_result_v1 { return activate_from(*canonical_json(bytes)); });
 }
 
+std::expected<void, execution_codec_error> check_verdict_bounds(const value_ptr& document) {
+  return guarded<void>([&] { verdict_bounds(document); });
+}
+
+std::expected<verdict_v1, verdict_violation> verdict_from_value(const value_ptr& document) {
+  try {
+    return verdict_document(document);
+  } catch (const verdict_failure& failure) {
+    return std::unexpected(verdict_violation{failure.field, failure.message});
+  } catch (const execution_codec_error&) {
+    // A null child is not a JSON shape; report it at the root.
+    return std::unexpected(verdict_violation{"verdict", "Expected object"});
+  }
+}
+
+std::expected<void, verdict_violation> check_verdict_decision(const verdict_v1& verdict) {
+  try {
+    verdict_decision(verdict);
+    return {};
+  } catch (const verdict_failure& failure) {
+    return std::unexpected(verdict_violation{failure.field, failure.message});
+  }
+}
+
+std::expected<value_ptr, execution_codec_error> verdict_value(const verdict_v1& verdict) {
+  return guarded<value_ptr>([&]() -> value_ptr {
+    auto structure = verdict_structure(verdict);
+    static_cast<void>(normalized_verdict(structure));
+    return structure;
+  });
+}
+
+std::expected<std::string, execution_codec_error> encode_verdict_v1(const verdict_v1& verdict) {
+  return guarded<std::string>([&]() -> std::string {
+    auto structure = verdict_structure(verdict);
+    static_cast<void>(normalized_verdict(structure));
+    return canonical_text(structure);
+  });
+}
+
+std::expected<verdict_v1, execution_codec_error> decode_verdict_v1(std::string_view bytes) {
+  return guarded<verdict_v1>([&]() -> verdict_v1 {
+    auto structure = canonical_value(bytes);
+    if (!structure->fields.contains("authority"))
+      invalid();
+    return normalized_verdict(structure);
+  });
+}
+
+std::expected<std::string, execution_codec_error> encode_verdict_result_v1(const verdict_result_v1& result) {
+  return guarded<std::string>([&]() -> std::string {
+    validate_verdict_result(result);
+    return json_text(verdict_result_value(result));
+  });
+}
+
+std::expected<verdict_result_v1, execution_codec_error> decode_verdict_result_v1(std::string_view bytes) {
+  return guarded<verdict_result_v1>([&]() -> verdict_result_v1 { return verdict_result_from(*canonical_json(bytes)); });
+}
+
 std::expected<value_ptr, execution_codec_error> assemble_packet_value(const packet_fields& fields) {
   return guarded<value_ptr>([&]() -> value_ptr {
     if (!strictly_increasing(fields.work))
@@ -941,6 +1473,88 @@ std::expected<value_ptr, execution_codec_error> assemble_packet_value(const pack
                         {"kind", make_text(fields.kind)},
                         {"work", make_texts(fields.work)},
                         {"markdown", make_text(fields.markdown)}});
+  });
+}
+
+namespace {
+void validate_check_value(std::string_view codec, const value_ptr& doc) {
+  if (!doc || doc->kind != value_kind::record)
+    invalid();
+  const auto version = doc->fields.find("version");
+  if (version == doc->fields.end() || !version->second || version->second->kind != value_kind::integer ||
+      version->second->integer != 1)
+    invalid();
+  auto list = [&](std::string_view key) {
+    auto it = doc->fields.find(std::string(key));
+    if (it == doc->fields.end() || !it->second || it->second->kind != value_kind::list)
+      invalid();
+    return it->second;
+  };
+  if (codec == codec_output_vector_v1) {
+    if (!exact_keys(*doc, {"version", "targets"}))
+      invalid();
+    std::string previous;
+    for (const auto& item : list("targets")->items) {
+      if (!item || !exact_keys(*item, {"work", "output"}))
+        invalid();
+      auto work = text_field(*item, "work"), output = text_field(*item, "output");
+      if (!identifier(work) || (!previous.empty() && previous >= work) || output.size() != 41 || !output.starts_with("xxh3_128:"))
+        invalid();
+      previous = work;
+    }
+  } else if (codec == codec_check_observation_v1) {
+    if (!exact_keys(*doc, {"version", "root", "base", "observation", "units", "contracts"}))
+      invalid();
+    (void)text_field(*doc, "root");
+    (void)text_field(*doc, "base");
+    (void)text_field(*doc, "observation");
+    (void)list("units");
+    (void)list("contracts");
+  } else if (codec == codec_boundary_diff_v1) {
+    if (!exact_keys(*doc, {"version", "changes"}))
+      invalid();
+    for (const auto& item : list("changes")->items) {
+      if (!item || !exact_keys(*item, {"path", "change", "class"}))
+        invalid();
+      (void)text_field(*item, "path");
+      auto change = text_field(*item, "change"), classification = text_field(*item, "class");
+      if (change != "added" && change != "deleted" && change != "modified" && change != "mode")
+        invalid();
+      if (classification != "own" && classification != "producer" && classification != "frozen" && classification != "outside")
+        invalid();
+    }
+  } else if (codec == codec_check_definition_v1) {
+    (void)text_field(*doc, "work");
+    (void)text_field(*doc, "check");
+    auto gate = text_field(*doc, "gate");
+    if (gate != "registry" && gate != "boundary_v1")
+      invalid();
+    (void)list("inputs");
+    if (gate == "registry") {
+      (void)list("command");
+      (void)list("environment");
+      (void)list("reserved");
+    } else {
+      (void)list("owned");
+      (void)list("frozen");
+      (void)list("excluded");
+      (void)list("producers");
+    }
+  } else
+    invalid();
+}
+} // namespace
+std::expected<std::string, execution_codec_error> encode_check_value(std::string_view codec, const value_ptr& doc) {
+  return guarded<std::string>([&] {
+    validate_check_value(codec, doc);
+    return canonical_text(doc);
+  });
+}
+std::expected<value_ptr, execution_codec_error> decode_check_value(std::string_view codec, std::string_view bytes) {
+  return guarded<value_ptr>([&] {
+    auto doc = canonical_value(bytes);
+    validate_check_value(codec, doc);
+    return doc;
   });
 }
 

@@ -9,6 +9,7 @@ module planar.engine.ledger.execution;
 import std;
 import planar.engine.canonical;
 import planar.engine.hash;
+import planar.engine.json_codec;
 import planar.engine.value;
 import planar.engine.history.record;
 import planar.engine.history.request_v2;
@@ -447,9 +448,8 @@ struct ledger_rows {
 // Table loading. Every loader reads one complete table in its stored order and rejects impossible column values.
 
 checked load_reserved_empty(connection& db) {
-  constexpr std::array<std::string_view, 10> reserved{"checkpoints",       "reservations", "evidence", "completions",
-                                                      "publications",      "verdicts",     "repairs",  "blockers",
-                                                      "reservation_state", "blocker_state"};
+  // R18: verdicts, repairs, blockers and blocker_state are read by execution_review.cpp; completions too (DRAFT-STUB R17-C).
+  constexpr std::array<std::string_view, 1> reserved{"checkpoints"};
   for (auto table : reserved) {
     const auto sql  = std::format("SELECT COUNT(*) FROM {}", table);
     bool       any  = false;
@@ -852,6 +852,12 @@ std::optional<std::string> operation_of(std::string_view type) {
     return "claim";
   if (type == "run_taken_over")
     return "takeover";
+  if (type == "check_reserved" || type == "check_recorded")
+    return "check";
+  if (type == "check_interrupted")
+    return "check-recover";
+  if (type == "verdict_recorded") // R18:
+    return "verdict";
   return std::nullopt;
 }
 
@@ -866,12 +872,19 @@ std::optional<std::string> outcome_of(std::string_view type) {
     return "claimed";
   if (type == "run_taken_over")
     return "taken_over";
+  if (type == "check_reserved" || type == "check_recorded")
+    return "recorded";
+  if (type == "check_interrupted")
+    return "interrupted";
+  if (type == "verdict_recorded") // R18:
+    return "recorded";
   return std::nullopt;
 }
 
 // Event types whose committed change increments fact_version of every role it transitions (EX-3 fact versions).
 bool bumps_fact(std::string_view type) {
-  return type == "declaration_accepted" || type == "job_activated" || type == "run_taken_over";
+  return type == "declaration_accepted" || type == "job_activated" || type == "run_taken_over" || type == "check_recorded" ||
+         type == "verdict_recorded"; // R18: verdict_recorded is a bumping event (R18-4).
 }
 
 // Typed event columns per EX-4: job, role, generation and run are present exactly as the event type requires.
@@ -884,7 +897,8 @@ bool typed_columns_ok(const event_entry& event) {
     return !job && !role && !generation && !run;
   if (event.type == "job_activated")
     return job && !role && !generation && !run;
-  if (event.type == "run_claimed" || event.type == "run_taken_over")
+  if (event.type == "run_claimed" || event.type == "run_taken_over" || event.type == "verdict_recorded" ||
+      event.type == "check_reserved" || event.type == "check_recorded" || event.type == "check_interrupted") // R18:
     return job && role && generation && run;
   return false;
 }
@@ -999,6 +1013,27 @@ checked apply_run_event(const ledger_rows& rows, const event_entry& event, const
   return {};
 }
 
+// R18: a verdict_recorded event completes the reviewer's active run (N11): the run is the role's active run of the
+// event's generation, ordinal 1 is that role leaving running, and the payload names the run. The row-level checks of
+// invariants 21 to 27 are in execution_review.cpp.
+checked apply_verdict_event(const event_entry& event, const hist::event_payload_v2& payload,
+                            const std::vector<hist::transition_row>& transitions, const replay_state& state) {
+  const auto key    = role_key{*event.job, *event.role};
+  const auto active = state.active_runs.find(key);
+  if (active == state.active_runs.end() || active->second != *event.run)
+    return std::unexpected(corrupt());
+  const auto run = state.runs.find(*event.run);
+  if (run == state.runs.end() || run->second.state != "active" || run->second.generation != *event.generation)
+    return std::unexpected(corrupt());
+  if (transitions.empty() || transitions[0].job != *event.job || transitions[0].role != *event.role ||
+      transitions[0].generation_id != *event.generation || !transitions[0].before_state ||
+      *transitions[0].before_state != "running" || transitions[0].after_state == "running")
+    return std::unexpected(corrupt());
+  if (ref_of(payload.references, "run") != std::to_string(*event.run))
+    return std::unexpected(corrupt());
+  return {};
+}
+
 // Apply the transition rows of one event to the role replay, deriving each running role's run and its fencing.
 checked apply_transitions(const ledger_rows& rows, const event_entry& event, const std::vector<hist::transition_row>& transitions,
                           replay_state& state) {
@@ -1039,7 +1074,10 @@ checked apply_transitions(const ledger_rows& rows, const event_entry& event, con
       auto fenced = state.runs.find(active->second);
       if (fenced == state.runs.end() || fenced->second.state != "active")
         return std::unexpected(corrupt());
-      fenced->second.state    = "fenced";
+      // R18: the reviewer run of a verdict completes (N11) instead of being fenced.
+      const bool completes    = (event.type == "verdict_recorded" || event.type == "check_recorded") && transition.ordinal == 1 &&
+                                transition.after_state == "done";
+      fenced->second.state    = completes ? "completed" : "fenced";
       fenced->second.last_seq = event.seq;
       state.active_runs.erase(active);
     }
@@ -1068,7 +1106,9 @@ checked apply_transitions(const ledger_rows& rows, const event_entry& event, con
 // Requests of one event: the bijection, operation, outcome, revision, body, result and attachment.
 checked check_request(const ledger_rows& rows, const execution_metadata& metadata, const event_entry& event,
                       const hist::event_payload_v2& payload, const request_entry& request, const replay_state& state) {
-  if (request.operation != operation_of(event.type).value_or("") || request.outcome != outcome_of(event.type).value_or("") ||
+  if (request.operation != operation_of(event.type).value_or("") ||
+      (request.outcome != outcome_of(event.type).value_or("") &&
+       !(event.type == "check_reserved" && request.outcome == "interrupted")) ||
       request.revision != *event.revision)
     return std::unexpected(corrupt());
   const bool load = request.operation == "load";
@@ -1116,6 +1156,23 @@ checked check_request(const ledger_rows& rows, const execution_metadata& metadat
         saved->event != std::to_string(event.seq) || saved->previous_job != payload.before.active_job)
       return std::unexpected(corrupt());
     if (request.attachment)
+      return std::unexpected(corrupt());
+    return {};
+  }
+  if (event.type == "check_reserved" || event.type == "check_interrupted") {
+    auto result = codec_decode(request.result);
+    if (!result || !*result || (*result)->kind != value_kind::record || request.attachment)
+      return std::unexpected(corrupt());
+    const auto kind = (*result)->fields.find("kind");
+    if (kind == (*result)->fields.end() || !kind->second || kind->second->string != "check")
+      return std::unexpected(corrupt());
+    return {};
+  }
+  if (event.type == "verdict_recorded") { // R18: the saved verdict_response_v1 names this request, run and event.
+    auto saved = hist::decode_verdict_result_v1(request.result);
+    if (!saved || saved->ledger != metadata.identity || saved->request_id != request.request_id || saved->job != *event.job ||
+        saved->role != *event.role || saved->revision != std::to_string(*event.revision) ||
+        saved->run != std::to_string(*event.run) || saved->event != std::to_string(event.seq) || request.attachment)
       return std::unexpected(corrupt());
     return {};
   }
@@ -1175,7 +1232,8 @@ checked replay_events(const ledger_rows& rows, const execution_metadata& metadat
     if (!hist::validate_transition_sequence(transitions) || payload->reason != hist::event_level_reason(transitions))
       return std::unexpected(corrupt());
     const auto& request_id = rows.request_of_event[index];
-    if (event.request_id.has_value() != request_id.has_value() || (request_id && *request_id != *event.request_id))
+    if (event.type != "check_reserved" && event.type != "check_recorded" &&
+        (event.request_id.has_value() != request_id.has_value() || (request_id && *request_id != *event.request_id)))
       return std::unexpected(corrupt());
     const request_entry* request = request_id ? &rows.requests.at(*request_id) : nullptr;
 
@@ -1212,8 +1270,20 @@ checked replay_events(const ledger_rows& rows, const execution_metadata& metadat
       if (payload->before.active_revision != payload->after.active_revision ||
           payload->before.active_job != payload->after.active_job)
         return std::unexpected(corrupt());
-      if (auto ok = apply_run_event(rows, event, *payload, transitions, state); !ok)
+      if (event.type == "check_reserved" || event.type == "check_recorded" || event.type == "check_interrupted") {
+        if (!event.request_id || (event.type != "check_recorded" && !transitions.empty()))
+          return std::unexpected(corrupt());
+        if (event.type != "check_interrupted") {
+          const auto active = state.active_runs.find({*event.job, *event.role});
+          if (active == state.active_runs.end() || active->second != *event.run)
+            return std::unexpected(corrupt());
+        }
+      } else if (event.type == "verdict_recorded") { // R18:
+        if (auto ok = apply_verdict_event(event, *payload, transitions, state); !ok)
+          return ok;
+      } else if (auto ok = apply_run_event(rows, event, *payload, transitions, state); !ok) {
         return ok;
+      }
     }
 
     if (auto ok = apply_transitions(rows, event, transitions, state); !ok)
@@ -1520,13 +1590,47 @@ value_ptr state_value(const execution_snapshot& snapshot, const std::map<std::ui
     head     = std::to_string(snapshot.revision->id);
     revision = record_node({{"id", text_node(head)}});
   }
-  const std::string activation = snapshot.activation ? std::to_string(*snapshot.activation) : "none";
-  return record_node({{"active_revision", text_node(head)},
-                      {"active_job", text_node(snapshot.active_job)},
-                      {"activation", text_node(activation)},
-                      {"revision", revision},
-                      {"roles", list_node(roles)},
-                      {"publications", list_node({})}});
+  const std::string                activation = snapshot.activation ? std::to_string(*snapshot.activation) : "none";
+  std::map<std::string, value_ptr> fields{{"active_revision", text_node(head)},  {"active_job", text_node(snapshot.active_job)},
+                                          {"activation", text_node(activation)}, {"revision", revision},
+                                          {"roles", list_node(roles)},           {"publications", list_node({})}};
+  std::vector<value_ptr>           reservations, evidence, observed, publications;
+  for (const auto& r : snapshot.reservations)
+    reservations.push_back(record_node({{"id", text_node(std::to_string(r.id))},
+                                        {"run", text_node(std::to_string(r.run))},
+                                        {"request_id", text_node(r.request_id)},
+                                        {"opened_seq", text_node(std::to_string(r.opened_seq))}}));
+  for (const auto& e : snapshot.evidence)
+    evidence.push_back(record_node({{"id", text_node(std::to_string(e.id))},
+                                    {"reservation", text_node(std::to_string(e.reservation))},
+                                    {"seq", text_node(std::to_string(e.seq))},
+                                    {"work", text_node(e.work)},
+                                    {"check", text_node(e.check)},
+                                    {"outcome", text_node(e.outcome)},
+                                    {"reason", text_node(e.reason)},
+                                    {"matched", text_node(e.matched ? std::to_string(*e.matched) : "none")},
+                                    {"vector", e.vector}}));
+  for (const auto& o : snapshot.observed)
+    observed.push_back(
+        record_node({{"work", text_node(o.work)}, {"output", text_node(o.output)}, {"seq", text_node(std::to_string(o.seq))}}));
+  for (const auto& p : snapshot.publications)
+    publications.push_back(record_node({{"publication", text_node(std::to_string(p.publication))},
+                                        {"completion", text_node(std::to_string(p.completion))},
+                                        {"job", text_node(p.job)},
+                                        {"role", text_node(p.role)},
+                                        {"work", text_node(p.work)},
+                                        {"facet", text_node(p.facet)},
+                                        {"semantic", text_node(p.semantic)}}));
+  fields["publications"] = list_node(std::move(publications));
+  if (!reservations.empty())
+    fields["reservations"] = list_node(std::move(reservations));
+  if (!evidence.empty())
+    fields["evidence"] = list_node(std::move(evidence));
+  if (!observed.empty())
+    fields["observed"] = list_node(std::move(observed));
+  for (auto& [key, member] : review_state_entries(snapshot)) // R18: completions and review (DB-R16).
+    fields[key] = std::move(member);
+  return record_node(std::move(fields));
 }
 
 std::uint64_t measure_state(const execution_snapshot& snapshot, const std::map<std::uint64_t, std::uint64_t>& revisions) {
@@ -1609,6 +1713,8 @@ value_result<execution_snapshot> build_snapshot(const ledger_rows& rows, const r
 // The shared cross-row verifier (D47). It runs on an open connection inside its current transaction, reads every table
 // into rows, verifies every format3 invariant, and returns the snapshot of the rows it verified. Every violation is
 // ledger_corrupt; the commit layer maps the same check on uncommitted state to invalid_change.
+checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledger_rows& rows);
+
 value_result<execution_snapshot> verify_rows(connection& db, const execution_metadata& metadata, ledger_rows& rows) {
   if (auto reserved = load_reserved_empty(db); !reserved)
     return std::unexpected(reserved.error());
@@ -1668,8 +1774,189 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
   auto                                   snapshot = build_snapshot(rows, state, metadata, dispatch_revisions);
   if (!snapshot)
     return std::unexpected(snapshot.error());
+  if (auto review = read_review(db, *snapshot); !review) // R18: invariants 21 to 27, completions and review.
+    return std::unexpected(review.error());
+  if (auto checks = read_check_rows(db, *snapshot, rows); !checks)
+    return std::unexpected(checks.error());
   snapshot->state_bytes = measure_state(*snapshot, dispatch_revisions);
   return snapshot;
+}
+
+checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledger_rows& rows) {
+  auto value_record = [&](std::uint64_t id, std::string_view codec) -> value_result<value_ptr> {
+    auto record = rows.records.find(id);
+    if (record == rows.records.end() || record->second.value_codec != codec)
+      return std::unexpected(corrupt());
+    auto decoded = hist::decode_check_value(codec, record->second.canonical);
+    if (!decoded)
+      return std::unexpected(corrupt());
+    return *decoded;
+  };
+  auto reservations =
+      for_each(db,
+               "SELECT r.id,r.request_id,r.run_id,r.opened_seq,r.body_id,s.state,s.last_seq FROM reservations r LEFT JOIN "
+               "reservation_state s ON s.reservation_id=r.id ORDER BY r.id",
+               [&](row_reader& q) -> checked {
+                 execution_reservation r;
+                 r.id         = q.id(0);
+                 r.request_id = q.text(1);
+                 r.run        = q.id(2);
+                 r.opened_seq = q.id(3);
+                 auto body    = q.id(4);
+                 auto state   = q.text(5);
+                 auto last    = q.id(6);
+                 if (r.opened_seq > rows.events.size() || last > rows.events.size() || !rows.runs.contains(r.run) ||
+                     !rows.records.contains(body))
+                   return std::unexpected(corrupt());
+                 const auto& event = rows.events[r.opened_seq - 1];
+                 if (event.type != "check_reserved" || event.run != r.run || event.request_id != r.request_id)
+                   return std::unexpected(corrupt());
+                 const auto request = rows.requests.find(r.request_id);
+                 if (state == "open") {
+                   if (last != r.opened_seq || request != rows.requests.end())
+                     return std::unexpected(corrupt());
+                   snapshot.reservations.push_back(r);
+                 } else if (state == "completed" || state == "interrupted") {
+                   if (last <= r.opened_seq || request == rows.requests.end() || request->second.body != body ||
+                       request->second.event_seq != r.opened_seq ||
+                       rows.events[last - 1].type != (state == "completed" ? "check_recorded" : "check_interrupted"))
+                     return std::unexpected(corrupt());
+                 } else
+                   return std::unexpected(corrupt());
+                 return {};
+               });
+  if (!reservations)
+    return reservations;
+  auto count = for_each(db, "SELECT (SELECT COUNT(*) FROM reservations),(SELECT COUNT(*) FROM reservation_state)",
+                        [](row_reader& q) -> checked {
+                          if (q.number(0) != q.number(1))
+                            return std::unexpected(corrupt());
+                          return {};
+                        });
+  if (!count)
+    return count;
+  std::map<std::pair<std::string, std::string>, execution_evidence> latest;
+  auto                                                              evidence =
+      for_each(db,
+               "SELECT "
+               "e.id,e.reservation_id,e.seq,e.work,e.\"check\",e.outcome,e.reason,e.matched,e.vector_id,e.definition_id,r.run_id,"
+               "s.job,s.role,s.generation_id,e.output_id,e.output_bytes FROM evidence e LEFT JOIN reservations r ON "
+               "r.id=e.reservation_id LEFT JOIN run_state s ON s.run_id=r.run_id ORDER BY e.seq,e.id",
+               [&](row_reader& q) -> checked {
+                 execution_evidence e;
+                 e.id          = q.id(0);
+                 e.reservation = q.id(1);
+                 e.seq         = q.id(2);
+                 e.work        = q.text(3);
+                 e.check       = q.text(4);
+                 e.outcome     = q.text(5);
+                 e.reason      = q.text(6);
+                 auto matched  = q.optional_number(7);
+                 if (matched) {
+                   if (*matched < 0)
+                     return std::unexpected(corrupt());
+                   e.matched = static_cast<std::uint64_t>(*matched);
+                 }
+                 auto vector = q.id(8), definition = q.id(9), run = q.id(10);
+                 e.job           = q.text(11);
+                 e.role          = q.text(12);
+                 auto generation = q.id(13);
+                 auto output     = q.optional_id(14);
+                 auto bytes      = q.number(15);
+                 if (e.seq > rows.events.size() || rows.events[e.seq - 1].type != "check_recorded" ||
+                     rows.events[e.seq - 1].run != run || bytes < 0)
+                   return std::unexpected(corrupt());
+                 auto v = value_record(vector, hist::codec_output_vector_v1),
+                      d = value_record(definition, hist::codec_check_definition_v1);
+                 if (!v || !d)
+                   return std::unexpected(corrupt());
+                 e.vector = *v;
+                 if (output && (!rows.records.contains(*output) || rows.records.at(*output).kind != 1))
+                   return std::unexpected(corrupt());
+                 const auto role =
+                     std::ranges::find_if(snapshot.roles, [&](const auto& r) { return r.job == e.job && r.role == e.role; });
+                 if (role != snapshot.roles.end() && e.job == snapshot.active_job) {
+                   auto lineage = lineage_generations(db, role->generation_id);
+                   if (!lineage)
+                     return std::unexpected(lineage.error());
+                   if (std::ranges::find(*lineage, generation) != lineage->end())
+                     latest[{e.work, e.check}] = e;
+                 }
+                 return {};
+               });
+  if (!evidence)
+    return evidence;
+  for (auto& [key, e] : latest)
+    snapshot.evidence.push_back(std::move(e));
+  std::map<std::string, execution_observed> observed;
+  for (const auto& c : snapshot.completions)
+    for (const auto& u : c.units)
+      if (!observed.contains(u.work) || observed[u.work].seq < c.seq)
+        observed[u.work] = {u.work, u.output, c.seq};
+  // Failed and inconclusive check observations also replace the latest observed own outputs.
+  for (const auto& event : rows.events)
+    if (event.type == "check_recorded") {
+      auto payload = hist::decode_event_payload_v2(event.type, event.payload);
+      if (!payload)
+        return std::unexpected(corrupt());
+      auto id = parse_decimal(ref_of(payload->references, "observation"));
+      if (!id)
+        return std::unexpected(corrupt());
+      auto obs = value_record(*id, hist::codec_check_observation_v1);
+      if (!obs)
+        return std::unexpected(obs.error());
+      auto run = rows.runs.find(event.run.value_or(0));
+      if (run == rows.runs.end())
+        return std::unexpected(corrupt());
+      auto gen = generation_of(rows, run->second.generation);
+      if (!gen)
+        return std::unexpected(corrupt());
+      auto structure = value_of(rows, gen->structure, "role_structure_v1");
+      if (!structure)
+        return std::unexpected(corrupt());
+      auto shape = hist::decode_role_structure_v1((*structure)->canonical);
+      if (!shape)
+        return std::unexpected(corrupt());
+      for (const auto& u : (*obs)->fields.at("units")->items) {
+        if (!u || u->kind != value_kind::record || !u->fields.contains("work") || !u->fields.contains("output"))
+          return std::unexpected(corrupt());
+        auto work = u->fields.at("work")->string;
+        if (std::ranges::find(shape->work, work) != shape->work.end())
+          observed[work] = {work, u->fields.at("output")->string, event.seq};
+      }
+    }
+  for (auto& [key, o] : observed)
+    snapshot.observed.push_back(std::move(o));
+  auto publications =
+      for_each(db, "SELECT p.id,p.completion_id,p.work,p.facet,p.semantic,p.payload_id FROM publications p ORDER BY p.id",
+               [&](row_reader& q) -> checked {
+                 execution_publication p;
+                 p.publication = q.id(0);
+                 p.completion  = q.id(1);
+                 p.work        = q.text(2);
+                 p.facet       = q.text(3);
+                 auto semantic = q.blob(4);
+                 auto payload  = q.id(5);
+                 if (semantic.size() != 16 || !rows.records.contains(payload) || rows.records.at(payload).kind != 2)
+                   return std::unexpected(corrupt());
+                 p.semantic = "xxh3_128:" + hex_of(semantic);
+                 auto c     = std::ranges::find(snapshot.completions, p.completion, &execution_completion::id);
+                 if (c == snapshot.completions.end())
+                   return {};
+                 p.job      = c->job;
+                 p.role     = c->role;
+                 auto newer = std::ranges::any_of(snapshot.completions, [&](const auto& other) {
+                   return other.job == c->job && other.role == c->role && other.seq > c->seq;
+                 });
+                 if (!newer)
+                   snapshot.publications.push_back(p);
+                 return {};
+               });
+  if (!publications)
+    return publications;
+  std::ranges::sort(snapshot.publications,
+                    [](const auto& a, const auto& b) { return std::tie(a.work, a.facet) < std::tie(b.work, b.facet); });
+  return {};
 }
 
 // Open the ledger, then verify it inside one read transaction so the rows form one consistent snapshot.
@@ -1740,9 +2027,7 @@ lookup_execution_request(const std::filesystem::path& path, std::string_view req
   ledger_rows rows;
   if (auto verified = read_verified(*db, rows); !verified)
     return std::unexpected(verified.error());
-  const auto found = rows.requests.find(std::string(request_id));
-  if (found == rows.requests.end())
-    return request_lookup{request_state::unused, {}};
+  const auto  found = rows.requests.find(std::string(request_id));
   std::string frame;
   if (const auto* version_two = std::get_if<hist::request_v2>(&framing)) {
     auto encoded = hist::encode_request_v2(*version_two);
@@ -1754,6 +2039,32 @@ lookup_execution_request(const std::filesystem::path& path, std::string_view req
     if (!encoded)
       return std::unexpected(failure(execution_error_code::invalid_change));
     frame = *encoded;
+  }
+  if (found == rows.requests.end()) {
+    auto query = db->sql().prepare(
+        "SELECT r.body_id,s.state FROM reservations r JOIN reservation_state s ON s.reservation_id=r.id WHERE r.request_id=?1");
+    if (!query)
+      return std::unexpected(map_sqlite(query.error()));
+    if (auto bound = query->bind_text(1, request_id); !bound)
+      return std::unexpected(map_sqlite(bound.error()));
+    auto step = query->step();
+    if (!step)
+      return std::unexpected(map_sqlite(step.error()));
+    if (*step == step_result::row) {
+      row_reader q(*query);
+      auto       body  = q.id(0);
+      auto       state = q.text(1);
+      if (auto ok = q.finish(); !ok)
+        return std::unexpected(ok.error());
+      if (!rows.records.contains(body))
+        return std::unexpected(corrupt());
+      if (rows.records.at(body).encoded != frame)
+        return request_lookup{request_state::conflict, {}};
+      if (state == "open")
+        return std::unexpected(failure(execution_error_code::check_in_progress));
+      return std::unexpected(corrupt());
+    }
+    return request_lookup{request_state::unused, {}};
   }
   const auto& stored = rows.records.at(found->second.body);
   if (stored.encoded != frame)
@@ -1995,6 +2306,7 @@ struct prepared_change {
   std::optional<artifact> manifest;
   std::optional<artifact> work;
   std::optional<artifact> provenance;
+  std::optional<artifact> verdict; // R18: verdict_v1 body of a verdict change.
   std::vector<artifact>   structures;
   std::string             markdown;
   std::string             render_text;
@@ -2078,6 +2390,16 @@ value_result<prepared_change> prepare_change(const execution_change& change) {
     if (!stored)
       return std::unexpected(stored.error());
     out.provenance = std::move(*stored);
+  }
+
+  if (change.verdict) { // R18: the normalized verdict document as a verdict_v1 value record.
+    auto canonical = hist::encode_verdict_v1(change.verdict->verdict);
+    if (!canonical)
+      return std::unexpected(invalid_error());
+    auto stored = value_artifact(hist::codec_verdict_v1, *canonical);
+    if (!stored)
+      return std::unexpected(stored.error());
+    out.verdict = std::move(*stored);
   }
 
   for (const auto& generation : change.generations) {
@@ -2200,6 +2522,10 @@ value_result<std::vector<execution_expectation>> fixed_members(const execution_s
 }
 
 checked check_shape(const execution_change& change) {
+  if (change.operation == "verdict") // R18: execution_review.cpp
+    return check_verdict_shape(change);
+  if (change.verdict) // R18: verdict facts belong to operation verdict only.
+    return std::unexpected(invalid_error());
   const auto& op       = change.operation;
   const bool  load     = op == "load";
   const bool  activate = op == "activate";
@@ -2294,6 +2620,19 @@ checked check_parameters(const execution_change& change, const hist::request_v3&
     return std::unexpected(invalid_error());
   const auto&           fields = (*decoded)->fields;
   std::set<std::string> keys;
+  if (change.operation == "verdict") { // R18: request_v3 parameters {run_id, verdict_path} (R18-4 Replay, DR18-10).
+    if (!change.verdict || fields.size() != 2)
+      return std::unexpected(invalid_error());
+    for (const auto* key : {"run_id", "verdict_path"}) {
+      const auto found = fields.find(key);
+      if (found == fields.end() || !found->second || found->second->kind != value_kind::string)
+        return std::unexpected(invalid_error());
+    }
+    if (fields.at("run_id")->string != std::to_string(change.verdict->run) || fields.at("verdict_path")->string.empty() ||
+        fields.at("verdict_path")->string.front() != '/')
+      return std::unexpected(invalid_error());
+    return {};
+  }
   if (change.operation == "claim" || change.operation == "takeover") {
     keys = {"job", "role"};
     if (change.operation == "takeover")
@@ -2829,6 +3168,28 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     return replay;
   }
 
+  if (change.operation == "verdict") { // R18: the verdict commit of execution_review.cpp, then the shared verifier.
+    if (auto ok = check_verdict_locked(db, change); !ok)
+      return std::unexpected(ok.error());
+    if (!prepared.verdict)
+      return std::unexpected(invalid_error());
+    auto request_record = intern(db, prepared.request);
+    if (!request_record)
+      return std::unexpected(request_record.error());
+    auto body = intern(db, *prepared.verdict);
+    if (!body)
+      return std::unexpected(body.error());
+    auto written = write_verdict(db, metadata.identity, change, *request_record, *body, commit_timestamp());
+    if (!written)
+      return std::unexpected(written.error());
+    ledger_rows verdict_rows;
+    if (auto verified_rows = verify_rows(db, metadata, verdict_rows); !verified_rows)
+      return std::unexpected(invalid_error());
+    locked_outcome verdict_outcome;
+    verdict_outcome.result = *written;
+    return verdict_outcome;
+  }
+
   auto head = read_head(db);
   if (!head)
     return std::unexpected(head.error());
@@ -3256,6 +3617,14 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     }
   }
 
+  // R18: blockers this load or activate clears (DB-R7); a load that keeps its job clears only that job's blockers.
+  if (!change.blockers_cleared.empty()) {
+    const bool        any_job = activate || change.job.empty();
+    const std::string job     = any_job ? std::string{} : head->job;
+    if (auto cleared = clear_blockers(db, change.blockers_cleared, *seq, job); !cleared)
+      return std::unexpected(cleared.error());
+  }
+
   // The head, the active job, the activation and the sequence of the current state.
   const auto new_activation = activate ? activation_id : head->activation;
   if (auto updated = run_bound(db,
@@ -3343,10 +3712,17 @@ stage_execution(const std::filesystem::path& path, const execution_snapshot& sna
   if (!used)
     return std::unexpected(used.error());
   if (!*used) {
-    if (auto snapshot_checked = check_snapshot(snapshot, change); !snapshot_checked)
-      return std::unexpected(snapshot_checked.error());
-    if (auto native = check_native(change, *prepared); !native)
-      return std::unexpected(native.error());
+    if (change.operation == "verdict") { // R18: native step-5 checks (execution_review.cpp).
+      if (auto checked = check_verdict_snapshot(snapshot, change); !checked)
+        return std::unexpected(checked.error());
+    } else {
+      if (auto snapshot_checked = check_snapshot(snapshot, change); !snapshot_checked)
+        return std::unexpected(snapshot_checked.error());
+      if (auto native = check_native(change, *prepared); !native)
+        return std::unexpected(native.error());
+      if (auto cleared = check_blockers_cleared(snapshot, change); !cleared) // R18: DB-R7
+        return std::unexpected(cleared.error());
+    }
   }
 
   auto staged = std::make_unique<execution_write::impl>(std::move(*database));
@@ -3373,6 +3749,604 @@ commit_execution(const std::filesystem::path& path, const execution_snapshot& sn
   if (auto committed = staged->commit(); !committed)
     return std::unexpected(committed.error());
   return staged->result();
+}
+
+namespace {
+value_ptr check_integer(std::uint64_t n) {
+  value v{};
+  v.kind    = value_kind::integer;
+  v.integer = static_cast<std::int64_t>(n);
+  return make_node(std::move(v));
+}
+struct check_run_row {
+  std::uint64_t id = 0, generation = 0, ordinal = 0, dispatch = 0, revision = 0;
+  std::string   job, role, state, work_fp;
+};
+value_result<check_run_row> check_run_locked(connection& db, std::uint64_t run, std::optional<run_token> token = {}) {
+  auto row = first_row(
+      db,
+      "SELECT s.job,s.role,s.generation_id,s.state,g.ordinal,r.secret,rs.generation_id,rs.run_id,"
+      "d.id,d.revision_id,d.work_fp FROM runs r JOIN run_state s ON s.run_id=r.id JOIN generations g ON g.id=r.generation_id "
+      "JOIN role_state rs ON rs.job=s.job AND rs.role=s.role JOIN dispatches d ON d.run_id=r.id "
+      "WHERE r.id=?1 ORDER BY d.seq DESC LIMIT 1",
+      {int_arg(run)});
+  if (!row)
+    return std::unexpected(row.error());
+  if (!*row)
+    return std::unexpected(failure(execution_error_code::unknown_run));
+  row_reader    q(**row);
+  check_run_row out;
+  out.id                  = run;
+  out.job                 = q.text(0);
+  out.role                = q.text(1);
+  out.generation          = q.id(2);
+  out.state               = q.text(3);
+  out.ordinal             = q.id(4);
+  auto secret             = q.blob(5);
+  auto current_generation = q.id(6);
+  auto active             = q.optional_id(7);
+  out.dispatch            = q.id(8);
+  out.revision            = q.id(9);
+  out.work_fp             = q.blob(10);
+  if (auto ok = q.finish(); !ok)
+    return std::unexpected(ok.error());
+  if (token) {
+    bool matches = secret.size() == token->secret.size();
+    for (std::size_t i = 0; i < secret.size() && i < token->secret.size(); ++i)
+      matches = matches && static_cast<unsigned char>(secret[i]) == token->secret[i];
+    if (!matches || out.ordinal != token->generation_ordinal || out.state != "active" || current_generation != out.generation ||
+        active != run) {
+      auto error  = failure(execution_error_code::fenced);
+      error.state = out.state;
+      return std::unexpected(error);
+    }
+  }
+  return out;
+}
+checked check_snapshot_locked(connection& db, const execution_snapshot& snapshot, bool facts) {
+  auto id = first_row(db, "SELECT identity FROM ledger_meta");
+  if (!id)
+    return std::unexpected(id.error());
+  if (!*id)
+    return std::unexpected(corrupt());
+  row_reader r(**id);
+  auto       identity = r.text(0);
+  if (auto ok = r.finish(); !ok)
+    return ok;
+  if (identity != snapshot.identity)
+    return std::unexpected(failure(execution_error_code::path_denied));
+  auto head = read_head(db);
+  if (!head)
+    return std::unexpected(head.error());
+  if (head->job != snapshot.active_job ||
+      head->revision != (snapshot.revision ? std::optional(snapshot.revision->id) : std::nullopt))
+    return std::unexpected(failure(execution_error_code::state_conflict));
+  if (facts)
+    for (const auto& role : snapshot.roles)
+      if (role.job == snapshot.active_job) {
+        auto now = locked_role(db, role.job, role.role);
+        if (!now)
+          return std::unexpected(now.error());
+        if (!*now || (*now)->fact_version != role.fact_version)
+          return std::unexpected(failure(execution_error_code::state_conflict));
+      }
+  return {};
+}
+value_result<std::uint64_t> check_value_record(connection& db, std::string_view codec, const value_ptr& v) {
+  auto bytes = hist::encode_check_value(codec, v);
+  if (!bytes)
+    return std::unexpected(invalid_error());
+  auto art = value_artifact(codec, *bytes);
+  if (!art)
+    return std::unexpected(art.error());
+  return intern(db, *art);
+}
+value_result<std::uint64_t> check_file_record(connection& db, std::string bytes, std::uint32_t mode = 420) {
+  hist::record file   = hist::file_record{mode, std::move(bytes)};
+  auto         frame  = hist::encode_record(file);
+  auto         digest = hist::digest_record(file);
+  if (!frame || !digest)
+    return std::unexpected(invalid_error());
+  return intern(db, artifact{1, 1, *frame, digest_bytes(*digest), "file"});
+}
+value_result<std::uint64_t> check_request_record(connection& db, const hist::request_v3& request) {
+  auto bytes  = hist::encode_request_v3(request);
+  auto digest = hist::digest_request_v3(request);
+  if (!bytes || !digest)
+    return std::unexpected(invalid_error());
+  return intern(db, artifact{4, 3, *bytes, digest_bytes(*digest), "request"});
+}
+checked check_event(connection& db, const check_run_row& run, std::uint64_t revision, std::string_view job, std::uint64_t seq,
+                    std::string_view type, std::string_view request, std::string_view actor,
+                    const std::map<std::string, std::string>& refs, std::string reason = {}) {
+  hist::event_payload_v2 p;
+  p.operation  = type == "check_interrupted" ? "check-recover" : "check";
+  p.before     = {std::to_string(revision), std::string(job)};
+  p.after      = p.before;
+  p.references = refs;
+  p.reason     = reason;
+  auto payload = hist::encode_event_payload_v2(type, p);
+  if (!payload)
+    return std::unexpected(invalid_error());
+  return run_bound(
+      db,
+      "INSERT INTO events(seq,type,version,revision_id,request_id,actor,occurred_at,payload,job,role,generation_id,run_id) "
+      "VALUES(?1,?2,2,?3,?4,?5,?6,?7,?8,?9,?10,?11)",
+      {int_arg(seq), text_arg(type), int_arg(revision), text_arg(request), text_arg(actor), text_arg(commit_timestamp()),
+       blob_arg(*payload), text_arg(run.job), text_arg(run.role), int_arg(run.generation), int_arg(run.id)});
+}
+value_ptr check_response(std::string_view identity, std::string_view request, const check_run_row& run, std::uint64_t reservation,
+                         std::string_view outcome, value_ptr evidence, value_ptr observation, value_ptr completion,
+                         const std::vector<std::string>& withheld) {
+  return record_node(
+      {{"version", check_integer(1)},
+       {"kind", text_node("check")},
+       {"ledger", text_node(identity)},
+       {"request_id", text_node(request)},
+       {"job", text_node(run.job)},
+       {"role", text_node(run.role)},
+       {"run", record_node({{"id", text_node(std::to_string(run.id))}, {"generation", text_node(std::to_string(run.ordinal))}})},
+       {"reservation", text_node(std::to_string(reservation))},
+       {"outcome", text_node(outcome)},
+       {"withheld", texts_node(withheld)},
+       {"evidence", evidence},
+       {"observation", observation},
+       {"completion", completion}});
+}
+} // namespace
+
+std::expected<execution_reservation, execution_error>
+reserve_check(const std::filesystem::path& path, const execution_snapshot& snapshot, std::string_view request_id,
+              std::string_view actor, const hist::request_v3& request, std::string_view token_text, const value_ptr& provenance) {
+  auto token = parse_run_token(token_text);
+  if (!token)
+    return std::unexpected(failure(execution_error_code::unknown_run));
+  if (request.operation != "check" || request.actor != actor)
+    return std::unexpected(invalid_error());
+  auto database = open_format3(path, execution_access::read_write);
+  if (!database)
+    return std::unexpected(database.error());
+  auto& db = database->sql();
+  auto  tx = db.begin(true);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  if (auto ok = check_snapshot_locked(db, snapshot, false); !ok)
+    return std::unexpected(ok.error());
+  auto run = check_run_locked(db, token->run_id, token);
+  if (!run)
+    return std::unexpected(run.error());
+  auto role = locked_role(db, run->job, run->role);
+  if (!role)
+    return std::unexpected(role.error());
+  if (!*role || run->job != snapshot.active_job)
+    return std::unexpected(failure(execution_error_code::state_conflict));
+  if ((*role)->drifted)
+    return std::unexpected(failure(execution_error_code::drifted));
+  auto prior = first_row(db, "SELECT 1 FROM requests WHERE request_id=?1", {text_arg(request_id)});
+  if (!prior)
+    return std::unexpected(prior.error());
+  if (*prior)
+    return std::unexpected(failure(execution_error_code::request_conflict));
+  auto open = first_row(db,
+                        "SELECT 1 FROM reservations r JOIN reservation_state s ON s.reservation_id=r.id WHERE (r.run_id=?1 AND "
+                        "s.state='open') OR r.request_id=?2",
+                        {int_arg(run->id), text_arg(request_id)});
+  if (!open)
+    return std::unexpected(open.error());
+  if (*open)
+    return std::unexpected(failure(execution_error_code::check_in_progress));
+  auto seq  = next_value(db, "SELECT last_seq FROM current_state WHERE singleton=1"),
+       id   = next_value(db, "SELECT COALESCE(MAX(id),0) FROM reservations");
+  auto body = check_request_record(db, request);
+  if (!seq)
+    return std::unexpected(seq.error());
+  if (!id)
+    return std::unexpected(id.error());
+  if (!body)
+    return std::unexpected(body.error());
+  std::map<std::string, std::string> refs{
+      {"reservation", std::to_string(*id)}, {"run", std::to_string(run->id)}, {"dispatch", std::to_string(run->dispatch)}};
+  if (provenance) {
+    auto bytes = hist::encode_driver_provenance_v1(provenance);
+    if (!bytes)
+      return std::unexpected(invalid_error());
+    auto art = value_artifact(hist::codec_driver_provenance_v1, *bytes);
+    if (!art)
+      return std::unexpected(art.error());
+    auto pid = intern(db, *art);
+    if (!pid)
+      return std::unexpected(pid.error());
+    refs["provenance"] = std::to_string(*pid);
+  }
+  if (auto ok =
+          check_event(db, *run, snapshot.revision->id, snapshot.active_job, *seq, "check_reserved", request_id, actor, refs);
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "INSERT INTO reservations(id,request_id,run_id,opened_seq,body_id) VALUES(?1,?2,?3,?4,?5)",
+                          {int_arg(*id), text_arg(request_id), int_arg(run->id), int_arg(*seq), int_arg(*body)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "INSERT INTO reservation_state(reservation_id,state,last_seq) VALUES(?1,'open',?2)",
+                          {int_arg(*id), int_arg(*seq)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "UPDATE current_state SET last_seq=?1 WHERE singleton=1", {int_arg(*seq)}); !ok)
+    return std::unexpected(ok.error());
+  ledger_rows verified_rows;
+  auto        verified = verify_rows(db, database->metadata(), verified_rows);
+  if (!verified)
+    return std::unexpected(invalid_error());
+  if (auto ok = tx->commit(); !ok)
+    return std::unexpected(map_sqlite(ok.error()));
+  return execution_reservation{*id, run->id, *seq, std::string(request_id)};
+}
+
+std::expected<execution_commit_result, execution_error>
+complete_check(const std::filesystem::path& path, const execution_snapshot& snapshot, std::uint64_t reservation,
+               std::string_view token_text, const execution_check_result& result, bool completion,
+               const std::vector<execution_transition_input>& transitions, const std::vector<std::uint64_t>& blockers,
+               const std::vector<std::string>& withheld) {
+  auto token = parse_run_token(token_text);
+  if (!token)
+    return std::unexpected(failure(execution_error_code::unknown_run));
+  if (!result.observation || result.evidence.empty() || result.evidence.size() > 1024)
+    return std::unexpected(invalid_error());
+  if (completion && (!result.recapture_matches || std::ranges::any_of(result.evidence, [](const auto& e) {
+        return e.outcome != "pass";
+      }) || transitions.empty()))
+    return std::unexpected(invalid_error());
+  auto database = open_format3(path, execution_access::read_write);
+  if (!database)
+    return std::unexpected(database.error());
+  auto& db = database->sql();
+  auto  tx = db.begin(true);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  auto run = check_run_locked(db, token->run_id, token);
+  if (!run)
+    return std::unexpected(run.error());
+  if (completion) {
+    if (auto ok = check_snapshot_locked(db, snapshot, true); !ok)
+      return std::unexpected(ok.error());
+  }
+  auto row = first_row(db,
+                       "SELECT r.request_id,r.run_id,r.opened_seq,r.body_id,s.state,e.actor,e.revision_id FROM reservations r "
+                       "JOIN reservation_state s ON s.reservation_id=r.id JOIN events e ON e.seq=r.opened_seq WHERE r.id=?1",
+                       {int_arg(reservation)});
+  if (!row)
+    return std::unexpected(row.error());
+  if (!*row)
+    return std::unexpected(failure(execution_error_code::unknown_reservation));
+  row_reader q(**row);
+  auto       request      = q.text(0);
+  auto       reserved_run = q.id(1), opened = q.id(2), body = q.id(3);
+  auto       state = q.text(4), actor = q.text(5);
+  auto       reserved_revision = q.id(6);
+  if (auto ok = q.finish(); !ok)
+    return std::unexpected(ok.error());
+  if (reserved_run != run->id || state != "open")
+    return std::unexpected(failure(execution_error_code::state_conflict));
+  auto seq = next_value(db, "SELECT last_seq FROM current_state WHERE singleton=1");
+  if (!seq)
+    return std::unexpected(seq.error());
+  auto head = read_head(db);
+  if (!head)
+    return std::unexpected(head.error());
+  if (!head->revision)
+    return std::unexpected(corrupt());
+  auto observation = check_value_record(db, hist::codec_check_observation_v1, result.observation);
+  if (!observation)
+    return std::unexpected(observation.error());
+  std::vector<value_ptr>              evidence_values;
+  std::pair<std::string, std::string> previous;
+  for (const auto& e : result.evidence) {
+    auto key = std::pair(e.work, e.check);
+    if (!previous.first.empty() && key <= previous)
+      return std::unexpected(invalid_error());
+    previous            = key;
+    std::string outcome = result.recapture_matches ? e.outcome : "inconclusive",
+                reason  = result.recapture_matches ? e.reason : "input_changed";
+    bool reason_ok = (outcome == "pass" && reason == "passed") || (outcome == "inconclusive" && reason == "input_changed") ||
+                     (outcome == "fail" &&
+                      (reason == "exit_status" || reason == "zero_selected" || reason == "missing_executable" ||
+                       reason == "timeout" || reason == "output_limit" || reason == "malformed_result" || reason == "boundary"));
+    if (!reason_ok || e.output.size() > e.output_bytes)
+      return std::unexpected(invalid_error());
+    auto definition = check_value_record(db, hist::codec_check_definition_v1, e.definition),
+         vector     = check_value_record(db, hist::codec_output_vector_v1, e.vector);
+    if (!definition)
+      return std::unexpected(definition.error());
+    if (!vector)
+      return std::unexpected(vector.error());
+    std::optional<std::uint64_t> output;
+    if (!e.output.empty()) {
+      auto file = check_file_record(db, e.output);
+      if (!file)
+        return std::unexpected(file.error());
+      output = *file;
+    }
+    auto id = next_value(db, "SELECT COALESCE(MAX(id),0) FROM evidence");
+    if (!id)
+      return std::unexpected(id.error());
+    if (auto ok = run_bound(
+            db,
+            "INSERT INTO "
+            "evidence(id,reservation_id,seq,work,\"check\",definition_id,vector_id,outcome,reason,matched,exit_status,duration_"
+            "ms,output_id,output_bytes,output_truncated) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15)",
+            {int_arg(*id), int_arg(reservation), int_arg(*seq), text_arg(e.work), text_arg(e.check), int_arg(*definition),
+             int_arg(*vector), text_arg(outcome), text_arg(reason), optional_int_arg(e.matched),
+             e.exit_status ? bind_arg{bind_kind::integer, static_cast<std::int64_t>(*e.exit_status), {}} : null_arg(),
+             int_arg(e.duration_ms), optional_int_arg(output), int_arg(e.output_bytes), int_arg(e.output_truncated ? 1 : 0)});
+        !ok)
+      return std::unexpected(ok.error());
+    evidence_values.push_back(record_node({{"evidence", text_node(std::to_string(*id))},
+                                           {"work", text_node(e.work)},
+                                           {"check", text_node(e.check)},
+                                           {"outcome", text_node(outcome)},
+                                           {"reason", text_node(reason)},
+                                           {"matched", text_node(e.matched ? std::to_string(*e.matched) : "none")},
+                                           {"exit_status", text_node(e.exit_status ? std::to_string(*e.exit_status) : "none")},
+                                           {"duration_ms", check_integer(e.duration_ms)},
+                                           {"output_bytes", check_integer(e.output_bytes)},
+                                           {"output_truncated", bool_node(e.output_truncated)},
+                                           {"output", text_node(output ? std::to_string(*output) : "none")}}));
+  }
+  std::optional<std::uint64_t> completion_id;
+  value_ptr                    completion_value = text_node("none");
+  if (completion) {
+    if (transitions.front().role != run->role || transitions.front().job != run->job ||
+        transitions.front().after_state != "done" || transitions.front().reason != "completed")
+      return std::unexpected(invalid_error());
+    auto id = next_value(db, "SELECT COALESCE(MAX(id),0) FROM completions");
+    if (!id)
+      return std::unexpected(id.error());
+    completion_id = *id;
+    if (auto ok =
+            run_bound(db, "INSERT INTO completions(id,run_id,seq,dispatch_id,work_fp,observation_id) VALUES(?1,?2,?3,?4,?5,?6)",
+                      {int_arg(*id), int_arg(run->id), int_arg(*seq), int_arg(run->dispatch), blob_arg(run->work_fp),
+                       int_arg(*observation)});
+        !ok)
+      return std::unexpected(ok.error());
+    std::vector<value_ptr> published;
+    for (const auto& pub : result.publications) {
+      auto semantic = digest_bytes_of_text(pub.semantic);
+      if (!semantic)
+        return std::unexpected(invalid_error());
+      // Build the retained facet hierarchy from portable paths; file records retain exact bytes and normalized modes.
+      struct directory {
+        std::map<std::string, directory>                         dirs;
+        std::map<std::string, const execution_publication_file*> files;
+      };
+      directory root;
+      for (const auto& file : pub.files) {
+        if (!valid_path(file.path))
+          return std::unexpected(invalid_error());
+        auto*            d    = &root;
+        std::string_view rest = file.path;
+        while (rest.find('/') != std::string_view::npos) {
+          auto slash = rest.find('/');
+          d          = &d->dirs[std::string(rest.substr(0, slash))];
+          rest.remove_prefix(slash + 1);
+        }
+        if (!d->files.emplace(std::string(rest), &file).second)
+          return std::unexpected(invalid_error());
+      }
+      std::function<value_result<std::pair<std::uint64_t, hist::record_digest>>(const directory&)> store_dir;
+      store_dir = [&](const directory& dir) -> value_result<std::pair<std::uint64_t, hist::record_digest>> {
+        hist::directory_record tree;
+        for (const auto& [name, sub] : dir.dirs) {
+          auto stored = store_dir(sub);
+          if (!stored)
+            return std::unexpected(stored.error());
+          tree.children.push_back({name, hist::record_kind::directory, stored->first, stored->second});
+        }
+        for (const auto& [name, file] : dir.files) {
+          auto id     = check_file_record(db, file->bytes, file->mode);
+          auto digest = hist::digest_record(hist::file_record{file->mode, file->bytes});
+          if (!id)
+            return std::unexpected(id.error());
+          if (!digest)
+            return std::unexpected(invalid_error());
+          tree.children.push_back({name, hist::record_kind::file, *id, *digest});
+        }
+        std::ranges::sort(tree.children, {}, &hist::record_child::name);
+        hist::record record = tree;
+        auto         frame  = hist::encode_record(record);
+        auto         digest = hist::digest_record(record);
+        if (!frame || !digest)
+          return std::unexpected(invalid_error());
+        auto id = intern(db, artifact{2, 1, *frame, digest_bytes(*digest), "directory"});
+        if (!id)
+          return std::unexpected(id.error());
+        return std::pair(*id, *digest);
+      };
+      auto payload = store_dir(root);
+      if (!payload)
+        return std::unexpected(payload.error());
+      auto pid = next_value(db, "SELECT COALESCE(MAX(id),0) FROM publications");
+      if (!pid)
+        return std::unexpected(pid.error());
+      if (auto ok =
+              run_bound(db, "INSERT INTO publications(id,completion_id,work,facet,semantic,payload_id) VALUES(?1,?2,?3,?4,?5,?6)",
+                        {int_arg(*pid), int_arg(*completion_id), text_arg(pub.work), text_arg(pub.facet), blob_arg(*semantic),
+                         int_arg(payload->first)});
+          !ok)
+        return std::unexpected(ok.error());
+      published.push_back(record_node({{"work", text_node(pub.work)},
+                                       {"facet", text_node(pub.facet)},
+                                       {"semantic", text_node(pub.semantic)},
+                                       {"publication", text_node(std::to_string(*pid))}}));
+    }
+    completion_value = record_node({{"id", text_node(std::to_string(*completion_id))},
+                                    {"work_fp", text_node("xxh3_128:" + hex_of(run->work_fp))},
+                                    {"publications", list_node(std::move(published))}});
+  }
+  for (std::size_t i = 0; i < transitions.size(); ++i) {
+    const auto& t      = transitions[i];
+    auto        before = locked_role(db, t.job, t.role);
+    if (!before)
+      return std::unexpected(before.error());
+    if (!*before || t.before_state != (*before)->state || t.before_drifted != (*before)->drifted)
+      return std::unexpected(failure(execution_error_code::state_conflict));
+    if (auto ok = run_bound(db,
+                            "INSERT INTO "
+                            "transitions(event_seq,ordinal,job,role,generation_id,before_state,after_state,before_drifted,after_"
+                            "drifted,reason) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
+                            {int_arg(*seq), int_arg(i + 1), text_arg(t.job), text_arg(t.role), int_arg((*before)->generation),
+                             text_arg((*before)->state), text_arg(t.after_state), int_arg((*before)->drifted ? 1 : 0),
+                             int_arg(t.after_drifted ? 1 : 0), text_arg(t.reason)});
+        !ok)
+      return std::unexpected(ok.error());
+    if (auto ok = run_bound(db,
+                            "UPDATE role_state SET state=?1,drifted=?2,run_id=?3,fact_version=fact_version+1,last_seq=?4 WHERE "
+                            "job=?5 AND role=?6",
+                            {text_arg(t.after_state), int_arg(t.after_drifted ? 1 : 0),
+                             t.after_state == "running" ? optional_int_arg((*before)->run) : null_arg(), int_arg(*seq),
+                             text_arg(t.job), text_arg(t.role)});
+        !ok)
+      return std::unexpected(ok.error());
+  }
+  if (completion) {
+    if (auto ok = run_bound(db, "UPDATE run_state SET state='completed',last_seq=?1 WHERE run_id=?2",
+                            {int_arg(*seq), int_arg(run->id)});
+        !ok)
+      return std::unexpected(ok.error());
+  }
+  if (auto ok = clear_blockers(db, blockers, *seq, run->job); !ok)
+    return std::unexpected(ok.error());
+  std::map<std::string, std::string> refs{{"reservation", std::to_string(reservation)},
+                                          {"observation", std::to_string(*observation)}};
+  if (completion_id)
+    refs["completion"] = std::to_string(*completion_id);
+  if (auto ok = check_event(db, *run, *head->revision, head->job, *seq, "check_recorded", request, actor, refs,
+                            transitions.empty() ? "" : transitions.front().reason);
+      !ok)
+    return std::unexpected(ok.error());
+  auto obs_digest = hash_value("check_observation_v1", result.observation);
+  if (!obs_digest)
+    return std::unexpected(invalid_error());
+  auto observation_value = record_node({{"id", text_node(std::to_string(*observation))},
+                                        {"digest", text_node("xxh3_128:" + *obs_digest)},
+                                        {"units", result.observation->fields.at("units")}});
+  auto response = check_response(database->metadata().identity, request, *run, reservation, completion ? "completed" : "recorded",
+                                 list_node(std::move(evidence_values)), observation_value, completion_value, withheld);
+  auto saved    = codec_encode(response);
+  if (!saved || saved->size() > 1048576)
+    return std::unexpected(invalid_error());
+  if (auto ok = run_bound(db,
+                          "INSERT INTO requests(request_id,operation,body_id,event_seq,revision_id,outcome,result,attachment_id) "
+                          "VALUES(?1,'check',?2,?3,?4,'recorded',?5,NULL)",
+                          {text_arg(request), int_arg(body), int_arg(opened), int_arg(reserved_revision), blob_arg(*saved)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "UPDATE reservation_state SET state='completed',last_seq=?1 WHERE reservation_id=?2",
+                          {int_arg(*seq), int_arg(reservation)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "UPDATE current_state SET last_seq=?1 WHERE singleton=1", {int_arg(*seq)}); !ok)
+    return std::unexpected(ok.error());
+  ledger_rows verified_rows;
+  auto        verified = verify_rows(db, database->metadata(), verified_rows);
+  if (!verified)
+    return std::unexpected(invalid_error());
+  if (auto ok = tx->commit(); !ok)
+    return std::unexpected(map_sqlite(ok.error()));
+  return execution_commit_result{false, *saved, *seq, {}};
+}
+std::expected<execution_commit_result, execution_error> recover_check(const std::filesystem::path& path,
+                                                                      std::string_view request_id, std::string_view actor,
+                                                                      const hist::request_v3& request, std::uint64_t run_id,
+                                                                      std::uint64_t reservation) {
+  auto replay = lookup_execution_request(path, request_id, request);
+  if (!replay)
+    return std::unexpected(replay.error());
+  if (replay->state == request_state::replay)
+    return execution_commit_result{true, replay->result, 0, {}};
+  if (replay->state == request_state::conflict)
+    return std::unexpected(failure(execution_error_code::request_conflict));
+  if (request.operation != "check-recover" || request.actor != actor)
+    return std::unexpected(invalid_error());
+  auto database = open_format3(path, execution_access::read_write);
+  if (!database)
+    return std::unexpected(database.error());
+  auto& db = database->sql();
+  auto  tx = db.begin(true);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  auto run = check_run_locked(db, run_id);
+  if (!run)
+    return std::unexpected(run.error());
+  auto row = first_row(db,
+                       "SELECT r.request_id,r.run_id,r.opened_seq,r.body_id,s.state,e.revision_id FROM reservations r JOIN "
+                       "reservation_state s ON s.reservation_id=r.id JOIN events e ON e.seq=r.opened_seq WHERE r.id=?1",
+                       {int_arg(reservation)});
+  if (!row)
+    return std::unexpected(row.error());
+  if (!*row)
+    return std::unexpected(failure(execution_error_code::unknown_reservation));
+  row_reader q(**row);
+  auto       check_request = q.text(0);
+  auto       reserved_run = q.id(1), opened = q.id(2), reserved_body = q.id(3);
+  auto       state             = q.text(4);
+  auto       reserved_revision = q.id(5);
+  if (auto ok = q.finish(); !ok)
+    return std::unexpected(ok.error());
+  if (reserved_run != run_id)
+    return std::unexpected(failure(execution_error_code::unknown_reservation));
+  if (state != "open")
+    return std::unexpected(failure(execution_error_code::state_conflict));
+  auto used = first_row(db, "SELECT 1 FROM requests WHERE request_id=?1 OR request_id=?2",
+                        {text_arg(request_id), text_arg(check_request)});
+  if (!used)
+    return std::unexpected(used.error());
+  if (*used || request_id == check_request)
+    return std::unexpected(failure(execution_error_code::state_conflict));
+  auto head = read_head(db);
+  if (!head)
+    return std::unexpected(head.error());
+  if (!head->revision)
+    return std::unexpected(corrupt());
+  auto seq = next_value(db, "SELECT last_seq FROM current_state WHERE singleton=1");
+  if (!seq)
+    return std::unexpected(seq.error());
+  auto body = check_request_record(db, request);
+  if (!body)
+    return std::unexpected(body.error());
+  auto response = check_response(database->metadata().identity, request_id, *run, reservation, "interrupted", list_node({}),
+                                 text_node("none"), text_node("none"), {});
+  auto saved    = codec_encode(response);
+  if (!saved)
+    return std::unexpected(invalid_error());
+  if (auto ok = check_event(db, *run, *head->revision, head->job, *seq, "check_interrupted", request_id, actor,
+                            {{"reservation", std::to_string(reservation)}});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db,
+                          "INSERT INTO requests(request_id,operation,body_id,event_seq,revision_id,outcome,result,attachment_id) "
+                          "VALUES(?1,'check-recover',?2,?3,?4,'interrupted',?5,NULL)",
+                          {text_arg(request_id), int_arg(*body), int_arg(*seq), int_arg(*head->revision), blob_arg(*saved)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(
+          db,
+          "INSERT INTO requests(request_id,operation,body_id,event_seq,revision_id,outcome,result,attachment_id) "
+          "VALUES(?1,'check',?2,?3,?4,'interrupted',?5,NULL)",
+          {text_arg(check_request), int_arg(reserved_body), int_arg(opened), int_arg(reserved_revision), blob_arg(*saved)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "UPDATE reservation_state SET state='interrupted',last_seq=?1 WHERE reservation_id=?2",
+                          {int_arg(*seq), int_arg(reservation)});
+      !ok)
+    return std::unexpected(ok.error());
+  if (auto ok = run_bound(db, "UPDATE current_state SET last_seq=?1 WHERE singleton=1", {int_arg(*seq)}); !ok)
+    return std::unexpected(ok.error());
+  ledger_rows verified_rows;
+  auto        verified = verify_rows(db, database->metadata(), verified_rows);
+  if (!verified)
+    return std::unexpected(invalid_error());
+  if (auto ok = tx->commit(); !ok)
+    return std::unexpected(map_sqlite(ok.error()));
+  return execution_commit_result{false, *saved, *seq, {}};
 }
 
 } // namespace planar::engine::ledger

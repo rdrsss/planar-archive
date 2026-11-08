@@ -73,6 +73,12 @@ planar_rewrite_module(planar_history_execution_codec
   INTERFACE history/execution_codec.cppm SOURCES history/execution_codec.cpp
   DEPENDS planar_history_record planar_canonical planar_hash planar_json_codec planar_xxhash TESTS history/execution_codec.t.cpp)
 
+# R18-2 verdict document reader: capture step 1, bounds, Glaze grammar, field table and normalization.
+planar_rewrite_module(planar_execution_verdict
+  INTERFACE execution/verdict.cppm SOURCES execution/verdict.cpp
+  DEPENDS planar_history_execution_codec planar_capture planar_capture_host_path planar_json_codec planar_value
+  TESTS execution/verdict.t.cpp)
+
 planar_rewrite_module(planar_json_codec
   INTERFACE json_codec/codec.cppm SOURCES json_codec/codec.cpp
   DEPENDS planar_value planar_glaze TESTS json_codec/codec.t.cpp)
@@ -272,9 +278,9 @@ planar_rewrite_module(planar_ledger_execution_schema
 target_link_libraries(planar_ledger_execution_schema_tests PRIVATE planar_ledger_format)
 
 planar_rewrite_module(planar_ledger_execution
-  INTERFACE ledger/execution.cppm SOURCES ledger/execution.cpp
+  INTERFACE ledger/execution.cppm SOURCES ledger/execution.cpp ledger/execution_review.cpp
   DEPENDS planar_ledger_execution_schema planar_ledger_history_codec planar_history_request_v2 planar_history_request_v3 planar_history_execution_codec planar_hash planar_canonical planar_history_record planar_ledger_sqlite
-  TESTS ledger/execution.t.cpp TEST_TIMEOUT 120)
+  TESTS ledger/execution.t.cpp ledger/execution_review.t.cpp TEST_TIMEOUT 120)
 # Test-only: the format1/format2 refusals and the legacy-ledger fixtures open ledgers through the existing format surface.
 target_link_libraries(planar_ledger_execution_tests PRIVATE planar_ledger_format)
 
@@ -654,3 +660,16 @@ planar_rewrite_module(planar_history_recorded_interpretation
 target_compile_definitions(planar_history_recorded_interpretation_tests PRIVATE
   PLANAR_V2_VECTORS="${PROJECT_SOURCE_DIR}/tests/vectors/interpretation-v2"
   PLANAR_V1_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
+
+planar_rewrite_module(planar_process_resolve
+  INTERFACE process/resolve.cppm SOURCES process/resolve.cpp TESTS process/resolve.t.cpp)
+
+planar_rewrite_module(planar_process_runner
+  INTERFACE process/runner.cppm SOURCES process/runner.cpp TESTS process/runner.t.cpp TEST_TIMEOUT 60)
+
+planar_rewrite_module(planar_capture_tree_digest
+  INTERFACE capture/tree_digest.cppm SOURCES capture/tree_digest.cpp
+  DEPENDS planar_value planar_canonical planar_xxhash)
+planar_rewrite_module(planar_execution_check
+  INTERFACE execution/check.cppm SOURCES execution/check.cpp
+  DEPENDS planar_value planar_capture_native planar_capture_tree_digest planar_process_runner planar_process_resolve planar_hash planar_json_codec planar_glaze TESTS execution/check.t.cpp)
