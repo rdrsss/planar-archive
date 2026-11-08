@@ -1,6 +1,8 @@
 /// @file execution_codec.cppm
 /// @brief Pure execution codecs for payload v2, transition rows, role structures, dispatch manifests, work fingerprints,
-/// driver provenance, value-record framing, saved results and the packet value; no storage or host access.
+/// driver provenance, verdict documents (R18-2), value-record framing, saved results (claim, activate, verdict) and the
+/// packet value; no storage or host access. Entry points return execution_codec_error; the verdict document checks
+/// also export the field-path violation that the R18-2 refusals reuse.
 export module planar.engine.history.execution_codec;
 import std;
 export import planar.engine.history.record;
@@ -22,18 +24,22 @@ inline constexpr std::string_view codec_work_exec_v1 = "work_exec_v1";
 inline constexpr std::string_view codec_driver_provenance_v1 = "driver_provenance_v1";
 /// Codec identifier of a role structure value record.
 inline constexpr std::string_view codec_role_structure_v1 = "role_structure_v1";
+/// Codec identifier of a normalized verdict document value record (R18-2).
+inline constexpr std::string_view codec_verdict_v1 = "verdict_v1";
+/// The only verdict authority this build supports (R18-7); normalization adds it when absent.
+inline constexpr std::string_view verdict_authority_reviewer = "reviewer_role_v1";
 /// Owned value record: a codec identifier and its encoded typed bytes.
 struct execution_value_record {
-  std::string codec;   ///< One of the four execution codec identifiers.
+  std::string codec;   ///< One of the five execution codec identifiers.
   std::string encoded; ///< Canonical_v1 bytes of the typed value.
 };
-/// @brief Frame canonical value bytes as a value record for one of the four execution codecs.
+/// @brief Frame canonical value bytes as a value record for one of the five execution codecs.
 /// @param codec Codec identifier; canonical_v1 and unknown identifiers are refused.
 /// @param canonical_bytes Canonical_v1 bytes of the typed value.
 /// @return Exact PLANAR-RECORD value frame, or an invalid refusal. Thread-safe, without shared state.
 std::expected<std::string, execution_codec_error> encode_execution_value_record(std::string_view codec,
                                                                                 std::string_view canonical_bytes);
-/// @brief Decode one exact value frame for one of the four execution codecs.
+/// @brief Decode one exact value frame for one of the five execution codecs.
 /// @param frame Complete frame; trailing bytes, other record kinds and unknown codecs are refused.
 /// @return Owned codec identifier and encoded bytes, or an invalid refusal. Thread-safe, without shared state.
 std::expected<execution_value_record, execution_codec_error> decode_execution_value_record(std::string_view frame);
@@ -48,14 +54,15 @@ struct payload_position {
 };
 /// Payload version two of a format3 event; the references key set depends on the event type.
 struct event_payload_v2 {
-  std::string      operation; ///< One of load, activate, claim or takeover.
+  std::string      operation; ///< One of load, activate, claim, takeover or verdict.
   payload_position before;    ///< Position before the event.
   payload_position after;     ///< Position after the event.
   std::string      reason;    ///< Sixteen-reason vocabulary value of the ordinal one transition, or empty without transitions.
   std::map<std::string, std::string> references; ///< Canonical positive u64 decimal references keyed per event type.
 };
 /// @brief Encode payload version two as canonical JSON with the event type's exact reference key set.
-/// @param event_type One of declaration_accepted, load_noop, job_activated, run_claimed or run_taken_over.
+/// @param event_type One of declaration_accepted, load_noop, job_activated, run_claimed, run_taken_over or
+/// verdict_recorded (references exactly body, run and verdict).
 /// @param payload Owned payload; every field is validated against its grammar before encoding.
 /// @return Compact sorted-key JSON without a terminal LF, or an invalid refusal. Thread-safe, without shared state.
 std::expected<std::string, execution_codec_error> encode_event_payload_v2(std::string_view        event_type,
@@ -145,6 +152,63 @@ std::expected<std::string, execution_codec_error> encode_driver_provenance_v1(co
 /// @param bytes Exact canonical bytes of the stored record.
 /// @return Owned normalized document, or a refusal. Thread-safe, without shared state.
 std::expected<value_ptr, execution_codec_error> decode_driver_provenance_v1(std::string_view bytes);
+// Verdict document (R18-2). The field table is checked on structural values so that the native reader and the codec
+// share one rule set; violations carry the P2-4 field path (verdict, or verdict. plus keys and decimal indexes).
+/// One finding of a verdict document.
+struct verdict_finding {
+  std::string                 id;           ///< Finding identifier, [A-Za-z0-9_.:-]{1,128}, unique within the document.
+  std::string                 severity;     ///< One of must, should or note.
+  std::string                 work;         ///< Work identifier equal to some target work.
+  std::optional<std::string>  path;         ///< Portable source path of 1 to 4096 bytes.
+  std::optional<std::int64_t> line;         ///< Line 1 to 2147483647, only with path.
+  std::optional<std::string>  prescription; ///< Declaration identifier.
+  std::string                 text;         ///< 1 to 4096 bytes without NUL.
+};
+/// One reviewed target: a work unit, its output identity and its work fingerprint.
+struct verdict_target {
+  std::string work;    ///< Work identifier.
+  std::string output;  ///< Output digest text.
+  std::string work_fp; ///< Work fingerprint digest text.
+};
+/// Typed verdict document. A normalized document always carries authority reviewer_role_v1.
+struct verdict_v1 {
+  std::vector<verdict_target>  targets;   ///< 1 to 256 entries sorted strictly by work.
+  std::string                  policy;    ///< Policy identity digest text.
+  std::string                  decision;  ///< approve or reject.
+  std::vector<verdict_finding> findings;  ///< 0 to 256 findings in document order.
+  std::vector<std::string>     repair;    ///< Sorted unique worker role identifiers.
+  std::string                  summary;   ///< 0 to 16384 bytes without NUL.
+  std::string                  authority; ///< Asserted authority; empty when the parsed document omitted it.
+};
+/// A failed verdict field rule: the P2-4 field path and an existing schema-normalizer message.
+struct verdict_violation {
+  std::string field;   ///< verdict, or verdict. followed by keys and decimal array indexes.
+  std::string message; ///< Existing message such as Required field, Unknown field or Malformed output digest.
+};
+/// @brief Apply the R18-2 step 4 bounds to a parsed document, in the order findings count, finding text, summary.
+/// @param document Parsed structural value; shapes the bounds do not apply to are left for the shape check.
+/// @return Success, or resource_limit naming verdict_findings, verdict_finding_bytes or verdict_summary_bytes.
+std::expected<void, execution_codec_error> check_verdict_bounds(const value_ptr& document);
+/// @brief Apply the R18-2 step 5 shape and field table and extract the typed document.
+/// @param document Parsed structural value within the step 4 bounds.
+/// @return The typed document (authority empty when absent), or the first violation in the documented order.
+std::expected<verdict_v1, verdict_violation> verdict_from_value(const value_ptr& document);
+/// @brief Apply the R18-2 step 7 approve rules: approve with a must finding or a nonempty repair list is refused.
+/// @param verdict Typed document that passed the field table.
+/// @return Success, or the violation at field verdict.decision.
+std::expected<void, verdict_violation> check_verdict_decision(const verdict_v1& verdict);
+/// @brief Build the normalized structural value: version 1, optional finding keys omitted when absent.
+/// @param verdict Typed document; authority must be reviewer_role_v1.
+/// @return The structural value, or an invalid refusal when any R18-2 rule fails. Thread-safe.
+std::expected<value_ptr, execution_codec_error> verdict_value(const verdict_v1& verdict);
+/// @brief Encode the normalized verdict document as canonical_v1 bytes.
+/// @param verdict Typed document; every R18-2 rule (bounds, field table, authority, approve rules) is re-checked.
+/// @return Canonical bytes, resource_limit for a verdict bound, otherwise invalid. Thread-safe.
+std::expected<std::string, execution_codec_error> encode_verdict_v1(const verdict_v1& verdict);
+/// @brief Decode stored canonical verdict bytes with exact keys and the same rules as the encoder.
+/// @param bytes Exact canonical_v1 bytes.
+/// @return The typed normalized document, or a refusal. Thread-safe, without shared state.
+std::expected<verdict_v1, execution_codec_error> decode_verdict_v1(std::string_view bytes);
 // Saved results (D25): Glaze JSON via planar.engine.json_codec, sorted keys, no terminal LF.
 /// Saved result of a claim or takeover request, without the packet and manifest.
 struct claim_result_v1 {
@@ -195,6 +259,51 @@ std::expected<std::string, execution_codec_error> encode_activate_result_v1(cons
 /// @param bytes Exact saved JSON bytes.
 /// @return Owned result, or an invalid refusal. Thread-safe, without shared state.
 std::expected<activate_result_v1, execution_codec_error> decode_activate_result_v1(std::string_view bytes);
+/// One repaired worker in a verdict saved result.
+struct verdict_result_repair {
+  std::string role;       ///< Repaired worker role identifier.
+  std::string generation; ///< Worker generation ordinal decimal.
+  std::string revision;   ///< New repair revision decimal.
+};
+/// One blocker opened by a verdict commit.
+struct verdict_result_blocker {
+  std::string id;   ///< Blocker decimal.
+  std::string kind; ///< max_rounds or unowned_rejection.
+};
+/// After-state of one role with a transition in the verdict commit.
+struct verdict_result_role {
+  std::string role;            ///< Role identifier.
+  std::string state;           ///< One of the six role states.
+  bool        drifted = false; ///< True only when state is running.
+};
+/// Saved result of a verdict request (verdict_response_v1); it never carries a token.
+struct verdict_result_v1 {
+  std::string                         ledger;           ///< Ledger identity as 32 lowercase hex.
+  std::string                         request_id;       ///< Bounded request token.
+  std::string                         job;              ///< Active job identifier.
+  std::string                         role;             ///< Reviewer role identifier.
+  std::string                         revision;         ///< Active revision decimal.
+  std::string                         run;              ///< Reviewer run decimal.
+  std::string                         event;            ///< verdict_recorded event decimal.
+  std::string                         verdict_id;       ///< Verdict row decimal.
+  std::string                         applicability;    ///< current or historical.
+  std::string                         decision;         ///< approve or reject.
+  bool                                admitted = false; ///< True exactly for an admitted rejection.
+  std::vector<verdict_result_repair>  repairs;          ///< Sorted unique by role; nonempty exactly when admitted.
+  std::string                         count;            ///< Review count after the commit, nonnegative decimal.
+  std::string                         max_rounds;       ///< max_rounds of the active job, nonnegative decimal.
+  std::vector<verdict_result_blocker> opened;           ///< Opened blockers ascending by id.
+  std::vector<std::string>            cleared;          ///< Cleared blocker decimals ascending.
+  std::vector<verdict_result_role>    roles;            ///< Sorted unique by role identifier.
+};
+/// @brief Encode the verdict saved result as Glaze JSON with sorted keys and no terminal LF.
+/// @param result Owned result; grammar, ordering and admission consistency are validated first.
+/// @return Exact JSON bytes, or an invalid refusal. Thread-safe, without shared state.
+std::expected<std::string, execution_codec_error> encode_verdict_result_v1(const verdict_result_v1& result);
+/// @brief Decode the verdict saved result with the same grammar checks as the encoder.
+/// @param bytes Exact saved JSON bytes.
+/// @return Owned result, or an invalid refusal. Thread-safe, without shared state.
+std::expected<verdict_result_v1, execution_codec_error> decode_verdict_result_v1(std::string_view bytes);
 /// Fields of the dispatch packet value; work holds work identifiers that must be sorted and unique.
 struct packet_fields {
   std::string              workspace; ///< Workspace identifier.

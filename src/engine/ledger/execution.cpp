@@ -447,9 +447,9 @@ struct ledger_rows {
 // Table loading. Every loader reads one complete table in its stored order and rejects impossible column values.
 
 checked load_reserved_empty(connection& db) {
-  constexpr std::array<std::string_view, 10> reserved{"checkpoints",       "reservations", "evidence", "completions",
-                                                      "publications",      "verdicts",     "repairs",  "blockers",
-                                                      "reservation_state", "blocker_state"};
+  // R18: verdicts, repairs, blockers and blocker_state are read by execution_review.cpp; completions too (DRAFT-STUB R17-C).
+  constexpr std::array<std::string_view, 5> reserved{"checkpoints", "reservations", "evidence", "publications",
+                                                     "reservation_state"};
   for (auto table : reserved) {
     const auto sql  = std::format("SELECT COUNT(*) FROM {}", table);
     bool       any  = false;
@@ -852,6 +852,8 @@ std::optional<std::string> operation_of(std::string_view type) {
     return "claim";
   if (type == "run_taken_over")
     return "takeover";
+  if (type == "verdict_recorded") // R18:
+    return "verdict";
   return std::nullopt;
 }
 
@@ -866,12 +868,15 @@ std::optional<std::string> outcome_of(std::string_view type) {
     return "claimed";
   if (type == "run_taken_over")
     return "taken_over";
+  if (type == "verdict_recorded") // R18:
+    return "recorded";
   return std::nullopt;
 }
 
 // Event types whose committed change increments fact_version of every role it transitions (EX-3 fact versions).
 bool bumps_fact(std::string_view type) {
-  return type == "declaration_accepted" || type == "job_activated" || type == "run_taken_over";
+  return type == "declaration_accepted" || type == "job_activated" || type == "run_taken_over" ||
+         type == "verdict_recorded"; // R18: verdict_recorded is a bumping event (R18-4).
 }
 
 // Typed event columns per EX-4: job, role, generation and run are present exactly as the event type requires.
@@ -884,7 +889,7 @@ bool typed_columns_ok(const event_entry& event) {
     return !job && !role && !generation && !run;
   if (event.type == "job_activated")
     return job && !role && !generation && !run;
-  if (event.type == "run_claimed" || event.type == "run_taken_over")
+  if (event.type == "run_claimed" || event.type == "run_taken_over" || event.type == "verdict_recorded") // R18:
     return job && role && generation && run;
   return false;
 }
@@ -999,6 +1004,27 @@ checked apply_run_event(const ledger_rows& rows, const event_entry& event, const
   return {};
 }
 
+// R18: a verdict_recorded event completes the reviewer's active run (N11): the run is the role's active run of the
+// event's generation, ordinal 1 is that role leaving running, and the payload names the run. The row-level checks of
+// invariants 21 to 27 are in execution_review.cpp.
+checked apply_verdict_event(const event_entry& event, const hist::event_payload_v2& payload,
+                            const std::vector<hist::transition_row>& transitions, const replay_state& state) {
+  const auto key    = role_key{*event.job, *event.role};
+  const auto active = state.active_runs.find(key);
+  if (active == state.active_runs.end() || active->second != *event.run)
+    return std::unexpected(corrupt());
+  const auto run = state.runs.find(*event.run);
+  if (run == state.runs.end() || run->second.state != "active" || run->second.generation != *event.generation)
+    return std::unexpected(corrupt());
+  if (transitions.empty() || transitions[0].job != *event.job || transitions[0].role != *event.role ||
+      transitions[0].generation_id != *event.generation || !transitions[0].before_state ||
+      *transitions[0].before_state != "running" || transitions[0].after_state == "running")
+    return std::unexpected(corrupt());
+  if (ref_of(payload.references, "run") != std::to_string(*event.run))
+    return std::unexpected(corrupt());
+  return {};
+}
+
 // Apply the transition rows of one event to the role replay, deriving each running role's run and its fencing.
 checked apply_transitions(const ledger_rows& rows, const event_entry& event, const std::vector<hist::transition_row>& transitions,
                           replay_state& state) {
@@ -1039,7 +1065,9 @@ checked apply_transitions(const ledger_rows& rows, const event_entry& event, con
       auto fenced = state.runs.find(active->second);
       if (fenced == state.runs.end() || fenced->second.state != "active")
         return std::unexpected(corrupt());
-      fenced->second.state    = "fenced";
+      // R18: the reviewer run of a verdict completes (N11) instead of being fenced.
+      const bool completes    = event.type == "verdict_recorded" && transition.ordinal == 1;
+      fenced->second.state    = completes ? "completed" : "fenced";
       fenced->second.last_seq = event.seq;
       state.active_runs.erase(active);
     }
@@ -1116,6 +1144,14 @@ checked check_request(const ledger_rows& rows, const execution_metadata& metadat
         saved->event != std::to_string(event.seq) || saved->previous_job != payload.before.active_job)
       return std::unexpected(corrupt());
     if (request.attachment)
+      return std::unexpected(corrupt());
+    return {};
+  }
+  if (event.type == "verdict_recorded") { // R18: the saved verdict_response_v1 names this request, run and event.
+    auto saved = hist::decode_verdict_result_v1(request.result);
+    if (!saved || saved->ledger != metadata.identity || saved->request_id != request.request_id || saved->job != *event.job ||
+        saved->role != *event.role || saved->revision != std::to_string(*event.revision) ||
+        saved->run != std::to_string(*event.run) || saved->event != std::to_string(event.seq) || request.attachment)
       return std::unexpected(corrupt());
     return {};
   }
@@ -1212,8 +1248,12 @@ checked replay_events(const ledger_rows& rows, const execution_metadata& metadat
       if (payload->before.active_revision != payload->after.active_revision ||
           payload->before.active_job != payload->after.active_job)
         return std::unexpected(corrupt());
-      if (auto ok = apply_run_event(rows, event, *payload, transitions, state); !ok)
+      if (event.type == "verdict_recorded") { // R18:
+        if (auto ok = apply_verdict_event(event, *payload, transitions, state); !ok)
+          return ok;
+      } else if (auto ok = apply_run_event(rows, event, *payload, transitions, state); !ok) {
         return ok;
+      }
     }
 
     if (auto ok = apply_transitions(rows, event, transitions, state); !ok)
@@ -1520,13 +1560,13 @@ value_ptr state_value(const execution_snapshot& snapshot, const std::map<std::ui
     head     = std::to_string(snapshot.revision->id);
     revision = record_node({{"id", text_node(head)}});
   }
-  const std::string activation = snapshot.activation ? std::to_string(*snapshot.activation) : "none";
-  return record_node({{"active_revision", text_node(head)},
-                      {"active_job", text_node(snapshot.active_job)},
-                      {"activation", text_node(activation)},
-                      {"revision", revision},
-                      {"roles", list_node(roles)},
-                      {"publications", list_node({})}});
+  const std::string                activation = snapshot.activation ? std::to_string(*snapshot.activation) : "none";
+  std::map<std::string, value_ptr> fields{{"active_revision", text_node(head)},  {"active_job", text_node(snapshot.active_job)},
+                                          {"activation", text_node(activation)}, {"revision", revision},
+                                          {"roles", list_node(roles)},           {"publications", list_node({})}};
+  for (auto& [key, member] : review_state_entries(snapshot)) // R18: completions and review (DB-R16).
+    fields[key] = std::move(member);
+  return record_node(std::move(fields));
 }
 
 std::uint64_t measure_state(const execution_snapshot& snapshot, const std::map<std::uint64_t, std::uint64_t>& revisions) {
@@ -1668,6 +1708,8 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
   auto                                   snapshot = build_snapshot(rows, state, metadata, dispatch_revisions);
   if (!snapshot)
     return std::unexpected(snapshot.error());
+  if (auto review = read_review(db, *snapshot); !review) // R18: invariants 21 to 27, completions and review.
+    return std::unexpected(review.error());
   snapshot->state_bytes = measure_state(*snapshot, dispatch_revisions);
   return snapshot;
 }
@@ -1995,6 +2037,7 @@ struct prepared_change {
   std::optional<artifact> manifest;
   std::optional<artifact> work;
   std::optional<artifact> provenance;
+  std::optional<artifact> verdict; // R18: verdict_v1 body of a verdict change.
   std::vector<artifact>   structures;
   std::string             markdown;
   std::string             render_text;
@@ -2078,6 +2121,16 @@ value_result<prepared_change> prepare_change(const execution_change& change) {
     if (!stored)
       return std::unexpected(stored.error());
     out.provenance = std::move(*stored);
+  }
+
+  if (change.verdict) { // R18: the normalized verdict document as a verdict_v1 value record.
+    auto canonical = hist::encode_verdict_v1(change.verdict->verdict);
+    if (!canonical)
+      return std::unexpected(invalid_error());
+    auto stored = value_artifact(hist::codec_verdict_v1, *canonical);
+    if (!stored)
+      return std::unexpected(stored.error());
+    out.verdict = std::move(*stored);
   }
 
   for (const auto& generation : change.generations) {
@@ -2200,6 +2253,10 @@ value_result<std::vector<execution_expectation>> fixed_members(const execution_s
 }
 
 checked check_shape(const execution_change& change) {
+  if (change.operation == "verdict") // R18: execution_review.cpp
+    return check_verdict_shape(change);
+  if (change.verdict) // R18: verdict facts belong to operation verdict only.
+    return std::unexpected(invalid_error());
   const auto& op       = change.operation;
   const bool  load     = op == "load";
   const bool  activate = op == "activate";
@@ -2294,6 +2351,19 @@ checked check_parameters(const execution_change& change, const hist::request_v3&
     return std::unexpected(invalid_error());
   const auto&           fields = (*decoded)->fields;
   std::set<std::string> keys;
+  if (change.operation == "verdict") { // R18: request_v3 parameters {run_id, verdict_path} (R18-4 Replay, DR18-10).
+    if (!change.verdict || fields.size() != 2)
+      return std::unexpected(invalid_error());
+    for (const auto* key : {"run_id", "verdict_path"}) {
+      const auto found = fields.find(key);
+      if (found == fields.end() || !found->second || found->second->kind != value_kind::string)
+        return std::unexpected(invalid_error());
+    }
+    if (fields.at("run_id")->string != std::to_string(change.verdict->run) || fields.at("verdict_path")->string.empty() ||
+        fields.at("verdict_path")->string.front() != '/')
+      return std::unexpected(invalid_error());
+    return {};
+  }
   if (change.operation == "claim" || change.operation == "takeover") {
     keys = {"job", "role"};
     if (change.operation == "takeover")
@@ -2829,6 +2899,28 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     return replay;
   }
 
+  if (change.operation == "verdict") { // R18: the verdict commit of execution_review.cpp, then the shared verifier.
+    if (auto ok = check_verdict_locked(db, change); !ok)
+      return std::unexpected(ok.error());
+    if (!prepared.verdict)
+      return std::unexpected(invalid_error());
+    auto request_record = intern(db, prepared.request);
+    if (!request_record)
+      return std::unexpected(request_record.error());
+    auto body = intern(db, *prepared.verdict);
+    if (!body)
+      return std::unexpected(body.error());
+    auto written = write_verdict(db, metadata.identity, change, *request_record, *body, commit_timestamp());
+    if (!written)
+      return std::unexpected(written.error());
+    ledger_rows verdict_rows;
+    if (auto verified_rows = verify_rows(db, metadata, verdict_rows); !verified_rows)
+      return std::unexpected(invalid_error());
+    locked_outcome verdict_outcome;
+    verdict_outcome.result = *written;
+    return verdict_outcome;
+  }
+
   auto head = read_head(db);
   if (!head)
     return std::unexpected(head.error());
@@ -3256,6 +3348,14 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     }
   }
 
+  // R18: blockers this load or activate clears (DB-R7); a load that keeps its job clears only that job's blockers.
+  if (!change.blockers_cleared.empty()) {
+    const bool        any_job = activate || change.job.empty();
+    const std::string job     = any_job ? std::string{} : head->job;
+    if (auto cleared = clear_blockers(db, change.blockers_cleared, *seq, job); !cleared)
+      return std::unexpected(cleared.error());
+  }
+
   // The head, the active job, the activation and the sequence of the current state.
   const auto new_activation = activate ? activation_id : head->activation;
   if (auto updated = run_bound(db,
@@ -3343,10 +3443,17 @@ stage_execution(const std::filesystem::path& path, const execution_snapshot& sna
   if (!used)
     return std::unexpected(used.error());
   if (!*used) {
-    if (auto snapshot_checked = check_snapshot(snapshot, change); !snapshot_checked)
-      return std::unexpected(snapshot_checked.error());
-    if (auto native = check_native(change, *prepared); !native)
-      return std::unexpected(native.error());
+    if (change.operation == "verdict") { // R18: native step-5 checks (execution_review.cpp).
+      if (auto checked = check_verdict_snapshot(snapshot, change); !checked)
+        return std::unexpected(checked.error());
+    } else {
+      if (auto snapshot_checked = check_snapshot(snapshot, change); !snapshot_checked)
+        return std::unexpected(snapshot_checked.error());
+      if (auto native = check_native(change, *prepared); !native)
+        return std::unexpected(native.error());
+      if (auto cleared = check_blockers_cleared(snapshot, change); !cleared) // R18: DB-R7
+        return std::unexpected(cleared.error());
+    }
   }
 
   auto staged = std::make_unique<execution_write::impl>(std::move(*database));

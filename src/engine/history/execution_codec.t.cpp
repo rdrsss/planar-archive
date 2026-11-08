@@ -525,7 +525,8 @@ TEST_CASE("execution payload v2 reference key sets per event type", "[execution_
   takeover_missing.references.erase("previous_run");
   CHECK_FALSE(encode_event_payload_v2("run_taken_over", takeover_missing));
 
-  // Ledger initialization keeps format2 payloads, and the reserved later-round events have no version 2 key set yet.
+  // Ledger initialization keeps format2 payloads, and the reserved later-round events have no version 2 key set yet;
+  // verdict_recorded (R18) has its own key set, which the load references do not satisfy.
   for (std::string_view type : {"ledger_initialized", "run_refreshed", "checkpoint_recorded", "run_released", "run_interrupted",
                                 "check_reserved", "check_recorded", "check_interrupted", "verdict_recorded", "bogus"})
     CHECK_FALSE(encode_event_payload_v2(type, accepted_payload()));
@@ -1261,4 +1262,378 @@ TEST_CASE("dispatch manifest decode bound at limit and limit plus one", "[execut
   CHECK(refused.error().code == execution_codec_code::resource_limit);
   CHECK(refused.error().limit == "manifest_bytes");
   CHECK(refused.error().maximum == limit);
+}
+
+// ---- R18 verdict codec ---------------------------------------------------------------------------------------------
+
+namespace {
+constexpr std::string_view verdict_policy = "xxh3_128:0123456789abcdef0123456789abcdef";
+
+verdict_v1 sample_verdict() {
+  verdict_v1 v;
+  v.targets   = {{"lexer", std::string(fingerprint), std::string(other_fingerprint)},
+                 {"parser", std::string(other_fingerprint), std::string(fingerprint)}};
+  v.policy    = std::string(verdict_policy);
+  v.decision  = "reject";
+  v.findings  = {{"F-1", "must", "parser", std::string("src/parser.cpp"), 42, std::string("p_style"), "Fix the parse."},
+                 {"F-2", "note", "lexer", std::nullopt, std::nullopt, std::nullopt, "Minor."}};
+  v.repair    = {"builder"};
+  v.summary   = "Two findings.";
+  v.authority = std::string(verdict_authority_reviewer);
+  return v;
+}
+
+// The structural form of sample_verdict written from R18-2, independently of the codec.
+value_ptr sample_verdict_value() {
+  return object_of({{"version", int_of(1)},
+                    {"targets", array_of({object_of({{"work", text_of("lexer")},
+                                                     {"output", text_of(std::string(fingerprint))},
+                                                     {"work_fp", text_of(std::string(other_fingerprint))}}),
+                                          object_of({{"work", text_of("parser")},
+                                                     {"output", text_of(std::string(other_fingerprint))},
+                                                     {"work_fp", text_of(std::string(fingerprint))}})})},
+                    {"policy", text_of(std::string(verdict_policy))},
+                    {"decision", text_of("reject")},
+                    {"findings", array_of({object_of({{"id", text_of("F-1")},
+                                                      {"severity", text_of("must")},
+                                                      {"work", text_of("parser")},
+                                                      {"path", text_of("src/parser.cpp")},
+                                                      {"line", int_of(42)},
+                                                      {"prescription", text_of("p_style")},
+                                                      {"text", text_of("Fix the parse.")}}),
+                                           object_of({{"id", text_of("F-2")},
+                                                      {"severity", text_of("note")},
+                                                      {"work", text_of("lexer")},
+                                                      {"text", text_of("Minor.")}})})},
+                    {"repair", array_of({text_of("builder")})},
+                    {"summary", text_of("Two findings.")},
+                    {"authority", text_of("reviewer_role_v1")}});
+}
+
+verdict_result_v1 sample_verdict_result() {
+  verdict_result_v1 r;
+  r.ledger        = std::string(ledger_id);
+  r.request_id    = "req-verdict-1";
+  r.job           = "parse";
+  r.role          = "reviewer";
+  r.revision      = "5";
+  r.run           = "11";
+  r.event         = "20";
+  r.verdict_id    = "3";
+  r.applicability = "current";
+  r.decision      = "reject";
+  r.admitted      = true;
+  r.repairs       = {{"builder", "2", "1"}};
+  r.count         = "1";
+  r.max_rounds    = "2";
+  r.opened        = {};
+  r.cleared       = {"2", "10"};
+  r.roles         = {{"builder", "stale", false}, {"reviewer", "blocked", false}};
+  return r;
+}
+
+constexpr std::string_view verdict_result_json =
+    R"j({"blockers":{"cleared":["2","10"],"opened":[]},"event":"20","job":"parse","kind":"verdict","ledger":"0123456789abcdef0123456789abcdef","repairs":[{"generation":"2","revision":"1","role":"builder"}],"request_id":"req-verdict-1","review":{"count":"1","max_rounds":"2"},"revision":"5","role":"reviewer","roles":[{"drifted":false,"role":"builder","state":"stale"},{"drifted":false,"role":"reviewer","state":"blocked"}],"run":"11","verdict":{"admitted":true,"applicability":"current","decision":"reject","id":"3"},"version":1})j";
+} // namespace
+
+TEST_CASE("R18-B verdict_v1 canonical bytes and round trip", "[r18][execution_codec]") {
+  auto encoded = encode_verdict_v1(sample_verdict());
+  REQUIRE(encoded);
+  CHECK(*encoded == canonical(sample_verdict_value()));
+  auto decoded = decode_verdict_v1(*encoded);
+  REQUIRE(decoded);
+  CHECK(decoded->targets.size() == 2);
+  CHECK(decoded->targets[1].work == "parser");
+  CHECK(decoded->findings[0].line == std::optional<std::int64_t>(42));
+  CHECK(decoded->findings[0].prescription == std::optional<std::string>("p_style"));
+  CHECK_FALSE(decoded->findings[1].path);
+  CHECK_FALSE(decoded->findings[1].line);
+  CHECK(decoded->authority == "reviewer_role_v1");
+  auto again = encode_verdict_v1(*decoded);
+  REQUIRE(again);
+  CHECK(*again == *encoded);
+
+  // Value record framing accepts the verdict codec.
+  auto frame = encode_execution_value_record(codec_verdict_v1, *encoded);
+  REQUIRE(frame);
+  CHECK(*frame == value_frame("verdict_v1", *encoded));
+  auto unframed = decode_execution_value_record(*frame);
+  REQUIRE(unframed);
+  CHECK(unframed->codec == "verdict_v1");
+
+  // verdict_value exposes the same structure.
+  auto structure = verdict_value(sample_verdict());
+  REQUIRE(structure);
+  CHECK(canonical(*structure) == *encoded);
+}
+
+TEST_CASE("R18-B verdict_v1 encoder refuses unnormalized documents", "[r18][execution_codec]") {
+  auto no_authority      = sample_verdict();
+  no_authority.authority = "";
+  CHECK_FALSE(encode_verdict_v1(no_authority));
+  auto external      = sample_verdict();
+  external.authority = "external";
+  CHECK_FALSE(encode_verdict_v1(external));
+  auto approve_must     = sample_verdict();
+  approve_must.decision = "approve";
+  approve_must.repair.clear();
+  CHECK_FALSE(encode_verdict_v1(approve_must));
+  auto approve_repair                 = sample_verdict();
+  approve_repair.decision             = "approve";
+  approve_repair.findings[0].severity = "should";
+  CHECK_FALSE(encode_verdict_v1(approve_repair));
+  approve_repair.repair.clear();
+  CHECK(encode_verdict_v1(approve_repair));
+  auto unsorted = sample_verdict();
+  std::swap(unsorted.targets[0], unsorted.targets[1]);
+  CHECK_FALSE(encode_verdict_v1(unsorted));
+  auto line_without_path             = sample_verdict();
+  line_without_path.findings[1].line = 3;
+  CHECK_FALSE(encode_verdict_v1(line_without_path));
+
+  auto many_findings = sample_verdict();
+  many_findings.findings.clear();
+  for (int i = 0; i < 257; ++i)
+    many_findings.findings.push_back({std::format("F{}", i), "note", "lexer", std::nullopt, std::nullopt, std::nullopt, "t"});
+  auto refused = encode_verdict_v1(many_findings);
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().code == execution_codec_code::resource_limit);
+  CHECK(refused.error().limit == "verdict_findings");
+  CHECK(refused.error().maximum == 256);
+  many_findings.findings.pop_back();
+  CHECK(encode_verdict_v1(many_findings));
+
+  auto long_summary    = sample_verdict();
+  long_summary.summary = std::string(16385, 's');
+  auto summary_refused = encode_verdict_v1(long_summary);
+  REQUIRE_FALSE(summary_refused);
+  CHECK(summary_refused.error().limit == "verdict_summary_bytes");
+}
+
+TEST_CASE("R18-B verdict_v1 decoder is exact", "[r18][execution_codec]") {
+  const auto base = sample_verdict_value();
+  CHECK(decode_verdict_v1(canonical(base)));
+  // Missing authority: a stored verdict is always normalized.
+  CHECK_FALSE(decode_verdict_v1(canonical(without_field(base, "authority"))));
+  CHECK_FALSE(decode_verdict_v1(canonical(with_field(base, "authority", text_of("external")))));
+  CHECK_FALSE(decode_verdict_v1(canonical(with_field(base, "extra", int_of(1)))));
+  CHECK_FALSE(decode_verdict_v1(canonical(with_field(base, "version", int_of(2)))));
+  CHECK_FALSE(decode_verdict_v1(canonical(with_field(base, "policy", text_of("xxh3_128:ABC")))));
+  CHECK_FALSE(decode_verdict_v1(canonical(base) + " "));
+  CHECK_FALSE(decode_verdict_v1(json(base)));
+}
+
+TEST_CASE("R18-B verdict field table messages and paths", "[r18][execution_codec]") {
+  const auto base  = sample_verdict_value();
+  const auto check = [](const value_ptr& v, std::string_view field, std::string_view message) {
+    auto result = verdict_from_value(v);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().field == field);
+    CHECK(result.error().message == message);
+  };
+  REQUIRE(verdict_from_value(base));
+  CHECK(verdict_from_value(without_field(base, "authority"))->authority.empty());
+  check(text_of("x"), "verdict", "Expected object");
+  check(with_field(base, "zzz", int_of(1)), "verdict.zzz", "Unknown field");
+  check(without_field(base, "targets"), "verdict.targets", "Required field");
+  check(with_field(base, "version", text_of("1")), "verdict.version", "Expected version integer");
+  check(with_field(base, "version", int_of(2)), "verdict.version", "Unsupported schema version");
+  check(with_field(base, "targets", array_of({})), "verdict.targets", "List is too short");
+  check(with_field(base, "targets", text_of("x")), "verdict.targets", "Expected list");
+  const auto target = [](std::string work, std::string output, std::string fp) {
+    return object_of(
+        {{"work", text_of(std::move(work))}, {"output", text_of(std::move(output))}, {"work_fp", text_of(std::move(fp))}});
+  };
+  const std::string f(fingerprint);
+  check(with_field(base, "targets", array_of({target("Lexer", f, f)})), "verdict.targets.0.work", "Invalid ID");
+  check(with_field(base, "targets", array_of({target("lexer", "xxh3_128:00", f)})), "verdict.targets.0.output",
+        "Malformed output digest");
+  check(with_field(base, "targets", array_of({target("lexer", f, "sha:00")})), "verdict.targets.0.work_fp",
+        "Malformed output digest");
+  // Unsorted and duplicate targets.
+  check(with_field(base, "targets", array_of({target("parser", f, f), target("lexer", f, f)})), "verdict.targets.1.work",
+        "Duplicate value");
+  check(with_field(base, "targets", array_of({target("lexer", f, f), target("lexer", f, f)})), "verdict.targets.1.work",
+        "Duplicate value");
+  std::vector<value_ptr> many;
+  for (int i = 0; i < 257; ++i)
+    many.push_back(target(std::format("w{:03}", i), f, f));
+  check(with_field(base, "targets", array_of(many)), "verdict.targets", "Expected list");
+  many.pop_back();
+  CHECK(verdict_from_value(with_field(with_field(base, "targets", array_of(many)), "findings", array_of({}))));
+  // A finding whose work is not a target.
+  check(with_field(base, "targets", array_of(many)), "verdict.findings.0.work", "Invalid enum value");
+  check(with_field(base, "policy", text_of("xxh3_128:0123456789ABCDEF0123456789ABCDEF")), "verdict.policy",
+        "Malformed output digest");
+  check(with_field(base, "decision", text_of("maybe")), "verdict.decision", "Invalid enum value");
+  check(with_field(base, "repair", array_of({text_of("z"), text_of("a")})), "verdict.repair.1", "Duplicate value");
+  check(with_field(base, "repair", array_of({text_of("a"), text_of("a")})), "verdict.repair.1", "Duplicate value");
+  check(with_field(base, "repair", array_of({int_of(1)})), "verdict.repair.0", "Invalid ID");
+  check(with_field(base, "summary", int_of(1)), "verdict.summary", "Invalid string");
+  check(with_field(base, "authority", int_of(1)), "verdict.authority", "Invalid string");
+
+  const auto finding = [](std::map<std::string, value_ptr> extra) {
+    std::map<std::string, value_ptr> fields{
+        {"id", text_of("F-9")}, {"severity", text_of("should")}, {"work", text_of("lexer")}, {"text", text_of("t")}};
+    for (auto& [k, v] : extra)
+      fields[k] = v;
+    return object_of(std::move(fields));
+  };
+  const auto with_finding = [&](value_ptr item) { return with_field(base, "findings", array_of({std::move(item)})); };
+  REQUIRE(verdict_from_value(with_finding(finding({}))));
+  check(with_finding(finding({{"id", text_of("bad id")}})), "verdict.findings.0.id", "Invalid ID");
+  check(with_finding(finding({{"id", text_of(std::string(129, 'a'))}})), "verdict.findings.0.id", "Invalid ID");
+  check(with_finding(finding({{"severity", text_of("fatal")}})), "verdict.findings.0.severity", "Invalid enum value");
+  check(with_finding(finding({{"work", text_of("emitter")}})), "verdict.findings.0.work", "Invalid enum value");
+  check(with_finding(finding({{"path", text_of("../x")}})), "verdict.findings.0.path", "Invalid portable path");
+  check(with_finding(finding({{"path", text_of("a/.git/x")}})), "verdict.findings.0.path", "Invalid portable path");
+  // Portable source paths of 1 to 4096 bytes, built from 100-byte segments.
+  const auto long_path = [](std::size_t n) {
+    std::string out(n, 'a');
+    for (std::size_t i = 100; i + 1 < n; i += 101)
+      out[i] = '/';
+    return out;
+  };
+  CHECK(verdict_from_value(with_finding(finding({{"path", text_of(long_path(4096))}}))));
+  check(with_finding(finding({{"path", text_of(long_path(4097))}})), "verdict.findings.0.path", "Invalid portable path");
+  check(with_finding(finding({{"path", text_of(std::string(129, 'a'))}})), "verdict.findings.0.path", "Invalid portable path");
+  check(with_finding(finding({{"line", int_of(3)}})), "verdict.findings.0.path", "Required field");
+  check(with_finding(finding({{"path", text_of("a")}, {"line", int_of(0)}})), "verdict.findings.0.line", "Integer out of range");
+  check(with_finding(finding({{"path", text_of("a")}, {"line", text_of("3")}})), "verdict.findings.0.line",
+        "Integer out of range");
+  CHECK(verdict_from_value(with_finding(finding({{"path", text_of("a")}, {"line", int_of(2147483647)}}))));
+  check(with_finding(finding({{"prescription", text_of("Bad")}})), "verdict.findings.0.prescription", "Invalid ID");
+  check(with_finding(finding({{"text", text_of("")}})), "verdict.findings.0.text", "Invalid string");
+  check(with_finding(finding({{"zzz", text_of("")}})), "verdict.findings.0.zzz", "Unknown field");
+  check(with_field(base, "findings", array_of({finding({}), finding({})})), "verdict.findings.1.id", "Duplicate value");
+}
+
+TEST_CASE("R18-B verdict bounds order", "[r18][execution_codec]") {
+  const auto base     = sample_verdict_value();
+  const auto bound_of = [](const value_ptr& v) {
+    auto result = check_verdict_bounds(v);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == execution_codec_code::resource_limit);
+    return result.error();
+  };
+  REQUIRE(check_verdict_bounds(base));
+  const auto             item = object_of({{"text", text_of(std::string(4097, 't'))}});
+  std::vector<value_ptr> items(257, object_of({}));
+  items[0] = item;
+  // Count wins over finding text, and finding text wins over summary.
+  auto both = with_field(with_field(base, "findings", array_of(items)), "summary", text_of(std::string(16385, 's')));
+  CHECK(bound_of(both).limit == "verdict_findings");
+  auto text_and_summary = with_field(with_field(base, "findings", array_of({item})), "summary", text_of(std::string(16385, 's')));
+  auto e                = bound_of(text_and_summary);
+  CHECK(e.limit == "verdict_finding_bytes");
+  CHECK(e.maximum == 4096);
+  auto summary = bound_of(with_field(base, "summary", text_of(std::string(16385, 's'))));
+  CHECK(summary.limit == "verdict_summary_bytes");
+  CHECK(summary.maximum == 16384);
+  CHECK(check_verdict_bounds(with_field(base, "summary", text_of(std::string(16384, 's')))));
+  CHECK(check_verdict_bounds(with_field(base, "findings", array_of({object_of({{"text", text_of(std::string(4096, 't'))}})}))));
+  // Shapes the bounds do not apply to are left to the field table.
+  CHECK(check_verdict_bounds(text_of("x")));
+  CHECK(check_verdict_bounds(with_field(base, "findings", text_of("x"))));
+}
+
+TEST_CASE("R18-B verdict decision rule", "[r18][execution_codec]") {
+  auto v     = sample_verdict();
+  v.decision = "approve";
+  auto must  = check_verdict_decision(v);
+  REQUIRE_FALSE(must);
+  CHECK(must.error().field == "verdict.decision");
+  v.findings[0].severity = "should";
+  CHECK_FALSE(check_verdict_decision(v));
+  v.repair.clear();
+  CHECK(check_verdict_decision(v));
+  v.decision             = "reject";
+  v.findings[0].severity = "must";
+  v.repair               = {"builder"};
+  CHECK(check_verdict_decision(v));
+}
+
+TEST_CASE("R18-B verdict_recorded payload references", "[r18][execution_codec]") {
+  event_payload_v2 p;
+  p.operation  = "verdict";
+  p.before     = {"5", "parse"};
+  p.after      = {"5", "parse"};
+  p.reason     = "completed";
+  p.references = {{"body", "12"}, {"run", "11"}, {"verdict", "3"}};
+  constexpr std::string_view expected =
+      R"j({"after":{"active_job":"parse","active_revision":"5"},"before":{"active_job":"parse","active_revision":"5"},"operation":"verdict","reason":"completed","references":{"body":"12","run":"11","verdict":"3"},"version":2})j";
+  auto encoded = encode_event_payload_v2("verdict_recorded", p);
+  REQUIRE(encoded);
+  CHECK(*encoded == expected);
+  auto decoded = decode_event_payload_v2("verdict_recorded", expected);
+  REQUIRE(decoded);
+  CHECK(decoded->references == p.references);
+
+  auto provenance                     = p;
+  provenance.references["provenance"] = "4";
+  CHECK_FALSE(encode_event_payload_v2("verdict_recorded", provenance));
+  auto missing = p;
+  missing.references.erase("body");
+  CHECK_FALSE(encode_event_payload_v2("verdict_recorded", missing));
+  auto empty_reason   = p;
+  empty_reason.reason = "";
+  CHECK_FALSE(encode_event_payload_v2("verdict_recorded", empty_reason));
+  auto other_operation      = p;
+  other_operation.operation = "check";
+  CHECK_FALSE(encode_event_payload_v2("verdict_recorded", other_operation));
+}
+
+TEST_CASE("R18-B verdict_result_v1 saved JSON round trip", "[r18][execution_codec]") {
+  auto encoded = encode_verdict_result_v1(sample_verdict_result());
+  REQUIRE(encoded);
+  CHECK(*encoded == verdict_result_json);
+  CHECK(encoded->find("token") == std::string::npos);
+  auto decoded = decode_verdict_result_v1(verdict_result_json);
+  REQUIRE(decoded);
+  CHECK(decoded->admitted);
+  CHECK(decoded->cleared == std::vector<std::string>{"2", "10"});
+  CHECK(decoded->roles.size() == 2);
+  auto again = encode_verdict_result_v1(*decoded);
+  REQUIRE(again);
+  CHECK(*again == verdict_result_json);
+
+  // An approval with an opened blocker list and drift on a running role.
+  auto approve         = sample_verdict_result();
+  approve.decision     = "approve";
+  approve.admitted     = false;
+  approve.repairs      = {};
+  approve.cleared      = {};
+  approve.opened       = {{"4", "unowned_rejection"}};
+  approve.roles        = {{"reviewer", "running", true}};
+  auto approve_encoded = encode_verdict_result_v1(approve);
+  REQUIRE(approve_encoded);
+  CHECK(decode_verdict_result_v1(*approve_encoded));
+
+  const auto refused = [](auto mutate) {
+    auto r = sample_verdict_result();
+    mutate(r);
+    CHECK_FALSE(encode_verdict_result_v1(r));
+  };
+  refused([](verdict_result_v1& r) { r.admitted = false; });
+  refused([](verdict_result_v1& r) { r.applicability = "historical"; });
+  refused([](verdict_result_v1& r) { r.applicability = "stale"; });
+  refused([](verdict_result_v1& r) { r.decision = "approve"; });
+  refused([](verdict_result_v1& r) { r.count = "01"; });
+  refused([](verdict_result_v1& r) { r.max_rounds = ""; });
+  refused([](verdict_result_v1& r) { r.cleared = {"10", "2"}; });
+  refused([](verdict_result_v1& r) { r.cleared = {"2", "2"}; });
+  refused([](verdict_result_v1& r) { r.opened = {{"5", "capped"}}; });
+  refused([](verdict_result_v1& r) { r.roles = {{"reviewer", "blocked", false}, {"builder", "stale", false}}; });
+  refused([](verdict_result_v1& r) { r.roles = {{"builder", "stale", true}}; });
+  refused([](verdict_result_v1& r) { r.verdict_id = "0"; });
+  refused([](verdict_result_v1& r) { r.ledger = "x"; });
+
+  CHECK_FALSE(decode_verdict_result_v1(std::string(verdict_result_json) + "\n"));
+  CHECK_FALSE(
+      decode_verdict_result_v1(replaced(std::string(verdict_result_json), R"j("admitted":true)j", R"j("admitted":"true")j")));
+  CHECK_FALSE(
+      decode_verdict_result_v1(replaced(std::string(verdict_result_json), R"j("kind":"verdict")j", R"j("kind":"claim")j")));
+  CHECK(decode_verdict_result_v1(std::string(verdict_result_json)).has_value());
+  CHECK_FALSE(
+      decode_verdict_result_v1(replaced(std::string(verdict_result_json), R"j("run":"11",)j", R"j("run":"11","token":"x",)j")));
 }
