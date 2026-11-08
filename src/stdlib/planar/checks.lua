@@ -1,0 +1,116 @@
+-- R17 trusted check planning and completion applicability. Pure over accepted snapshots; native owns all I/O.
+-- Embed after dispatch.lua, before review.lua. Integration installs hooks.acceptance and hooks.blockers_to_clear.
+local checks=(function()
+ local M={hooks={}}
+ local function arr(t)return engine and engine.array and engine.array(t or {}) or (t or {}) end
+ local function obj(t)return engine and engine.object and engine.object(t) or t end
+ local function eq(a,b)return a~=nil and b~=nil and tostring(a)==tostring(b) end
+ local function sorted(t,key)local out={};for _,v in ipairs(t or {})do out[#out+1]=v end;table.sort(out,function(a,b)return key(a)<key(b)end);return arr(out)end
+ local function row(S,role)for _,r in ipairs(S.roles or {})do if r.job==S.active_job and r.role==role then return r end end end
+ local function structure(r)return r and type(r.generation)=="table" and r.generation.structure or {} end
+ local function lineage(r,g)
+  if not r or type(r.generation)~="table" then return false end
+  for _,id in ipairs(r.generation.lineage or {r.generation.id})do if eq(id,g)then return true end end
+  return false
+ end
+ local function owner(S,work)for _,r in ipairs(S.roles or {})do if r.job==S.active_job and r.state~="retired" then for _,w in ipairs(structure(r).work or {})do if w==work then return r end end end end end
+ local function completion_list(S,role)
+  local r=row(S,role);local out={}
+  for _,c in ipairs(S.completions or {})do if c.job==S.active_job and c.role==role and lineage(r,c.generation)then out[#out+1]=c end end
+  table.sort(out,function(a,b)return tonumber(a.seq)>tonumber(b.seq)end);return out
+ end
+ function M.current_completion(S,role)return completion_list(S,role)[1]end
+ function M.unit_output(c,work)for _,u in ipairs(c and c.units or {})do if u.work==work then return u.output end end end
+ function M.current_work(S,r)
+  if M.hooks.current_work then return M.hooks.current_work(S,r)end
+  if dispatch_internal and S.revision and S.revision.interpretation then
+   local location=dispatch_internal.locate(S.revision.interpretation,S.active_job,r.role)
+   if location then
+    local states={};for _,v in ipairs(S.roles or {})do if v.job==S.active_job then states[v.role]=v.state end end
+    local repair="0";for _,v in ipairs(S.review and S.review.repairs or {})do if v.role==r.role then repair=v.revision end end
+    return dispatch_internal.role_material(location,S.publications or {},repair,states)
+   end
+  end
+  if type(r.run)=="table" and r.run.dispatch and not r.drifted then return {work=r.run.dispatch.work,digest=r.run.dispatch.work_fp}end
+ end
+ local function observed(S,work)
+  for _,v in ipairs(S.observed or {})do if v.work==work then return v.output end end
+  local latest
+  for _,c in ipairs(S.completions or {})do local out=M.unit_output(c,work);if out and (not latest or tonumber(c.seq)>tonumber(latest.seq))then latest={seq=c.seq,output=out}end end
+  return latest and latest.output
+ end
+ function M.completion_mismatches(S,c)
+  local out={}
+  for _,u in ipairs(c.units or {})do local o=owner(S,u.work);if o and o.role==c.role then local current=observed(S,u.work);if current~=u.output then out[u.work]={work=u.work,recorded=u.output,current=current or "none"}end end end
+  for _,v in ipairs(c.vectors or {})do for _,t in ipairs(v.targets or {})do local o=owner(S,t.work);if o and o.role~=c.role then local current=M.unit_output(M.current_completion(S,o.role),t.work);if current~=t.output then out[t.work]={work=t.work,recorded=t.output,current=current or "none"}end end end end
+  local values={};for _,v in pairs(out)do values[#values+1]=obj(v)end;return sorted(values,function(v)return v.work end)
+ end
+ function M.applicable_completion(S,role)
+  local r=row(S,role);if not r then return nil end
+  local current=M.current_work(S,r);if not current then return nil end
+  for _,c in ipairs(completion_list(S,role))do if c.work_fp==current.digest and #M.completion_mismatches(S,c)==0 then return c end end
+ end
+ function M.plan(S,role)
+  local r=row(S,role);if not r or type(r.run)~="table" then return nil,"fenced"end
+  if structure(r).kind=="reviewer"then return nil,"reference"end
+  local current=M.current_work(S,r);if not current then return nil,"internal"end
+  local W=current.work;local owned,units,selected={},{},{}
+  for _,u in ipairs(W.units or {})do selected[u.id]=true;units[#units+1]=obj({work=u.id,paths=u.paths});for _,p in ipairs(u.paths)do owned[#owned+1]=p end end
+  local definitions,tools={},{};for _,c in ipairs(W.checks or {})do definitions[c.id]=c end;for _,t in ipairs(W.toolchains or {})do tools[t.id]=t end
+  local producers,producer_ids={},{}
+  for _,d in ipairs(W.dependencies or {})do if d.phase=="complete" or d.source=="facet"then if not selected[d.producer]then producer_ids[d.producer]=true end end end
+  local location=dispatch_internal and dispatch_internal.locate(S.revision.interpretation,S.active_job,role)
+  for _,u in ipairs(location and location.spec.work or {})do if producer_ids[u.id]then local own=owner(S,u.id);producers[#producers+1]=obj({work=u.id,paths=u.paths,completion_output=(own and M.unit_output(M.current_completion(S,own.role),u.id))or "none"})end end
+  local plan_checks,contracts,need_contracts={},{},false
+  for _,e in ipairs(W.effective_checks or {})do for _,id in ipairs(e.checks)do local c=definitions[id];local t=c and tools[c.toolchain];if not t then return nil,"internal"end
+   local env={};for _,v in ipairs(t.environment or {})do env[v.name]=v.value end
+   local vector={e.work};for _,input in ipairs(c.inputs or {})do if input=="output_vector"then for id in pairs(producer_ids)do vector[#vector+1]=id end elseif input=="expected_contracts"then need_contracts=true end end
+   table.sort(vector)
+   plan_checks[#plan_checks+1]=obj({work=e.work,check=c.id,toolchain=c.toolchain,command=t.command,argv=c.argv,environment=obj(env),timeout_ms=c.timeout_ms,max_output_bytes=c.max_output_bytes,selection=c.selection,inputs=c.inputs,coverage=c.coverage,vector=arr(vector)})
+  end end
+  if need_contracts then for _,entry in ipairs(W.contracts or {})do
+   local c=entry.declaration or entry;local expected=c.expected;local path,bytes
+   if type(expected)=="table" then path=expected.path or (type(expected.file)=="table" and expected.file.path or expected.file);bytes=expected.text or expected.bytes or expected.content end
+   -- Normalized interpretations retain file provenance in the expected value; inline text deliberately has no path.
+   if path and not bytes and location then for _,file in ipairs(location.bundle.files or {})do if file.path==path then bytes=file.bytes end end end
+   contracts[#contracts+1]=obj({id=c.id,work=c.producer,path=path or "",bytes=bytes or (type(expected)=="string" and expected or ""),bytes_digest=entry.semantic or ""})
+  end end
+  local facets={};for _,f in ipairs(location and location.spec.facets or W.facets or {})do if selected[f.producer or f.work]then facets[#facets+1]=obj({work=f.producer or f.work,facet=f.id,paths=f.paths})end end
+  local registry=location and location.registry or {}
+  return obj({version=1,job=S.active_job,role=role,run=tostring(r.run.id),generation=tostring(r.generation.id),root=W.root,base=W.base.label,registry=obj({id=registry.id or "",revision=registry.revision or ""}),units=sorted(units,function(v)return v.work end),checks=sorted(plan_checks,function(v)return v.work.."\0"..v.check end),contracts=sorted(contracts,function(v)return v.id end),facets=sorted(facets,function(v)return v.work.."\0"..v.facet end),owned=sorted(owned,function(v)return v end),frozen=W.ownership.frozen,excluded=W.ownership.excluded,producers=sorted(producers,function(v)return v.work end)})
+ end
+ local function add(set,key)set[key]=true end
+ function M.evaluate(S,plan,result,options)
+  options=options or {};local r=row(S,plan.role)
+  if not r or type(r.run)~="table" or not eq(r.run.id,plan.run)then return nil,"fenced"end
+  local withheld={}
+  for _,e in ipairs(result.evidence or {})do if e.outcome~="pass"then add(withheld,e.reason=="input_changed" and "input_changed" or e.check=="planar.boundary_v1" and "boundary" or "check_failed")end end
+  if result.recapture=="differs" or result.recapture_matches==false then add(withheld,"input_changed")end
+  if r.drifted then add(withheld,"drifted")end
+  local material=M.current_work(S,r)
+  for _,p in ipairs(material and material.prerequisites or {})do if p.status~="available" and p.status~="answered"then add(withheld,p.phase=="start" and "start_prerequisite" or "complete_prerequisite")end end
+  for _,d in ipairs(material and material.work.dependencies or {})do if d.phase=="complete" and (d.quality=="done" or d.quality=="accepted")then
+   local o=owner(S,d.producer);local ok=o and (o.role==plan.role or M.applicable_completion(S,o.role)~=nil)
+   if d.quality=="accepted"then ok=false;if M.hooks.acceptance then local accepted=M.hooks.acceptance(S);for _,u in ipairs(accepted.units or {})do if u.work==d.producer and u.accepted then ok=true end end end end
+   if not ok then add(withheld,"complete_prerequisite")end
+  end end
+  if options.retry_exhausted then add(withheld,"retry_exhausted")end
+  local reasons={};for reason in pairs(withheld)do reasons[#reasons+1]=reason end;table.sort(reasons)
+  local transitions,vector={},{}
+  if #reasons==0 then transitions[1]=obj({job=plan.job,role=plan.role,before_state="running",before_drifted=false,after_state="done",after_drifted=false,reason="completed"})end
+  for _,v in ipairs(S.roles or {})do if v.job==plan.job then vector[#vector+1]=obj({job=v.job,role=v.role,state=v.role==plan.role and #reasons==0 and "done" or v.state,drifted=v.drifted==true})end end
+  local facts={reservation=result.reservation or options.reservation,evidence=result.evidence,observation=result.observation,blockers_cleared=arr({})}
+  if #reasons==0 then facts.completion=obj({publications=result.facets or result.publications or arr({})})end
+  if M.hooks.blockers_to_clear then facts.blockers_cleared=M.hooks.blockers_to_clear(S,{operation="check",job=plan.job})end
+  local change=obj({version=1,operation="check",facts=obj(facts),vector=sorted(vector,function(v)return v.role end),transitions=arr(transitions),expected=arr({}),withheld=arr(reasons)})
+  if M.hooks.reconcile then change=M.hooks.reconcile(S,change,plan,result)end
+  return change
+ end
+ function M.evidence_lines(S,role)
+  local own={};for _,w in ipairs(structure(row(S,role)).work or {})do own[w]=true end
+  local lines={"Check evidence (recorded, latest per work and check):"}
+  for _,e in ipairs(sorted(S.evidence or {},function(e)return e.work.."\0"..e.check end))do if own[e.work]then lines[#lines+1]="- "..e.work.." "..e.check..": "..e.outcome..(e.outcome=="pass" and "" or " ("..e.reason..")")end end
+  return lines
+ end
+ return M
+end)()

@@ -666,3 +666,10 @@ planar_rewrite_module(planar_process_resolve
 
 planar_rewrite_module(planar_process_runner
   INTERFACE process/runner.cppm SOURCES process/runner.cpp TESTS process/runner.t.cpp TEST_TIMEOUT 60)
+
+planar_rewrite_module(planar_capture_tree_digest
+  INTERFACE capture/tree_digest.cppm SOURCES capture/tree_digest.cpp
+  DEPENDS planar_value planar_canonical planar_xxhash)
+planar_rewrite_module(planar_execution_check
+  INTERFACE execution/check.cppm SOURCES execution/check.cpp
+  DEPENDS planar_value planar_capture_native planar_capture_tree_digest planar_process_runner planar_process_resolve planar_hash planar_json_codec planar_glaze TESTS execution/check.t.cpp)
