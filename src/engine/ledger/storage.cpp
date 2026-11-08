@@ -226,7 +226,7 @@ std::expected<void, format_error> header(int fd) {
   };
   if (u32(68) != 1347178034)
     return refuse(format_error_code::foreign_ledger, "Unrecognized ledger application");
-  if (u32(60) != 1 && u32(60) != 2)
+  if (u32(60) != 1 && u32(60) != 2 && u32(60) != 3)
     return refuse(format_error_code::unsupported_version, "Unsupported ledger format version");
   if (u32(56) != 1 || bytes[18] != 1 || bytes[19] != 1)
     return refuse(format_error_code::corrupt, "Unsupported ledger encoding or journal mode");
@@ -330,6 +330,20 @@ std::expected<void, format_error> check_schema(connection& db, ledger_format for
     return refuse(format_error_code::corrupt, "Incomplete ledger schema");
   return {};
 }
+// A file marked format3 must carry the format3 table set; a format1 or format2 file with a forged marker stays an
+// unsupported version, as the header check reported before the format3 read variant existed.
+std::expected<void, format_error> check_format3_shape(connection& db) {
+  auto tables = scalar(db, "SELECT count(*) FROM sqlite_schema WHERE type='table'");
+  if (!tables)
+    return std::unexpected(tables.error());
+  auto execution = scalar(db, "SELECT count(*) FROM sqlite_schema WHERE type='table' AND name IN "
+                              "('job_activations','generations','runs','dispatches','role_state','run_state','transitions')");
+  if (!execution)
+    return std::unexpected(execution.error());
+  if (*tables != 24 || *execution != 7)
+    return refuse(format_error_code::unsupported_version, "Unsupported ledger format version");
+  return {};
+}
 using namespace planar::engine::history;
 constexpr std::int64_t max_record_bytes = 67108864;
 std::string_view       digest_bytes(const record_digest& digest) {
@@ -364,7 +378,7 @@ std::expected<stored_record, format_error> load_record(connection& db, std::uint
     auto format = scalar(db, "PRAGMA user_version");
     if (!format)
       return std::unexpected(format.error());
-    if (*format != 2 || **kind != 4)
+    if ((*format != 2 && *format != 3) || **kind != 4)
       return refuse(format_error_code::corrupt, "Invalid record codec for selected format");
     auto value = decode_request_v2(**encoded);
     if (!value)
@@ -432,7 +446,7 @@ std::expected<stored_record, format_error> load_record(connection& db, std::uint
         auto format = scalar(db, "PRAGMA user_version");
         if (!format)
           return std::unexpected(format.error());
-        if (*format == 2)
+        if (*format >= 2)
           return refuse(format_error_code::corrupt, "Request record is not a directory child");
       }
       auto ref = db.prepare("SELECT kind,octet_length(digest),digest FROM records WHERE id=?1");
@@ -659,6 +673,231 @@ std::expected<event_row, format_error> decode_event_row(statement& row) {
                    std::move(*actor),
                    std::move(*time),
                    std::move(*payload)};
+}
+constexpr std::string_view event_columns_v3 =
+    "SELECT "
+    "seq,octet_length(type),type,version,revision_id,octet_length(request_id),request_id,octet_length(actor),actor,octet_length("
+    "occurred_at),occurred_at,octet_length(payload),payload,octet_length(job),job,octet_length(role),role,generation_id,run_id "
+    "FROM events ";
+bool format3_event_type(std::string_view type) {
+  static constexpr std::array<std::string_view, 14> types = {
+      "ledger_initialized", "declaration_accepted", "load_noop",         "job_activated",    "run_claimed",
+      "run_taken_over",     "run_refreshed",        "checkpoint_recorded", "run_released",   "run_interrupted",
+      "check_reserved",     "check_recorded",       "check_interrupted", "verdict_recorded"};
+  return std::ranges::find(types, type) != types.end();
+}
+// Format3 event row (R15-C DD35): shape and the typed reference columns only; the version-2 payload is decoded by the
+// history projection with the execution codec, which this storage module does not import.
+std::expected<event_row, format_error> decode_event_row_v3(statement& row) {
+  auto seq = row_integer(row, 0), version = row_integer(row, 3), revision = row_integer(row, 4),
+       request_length = row_integer(row, 5), job_length = row_integer(row, 13), role_length = row_integer(row, 15),
+       generation = row_integer(row, 17), run = row_integer(row, 18);
+  for (auto* column : {&seq, &version, &revision, &request_length, &job_length, &role_length, &generation, &run})
+    if (!*column)
+      return std::unexpected(column->error());
+  if (!*seq || **seq <= 0 || !*version)
+    return history_corrupt();
+  if (**version != 1 && **version != 2)
+    return refuse(format_error_code::unsupported_state, "Unsupported event version");
+  auto type = row_bytes(row, 1, false, 20), actor = row_bytes(row, 7, false, 256), time = row_bytes(row, 9, false, 24),
+       payload = row_bytes(row, 11, true, 1048576);
+  if (!type)
+    return std::unexpected(type.error());
+  if (!actor)
+    return std::unexpected(actor.error());
+  if (!time)
+    return std::unexpected(time.error());
+  if (!payload)
+    return std::unexpected(payload.error());
+  if (!format3_event_type(*type) || actor->empty() || !valid_text(*actor) || !valid_time(*time))
+    return history_corrupt();
+  std::optional<std::string> request;
+  if (**request_length) {
+    auto key = row_bytes(row, 5, false, 128);
+    if (!key)
+      return std::unexpected(key.error());
+    if (!valid_request_key(*key))
+      return history_corrupt();
+    request = std::move(*key);
+  }
+  std::string job, role;
+  if (**job_length) {
+    auto text = row_bytes(row, 13, false, 64);
+    if (!text)
+      return std::unexpected(text.error());
+    job = std::move(*text);
+  }
+  if (**role_length) {
+    auto text = row_bytes(row, 15, false, 64);
+    if (!text)
+      return std::unexpected(text.error());
+    role = std::move(*text);
+  }
+  if ((!role.empty() && job.empty()) || (*revision && **revision <= 0) || (*generation && **generation <= 0) ||
+      (*run && **run <= 0))
+    return history_corrupt();
+  if (**seq == 1) {
+    if (*type != "ledger_initialized" || **version != 1 || *revision || request || !job.empty())
+      return history_corrupt();
+  } else if (*type == "ledger_initialized" || **version != 2)
+    return history_corrupt();
+  event_row out{**seq,
+                std::move(*type),
+                **version,
+                *revision,
+                std::move(request),
+                std::move(*actor),
+                std::move(*time),
+                std::move(*payload)};
+  out.job           = std::move(job);
+  out.role          = std::move(role);
+  out.generation_id = *generation;
+  out.run_id        = *run;
+  return out;
+}
+bool format3_operation(std::string_view operation) {
+  static constexpr std::array<std::string_view, 10> operations = {"load",       "activate", "claim", "takeover",      "refresh",
+                                                                  "checkpoint", "release",  "check", "check-recover", "verdict"};
+  return std::ranges::find(operations, operation) != operations.end();
+}
+bool format3_outcome(std::string_view outcome) {
+  static constexpr std::array<std::string_view, 9> outcomes = {"accepted",  "noop",     "activated", "claimed",    "taken_over",
+                                                               "refreshed", "recorded", "released",  "interrupted"};
+  return std::ranges::find(outcomes, outcome) != outcomes.end();
+}
+std::expected<std::optional<execution_request_row>, format_error> lookup_format3_request(connection& db,
+                                                                                          std::string_view key) {
+  if (!valid_request_key(key))
+    return refuse(format_error_code::invalid_argument, "A bounded ASCII request token is required");
+  auto row = db.prepare("SELECT octet_length(request_id),request_id,octet_length(operation),operation,event_seq,revision_id,"
+                        "octet_length(outcome),outcome,octet_length(result),result FROM requests WHERE request_id=?1");
+  if (!row)
+    return storage(row.error());
+  auto bound = row->bind_text(1, key);
+  if (!bound)
+    return storage(bound.error());
+  auto step = row->step();
+  if (!step)
+    return storage(step.error());
+  if (*step == step_result::done)
+    return std::nullopt;
+  auto id = row_bytes(*row, 0, false, 128), operation = row_bytes(*row, 2, false, 16), outcome = row_bytes(*row, 6, false, 16),
+       result = row_bytes(*row, 8, true, 1048576);
+  if (!id)
+    return std::unexpected(id.error());
+  if (!operation)
+    return std::unexpected(operation.error());
+  if (!outcome)
+    return std::unexpected(outcome.error());
+  if (!result)
+    return std::unexpected(result.error());
+  auto event = row_integer(*row, 4), revision = row_integer(*row, 5);
+  if (!event)
+    return std::unexpected(event.error());
+  if (!revision)
+    return std::unexpected(revision.error());
+  if (*id != key || !format3_operation(*operation) || !format3_outcome(*outcome) || !*event || **event <= 0 || !*revision ||
+      **revision <= 0)
+    return history_corrupt();
+  return execution_request_row{std::move(*id), std::move(*operation), std::move(*outcome), **event, **revision,
+                               std::move(*result)};
+}
+// Replay of the format3 at-event state (P2-5) from immutable rows with sequence at most `sequence`, without Lua.
+std::expected<execution_state_at, format_error> replay_execution_state(connection& db, std::int64_t sequence,
+                                                                       std::string_view job) {
+  execution_state_at out;
+  {
+    auto row = db.prepare("SELECT id FROM job_activations WHERE event_seq<=?1 ORDER BY event_seq DESC,id DESC LIMIT 1");
+    if (!row)
+      return storage(row.error());
+    auto bound = row->bind_integer(1, sequence);
+    if (!bound)
+      return storage(bound.error());
+    auto step = row->step();
+    if (!step)
+      return storage(step.error());
+    if (*step == step_result::row) {
+      auto id = row_integer(*row, 0);
+      if (!id)
+        return std::unexpected(id.error());
+      if (!*id || **id <= 0)
+        return history_corrupt();
+      out.activation = **id;
+    }
+  }
+  if (job.empty())
+    return out;
+  // The last transition of each role of the job at the event; roles of other jobs are retired and omitted.
+  auto roles = db.prepare(
+      "SELECT octet_length(t.role),t.role,g.ordinal,t.after_state,t.after_drifted FROM transitions t "
+      "LEFT JOIN generations g ON g.id=t.generation_id AND g.job=t.job AND g.role=t.role "
+      "WHERE t.job=?2 AND t.event_seq<=?1 AND NOT EXISTS (SELECT 1 FROM transitions u WHERE u.job=t.job AND u.role=t.role "
+      "AND u.event_seq<=?1 AND (u.event_seq>t.event_seq OR (u.event_seq=t.event_seq AND u.ordinal>t.ordinal))) "
+      "ORDER BY t.role");
+  if (!roles)
+    return storage(roles.error());
+  auto bound = roles->bind_integer(1, sequence);
+  if (!bound)
+    return storage(bound.error());
+  bound = roles->bind_text(2, job);
+  if (!bound)
+    return storage(bound.error());
+  while (true) {
+    auto step = roles->step();
+    if (!step)
+      return storage(step.error());
+    if (*step == step_result::done)
+      break;
+    auto role = row_bytes(*roles, 0, false, 64);
+    if (!role)
+      return std::unexpected(role.error());
+    auto ordinal = row_integer(*roles, 2), drifted = row_integer(*roles, 4);
+    if (!ordinal)
+      return std::unexpected(ordinal.error());
+    if (!drifted)
+      return std::unexpected(drifted.error());
+    auto state = roles->text(3);
+    if (!state)
+      return row_failure(state.error());
+    if (!*ordinal || **ordinal <= 0 || !*drifted || (**drifted != 0 && **drifted != 1) || !*state)
+      return history_corrupt();
+    out.roles.push_back({std::move(*role), **ordinal, std::move(**state), **drifted == 1, std::nullopt});
+  }
+  for (auto& role : out.roles) {
+    if (role.state != "running")
+      continue;
+    auto run = db.prepare(
+        "SELECT r.id,g.ordinal FROM runs r JOIN generations g ON g.id=r.generation_id WHERE g.job=?2 AND g.role=?3 AND "
+        "r.claimed_seq=(SELECT max(event_seq) FROM transitions WHERE job=?2 AND role=?3 AND after_state='running' AND "
+        "event_seq<=?1) ORDER BY r.id DESC LIMIT 1");
+    if (!run)
+      return storage(run.error());
+    auto first = run->bind_integer(1, sequence);
+    if (!first)
+      return storage(first.error());
+    first = run->bind_text(2, job);
+    if (!first)
+      return storage(first.error());
+    first = run->bind_text(3, role.role);
+    if (!first)
+      return storage(first.error());
+    auto step = run->step();
+    if (!step)
+      return storage(step.error());
+    if (*step != step_result::row)
+      return history_corrupt();
+    auto id = row_integer(*run, 0), ordinal = row_integer(*run, 1);
+    if (!id)
+      return std::unexpected(id.error());
+    if (!ordinal)
+      return std::unexpected(ordinal.error());
+    if (!*id || **id <= 0 || !*ordinal || **ordinal <= 0)
+      return history_corrupt();
+    role.run = state_run_reference{**id, **ordinal};
+    out.runs.push_back({**id, role.role, **ordinal});
+  }
+  std::ranges::sort(out.runs, {}, &state_run_row::id);
+  return out;
 }
 std::expected<request_row, format_error> decode_request_row(connection& db, statement& row) {
   auto key = row_bytes(row, 0, false, 128), outcome = row_bytes(row, 5, false, 8), result = row_bytes(row, 7, true, 1048576);
@@ -969,9 +1208,10 @@ std::expected<ledger_metadata, format_error> verify(connection& db) {
   auto version = scalar(db, "PRAGMA user_version");
   if (!version)
     return std::unexpected(version.error());
-  if (*version != 1 && *version != 2)
+  if (*version != 1 && *version != 2 && *version != 3)
     return refuse(format_error_code::unsupported_version, "Unsupported ledger format version");
   const auto format = static_cast<ledger_format>(*version);
+  const bool format3 = format == ledger_format::v3;
   for (auto [sql, wanted] : {std::pair{"PRAGMA application_id", 1347178034}}) {
     auto n = scalar(db, sql);
     if (!n)
@@ -999,16 +1239,20 @@ std::expected<ledger_metadata, format_error> verify(connection& db) {
     if (*step != step_result::done)
       return refuse(format_error_code::corrupt, "Ledger integrity or storage policy failed");
   }
-  auto schema = check_schema(db, format);
+  // Format3 (R15-C DD35): the exact 69-statement schema and every execution invariant are verified by the execution
+  // module, which callers run first; this reader checks the format3 shape and the shared SQLite-level properties.
+  auto schema = format3 ? check_format3_shape(db) : check_schema(db, format);
   if (!schema)
     return std::unexpected(schema.error());
   // Inspect codec negotiation after exact schema validation, before CHECK diagnostics mask unknown versions.
-  auto unknown_event = scalar(db, "SELECT EXISTS(SELECT 1 FROM events WHERE version<>1)");
+  auto unknown_event = scalar(db, format3 ? "SELECT EXISTS(SELECT 1 FROM events WHERE version NOT IN (1,2))"
+                                          : "SELECT EXISTS(SELECT 1 FROM events WHERE version<>1)");
   if (!unknown_event)
     return std::unexpected(unknown_event.error());
   if (*unknown_event)
     return refuse(format_error_code::unsupported_state, "Unsupported event version");
-  auto unknown_codec = scalar(db, "SELECT EXISTS(SELECT 1 FROM records WHERE codec NOT IN (1,2))");
+  auto unknown_codec = scalar(db, format3 ? "SELECT EXISTS(SELECT 1 FROM records WHERE codec NOT IN (1,2,3))"
+                                          : "SELECT EXISTS(SELECT 1 FROM records WHERE codec NOT IN (1,2))");
   if (!unknown_codec)
     return std::unexpected(unknown_codec.error());
   if (*unknown_codec)
@@ -1074,7 +1318,9 @@ std::expected<ledger_metadata, format_error> verify(connection& db) {
   if (!*id || !*workspace || !*time || !valid_identity(**id) || !valid_workspace(**workspace) || !valid_time(**time))
     return refuse(format_error_code::corrupt, "Invalid ledger metadata values");
   ledger_metadata metadata{**id, **workspace, **time, format};
-  auto            records = validate_records(db);
+  if (format3)
+    return metadata;
+  auto records = validate_records(db);
   if (!records)
     return std::unexpected(records.error());
   auto history = verify_history(db, metadata);
@@ -1278,6 +1524,9 @@ std::expected<read_snapshot, format_error> read_snapshot::open_read(const std::f
     return refuse(format_error_code::unsafe_path, "Ledger identity changed during verification");
   if (db->gate_status() != read_gate_status::ready || verify_gate(guard) != read_gate_status::ready)
     return refuse(format_error_code::capture_changed, "Native ledger read gate refused");
+  // Format3 writes belong to the execution module; this storage reads format3 only (R15-C DD35).
+  if (info->format == ledger_format::v3 && access == ledger_access::read_write)
+    return refuse(format_error_code::unsupported_version, "Unsupported ledger format version");
   if (access == ledger_access::read_write) {
     // Destroy the read snapshot and connection before the separately verified writable transition.
     LEDGER_TRY(tx->rollback());
@@ -1399,11 +1648,29 @@ std::expected<std::optional<revision_row>, format_error> read_snapshot::read_rev
 }
 std::expected<std::optional<event_row>, format_error> read_snapshot::read_event(std::uint64_t sequence) const {
   return checked_read<std::optional<event_row>>(_state, [&](connection& db) {
+    if (_state->info.format == ledger_format::v3)
+      return lookup_row<event_row>(db, std::string(event_columns_v3) + "WHERE seq=?1", sequence, decode_event_row_v3);
     return lookup_row<event_row>(db, std::string(event_columns) + "WHERE seq=?1", sequence, decode_event_row);
   });
 }
 std::expected<std::optional<request_row>, format_error> read_snapshot::read_request(std::string_view key) const {
   return checked_read<std::optional<request_row>>(_state, [&](connection& db) { return lookup_request(db, key); });
+}
+std::expected<std::optional<execution_request_row>, format_error>
+read_snapshot::read_execution_request(std::string_view key) const {
+  if (_state && _state->info.format != ledger_format::v3)
+    return refuse(format_error_code::invalid_argument, "A format3 ledger is required");
+  return checked_read<std::optional<execution_request_row>>(_state,
+                                                           [&](connection& db) { return lookup_format3_request(db, key); });
+}
+std::expected<execution_state_at, format_error> read_snapshot::read_execution_state_at(std::uint64_t sequence,
+                                                                                     std::string_view job) const {
+  if (_state && _state->info.format != ledger_format::v3)
+    return refuse(format_error_code::invalid_argument, "A format3 ledger is required");
+  if (!positive_id(sequence))
+    return refuse(format_error_code::invalid_argument, "A positive signed-64 ID is required");
+  return checked_read<execution_state_at>(
+      _state, [&](connection& db) { return replay_execution_state(db, static_cast<std::int64_t>(sequence), job); });
 }
 std::expected<event_page, format_error> read_snapshot::read_events_after(std::uint64_t cursor, std::size_t limit) const {
   return checked_read<event_page>(_state, [&](connection& db) -> std::expected<event_page, format_error> {
@@ -1412,7 +1679,8 @@ std::expected<event_page, format_error> read_snapshot::read_events_after(std::ui
     auto head = load_head(db);
     if (!head)
       return std::unexpected(head.error());
-    auto rows = db.prepare(std::string(event_columns) + "WHERE seq>?1 ORDER BY seq LIMIT ?2");
+    const bool format3 = _state->info.format == ledger_format::v3;
+    auto rows = db.prepare(std::string(format3 ? event_columns_v3 : event_columns) + "WHERE seq>?1 ORDER BY seq LIMIT ?2");
     if (!rows)
       return storage(rows.error());
     auto bound = rows->bind_integer(1, std::int64_t(cursor));
@@ -1428,7 +1696,7 @@ std::expected<event_page, format_error> read_snapshot::read_events_after(std::ui
         return storage(step.error());
       if (*step == step_result::done)
         break;
-      auto event = decode_event_row(*rows);
+      auto event = format3 ? decode_event_row_v3(*rows) : decode_event_row(*rows);
       if (!event)
         return std::unexpected(event.error());
       page.events.push_back(std::move(*event));

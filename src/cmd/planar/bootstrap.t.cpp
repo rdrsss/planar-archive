@@ -20,6 +20,8 @@ import planar.cmd.planar.handlers.history;
 import planar.cmd.planar.handlers.source_export;
 import planar.cmd.planar.handlers.load;
 import planar.engine.ledger.types;
+import planar.engine.ledger.execution;
+import planar.engine.ledger.execution_schema;
 
 TEST_CASE("help is explicit and buffered", "[bootstrap]") {
   const std::array<std::string_view, 1> args   = {"--help"};
@@ -1266,7 +1268,7 @@ TEST_CASE("X07 production handler rows succeed", "[bootstrap][x07]") {
     if (r.id == "E34") {
       auto made = planar::engine::ledger::open_existing(a.work / "a", planar::engine::ledger::ledger_access::read_only);
       REQUIRE(made);
-      CHECK(made->metadata().format == planar::engine::ledger::ledger_format::v2);
+      CHECK(made->metadata().format == planar::engine::ledger::ledger_format::v3);
       CHECK(x07::fs::exists(a.work / "a"));
       // Response bytes equal the public init response, apart from the random ledger identity.
       auto mask = [](std::string text) {
@@ -2769,7 +2771,7 @@ TEST_CASE("X07 public init creates a format2 ledger with unchanged response", "[
   CHECK(got.error.empty());
   auto opened = planar::engine::ledger::open_existing(t.work / "pub.db", planar::engine::ledger::ledger_access::read_only);
   REQUIRE(opened);
-  CHECK(opened->metadata().format == planar::engine::ledger::ledger_format::v2);
+  CHECK(opened->metadata().format == planar::engine::ledger::ledger_format::v3);
   const auto id = opened->metadata().identity;
   CHECK(got.output ==
         std::format("{{\"active_revision\":\"none\",\"event\":\"1\",\"kind\":\"init\",\"ledger\":\"{}\",\"version\":1,"
@@ -3477,4 +3479,315 @@ TEST_CASE("RA01-B1 with-profile reserved command registration prints the existin
   // The same profile under another name registers normally.
   x07::put(t.trusted / "modules/p.lua", x07::inspect_module("inspect"));
   CHECK_FALSE(x07::of(x07::run(t, x07::with_profile({"inspect", "--text", "v"}))) == conflict);
+}
+
+// ---- R15-C P4: init cutover to format3 and format3 read compatibility of history and export. ----
+namespace {
+namespace p4 {
+namespace fs = std::filesystem;
+using planar::engine::value_kind;
+using planar::engine::value_ptr;
+
+struct scratch {
+  fs::path root;
+  scratch() {
+    char  pattern[] = "/tmp/planar-p4-format3-XXXXXX";
+    char* made      = ::mkdtemp(pattern);
+    REQUIRE(made != nullptr);
+    root = fs::canonical(made);
+  }
+  ~scratch() {
+    std::error_code ignored;
+    fs::remove_all(root, ignored);
+  }
+};
+struct outcome {
+  int         status = 0;
+  std::string output;
+  std::string error;
+  value_ptr   value;
+};
+outcome run(const std::vector<std::string>& args) {
+  std::vector<std::string_view> views(args.begin(), args.end());
+  auto                          result = planar::cmd::invoke(views);
+  outcome                       out{result.status, result.output, result.error, nullptr};
+  const auto&                   text = result.status == 0 ? result.output : result.error;
+  if (!text.empty()) {
+    auto decoded = planar::engine::codec_decode(std::string_view(text).substr(0, text.size() - 1));
+    if (decoded)
+      out.value = *decoded;
+  }
+  return out;
+}
+const value_ptr& at(const value_ptr& node, std::string_view key) {
+  REQUIRE(node);
+  REQUIRE(node->kind == p4::value_kind::record);
+  auto found = node->fields.find(std::string(key));
+  INFO(key);
+  REQUIRE(found != node->fields.end());
+  return found->second;
+}
+std::string str(const value_ptr& node, std::string_view key) {
+  const auto& item = at(node, key);
+  REQUIRE(item->kind == p4::value_kind::string);
+  return item->string;
+}
+std::set<std::string> keys(const value_ptr& node) {
+  std::set<std::string> out;
+  for (const auto& [name, _] : node->fields)
+    out.insert(name);
+  return out;
+}
+fs::path fixture() {
+  return fs::path(PLANAR_B2_WORKSPACE_FIXTURE).parent_path().parent_path();
+}
+outcome load(const fs::path& ledger, std::string_view head, std::string_view request) {
+  return run({"load", "--ledger", ledger.string(), "--workspace", (fixture() / "workspace/workspace.lua").string(), "--registry",
+              (fixture() / "registry/quota-tools.json").string(), "--expect-revision", std::string(head), "--request-id",
+              std::string(request), "--actor", "tester"});
+}
+outcome activate(const fs::path& ledger, std::string_view job, std::string_view head, std::string_view expect_job,
+                 std::string_view request) {
+  return run({"activate", "--ledger", ledger.string(), "--job", std::string(job), "--expect-revision", std::string(head),
+              "--expect-job", std::string(expect_job), "--request-id", std::string(request), "--actor", "tester"});
+}
+outcome history(const fs::path& ledger, std::vector<std::string> extra = {}) {
+  std::vector<std::string> args{"history", "--ledger", ledger.string()};
+  args.insert(args.end(), extra.begin(), extra.end());
+  return run(args);
+}
+/// Public init, then one embedded load: a format3 ledger with one accepted revision.
+fs::path initialized_and_loaded(const scratch& s) {
+  const auto ledger = s.root / "ledger.planar";
+  const auto made   = run({"init", "--ledger", ledger.string(), "--workspace-id", "quota"});
+  INFO(made.error);
+  REQUIRE(made.status == 0);
+  const auto loaded = load(ledger, "none", "seed");
+  INFO(loaded.error);
+  REQUIRE(loaded.status == 0);
+  return ledger;
+}
+} // namespace p4
+} // namespace
+
+TEST_CASE("R15-C init creates a verified format3 ledger with the unchanged response", "[bootstrap][format3]") {
+  p4::scratch s;
+  const auto  ledger = s.root / "pub.db";
+  const auto  got    = p4::run({"init", "--ledger", ledger.string(), "--workspace-id", "quota"});
+  INFO(got.error);
+  REQUIRE(got.status == 0);
+  CHECK(got.error.empty());
+  auto opened = planar::engine::ledger::open_format3(ledger, planar::engine::ledger::execution_access::read_only);
+  REQUIRE(opened);
+  CHECK(opened->metadata().workspace_id == "quota");
+  CHECK(planar::engine::ledger::verify_execution_ledger(ledger).has_value());
+  CHECK(got.output == std::format("{{\"active_revision\":\"none\",\"event\":\"1\",\"kind\":\"init\",\"ledger\":\"{}\","
+                                  "\"version\":1,\"workspace\":\"quota\"}}\n",
+                                  opened->metadata().identity));
+  // An existing target is refused with the existing init diagnostic and left untouched.
+  const auto again = p4::run({"init", "--ledger", ledger.string(), "--workspace-id", "quota"});
+  CHECK(again.status != 0);
+  CHECK(p4::str(p4::at(again.value, "error"), "code") == "ledger_exists");
+  CHECK(p4::str(p4::at(again.value, "error"), "message") == "Ledger target already exists");
+}
+
+TEST_CASE("R15-C format3 history page carries the typed reference keys after init load and activate",
+          "[bootstrap][format3]") {
+  p4::scratch s;
+  const auto  ledger    = p4::initialized_and_loaded(s);
+  const auto  activated = p4::activate(ledger, "combined", "1", "NONE", "act");
+  INFO(activated.error);
+  REQUIRE(activated.status == 0);
+  const auto page = p4::history(ledger);
+  INFO(page.error);
+  REQUIRE(page.status == 0);
+  CHECK(p4::str(page.value, "active_revision") == "1");
+  CHECK(p4::str(page.value, "last_event") == "3");
+  const auto& events = p4::at(p4::at(page.value, "data"), "events");
+  REQUIRE(events->items.size() == 3);
+  const std::set<std::string> summary_keys{"sequence", "type",    "version", "revision", "request_id", "actor",
+                                           "occurred_at", "payload", "job",     "role",     "generation_id", "run_id"};
+  for (const auto& event : events->items)
+    CHECK(p4::keys(event) == summary_keys);
+  const auto& init = events->items[0];
+  CHECK(p4::str(init, "type") == "ledger_initialized");
+  CHECK(p4::at(init, "version")->integer == 1);
+  CHECK(p4::str(init, "job").empty());
+  CHECK(p4::str(init, "role").empty());
+  CHECK(p4::str(init, "generation_id") == "none");
+  CHECK(p4::str(init, "run_id") == "none");
+  const auto& accepted = events->items[1];
+  CHECK(p4::str(accepted, "type") == "declaration_accepted");
+  CHECK(p4::at(accepted, "version")->integer == 2);
+  CHECK(p4::str(accepted, "request_id") == "seed");
+  CHECK(p4::at(p4::at(accepted, "payload"), "version")->integer == 2);
+  CHECK(p4::str(p4::at(p4::at(accepted, "payload"), "after"), "active_revision") == "1");
+  const auto& job = events->items[2];
+  CHECK(p4::str(job, "type") == "job_activated");
+  CHECK(p4::str(job, "job") == "combined");
+  CHECK(p4::str(job, "request_id") == "act");
+  CHECK(p4::str(p4::at(p4::at(job, "payload"), "after"), "active_job") == "combined");
+  // A bounded page reports the cursor exactly as before.
+  const auto first = p4::history(ledger, {"--limit", "2"});
+  REQUIRE(first.status == 0);
+  CHECK(p4::str(p4::at(first.value, "data"), "next_after") == "2");
+  const auto rest = p4::history(ledger, {"--after-event", "2"});
+  REQUIRE(rest.status == 0);
+  CHECK(p4::at(p4::at(rest.value, "data"), "events")->items.size() == 1);
+}
+
+TEST_CASE("R15-C format3 history revision and request results for load and activate", "[bootstrap][format3]") {
+  p4::scratch s;
+  const auto  ledger    = p4::initialized_and_loaded(s);
+  const auto  activated = p4::activate(ledger, "combined", "1", "NONE", "act");
+  REQUIRE(activated.status == 0);
+  const auto revision = p4::history(ledger, {"--revision", "1"});
+  INFO(revision.error);
+  REQUIRE(revision.status == 0);
+  const auto& view = p4::at(revision.value, "data");
+  CHECK(p4::str(view, "selector") == "revision");
+  CHECK(p4::str(p4::at(view, "revision"), "id") == "1");
+  CHECK(p4::str(p4::at(view, "revision"), "parent") == "none");
+  CHECK(p4::at(view, "interpretation")->kind == p4::value_kind::record);
+  CHECK(p4::at(view, "versions")->kind == p4::value_kind::record);
+
+  const auto loaded = p4::history(ledger, {"--request-id", "seed"});
+  INFO(loaded.error);
+  REQUIRE(loaded.status == 0);
+  const auto& load_result = p4::at(p4::at(loaded.value, "data"), "result");
+  CHECK(p4::keys(p4::at(loaded.value, "data")) == std::set<std::string>{"selector", "result"});
+  CHECK(p4::str(load_result, "request_id") == "seed");
+  CHECK(p4::str(load_result, "outcome") == "accepted");
+
+  const auto act = p4::history(ledger, {"--request-id", "act"});
+  INFO(act.error);
+  REQUIRE(act.status == 0);
+  const auto& act_result = p4::at(p4::at(act.value, "data"), "result");
+  CHECK(p4::str(act_result, "job") == "combined");
+  CHECK(p4::str(act_result, "request_id") == "act");
+  CHECK(p4::str(act_result, "event") == "3");
+  // The saved activate_v1 value equals the activate response minus its envelope keys.
+  for (const auto& [name, value] : act_result->fields) {
+    CAPTURE(name);
+    CHECK(*planar::engine::codec_encode(value) == *planar::engine::codec_encode(p4::at(activated.value, name)));
+  }
+
+  const auto missing = p4::history(ledger, {"--request-id", "absent"});
+  CHECK(missing.status != 0);
+  CHECK(p4::str(p4::at(missing.value, "error"), "code") == "request_not_found");
+}
+
+TEST_CASE("R15-C format3 history at-event replays job, activation, roles and runs", "[bootstrap][format3]") {
+  p4::scratch s;
+  const auto  ledger = p4::initialized_and_loaded(s);
+  REQUIRE(p4::activate(ledger, "combined", "1", "NONE", "one").status == 0);
+  REQUIRE(p4::activate(ledger, "split", "1", "combined", "two").status == 0);
+
+  const auto state_of = [&](std::string_view event) {
+    const auto got = p4::history(ledger, {"--at-event", std::string(event)});
+    INFO(got.error);
+    REQUIRE(got.status == 0);
+    return p4::at(got.value, "data");
+  };
+  const std::set<std::string> state_keys{"active_revision", "active_job", "activation", "roles", "runs"};
+  {
+    const auto data = state_of("1");
+    CHECK(p4::str(data, "selector") == "state");
+    CHECK(p4::str(data, "revision") == "none");
+    const auto& state = p4::at(data, "state");
+    CHECK(p4::keys(state) == state_keys);
+    CHECK(p4::str(state, "active_revision") == "none");
+    CHECK(p4::str(state, "active_job").empty());
+    CHECK(p4::str(state, "activation") == "none");
+    CHECK(p4::at(state, "roles")->items.empty());
+  }
+  {
+    const auto data = state_of("2");
+    CHECK(p4::str(p4::at(data, "revision"), "id") == "1");
+    CHECK(p4::str(p4::at(data, "state"), "active_job").empty());
+    CHECK(p4::str(p4::at(data, "event"), "type") == "declaration_accepted");
+  }
+  std::string first_activation;
+  {
+    const auto  data  = state_of("3");
+    const auto& state = p4::at(data, "state");
+    CHECK(p4::str(state, "active_job") == "combined");
+    first_activation = p4::str(state, "activation");
+    CHECK(first_activation != "none");
+    const auto& roles = p4::at(state, "roles");
+    REQUIRE(roles->items.size() == 2);
+    CHECK(p4::str(roles->items[0], "role") == "builder");
+    CHECK(p4::str(roles->items[0], "generation") == "1");
+    CHECK(p4::str(roles->items[0], "state") == "ready");
+    CHECK(p4::at(roles->items[0], "drifted")->kind == p4::value_kind::boolean);
+    CHECK_FALSE(p4::at(roles->items[0], "drifted")->boolean);
+    CHECK(p4::str(roles->items[0], "run") == "none");
+    CHECK(p4::str(roles->items[1], "role") == "reviewer");
+    CHECK(p4::str(roles->items[1], "state") == "blocked");
+    CHECK(p4::at(state, "runs")->items.empty());
+  }
+  {
+    // After the switch only the split roles are reported; the retired combined roles belong to another job.
+    const auto  data  = state_of("4");
+    const auto& state = p4::at(data, "state");
+    CHECK(p4::str(state, "active_job") == "split");
+    CHECK(p4::str(state, "activation") != first_activation);
+    std::vector<std::string> names;
+    for (const auto& role : p4::at(state, "roles")->items)
+      names.push_back(p4::str(role, "role"));
+    CHECK(names == std::vector<std::string>{"cli_worker", "library_worker", "reviewer"});
+  }
+  // Replay of an earlier event is unaffected by later rows.
+  CHECK(p4::str(p4::at(state_of("3"), "state"), "activation") == first_activation);
+  const auto missing = p4::history(ledger, {"--at-event", "9"});
+  CHECK(missing.status != 0);
+  CHECK(p4::str(p4::at(missing.value, "error"), "code") == "event_not_found");
+}
+
+TEST_CASE("R15-C export reads a format3 source tree after init and load", "[bootstrap][format3]") {
+  p4::scratch s;
+  const auto  ledger   = p4::initialized_and_loaded(s);
+  const auto  target   = s.root / "exported";
+  const auto  exported = p4::run({"export", "--ledger", ledger.string(), "--revision", "1", "--target", target.string()});
+  INFO(exported.error);
+  REQUIRE(exported.status == 0);
+  CHECK(p4::str(exported.value, "revision") == "1");
+  CHECK(p4::fs::is_directory(target));
+  // The exported source tree holds the captured workspace declaration.
+  bool declaration = false;
+  for (const auto& entry : p4::fs::recursive_directory_iterator(target))
+    declaration = declaration || entry.path().filename() == "workspace.lua";
+  CHECK(declaration);
+  const auto absent =
+      p4::run({"export", "--ledger", ledger.string(), "--revision", "2", "--target", (s.root / "none").string()});
+  CHECK(absent.status != 0);
+  CHECK_FALSE(p4::fs::exists(s.root / "none"));
+}
+
+TEST_CASE("R15-C explicit format1 and format2 ledgers still read through history unchanged", "[bootstrap][format3]") {
+  p4::scratch s;
+  for (const auto& [name, format] : {std::pair{"one.db", 1}, std::pair{"two.db", 2}}) {
+    CAPTURE(name);
+    const auto ledger = s.root / name;
+    REQUIRE((format == 1 ? planar::engine::ledger::initialize_new(ledger, "quota").has_value()
+                         : planar::engine::ledger::initialize_new_v2(ledger, "quota").has_value()));
+    const auto loaded = p4::load(ledger, "none", "seed");
+    INFO(loaded.error);
+    REQUIRE(loaded.status == 0);
+    const auto page = p4::history(ledger);
+    REQUIRE(page.status == 0);
+    for (const auto& event : p4::at(p4::at(page.value, "data"), "events")->items)
+      CHECK(p4::keys(event) == std::set<std::string>{"sequence", "type", "version", "revision", "request_id", "actor",
+                                                    "occurred_at", "payload"});
+    const auto state = p4::history(ledger, {"--at-event", "2"});
+    REQUIRE(state.status == 0);
+    CHECK(p4::keys(p4::at(p4::at(state.value, "data"), "state")) == std::set<std::string>{"active_revision"});
+    const auto request = p4::history(ledger, {"--request-id", "seed"});
+    REQUIRE(request.status == 0);
+    CHECK(p4::str(p4::at(p4::at(request.value, "data"), "result"), "outcome") == "accepted");
+    const auto target = s.root / (std::string(name) + ".export");
+    CHECK(p4::run({"export", "--ledger", ledger.string(), "--revision", "1", "--target", target.string()}).status == 0);
+    // Activate refuses format1 and format2 ledgers before any lookup.
+    CHECK(p4::activate(ledger, "combined", "1", "NONE", "act").status != 0);
+  }
 }

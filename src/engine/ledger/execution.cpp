@@ -15,6 +15,8 @@ import planar.engine.history.record;
 import planar.engine.history.request_v2;
 import planar.engine.history.request_v3;
 import planar.engine.history.execution_codec;
+import planar.engine.history.recorded_interpretation;
+import planar.engine.history.tree_core;
 import planar.engine.ledger.history_codec;
 import planar.engine.ledger.sqlite;
 import planar.engine.ledger.execution_schema;
@@ -419,6 +421,12 @@ struct run_state_row {
   std::uint64_t last_seq = 0;
 };
 
+struct edge_row {
+  std::uint64_t ordinal = 0;
+  std::string   name;
+  std::uint64_t child = 0;
+};
+
 struct current_row {
   std::optional<std::uint64_t> revision;
   std::uint64_t                last_seq = 0;
@@ -442,6 +450,7 @@ struct ledger_rows {
   std::vector<role_row>                          role_states;
   std::vector<run_state_row>                     run_states;
   std::optional<current_row>                     current;
+  std::map<std::uint64_t, std::vector<edge_row>> edges; ///< tree_edges by parent, in ordinal order.
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -551,6 +560,22 @@ checked load_records(connection& db, ledger_rows& rows) {
     rows.records.emplace(id, std::move(*entry));
     return {};
   });
+}
+
+checked load_tree_edges(connection& db, ledger_rows& rows) {
+  return for_each(db, "SELECT parent_id,ordinal,name,child_id FROM tree_edges ORDER BY parent_id,ordinal",
+                  [&](row_reader& row) -> checked {
+                    const auto parent  = row.id(0);
+                    const auto ordinal = row.number(1);
+                    auto       name    = row.text(2);
+                    const auto child   = row.id(3);
+                    if (auto finished = row.finish(); !finished)
+                      return finished;
+                    if (ordinal < 0)
+                      return std::unexpected(corrupt());
+                    rows.edges[parent].push_back(edge_row{static_cast<std::uint64_t>(ordinal), std::move(name), child});
+                    return {};
+                  });
 }
 
 checked load_events(connection& db, ledger_rows& rows) {
@@ -1329,6 +1354,143 @@ checked check_revision_shapes(const ledger_rows& rows) {
   return {};
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// L2 residuals: the five format2-era cross-row checks of EX-1 invariant 20, on format3 rows.
+
+hist::record_digest digest_array(std::string_view bytes) {
+  hist::record_digest out{};
+  for (std::size_t i = 0; i < out.size() && i < bytes.size(); ++i)
+    out[i] = static_cast<std::uint8_t>(bytes[i]);
+  return out;
+}
+
+// Directory edges versus encoded children: every edge belongs to a directory record, ordinals are contiguous from zero,
+// and each edge names exactly the encoded child at its ordinal, whose stored record has the encoded kind and digest.
+checked check_tree_edges(const ledger_rows& rows) {
+  for (const auto& [parent, list] : rows.edges) {
+    const auto found = rows.records.find(parent);
+    if (found == rows.records.end() || found->second.kind != 2)
+      return std::unexpected(corrupt());
+  }
+  for (const auto& [id, entry] : rows.records) {
+    if (entry.kind != 2)
+      continue;
+    auto decoded = hist::decode_record(entry.encoded);
+    if (!decoded)
+      return std::unexpected(corrupt());
+    const auto* directory = std::get_if<hist::directory_record>(&*decoded);
+    if (!directory)
+      return std::unexpected(corrupt());
+    const auto                         edges = rows.edges.find(id);
+    static const std::vector<edge_row> none;
+    const auto&                        list = edges == rows.edges.end() ? none : edges->second;
+    if (list.size() != directory->children.size())
+      return std::unexpected(corrupt());
+    for (std::size_t i = 0; i < list.size(); ++i) {
+      const auto& edge  = list[i];
+      const auto& child = directory->children[i];
+      if (edge.ordinal != i || edge.name != child.name || edge.child != child.id || child.id >= id)
+        return std::unexpected(corrupt());
+      const auto stored = rows.records.find(child.id);
+      if (stored == rows.records.end() || stored->second.kind != static_cast<std::int64_t>(child.kind) ||
+          stored->second.digest != digest_bytes(child.digest))
+        return std::unexpected(corrupt());
+    }
+  }
+  return {};
+}
+
+// Reader over the loaded records for tree_core: codec1 file, directory and value records only.
+std::function<std::expected<types::stored_record, types::format_error>(std::uint64_t)> rows_reader(const ledger_rows& rows) {
+  return [&rows](std::uint64_t id) -> std::expected<types::stored_record, types::format_error> {
+    const auto found = rows.records.find(id);
+    if (found == rows.records.end() || found->second.kind < 1 || found->second.kind > 3 || found->second.codec != 1)
+      return std::unexpected(types::format_error{types::format_error_code::corrupt, "Invalid tree record"});
+    auto decoded = hist::decode_record(found->second.encoded);
+    if (!decoded)
+      return std::unexpected(types::format_error{types::format_error_code::corrupt, "Invalid tree record"});
+    const types::record_reference reference{id, hist::kind_of(*decoded), digest_array(found->second.digest)};
+    return types::stored_record(reference, std::move(*decoded));
+  };
+}
+
+value_result<std::vector<hist::tree_file>> read_tree(const ledger_rows& rows, std::uint64_t root, hist::tree_profile profile) {
+  const auto found = rows.records.find(root);
+  if (found == rows.records.end() || found->second.kind != 2)
+    return std::unexpected(corrupt());
+  const types::record_reference reference{root, hist::record_kind::directory, digest_array(found->second.digest)};
+  auto                          files = hist::read_tree_core(reference, profile, rows_reader(rows));
+  if (!files)
+    return std::unexpected(corrupt());
+  return std::move(*files);
+}
+
+// Tree reachability, embedded versions, workspace identity and recorded family versus the profile selector of every
+// load request that names the revision.
+checked check_revision_content(const ledger_rows& rows, const execution_metadata& metadata) {
+  std::map<std::uint64_t, hist::recorded_family> families;
+  for (const auto& [id, revision] : rows.revisions) {
+    const auto interpretation = rows.records.find(revision.interpretation);
+    const auto versions       = rows.records.find(revision.versions);
+    if (interpretation == rows.records.end() || versions == rows.records.end() ||
+        interpretation->second.value_codec != "canonical_v1" || versions->second.value_codec != "canonical_v1")
+      return std::unexpected(corrupt());
+    auto family = hist::classify_recorded_interpretation(interpretation->second.canonical, versions->second.canonical);
+    if (!family)
+      return std::unexpected(corrupt());
+    families[id] = *family;
+    // Tree reachability: every file and directory of the three trees resolves from its root under its profile.
+    if (auto tree = read_tree(rows, revision.source, hist::tree_profile::source); !tree)
+      return std::unexpected(tree.error());
+    if (auto tree = read_tree(rows, revision.registry, hist::tree_profile::provenance); !tree)
+      return std::unexpected(tree.error());
+    const auto stdlib_profile =
+        *family == hist::recorded_family::effective ? hist::tree_profile::effective_provenance : hist::tree_profile::provenance;
+    if (auto tree = read_tree(rows, revision.stdlib, stdlib_profile); !tree)
+      return std::unexpected(tree.error());
+    // Embedded versions equal the versions record byte for byte.
+    auto root = ::planar::engine::canonical_decode(interpretation->second.canonical);
+    if (!root || !*root || (*root)->kind != value_kind::record)
+      return std::unexpected(corrupt());
+    const auto embedded = (*root)->fields.find("versions");
+    if (embedded == (*root)->fields.end())
+      return std::unexpected(corrupt());
+    auto embedded_bytes = ::planar::engine::canonical_encode(embedded->second);
+    if (!embedded_bytes || *embedded_bytes != versions->second.canonical)
+      return std::unexpected(corrupt());
+    // Workspace identifier of the recorded bundle equals ledger_meta.workspace_id.
+    const auto bundle = (*root)->fields.find("bundle");
+    if (bundle == (*root)->fields.end() || !bundle->second || bundle->second->kind != value_kind::record)
+      return std::unexpected(corrupt());
+    const auto workspace = bundle->second->fields.find("workspace");
+    if (workspace == bundle->second->fields.end() || !workspace->second || workspace->second->kind != value_kind::record)
+      return std::unexpected(corrupt());
+    const auto workspace_id = workspace->second->fields.find("id");
+    if (workspace_id == workspace->second->fields.end() || !workspace_id->second ||
+        workspace_id->second->kind != value_kind::string || workspace_id->second->string != metadata.workspace_id)
+      return std::unexpected(corrupt());
+  }
+  // Recorded family versus the profile selector of each load request.
+  for (const auto& [key, request] : rows.requests) {
+    (void)key;
+    if (request.operation != "load")
+      continue;
+    const auto body = rows.records.find(request.body);
+    if (body == rows.records.end() || body->second.kind != 4 || body->second.codec != 2)
+      return std::unexpected(corrupt());
+    auto framed = hist::decode_request_v2(body->second.encoded);
+    if (!framed)
+      return std::unexpected(corrupt());
+    const auto family = families.find(request.revision);
+    if (family == families.end())
+      return std::unexpected(corrupt());
+    const auto requested = framed->profile_argument ? hist::recorded_family::effective : hist::recorded_family::embedded;
+    if (family->second != requested)
+      return std::unexpected(corrupt());
+  }
+  return {};
+}
+
 // Role lineage as stored facts (EX-5, D44): reasons, opening events, takeover lineage and the structure digests.
 checked check_generations(const ledger_rows& rows) {
   std::map<role_key, std::vector<const generation_entry*>> groups;
@@ -1701,6 +1863,7 @@ value_result<execution_snapshot> build_snapshot(const ledger_rows& rows, const r
       out.packet_id                   = dispatch.packet;
       out.manifest_id                 = dispatch.manifest;
       out.work_id                     = dispatch.work;
+      out.revision                    = dispatch.revision;
       out.work                        = *work;
       role.dispatch                   = std::move(out);
       dispatch_revisions[dispatch.id] = dispatch.revision;
@@ -1742,11 +1905,17 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
     return std::unexpected(loaded.error());
   if (auto loaded = load_current(db, rows); !loaded)
     return std::unexpected(loaded.error());
+  if (auto loaded = load_tree_edges(db, rows); !loaded)
+    return std::unexpected(loaded.error());
 
   if (auto checked_sequences = check_sequences(rows); !checked_sequences)
     return std::unexpected(checked_sequences.error());
   if (auto shapes = check_revision_shapes(rows); !shapes)
     return std::unexpected(shapes.error());
+  if (auto edges = check_tree_edges(rows); !edges)
+    return std::unexpected(edges.error());
+  if (auto content = check_revision_content(rows, metadata); !content)
+    return std::unexpected(content.error());
 
   replay_state state;
   if (auto replayed = replay_events(rows, metadata, state); !replayed)
@@ -2015,8 +2184,12 @@ std::expected<void, execution_error> verify_execution_ledger(const std::filesyst
 }
 
 std::uint64_t execution_state_bytes(const execution_snapshot& snapshot) {
-  // The snapshot keeps no dispatch revision, so each dispatch is measured at the active revision (see the limit note).
-  return measure_state(snapshot, {});
+  // A1: each dispatch is measured at its own recorded revision, exactly as the reader measures it.
+  std::map<std::uint64_t, std::uint64_t> revisions;
+  for (const auto& row : snapshot.roles)
+    if (row.dispatch && row.dispatch->revision != 0)
+      revisions[row.dispatch->id] = row.dispatch->revision;
+  return measure_state(snapshot, revisions);
 }
 
 std::expected<request_lookup, execution_error>
@@ -2539,7 +2712,11 @@ checked check_shape(const execution_change& change) {
       return std::unexpected(invalid_error());
     if (change.revision->noop && (!change.transitions.empty() || !change.generations.empty() || !change.fenced_runs.empty()))
       return std::unexpected(invalid_error());
+    if (change.revision->noop && change.prepared)
+      return std::unexpected(invalid_error());
   }
+  if (!load && change.prepared)
+    return std::unexpected(invalid_error());
   if (activate) {
     if (change.revision || !is_identifier(change.job) || !change.role.empty() || change.previous_run || change.packet ||
         change.provenance)
@@ -3073,7 +3250,7 @@ checked check_revision_records(connection& db, const execution_revision_input& i
 }
 
 /// Collision-safe interning (D38): reuse only an exact row, refuse any other row with the same digest, else insert.
-value_result<std::uint64_t> intern(connection& db, const artifact& item) {
+value_result<std::uint64_t> intern(connection& db, const artifact& item, bool* inserted = nullptr) {
   auto query = prepare_bound(db, "SELECT id,kind,codec,encoded FROM records WHERE digest = ?1", {blob_arg(item.digest)});
   if (!query)
     return std::unexpected(query.error());
@@ -3104,6 +3281,8 @@ value_result<std::uint64_t> intern(connection& db, const artifact& item) {
     error.record_digest   = item.label == "request" ? std::string{} : hex_of(item.digest);
     return std::unexpected(error);
   }
+  if (inserted)
+    *inserted = !reused;
   if (reused)
     return *reused;
   auto id = next_value(db, "SELECT COALESCE(MAX(id),0) FROM records");
@@ -3115,6 +3294,94 @@ value_result<std::uint64_t> intern(connection& db, const artifact& item) {
       !inserted)
     return std::unexpected(inserted.error());
   return *id;
+}
+
+/// G2: intern one codec1 record of a load candidate, writing the directory edges of a newly inserted directory.
+value_result<std::uint64_t> intern_codec1(connection& db, const hist::record& item) {
+  auto frame  = hist::encode_record(item);
+  auto digest = hist::digest_record(item);
+  if (!frame || !digest)
+    return std::unexpected(invalid_error());
+  const auto  kind  = hist::kind_of(item);
+  std::string label = kind == hist::record_kind::file ? "file" : kind == hist::record_kind::directory ? "directory" : "value";
+  bool        fresh = false;
+  auto        id    = intern(db, artifact{static_cast<std::int64_t>(kind), 1, *frame, digest_bytes(*digest), label}, &fresh);
+  if (!id)
+    return std::unexpected(id.error());
+  if (fresh) {
+    if (const auto* directory = std::get_if<hist::directory_record>(&item)) {
+      for (std::size_t i = 0; i < directory->children.size(); ++i) {
+        const auto& child = directory->children[i];
+        if (auto edge = run_bound(db, "INSERT INTO tree_edges(parent_id,ordinal,name,child_id) VALUES(?1,?2,?3,?4)",
+                                  {int_arg(*id), int_arg(i), text_arg(child.name), int_arg(child.id)});
+            !edge)
+          return std::unexpected(edge.error());
+      }
+    }
+  }
+  return id;
+}
+
+value_result<std::uint64_t> intern_prepared_tree(connection& db, const execution_prepared_tree& tree) {
+  std::vector<hist::tree_file_view> views;
+  views.reserve(tree.files.size());
+  for (const auto& file : tree.files)
+    views.push_back(hist::tree_file_view{file.path, file.payload, file.mode});
+  std::optional<execution_error> stashed;
+  const hist::tree_record_intern callback =
+      [&](const hist::record& item) -> std::expected<types::record_reference, types::format_error> {
+    auto id = intern_codec1(db, item);
+    if (!id) {
+      stashed = id.error();
+      return std::unexpected(types::format_error{types::format_error_code::io, "Interning failed"});
+    }
+    auto digest = hist::digest_record(item);
+    if (!digest)
+      return std::unexpected(types::format_error{types::format_error_code::invalid_argument, "Invalid record"});
+    return types::record_reference{*id, hist::kind_of(item), *digest};
+  };
+  auto root = hist::build_tree_core(views, tree.profile, callback);
+  if (!root) {
+    if (stashed)
+      return std::unexpected(*stashed);
+    if (root.error().code == hist::tree_error_code::resource_limit) {
+      execution_error error = failure(execution_error_code::resource_limit);
+      error.limit           = "tree";
+      return std::unexpected(error);
+    }
+    return std::unexpected(invalid_error());
+  }
+  if (root->kind != hist::record_kind::directory)
+    return std::unexpected(invalid_error());
+  return root->id;
+}
+
+/// G2: intern the prepared records of an accepted load inside the staged transaction (collision-safe, D38) and return
+/// the revision input with the allocated identifiers.
+value_result<execution_revision_input> intern_prepared_revision(connection& db, const execution_prepared_revision& prepared,
+                                                                execution_revision_input input) {
+  auto source = intern_prepared_tree(db, prepared.source);
+  if (!source)
+    return std::unexpected(source.error());
+  auto registry = intern_prepared_tree(db, prepared.registry);
+  if (!registry)
+    return std::unexpected(registry.error());
+  auto stdlib = intern_prepared_tree(db, prepared.stdlib);
+  if (!stdlib)
+    return std::unexpected(stdlib.error());
+  auto interpretation =
+      intern_codec1(db, hist::record{hist::value_record{.codec = "canonical_v1", .encoded = prepared.interpretation}});
+  if (!interpretation)
+    return std::unexpected(interpretation.error());
+  auto versions = intern_codec1(db, hist::record{hist::value_record{.codec = "canonical_v1", .encoded = prepared.versions}});
+  if (!versions)
+    return std::unexpected(versions.error());
+  input.source         = *source;
+  input.registry       = *registry;
+  input.stdlib         = *stdlib;
+  input.interpretation = *interpretation;
+  input.versions       = *versions;
+  return input;
 }
 
 struct locked_outcome {
@@ -3221,8 +3488,16 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     return std::unexpected(ok.error());
   if (!accepted && !head->revision)
     return std::unexpected(invalid_error());
+  // G2: the candidate's records are interned in this write transaction, before the revision record check.
+  std::optional<execution_revision_input> revision_refs = change.revision;
+  if (accepted && change.prepared) {
+    auto interned = intern_prepared_revision(db, *change.prepared, *change.revision);
+    if (!interned)
+      return std::unexpected(interned.error());
+    revision_refs = *interned;
+  }
   if (accepted) {
-    if (auto ok = check_revision_records(db, *change.revision); !ok)
+    if (auto ok = check_revision_records(db, *revision_refs); !ok)
       return std::unexpected(ok.error());
   }
 
@@ -3283,7 +3558,7 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     auto next = next_value(db, "SELECT COALESCE(MAX(id),0) FROM revisions");
     if (!next)
       return std::unexpected(next.error());
-    const auto& refs = *change.revision;
+    const auto& refs = *revision_refs;
     if (auto inserted = run_bound(
             db,
             "INSERT INTO revisions(id,parent_id,source_id,registry_id,stdlib_id,interpretation_id,versions_id,"
@@ -3389,7 +3664,7 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
   payload.after.active_job       = change.job;
   payload.reason                 = change.transitions.empty() ? std::string{} : change.transitions.front().reason;
   if (accepted || noop) {
-    const auto& refs                     = *change.revision;
+    const auto& refs                     = *revision_refs;
     payload.references["source"]         = std::to_string(refs.source);
     payload.references["registry"]       = std::to_string(refs.registry);
     payload.references["stdlib"]         = std::to_string(refs.stdlib);

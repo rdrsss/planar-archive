@@ -10,7 +10,7 @@ using format_error_code = ::planar::engine::ledger::types::format_error_code;
 /// Exact shared redacted ledger failure.
 using format_error = ::planar::engine::ledger::types::format_error;
 /// @brief Exact supported on-disk schema discriminator.
-enum class ledger_format { v1 = 1, v2 = 2 };
+enum class ledger_format { v1 = 1, v2 = 2, v3 = 3 };
 /// @brief Verified initialization metadata; identifiers remain strings at JSON boundaries.
 struct ledger_metadata {
   std::string   identity;                   ///< Thirty-two lowercase hexadecimal digits from sixteen OS-random bytes.
@@ -47,6 +47,10 @@ struct event_row {
   std::string                 actor;       ///< Bounded UTF-8 native assertion.
   std::string                 occurred_at; ///< Contextual UTC time.
   std::string                 payload;     ///< Exact canonical event bytes; decode with the pure history codec.
+  std::string                 job{};       ///< Format3 `events.job`; empty when NULL and on format1/format2.
+  std::string                 role{};      ///< Format3 `events.role`; empty when NULL and on format1/format2.
+  std::optional<std::int64_t> generation_id{}; ///< Format3 `events.generation_id`; absent when NULL.
+  std::optional<std::int64_t> run_id{};        ///< Format3 `events.run_id`; absent when NULL.
 };
 /// Owned private replay data. Host argument bytes must never appear in public history output.
 struct request_row {
@@ -57,6 +61,40 @@ struct request_row {
   std::int64_t                           revision;       ///< Returned revision.
   ::planar::engine::ledger::load_outcome outcome;        ///< Accepted or unchanged result.
   std::string                            result;         ///< Exact saved canonical result bytes.
+};
+/// Owned format3 request row without its private body: any execution operation and its saved result bytes.
+struct execution_request_row {
+  std::string  request_id;     ///< Bounded replay key.
+  std::string  operation;      ///< Stored operation, such as `load` or `activate`.
+  std::string  outcome;        ///< Stored outcome, such as `accepted`, `noop` or `activated`.
+  std::int64_t event_sequence; ///< Saved successful operation event.
+  std::int64_t revision;       ///< Revision named by the request row.
+  std::string  result;         ///< Exact saved canonical result bytes (at most 1 MiB).
+};
+/// Run of a replayed format3 role: its identifier and the ordinal of its generation.
+struct state_run_reference {
+  std::int64_t id;         ///< Positive run identifier.
+  std::int64_t generation; ///< Positive generation ordinal of the run.
+};
+/// One role of the active job replayed at an event from its last transition row.
+struct state_role_row {
+  std::string                       role;       ///< Role identifier.
+  std::int64_t                      generation; ///< Generation ordinal of the last transition.
+  std::string                       state;      ///< After-state of the last transition.
+  bool                              drifted;    ///< After-drift of the last transition.
+  std::optional<state_run_reference> run;       ///< Run claimed at the last transition into running, while running.
+};
+/// One run active at a replayed event.
+struct state_run_row {
+  std::int64_t id;         ///< Positive run identifier.
+  std::string  role;       ///< Role of the run.
+  std::int64_t generation; ///< Generation ordinal of the run.
+};
+/// Format3 execution state replayed from rows with sequence at most one event, without Lua.
+struct execution_state_at {
+  std::optional<std::int64_t> activation; ///< Latest job activation with event_seq at most the event, absent when none.
+  std::vector<state_role_row> roles;      ///< Roles of the given job at the event, sorted by role.
+  std::vector<state_run_row>  runs;       ///< Runs active at the event, sorted by id.
 };
 /// One bounded ascending event page from the pinned snapshot.
 struct event_page {

@@ -64,10 +64,19 @@ struct command_load_options {
   std::string                 actor;           ///< Bounded nonempty UTF-8 driver assertion.
   std::optional<std::int64_t> expected_head;   ///< Numeric expected head, absent exactly for none.
 };
+/// Native activate intent (execution-contract P2-1); `expect_job` is `NONE` or a job ID, `expect_revision` an ID or none.
+struct command_activate_options {
+  std::string ledger;          ///< Private ledger path.
+  std::string job;             ///< Job to activate.
+  std::string expect_revision; ///< Canonical positive decimal or explicit none.
+  std::string expect_job;      ///< Uppercase NONE or the expected active job ID.
+  std::string request_id;      ///< Bounded ASCII request key.
+  std::string actor;           ///< Bounded nonempty UTF-8 driver assertion.
+};
 #ifdef PLANAR_AUTHORING_BUNDLE
 /// The six embedded-only authoring verbs; exists only in the authoring stack and its variants.
 enum class command_authoring_verb { spec_prompt, critique, ingest, explain_rejection, observe, orchestrator };
-/// Embedded-only authoring intent, deliberately outside `command_options` (which stays closed at five alternatives).
+/// Embedded-only authoring intent, deliberately outside `command_options` (six alternatives since R15-C activate, DD4).
 /// Path members are private normalized host spellings; unused members stay empty.
 struct command_authoring_options {
   command_authoring_verb verb = command_authoring_verb::spec_prompt; ///< Selected authoring verb.
@@ -80,7 +89,7 @@ struct command_authoring_options {
 #endif
 /// Exactly one compiled family intent, copied into the invocation owner.
 using command_options = std::variant<command_render_options, command_init_options, command_history_options,
-                                     command_export_options, command_load_options>;
+                                     command_export_options, command_load_options, command_activate_options>;
 /// Verified history selector passed to the finite native boundary.
 struct command_history_selector {
   std::string  selector;   ///< Fixed selector name.
@@ -141,6 +150,34 @@ public:
   virtual command_service_result accept_load(const command_load_options& options, const value_ptr& bundle,
                                              const value_ptr& semantic, std::span<const history::tree_file> provenance,
                                              ledger::completion_receipt& completion);
+  /// @brief Report whether the load prelude found a format3 ledger (DD1): only then is `read_execution` offered to load.
+  /// @return True for a format3 load; the default keeps the three-service format1 and format2 path.
+  virtual bool load_execution() const;
+  /// @brief Read the verified format3 execution snapshot for a format3 load, once, after capture.
+  /// @param options Retained native load intent.
+  /// @return Exact `{version:1,ledger,last_seq,snapshot}` or typed failure. Default refuses.
+  virtual command_service_result read_execution(const command_load_options& options);
+  /// @brief Prepare, intern and commit a format3 load with its reconciled execution change (G2), releasing all locks.
+  /// @param options Retained native intent.
+  /// @param bundle Normalized bundle from the retained callable.
+  /// @param semantic Semantic value from the retained callable.
+  /// @param execution `execution_change_v1` value of operation load built by trusted Lua from the read snapshot.
+  /// @param provenance Immutable VM-owned verified files; valid only during this synchronous call.
+  /// @param completion VM-owned receipt; retains saved bytes before commit and the phase after it.
+  /// @return Complete saved load envelope or typed failure. Default refuses.
+  virtual command_service_result accept_load(const command_load_options& options, const value_ptr& bundle,
+                                             const value_ptr& semantic, const value_ptr& execution,
+                                             std::span<const history::tree_file> provenance,
+                                             ledger::completion_receipt&         completion);
+  /// @brief Read the verified format3 execution snapshot for activate, after the interpretation and expectation checks.
+  /// @param options Retained native activate intent.
+  /// @return Exact `{version:1,ledger,last_seq,snapshot}` or typed failure. Default refuses.
+  virtual command_service_result read_execution(const command_activate_options& options);
+  /// @brief Validate and commit the activate change against the snapshot read by `read_execution`.
+  /// @param options Retained native activate intent.
+  /// @param change `execution_change_v1` value of operation activate.
+  /// @return Decoded saved `activate_v1` response or typed failure. Default refuses.
+  virtual command_service_result commit_execution(const command_activate_options& options, const value_ptr& change);
 #ifdef PLANAR_AUTHORING_BUNDLE
   /// @brief Open the private authoring workspace, synchronously and once.
   /// @param options Retained authoring intent; no Lua-selected host path.

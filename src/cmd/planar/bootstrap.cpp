@@ -9,6 +9,7 @@ import planar.cmd.planar.handlers.history;
 import planar.cmd.planar.handlers.source_export;
 import planar.cmd.planar.handlers.load;
 import planar.cmd.planar.handlers.extension;
+import planar.cmd.execution.activate;
 #ifdef PLANAR_AUTHORING_BUNDLE
 import planar.cmd.authoring;
 import planar.cmd.authoring.spec_prompt;
@@ -31,6 +32,8 @@ constexpr std::string_view default_root_help =
     "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
     "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
     "--actor TEXT\n"
+    "planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor "
+    "TEXT\n"
     "planar --help\n";
 } // namespace
 namespace {
@@ -73,6 +76,9 @@ struct shipped_families {
   handlers::history_options history;
   handlers::export_options  source_export;
   handlers::load_options    load;
+  // Activate binds through the real handler module in every composition (DD27), hence the qualified names.
+  ::planar::cmd::handlers::activate_options activate;
+  CLI::App*                                 activate_command = nullptr;
   CLI::App*                 render_command  = nullptr;
   CLI::App*                 init_command    = nullptr;
   CLI::App*                 history_command = nullptr;
@@ -84,15 +90,18 @@ struct shipped_families {
     history_command = &handlers::attach_history(root, history);
     export_command  = &handlers::attach_export(root, source_export);
     load_command    = &handlers::attach_load(root, load);
+    // P2-7 order: the R15 verbs follow load.
+    activate_command = &::planar::cmd::handlers::attach_activate(root, activate);
   }
   std::size_t selected() const {
     return render_command->count() + init_command->count() + history_command->count() + export_command->count() +
-           load_command->count();
+           load_command->count() + activate_command->count();
   }
   /// Tokens CLI11 bound to the selected command: its name plus one per flag and two per scalar option.
   std::size_t parsed_tokens() const {
     std::size_t total = selected();
-    for (const auto* registered : {render_command, init_command, history_command, export_command, load_command})
+    for (const auto* registered :
+         {render_command, init_command, history_command, export_command, load_command, activate_command})
       for (const auto* option : registered->get_options())
         total += option->count() * (option->get_expected_max() == 0 ? 1 : 2);
     return total;
@@ -395,6 +404,8 @@ response invoke_with_profile(const envelope::prefix_binding& binding, std::size_
   if (shipped) {
     if (families.selected() != 1 || (families.render_command->count() == 1 && !families.render_consistent()))
       return detail::usage();
+    if (families.activate_command->count() == 1)
+      return ::planar::cmd::handlers::activate_with_profile(families.activate, prefix.selector);
     // The probe state is the final state: the same options object is admitted and dispatched.
     return execute_with_profile(families.intent(), prefix.selector);
   }
@@ -465,6 +476,8 @@ response invoke(std::span<const std::string_view> arguments) {
     if (auto answered = extra.dispatch(&*vm))
       return std::move(*answered);
 #endif
+    if (families.activate_command->count() == 1)
+      return ::planar::cmd::handlers::activate_command(families.activate);
     if (families.load_command->count() == 1)
       return handlers::load_command(families.load, &*vm);
     if (families.export_command->count() == 1)

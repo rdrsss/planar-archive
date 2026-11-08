@@ -19,6 +19,7 @@ import planar.test.export_posix;
 namespace exporting = planar::engine::source_export_fault;
 #else
 import planar.engine.source_export;
+import planar.engine.ledger.execution;
 namespace exporting = planar::engine::source_export;
 #endif
 using namespace planar::engine;
@@ -419,5 +420,78 @@ TEST_CASE("source export termination leaves absent or complete target and never 
     REQUIRE(exporting::export_source(s.root / "ledger", 1, s.root / "fresh"));
     CHECK(stages(s.root) == before);
   }
+}
+#endif
+
+#if !defined(PLANAR_EXPORT_FAULT_TEST)
+// ---- R15-C P4: export reads a format3 source tree through the storage read variant. ----
+namespace {
+value_ptr export_text(std::string text) {
+  value out{};
+  out.kind   = value_kind::string;
+  out.string = std::move(text);
+  return std::make_shared<const value>(std::move(out));
+}
+value_ptr export_record(std::map<std::string, value_ptr> fields) {
+  value out{};
+  out.kind   = value_kind::record;
+  out.fields = std::move(fields);
+  return std::make_shared<const value>(std::move(out));
+}
+/// Commit one accepted load revision with a two-file source tree into a fresh format3 ledger through the ledger API.
+void format3_revision(const std::filesystem::path& ledger) {
+  take(initialize_format3(ledger, "quota"));
+  const std::vector<tree_file> stdlib{{"stdlib.lua", "return {}", 420}};
+  std::vector<tree_file_view>  views{{stdlib[0].path, stdlib[0].payload, stdlib[0].mode}};
+  const auto                   versions = export_record({{"stdlib_digest", export_text(hex(take(digest_tree(views, tree_profile::provenance))))}});
+  const auto interpretation =
+      export_record({{"tag", export_text("export")}, {"bundle", export_record({{"workspace", export_record({{"id", export_text("quota")}})}})}, {"versions", versions}});
+  auto state = take(read_execution_snapshot(ledger));
+  execution_change change;
+  change.operation = "load";
+  change.request_id = "seed";
+  change.actor      = "tester";
+  request_v2 request;
+  request.operation          = "load";
+  request.actor              = "tester";
+  request.expected_head      = "none";
+  request.workspace_argument = "quota";
+  request.registry_argument  = "registry";
+  change.request             = request;
+  change.revision            = execution_revision_input{};
+  change.prepared            = execution_prepared_revision{
+      {{{"workspace.lua", "return workspace", 420}, {"jobs/a.lua", "return job", 493}}, tree_profile::source},
+      {{{"input.json", "{}", 420}}, tree_profile::provenance},
+      {stdlib, tree_profile::provenance},
+      take(canonical_encode(interpretation)),
+      take(canonical_encode(versions))};
+  using kind_t = execution_expectation::kind_t;
+  execution_expectation revision, job, unused;
+  revision.kind   = kind_t::active_revision;
+  job.kind        = kind_t::active_job;
+  unused.kind     = kind_t::request_unused;
+  change.expected = {revision, job, unused};
+  take(commit_execution(ledger, state, change));
+}
+} // namespace
+TEST_CASE("export publishes a format3 source tree exactly", "[export][format3]") {
+  scratch s;
+  format3_revision(s.root / "ledger");
+  auto opened = open_existing(s.root / "ledger");
+  REQUIRE(opened);
+  CHECK(opened->metadata().format == ledger_format::v3);
+  auto result = exporting::export_source(s.root / "ledger", 1, s.root / "target");
+  REQUIRE(result);
+  CHECK(result->ledger == opened->metadata().identity);
+  CHECK(result->revision == 1);
+  CHECK(bytes(s.root / "target/workspace.lua") == "return workspace");
+  CHECK(bytes(s.root / "target/jobs/a.lua") == "return job");
+  struct stat st{};
+  REQUIRE(::stat((s.root / "target/jobs/a.lua").c_str(), &st) == 0);
+  CHECK((st.st_mode & 0777) == 0755);
+  auto missing = exporting::export_source(s.root / "ledger", 2, s.root / "other");
+  REQUIRE_FALSE(missing);
+  CHECK(missing.error().code == exporting::error_code::revision_not_found);
+  CHECK_FALSE(std::filesystem::exists(s.root / "other"));
 }
 #endif

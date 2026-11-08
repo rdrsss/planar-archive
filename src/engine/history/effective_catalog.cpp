@@ -168,6 +168,9 @@ std::vector<signature> shipped_signature(std::string_view name) {
   if (name == "load")
     return {{"--ledger", "text", true},          {"--workspace", "text", true},  {"--registry", "text", true},
             {"--expect-revision", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  if (name == "activate")
+    return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
+            {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
   return {};
 }
 void validate(const value_ptr& root, std::span<const std::string_view> shipped, std::span<const std::string_view> external) {
@@ -183,7 +186,8 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
                                                             {"init", "initialize_ledger_v1"},
                                                             {"history", "read_history_v1"},
                                                             {"export", "export_source_v1"},
-                                                            {"load", "accept_load_v1"}};
+                                                            {"load", "accept_load_v1"},
+                                                            {"activate", "execution_commit_v1"}};
   for (auto kind : {"commands", "shapes", "projections"}) {
     std::string_view previous;
     bool             first = true;
@@ -293,7 +297,7 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
     }
     c.field = "catalog";
   }
-  if (mandatory.size() != 5)
+  if (mandatory.size() != 6)
     c.fail();
 }
 catalog_error codec_error(const diagnostic& error) {
