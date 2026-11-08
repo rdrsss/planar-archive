@@ -123,8 +123,11 @@ std::expected<std::optional<execution_request_row>, format_error>
 format_file::read_execution_request(std::string_view key) const {
   return _snapshot.read_execution_request(key);
 }
-std::expected<execution_state_at, format_error> format_file::read_execution_state_at(std::uint64_t sequence,
-                                                                                   std::string_view job) const {
+std::expected<execution_event_detail, format_error> format_file::read_execution_event(std::uint64_t sequence) const {
+  return _snapshot.read_execution_event(sequence);
+}
+std::expected<execution_state_at, format_error> format_file::read_execution_state_at(std::uint64_t    sequence,
+                                                                                     std::string_view job) const {
   return _snapshot.read_execution_state_at(sequence, job);
 }
 record_writer::record_writer(write_transaction transaction) : _transaction(std::move(transaction)) {

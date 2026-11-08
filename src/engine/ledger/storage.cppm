@@ -97,16 +97,23 @@ public:
   /// @brief Read a format3 request row of any execution operation, without its private body.
   /// @param key ASCII request token of one through 128 bytes.
   /// @return Owned row or successful optional miss; invalid_argument on a format1 or format2 snapshot; failures invalidate.
-  std::expected<std::optional<::planar::engine::ledger::execution_request_row>, format_error> read_execution_request(std::string_view key) const;
+  std::expected<std::optional<::planar::engine::ledger::execution_request_row>, format_error>
+  read_execution_request(std::string_view key) const;
   /// @brief Replay the format3 execution state at one event from immutable rows, without Lua (P2-5 `--at-event`).
   /// @param sequence Positive event sequence; rows with a greater sequence are ignored.
   /// @param job Active job at that event, or empty for none (then no roles or runs are replayed).
   /// @return Latest activation, the job's roles and the active runs; invalid_argument on format1 or format2.
-  std::expected<::planar::engine::ledger::execution_state_at, format_error> read_execution_state_at(std::uint64_t sequence, std::string_view job) const;
+  std::expected<::planar::engine::ledger::execution_state_at, format_error> read_execution_state_at(std::uint64_t    sequence,
+                                                                                                    std::string_view job) const;
   /// @brief Copy this pinned snapshot into an already staged destination through SQLite online backup.
   /// @param destination Existing staged file owned by the caller.
   /// @return Success or storage failure mapped to the shared vocabulary.
   std::expected<void, format_error> backup_to(const std::filesystem::path& destination) const;
+
+  /// @brief Read execution event metadata and transitions without selecting run secrets.
+  /// @param sequence Positive event sequence in this owner's snapshot.
+  /// @return Owned metadata or a sticky typed failure.
+  std::expected<execution_event_detail, format_error> read_execution_event(std::uint64_t sequence) const;
 
 private:
   friend std::expected<write_transaction, format_error> begin_write(const std::filesystem::path&);

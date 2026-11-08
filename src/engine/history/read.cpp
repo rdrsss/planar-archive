@@ -4,6 +4,7 @@ import planar.engine.json_codec;
 import planar.engine.history.recorded_interpretation;
 import planar.engine.history.tree;
 import planar.engine.history.execution_codec;
+import planar.engine.canonical;
 namespace planar::engine::history {
 namespace {
 using code = history_read_code;
@@ -98,6 +99,188 @@ std::optional<std::int64_t> decimal(std::string_view s) {
     return std::nullopt;
   return n;
 }
+value_ptr array(std::vector<value_ptr> items = {}) {
+  auto v   = std::make_shared<value>();
+  v->kind  = value_kind::list;
+  v->items = std::move(items);
+  return v;
+}
+value_ptr field(const value_ptr& v, std::string_view key) {
+  if (!v || v->kind != value_kind::record)
+    return {};
+  auto it = v->fields.find(std::string(key));
+  return it == v->fields.end() ? value_ptr{} : it->second;
+}
+std::expected<value_ptr, history_read_error> execution_value(const ledger::format_file& file, std::int64_t id,
+                                                             std::string_view codec) {
+  auto rec = file.read_record(id);
+  if (!rec)
+    return storage(rec.error());
+  auto* v = std::get_if<value_record>(&rec->value);
+  if (!v || v->codec != codec)
+    return corrupt();
+  auto decoded = canonical_decode(v->encoded);
+  if (!decoded)
+    return corrupt();
+  return *decoded;
+}
+std::expected<value_ptr, history_read_error> driver_value(const ledger::format_file& file, std::optional<std::int64_t> record) {
+  auto      unknown  = object({{"status", text("unknown")}});
+  value_ptr document = object({{"version", integer(1)},
+                               {"driver", object({{"name", unknown}, {"version", unknown}})},
+                               {"trial", object({{"id", unknown}})},
+                               {"view", object({{"id", unknown}})},
+                               {"model", object({{"requested", unknown}, {"actual", unknown}})},
+                               {"session", object({{"requested", unknown}, {"actual", unknown}})},
+                               {"settings", array()}});
+  if (record) {
+    auto value = execution_value(file, *record, "driver_provenance_v1");
+    if (!value)
+      return std::unexpected(value.error());
+    document = field(*value, "document");
+    if (!document)
+      return corrupt();
+  }
+  return object(
+      {{"id", text(id(record))}, {"authority", text(record ? "driver_assertion_unverified" : "none")}, {"document", document}});
+}
+std::expected<value_ptr, history_read_error> event_view(const ledger::format_file& file, const ledger::event_row& row) {
+  auto summary = event_summary(row, file.metadata().format);
+  if (!summary)
+    return std::unexpected(summary.error());
+  auto detail = file.read_execution_event(row.sequence);
+  if (!detail)
+    return storage(detail.error());
+  std::vector<value_ptr> transitions;
+  for (const auto& t : detail->transitions) {
+    auto before =
+        t.before ? object({{"state", text(*t.before)}, {"drifted", boolean(t.before_drifted.value_or(false))}}) : text("none");
+    auto after = object({{"state", text(t.after)}, {"drifted", boolean(t.after_drifted)}});
+    transitions.push_back(object({{"ordinal", integer(t.ordinal)},
+                                  {"job", text(t.job)},
+                                  {"role", text(t.role)},
+                                  {"generation", text(id(t.generation))},
+                                  {"before", before},
+                                  {"after", after},
+                                  {"reason", text(t.reason)}}));
+  }
+  std::map<std::string, value_ptr> result{
+      {"selector", text("event")}, {"event", *summary}, {"transitions", array(std::move(transitions))}};
+  if (file.metadata().format != ledger::ledger_format::v3 || row.type == "ledger_initialized")
+    return object(std::move(result));
+  auto payload = decode_event_payload_v2(row.type, row.payload);
+  if (!payload)
+    return corrupt();
+  auto ref = [&](std::string_view key) -> std::optional<std::int64_t> {
+    auto it = payload->references.find(std::string(key));
+    return it == payload->references.end() ? std::nullopt : decimal(it->second);
+  };
+  if (row.type == "job_activated") {
+    result["execution"] =
+        object({{"activation",
+                 object({{"id", text(id(ref("activation")))}, {"job", text(row.job)}, {"revision", text(id(row.revision))}})}});
+    return object(std::move(result));
+  }
+  if (!detail->run)
+    return object(std::move(result));
+  auto run = object(
+      {{"id", text(id(detail->run))}, {"generation", text(id(detail->generation))}, {"request_id", text(detail->run_request)}});
+  std::map<std::string, value_ptr> expansion{{"run", run}};
+  value_ptr                        checkpoint = text("none");
+  if (detail->checkpoint_body) {
+    auto note = execution_value(file, *detail->checkpoint_body, "checkpoint_v1");
+    if (!note)
+      return std::unexpected(note.error());
+    checkpoint = object({{"id", text(id(detail->checkpoint))}, {"value", *note}});
+  }
+  if (detail->dispatch) {
+    auto packet = file.read_record(*detail->packet);
+    if (!packet)
+      return storage(packet.error());
+    const auto* body = std::get_if<file_record>(&packet->value);
+    if (!body)
+      return corrupt();
+    auto manifest = execution_value(file, *detail->manifest, "dispatch_manifest_v1"),
+         work     = execution_value(file, *detail->work, "work_exec_v1");
+    if (!manifest)
+      return std::unexpected(manifest.error());
+    if (!work)
+      return std::unexpected(work.error());
+    expansion["dispatch"] = object({{"id", text(id(detail->dispatch))},
+                                    {"kind", text(detail->dispatch_kind)},
+                                    {"work_fp", text("xxh3_128:" + detail->work_fp)},
+                                    {"render_fp", text("xxh3_128:" + detail->render_fp)},
+                                    {"revision", text(id(row.revision))}});
+    expansion["packet"] =
+        object({{"id", text(id(detail->packet))}, {"bytes", integer(body->payload.size())}, {"markdown", text(body->payload)}});
+    expansion["manifest"] = object({{"id", text(id(detail->manifest))}, {"value", *manifest}});
+    expansion["work"]     = object({{"id", text(id(detail->work))}, {"value", *work}});
+    auto revision         = file.read_revision(*row.revision);
+    if (!revision)
+      return storage(revision.error());
+    if (!*revision)
+      return corrupt();
+    auto source = file.read_record((**revision).references.source);
+    if (!source)
+      return storage(source.error());
+    std::string source_digest = "xxh3_128:";
+    for (auto b : source->reference.digest)
+      source_digest += std::format("{:02x}", b);
+    auto      unknown = object({{"status", text("unknown")}});
+    value_ptr model = unknown, session = unknown;
+    auto      interp = execution_value(file, (**revision).references.interpretation, "canonical_v1");
+    if (!interp)
+      return std::unexpected(interp.error());
+    auto jobs = field(field(*interp, "bundle"), "jobs");
+    if (jobs && jobs->kind == value_kind::list)
+      for (const auto& job : jobs->items) {
+        auto name = field(job, "id");
+        if (name && name->kind == value_kind::string && name->string == row.job) {
+          if (auto m = field(job, "model"))
+            model = m;
+          if (auto v = field(job, "session"))
+            session = v;
+        }
+      }
+    auto base  = field(*work, "base");
+    auto label = base && base->kind == value_kind::string ? base : field(base, "label");
+    if (!label)
+      label = text("");
+    auto native = object({{"ledger", text(file.metadata().identity)},
+                          {"revision", text(id(row.revision))},
+                          {"source", object({{"id", text(id((**revision).references.source))}, {"digest", text(source_digest)}})},
+                          {"job", text(row.job)},
+                          {"role", text(row.role)},
+                          {"generation", text(id(detail->generation))},
+                          {"base_label", label},
+                          {"work_fp", text("xxh3_128:" + detail->work_fp)},
+                          {"render_fp", text("xxh3_128:" + detail->render_fp)},
+                          {"preferences", object({{"model", model}, {"session", session}})}});
+    auto driver = driver_value(file, detail->provenance);
+    if (!driver)
+      return std::unexpected(driver.error());
+    expansion["provenance"] = object({{"native", native}, {"driver", *driver}});
+    if (row.type == "run_taken_over")
+      expansion["previous_run"] = text(id(ref("previous_run")));
+    if (row.type == "run_refreshed")
+      expansion["checkpoint"] = checkpoint;
+  } else if (row.type == "checkpoint_recorded")
+    expansion["checkpoint"] = checkpoint;
+  else if (row.type == "run_released" || row.type == "run_interrupted") {
+    expansion["run"]        = object({{"id", text(id(detail->run))},
+                                      {"generation", text(id(detail->generation))},
+                                      {"request_id", text(detail->run_request)},
+                                      {"state", text(row.type == "run_released" ? "released" : "interrupted")}});
+    expansion["checkpoint"] = checkpoint;
+    auto driver             = driver_value(file, ref("provenance"));
+    if (!driver)
+      return std::unexpected(driver.error());
+    expansion["provenance"] = object({{"driver", *driver}});
+  } else
+    return object(std::move(result));
+  result["execution"] = object(std::move(expansion));
+  return object(std::move(result));
+}
 /// Format3 saved request result (P2-5): load keeps the existing result, activate is `activate_v1`; claim and takeover
 /// assembly with the packet and manifest belongs to R15-D, so their saved value is returned as stored.
 std::expected<value_ptr, history_read_error> format3_request_view(const ledger::format_file& file, std::string_view key) {
@@ -114,11 +297,66 @@ std::expected<value_ptr, history_read_error> format3_request_view(const ledger::
     valid = static_cast<bool>(decode_activate_result_v1(r.result));
   else if (r.operation == "claim" || r.operation == "takeover")
     valid = static_cast<bool>(decode_claim_result_v1(r.result));
+  else if(r.operation=="refresh") valid=static_cast<bool>(decode_refresh_result_v1(r.result));
+  else if(r.operation=="checkpoint") valid=static_cast<bool>(decode_checkpoint_result_v1(r.result));
+  else if(r.operation=="release") valid=static_cast<bool>(decode_release_result_v1(r.result));
   if (!valid)
     return corrupt();
   auto result = saved_json(r.result);
   if (!result)
     return std::unexpected(result.error());
+  if (r.operation == "claim" || r.operation == "takeover" || r.operation == "refresh") {
+    auto event = file.read_event(r.event_sequence);
+    if (!event)
+      return storage(event.error());
+    if (!*event)
+      return corrupt();
+    auto detail = file.read_execution_event(r.event_sequence);
+    if (!detail)
+      return storage(detail.error());
+    if (!detail->packet || !detail->manifest || !detail->work || !detail->structure)
+      return corrupt();
+    auto record = file.read_record(*detail->packet);
+    if (!record)
+      return storage(record.error());
+    auto* body = std::get_if<file_record>(&record->value);
+    if (!body)
+      return corrupt();
+    auto manifest  = execution_value(file, *detail->manifest, "dispatch_manifest_v1"),
+         work      = execution_value(file, *detail->work, "work_exec_v1"),
+         structure = execution_value(file, *detail->structure, "role_structure_v1");
+    if (!manifest)
+      return std::unexpected(manifest.error());
+    if (!work)
+      return std::unexpected(work.error());
+    if (!structure)
+      return std::unexpected(structure.error());
+    auto workspace = field(*work, "workspace"), spec = field(*work, "spec"), kind = field(*structure, "kind"),
+         units = field(*structure, "work");
+    if (kind && kind->kind == value_kind::string && kind->string == "reviewer")
+      units = field(*structure, "targets");
+    if (!workspace || !spec || !kind || !units)
+      return corrupt();
+    if (workspace->kind == value_kind::record)
+      workspace = field(workspace, "id");
+    if (spec->kind == value_kind::record)
+      spec = field(spec, "id");
+    if (!workspace || !spec)
+      return corrupt();
+    auto packet        = object({{"version", integer(1)},
+                                 {"mode", text("dispatch")},
+                                 {"workspace", workspace},
+                                 {"spec", spec},
+                                 {"job", field(*work, "job")},
+                                 {"role", field(*work, "role")},
+                                 {"kind", kind},
+                                 {"work", units},
+                                 {"markdown", text(body->payload)}});
+    auto fields        = (*result)->fields;
+    fields["packet"]   = packet;
+    fields["manifest"] = *manifest;
+    result             = object(std::move(fields));
+  }
   return object({{"selector", text("request")}, {"result", *result}});
 }
 /// Format3 `--at-event` state (P2-5), replayed from rows with sequence at most the event, without Lua.
@@ -158,8 +396,7 @@ std::expected<value_ptr, history_read_error> format3_state_view(const ledger::fo
   auto runs  = std::make_shared<value>();
   runs->kind = value_kind::list;
   for (const auto& run : replayed->runs)
-    runs->items.push_back(
-        object({{"id", text(id(run.id))}, {"role", text(run.role)}, {"generation", text(id(run.generation))}}));
+    runs->items.push_back(object({{"id", text(id(run.id))}, {"role", text(run.role)}, {"generation", text(id(run.generation))}}));
   auto revision = text("none");
   if (active_revision) {
     auto r = file.read_revision(static_cast<std::uint64_t>(*active_revision));
@@ -270,6 +507,18 @@ std::expected<value_ptr, history_read_error> read_history(const ledger::format_f
     if (!result)
       return std::unexpected(result.error());
     data = object({{"selector", text("request")}, {"result", *result}});
+    break;
+  }
+  case history_selector::event: {
+    auto row = file.read_event(q.id);
+    if (!row)
+      return storage(row.error());
+    if (!*row)
+      return std::unexpected(history_read_error{code::event_not_found});
+    auto view = event_view(file, **row);
+    if (!view)
+      return std::unexpected(view.error());
+    data = *view;
     break;
   }
   case history_selector::state: {

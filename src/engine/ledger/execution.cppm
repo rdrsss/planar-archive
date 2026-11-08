@@ -20,6 +20,52 @@ export import planar.engine.history.tree_core;
 
 export namespace planar::engine::ledger {
 
+/// @brief Retained session note; immutable and safe to share with a snapshot.
+struct retained_checkpoint {
+  std::uint64_t id = 0, run_id = 0, seq = 0;
+  value_ptr     value;
+};
+/// @brief A retained dispatch with exact packet bytes and decoded manifest and work.
+struct retained_dispatch {
+  std::uint64_t id = 0, run_id = 0, seq = 0, revision_id = 0;
+  std::string   kind, request_id, run_state, work_fp, render_fp, role_kind;
+  std::string   markdown;
+  value_ptr     manifest;
+  value_ptr     work;
+};
+/// @brief Public run identity without its secret.
+struct recovery_run {
+  std::uint64_t id = 0, generation_ordinal = 0;
+  std::string   request_id, state;
+};
+/// @brief Retained records of a role's current structural lineage.
+struct recovery_records {
+  std::optional<recovery_run>        run;
+  std::optional<retained_dispatch>   acknowledged;
+  std::optional<retained_checkpoint> checkpoint;
+};
+/// @brief Read one retained dispatch by id in a verified read transaction.
+/// @return Exact retained dispatch, or a typed ledger failure.
+std::expected<retained_dispatch, execution_error> read_retained_dispatch(const std::filesystem::path& ledger,
+                                                                         std::uint64_t                dispatch);
+/// @brief Look up the newest matching dispatch without modifying or acknowledging it.
+/// @return Retained dispatch, no match, or a typed ledger failure.
+std::expected<std::optional<retained_dispatch>, execution_error> find_dispatch_by_render(const std::filesystem::path& ledger,
+                                                                                         std::string_view             job,
+                                                                                         std::string_view             role,
+                                                                                         std::string_view render_fp_hex);
+/// @brief Read exact retained recovery records in one read transaction, without secrets.
+/// @return Lineage records or a typed ledger failure.
+std::expected<recovery_records, execution_error> read_recovery_records(const std::filesystem::path& ledger, std::string_view job,
+                                                                       std::string_view role);
+/// @brief Named run identity for snapshot-time takeover refusal mapping.
+struct named_run {
+  std::string job, role, state;
+};
+/// @brief Read a named run without selecting its secret.
+/// @return Named identity, no match, or a typed ledger failure.
+std::expected<std::optional<named_run>, execution_error> lookup_named_run(const std::filesystem::path& ledger, std::uint64_t run);
+
 /// @brief One dispatch of a running role: its packet, manifest, W value and fingerprints as stored.
 struct execution_dispatch {
   std::uint64_t id = 0;          ///< dispatches.id.
@@ -35,17 +81,18 @@ struct execution_dispatch {
 
 /// @brief Snapshot of one (job, role) row with its current generation and, when running, its active run and dispatch.
 struct execution_role {
-  std::string                       job;                    ///< Job identifier.
-  std::string                       role;                   ///< Role identifier.
-  std::uint64_t                     generation_id      = 0; ///< Current generation record identifier.
-  std::uint64_t                     generation_ordinal = 0; ///< Current generation ordinal.
-  history::role_structure_v1        structure;              ///< Decoded role structure of the current generation.
-  std::string                       state;                  ///< One of the six role states.
-  bool                              drifted = false;        ///< Drift flag, true only when running.
-  std::optional<std::uint64_t>      run_id;                 ///< Active run, present exactly when running.
-  std::uint64_t                     fact_version = 0;       ///< role_state.fact_version.
-  std::uint64_t                     last_seq     = 0;       ///< role_state.last_seq.
-  std::optional<execution_dispatch> dispatch;               ///< Acknowledged dispatch of the active run.
+  std::string                        job;                    ///< Job identifier.
+  std::string                        role;                   ///< Role identifier.
+  std::uint64_t                      generation_id      = 0; ///< Current generation record identifier.
+  std::uint64_t                      generation_ordinal = 0; ///< Current generation ordinal.
+  history::role_structure_v1         structure;              ///< Decoded role structure of the current generation.
+  std::string                        state;                  ///< One of the six role states.
+  bool                               drifted = false;        ///< Drift flag, true only when running.
+  std::optional<std::uint64_t>       run_id;                 ///< Active run, present exactly when running.
+  std::uint64_t                      fact_version = 0;       ///< role_state.fact_version.
+  std::uint64_t                      last_seq     = 0;       ///< role_state.last_seq.
+  std::optional<retained_checkpoint> checkpoint;             ///< Latest checkpoint of the active run.
+  std::optional<execution_dispatch>  dispatch;               ///< Acknowledged dispatch of the active run.
 };
 
 /// @brief Recorded revision values of the active revision, decoded from its immutable records.
@@ -230,9 +277,13 @@ struct execution_change {
   execution_framing request;    ///< Framing whose operation and actor match this change.
   std::string
       job; ///< Load and activate: the active job after the commit, or the empty string; claim and takeover: the target job.
-  std::string                             role;         ///< Claim and takeover: the target role; otherwise empty.
-  std::optional<std::uint64_t>            previous_run; ///< Takeover only: the run that the takeover fences.
-  std::optional<execution_revision_input> revision;     ///< Load only.
+  std::string                             role;           ///< Claim and takeover: the target role; otherwise empty.
+  std::optional<std::uint64_t>            run;            ///< Target run of refresh/checkpoint/release.
+  std::string                             run_token_text; ///< Ephemeral authorization, never persisted.
+  std::string                             release_reason; ///< released or interrupted.
+  value_ptr                               checkpoint;     ///< Normalized checkpoint object.
+  std::optional<std::uint64_t>            previous_run;   ///< Takeover only: the run that the takeover fences.
+  std::optional<execution_revision_input> revision;       ///< Load only.
   /// Accepted load only (G2, additive): records to intern inside the staged transaction; when present, the five
   /// identifiers of `revision` are ignored and replaced by the interned identifiers.
   std::optional<execution_prepared_revision> prepared;

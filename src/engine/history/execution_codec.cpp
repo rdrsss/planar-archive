@@ -39,7 +39,8 @@ constexpr std::array<std::string_view, 16> transition_reasons{"activated",
                                                               "retired",
                                                               "recreated",
                                                               "drift_cleared"};
-constexpr std::array<std::string_view, 4>  payload_operations{"load", "activate", "claim", "takeover"};
+constexpr std::array<std::string_view, 7>  payload_operations{"load",    "activate",   "claim",  "takeover",
+                                                              "refresh", "checkpoint", "release"};
 
 [[noreturn]] void invalid() {
   throw execution_codec_error{execution_codec_code::invalid, {}, 0};
@@ -131,7 +132,7 @@ bool strictly_increasing(const std::vector<std::string>& items) {
 
 bool known_codec(std::string_view codec) {
   return codec == codec_dispatch_manifest_v1 || codec == codec_work_exec_v1 || codec == codec_driver_provenance_v1 ||
-         codec == codec_role_structure_v1;
+         codec == codec_role_structure_v1 || codec == "checkpoint_v1";
 }
 
 // ---- value construction --------------------------------------------------------------------------------------------
@@ -288,6 +289,7 @@ void validate_position(const payload_position& p) {
 void validate_references(std::string_view event_type, const std::map<std::string, std::string>& refs) {
   std::vector<std::string_view> required;
   bool                          provenance_allowed = false;
+  bool                          checkpoint_allowed = false;
   if (event_type == "declaration_accepted" || event_type == "load_noop") {
     required = {"source", "registry", "stdlib", "interpretation", "versions"};
   } else if (event_type == "job_activated") {
@@ -298,13 +300,23 @@ void validate_references(std::string_view event_type, const std::map<std::string
   } else if (event_type == "run_taken_over") {
     required           = {"run", "previous_run", "dispatch", "packet", "manifest", "work"};
     provenance_allowed = true;
+  } else if (event_type == "run_refreshed") {
+    required           = {"run", "dispatch", "packet", "manifest", "work"};
+    checkpoint_allowed = true;
+  } else if (event_type == "checkpoint_recorded") {
+    required = {"run", "checkpoint"};
+  } else if (event_type == "run_released" || event_type == "run_interrupted") {
+    required           = {"run"};
+    checkpoint_allowed = true;
+    provenance_allowed = true;
   } else {
     invalid();
   }
   for (std::string_view key : required)
     if (!refs.contains(std::string(key)))
       invalid();
-  const std::size_t extra = provenance_allowed && refs.contains("provenance") ? 1 : 0;
+  const std::size_t extra =
+      (provenance_allowed && refs.contains("provenance") ? 1 : 0) + (checkpoint_allowed && refs.contains("checkpoint") ? 1 : 0);
   if (refs.size() != required.size() + extra)
     invalid();
   for (const auto& entry : refs)
@@ -320,7 +332,9 @@ void validate_payload(std::string_view event_type, const event_payload_v2& p) {
   // EX-4 event payload and D101: the event reason is the reason of transition ordinal 1, or empty when the event has none.
   // Only a load event can carry no transition (a noop, or a first acceptance with no active job); every other event
   // carries a transition reason.
-  const bool empty_reason_allowed = (event_type == "load_noop" || event_type == "declaration_accepted") && p.reason.empty();
+  const bool empty_reason_allowed = (event_type == "load_noop" || event_type == "declaration_accepted" ||
+                                     event_type == "checkpoint_recorded" || event_type == "run_refreshed") &&
+                                    p.reason.empty();
   if (!empty_reason_allowed && !one_of(p.reason, transition_reasons))
     invalid();
   validate_references(event_type, p.references);
@@ -859,6 +873,37 @@ std::expected<value_ptr, execution_codec_error> decode_dispatch_manifest_v1(std:
   });
 }
 
+std::expected<std::string, execution_codec_error> encode_checkpoint_v1(const value_ptr& checkpoint) {
+  return guarded<std::string>([&]() {
+    if (!checkpoint || !exact_keys(*checkpoint, {"files", "next", "progress", "unresolved"}))
+      invalid();
+    for (auto key : {"progress", "next", "unresolved"})
+      if (checkpoint->fields.at(key)->kind != value_kind::string)
+        invalid();
+    for (auto key : {"files"}) {
+      const auto& list = checkpoint->fields.at(key);
+      if (!list || list->kind != value_kind::list)
+        invalid();
+      for (const auto& item : list->items)
+        if (!item || item->kind != value_kind::string)
+          invalid();
+    }
+    auto bytes = canonical_text(checkpoint);
+    if (bytes.size() > 8192)
+      exceeded("checkpoint_bytes", 8192);
+    return bytes;
+  });
+}
+std::expected<value_ptr, execution_codec_error> decode_checkpoint_v1(std::string_view bytes) {
+  return guarded<value_ptr>([&]() {
+    auto node    = canonical_value(bytes);
+    auto encoded = encode_checkpoint_v1(node);
+    if (!encoded)
+      throw encoded.error();
+    return node;
+  });
+}
+
 std::expected<std::string, execution_codec_error> encode_work_exec_v1(const value_ptr& work) {
   return guarded<std::string>([&]() -> std::string {
     if (!work)
@@ -944,4 +989,153 @@ std::expected<value_ptr, execution_codec_error> assemble_packet_value(const pack
   });
 }
 
+namespace {
+std::map<std::string, value_ptr> recovery_fields(const recovery_result_identity& r, std::string kind) {
+  if (!ledger_text(r.ledger) || !request_token(r.request_id) || !identifier(r.job) || !identifier(r.role) ||
+      !positive_decimal(r.run_id) || !positive_decimal(r.generation))
+    invalid();
+  return {{"version", make_integer(1)},
+          {"kind", make_text(kind)},
+          {"ledger", make_text(r.ledger)},
+          {"request_id", make_text(r.request_id)},
+          {"job", make_text(r.job)},
+          {"role", make_text(r.role)},
+          {"run", make_record({{"id", make_text(r.run_id)}, {"generation", make_text(r.generation)}})}};
+}
+recovery_result_identity recovery_identity(const value& v, std::string_view kind) {
+  if (integer_field(v, "version") != 1 || text_field(v, "kind") != kind)
+    invalid();
+  const auto&              run = object_field(v, "run");
+  recovery_result_identity r{text_field(v, "ledger"), text_field(v, "request_id"), text_field(v, "job"),
+                             text_field(v, "role"),   text_field(run, "id"),       text_field(run, "generation")};
+  recovery_fields(r, std::string(kind));
+  return r;
+}
+value_ptr checkpoint_id_value(const std::optional<std::string>& id) {
+  if (!id)
+    return make_text("none");
+  if (!positive_decimal(*id))
+    invalid();
+  return make_record({{"id", make_text(*id)}});
+}
+std::optional<std::string> checkpoint_id_from(const value& root) {
+  const auto& node = root.fields.at("checkpoint");
+  if (node->kind == value_kind::string && node->string == "none")
+    return {};
+  if (!exact_keys(*node, {"id"}))
+    invalid();
+  auto id = text_field(*node, "id");
+  if (!positive_decimal(id))
+    invalid();
+  return id;
+}
+} // namespace
+std::expected<std::string, execution_codec_error> encode_refresh_result_v1(const refresh_result_v1& r) {
+  return guarded<std::string>([&]() {
+    auto fields = recovery_fields(r, "refresh");
+    if (!positive_decimal(r.revision) || !positive_decimal(r.dispatch_id) || !fingerprint_text(r.work_fp) ||
+        !fingerprint_text(r.render_digest) || r.bytes > int32_maximum)
+      invalid();
+    fields["revision"]      = make_text(r.revision);
+    fields["dispatch"]      = make_record({{"id", make_text(r.dispatch_id)},
+                                           {"work_fp", make_text(r.work_fp)},
+                                           {"render_digest", make_text(r.render_digest)},
+                                           {"bytes", make_integer(r.bytes)}});
+    fields["checkpoint"]    = checkpoint_id_value(r.checkpoint);
+    auto flag               = make_node(value_kind::boolean);
+    flag->boolean           = r.drift_cleared;
+    fields["drift_cleared"] = flag;
+    return json_text(make_record(std::move(fields)));
+  });
+}
+std::expected<refresh_result_v1, execution_codec_error> decode_refresh_result_v1(std::string_view bytes) {
+  return guarded<refresh_result_v1>([&]() {
+    auto root = canonical_json(bytes);
+    if (!exact_keys(*root, {"version", "kind", "ledger", "request_id", "job", "role", "run", "revision", "dispatch", "checkpoint",
+                            "drift_cleared"}))
+      invalid();
+    refresh_result_v1 r;
+    static_cast<recovery_result_identity&>(r) = recovery_identity(*root, "refresh");
+    const auto& d                             = object_field(*root, "dispatch");
+    if (!exact_keys(d, {"id", "work_fp", "render_digest", "bytes"}) ||
+        !exact_keys(object_field(*root, "run"), {"id", "generation"}))
+      invalid();
+    r.revision      = text_field(*root, "revision");
+    r.dispatch_id   = text_field(d, "id");
+    r.work_fp       = text_field(d, "work_fp");
+    r.render_digest = text_field(d, "render_digest");
+    r.bytes         = integer_field(d, "bytes");
+    r.checkpoint    = checkpoint_id_from(*root);
+    auto flag       = root->fields.at("drift_cleared");
+    if (flag->kind != value_kind::boolean)
+      invalid();
+    r.drift_cleared = flag->boolean;
+    auto out        = encode_refresh_result_v1(r);
+    if (!out)
+      throw out.error();
+    return r;
+  });
+}
+std::expected<std::string, execution_codec_error> encode_checkpoint_result_v1(const checkpoint_result_v1& r) {
+  return guarded<std::string>([&]() {
+    auto fields = recovery_fields(r, "checkpoint");
+    if (!positive_decimal(r.checkpoint) || !positive_decimal(r.event))
+      invalid();
+    fields["checkpoint"] = make_record({{"id", make_text(r.checkpoint)}, {"event", make_text(r.event)}});
+    return json_text(make_record(std::move(fields)));
+  });
+}
+std::expected<checkpoint_result_v1, execution_codec_error> decode_checkpoint_result_v1(std::string_view bytes) {
+  return guarded<checkpoint_result_v1>([&]() {
+    auto root = canonical_json(bytes);
+    if (!exact_keys(*root, {"version", "kind", "ledger", "request_id", "job", "role", "run", "checkpoint"}) ||
+        !exact_keys(object_field(*root, "run"), {"id", "generation"}))
+      invalid();
+    checkpoint_result_v1 r;
+    static_cast<recovery_result_identity&>(r) = recovery_identity(*root, "checkpoint");
+    const auto& c                             = object_field(*root, "checkpoint");
+    if (!exact_keys(c, {"id", "event"}))
+      invalid();
+    r.checkpoint = text_field(c, "id");
+    r.event      = text_field(c, "event");
+    auto out     = encode_checkpoint_result_v1(r);
+    if (!out)
+      throw out.error();
+    return r;
+  });
+}
+std::expected<std::string, execution_codec_error> encode_release_result_v1(const release_result_v1& r) {
+  return guarded<std::string>([&]() {
+    auto fields = recovery_fields(r, "release");
+    if ((r.state != "released" && r.state != "interrupted") || !positive_decimal(r.event) || !one_of(r.role_state, role_states) ||
+        r.role_state == "running" || r.role_state == "retired")
+      invalid();
+    fields["run"] =
+        make_record({{"id", make_text(r.run_id)}, {"generation", make_text(r.generation)}, {"state", make_text(r.state)}});
+    fields["role_state"] = make_record({{"state", make_text(r.role_state)}});
+    fields["event"]      = make_text(r.event);
+    fields["checkpoint"] = checkpoint_id_value(r.checkpoint);
+    return json_text(make_record(std::move(fields)));
+  });
+}
+std::expected<release_result_v1, execution_codec_error> decode_release_result_v1(std::string_view bytes) {
+  return guarded<release_result_v1>([&]() {
+    auto root = canonical_json(bytes);
+    if (!exact_keys(*root,
+                    {"version", "kind", "ledger", "request_id", "job", "role", "run", "role_state", "event", "checkpoint"}) ||
+        !exact_keys(object_field(*root, "run"), {"id", "generation", "state"}) ||
+        !exact_keys(object_field(*root, "role_state"), {"state"}))
+      invalid();
+    release_result_v1 r;
+    static_cast<recovery_result_identity&>(r) = recovery_identity(*root, "release");
+    r.state                                   = text_field(object_field(*root, "run"), "state");
+    r.role_state                              = text_field(object_field(*root, "role_state"), "state");
+    r.event                                   = text_field(*root, "event");
+    r.checkpoint                              = checkpoint_id_from(*root);
+    auto out                                  = encode_release_result_v1(r);
+    if (!out)
+      throw out.error();
+    return r;
+  });
+}
 } // namespace planar::engine::history

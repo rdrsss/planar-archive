@@ -33,7 +33,8 @@ enum class execution_error_code {
   resource_limit,
   invalid_change,
   hash_collision,
-  unknown_run
+  unknown_run,
+  check_in_progress
 };
 
 /// @brief Native failure with its closed category and the detail fields that particular categories define.

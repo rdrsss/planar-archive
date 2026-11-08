@@ -10,7 +10,7 @@ export import planar.engine.ledger.format;
 export import planar.engine.value;
 export namespace planar::engine::history {
 /// Mutually exclusive recorded-history views.
-enum class history_selector { page, revision, request, state };
+enum class history_selector { page, revision, request, state, event };
 /// Validated invocation; native IDs are never transported as JSON numbers.
 struct history_query {
   history_selector selector = history_selector::page; ///< Selected view.
@@ -43,7 +43,7 @@ value_ptr revision_metadata(const ledger::revision_row& row);
 /// validates payload version 2 (P2-5), format1 and format2 keep the eight-key summary.
 /// @return Public event summary or corruption refusal.
 std::expected<value_ptr, history_read_error> event_summary(const ledger::event_row& row,
-                                                           ledger::ledger_format format = ledger::ledger_format::v1);
+                                                           ledger::ledger_format    format = ledger::ledger_format::v1);
 /// Read one public history view using only this owner's pinned snapshot.
 /// @param file Thread-confined verified owner, never reopened or mutated by this function.
 /// @param query Validated selector arguments; no host arguments enter the projection.

@@ -16,6 +16,7 @@ import planar.engine.hash;
 import planar.engine.json_codec;
 import planar.engine.value;
 import planar.engine.history.execution_codec;
+import planar.engine.history.read;
 import planar.engine.history.record;
 import planar.engine.history.request_v2;
 import planar.engine.history.request_v3;
@@ -3856,4 +3857,153 @@ TEST_CASE("execution load with prepared records writes nothing when the commit i
   const auto before = file_contents(dir.root);
   require_code(commit_execution(path, snapshot, change), execution_error_code::revision_conflict);
   REQUIRE(file_contents(dir.root) == before);
+}
+
+namespace {
+execution_change recovery_change(const execution_snapshot& snapshot, std::string_view op, std::string_view id,
+                                 std::string_view token) {
+  const auto* role = find_role(snapshot, "alpha", "builder");
+  REQUIRE(role != nullptr);
+  REQUIRE(role->run_id);
+  execution_change c;
+  c.operation      = op;
+  c.request_id     = id;
+  c.actor          = "tester";
+  c.job            = "alpha";
+  c.role           = "builder";
+  c.run            = role->run_id;
+  c.run_token_text = token;
+  std::vector<std::pair<std::string, std::string>> params{{"run_id", decimal(*c.run)}};
+  if (op == "checkpoint") {
+    params.emplace_back("observations_path", "notes.json");
+    auto note = planar::engine::codec_decode(R"({"files":[],"next":"continue","progress":"implemented","unresolved":"none"})");
+    REQUIRE(note);
+    c.checkpoint = *note;
+  }
+  if (op == "refresh") {
+    params.emplace_back("expect_fp", "xxh3_128:" + role->dispatch->work_fp);
+    c.packet = make_packet(snapshot, *role, id, "refresh", std::nullopt);
+  }
+  if (op == "release") {
+    c.release_reason = "interrupted";
+    params.emplace_back("reason", c.release_reason);
+    c.transitions.push_back({.job            = "alpha",
+                             .role           = "builder",
+                             .before_state   = "running",
+                             .before_drifted = role->drifted,
+                             .after_state    = "ready",
+                             .after_drifted  = false,
+                             .reason         = "interrupted"});
+  }
+  c.request = hist::request_v3{
+      .operation = std::string(op), .actor = "tester", .parameters = params_bytes(params), .profile_argument = std::nullopt};
+  c.vector = base_vector(snapshot, "alpha");
+  if (op == "release")
+    for (auto& r : c.vector)
+      if (r.role == "builder") {
+        r.state   = "ready";
+        r.drifted = false;
+        r.run.reset();
+      }
+  c.expected = targeted_expected(snapshot, *role);
+  if (op == "checkpoint")
+    std::erase_if(c.expected, [](const auto& e) { return e.kind == kind_t::fact_version || e.kind == kind_t::role_state; });
+  auto auth = member(kind_t::run_active);
+  auth.run  = c.run;
+  c.expected.push_back(auth);
+  return c;
+}
+} // namespace
+TEST_CASE("R16 native checkpoint refresh release preserve retained recovery and replay") {
+  scratch    dir;
+  const auto path  = activated_ledger(dir);
+  const auto claim = commit_claim(path, "claim-r16", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto       initial  = snapshot_of(path);
+  const auto original = find_role(initial, "alpha", "builder")->dispatch->id;
+  for (auto op : {"checkpoint", "refresh", "release"}) {
+    auto snapshot = snapshot_of(path);
+    auto change   = recovery_change(snapshot, op, std::string(op) + "-r16", *claim.token);
+    auto result   = commit_execution(path, snapshot, change);
+    INFO(op);
+    INFO((result ? -1 : static_cast<int>(result.error().code)));
+    REQUIRE(result);
+    auto replay = commit_execution(path, snapshot, change);
+    REQUIRE(replay);
+    CHECK(replay->replayed);
+    CHECK(replay->saved_result == result->saved_result);
+    require_verifies(path);
+  }
+  auto recovery = read_recovery_records(path, "alpha", "builder");
+  REQUIRE(recovery);
+  CHECK_FALSE(recovery->run);
+  REQUIRE(recovery->checkpoint);
+  CHECK(recovery->checkpoint->value->fields.at("progress")->string == "implemented");
+  REQUIRE(recovery->acknowledged);
+  CHECK(recovery->acknowledged->kind == "refresh");
+  CHECK(recovery->acknowledged->run_state == "interrupted");
+  auto retained = read_retained_dispatch(path, original);
+  REQUIRE(retained);
+  CHECK(retained->kind == "claim");
+  CHECK_FALSE(retained->markdown.empty());
+  auto since = find_dispatch_by_render(path, "alpha", "builder", retained->render_fp);
+  REQUIRE(since);
+  REQUIRE(*since);
+  CHECK((*since)->id == recovery->acknowledged->id);
+  auto auth = authorize_run_token(path, *claim.token);
+  REQUIRE_FALSE(auth);
+  CHECK(auth.error().code == execution_error_code::fenced);
+  CHECK(auth.error().state == "interrupted");
+}
+TEST_CASE("R16 native token mutation rejects wrong secret without a write") {
+  scratch    dir;
+  const auto path  = activated_ledger(dir);
+  const auto claim = commit_claim(path, "claim-r16", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto snapshot = snapshot_of(path);
+  auto bad      = *claim.token;
+  bad.back()    = bad.back() == '0' ? '1' : '0';
+  auto change   = recovery_change(snapshot, "checkpoint", "bad-secret", bad);
+  auto result   = commit_execution(path, snapshot, change);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().code == execution_error_code::fenced);
+  CHECK(snapshot_of(path).last_seq == snapshot.last_seq);
+}
+
+TEST_CASE("R16 history expands retained execution events and request packets") {
+  scratch    dir;
+  const auto path  = activated_ledger(dir);
+  const auto claim = commit_claim(path, "claim-history", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto snapshot   = snapshot_of(path);
+  auto checkpoint = commit_execution(path, snapshot, recovery_change(snapshot, "checkpoint", "note-history", *claim.token));
+  REQUIRE(checkpoint);
+  snapshot     = snapshot_of(path);
+  auto refresh = commit_execution(path, snapshot, recovery_change(snapshot, "refresh", "refresh-history", *claim.token));
+  REQUIRE(refresh);
+  auto file = open_existing(path, ledger_access::read_only);
+  REQUIRE(file.has_value());
+  for (auto seq : {claim.event_seq, checkpoint->event_seq, refresh->event_seq}) {
+    hist::history_query query;
+    query.selector = hist::history_selector::event;
+    query.id       = seq;
+    auto result    = hist::read_history(*file, query);
+    INFO(seq);
+    INFO((result ? -1 : static_cast<int>(result.error().code)));
+    REQUIRE(result);
+    const auto& data = (*result)->fields.at("data");
+    CHECK(data->fields.at("selector")->string == "event");
+    REQUIRE(data->fields.contains("execution"));
+  }
+  for (auto key : {"claim-history", "refresh-history"}) {
+    hist::history_query query;
+    query.selector   = hist::history_selector::request;
+    query.request_id = key;
+    auto result      = hist::read_history(*file, query);
+    INFO(key);
+    REQUIRE(result);
+    const auto& saved = (*result)->fields.at("data")->fields.at("result");
+    CHECK(saved->fields.contains("packet"));
+    CHECK(saved->fields.contains("manifest"));
+  }
 }

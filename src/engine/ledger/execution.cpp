@@ -10,6 +10,7 @@ import std;
 import planar.engine.canonical;
 import planar.engine.hash;
 import planar.engine.value;
+import planar.engine.json_codec;
 import planar.engine.history.record;
 import planar.engine.history.request_v2;
 import planar.engine.history.request_v3;
@@ -283,6 +284,13 @@ value_ptr text_node(std::string_view text) {
   return make_node(std::move(node));
 }
 
+value_ptr integer_node(std::int64_t n) {
+  value node{};
+  node.kind    = value_kind::integer;
+  node.integer = n;
+  return make_node(std::move(node));
+}
+
 value_ptr bool_node(bool flag) {
   value node{};
   node.kind    = value_kind::boolean;
@@ -377,16 +385,17 @@ struct run_entry {
 };
 
 struct dispatch_entry {
-  std::uint64_t id       = 0;
-  std::uint64_t run      = 0;
-  std::uint64_t seq      = 0;
-  std::uint64_t revision = 0;
-  std::string   kind;
-  std::uint64_t packet   = 0;
-  std::uint64_t manifest = 0;
-  std::uint64_t work     = 0;
-  std::string   work_fp;
-  std::string   render_fp;
+  std::uint64_t                id       = 0;
+  std::uint64_t                run      = 0;
+  std::uint64_t                seq      = 0;
+  std::uint64_t                revision = 0;
+  std::string                  kind;
+  std::uint64_t                packet   = 0;
+  std::uint64_t                manifest = 0;
+  std::uint64_t                work     = 0;
+  std::string                  work_fp;
+  std::string                  render_fp;
+  std::optional<std::uint64_t> checkpoint;
 };
 
 struct request_entry {
@@ -444,6 +453,8 @@ struct ledger_rows {
   std::vector<activation_entry>                  activations;
   std::map<std::uint64_t, run_entry>             runs;
   std::map<std::uint64_t, dispatch_entry>        dispatches;
+  std::map<std::uint64_t, retained_checkpoint>   checkpoints;
+  std::map<std::uint64_t, std::uint64_t>         checkpoint_bodies;
   std::map<std::uint64_t, std::uint64_t>         dispatch_by_run;
   std::map<std::string, request_entry>           requests;
   std::vector<role_row>                          role_states;
@@ -456,9 +467,8 @@ struct ledger_rows {
 // Table loading. Every loader reads one complete table in its stored order and rejects impossible column values.
 
 checked load_reserved_empty(connection& db) {
-  constexpr std::array<std::string_view, 10> reserved{"checkpoints",       "reservations", "evidence", "completions",
-                                                      "publications",      "verdicts",     "repairs",  "blockers",
-                                                      "reservation_state", "blocker_state"};
+  constexpr std::array<std::string_view, 9> reserved{"reservations", "evidence", "completions",       "publications", "verdicts",
+                                                     "repairs",      "blockers", "reservation_state", "blocker_state"};
   for (auto table : reserved) {
     const auto sql  = std::format("SELECT COUNT(*) FROM {}", table);
     bool       any  = false;
@@ -714,25 +724,24 @@ checked load_dispatches(connection& db, ledger_rows& rows) {
                   "FROM dispatches ORDER BY id",
                   [&](row_reader& row) -> checked {
                     dispatch_entry entry;
-                    entry.id              = row.id(0);
-                    entry.run             = row.id(1);
-                    entry.seq             = row.id(2);
-                    entry.revision        = row.id(3);
-                    entry.kind            = row.text(4);
-                    entry.packet          = row.id(5);
-                    entry.manifest        = row.id(6);
-                    entry.work            = row.id(7);
-                    entry.work_fp         = row.blob(8);
-                    entry.render_fp       = row.blob(9);
-                    const auto checkpoint = row.optional_number(10);
+                    entry.id         = row.id(0);
+                    entry.run        = row.id(1);
+                    entry.seq        = row.id(2);
+                    entry.revision   = row.id(3);
+                    entry.kind       = row.text(4);
+                    entry.packet     = row.id(5);
+                    entry.manifest   = row.id(6);
+                    entry.work       = row.id(7);
+                    entry.work_fp    = row.blob(8);
+                    entry.render_fp  = row.blob(9);
+                    entry.checkpoint = row.optional_id(10);
                     if (auto finished = row.finish(); !finished)
                       return finished;
-                    if (checkpoint || entry.work_fp.size() != 16 || entry.render_fp.size() != 16)
+                    if (entry.work_fp.size() != 16 || entry.render_fp.size() != 16)
                       return std::unexpected(corrupt());
                     if (entry.id != rows.dispatches.size() + 1)
                       return std::unexpected(corrupt());
-                    if (!rows.dispatch_by_run.emplace(entry.run, entry.id).second)
-                      return std::unexpected(corrupt());
+                    rows.dispatch_by_run[entry.run] = entry.id;
                     rows.dispatches.emplace(entry.id, std::move(entry));
                     return {};
                   });
@@ -877,6 +886,12 @@ std::optional<std::string> operation_of(std::string_view type) {
     return "claim";
   if (type == "run_taken_over")
     return "takeover";
+  if (type == "run_refreshed")
+    return "refresh";
+  if (type == "checkpoint_recorded")
+    return "checkpoint";
+  if (type == "run_released" || type == "run_interrupted")
+    return "release";
   return std::nullopt;
 }
 
@@ -891,6 +906,14 @@ std::optional<std::string> outcome_of(std::string_view type) {
     return "claimed";
   if (type == "run_taken_over")
     return "taken_over";
+  if (type == "run_refreshed")
+    return "refreshed";
+  if (type == "checkpoint_recorded")
+    return "recorded";
+  if (type == "run_released")
+    return "released";
+  if (type == "run_interrupted")
+    return "interrupted";
   return std::nullopt;
 }
 
@@ -909,7 +932,8 @@ bool typed_columns_ok(const event_entry& event) {
     return !job && !role && !generation && !run;
   if (event.type == "job_activated")
     return job && !role && !generation && !run;
-  if (event.type == "run_claimed" || event.type == "run_taken_over")
+  if (event.type == "run_claimed" || event.type == "run_taken_over" || event.type == "run_refreshed" ||
+      event.type == "checkpoint_recorded" || event.type == "run_released" || event.type == "run_interrupted")
     return job && role && generation && run;
   return false;
 }
@@ -985,10 +1009,10 @@ checked apply_run_event(const ledger_rows& rows, const event_entry& event, const
   if (transitions.empty() || transitions[0].job != *event.job || transitions[0].role != *event.role ||
       transitions[0].generation_id != *event.generation || transitions[0].after_state != "running")
     return std::unexpected(corrupt());
-  const auto dispatch_id = rows.dispatch_by_run.find(run_id);
-  if (dispatch_id == rows.dispatch_by_run.end())
+  const auto dispatch_id = parse_decimal(ref_of(payload.references, "dispatch"));
+  if (!dispatch_id || !rows.dispatches.contains(*dispatch_id))
     return std::unexpected(corrupt());
-  const auto& dispatch = rows.dispatches.at(dispatch_id->second);
+  const auto& dispatch = rows.dispatches.at(*dispatch_id);
   const bool  claim    = event.type == "run_claimed";
   if (dispatch.seq != event.seq || dispatch.revision != *event.revision || dispatch.kind != (claim ? "claim" : "takeover"))
     return std::unexpected(corrupt());
@@ -1064,7 +1088,9 @@ checked apply_transitions(const ledger_rows& rows, const event_entry& event, con
       auto fenced = state.runs.find(active->second);
       if (fenced == state.runs.end() || fenced->second.state != "active")
         return std::unexpected(corrupt());
-      fenced->second.state    = "fenced";
+      fenced->second.state    = event.type == "run_released"      ? "released"
+                                : event.type == "run_interrupted" ? "interrupted"
+                                                                  : "fenced";
       fenced->second.last_seq = event.seq;
       state.active_runs.erase(active);
     }
@@ -1144,9 +1170,40 @@ checked check_request(const ledger_rows& rows, const execution_metadata& metadat
       return std::unexpected(corrupt());
     return {};
   }
+  if (request.operation == "refresh" || request.operation == "checkpoint" || request.operation == "release") {
+    if(request.operation=="refresh" && !hist::decode_refresh_result_v1(request.result)) return std::unexpected(corrupt());
+    if(request.operation=="checkpoint" && !hist::decode_checkpoint_result_v1(request.result)) return std::unexpected(corrupt());
+    if(request.operation=="release" && !hist::decode_release_result_v1(request.result)) return std::unexpected(corrupt());
+    auto saved = ::planar::engine::codec_decode(request.result);
+    if (!saved || !*saved || (*saved)->kind != value_kind::record)
+      return std::unexpected(corrupt());
+    const auto& fields = (*saved)->fields;
+    for (const auto& [key, expected] : std::map<std::string, std::string>{{"kind", request.operation},
+                                                                          {"ledger", metadata.identity},
+                                                                          {"request_id", request.request_id},
+                                                                          {"job", *event.job},
+                                                                          {"role", *event.role}}) {
+      auto found = fields.find(key);
+      if (found == fields.end() || !found->second || found->second->kind != value_kind::string ||
+          found->second->string != expected)
+        return std::unexpected(corrupt());
+    }
+    auto again = ::planar::engine::codec_encode(*saved);
+    if (!again || *again != request.result)
+      return std::unexpected(corrupt());
+    if (request.operation == "refresh") {
+      auto packet = parse_decimal(ref_of(payload.references, "packet"));
+      if (!packet || request.attachment != packet)
+        return std::unexpected(corrupt());
+    } else if (request.attachment)
+      return std::unexpected(corrupt());
+    return {};
+  }
   // claim and takeover: the saved result names the run and its token, and the request names the packet record.
-  const auto  dispatch_id = rows.dispatch_by_run.at(*event.run);
-  const auto& dispatch    = rows.dispatches.at(dispatch_id);
+  auto dispatch_ref = parse_decimal(ref_of(payload.references, "dispatch"));
+  if (!dispatch_ref || !rows.dispatches.contains(*dispatch_ref))
+    return std::unexpected(corrupt());
+  const auto& dispatch = rows.dispatches.at(*dispatch_ref);
   if (!request.attachment || *request.attachment != dispatch.packet)
     return std::unexpected(corrupt());
   const auto                   run     = rows.runs.at(*event.run);
@@ -1237,8 +1294,47 @@ checked replay_events(const ledger_rows& rows, const execution_metadata& metadat
       if (payload->before.active_revision != payload->after.active_revision ||
           payload->before.active_job != payload->after.active_job)
         return std::unexpected(corrupt());
-      if (auto ok = apply_run_event(rows, event, *payload, transitions, state); !ok)
-        return ok;
+      if (event.type == "run_claimed" || event.type == "run_taken_over") {
+        if (auto ok = apply_run_event(rows, event, *payload, transitions, state); !ok)
+          return ok;
+      } else {
+        auto run  = state.runs.find(*event.run);
+        auto role = state.roles.find({*event.job, *event.role});
+        if (run == state.runs.end() || role == state.roles.end() || run->second.state != "active" ||
+            run->second.generation != *event.generation || role->second.run != event.run ||
+            ref_of(payload->references, "run") != std::to_string(*event.run))
+          return std::unexpected(corrupt());
+        if (event.type == "checkpoint_recorded" && !transitions.empty())
+          return std::unexpected(corrupt());
+        if (event.type == "run_released" || event.type == "run_interrupted") {
+          auto reason = event.type == "run_released" ? "released" : "interrupted";
+          if (transitions.size() != 1 || transitions[0].job != *event.job || transitions[0].role != *event.role ||
+              transitions[0].reason != reason || transitions[0].after_state == "running" ||
+              transitions[0].after_state == "retired")
+            return std::unexpected(corrupt());
+        }
+        if (event.type == "run_refreshed") {
+          auto id = parse_decimal(ref_of(payload->references, "dispatch"));
+          if (!id || !rows.dispatches.contains(*id))
+            return std::unexpected(corrupt());
+          const auto& d = rows.dispatches.at(*id);
+          if (d.run != *event.run || d.seq != seq || d.kind != "refresh" || d.revision != *event.revision ||
+              ref_of(payload->references, "packet") != std::to_string(d.packet) ||
+              ref_of(payload->references, "manifest") != std::to_string(d.manifest) ||
+              ref_of(payload->references, "work") != std::to_string(d.work))
+            return std::unexpected(corrupt());
+          if (role->second.drifted ? (transitions.size() != 1 || transitions[0].reason != "drift_cleared") : !transitions.empty())
+            return std::unexpected(corrupt());
+        }
+        if (has_ref(payload->references, "checkpoint")) {
+          auto id = parse_decimal(ref_of(payload->references, "checkpoint"));
+          if (!id || !rows.checkpoints.contains(*id))
+            return std::unexpected(corrupt());
+          const auto& c = rows.checkpoints.at(*id);
+          if (c.run_id != *event.run || c.seq != seq)
+            return std::unexpected(corrupt());
+        }
+      }
     }
 
     if (auto ok = apply_transitions(rows, event, transitions, state); !ok)
@@ -1535,13 +1631,23 @@ checked check_dispatch_content(const ledger_rows& rows, const dispatch_entry& di
 
 // Every run is one claim or takeover event with exactly one dispatch; the dispatch rows agree with their runs and events.
 checked check_dispatches(const ledger_rows& rows) {
-  if (rows.dispatches.size() != rows.runs.size() || rows.dispatch_by_run.size() != rows.runs.size())
+  if (rows.dispatches.size() < rows.runs.size() || rows.dispatch_by_run.size() != rows.runs.size())
     return std::unexpected(corrupt());
   for (const auto& [id, dispatch] : rows.dispatches) {
     (void)id;
     const auto run = rows.runs.find(dispatch.run);
-    if (run == rows.runs.end() || run->second.claimed_seq != dispatch.seq)
+    if (run == rows.runs.end() || (dispatch.kind != "refresh" && run->second.claimed_seq != dispatch.seq) ||
+        (dispatch.kind == "refresh" && (dispatch.seq <= run->second.claimed_seq || dispatch.seq > rows.events.size() ||
+                                        rows.events[dispatch.seq - 1].type != "run_refreshed")))
       return std::unexpected(corrupt());
+    if (dispatch.checkpoint) {
+      bool found = false;
+      for (const auto& [id, c] : rows.checkpoints)
+        if (c.run_id == dispatch.run && c.seq <= dispatch.seq && rows.checkpoint_bodies.at(id) == *dispatch.checkpoint)
+          found = true;
+      if (!found)
+        return std::unexpected(corrupt());
+    }
     if (auto ok = check_dispatch_content(rows, dispatch); !ok)
       return ok;
   }
@@ -1752,16 +1858,19 @@ value_result<execution_snapshot> build_snapshot(const ledger_rows& rows, const r
       if (!work)
         return std::unexpected(corrupt());
       execution_dispatch out;
-      out.id                          = dispatch.id;
-      out.kind                        = dispatch.kind;
-      out.work_fp                     = hex_of(dispatch.work_fp);
-      out.render_fp                   = hex_of(dispatch.render_fp);
-      out.packet_id                   = dispatch.packet;
-      out.manifest_id                 = dispatch.manifest;
-      out.work_id                     = dispatch.work;
-      out.revision                    = dispatch.revision;
-      out.work                        = *work;
-      role.dispatch                   = std::move(out);
+      out.id          = dispatch.id;
+      out.kind        = dispatch.kind;
+      out.work_fp     = hex_of(dispatch.work_fp);
+      out.render_fp   = hex_of(dispatch.render_fp);
+      out.packet_id   = dispatch.packet;
+      out.manifest_id = dispatch.manifest;
+      out.work_id     = dispatch.work;
+      out.revision    = dispatch.revision;
+      out.work        = *work;
+      role.dispatch   = std::move(out);
+      for (const auto& [id, note] : rows.checkpoints)
+        if (note.run_id == *row.run && (!role.checkpoint || note.seq > role.checkpoint->seq))
+          role.checkpoint = note;
       dispatch_revisions[dispatch.id] = dispatch.revision;
     }
     snapshot.roles.push_back(std::move(role));
@@ -1790,6 +1899,30 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
   if (auto loaded = load_runs(db, rows); !loaded)
     return std::unexpected(loaded.error());
   if (auto loaded = load_dispatches(db, rows); !loaded)
+    return std::unexpected(loaded.error());
+  if (auto loaded =
+          for_each(db, "SELECT id,run_id,seq,body_id FROM checkpoints ORDER BY id",
+                   [&](row_reader& r) -> checked {
+                     auto id = r.id(0), run = r.id(1), seq = r.id(2), body = r.id(3);
+                     auto rec = value_of(rows, body, "checkpoint_v1");
+                     if (!rec || !rows.runs.contains(run) || id != rows.checkpoints.size() + 1 || seq > rows.events.size())
+                       return std::unexpected(corrupt());
+                     auto note = hist::decode_checkpoint_v1((*rec)->canonical);
+                     if (!note)
+                       return std::unexpected(corrupt());
+                     const auto& event = rows.events[seq - 1];
+                     if (event.run != std::optional<std::uint64_t>(run) ||
+                         (event.type != "checkpoint_recorded" && event.type != "run_refreshed" && event.type != "run_released" &&
+                          event.type != "run_interrupted"))
+                       return std::unexpected(corrupt());
+                     auto payload = hist::decode_event_payload_v2(event.type, event.payload);
+                     if (!payload || ref_of(payload->references, "checkpoint") != std::to_string(id))
+                       return std::unexpected(corrupt());
+                     rows.checkpoints[id]       = retained_checkpoint{id, run, seq, *note};
+                     rows.checkpoint_bodies[id] = body;
+                     return {};
+                   });
+      !loaded)
     return std::unexpected(loaded.error());
   if (auto loaded = load_requests(db, rows); !loaded)
     return std::unexpected(loaded.error());
@@ -2168,6 +2301,7 @@ struct prepared_change {
   std::optional<artifact> manifest;
   std::optional<artifact> work;
   std::optional<artifact> provenance;
+  std::optional<artifact> checkpoint;
   std::vector<artifact>   structures;
   std::string             markdown;
   std::string             render_text;
@@ -2253,6 +2387,15 @@ value_result<prepared_change> prepare_change(const execution_change& change) {
     out.provenance = std::move(*stored);
   }
 
+  if (change.checkpoint) {
+    auto bytes = hist::encode_checkpoint_v1(change.checkpoint);
+    if (!bytes)
+      return std::unexpected(codec_error(bytes.error(), true));
+    auto stored = value_artifact("checkpoint_v1", *bytes);
+    if (!stored)
+      return std::unexpected(stored.error());
+    out.checkpoint = std::move(*stored);
+  }
   for (const auto& generation : change.generations) {
     auto canonical = hist::encode_role_structure_v1(generation.structure);
     if (!canonical)
@@ -2308,6 +2451,8 @@ bool same_value(const execution_expectation& expected, const execution_expectati
   case kind_t::fact_version:
   case kind_t::generation_current:
     return expected.number == given.number;
+  case kind_t::run_active:
+    return expected.run == given.run;
   case kind_t::role_state:
     return expected.state == given.state && expected.drifted == given.drifted && expected.run == given.run;
   default:
@@ -2330,7 +2475,8 @@ value_result<std::vector<execution_expectation>> fixed_members(const execution_s
   active.text = snapshot.active_job;
   out.push_back(active);
 
-  const bool               targeted = change.operation == "claim" || change.operation == "takeover";
+  const bool token_op = change.operation == "refresh" || change.operation == "checkpoint" || change.operation == "release";
+  const bool targeted = change.operation == "claim" || change.operation == "takeover" || token_op;
   std::vector<std::string> jobs;
   if (!snapshot.active_job.empty())
     jobs.push_back(snapshot.active_job);
@@ -2338,6 +2484,8 @@ value_result<std::vector<execution_expectation>> fixed_members(const execution_s
     jobs.push_back(change.job);
   for (const auto& row : snapshot.roles) {
     if (std::ranges::find(jobs, row.job) == jobs.end())
+      continue;
+    if (change.operation == "checkpoint")
       continue;
     execution_expectation fact;
     fact.kind   = kind_t::fact_version;
@@ -2358,13 +2506,20 @@ value_result<std::vector<execution_expectation>> fixed_members(const execution_s
       state.drifted = target->drifted;
       state.run     = change.previous_run;
     }
-    out.push_back(state);
+    if (change.operation != "checkpoint")
+      out.push_back(state);
     execution_expectation generation;
     generation.kind   = kind_t::generation_current;
     generation.job    = target->job;
     generation.role   = target->role;
     generation.number = target->generation_id;
     out.push_back(generation);
+    if (token_op) {
+      execution_expectation auth;
+      auth.kind = kind_t::run_active;
+      auth.run  = change.run;
+      out.push_back(auth);
+    }
   }
   execution_expectation unused;
   unused.kind = kind_t::request_unused;
@@ -2378,7 +2533,8 @@ checked check_shape(const execution_change& change) {
   const bool  activate = op == "activate";
   const bool  claim    = op == "claim";
   const bool  takeover = op == "takeover";
-  if (!load && !activate && !claim && !takeover)
+  const bool  token_op = op == "refresh" || op == "checkpoint" || op == "release";
+  if (!load && !activate && !claim && !takeover && !token_op)
     return std::unexpected(invalid_error());
   if (load) {
     if (!change.revision || (!change.job.empty() && !is_identifier(change.job)) || !change.role.empty() || change.previous_run ||
@@ -2404,6 +2560,26 @@ checked check_shape(const execution_change& change) {
     if (takeover && !change.previous_run)
       return std::unexpected(invalid_error());
   }
+
+  if (token_op) {
+    auto token = parse_run_token(change.run_token_text);
+    if (!change.run || !token || token->run_id != *change.run || !is_identifier(change.job) || !is_identifier(change.role) ||
+        change.revision || change.previous_run || !change.generations.empty() || !change.fenced_runs.empty())
+      return std::unexpected(invalid_error());
+    if ((op == "refresh") != change.packet.has_value())
+      return std::unexpected(invalid_error());
+    if (op == "checkpoint" && (!change.checkpoint || !change.transitions.empty()))
+      return std::unexpected(invalid_error());
+    if (op != "release" && change.provenance)
+      return std::unexpected(invalid_error());
+    if (op == "release" && (change.release_reason != "released" && change.release_reason != "interrupted"))
+      return std::unexpected(invalid_error());
+    if (op == "release" &&
+        (change.transitions.size() != 1 || change.transitions[0].after_state == "running" ||
+         change.transitions[0].after_state == "retired" || change.transitions[0].reason != change.release_reason))
+      return std::unexpected(invalid_error());
+  } else if (change.run || change.checkpoint || !change.run_token_text.empty() || !change.release_reason.empty())
+    return std::unexpected(invalid_error());
 
   std::set<role_key>                touched;
   std::vector<hist::transition_row> rows;
@@ -2457,6 +2633,7 @@ checked check_shape(const execution_change& change) {
     case kind_t::role_state:
     case kind_t::generation_current:
     case kind_t::request_unused:
+    case kind_t::run_active:
       break;
     default:
       return std::unexpected(invalid_error());
@@ -2469,7 +2646,31 @@ checked check_parameters(const execution_change& change, const hist::request_v3&
   auto decoded = ::planar::engine::canonical_decode(framed.parameters);
   if (!decoded || (*decoded)->kind != value_kind::record)
     return std::unexpected(invalid_error());
-  const auto&           fields = (*decoded)->fields;
+  const auto& fields = (*decoded)->fields;
+  if (change.operation == "refresh" || change.operation == "checkpoint" || change.operation == "release") {
+    std::set<std::string> allowed{"run_id"};
+    if (change.operation == "refresh")
+      allowed.insert("expect_fp");
+    if (change.operation == "release")
+      allowed.insert("reason");
+    if (fields.contains("observations_path"))
+      allowed.insert("observations_path");
+    if (fields.contains("provenance_path") && change.operation == "release")
+      allowed.insert("provenance_path");
+    if (fields.size() != allowed.size())
+      return std::unexpected(invalid_error());
+    for (const auto& key : allowed)
+      if (!fields.contains(key) || !fields.at(key) || fields.at(key)->kind != value_kind::string)
+        return std::unexpected(invalid_error());
+    if (!change.run || fields.at("run_id")->string != std::to_string(*change.run))
+      return std::unexpected(invalid_error());
+    if (change.operation == "release" && fields.at("reason")->string != change.release_reason)
+      return std::unexpected(invalid_error());
+    if (change.operation == "checkpoint" && !fields.contains("observations_path"))
+      return std::unexpected(invalid_error());
+    return {};
+  }
+
   std::set<std::string> keys;
   if (change.operation == "claim" || change.operation == "takeover") {
     keys = {"job", "role"};
@@ -2546,6 +2747,17 @@ checked check_snapshot(const execution_snapshot& snapshot, const execution_chang
   if (targeted && (change.job != snapshot.active_job || !snapshot_role(snapshot, change.job, change.role)))
     return std::unexpected(invalid_error());
 
+  const bool token_op = change.operation == "refresh" || change.operation == "checkpoint" || change.operation == "release";
+  if (token_op) {
+    const auto* target = snapshot_role(snapshot, change.job, change.role);
+    if (change.job != snapshot.active_job || !target || target->state != "running" || target->run_id != change.run)
+      return std::unexpected(invalid_error());
+    if (change.operation == "refresh" &&
+        ((target->drifted && (change.transitions.size() != 1 || change.transitions[0].reason != "drift_cleared" ||
+                              change.transitions[0].after_state != "running" || change.transitions[0].after_drifted)) ||
+         (!target->drifted && !change.transitions.empty())))
+      return std::unexpected(invalid_error());
+  }
   // (a) The expected set equals the fixed set, plus optional no-row members of the active job.
   auto fixed = fixed_members(snapshot, change);
   if (!fixed)
@@ -2650,7 +2862,8 @@ checked check_snapshot(const execution_snapshot& snapshot, const execution_chang
     const auto* row = snapshot_role(snapshot, transition.job, transition.role);
     if (!row || !row->run_id)
       return std::unexpected(invalid_error());
-    expected_fences.insert(*row->run_id);
+    if (change.operation != "release")
+      expected_fences.insert(*row->run_id);
   }
   std::set<std::uint64_t> given_fences(change.fenced_runs.begin(), change.fenced_runs.end());
   if (given_fences != expected_fences)
@@ -2854,6 +3067,35 @@ checked check_preconditions(connection& db, const execution_change& change, cons
         return std::unexpected(row.error());
       if (!*row || (*row)->generation != member.number)
         return std::unexpected(failure(execution_error_code::state_conflict));
+      break;
+    }
+    case kind_t::run_active: {
+      auto token = parse_run_token(change.run_token_text);
+      if (!token || !change.run || token->run_id != *change.run)
+        return std::unexpected(invalid_error());
+      auto row = first_row(
+          db,
+          "SELECT rs.state,rs.generation_id,g.ordinal,r.secret,cr.generation_id FROM runs r JOIN run_state rs ON rs.run_id=r.id "
+          "JOIN generations g ON g.id=r.generation_id JOIN role_state cr ON cr.job=g.job AND cr.role=g.role WHERE r.id=?1",
+          {int_arg(*change.run)});
+      if (!row)
+        return std::unexpected(row.error());
+      if (!*row)
+        return std::unexpected(failure(execution_error_code::unknown_run));
+      row_reader r(**row);
+      auto       state      = r.text(0);
+      auto       generation = r.id(1);
+      auto       ordinal    = r.id(2);
+      auto       secret     = r.blob(3);
+      auto       current    = r.id(4);
+      if (auto ok = r.finish(); !ok)
+        return std::unexpected(ok.error());
+      const std::string expected(reinterpret_cast<const char*>(token->secret.data()), token->secret.size());
+      if (state != "active" || generation != current || ordinal != token->generation_ordinal || secret != expected) {
+        auto error  = failure(execution_error_code::fenced);
+        error.state = state;
+        return std::unexpected(error);
+      }
       break;
     }
     case kind_t::request_unused:
@@ -3099,13 +3341,18 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
   auto head = read_head(db);
   if (!head)
     return std::unexpected(head.error());
-  const bool load     = change.operation == "load";
-  const bool activate = change.operation == "activate";
-  const bool claim    = change.operation == "claim";
-  const bool takeover = change.operation == "takeover";
-  const bool run_op   = claim || takeover;
-  const bool accepted = load && change.revision && !change.revision->noop;
-  const bool noop     = load && change.revision && change.revision->noop;
+  const bool load        = change.operation == "load";
+  const bool activate    = change.operation == "activate";
+  const bool claim       = change.operation == "claim";
+  const bool takeover    = change.operation == "takeover";
+  const bool run_op      = claim || takeover;
+  const bool refresh     = change.operation == "refresh";
+  const bool checkpoint  = change.operation == "checkpoint";
+  const bool release     = change.operation == "release";
+  const bool token_op    = refresh || checkpoint || release;
+  const bool dispatch_op = run_op || refresh;
+  const bool accepted    = load && change.revision && !change.revision->noop;
+  const bool noop        = load && change.revision && change.revision->noop;
 
   // (7) A load compares its intent expected head with the locked head (D39, EX-4 671).
   if (load) {
@@ -3125,6 +3372,17 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     return std::unexpected(ok.error());
   if (auto ok = check_locked_before(db, change); !ok)
     return std::unexpected(ok.error());
+  if (refresh || release) {
+    auto open =
+        first_row(db,
+                  "SELECT run_id FROM reservation_state JOIN reservations ON reservations.id=reservation_state.reservation_id "
+                  "WHERE reservations.run_id=?1 AND reservation_state.state='open' LIMIT 1",
+                  {int_arg(*change.run)});
+    if (!open)
+      return std::unexpected(open.error());
+    if (*open)
+      return std::unexpected(failure(execution_error_code::check_in_progress));
+  }
   if (!accepted && !head->revision)
     return std::unexpected(invalid_error());
   // G2: the candidate's records are interned in this write transaction, before the revision record check.
@@ -3146,11 +3404,15 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
   if (!seq)
     return std::unexpected(seq.error());
   const std::string now        = commit_timestamp();
-  const std::string event_type = accepted   ? "declaration_accepted"
-                                 : noop     ? "load_noop"
-                                 : activate ? "job_activated"
-                                 : claim    ? "run_claimed"
-                                            : "run_taken_over";
+  const std::string event_type = accepted                              ? "declaration_accepted"
+                                 : noop                                ? "load_noop"
+                                 : activate                            ? "job_activated"
+                                 : claim                               ? "run_claimed"
+                                 : takeover                            ? "run_taken_over"
+                                 : refresh                             ? "run_refreshed"
+                                 : checkpoint                          ? "checkpoint_recorded"
+                                 : change.release_reason == "released" ? "run_released"
+                                                                       : "run_interrupted";
 
   auto request_record = intern(db, prepared.request);
   if (!request_record)
@@ -3159,6 +3421,17 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
   std::optional<std::uint64_t> manifest_id;
   std::optional<std::uint64_t> work_id;
   std::optional<std::uint64_t> provenance_id;
+  std::optional<std::uint64_t> checkpoint_id, checkpoint_body;
+  if (prepared.checkpoint) {
+    auto id = intern(db, *prepared.checkpoint);
+    if (!id)
+      return std::unexpected(id.error());
+    checkpoint_body = *id;
+    auto next       = next_value(db, "SELECT COALESCE(MAX(id),0) FROM checkpoints");
+    if (!next)
+      return std::unexpected(next.error());
+    checkpoint_id = *next;
+  }
   if (prepared.packet) {
     auto id = intern(db, *prepared.packet);
     if (!id)
@@ -3275,6 +3548,18 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     dispatch_id = *dispatch;
     token_text  = format_run_token(run_token{*run_id, ordinal, secret});
   }
+  if (token_op) {
+    run_id            = change.run;
+    const auto* role  = snapshot_role(snapshot, change.job, change.role);
+    target_generation = role->generation_id;
+    ordinal           = role->generation_ordinal;
+    if (refresh) {
+      auto next = next_value(db, "SELECT COALESCE(MAX(id),0) FROM dispatches");
+      if (!next)
+        return std::unexpected(next.error());
+      dispatch_id = *next;
+    }
+  }
   if (activate) {
     auto activation = next_value(db, "SELECT COALESCE(MAX(id),0) FROM job_activations");
     if (!activation)
@@ -3285,7 +3570,7 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
   // Fingerprints of the dispatch rows (16 raw bytes each).
   std::string work_fp;
   std::string render_fp;
-  if (run_op) {
+  if (dispatch_op) {
     auto work_bytes   = digest_bytes_of_text(prepared.work_text);
     auto render_bytes = digest_bytes_of_text(prepared.render_text);
     if (!work_bytes || !render_bytes)
@@ -3314,7 +3599,14 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     payload.references["activation"] = std::to_string(*activation_id);
     payload.references["revision"]   = std::to_string(*revision_id);
   }
-  if (run_op) {
+  if (token_op) {
+    payload.references["run"] = std::to_string(*run_id);
+    if (checkpoint_id)
+      payload.references["checkpoint"] = std::to_string(*checkpoint_id);
+    if (provenance_id)
+      payload.references["provenance"] = std::to_string(*provenance_id);
+  }
+  if (dispatch_op) {
     payload.references["run"]      = std::to_string(*run_id);
     payload.references["dispatch"] = std::to_string(*dispatch_id);
     payload.references["packet"]   = std::to_string(*packet_id);
@@ -3375,6 +3667,39 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     if (!encoded)
       return std::unexpected(invalid_error());
     saved = *encoded;
+  } else if (token_op) {
+    auto run = record_node({{"id", text_node(std::to_string(*run_id))}, {"generation", text_node(std::to_string(ordinal))}});
+    std::map<std::string, value_ptr> fields{{"version", integer_node(1)},
+                                            {"kind", text_node(change.operation)},
+                                            {"ledger", text_node(metadata.identity)},
+                                            {"request_id", text_node(change.request_id)},
+                                            {"job", text_node(change.job)},
+                                            {"role", text_node(change.role)},
+                                            {"run", run}};
+    value_ptr note = checkpoint_id ? record_node({{"id", text_node(std::to_string(*checkpoint_id))}}) : text_node("none");
+    if (checkpoint) {
+      note = record_node({{"id", text_node(std::to_string(*checkpoint_id))}, {"event", text_node(std::to_string(*seq))}});
+    }
+    fields["checkpoint"] = note;
+    if (refresh) {
+      fields["revision"]      = text_node(std::to_string(*revision_id));
+      fields["drift_cleared"] = bool_node(snapshot_role(snapshot, change.job, change.role)->drifted);
+      fields["dispatch"]      = record_node({{"id", text_node(std::to_string(*dispatch_id))},
+                                             {"work_fp", text_node(prepared.work_text)},
+                                             {"render_digest", text_node(prepared.render_text)},
+                                             {"bytes", integer_node(prepared.markdown.size())}});
+    }
+    if (release) {
+      fields["run"]        = record_node({{"id", text_node(std::to_string(*run_id))},
+                                          {"generation", text_node(std::to_string(ordinal))},
+                                          {"state", text_node(change.release_reason)}});
+      fields["role_state"] = record_node({{"state", text_node(change.transitions.front().after_state)}});
+      fields["event"]      = text_node(std::to_string(*seq));
+    }
+    auto encoded = ::planar::engine::codec_encode(record_node(std::move(fields)));
+    if (!encoded)
+      return std::unexpected(invalid_error());
+    saved = *encoded;
   } else {
     hist::claim_result_v1 result;
     result.ledger        = metadata.identity;
@@ -3405,10 +3730,10 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
                                    text_arg(change.actor),
                                    text_arg(now),
                                    blob_arg(*payload_bytes),
-                                   (activate || run_op) ? text_arg(change.job) : null_arg(),
-                                   run_op ? text_arg(change.role) : null_arg(),
-                                   run_op ? int_arg(*target_generation) : null_arg(),
-                                   run_op ? int_arg(*run_id) : null_arg()};
+                                   (activate || run_op || token_op) ? text_arg(change.job) : null_arg(),
+                                   (run_op || token_op) ? text_arg(change.role) : null_arg(),
+                                   (run_op || token_op) ? int_arg(*target_generation) : null_arg(),
+                                   (run_op || token_op) ? int_arg(*run_id) : null_arg()};
   if (auto inserted = run_bound(db,
                                 "INSERT INTO events(seq,type,version,revision_id,request_id,actor,occurred_at,payload,job,role,"
                                 "generation_id,run_id) VALUES(?1,?2,2,?3,?4,?5,?6,?7,?8,?9,?10,?11)",
@@ -3427,14 +3752,21 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
       return std::unexpected(inserted.error());
   }
 
-  const std::string outcome = accepted ? "accepted" : noop ? "noop" : activate ? "activated" : claim ? "claimed" : "taken_over";
+  const std::string outcome = accepted     ? "accepted"
+                              : noop       ? "noop"
+                              : activate   ? "activated"
+                              : claim      ? "claimed"
+                              : takeover   ? "taken_over"
+                              : refresh    ? "refreshed"
+                              : checkpoint ? "recorded"
+                                           : change.release_reason;
   if (auto inserted =
           run_bound(db,
                     "INSERT INTO requests(request_id,operation,body_id,event_seq,revision_id,outcome,result,attachment_id) "
                     "VALUES(?1,?2,?3,?4,?5,?6,?7,?8)",
                     {text_arg(change.request_id), text_arg(change.operation), int_arg(*request_record), int_arg(*seq),
                      int_arg(*revision_id), text_arg(outcome), blob_arg(saved),
-                     optional_int_arg(run_op ? packet_id : std::optional<std::uint64_t>{})});
+                     optional_int_arg(dispatch_op ? packet_id : std::optional<std::uint64_t>{})});
       !inserted)
     return std::unexpected(inserted.error());
 
@@ -3482,13 +3814,42 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
             {int_arg(*run_id), text_arg(change.job), text_arg(change.role), int_arg(*target_generation), int_arg(*seq)});
         !inserted)
       return std::unexpected(inserted.error());
+  }
+  if (checkpoint_id) {
+    auto ok = run_bound(db, "INSERT INTO checkpoints(id,run_id,seq,body_id) VALUES(?1,?2,?3,?4)",
+                        {int_arg(*checkpoint_id), int_arg(*run_id), int_arg(*seq), int_arg(*checkpoint_body)});
+    if (!ok)
+      return std::unexpected(ok.error());
+  }
+  if (release) {
+    auto ok = run_bound(db, "UPDATE run_state SET state=?1,last_seq=?2 WHERE run_id=?3",
+                        {text_arg(change.release_reason), int_arg(*seq), int_arg(*run_id)});
+    if (!ok)
+      return std::unexpected(ok.error());
+  }
+  if (dispatch_op) {
+    std::optional<std::uint64_t> dispatch_checkpoint = checkpoint_body;
+    if (refresh && !dispatch_checkpoint) {
+      auto row = first_row(db, "SELECT body_id FROM checkpoints WHERE run_id=?1 ORDER BY seq DESC LIMIT 1", {int_arg(*run_id)});
+      if (!row)
+        return std::unexpected(row.error());
+      if (*row) {
+        row_reader r(**row);
+        dispatch_checkpoint = r.id(0);
+        if (auto ok = r.finish(); !ok)
+          return std::unexpected(ok.error());
+      }
+    }
     if (auto inserted =
             run_bound(db,
                       "INSERT INTO dispatches(id,run_id,seq,revision_id,kind,packet_id,manifest_id,work_id,work_fp,render_fp,"
-                      "checkpoint_id) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,NULL)",
+                      "checkpoint_id) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)",
                       {int_arg(*dispatch_id), int_arg(*run_id), int_arg(*seq), int_arg(*revision_id),
-                       text_arg(claim ? "claim" : "takeover"), int_arg(*packet_id), int_arg(*manifest_id), int_arg(*work_id),
-                       blob_arg(work_fp), blob_arg(render_fp)});
+                       text_arg(claim      ? "claim"
+                                : takeover ? "takeover"
+                                           : "refresh"),
+                       int_arg(*packet_id), int_arg(*manifest_id), int_arg(*work_id), blob_arg(work_fp), blob_arg(render_fp),
+                       optional_int_arg(dispatch_checkpoint)});
         !inserted)
       return std::unexpected(inserted.error());
   }
@@ -3648,6 +4009,203 @@ commit_execution(const std::filesystem::path& path, const execution_snapshot& sn
   if (auto committed = staged->commit(); !committed)
     return std::unexpected(committed.error());
   return staged->result();
+}
+
+std::expected<std::optional<named_run>, execution_error> lookup_named_run(const std::filesystem::path& path, std::uint64_t run) {
+  auto db = open_format3(path, execution_access::read_only);
+  if (!db)
+    return std::unexpected(db.error());
+  auto tx = db->sql().begin(false);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  auto row = first_row(db->sql(), "SELECT job,role,state FROM run_state WHERE run_id=?1", {int_arg(run)});
+  if (!row)
+    return std::unexpected(row.error());
+  if (!*row)
+    return std::optional<named_run>{};
+  row_reader r(**row);
+  named_run  out{r.text(0), r.text(1), r.text(2)};
+  if (auto ok = r.finish(); !ok)
+    return std::unexpected(ok.error());
+  return std::optional<named_run>{out};
+}
+
+namespace {
+// Recovery reads deliberately never select runs.secret. Validate the retained closure in their one read transaction.
+value_result<execution_snapshot> recovery_snapshot(connection& db, ledger_rows& rows) {
+ if(auto ok=load_records(db,rows);!ok)return std::unexpected(ok.error());
+ if(auto ok=load_events(db,rows);!ok)return std::unexpected(ok.error());
+ if(auto ok=load_generations(db,rows);!ok)return std::unexpected(ok.error());
+ if(auto ok=for_each(db,"SELECT id,generation_id,request_id,claimed_seq,provenance_id FROM runs ORDER BY id",[&](row_reader& r)->checked {
+  run_entry run;run.id=r.id(0);run.generation=r.id(1);run.request_id=r.text(2);run.claimed_seq=r.id(3);run.provenance=r.optional_id(4);
+  if(!rows.generations.contains(run.generation)||run.claimed_seq>rows.events.size())return std::unexpected(corrupt());rows.runs.emplace(run.id,std::move(run));return {};
+ });!ok)return std::unexpected(ok.error());
+ if(auto ok=load_dispatches(db,rows);!ok)return std::unexpected(ok.error());
+ if(auto ok=load_role_states(db,rows);!ok)return std::unexpected(ok.error());
+ if(auto ok=load_run_states(db,rows);!ok)return std::unexpected(ok.error());
+ for(const auto& [id,d]:rows.dispatches) {
+  if(!rows.runs.contains(d.run)||d.seq>rows.events.size())return std::unexpected(corrupt());
+  if(auto ok=check_dispatch_content(rows,d);!ok)return std::unexpected(ok.error());
+ }
+ execution_snapshot snapshot;
+ for(const auto& row:rows.role_states) {
+  if(!rows.generations.contains(row.generation))return std::unexpected(corrupt());
+  execution_role role;role.job=row.job;role.role=row.role;role.generation_id=row.generation;role.generation_ordinal=rows.generations.at(row.generation).ordinal;role.state=row.state;role.run_id=row.run;
+  if(role.run_id && !rows.runs.contains(*role.run_id))return std::unexpected(corrupt());snapshot.roles.push_back(std::move(role));
+ }
+ return snapshot;
+}
+value_result<retained_dispatch> retained_from(connection& db, const ledger_rows& rows, const dispatch_entry& d) {
+  retained_dispatch out;
+  out.id                = d.id;
+  out.run_id            = d.run;
+  out.seq               = d.seq;
+  out.revision_id       = d.revision;
+  out.kind              = d.kind;
+  const auto& gen       = rows.generations.at(rows.runs.at(d.run).generation);
+  auto        structure = hist::decode_role_structure_v1(rows.records.at(gen.structure).canonical);
+  if (!structure)
+    return std::unexpected(corrupt());
+  out.role_kind = structure->kind;
+  out.work_fp   = hex_of(d.work_fp);
+  out.render_fp = hex_of(d.render_fp);
+  auto event    = first_row(db, "SELECT request_id FROM events WHERE seq=?1", {int_arg(d.seq)});
+  if (!event || !*event)
+    return std::unexpected(event ? corrupt() : event.error());
+  row_reader er(**event);
+  out.request_id = er.text(0);
+  if (auto ok = er.finish(); !ok)
+    return std::unexpected(ok.error());
+  auto state = first_row(db, "SELECT state FROM run_state WHERE run_id=?1", {int_arg(d.run)});
+  if (!state || !*state)
+    return std::unexpected(state ? corrupt() : state.error());
+  row_reader sr(**state);
+  out.run_state = sr.text(0);
+  if (auto ok = sr.finish(); !ok)
+    return std::unexpected(ok.error());
+  const auto packet   = record_of(rows, d.packet, 1);
+  auto       manifest = value_of(rows, d.manifest, "dispatch_manifest_v1");
+  auto       work     = value_of(rows, d.work, "work_exec_v1");
+  if (!packet || !manifest || !work)
+    return std::unexpected(corrupt());
+  auto        record = hist::decode_record((*packet)->encoded);
+  const auto* file   = record ? std::get_if<hist::file_record>(&*record) : nullptr;
+  auto        m      = hist::decode_dispatch_manifest_v1((*manifest)->canonical);
+  auto        w      = hist::decode_work_exec_v1((*work)->canonical);
+  if (!file || !m || !w)
+    return std::unexpected(corrupt());
+  out.markdown = file->payload;
+  out.manifest = *m;
+  out.work     = *w;
+  return out;
+}
+} // namespace
+std::expected<retained_dispatch, execution_error> read_retained_dispatch(const std::filesystem::path& path, std::uint64_t id) {
+  auto db = open_format3(path, execution_access::read_only);
+  if (!db)
+    return std::unexpected(db.error());
+  auto tx = db->sql().begin(false);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  ledger_rows rows;
+  auto        snapshot = recovery_snapshot(db->sql(), rows);
+  if (!snapshot)
+    return std::unexpected(snapshot.error());
+  auto found = rows.dispatches.find(id);
+  if (found == rows.dispatches.end())
+    return std::unexpected(corrupt());
+  return retained_from(db->sql(), rows, found->second);
+}
+std::expected<std::optional<retained_dispatch>, execution_error>
+find_dispatch_by_render(const std::filesystem::path& path, std::string_view job, std::string_view role, std::string_view fp) {
+  auto db = open_format3(path, execution_access::read_only);
+  if (!db)
+    return std::unexpected(db.error());
+  auto tx = db->sql().begin(false);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  ledger_rows rows;
+  auto        snap = recovery_snapshot(db->sql(), rows);
+  if (!snap)
+    return std::unexpected(snap.error());
+  const dispatch_entry* best = nullptr;
+  for (const auto& [id, d] : rows.dispatches) {
+    const auto& g = rows.generations.at(rows.runs.at(d.run).generation);
+    if (g.job == job && g.role == role && hex_of(d.render_fp) == fp && (!best || d.seq > best->seq))
+      best = &d;
+  }
+  if (!best)
+    return std::optional<retained_dispatch>{};
+  auto r = retained_from(db->sql(), rows, *best);
+  if (!r)
+    return std::unexpected(r.error());
+  return std::optional<retained_dispatch>{std::move(*r)};
+}
+std::expected<recovery_records, execution_error> read_recovery_records(const std::filesystem::path& path, std::string_view job,
+                                                                       std::string_view role) {
+  auto db = open_format3(path, execution_access::read_only);
+  if (!db)
+    return std::unexpected(db.error());
+  auto tx = db->sql().begin(false);
+  if (!tx)
+    return std::unexpected(map_sqlite(tx.error()));
+  ledger_rows rows;
+  auto        snap = recovery_snapshot(db->sql(), rows);
+  if (!snap)
+    return std::unexpected(snap.error());
+  recovery_records      out;
+  const execution_role* target = nullptr;
+  for (const auto& r : snap->roles)
+    if (r.job == job && r.role == role)
+      target = &r;
+  if (!target)
+    return out;
+  std::uint64_t first = target->generation_ordinal;
+  while (first > 1) {
+    const generation_entry* g = nullptr;
+    for (const auto& [id, x] : rows.generations)
+      if (x.job == job && x.role == role && x.ordinal == first)
+        g = &x;
+    if (!g || g->reason != "takeover")
+      break;
+    --first;
+  }
+  std::set<std::uint64_t> runs;
+  for (const auto& [id, r] : rows.runs) {
+    const auto& g = rows.generations.at(r.generation);
+    if (g.job == job && g.role == role && g.ordinal >= first && g.ordinal <= target->generation_ordinal)
+      runs.insert(id);
+  }
+  if (target->run_id) {
+    const auto& r = rows.runs.at(*target->run_id);
+    out.run       = recovery_run{r.id, target->generation_ordinal, r.request_id, "active"};
+  }
+  const dispatch_entry* latest = nullptr;
+  for (const auto& [id, d] : rows.dispatches)
+    if (runs.contains(d.run) && (!latest || d.seq > latest->seq))
+      latest = &d;
+  if (latest) {
+    auto r = retained_from(db->sql(), rows, *latest);
+    if (!r)
+      return std::unexpected(r.error());
+    out.acknowledged = std::move(*r);
+  }
+  auto ok = for_each(db->sql(), "SELECT id,run_id,seq,body_id FROM checkpoints ORDER BY seq", [&](row_reader& r) -> checked {
+    auto id = r.id(0), run = r.id(1), seq = r.id(2), body = r.id(3);
+    if (!runs.contains(run))
+      return {};
+    auto v = value_of(rows, body, "checkpoint_v1");
+    if (!v)
+      return std::unexpected(corrupt());
+    auto note = hist::decode_checkpoint_v1((*v)->canonical);
+    if (!note)
+      return std::unexpected(corrupt());
+    out.checkpoint = retained_checkpoint{id, run, seq, *note};
+    return {};
+  });
+  if (!ok)
+    return std::unexpected(ok.error());
+  return out;
 }
 
 } // namespace planar::engine::ledger

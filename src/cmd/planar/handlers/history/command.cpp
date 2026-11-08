@@ -52,9 +52,11 @@ CLI::App& attach_history(CLI::App& root, history_options& o) {
         ->each([&token](const std::string& value) { token = value; });
   };
   auto r = decimal("--revision", o.revision_number, o.revision, id_value), k = add("--request-id", o.request_id, key_value),
-       e = decimal("--at-event", o.at_event_number, o.at_event, id_value),
-       a = decimal("--after-event", o.after_event_number, o.after_event, id_value),
-       l = decimal("--limit", o.limit_number, o.limit, limit_value);
+       e      = decimal("--at-event", o.at_event_number, o.at_event, id_value),
+       a      = decimal("--after-event", o.after_event_number, o.after_event, id_value),
+       l      = decimal("--limit", o.limit_number, o.limit, limit_value);
+  auto detail = decimal("--event", o.event_number, o.event, id_value);
+  detail->excludes(r)->excludes(k)->excludes(e)->excludes(a)->excludes(l);
   r->excludes(k)->excludes(e)->excludes(a)->excludes(l);
   k->excludes(e)->excludes(a)->excludes(l);
   e->excludes(a)->excludes(l);
@@ -63,6 +65,8 @@ CLI::App& attach_history(CLI::App& root, history_options& o) {
 engine::command_options history_intent(const history_options& o) {
   engine::command_history_options intent;
   intent.ledger = o.ledger;
+  if (!o.event.empty())
+    intent.event = o.event_number;
   if (!o.revision.empty())
     intent.revision = o.revision_number;
   if (!o.at_event.empty())

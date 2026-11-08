@@ -229,8 +229,18 @@ ledger::execution_expectation expectation_of(const value_ptr& node, const std::s
     out.job    = text(entry, "job", path);
     out.role   = text(entry, "role", path);
     out.number = positive(entry, "generation", path);
+  } else if (kind == "run_active") {
+    exact_keys(entry, {"kind", "run"}, {"generation"}, path);
+    out.kind = kind_t::run_active;
+    out.run  = positive(entry, "run", path);
+    if (has(entry, "generation"))
+      out.number = positive(entry, "generation", path);
+  } else if (kind == "reservation_open") {
+    exact_keys(entry, {"kind", "reservation"}, {}, path);
+    out.kind   = kind_t::reservation_open;
+    out.number = positive(entry, "reservation", path);
   } else {
-    // run_active and reservation_open are not used in R15; anything else is outside the closed vocabulary.
+    // Unknown members remain closed.
     refuse(path + ".kind");
   }
   return out;
@@ -294,7 +304,7 @@ ledger::execution_change decode(const value_ptr& root, const ledger::execution_s
   const auto&       change    = as_record(root, path);
   const auto        operation = std::string(operation_name(request.options));
   const bool        run_op    = operation == "claim" || operation == "takeover";
-  if (run_op)
+  if (run_op || operation == "refresh")
     exact_keys(change, {"version", "operation", "snapshot_seq", "facts", "vector", "transitions", "packet", "expected"}, {},
                path);
   else
@@ -354,7 +364,7 @@ ledger::execution_change decode(const value_ptr& root, const ledger::execution_s
           check_provenance(facts, request.provenance, facts_path);
           out.job  = options.job;
           out.role = options.role;
-        } else {
+        } else if constexpr (std::is_same_v<T, takeover_options>) {
           exact_keys(facts, {"role", "previous_run"}, {"provenance"}, facts_path);
           if (text(facts, "role", facts_path) != options.role)
             refuse(facts_path + ".role");
@@ -371,6 +381,36 @@ ledger::execution_change decode(const value_ptr& root, const ledger::execution_s
           out.generations.push_back(ledger::execution_generation_input{
               .job = options.job, .role = options.role, .reason = "takeover", .structure = row->structure});
           out.fenced_runs.push_back(options.run_id);
+        } else {
+          auto token = ledger::parse_run_token(options.run_token);
+          if (!token)
+            refuse("request.run_token");
+          if (options.operation == "release")
+            exact_keys(facts, {"role", "run", "reason"}, {"checkpoint", "provenance"}, facts_path);
+          else if (options.operation == "checkpoint")
+            exact_keys(facts, {"role", "run", "checkpoint"}, {}, facts_path);
+          else if (options.operation == "refresh")
+            exact_keys(facts, {"role", "run"}, {"checkpoint"}, facts_path);
+          else
+            refuse("request.operation");
+          if (text(facts, "role", facts_path) != options.role || positive(facts, "run", facts_path) != token->run_id)
+            refuse(facts_path + ".run");
+          out.job            = options.job;
+          out.role           = options.role;
+          out.run            = token->run_id;
+          out.run_token_text = options.run_token;
+          out.release_reason = options.reason;
+          if (options.operation == "release") {
+            if (text(facts, "reason", facts_path) != options.reason)
+              refuse(facts_path + ".reason");
+            check_provenance(facts, request.provenance, facts_path);
+            out.provenance = request.provenance;
+          }
+          if (has(facts, "checkpoint")) {
+            out.checkpoint = member(facts, "checkpoint", facts_path);
+            if (!history::encode_checkpoint_v1(out.checkpoint))
+              refuse(facts_path + ".checkpoint");
+          }
         }
       },
       request.options);
@@ -387,7 +427,7 @@ ledger::execution_change decode(const value_ptr& root, const ledger::execution_s
   for (std::size_t i = 0; i < expected.size(); ++i)
     out.expected.push_back(expectation_of(expected[i], at_index(path, "expected", i), request.request_id));
 
-  if (run_op) {
+  if (run_op || operation == "refresh") {
     const std::string packet_path = path + ".packet";
     const auto&       packet      = as_record(member(change, "packet", path), packet_path);
     exact_keys(packet, {"markdown", "manifest", "work"}, {}, packet_path);
@@ -416,8 +456,10 @@ std::string_view operation_name(const operation_options& options) {
           return "activate";
         else if constexpr (std::is_same_v<T, claim_options>)
           return "claim";
-        else
+        else if constexpr (std::is_same_v<T, takeover_options>)
           return "takeover";
+        else
+          return typed.operation;
       },
       options);
 }
@@ -435,6 +477,25 @@ std::expected<history::request_v3, change_error> build_request_v3(std::string_vi
           parameters["expect_job"]      = text_node(typed.expect_job);
           parameters["expect_revision"] = text_node(typed.expect_revision);
           parameters["job"]             = text_node(typed.job);
+        } else if constexpr (std::is_same_v<T, recovery_options>) {
+          auto token = ledger::parse_run_token(typed.run_token);
+          if (!token) {
+            valid = false;
+            return;
+          }
+          if (typed.operation != "refresh" && typed.operation != "checkpoint" && typed.operation != "release") {
+            valid = false;
+            return;
+          }
+          parameters["run_id"] = text_node(std::to_string(token->run_id));
+          if (typed.operation == "refresh")
+            parameters["expect_fp"] = text_node(typed.expect_fp);
+          if (typed.operation == "release")
+            parameters["reason"] = text_node(typed.reason);
+          if (typed.observations_path)
+            parameters["observations_path"] = text_node(*typed.observations_path);
+          if (typed.provenance_path)
+            parameters["provenance_path"] = text_node(*typed.provenance_path);
         } else {
           parameters["job"]  = text_node(typed.job);
           parameters["role"] = text_node(typed.role);
