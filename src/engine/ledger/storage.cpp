@@ -1672,6 +1672,208 @@ read_snapshot::read_execution_request(std::string_view key) const {
   return checked_read<std::optional<execution_request_row>>(_state,
                                                             [&](connection& db) { return lookup_format3_request(db, key); });
 }
+namespace {
+value_ptr history_scalar(std::string text) {
+  value v{};
+  v.kind   = value_kind::string;
+  v.string = std::move(text);
+  return std::make_shared<const value>(std::move(v));
+}
+value_ptr history_object(std::map<std::string, value_ptr> fields) {
+  value v{};
+  v.kind   = value_kind::record;
+  v.fields = std::move(fields);
+  return std::make_shared<const value>(std::move(v));
+}
+value_ptr history_list(std::vector<value_ptr> items) {
+  value v{};
+  v.kind  = value_kind::list;
+  v.items = std::move(items);
+  return std::make_shared<const value>(std::move(v));
+}
+struct history_column {
+  std::string key;
+  char        kind;
+};
+std::expected<std::vector<value_ptr>, format_error> history_rows(connection& db, std::string_view sql, std::int64_t sequence,
+                                                                 std::initializer_list<history_column> columns) {
+  auto q = db.prepare(sql);
+  if (!q)
+    return storage(q.error());
+  if (auto b = q->bind_integer(1, sequence); !b)
+    return storage(b.error());
+  std::vector<value_ptr> result;
+  for (;;) {
+    auto step = q->step();
+    if (!step)
+      return storage(step.error());
+    if (*step == step_result::done)
+      break;
+    std::map<std::string, value_ptr> fields;
+    int                              i = 0;
+    for (const auto& c : columns) {
+      value_ptr v;
+      if (c.kind == 's') {
+        auto raw = q->text(i);
+        if (!raw)
+          return row_failure(raw.error());
+        if (!*raw)
+          return history_corrupt();
+        v = history_scalar(**raw);
+      } else {
+        auto raw = q->integer(i);
+        if (!raw)
+          return row_failure(raw.error());
+        if (!*raw)
+          v = history_scalar("none");
+        else if (c.kind == 'v') {
+          auto record = load_record(db, **raw);
+          if (!record)
+            return std::unexpected(record.error());
+          auto* val = std::get_if<history::value_record>(&record->value);
+          if (!val)
+            return history_corrupt();
+          auto decoded = canonical_decode(val->encoded);
+          if (!decoded)
+            return history_corrupt();
+          v = *decoded;
+        } else if (c.kind == 'n' || c.kind == 'b') {
+          value node{};
+          node.kind    = c.kind == 'n' ? value_kind::integer : value_kind::boolean;
+          node.integer = **raw;
+          node.boolean = **raw != 0;
+          v            = std::make_shared<const value>(std::move(node));
+        } else
+          v = history_scalar(std::to_string(**raw));
+      }
+      fields.emplace(c.key, std::move(v));
+      ++i;
+    }
+    result.push_back(history_object(std::move(fields)));
+  }
+  return result;
+}
+std::expected<value_ptr, format_error> supplementary_execution(connection& db, std::int64_t sequence) {
+  auto event = db.prepare("SELECT type,payload FROM events WHERE seq=?1");
+  if (!event)
+    return storage(event.error());
+  if (auto b = event->bind_integer(1, sequence); !b)
+    return storage(b.error());
+  auto step = event->step();
+  if (!step)
+    return storage(step.error());
+  if (*step != step_result::row)
+    return value_ptr{};
+  auto type = event->text(0), payload = event->blob(1);
+  if (!type || !*type || !payload || !*payload)
+    return history_corrupt();
+  if (**type == "check_reserved" || **type == "check_recorded" || **type == "check_interrupted") {
+    auto refs = history::decode_event_payload_v2(**type, **payload);
+    if (!refs)
+      return history_corrupt();
+    auto it = refs->references.find("reservation");
+    if (it == refs->references.end())
+      return history_corrupt();
+    std::int64_t reservation = 0;
+    auto [end, error]        = std::from_chars(it->second.data(), it->second.data() + it->second.size(), reservation);
+    if (error != std::errc{} || end != it->second.data() + it->second.size())
+      return history_corrupt();
+    auto reserved = history_rows(db, "SELECT id,request_id,run_id FROM reservations WHERE id=?1", reservation,
+                                 {{"id", 'i'}, {"request_id", 's'}, {"run", 'i'}});
+    if (!reserved)
+      return std::unexpected(reserved.error());
+    if (reserved->size() != 1)
+      return history_corrupt();
+    std::map<std::string, value_ptr> out{{"reservation", reserved->front()}};
+    if (**type == "check_reserved") {
+      auto fields   = reserved->front()->fields;
+      auto dispatch = refs->references.find("dispatch");
+      if (dispatch == refs->references.end())
+        return history_corrupt();
+      fields["dispatch"] = history_scalar(dispatch->second);
+      out["reservation"] = history_object(std::move(fields));
+    }
+    if (**type == "check_recorded") {
+      auto evidence = history_rows(
+          db,
+          "SELECT id,work,\"check\",outcome,reason,matched,exit_status,duration_ms,output_bytes,output_truncated,output_id FROM "
+          "evidence WHERE seq=?1 ORDER BY work,\"check\"",
+          sequence,
+          {{"evidence", 'i'},
+           {"work", 's'},
+           {"check", 's'},
+           {"outcome", 's'},
+           {"reason", 's'},
+           {"matched", 'i'},
+           {"exit_status", 'i'},
+           {"duration_ms", 'n'},
+           {"output_bytes", 'n'},
+           {"output_truncated", 'b'},
+           {"output", 'i'}});
+      if (!evidence)
+        return std::unexpected(evidence.error());
+      out["evidence"]  = history_list(std::move(*evidence));
+      auto observation = refs->references.find("observation");
+      if (observation == refs->references.end())
+        return history_corrupt();
+      std::int64_t oid = 0;
+      auto parsed = std::from_chars(observation->second.data(), observation->second.data() + observation->second.size(), oid);
+      if (parsed.ec != std::errc{})
+        return history_corrupt();
+      auto o = history_rows(db, "SELECT id,id FROM records WHERE id=?1", oid, {{"id", 'i'}, {"value", 'v'}});
+      if (!o || o->size() != 1)
+        return history_corrupt();
+      out["observation"] = o->front();
+      auto completion = history_rows(db, "SELECT id,dispatch_id,'xxh3_128:'||lower(hex(work_fp)) FROM completions WHERE seq=?1",
+                                     sequence, {{"id", 'i'}, {"dispatch", 'i'}, {"work_fp", 's'}});
+      if (!completion)
+        return std::unexpected(completion.error());
+      if (!completion->empty()) {
+        auto publications = history_rows(db,
+                                         "SELECT p.work,p.facet,'xxh3_128:'||lower(hex(p.semantic)),p.id FROM publications p "
+                                         "JOIN completions c ON c.id=p.completion_id WHERE c.seq=?1 ORDER BY p.work,p.facet",
+                                         sequence, {{"work", 's'}, {"facet", 's'}, {"semantic", 's'}, {"publication", 'i'}});
+        if (!publications)
+          return std::unexpected(publications.error());
+        auto fields            = completion->front()->fields;
+        fields["publications"] = history_list(std::move(*publications));
+        out["completion"]      = history_object(std::move(fields));
+      }
+    }
+    return history_object(std::move(out));
+  }
+  if (**type == "verdict_recorded") {
+    auto verdict =
+        history_rows(db, "SELECT id,request_id,run_id,applicability,decision,body_id FROM verdicts WHERE seq=?1", sequence,
+                     {{"id", 'i'}, {"request_id", 's'}, {"run", 'i'}, {"applicability", 's'}, {"decision", 's'}, {"body", 'v'}});
+    if (!verdict || verdict->size() != 1)
+      return history_corrupt();
+    auto repairs = history_rows(db,
+                                "SELECT r.role,g.ordinal,r.revision FROM repairs r JOIN generations g ON g.id=r.generation_id "
+                                "JOIN verdicts v ON v.id=r.verdict_id WHERE v.seq=?1 ORDER BY r.role",
+                                sequence, {{"role", 's'}, {"generation", 'i'}, {"revision", 'i'}});
+    if (!repairs)
+      return std::unexpected(repairs.error());
+    auto opened =
+        history_rows(db, "SELECT b.id,b.kind FROM blockers b JOIN verdicts v ON v.id=b.verdict_id WHERE v.seq=?1 ORDER BY b.id",
+                     sequence, {{"id", 'i'}, {"kind", 's'}});
+    if (!opened)
+      return std::unexpected(opened.error());
+    auto cleared = history_rows(db, "SELECT blocker_id FROM blocker_state WHERE cleared_seq=?1 ORDER BY blocker_id", sequence,
+                                {{"id", 'i'}});
+    if (!cleared)
+      return std::unexpected(cleared.error());
+    std::vector<value_ptr> ids;
+    for (const auto& r : *cleared)
+      ids.push_back(r->fields.at("id"));
+    return history_object({{"verdict", verdict->front()},
+                           {"repairs", history_list(std::move(*repairs))},
+                           {"blockers", history_object({{"opened", history_list(std::move(*opened))},
+                                                        {"cleared", history_list(std::move(ids))}})}});
+  }
+  return value_ptr{};
+}
+} // namespace
 std::expected<execution_event_detail, format_error> read_snapshot::read_execution_event(std::uint64_t sequence) const {
   if (!positive_id(sequence))
     return refuse(format_error_code::invalid_argument, "A positive signed-64 ID is required");
@@ -1721,7 +1923,8 @@ std::expected<execution_event_detail, format_error> read_snapshot::read_executio
       out.run_request = **request;
     }
     auto d = db.prepare(
-        "SELECT id,packet_id,manifest_id,work_id,kind,lower(hex(work_fp)),lower(hex(render_fp)) FROM dispatches WHERE seq=?1");
+        "SELECT id,packet_id,manifest_id,work_id,kind,lower(hex(work_fp)),lower(hex(render_fp)) FROM dispatches WHERE seq=?1 OR "
+        "(run_id=(SELECT run_id FROM events WHERE seq=?1 AND type='verdict_recorded') AND seq<=?1) ORDER BY seq DESC LIMIT 1");
     if (!d)
       return storage(d.error());
     if (auto ok = d->bind_integer(1, sequence); !ok)
@@ -1758,6 +1961,10 @@ std::expected<execution_event_detail, format_error> read_snapshot::read_executio
       out.checkpoint      = *id;
       out.checkpoint_body = *body;
     }
+    auto extra = supplementary_execution(db, sequence);
+    if (!extra)
+      return std::unexpected(extra.error());
+    out.supplemental = *extra;
     return out;
   });
 }

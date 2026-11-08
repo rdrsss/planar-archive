@@ -44,6 +44,8 @@ struct recovery_records {
   std::optional<recovery_run>        run;
   std::optional<retained_dispatch>   acknowledged;
   std::optional<retained_checkpoint> checkpoint;
+  std::vector<value_ptr>             evidence; ///< Latest evidence per work/check in the structural lineage.
+  std::vector<value_ptr>             findings; ///< Carried findings from the current activation latest rejection.
 };
 /// @brief Read one retained dispatch by id in a verified read transaction.
 /// @return Exact retained dispatch, or a typed ledger failure.
@@ -86,6 +88,8 @@ struct execution_role {
   std::string                        role;                   ///< Role identifier.
   std::uint64_t                      generation_id      = 0; ///< Current generation record identifier.
   std::uint64_t                      generation_ordinal = 0; ///< Current generation ordinal.
+  std::vector<std::uint64_t>         lineage;                ///< Current structural lineage generation identifiers.
+  std::uint64_t                      lineage_opened = 0;     ///< Opening event of the oldest structural-lineage generation.
   history::role_structure_v1         structure;              ///< Decoded role structure of the current generation.
   std::string                        state;                  ///< One of the six role states.
   bool                               drifted = false;        ///< Drift flag, true only when running.

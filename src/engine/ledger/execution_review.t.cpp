@@ -11,6 +11,7 @@ import planar.engine.canonical;
 import planar.engine.hash;
 import planar.engine.value;
 import planar.engine.history.execution_codec;
+import planar.engine.history.read;
 import planar.engine.history.record;
 import planar.engine.history.request_v2;
 import planar.engine.history.request_v3;
@@ -976,8 +977,8 @@ constexpr std::string_view output_two   = "xxh3_128:2222222222222222222222222222
 constexpr std::string_view output_three = "xxh3_128:33333333333333333333333333333333";
 
 value_ptr with_field(const value_ptr& base, const std::string& key, const value_ptr& item) {
-  value copy          = *base;
-  copy.fields[key]    = item;
+  value copy       = *base;
+  copy.fields[key] = item;
   return std::make_shared<const value>(std::move(copy));
 }
 
@@ -1022,7 +1023,8 @@ std::string claim_with(const std::filesystem::path& path, std::string_view reque
   change.vector = base_vector(snapshot, "alpha");
   for (auto& entry : change.vector)
     if (entry.role == role)
-      entry = execution_vector_entry{.job = entry.job, .role = entry.role, .state = "running", .drifted = false, .run = std::nullopt};
+      entry =
+          execution_vector_entry{.job = entry.job, .role = entry.role, .state = "running", .drifted = false, .run = std::nullopt};
   change.packet   = packet_with(snapshot, *row, request_id, review_work(role, max_rounds, repair));
   change.expected = targeted_expected(snapshot, *row);
   auto result     = commit_execution(path, snapshot, change);
@@ -1040,14 +1042,14 @@ void takeover_role(const std::filesystem::path& path, std::string_view request_i
   REQUIRE(row->run_id.has_value());
   const auto       previous = *row->run_id;
   execution_change change;
-  change.operation    = "takeover";
-  change.request_id   = request_id;
-  change.actor        = "tester";
-  change.request      = hist::request_v3{
-      .operation        = "takeover",
-      .actor            = "tester",
-      .parameters       = params_bytes({{"job", "alpha"}, {"role", std::string(role)}, {"run_id", decimal(previous)}}),
-      .profile_argument = std::nullopt};
+  change.operation  = "takeover";
+  change.request_id = request_id;
+  change.actor      = "tester";
+  change.request =
+      hist::request_v3{.operation  = "takeover",
+                       .actor      = "tester",
+                       .parameters = params_bytes({{"job", "alpha"}, {"role", std::string(role)}, {"run_id", decimal(previous)}}),
+                       .profile_argument = std::nullopt};
   change.job          = "alpha";
   change.role         = std::string(role);
   change.previous_run = previous;
@@ -1064,7 +1066,8 @@ void takeover_role(const std::filesystem::path& path, std::string_view request_i
   change.vector = base_vector(snapshot, "alpha");
   for (auto& entry : change.vector)
     if (entry.role == role)
-      entry = execution_vector_entry{.job = entry.job, .role = entry.role, .state = "running", .drifted = false, .run = std::nullopt};
+      entry =
+          execution_vector_entry{.job = entry.job, .role = entry.role, .state = "running", .drifted = false, .run = std::nullopt};
   change.packet   = packet_with(snapshot, *row, request_id, row->dispatch->work);
   change.expected = targeted_expected(snapshot, *row);
   commit_or_fail(path, snapshot, change);
@@ -1097,7 +1100,8 @@ execution_change load_with(const execution_snapshot& snapshot, std::string_view 
   for (const auto& t : transitions) {
     for (auto& entry : change.vector)
       if (entry.role == t.role)
-        entry = execution_vector_entry{.job = t.job, .role = t.role, .state = t.after_state, .drifted = false, .run = std::nullopt};
+        entry =
+            execution_vector_entry{.job = t.job, .role = t.role, .state = t.after_state, .drifted = false, .run = std::nullopt};
     const auto* row = find_role(snapshot, t.job, t.role);
     if (row && row->state == "running" && t.after_state != "running")
       change.fenced_runs.push_back(*row->run_id);
@@ -1125,10 +1129,10 @@ void complete_builder(const std::filesystem::path& path, std::string_view reques
   REQUIRE(builder != nullptr);
   REQUIRE(builder->state == "running");
   REQUIRE(builder->dispatch.has_value());
-  const auto run      = *builder->run_id;
-  const auto dispatch = builder->dispatch->id;
+  const auto                              run      = *builder->run_id;
+  const auto                              dispatch = builder->dispatch->id;
   std::vector<execution_transition_input> transitions{step_to(*builder, "done", "completed")};
-  const auto* reviewer = find_role(snapshot, "alpha", "reviewer");
+  const auto*                             reviewer = find_role(snapshot, "alpha", "reviewer");
   if (reviewer && (reviewer->state == "blocked"))
     transitions.push_back(step_to(*reviewer, "ready", "prerequisite_available"));
   commit_or_fail(path, snapshot, load_with(snapshot, request_id, seed_revision(path, request_id), transitions));
@@ -1155,14 +1159,14 @@ std::string reviewing_ledger(const std::filesystem::path& path, std::int64_t max
 }
 
 struct verdict_input {
-  std::string                                      request_id = "verdict-1";
-  std::string                                      decision   = "approve";
-  std::vector<std::string>                         repair;
-  std::optional<std::string>                       output;  ///< Document target output; default the current one.
-  std::optional<std::string>                       work_fp; ///< Document target work_fp; default the current one.
-  std::optional<std::string>                       policy;  ///< Document policy; default the current policy.
-  std::vector<std::uint64_t>                       cleared;
-  std::string                                      verdict_path = "/private/verdict.json";
+  std::string                request_id = "verdict-1";
+  std::string                decision   = "approve";
+  std::vector<std::string>   repair;
+  std::optional<std::string> output;  ///< Document target output; default the current one.
+  std::optional<std::string> work_fp; ///< Document target work_fp; default the current one.
+  std::optional<std::string> policy;  ///< Document policy; default the current policy.
+  std::vector<std::uint64_t> cleared;
+  std::string                verdict_path = "/private/verdict.json";
 };
 
 /// The current target vector as Lua derives it (R18-1 item 3): the latest lineage completion of each target owner.
@@ -1212,10 +1216,10 @@ execution_change verdict_change(const execution_snapshot& snapshot, const verdic
   REQUIRE(reviewer->run_id.has_value());
   REQUIRE(reviewer->dispatch.has_value());
   execution_verdict_facts facts;
-  facts.role           = "reviewer";
-  facts.run            = *reviewer->run_id;
-  facts.current.work   = reviewer->dispatch->work;
-  auto policy          = hist::work_exec_digest(facts.current.work);
+  facts.role         = "reviewer";
+  facts.run          = *reviewer->run_id;
+  facts.current.work = reviewer->dispatch->work;
+  auto policy        = hist::work_exec_digest(facts.current.work);
   REQUIRE(policy.has_value());
   facts.current.policy  = *policy;
   facts.current.targets = current_vector(snapshot);
@@ -1226,8 +1230,8 @@ execution_change verdict_change(const execution_snapshot& snapshot, const verdic
     target.output  = in.output.value_or(target.output);
     target.work_fp = in.work_fp.value_or(target.work_fp);
   }
-  facts.document        = document_value(in, targets, in.policy.value_or(facts.current.policy));
-  auto typed            = hist::verdict_from_value(facts.document);
+  facts.document = document_value(in, targets, in.policy.value_or(facts.current.policy));
+  auto typed     = hist::verdict_from_value(facts.document);
   REQUIRE(typed.has_value());
   typed->authority = std::string(hist::verdict_authority_reviewer);
   facts.verdict    = *typed;
@@ -1258,13 +1262,13 @@ execution_change verdict_change(const execution_snapshot& snapshot, const verdic
   change.operation  = "verdict";
   change.request_id = in.request_id;
   change.actor      = "tester";
-  change.request    = hist::request_v3{
-      .operation        = "verdict",
-      .actor            = "tester",
-      .parameters       = params_bytes({{"run_id", decimal(facts.run)}, {"verdict_path", in.verdict_path}}),
-      .profile_argument = std::nullopt};
-  change.job  = "alpha";
-  change.role = "reviewer";
+  change.request =
+      hist::request_v3{.operation        = "verdict",
+                       .actor            = "tester",
+                       .parameters       = params_bytes({{"run_id", decimal(facts.run)}, {"verdict_path", in.verdict_path}}),
+                       .profile_argument = std::nullopt};
+  change.job    = "alpha";
+  change.role   = "reviewer";
   bool all_done = true;
   for (const auto& row : snapshot.roles)
     if (row.job == "alpha" && row.structure.kind == "worker" && row.state != "done")
@@ -1282,7 +1286,8 @@ execution_change verdict_change(const execution_snapshot& snapshot, const verdic
   for (const auto& t : change.transitions)
     for (auto& entry : change.vector)
       if (entry.role == t.role)
-        entry = execution_vector_entry{.job = t.job, .role = t.role, .state = t.after_state, .drifted = false, .run = std::nullopt};
+        entry =
+            execution_vector_entry{.job = t.job, .role = t.role, .state = t.after_state, .drifted = false, .run = std::nullopt};
   change.expected = {revision_member(snapshot), active_job_member(snapshot)};
   for (const auto& row : snapshot.roles)
     if (row.job == "alpha")
@@ -1389,7 +1394,7 @@ TEST_CASE("R18-B verdict approve of the current vector completes the reviewer", 
 
 TEST_CASE("R18-B verdict admitted rejection writes every effect in one commit", "[r18][verdict_commit]") {
   scratch    dir;
-  const auto path   = dir.ledger();
+  const auto path = dir.ledger();
   reviewing_ledger(path);
   const auto events = count_rows(path, "SELECT COUNT(*) FROM events");
   const auto result = commit_verdict(path, reject("verdict-1"));
@@ -1420,8 +1425,8 @@ TEST_CASE("R18-B verdict admitted rejection writes every effect in one commit", 
   CHECK(count_rows(path, std::format("SELECT COUNT(*) FROM verdicts WHERE seq={}", seq)) == 1);
   CHECK(count_rows(path, "SELECT COUNT(*) FROM repairs") == 1);
   CHECK(count_rows(path, std::format("SELECT COUNT(*) FROM requests WHERE event_seq={} AND outcome='recorded'", seq)) == 1);
-  CHECK(count_rows(path, "SELECT reason='repair_admitted' FROM transitions WHERE role='builder' ORDER BY event_seq DESC LIMIT 1") ==
-        1);
+  CHECK(count_rows(path,
+                   "SELECT reason='repair_admitted' FROM transitions WHERE role='builder' ORDER BY event_seq DESC LIMIT 1") == 1);
 }
 
 TEST_CASE("R18-B verdict admitted rejection keeps a blocked worker blocked (M44)", "[r18][verdict_commit]") {
@@ -1568,22 +1573,24 @@ TEST_CASE("R18-B verdict count is per activation after a re-activation", "[r18][
   commit_verdict(path, reject("verdict-1"));
   CHECK(snapshot_of(path).review.count == 1);
   // Re-activate alpha (builder stale, reviewer blocked -> ready), then a full round admits with count 1 again.
-  const auto s = snapshot_of(path);
+  const auto       s = snapshot_of(path);
   execution_change change;
   change.operation  = "activate";
   change.request_id = "reactivate-1";
   change.actor      = "tester";
   change.job        = "alpha";
-  change.request    = hist::request_v3{
-      .operation        = "activate",
-      .actor            = "tester",
-      .parameters       = params_bytes({{"expect_job", "alpha"}, {"expect_revision", head_text(s)}, {"job", "alpha"}}),
-      .profile_argument = std::nullopt};
-  for (const auto& [role, kind] : std::vector<std::pair<std::string, std::string>>{{"builder", "worker"}, {"reviewer", "reviewer"}}) {
+  change.request =
+      hist::request_v3{.operation  = "activate",
+                       .actor      = "tester",
+                       .parameters = params_bytes({{"expect_job", "alpha"}, {"expect_revision", head_text(s)}, {"job", "alpha"}}),
+                       .profile_argument = std::nullopt};
+  for (const auto& [role, kind] :
+       std::vector<std::pair<std::string, std::string>>{{"builder", "worker"}, {"reviewer", "reviewer"}}) {
     change.generations.push_back(execution_generation_input{
         .job = "alpha", .role = role, .reason = "activated", .structure = structure_of("alpha", role, kind)});
     change.transitions.push_back(step_to(*find_role(s, "alpha", role), "ready", "activated"));
-    change.vector.push_back(execution_vector_entry{.job = "alpha", .role = role, .state = "ready", .drifted = false, .run = std::nullopt});
+    change.vector.push_back(
+        execution_vector_entry{.job = "alpha", .role = role, .state = "ready", .drifted = false, .run = std::nullopt});
   }
   change.expected = lifecycle_expected(s, {"alpha"});
   commit_or_fail(path, s, change);
@@ -1602,7 +1609,7 @@ TEST_CASE("R18-B verdict count is per activation after a re-activation", "[r18][
 
 TEST_CASE("R18-B verdict empty repair opens unowned_rejection once", "[r18][verdict_commit]") {
   scratch    dir;
-  const auto path   = dir.ledger();
+  const auto path = dir.ledger();
   reviewing_ledger(path);
   const auto saved = saved_of(commit_verdict(path, reject("verdict-1", {})));
   require_verifies(path);
@@ -1616,7 +1623,7 @@ TEST_CASE("R18-B verdict empty repair opens unowned_rejection once", "[r18][verd
 
 TEST_CASE("R18-B verdict same request id replays the saved bytes and an unequal body conflicts", "[r18][verdict_commit]") {
   scratch    dir;
-  const auto path     = dir.ledger();
+  const auto path = dir.ledger();
   reviewing_ledger(path);
   const auto snapshot = snapshot_of(path);
   const auto change   = verdict_change(snapshot, reject("verdict-1"));
@@ -1657,10 +1664,10 @@ TEST_CASE("R18-B verdict of a taken-over reviewer run is fenced", "[r18][verdict
 
 TEST_CASE("R18-B verdict every step-5 mismatch is an invalid change and writes nothing", "[r18][verdict_commit]") {
   scratch    dir;
-  const auto path     = dir.ledger();
+  const auto path = dir.ledger();
   reviewing_ledger(path);
-  const auto snapshot = snapshot_of(path);
-  const auto events   = count_rows(path, "SELECT COUNT(*) FROM events");
+  const auto snapshot       = snapshot_of(path);
+  const auto events         = count_rows(path, "SELECT COUNT(*) FROM events");
   auto       expect_invalid = [&](const std::string& name, const std::function<void(execution_change&)>& mutate) {
     INFO(name);
     auto change = verdict_change(snapshot, reject("verdict-1"));
@@ -1668,12 +1675,16 @@ TEST_CASE("R18-B verdict every step-5 mismatch is an invalid change and writes n
     require_code(commit_execution(path, snapshot, change), execution_error_code::invalid_change);
     CHECK(count_rows(path, "SELECT COUNT(*) FROM events") == events);
   };
-  expect_invalid("verdict differs from the document normalization", [](execution_change& c) { c.verdict->verdict.summary = "Other."; });
-  expect_invalid("document authority external",
-                 [](execution_change& c) { c.verdict->document = with_field(c.verdict->document, "authority", vstr("external")); });
-  expect_invalid("current W differs from the dispatch W",
-                 [](execution_change& c) { c.verdict->current.work = with_field(c.verdict->current.work, "goal", vstr("other")); });
-  expect_invalid("policy is not the W digest", [](execution_change& c) { c.verdict->current.policy = std::string(fingerprint_two); });
+  expect_invalid("verdict differs from the document normalization",
+                 [](execution_change& c) { c.verdict->verdict.summary = "Other."; });
+  expect_invalid("document authority external", [](execution_change& c) {
+    c.verdict->document = with_field(c.verdict->document, "authority", vstr("external"));
+  });
+  expect_invalid("current W differs from the dispatch W", [](execution_change& c) {
+    c.verdict->current.work = with_field(c.verdict->current.work, "goal", vstr("other"));
+  });
+  expect_invalid("policy is not the W digest",
+                 [](execution_change& c) { c.verdict->current.policy = std::string(fingerprint_two); });
   expect_invalid("current target names no completion",
                  [](execution_change& c) { c.verdict->current.targets[0].output = std::string(output_three); });
   expect_invalid("max_rounds differs from the W shape", [](execution_change& c) { c.verdict->max_rounds = 3; });
@@ -1695,8 +1706,8 @@ TEST_CASE("R18-B verdict every step-5 mismatch is an invalid change and writes n
   expect_invalid("unknown blocker cleared", [](execution_change& c) { c.blockers_cleared = {7}; });
   // A repair role that owns no target (the reviewer) is native invalid_change (DB-R8).
   {
-    auto in    = reject("verdict-1", {"reviewer"});
-    auto doc   = verdict_change(snapshot, in);
+    auto in  = reject("verdict-1", {"reviewer"});
+    auto doc = verdict_change(snapshot, in);
     require_code(commit_execution(path, snapshot, doc), execution_error_code::invalid_change);
   }
   require_verifies(path);
@@ -1724,9 +1735,9 @@ TEST_CASE("R18-B verdict repair revision survives a takeover in the lineage", "[
 
 TEST_CASE("R18-B history expansion of verdict_recorded and the saved response", "[r18][verdict_commit]") {
   scratch    dir;
-  const auto path   = dir.ledger();
+  const auto path = dir.ledger();
   reviewing_ledger(path);
-  const auto result = commit_verdict(path, reject("verdict-1"));
+  const auto result   = commit_verdict(path, reject("verdict-1"));
   auto       expanded = read_verdict_expansion(path, result.event_seq);
   REQUIRE(expanded.has_value());
   REQUIRE(expanded->has_value());
@@ -1753,6 +1764,22 @@ TEST_CASE("R18-B history expansion of verdict_recorded and the saved response", 
   REQUIRE(bytes.has_value());
   CHECK(bytes->find("secret") == std::string::npos);
 
+  auto owner = open_existing(path, ledger_access::read_only);
+  REQUIRE(owner);
+  hist::history_query query;
+  query.selector = hist::history_selector::event;
+  query.id       = result.event_seq;
+  auto projected = hist::read_history(*owner, query);
+  REQUIRE(projected);
+  const auto& projection = (*projected)->fields.at("data")->fields.at("execution");
+  CHECK(projection->fields.at("verdict")->fields.at("decision")->string == "reject");
+  CHECK(projection->fields.at("repairs")->items.size() == 1);
+  query.selector   = hist::history_selector::request;
+  query.request_id = "verdict-1";
+  REQUIRE(hist::read_history(*owner, query));
+  auto recovery = read_recovery_records(path, "alpha", "builder");
+  REQUIRE(recovery);
+  CHECK(recovery->findings.size() == verdict->fields.at("body")->fields.at("findings")->items.size());
   auto saved = read_saved_result(path, "verdict-1");
   REQUIRE(saved.has_value());
   REQUIRE(saved->has_value());

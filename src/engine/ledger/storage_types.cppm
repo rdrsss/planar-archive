@@ -3,6 +3,7 @@
 export module planar.engine.ledger.storage_types;
 import std;
 export import planar.engine.ledger.types;
+export import planar.engine.value;
 export import planar.engine.ledger.history_codec;
 export namespace planar::engine::ledger {
 /// Exact shared ledger failure category.
@@ -85,6 +86,7 @@ struct execution_event_detail {
   std::optional<std::int64_t> run, generation, dispatch, packet, manifest, work, checkpoint, checkpoint_body, provenance,
       structure;
   std::string run_request, dispatch_kind, work_fp, render_fp;
+  value_ptr   supplemental; ///< Check/verdict expansion, excluding native provenance.
 };
 /// Run of a replayed format3 role: its identifier and the ordinal of its generation.
 struct state_run_reference {

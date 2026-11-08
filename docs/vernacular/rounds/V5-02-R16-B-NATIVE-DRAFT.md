@@ -32,9 +32,8 @@ claim through a refresh transition.
 - `cmake --build build/rewrite-debug --target planar_ledger_execution_tests planar_execution_change_value`
   compiled the ledger, codec, decoder, storage and history changes.
 - `build/rewrite-debug/src/engine/planar_ledger_execution_tests 'R16 *'`:
-  3 test cases, 519 assertions passed before the final secret-free reader
-  refinement. The final reader refinement compiled successfully in the shared
-  CLI build; its focused test rerun is pending that build finishing.
+  3 test cases, 519 assertions passed after the final secret-free reader
+  refinement. The final focused run used the lane A draft before integration.
 - The first native test run had one incorrect oracle: equal retained render
   digests must select the latest dispatch, not the original claim. The oracle was
   corrected to the contract's latest-dispatch rule. No product behavior was
@@ -52,3 +51,16 @@ so the verifier and retained-reader implementation share record decoding without
 a cyclic module edge. R17/R18 extend recovery with evidence and findings after
 integration. Their history expansion and final cross-row acceptance remain part
 of that integration, not a claim made by this native slice.
+
+## R17/R18 integration implementation
+
+The retained recovery reader now exposes latest evidence by work/check in the
+current structural lineage and carried rejection findings. Snapshot roles expose
+their structural lineage, and observed units exclude unrelated prior role
+recreations. Pinned history snapshots expand reserved, recorded and interrupted
+checks, and verdict bodies, repairs and blocker changes. Saved check and verdict
+requests are decoded without exposing execution secrets or check output bytes.
+
+Focused test cases were extended for these read paths. Their integrated compile
+and run are pending the shared runtime merge and catalog configuration update.
+No review or full validation gate is claimed.

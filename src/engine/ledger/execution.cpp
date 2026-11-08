@@ -2085,6 +2085,15 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
     return std::unexpected(review.error());
   if (auto checks = read_check_rows(db, *snapshot, rows); !checks)
     return std::unexpected(checks.error());
+  for (auto& role : snapshot->roles) {
+    auto lineage = lineage_generations(db, role.generation_id);
+    if (!lineage)
+      return std::unexpected(lineage.error());
+    role.lineage = std::move(*lineage);
+    if (role.lineage.empty())
+      return std::unexpected(corrupt());
+    role.lineage_opened = rows.generations.at(role.lineage.front()).opened_seq;
+  }
   snapshot->state_bytes = measure_state(*snapshot, dispatch_revisions);
   return snapshot;
 }
@@ -2218,6 +2227,17 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
       auto gen = generation_of(rows, run->second.generation);
       if (!gen)
         return std::unexpected(corrupt());
+      if (gen->job != snapshot.active_job)
+        continue;
+      const auto selected_role =
+          std::ranges::find_if(snapshot.roles, [&](const auto& r) { return r.job == gen->job && r.role == gen->role; });
+      if (selected_role == snapshot.roles.end())
+        continue;
+      auto lineage = lineage_generations(db, selected_role->generation_id);
+      if (!lineage)
+        return std::unexpected(lineage.error());
+      if (std::ranges::find(*lineage, gen->id) == lineage->end())
+        continue;
       auto structure = value_of(rows, gen->structure, "role_structure_v1");
       if (!structure)
         return std::unexpected(corrupt());
@@ -5212,6 +5232,89 @@ std::expected<recovery_records, execution_error> read_recovery_records(const std
   });
   if (!ok)
     return std::unexpected(ok.error());
+  std::map<std::pair<std::string, std::string>, value_ptr> evidence;
+  ok = for_each(db->sql(),
+                "SELECT e.id,e.reservation_id,e.work,e.\"check\",e.outcome,e.reason,e.matched,e.seq,e.vector_id,r.run_id FROM "
+                "evidence e JOIN reservations r ON r.id=e.reservation_id ORDER BY e.seq,e.id",
+                [&](row_reader& q) -> checked {
+                  auto id = q.id(0), reservation = q.id(1);
+                  auto work = q.text(2), check = q.text(3), outcome = q.text(4), reason = q.text(5);
+                  auto matched = q.optional_number(6);
+                  auto seq = q.id(7), vector = q.id(8), run = q.id(9);
+                  if (!runs.contains(run))
+                    return {};
+                  auto record = value_of(rows, vector, hist::codec_output_vector_v1);
+                  if (!record)
+                    return std::unexpected(corrupt());
+                  auto v = hist::decode_check_value(hist::codec_output_vector_v1, (*record)->canonical);
+                  if (!v)
+                    return std::unexpected(corrupt());
+                  evidence[{work, check}] = record_node({{"id", text_node(std::to_string(id))},
+                                                         {"reservation", text_node(std::to_string(reservation))},
+                                                         {"work", text_node(work)},
+                                                         {"check", text_node(check)},
+                                                         {"outcome", text_node(outcome)},
+                                                         {"reason", text_node(reason)},
+                                                         {"matched", text_node(matched ? std::to_string(*matched) : "none")},
+                                                         {"seq", text_node(std::to_string(seq))},
+                                                         {"vector", *v}});
+                  return {};
+                });
+  if (!ok)
+    return std::unexpected(ok.error());
+  for (auto& [key, v] : evidence)
+    out.evidence.push_back(std::move(v));
+  const auto& gen    = rows.generations.at(target->generation_id);
+  auto        stored = value_of(rows, gen.structure, "role_structure_v1");
+  if (!stored)
+    return std::unexpected(corrupt());
+  auto structure = hist::decode_role_structure_v1((*stored)->canonical);
+  if (!structure)
+    return std::unexpected(corrupt());
+  auto reject = first_row(db->sql(),
+                          "SELECT v.id,v.body_id,v.applicability FROM verdicts v JOIN runs r ON r.id=v.run_id JOIN generations g "
+                          "ON g.id=r.generation_id WHERE g.job=?1 AND v.decision='reject' AND v.seq>=(SELECT "
+                          "COALESCE(MAX(event_seq),0) FROM job_activations WHERE job=?1) ORDER BY v.seq DESC LIMIT 1",
+                          {text_arg(job)});
+  if (!reject)
+    return std::unexpected(reject.error());
+  if (*reject) {
+    row_reader q(**reject);
+    auto       id = q.id(0), body = q.id(1);
+    auto       applicability = q.text(2);
+    if (auto valid = q.finish(); !valid)
+      return std::unexpected(valid.error());
+    auto record = value_of(rows, body, hist::codec_verdict_v1);
+    if (!record)
+      return std::unexpected(corrupt());
+    auto verdict = hist::decode_verdict_v1((*record)->canonical);
+    if (!verdict)
+      return std::unexpected(corrupt());
+    const bool selected =
+        structure->kind == "reviewer" ||
+        (applicability == "current" && std::ranges::find(verdict->repair, std::string(role)) != verdict->repair.end());
+    if (selected)
+      for (const auto& f : verdict->findings) {
+        if (structure->kind == "worker" && std::ranges::find(structure->work, f.work) == structure->work.end())
+          continue;
+        std::map<std::string, value_ptr> fields{{"verdict", text_node(std::to_string(id))},
+                                                {"id", text_node(f.id)},
+                                                {"severity", text_node(f.severity)},
+                                                {"work", text_node(f.work)},
+                                                {"text", text_node(f.text)}};
+        if (f.path)
+          fields["path"] = text_node(*f.path);
+        if (f.line)
+          fields["line"] = integer_node(*f.line);
+        if (f.prescription)
+          fields["prescription"] = text_node(*f.prescription);
+        out.findings.push_back(record_node(std::move(fields)));
+      }
+  }
+  std::ranges::sort(out.findings, [](const auto& a, const auto& b) {
+    return std::pair{a->fields.at("work")->string, a->fields.at("id")->string} <
+           std::pair{b->fields.at("work")->string, b->fields.at("id")->string};
+  });
   return out;
 }
 

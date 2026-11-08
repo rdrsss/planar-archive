@@ -181,6 +181,10 @@ std::expected<value_ptr, history_read_error> event_view(const ledger::format_fil
                  object({{"id", text(id(ref("activation")))}, {"job", text(row.job)}, {"revision", text(id(row.revision))}})}});
     return object(std::move(result));
   }
+  if (detail->supplemental && row.type != "verdict_recorded") {
+    result["execution"] = detail->supplemental;
+    return object(std::move(result));
+  }
   if (!detail->run)
     return object(std::move(result));
   auto run = object(
@@ -278,6 +282,16 @@ std::expected<value_ptr, history_read_error> event_view(const ledger::format_fil
     expansion["provenance"] = object({{"driver", *driver}});
   } else
     return object(std::move(result));
+  if (row.type == "verdict_recorded" && detail->supplemental) {
+    auto provenance = expansion.find("provenance");
+    if (provenance == expansion.end())
+      return corrupt();
+    auto native = field(provenance->second, "native");
+    if (!native)
+      return corrupt();
+    expansion               = detail->supplemental->fields;
+    expansion["provenance"] = object({{"native", native}});
+  }
   result["execution"] = object(std::move(expansion));
   return object(std::move(result));
 }
@@ -297,9 +311,19 @@ std::expected<value_ptr, history_read_error> format3_request_view(const ledger::
     valid = static_cast<bool>(decode_activate_result_v1(r.result));
   else if (r.operation == "claim" || r.operation == "takeover")
     valid = static_cast<bool>(decode_claim_result_v1(r.result));
-  else if(r.operation=="refresh") valid=static_cast<bool>(decode_refresh_result_v1(r.result));
-  else if(r.operation=="checkpoint") valid=static_cast<bool>(decode_checkpoint_result_v1(r.result));
-  else if(r.operation=="release") valid=static_cast<bool>(decode_release_result_v1(r.result));
+  else if (r.operation == "refresh")
+    valid = static_cast<bool>(decode_refresh_result_v1(r.result));
+  else if (r.operation == "checkpoint")
+    valid = static_cast<bool>(decode_checkpoint_result_v1(r.result));
+  else if (r.operation == "release")
+    valid = static_cast<bool>(decode_release_result_v1(r.result));
+  else if (r.operation == "verdict")
+    valid = static_cast<bool>(decode_verdict_result_v1(r.result));
+  else if (r.operation == "check" || r.operation == "check-recover") {
+    auto saved = saved_json(r.result);
+    auto kind  = saved ? field(*saved, "kind") : value_ptr{};
+    valid      = kind && kind->kind == value_kind::string && kind->string == "check";
+  }
   if (!valid)
     return corrupt();
   auto result = saved_json(r.result);

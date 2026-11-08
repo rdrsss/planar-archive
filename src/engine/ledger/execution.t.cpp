@@ -3705,6 +3705,17 @@ TEST_CASE("R17 ledger reservation survives restart and recovery closes both requ
   REQUIRE(replay->state == request_state::replay);
   REQUIRE(replay->result == recovered->saved_result);
   REQUIRE(authorize_run_token(path, *claim.token));
+  auto file = open_existing(path, ledger_access::read_only);
+  REQUIRE(file);
+  for (auto seq : {reserved->opened_seq, recovered->event_seq}) {
+    hist::history_query query;
+    query.selector = hist::history_selector::event;
+    query.id       = seq;
+    auto h         = hist::read_history(*file, query);
+    REQUIRE(h);
+    const auto& expansion = (*h)->fields.at("data")->fields.at("execution");
+    CHECK(expansion->fields.at("reservation")->fields.at("id")->string == std::to_string(reserved->id));
+  }
 }
 
 TEST_CASE("R17 ledger completion retains evidence and changes run to completed atomically") {
@@ -3769,6 +3780,24 @@ TEST_CASE("R17 ledger completion retains evidence and changes run to completed a
   auto authorization = authorize_run_token(path, *claim.token);
   REQUIRE_FALSE(authorization);
   REQUIRE(authorization.error().state == "completed");
+  auto recovery = read_recovery_records(path, "alpha", "builder");
+  REQUIRE(recovery);
+  REQUIRE(recovery->evidence.size() == 1);
+  CHECK(recovery->evidence[0]->fields.at("outcome")->string == "pass");
+  auto file = open_existing(path, ledger_access::read_only);
+  REQUIRE(file);
+  hist::history_query query;
+  query.selector = hist::history_selector::event;
+  query.id       = completed->event_seq;
+  auto expanded  = hist::read_history(*file, query);
+  REQUIRE(expanded);
+  const auto& details = (*expanded)->fields.at("data")->fields.at("execution");
+  CHECK(details->fields.at("evidence")->items.size() == 1);
+  CHECK(details->fields.contains("completion"));
+  CHECK(details->fields.contains("observation"));
+  query.selector   = hist::history_selector::request;
+  query.request_id = "check-1";
+  REQUIRE(hist::read_history(*file, query));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
