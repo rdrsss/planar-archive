@@ -1,6 +1,7 @@
 module planar.cmd.execution.verdict;
 import std;
 import cli11;
+import planar.cmd.invocation;
 namespace planar::cmd::handlers {
 namespace {
 [[maybe_unused]] bool positive(std::string_view s) {
@@ -68,5 +69,24 @@ CLI::App& attach_verdict(CLI::App& root, verdict_options& options) {
       ->check(CLI::Validator([](std::string& s) { return s.size() <= 256 && engine::valid_text(s) ? "" : "Invalid actor"; },
                              "ACTOR"));
   return command;
+}
+
+namespace {
+engine::command_check_options intent(const verdict_options& o) {
+  engine::command_check_options v;
+  v.operation  = "verdict";
+  v.ledger     = o.ledger;
+  v.run        = o.run;
+  v.verdict    = o.verdict;
+  v.request_id = o.request_id;
+  v.actor      = o.actor;
+  return v;
+}
+} // namespace
+response verdict_command(const verdict_options& o, engine::command_vm* vm) {
+  return execute(intent(o), vm);
+}
+response verdict_with_profile(const verdict_options& o, std::string_view selector) {
+  return execute_with_profile(intent(o), selector);
 }
 } // namespace planar::cmd::handlers

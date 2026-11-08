@@ -1,6 +1,7 @@
 // Recovery output capture observes exact role boundaries without writing ledger state.
 #include <catch2/catch_test_macros.hpp>
 #include <stdlib.h>
+#include <unistd.h>
 import std;
 import planar.engine.execution.recovery_capture;
 namespace {
@@ -27,7 +28,7 @@ struct scratch {
   std::filesystem::path root;
   scratch() {
     char  p[]  = "/tmp/planar-recovery-capture-XXXXXX";
-    auto* made = mkdtemp(p);
+    auto* made = ::mkdtemp(p);
     REQUIRE(made);
     root = std::filesystem::canonical(made);
     std::filesystem::create_directories(root / "current/src");

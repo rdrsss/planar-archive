@@ -736,12 +736,12 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
     change.vector={}
     for _,r in ipairs(roles_of(snapshot,job)) do
       local t=after[r.role]
-      local entry={job=r.job,role=r.role,state=r.state,drifted=r.drifted==true}
+      local entry={job=r.job,role=r.role,state=r.state,drifted=r.drifted==true,run="none"}
       if has_run(r) then entry.run=r.run.id end
       if t then
         entry.state=t.after_state
         entry.drifted=t.after_drifted
-        if r.role==reviewer.role then entry.run=nil end
+        if r.role==reviewer.role then entry.run="none" end
       end
       change.vector[#change.vector+1]=entry
     end

@@ -23,7 +23,7 @@ import planar.engine.history.effective_catalog;
 import planar.engine.history.effective_provenance;
 namespace planar::engine {
 namespace {
-constexpr std::size_t command_catalog_size     = 14;
+constexpr std::size_t command_catalog_size     = 17;
 constexpr std::size_t command_registration_cap = 64;
 // Compile-time bundle selection: only test variant targets define PLANAR_AUTHORING_BUNDLE.
 #ifdef PLANAR_AUTHORING_BUNDLE
@@ -286,7 +286,7 @@ value_kind table_kind(lua_State* l, int index) {
   return kind;
 }
 // This sole union applies to both input kinds, including conditional and generated sections.
-constexpr std::array<std::string_view, 23> projection_reserved_ids{"authority",
+constexpr std::array<std::string_view, 25> projection_reserved_ids{"authority",
                                                                    "goal",
                                                                    "acceptance",
                                                                    "requirements",
@@ -308,7 +308,9 @@ constexpr std::array<std::string_view, 23> projection_reserved_ids{"authority",
                                                                    "orchestrator_graph",
                                                                    "orchestrator_roles",
                                                                    "orchestrator_prescriptions",
-                                                                   "orchestrator_actions"};
+                                                                   "orchestrator_actions",
+                                                                   "run",
+                                                                   "orchestrator_state"};
 struct projection_scan {
   std::array<projection_section_view, 64> sections{};
   std::size_t                             count = 0, text_bytes = 0;
@@ -1203,15 +1205,15 @@ struct command_state {
   std::vector<history::tree_file>          provenance;
   ledger::completion_receipt               completion;
   command_services*                        services = nullptr;
-  bool load_format3 = false; ///< Latched when the handler starts: the services offered read_execution to load (DD1).
-  value_ptr execution_read;  ///< Result of read_execution for status and preview; the response must name its ledger.
-  extension_history_bridge                 extension_history;
-  std::map<std::string, const void*>       handles;
-  std::size_t                              calls       = 0;
-  unsigned check_stage=0, check_attempts=0;
-  int                                      owner_first = 0, owner_last = 0;
-  bool                                     registering = true, invoked = false, export_published = false;
-  const void* profile_frame_owner = nullptr; ///< Identity of the profile_invocation that began the frame.
+  bool      load_format3 = false; ///< Latched when the handler starts: the services offered read_execution to load (DD1).
+  value_ptr execution_read;       ///< Result of read_execution for status and preview; the response must name its ledger.
+  extension_history_bridge           extension_history;
+  std::map<std::string, const void*> handles;
+  std::size_t                        calls       = 0;
+  unsigned                           check_stage = 0, check_attempts = 0;
+  int                                owner_first = 0, owner_last = 0;
+  bool                               registering = true, invoked = false, export_published = false;
+  const void*                        profile_frame_owner = nullptr; ///< Identity of the profile_invocation that began the frame.
 };
 command_state& commands(lua_State* l) {
   return *context(l).command;
@@ -1342,7 +1344,8 @@ std::vector<signature_option> command_signature(std::string_view name) {
     return {{"--ledger", "text", true}, {"--workspace-id", "text", true}};
   if (name == "history")
     return {{"--ledger", "text", true},       {"--request-id", "text", false},     {"--revision", "decimal", false},
-            {"--at-event", "decimal", false}, {"--after-event", "decimal", false}, {"--limit", "decimal", false},{"--event","decimal",false}};
+            {"--at-event", "decimal", false}, {"--after-event", "decimal", false}, {"--limit", "decimal", false},
+            {"--event", "decimal", false}};
   if (name == "export")
     return {{"--ledger", "text", true}, {"--target", "text", true}, {"--revision", "decimal", true}};
   if (name == "spec-prompt" || name == "critique" || name == "ingest")
@@ -1352,29 +1355,49 @@ std::vector<signature_option> command_signature(std::string_view name) {
   if (name == "observe")
     return {{"--from", "text", true}};
   if (name == "orchestrator")
-    return {{"--job", "text", true}, {"--registry", "text", true}, {"--workspace", "text", true}};
+    return {{"--job", "text", false}, {"--ledger", "text", false}, {"--registry", "text", false}, {"--workspace", "text", false}};
   if (name == "load")
     return {{"--ledger", "text", true},          {"--workspace", "text", true},  {"--registry", "text", true},
             {"--expect-revision", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
-  if(name=="check")return {{"--ledger","text",true},{"--run","text",true},{"--root","text",true},{"--base-root","text",true},{"--scratch","text",true},{"--request-id","text",true},{"--actor","text",true},{"--provenance","text",false}};
-  if(name=="check-recover")return {{"--ledger","text",true},{"--run-id","text",true},{"--reservation","text",true},{"--confirm-stopped","text",true},{"--request-id","text",true},{"--actor","text",true}};
-  if(name=="verdict")return {{"--ledger","text",true},{"--run","text",true},{"--verdict","text",true},{"--request-id","text",true},{"--actor","text",true}};
+  if (name == "check")
+    return {{"--ledger", "text", true},    {"--run", "text", true},        {"--root", "text", true},
+            {"--base-root", "text", true}, {"--scratch", "text", true},    {"--request-id", "text", true},
+            {"--actor", "text", true},     {"--provenance", "text", false}};
+  if (name == "check-recover")
+    return {{"--ledger", "text", true},          {"--run-id", "text", true},     {"--reservation", "text", true},
+            {"--confirm-stopped", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  if (name == "verdict")
+    return {{"--ledger", "text", true},
+            {"--run", "text", true},
+            {"--verdict", "text", true},
+            {"--request-id", "text", true},
+            {"--actor", "text", true}};
   if (name == "activate")
     return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
             {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
   // P2-7: status --ledger! and four optional text options; preview --ledger! --role!.
-  if (name=="recover") return {{"--ledger","text",true},{"--role","text",true},{"--root","text",false},{"--base-root","text",false}};
-  if (name=="refresh" || name=="checkpoint" || name=="release") {
-    std::vector<signature_option> o{{"--ledger","text",true},{"--run","text",true},{"--request-id","text",true},{"--actor","text",true},
-      {"--observations","text",name=="checkpoint"}};
-    if (name=="refresh") o.push_back({"--expect-fp","text",true});
-    if (name=="release") {o.push_back({"--reason","text",true});o.push_back({"--provenance","text",false});}
+  if (name == "recover")
+    return {{"--ledger", "text", true}, {"--role", "text", true}, {"--root", "text", false}, {"--base-root", "text", false}};
+  if (name == "refresh" || name == "checkpoint" || name == "release") {
+    std::vector<signature_option> o{{"--ledger", "text", true},
+                                    {"--run", "text", true},
+                                    {"--request-id", "text", true},
+                                    {"--actor", "text", true},
+                                    {"--observations", "text", name == "checkpoint"}};
+    if (name == "refresh")
+      o.push_back({"--expect-fp", "text", true});
+    if (name == "release") {
+      o.push_back({"--reason", "text", true});
+      o.push_back({"--provenance", "text", false});
+    }
     return o;
   }
   if (name == "claim" || name == "takeover") {
-    std::vector<signature_option> options{{"--ledger","text",true},{"--job","text",true},{"--role","text",true},
-      {"--request-id","text",true},{"--actor","text",true},{"--provenance","text",false}};
-    if (name == "takeover") options.push_back({"--run-id","text",true});
+    std::vector<signature_option> options{{"--ledger", "text", true}, {"--job", "text", true},
+                                          {"--role", "text", true},   {"--request-id", "text", true},
+                                          {"--actor", "text", true},  {"--provenance", "text", false}};
+    if (name == "takeover")
+      options.push_back({"--run-id", "text", true});
     return options;
   }
   if (name == "status")
@@ -1384,7 +1407,7 @@ std::vector<signature_option> command_signature(std::string_view name) {
             {"--workspace", "text", false},
             {"--registry", "text", false}};
   if (name == "preview")
-    return {{"--ledger", "text", true}, {"--role", "text", true},{"--since","text",false}};
+    return {{"--ledger", "text", true}, {"--role", "text", true}, {"--since", "text", false}};
   command_refuse();
 }
 void help_text(const std::string& text) {
@@ -1399,18 +1422,18 @@ void help_text(const std::string& text) {
 struct bundle_row {
   std::string_view name, handler, kind, capability;
   bool             authoring_only;
-  std::string_view capability2={},capability3={};
+  std::string_view capability2 = {}, capability3 = {};
 };
 constexpr std::array<bundle_row, 23> bundle_table{{
-    {"check","shipped.check.v1","check_v1","check_run_v1",false,"execution_commit_v1","provenance_read_v1"},
-    {"check-recover","shipped.check_recover.v1","check_v1","execution_commit_v1",false},
-    {"verdict","shipped.verdict.v1","verdict_response_v1","execution_commit_v1",false,"verdict_read_v1"},
+    {"check", "shipped.check.v1", "check_v1", "check_run_v1", false, "execution_commit_v1", "provenance_read_v1"},
+    {"check-recover", "shipped.check_recover.v1", "check_v1", "execution_commit_v1", false},
+    {"verdict", "shipped.verdict.v1", "verdict_response_v1", "execution_commit_v1", false, "verdict_read_v1"},
     {"render", "shipped.render.v1", "render_v1", "render_capture_v1", false},
     {"activate", "shipped.activate.v1", "activate_v1", "execution_commit_v1", false},
-    {"refresh","shipped.refresh.v1","refresh_v1","execution_commit_v1",false},
-    {"checkpoint","shipped.checkpoint.v1","checkpoint_v1","execution_commit_v1",false},
-    {"release","shipped.release.v1","release_v1","execution_commit_v1",false},
-    {"recover","shipped.recover.v1","recover_v1","execution_read_v1",false},
+    {"refresh", "shipped.refresh.v1", "refresh_v1", "execution_commit_v1", false},
+    {"checkpoint", "shipped.checkpoint.v1", "checkpoint_v1", "execution_commit_v1", false},
+    {"release", "shipped.release.v1", "release_v1", "execution_commit_v1", false},
+    {"recover", "shipped.recover.v1", "recover_v1", "execution_read_v1", false},
     {"claim", "shipped.claim.v1", "claim_v1", "execution_commit_v1", false, "provenance_read_v1"},
     {"takeover", "shipped.takeover.v1", "claim_v1", "execution_commit_v1", false, "provenance_read_v1"},
     {"status", "shipped.status.v1", "status_v1", "draft_capture_v1", false, "execution_read_v1"},
@@ -1424,7 +1447,7 @@ constexpr std::array<bundle_row, 23> bundle_table{{
     {"ingest", "shipped.ingest.v1", "ingest_v1", "authoring_capture_v1", true},
     {"explain-rejection", "shipped.explain_rejection.v1", "explain_rejection_v1", "diagnostic_read_v1", true},
     {"observe", "shipped.observe.v1", "observe_v1", "observation_directory_v1", true},
-    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "orchestrator_capture_v1", true},
+    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "execution_read_v1", true, "orchestrator_capture_v1"},
 }};
 const bundle_row*                    find_bundle_row(std::string_view name, bool authoring) {
   for (const auto& row : bundle_table) {
@@ -1468,12 +1491,16 @@ void seal_catalog(state& s) {
     auto signature = command_signature(name);
     help_text(text_field(d, "help"));
     auto caps = d->fields.at("capabilities"), options = d->fields.at("options");
-    if (caps->kind != value_kind::list || caps->items.size() != 1+std::size_t(!row->capability2.empty())+std::size_t(!row->capability3.empty()) || caps->items[0]->kind != value_kind::string)
+    if (caps->kind != value_kind::list ||
+        caps->items.size() != 1 + std::size_t(!row->capability2.empty()) + std::size_t(!row->capability3.empty()) ||
+        caps->items[0]->kind != value_kind::string)
       command_refuse();
     if (caps->items[0]->string != row->capability)
       command_refuse();
-    if(!row->capability2.empty() && (caps->items[1]->kind!=value_kind::string || caps->items[1]->string!=row->capability2))command_refuse();
-    if(!row->capability3.empty() && (caps->items[2]->kind!=value_kind::string || caps->items[2]->string!=row->capability3))command_refuse();
+    if (!row->capability2.empty() && (caps->items[1]->kind != value_kind::string || caps->items[1]->string != row->capability2))
+      command_refuse();
+    if (!row->capability3.empty() && (caps->items[2]->kind != value_kind::string || caps->items[2]->string != row->capability3))
+      command_refuse();
     if (options->kind != value_kind::list)
       command_refuse();
     if (options->items.size() != signature.size())
@@ -2527,7 +2554,7 @@ void prepare_invocation(command_state& c) {
           };
           id("revision", o.revision);
           id("at-event", o.at_event);
-          id("event",o.event);
+          id("event", o.event);
           id("after-event", o.after_event);
           int selectors = o.revision.has_value() + o.at_event.has_value() + o.request_id.has_value() + o.event.has_value();
           if (selectors > 1 || (selectors && (o.after_event || o.limit)))
@@ -2560,12 +2587,36 @@ void prepare_invocation(command_state& c) {
           add("expect-revision", command_text(o.expect_revision));
           add("request-id", command_text(o.request_id));
           add("actor", command_text(o.actor));
-        } else if constexpr(std::is_same_v<T,command_check_options>){
-          c.name=o.operation;if(c.name!="check"&&c.name!="check-recover"&&c.name!="verdict")command_refuse();
-          path("ledger",o.ledger);require_token(o.request_id);require_token(o.actor);
-          add("request-id",command_text(o.request_id));add("actor",command_text(o.actor));
-          if(c.name=="check-recover"){add("run-id",command_text(o.run_id));add("reservation",command_text(o.reservation));add("confirm-stopped",command_text(o.confirm_stopped));if(o.confirm_stopped!="true")command_refuse();}
-          else {require_token(o.run);add("run",command_text(o.run));if(c.name=="verdict")path("verdict",o.verdict);else{path("root",o.root);path("base-root",o.base_root);path("scratch",o.scratch);if(o.provenance)path("provenance",*o.provenance);else add("provenance",command_text(""),false);}}
+        } else if constexpr (std::is_same_v<T, command_check_options>) {
+          c.name = o.operation;
+          if (c.name != "check" && c.name != "check-recover" && c.name != "verdict")
+            command_refuse();
+          path("ledger", o.ledger);
+          require_token(o.request_id);
+          require_token(o.actor);
+          add("request-id", command_text(o.request_id));
+          add("actor", command_text(o.actor));
+          if (c.name == "check-recover") {
+            add("run-id", command_text(o.run_id));
+            add("reservation", command_text(o.reservation));
+            add("confirm-stopped", command_text(o.confirm_stopped));
+            if (o.confirm_stopped != "true")
+              command_refuse();
+          } else {
+            require_token(o.run);
+            add("run", command_text(o.run));
+            if (c.name == "verdict")
+              path("verdict", o.verdict);
+            else {
+              path("root", o.root);
+              path("base-root", o.base_root);
+              path("scratch", o.scratch);
+              if (o.provenance)
+                path("provenance", *o.provenance);
+              else
+                add("provenance", command_text(""), false);
+            }
+          }
         } else if constexpr (std::is_same_v<T, command_activate_options>) {
           c.name = "activate";
           path("ledger", o.ledger);
@@ -2587,22 +2638,42 @@ void prepare_invocation(command_state& c) {
           add("request-id", command_text(o.request_id));
           add("actor", command_text(o.actor));
         } else if constexpr (std::is_same_v<T, command_recovery_options>) {
-          c.name=o.operation; path("ledger",o.ledger);
-          if (o.run.empty()) command_refuse();
-          add("run",command_text("native")); add("request-id",command_text(o.request_id)); add("actor",command_text(o.actor));
-          path("observations",o.observations.value_or(""),o.observations.has_value());
-          if (o.operation=="refresh") add("expect-fp",command_text(o.expect_fp));
-          if (o.operation=="release") {add("reason",command_text(o.reason));path("provenance",o.provenance.value_or(""),o.provenance.has_value());}
+          c.name = o.operation;
+          path("ledger", o.ledger);
+          if (o.run.empty())
+            command_refuse();
+          add("run", command_text("native"));
+          add("request-id", command_text(o.request_id));
+          add("actor", command_text(o.actor));
+          path("observations", o.observations.value_or(""), o.observations.has_value());
+          if (o.operation == "refresh")
+            add("expect-fp", command_text(o.expect_fp));
+          if (o.operation == "release") {
+            add("reason", command_text(o.reason));
+            path("provenance", o.provenance.value_or(""), o.provenance.has_value());
+          }
         } else if constexpr (std::is_same_v<T, command_recover_options>) {
-          c.name="recover"; path("ledger",o.ledger); require_token(o.role); add("role",command_text(o.role));
-          path("root",o.root.value_or(""),o.root.has_value()); path("base-root",o.base_root.value_or(""),o.base_root.has_value());
+          c.name = "recover";
+          path("ledger", o.ledger);
+          require_token(o.role);
+          add("role", command_text(o.role));
+          path("root", o.root.value_or(""), o.root.has_value());
+          path("base-root", o.base_root.value_or(""), o.base_root.has_value());
         } else if constexpr (std::is_same_v<T, command_run_options>) {
-          c.name=o.run_id ? "takeover" : "claim";
-          path("ledger",o.ledger); require_token(o.job); require_token(o.role);
-          add("job",command_text(o.job)); add("role",command_text(o.role));
-          add("request-id",command_text(o.request_id)); add("actor",command_text(o.actor));
-          path("provenance",o.provenance.value_or(""),o.provenance.has_value());
-          if (o.run_id) { if (!decimal_id(*o.run_id)) command_refuse(); add("run-id",command_text(*o.run_id)); }
+          c.name = o.run_id ? "takeover" : "claim";
+          path("ledger", o.ledger);
+          require_token(o.job);
+          require_token(o.role);
+          add("job", command_text(o.job));
+          add("role", command_text(o.role));
+          add("request-id", command_text(o.request_id));
+          add("actor", command_text(o.actor));
+          path("provenance", o.provenance.value_or(""), o.provenance.has_value());
+          if (o.run_id) {
+            if (!decimal_id(*o.run_id))
+              command_refuse();
+            add("run-id", command_text(*o.run_id));
+          }
         } else if constexpr (std::is_same_v<T, command_status_options>) {
           // P2-1: --role excludes --request-id; --workspace and --registry both or neither.
           c.name = "status";
@@ -2628,7 +2699,7 @@ void prepare_invocation(command_state& c) {
           path("ledger", o.ledger);
           require_token(o.role);
           add("role", command_text(o.role));
-          add("since",command_text(o.since.value_or("")),o.since.has_value());
+          add("since", command_text(o.since.value_or("")), o.since.has_value());
         } else {
           c.name = "export";
           path("ledger", o.ledger);
@@ -2679,12 +2750,14 @@ void prepare_authoring_invocation(command_state& c, const command_authoring_opti
   };
   if (!c.authoring)
     command_refuse();
-  const bool workspace = authoring_has_workspace(o.verb);
+  const bool live      = o.verb == command_authoring_verb::orchestrator && !o.ledger.empty();
+  const bool workspace = authoring_has_workspace(o.verb) && !live;
   const bool job       = o.verb == command_authoring_verb::orchestrator;
   // Unused intent members must stay empty: a populated slot of another verb is a protocol violation.
   if ((!workspace && (!o.workspace.empty() || !o.registry.empty())) ||
       (o.verb != command_authoring_verb::explain_rejection && !o.diagnostic.empty()) ||
-      (o.verb != command_authoring_verb::observe && !o.from.empty()) || (!job && !o.job.empty()))
+      (o.verb != command_authoring_verb::observe && !o.from.empty()) || (!job && (!o.job.empty() || !o.ledger.empty())) ||
+      (live && !o.job.empty()))
     command_refuse();
   c.name              = std::string(authoring_verb_name(o.verb));
   c.authoring_options = o;
@@ -2696,7 +2769,9 @@ void prepare_authoring_invocation(command_state& c, const command_authoring_opti
     slot("diagnostic", o.diagnostic);
   if (o.verb == command_authoring_verb::observe)
     slot("from", o.from);
-  if (job) {
+  if (live)
+    slot("ledger", o.ledger);
+  if (job && !live) {
     require_token(o.job);
     options["job"] = command_text(o.job);
     present["job"] = command_boolean(true);
@@ -3158,7 +3233,8 @@ command_history_selector history_selector(const command_history_options& o) {
     s.selector = "revision";
     s.id       = std::to_string(*o.revision);
   } else if (o.event) {
-    s.selector="event"; s.id=std::to_string(*o.event);
+    s.selector = "event";
+    s.id       = std::to_string(*o.event);
   } else if (o.at_event) {
     s.selector = "state";
     s.id       = std::to_string(*o.at_event);
@@ -3244,26 +3320,91 @@ void call_service_native(lua_State* l, int operation) {
     else
       result = c.services->open_workspace(std::get<command_render_options>(c.options));
   } else {
+    // Validate opaque input capabilities before the generic value converter, which rejects userdata.
+    if (operation == 15 || operation == 17 || operation == 18 || operation == 22 || operation == 31) {
+      if (lua_type(l, 1) != LUA_TTABLE || lua_getmetatable(l, 1))
+        command_refuse();
+      const auto slot = [&](const char* key, const char* option) {
+        lua_getfield(l, 1, key);
+        auto found = c.handles.find(option);
+        if (found == c.handles.end() || lua_type(l, -1) != LUA_TUSERDATA || lua_topointer(l, -1) != found->second)
+          command_refuse();
+        lua_pop(l, 1);
+        lua_pushliteral(l, "native");
+        lua_setfield(l, 1, key);
+      };
+      if (operation == 22) {
+        slot("root", "root");
+        slot("base_root", "base-root");
+      } else if (operation == 17)
+        slot("observations", "observations");
+      else
+        slot("provenance", "provenance");
+    }
     auto args = convert(l, 1, 1);
-    if(operation>=30 && operation<=37){
-      auto* option=std::get_if<command_check_options>(&c.options);if(!option)command_refuse();
-      static constexpr std::array<std::string_view,8> names={"read_execution","read_provenance","prepare_check","reserve_check","run_checks","commit_check","read_verdict","commit_verdict"};
-      bool allowed=false;
-      if(c.name=="check"){
-        if(operation==30&&(c.check_stage==0||c.check_stage==5||c.check_stage==7)){allowed=++c.check_attempts<=5;c.check_stage=c.check_stage==0?1:6;}
-        else if(operation==31&&c.check_stage==1&&option->provenance){allowed=true;c.check_stage=2;}
-        else if(operation==32&&(c.check_stage==2||(c.check_stage==1&&!option->provenance))){allowed=true;c.check_stage=3;}
-        else if(operation==33&&c.check_stage==3){allowed=true;c.check_stage=4;}
-        else if(operation==34&&c.check_stage==4){allowed=true;c.check_stage=5;}
-        else if(operation==35&&c.check_stage==6){allowed=true;c.check_stage=7;}
-      }else if(c.name=="check-recover"){
-        if(operation==30&&c.check_stage==0){allowed=true;c.check_stage=1;}else if(operation==35&&c.check_stage==1){allowed=true;c.check_stage=7;}
-      }else if(c.name=="verdict"){
-        if(operation==30&&c.check_stage==0){allowed=true;c.check_stage=1;}else if(operation==36&&c.check_stage==1){allowed=true;c.check_stage=2;}else if(operation==37&&c.check_stage==2){allowed=true;c.check_stage=7;}
+    if (operation >= 30 && operation <= 37) {
+      auto* option = std::get_if<command_check_options>(&c.options);
+      if (!option)
+        command_refuse();
+      static constexpr std::array<std::string_view, 8> names   = {"read_execution", "read_provenance", "prepare_check",
+                                                                  "reserve_check",  "run_checks",      "commit_check",
+                                                                  "read_verdict",   "commit_verdict"};
+      bool                                             allowed = false;
+      if (c.name == "check") {
+        if (operation == 30 && (c.check_stage == 0 || c.check_stage == 5 || c.check_stage == 7)) {
+          allowed       = ++c.check_attempts <= 5;
+          c.check_stage = c.check_stage == 0 ? 1 : 6;
+        } else if (operation == 31 && c.check_stage == 1 && option->provenance) {
+          allowed       = true;
+          c.check_stage = 2;
+        } else if (operation == 32 && (c.check_stage == 2 || (c.check_stage == 1 && !option->provenance))) {
+          allowed       = true;
+          c.check_stage = 3;
+        } else if (operation == 33 && c.check_stage == 3) {
+          allowed       = true;
+          c.check_stage = 4;
+        } else if (operation == 34 && c.check_stage == 4) {
+          allowed       = true;
+          c.check_stage = 5;
+        } else if (operation == 35 && c.check_stage == 6) {
+          allowed       = true;
+          c.check_stage = 7;
+        }
+      } else if (c.name == "check-recover") {
+        if (operation == 30 && c.check_stage == 0) {
+          allowed       = true;
+          c.check_stage = 1;
+        } else if (operation == 35 && c.check_stage == 1) {
+          allowed       = true;
+          c.check_stage = 7;
+        }
+      } else if (c.name == "verdict") {
+        if (operation == 30 && c.check_stage == 0) {
+          allowed       = true;
+          c.check_stage = 1;
+        } else if (operation == 36 && c.check_stage == 1) {
+          allowed       = true;
+          c.check_stage = 2;
+        } else if (operation == 37 && c.check_stage == 2) {
+          allowed       = true;
+          c.check_stage = 7;
+        }
       }
-      if(!allowed)command_refuse();
-      if(operation==32)exact(args,{"plan"});else if(operation==35&&c.name=="check"||operation==37)exact(args,{"change"});else exact(args,{});
-      result=c.services->check_step(*option,names[operation-30],args);
+      if (!allowed)
+        command_refuse();
+      if (operation == 32)
+        exact(args, {"plan"});
+      else if (operation == 31)
+        exact(args, {"provenance"});
+      else if (operation == 33)
+        exact(args, {"expected"});
+      else if (operation == 35 && c.name == "check-recover")
+        exact(args, {"run_id", "reservation"});
+      else if ((operation == 35 && c.name == "check") || operation == 37)
+        exact(args, {"change"});
+      else
+        exact(args, {});
+      result = c.services->check_step(*option, names[operation - 30], args);
     } else if (operation == 1) {
       if (c.name != "render" || c.calls != 1)
         command_refuse();
@@ -3305,20 +3446,30 @@ void call_service_native(lua_State* l, int operation) {
       exact(args, {"route"});
       validate_route(c, args->fields.at("route"));
       result = c.services->capture_load(std::get<command_load_options>(c.options), args->fields.at("route"));
+#ifdef PLANAR_AUTHORING_BUNDLE
+    } else if (operation == 23) {
+      if (!c.authoring_options || c.name != "orchestrator" || c.authoring_options->ledger.empty() || c.calls != 0)
+        command_refuse();
+      exact(args, {});
+      result = c.services->read_orchestrator(*c.authoring_options);
+#endif
     } else if (operation == 11) {
       // read_execution({}): format3 load after capture (DD1), or the first activate service.
       // status and preview read first (P2-1 services table).
-      const bool load_read  = c.name == "load" && c.load_format3 && c.calls == 2;
-      const bool first_read = (c.name == "activate" || c.name == "status" || c.name == "preview" || c.name == "claim" || c.name == "takeover" || c.name == "refresh" || c.name == "checkpoint" || c.name == "release" || c.name == "recover") && c.calls == 0;
+      const bool load_read = c.name == "load" && c.load_format3 && c.calls == 2;
+      const bool first_read =
+          (c.name == "activate" || c.name == "status" || c.name == "preview" || c.name == "claim" || c.name == "takeover" ||
+           c.name == "refresh" || c.name == "checkpoint" || c.name == "release" || c.name == "recover") &&
+          c.calls == 0;
       if (!load_read && !first_read)
         command_refuse();
       exact(args, {});
       if (load_read)
         result = c.services->read_execution(std::get<command_load_options>(c.options));
       else if (c.name == "refresh" || c.name == "checkpoint" || c.name == "release")
-        result=c.services->read_execution(std::get<command_recovery_options>(c.options));
+        result = c.services->read_execution(std::get<command_recovery_options>(c.options));
       else if (c.name == "recover")
-        result=c.services->read_execution(std::get<command_recover_options>(c.options));
+        result = c.services->read_execution(std::get<command_recover_options>(c.options));
       else if (c.name == "claim" || c.name == "takeover")
         result = c.services->read_execution(std::get<command_run_options>(c.options));
       else if (c.name == "status")
@@ -3335,35 +3486,56 @@ void call_service_native(lua_State* l, int operation) {
         command_refuse();
       result = c.services->commit_execution(std::get<command_activate_options>(c.options), args->fields.at("change"));
     } else if (operation == 17) {
-      const auto& o=std::get<command_recovery_options>(c.options);
-      if (c.calls!=1 || !o.observations) command_refuse();
-      exact(args,{"observations"}); result=c.services->read_observations(o);
+      const auto& o = std::get<command_recovery_options>(c.options);
+      if (c.calls != 1 || !o.observations)
+        command_refuse();
+      exact(args, {"observations"});
+      result = c.services->read_observations(o);
     } else if (operation == 18) {
-      const auto& o=std::get<command_recovery_options>(c.options);
-      if (c.calls!=(o.observations ? 2u : 1u) || !o.provenance) command_refuse();
-      exact(args,{"provenance"}); result=c.services->read_provenance(o);
+      const auto& o = std::get<command_recovery_options>(c.options);
+      if (c.calls != (o.observations ? 2u : 1u) || !o.provenance)
+        command_refuse();
+      exact(args, {"provenance"});
+      result = c.services->read_provenance(o);
     } else if (operation == 19) {
-      const auto& o=std::get<command_recovery_options>(c.options);
-      if (c.calls!=1u+o.observations.has_value()+o.provenance.has_value()) command_refuse();
-      exact(args,{"change"}); result=c.services->commit_execution(o,args->fields.at("change"));
+      const auto& o = std::get<command_recovery_options>(c.options);
+      if (c.calls != 1u + o.observations.has_value() + o.provenance.has_value())
+        command_refuse();
+      exact(args, {"change"});
+      result = c.services->commit_execution(o, args->fields.at("change"));
     } else if (operation == 20) {
-      if (c.name!="recover" || c.calls!=1) command_refuse();
-      exact(args,{"job","role"}); result=c.services->read_recovery(std::get<command_recover_options>(c.options));
+      if (c.name != "recover" || c.calls != 1)
+        command_refuse();
+      exact(args, {"job", "role"});
+      result = c.services->read_recovery(std::get<command_recover_options>(c.options));
+    } else if (operation == 22) {
+      const auto& o = std::get<command_recover_options>(c.options);
+      if (c.calls != 2 || !o.root || !o.base_root)
+        command_refuse();
+      exact(args, {"role", "root", "base_root"});
+      if (text_field(args, "role") != o.role)
+        command_refuse();
+      result = c.services->capture_outputs(o);
     } else if (operation == 21) {
-      if (c.name!="preview" || c.calls!=1) command_refuse();
-      exact(args,{"job","role","render_fp"}); result=c.services->read_dispatch(std::get<command_preview_options>(c.options));
+      if (c.name != "preview" || c.calls != 1)
+        command_refuse();
+      exact(args, {"job", "role", "render_fp"});
+      result = c.services->read_dispatch(std::get<command_preview_options>(c.options));
     } else if (operation == 15) {
-      const auto& o=std::get<command_run_options>(c.options);
-      if (!o.provenance || c.calls!=1) command_refuse();
-      exact(args,{"provenance"});
-      const auto slot=c.handles.find("provenance");
-      if (slot==c.handles.end()) command_refuse();
-      result=c.services->read_provenance(o);
+      const auto& o = std::get<command_run_options>(c.options);
+      if (!o.provenance || c.calls != 1)
+        command_refuse();
+      exact(args, {"provenance"});
+      const auto slot = c.handles.find("provenance");
+      if (slot == c.handles.end())
+        command_refuse();
+      result = c.services->read_provenance(o);
     } else if (operation == 16) {
-      const auto& o=std::get<command_run_options>(c.options);
-      if (c.calls!=(o.provenance ? 2u : 1u)) command_refuse();
-      exact(args,{"change"});
-      result=c.services->commit_execution(o,args->fields.at("change"));
+      const auto& o = std::get<command_run_options>(c.options);
+      if (c.calls != (o.provenance ? 2u : 1u))
+        command_refuse();
+      exact(args, {"change"});
+      result = c.services->commit_execution(o, args->fields.at("change"));
     } else if (operation == 13) {
       // read_request({request_id}): status --request-id, right after read_execution.
       const auto* status = status_intent(c);
@@ -3403,8 +3575,7 @@ void call_service_native(lua_State* l, int operation) {
       c.provenance = std::move(provenance->files);
       if (format3)
         result = c.services->accept_load(std::get<command_load_options>(c.options), args->fields.at("bundle"),
-                                         args->fields.at("semantic"), args->fields.at("execution"), c.provenance,
-                                         c.completion);
+                                         args->fields.at("semantic"), args->fields.at("execution"), c.provenance, c.completion);
       else
         result = c.services->accept_load(std::get<command_load_options>(c.options), args->fields.at("bundle"),
                                          args->fields.at("semantic"), c.provenance, c.completion);
@@ -3452,8 +3623,9 @@ void call_service_native(lua_State* l, int operation) {
   auto copied = copy_value(data);
   if (result.error) {
     native_error_schema(copied);
-    c.native_error = copied;
-    c.response     = command_record({{"ok", command_boolean(false)}, {"error", copied}});
+    if (!(operation == 35 && c.name == "check" && text_field(copied, "code") == "state_conflict"))
+      c.native_error = copied;
+    c.response = command_record({{"ok", command_boolean(false)}, {"error", copied}});
   } else {
     if (operation == 2) {
       exact(copied, {"ledger", "workspace", "active_revision", "event"});
@@ -3480,11 +3652,18 @@ void call_service_native(lua_State* l, int operation) {
 #ifdef PLANAR_AUTHORING_BUNDLE
     if (operation == 7)
       exact(copied, {"bundle", "capture", "files"});
-    if (operation == 8) {
+    if (operation == 8 || operation == 23) {
       // The provider owns exactly four keys; native alone appends the sealed names, so a fifth key is a protocol violation.
-      exact(copied, {"bundle", "capture", "files", "job"});
-      if (text_field(copied, "job") != c.authoring_options->job)
-        command_refuse();
+      if (operation == 8) {
+        exact(copied, {"bundle", "capture", "files", "job"});
+        if (text_field(copied, "job") != c.authoring_options->job)
+          command_refuse();
+      } else {
+        exact(copied, {"version", "ledger", "last_seq", "snapshot"});
+        if (!ledger_identity(text_field(copied, "ledger")) || !decimal_id(text_field(copied, "last_seq"), true) ||
+            copied->fields.at("snapshot")->kind != value_kind::record)
+          command_refuse();
+      }
       std::vector<std::string> names;
       for (auto& e : c.entries)
         names.push_back(text_field(e.descriptor, "name"));
@@ -3524,8 +3703,10 @@ void call_service_native(lua_State* l, int operation) {
     if (operation == 5)
       exact(copied, {"bundle"});
     if (operation == 11) {
-      if (std::holds_alternative<command_recovery_options>(c.options)) exact(copied,{"version","ledger","last_seq","snapshot","target_job","target_role"});
-      else exact(copied, {"version", "ledger", "last_seq", "snapshot"});
+      if (std::holds_alternative<command_recovery_options>(c.options))
+        exact(copied, {"version", "ledger", "last_seq", "snapshot", "target_job", "target_role"});
+      else
+        exact(copied, {"version", "ledger", "last_seq", "snapshot"});
       if (copied->fields.at("version")->kind != value_kind::integer || copied->fields.at("version")->integer != 1 ||
           !ledger_identity(text_field(copied, "ledger")) || !decimal_id(text_field(copied, "last_seq"), true) ||
           copied->fields.at("snapshot")->kind != value_kind::record)
@@ -3545,8 +3726,8 @@ void call_service_native(lua_State* l, int operation) {
       text_field(copied, "outcome");
       if (execution_run) {
         const auto& disposition = text_field(copied, "disposition");
-        if (disposition != "current" && disposition != "completed" && disposition != "released" &&
-            disposition != "interrupted" && disposition != "fenced")
+        if (disposition != "current" && disposition != "completed" && disposition != "released" && disposition != "interrupted" &&
+            disposition != "fenced")
           command_refuse();
       }
     }
@@ -3664,6 +3845,8 @@ int execute_command(lua_State* l) {
                                                                          : authoring_has_workspace(authoring->verb)   ? i == 7
                                                                          : authoring->verb == verb::explain_rejection ? i == 9
                                                                                                                       : i == 10);
+      if (!authoring->ledger.empty())
+        offered = false;
     }
 #endif
     if (offered) {
@@ -3675,8 +3858,17 @@ int execute_command(lua_State* l) {
   // Execution services (operations 11 and 12): read_execution for activate and, on a format3 ledger only, for load (DD1);
   // commit_execution for activate.
   commands(l).load_format3 = commands(l).name == "load" && commands(l).services && commands(l).services->load_execution();
-  const bool execution_read = commands(l).name == "activate" || commands(l).name == "status" ||
-                              commands(l).name == "preview" || commands(l).name == "claim" || commands(l).name == "takeover" || commands(l).name == "refresh" || commands(l).name == "checkpoint" || commands(l).name == "release" || commands(l).name == "recover" || commands(l).load_format3;
+#ifdef PLANAR_AUTHORING_BUNDLE
+  if (commands(l).authoring_options && !commands(l).authoring_options->ledger.empty()) {
+    lua_pushinteger(l, 23);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "read_execution");
+  }
+#endif
+  const bool execution_read = commands(l).name == "activate" || commands(l).name == "status" || commands(l).name == "preview" ||
+                              commands(l).name == "claim" || commands(l).name == "takeover" || commands(l).name == "refresh" ||
+                              commands(l).name == "checkpoint" || commands(l).name == "release" ||
+                              commands(l).name == "recover" || commands(l).load_format3;
   if (execution_read) {
     lua_pushinteger(l, 11);
     lua_pushcclosure(l, call_service, 1);
@@ -3695,30 +3887,65 @@ int execute_command(lua_State* l) {
       lua_setfield(l, -2, "capture_drafts");
     }
   }
-  if (const auto* o=std::get_if<command_recovery_options>(&commands(l).options)) {
-    if (o->observations) {lua_pushinteger(l,17);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_observations");}
-    if (o->provenance) {lua_pushinteger(l,18);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_provenance");}
-    lua_pushinteger(l,19);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"commit_execution");
+  if (const auto* o = std::get_if<command_recovery_options>(&commands(l).options)) {
+    if (o->observations) {
+      lua_pushinteger(l, 17);
+      lua_pushcclosure(l, call_service, 1);
+      lua_setfield(l, -2, "read_observations");
+    }
+    if (o->provenance) {
+      lua_pushinteger(l, 18);
+      lua_pushcclosure(l, call_service, 1);
+      lua_setfield(l, -2, "read_provenance");
+    }
+    lua_pushinteger(l, 19);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "commit_execution");
   }
-  if (commands(l).name=="recover") {lua_pushinteger(l,20);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_recovery");}
-  if (const auto* o=std::get_if<command_preview_options>(&commands(l).options); o && o->since) {
-    lua_pushinteger(l,21);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_dispatch");
+  if (commands(l).name == "recover") {
+    lua_pushinteger(l, 20);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "read_recovery");
+    if (std::get<command_recover_options>(commands(l).options).root) {
+      lua_pushinteger(l, 22);
+      lua_pushcclosure(l, call_service, 1);
+      lua_setfield(l, -2, "capture_outputs");
+    }
+  }
+  if (const auto* o = std::get_if<command_preview_options>(&commands(l).options); o && o->since) {
+    lua_pushinteger(l, 21);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "read_dispatch");
   }
   if (commands(l).name == "claim" || commands(l).name == "takeover") {
     if (std::get<command_run_options>(commands(l).options).provenance) {
-      lua_pushinteger(l,15); lua_pushcclosure(l,call_service,1); lua_setfield(l,-2,"read_provenance");
+      lua_pushinteger(l, 15);
+      lua_pushcclosure(l, call_service, 1);
+      lua_setfield(l, -2, "read_provenance");
     }
-    lua_pushinteger(l,16); lua_pushcclosure(l,call_service,1); lua_setfield(l,-2,"commit_execution");
+    lua_pushinteger(l, 16);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "commit_execution");
   }
   if (commands(l).name == "activate") {
     lua_pushinteger(l, 12);
     lua_pushcclosure(l, call_service, 1);
     lua_setfield(l, -2, "commit_execution");
   }
-  if(std::holds_alternative<command_check_options>(commands(l).options)){
-    static constexpr std::array<const char*,8> names={"read_execution","read_provenance","prepare_check","reserve_check","run_checks","commit_check","read_verdict","commit_execution"};
-    const auto& name=commands(l).name;
-    for(int i=0;i<8;++i){bool offered=(name=="check"&&i<=5)||(name=="check-recover"&&(i==0||i==5))||(name=="verdict"&&(i==0||i>=6));if(offered){lua_pushinteger(l,30+i);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,name=="check-recover"&&i==5?"recover_reservation":names[i]);}}
+  if (std::holds_alternative<command_check_options>(commands(l).options)) {
+    static constexpr std::array<const char*, 8> names = {"read_execution", "read_provenance", "prepare_check",
+                                                         "reserve_check",  "run_checks",      "commit_check",
+                                                         "read_verdict",   "commit_execution"};
+    const auto&                                 name  = commands(l).name;
+    for (int i = 0; i < 8; ++i) {
+      bool offered = (name == "check" && i <= 5) || (name == "check-recover" && (i == 0 || i == 5)) ||
+                     (name == "verdict" && (i == 0 || i >= 6));
+      if (offered) {
+        lua_pushinteger(l, 30 + i);
+        lua_pushcclosure(l, call_service, 1);
+        lua_setfield(l, -2, name == "check-recover" && i == 5 ? "recover_reservation" : names[i]);
+      }
+    }
   }
   lua_call(l, 2, LUA_MULTRET);
   return lua_gettop(l);
@@ -3735,7 +3962,7 @@ bool digest_shape(const std::string& d) {
 void validate_authoring_response(command_state& c, const value_ptr& envelope) {
   using verb          = command_authoring_verb;
   const auto which    = c.authoring_options->verb;
-  const bool two_call = which != verb::explain_rejection && which != verb::observe;
+  const bool two_call = which != verb::explain_rejection && which != verb::observe && c.authoring_options->ledger.empty();
   if (c.calls != (two_call ? 2u : 1u))
     command_refuse();
   if (!envelope || envelope->kind != value_kind::record || !envelope->fields.contains("version") ||
@@ -3778,10 +4005,10 @@ void validate_execution_read_response(command_state& c, const value_ptr& envelop
   if (text_field(envelope, "ledger") != text_field(read, "ledger"))
     command_refuse();
   if (c.name == "status") {
-    const auto&                      o = std::get<command_status_options>(c.options);
-    std::initializer_list<std::string_view> base{"version", "kind",       "ledger", "active_revision",
-                                                 "active_job", "last_event", "roles"};
-    std::set<std::string_view>       keys(base);
+    const auto&                             o = std::get<command_status_options>(c.options);
+    std::initializer_list<std::string_view> base{"version",    "kind",       "ledger", "active_revision",
+                                                 "active_job", "last_event", "roles",  "review"};
+    std::set<std::string_view>              keys(base);
     if (o.role)
       keys.insert("role_detail");
     if (o.request_id)
@@ -3803,9 +4030,12 @@ void validate_execution_read_response(command_state& c, const value_ptr& envelop
     return;
   }
   const auto& o = std::get<command_preview_options>(c.options);
-  if (o.since) exact(envelope,{"version","kind","ledger","revision","job","role","generation","state","work_fp","render_digest","bytes","packet","manifest","since"});
-  else exact(envelope, {"version", "kind", "ledger", "revision", "job", "role", "generation", "state", "work_fp", "render_digest",
-                   "bytes", "packet", "manifest"});
+  if (o.since)
+    exact(envelope, {"version", "kind", "ledger", "revision", "job", "role", "generation", "state", "work_fp", "render_digest",
+                     "bytes", "packet", "manifest", "since"});
+  else
+    exact(envelope, {"version", "kind", "ledger", "revision", "job", "role", "generation", "state", "work_fp", "render_digest",
+                     "bytes", "packet", "manifest"});
   if (text_field(envelope, "role") != o.role || envelope->fields.at("bytes")->kind != value_kind::integer ||
       envelope->fields.at("packet")->kind != value_kind::record || envelope->fields.at("manifest")->kind != value_kind::record ||
       static_cast<std::uint64_t>(envelope->fields.at("bytes")->integer) !=
@@ -3832,18 +4062,26 @@ void validate_response(command_state& c, const value_ptr& response) {
     return;
   }
 #endif
-  if(std::holds_alternative<command_check_options>(c.options)){
-    if(c.check_stage!=7||!same(response->fields.at("value"),c.facts))command_refuse();
-    auto encoded=codec_encode(c.facts);if(!encoded)throw encoded.error().detail;return;
+  if (std::holds_alternative<command_check_options>(c.options)) {
+    if (c.check_stage != 7 || !same(response->fields.at("value"), c.facts))
+      command_refuse();
+    auto encoded = codec_encode(c.facts);
+    if (!encoded)
+      throw encoded.error().detail;
+    return;
   }
-  const std::size_t load_calls = c.load_format3 ? 4 : 3;
+  const std::size_t load_calls   = c.load_format3 ? 4 : 3;
   std::size_t       status_calls = 1;
   if (const auto* status = status_intent(c))
     status_calls += (status->request_id ? 1 : 0) + (status->workspace ? 2 : 0);
-  const auto* run_options=std::get_if<command_run_options>(&c.options);
-  const auto* recovery_options=std::get_if<command_recovery_options>(&c.options);
-  const auto* preview_options=std::get_if<command_preview_options>(&c.options);
-  if (c.calls != (recovery_options ? 2u+recovery_options->observations.has_value()+recovery_options->provenance.has_value() : c.name=="recover" ? 2u : preview_options ? 1u+preview_options->since.has_value() : run_options ? (run_options->provenance ? 3u : 2u) : c.name == "render"     ? 2
+  const auto* run_options      = std::get_if<command_run_options>(&c.options);
+  const auto* recovery_options = std::get_if<command_recovery_options>(&c.options);
+  const auto* preview_options  = std::get_if<command_preview_options>(&c.options);
+  if (c.calls != (recovery_options ? 2u + recovery_options->observations.has_value() + recovery_options->provenance.has_value()
+                  : c.name == "recover"  ? 2u + std::get<command_recover_options>(c.options).root.has_value()
+                  : preview_options      ? 1u + preview_options->since.has_value()
+                  : run_options          ? (run_options->provenance ? 3u : 2u)
+                  : c.name == "render"   ? 2
                   : c.name == "load"     ? load_calls
                   : c.name == "activate" ? 2
                   : c.name == "status"   ? status_calls
@@ -3852,9 +4090,11 @@ void validate_response(command_state& c, const value_ptr& response) {
   auto envelope = response->fields.at("value");
   if (!envelope || envelope->kind != value_kind::record || !envelope->fields.contains("version") ||
       envelope->fields.at("version")->kind != value_kind::integer || envelope->fields.at("version")->integer != 1 ||
-      (text_field(envelope, "kind") != c.name && !(c.name == "render" && text_field(envelope, "kind") == "render_external") && !(c.name == "takeover" && text_field(envelope,"kind")=="claim")))
+      (text_field(envelope, "kind") != c.name && !(c.name == "render" && text_field(envelope, "kind") == "render_external") &&
+       !(c.name == "takeover" && text_field(envelope, "kind") == "claim")))
     command_refuse();
-  if (c.name == "history" || c.name == "load" || c.name == "activate" || c.name == "claim" || c.name == "takeover" || c.name == "refresh" || c.name == "checkpoint" || c.name == "release") {
+  if (c.name == "history" || c.name == "load" || c.name == "activate" || c.name == "claim" || c.name == "takeover" ||
+      c.name == "refresh" || c.name == "checkpoint" || c.name == "release") {
     if (!same(envelope, c.facts))
       command_refuse();
   } else if (c.name == "status" || c.name == "preview") {
@@ -3869,8 +4109,9 @@ void validate_response(command_state& c, const value_ptr& response) {
     expected->fields["kind"]    = command_text(c.name);
     if (!same(envelope, expected))
       command_refuse();
-  } else if (c.name=="recover") {
-    if (!c.execution_read || text_field(envelope,"ledger")!=text_field(c.execution_read,"ledger")) command_refuse();
+  } else if (c.name == "recover") {
+    if (!c.execution_read || text_field(envelope, "ledger") != text_field(c.execution_read, "ledger"))
+      command_refuse();
   } else if (text_field(envelope, "kind") == "render_external") {
     // An external shape adds its identity record beside the packet and manifest.
     exact(envelope, {"version", "kind", "packet", "manifest", "shape"});
@@ -4059,8 +4300,9 @@ bool reserved_authoring_handler(std::string_view text) {
   return std::ranges::find(ids, text) != ids.end();
 }
 bool reserved_authoring_projection(std::string_view text) {
-  constexpr std::array<std::string_view, 6> ids{"orchestrator",       "orchestrator_authority",     "orchestrator_graph",
-                                                "orchestrator_roles", "orchestrator_prescriptions", "orchestrator_actions"};
+  constexpr std::array<std::string_view, 7> ids{"orchestrator",       "orchestrator_authority",     "orchestrator_graph",
+                                                "orchestrator_roles", "orchestrator_prescriptions", "orchestrator_actions",
+                                                "orchestrator_state"};
   return std::ranges::find(ids, text) != ids.end();
 }
 // Reads a string field without ever throwing; absent or ill-typed fields read as empty.
@@ -4484,23 +4726,50 @@ command_service_result command_services::accept_load(const command_load_options&
                                                      ledger::completion_receipt&) {
   command_refuse();
 }
-command_service_result command_services::check_step(const command_check_options&,std::string_view,const value_ptr&){command_refuse();}
+command_service_result command_services::check_step(const command_check_options&, std::string_view, const value_ptr&) {
+  command_refuse();
+}
 command_service_result command_services::read_execution(const command_activate_options&) {
   command_refuse();
 }
 command_service_result command_services::commit_execution(const command_activate_options&, const value_ptr&) {
   command_refuse();
 }
-command_service_result command_services::read_execution(const command_recovery_options&) {command_refuse();}
-command_service_result command_services::read_execution(const command_recover_options&) {command_refuse();}
-command_service_result command_services::read_observations(const command_recovery_options&) {command_refuse();}
-command_service_result command_services::read_provenance(const command_recovery_options&) {command_refuse();}
-command_service_result command_services::commit_execution(const command_recovery_options&,const value_ptr&) {command_refuse();}
-command_service_result command_services::read_recovery(const command_recover_options&) {command_refuse();}
-command_service_result command_services::read_dispatch(const command_preview_options&) {command_refuse();}
-command_service_result command_services::read_execution(const command_run_options&) { command_refuse(); }
-command_service_result command_services::read_provenance(const command_run_options&) { command_refuse(); }
-command_service_result command_services::commit_execution(const command_run_options&, const value_ptr&) { command_refuse(); }
+void command_services::bind_execution_profile(std::string_view) {
+}
+command_service_result command_services::read_execution(const command_recovery_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_execution(const command_recover_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_observations(const command_recovery_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_provenance(const command_recovery_options&) {
+  command_refuse();
+}
+command_service_result command_services::commit_execution(const command_recovery_options&, const value_ptr&) {
+  command_refuse();
+}
+command_service_result command_services::read_recovery(const command_recover_options&) {
+  command_refuse();
+}
+command_service_result command_services::capture_outputs(const command_recover_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_dispatch(const command_preview_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_execution(const command_run_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_provenance(const command_run_options&) {
+  command_refuse();
+}
+command_service_result command_services::commit_execution(const command_run_options&, const value_ptr&) {
+  command_refuse();
+}
 command_service_result command_services::read_execution(const command_status_options&) {
   command_refuse();
 }
@@ -4525,6 +4794,9 @@ command_service_result command_services::capture_authoring(const command_authori
 }
 command_service_result command_services::capture_orchestrator(const command_authoring_options&, const value_ptr&,
                                                               std::string_view) {
+  command_refuse();
+}
+command_service_result command_services::read_orchestrator(const command_authoring_options&) {
   command_refuse();
 }
 command_service_result command_services::read_diagnostic(const command_authoring_options&) {
@@ -6107,7 +6379,22 @@ std::expected<void, registration_error> admit_family_slots(profile_capture& capt
     std::expected<void, registration_error> operator()(const command_load_options&) const {
       return std::unexpected(profile_owner_protocol_error());
     }
-    std::expected<void,registration_error> operator()(const command_check_options& o)const{return admit_ledger(capture,o.ledger);}
+    std::expected<void, registration_error> operator()(const command_check_options& o) const {
+      if (auto admitted = admit_ledger(capture, o.ledger); !admitted)
+        return admitted;
+      if (o.operation == "check")
+        for (const auto& entry : std::array<std::pair<std::string_view, std::string_view>, 3>{
+                 {{"source", o.root}, {"base", o.base_root}, {"scratch", o.scratch}}})
+          if (auto admitted = capture.admit_root(entry.first, entry.second); !admitted)
+            return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (o.operation == "verdict")
+        if (auto admitted = capture.admit_file("verdict", o.verdict, admission_file_role::observation); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (o.provenance)
+        if (auto admitted = capture.admit_file("provenance", *o.provenance, admission_file_role::observation); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
+    }
     std::expected<void, registration_error> operator()(const command_activate_options& o) const {
       return admit_ledger(capture, o.ledger);
     }
@@ -6128,10 +6415,37 @@ std::expected<void, registration_error> admit_family_slots(profile_capture& capt
         return std::unexpected(from_profile_error(std::move(admitted.error())));
       return {};
     }
-    std::expected<void, registration_error> operator()(const command_recovery_options& o) const {return admit_ledger(capture,o.ledger);}
-    std::expected<void, registration_error> operator()(const command_recover_options& o) const {return admit_ledger(capture,o.ledger);}
+    std::expected<void, registration_error> operator()(const command_recovery_options& o) const {
+      if (auto admitted = admit_ledger(capture, o.ledger); !admitted)
+        return admitted;
+      if (o.observations)
+        if (auto admitted = capture.admit_file("observations", *o.observations, admission_file_role::observation); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (o.provenance)
+        if (auto admitted = capture.admit_file("provenance", *o.provenance, admission_file_role::observation); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
+    }
+    std::expected<void, registration_error> operator()(const command_recover_options& o) const {
+      if (auto admitted = admit_ledger(capture, o.ledger); !admitted)
+        return admitted;
+      if (o.root)
+        if (auto directory = mapping_directory(*o.root))
+          if (auto admitted = capture.admit_root("source", *directory); !admitted)
+            return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (o.base_root)
+        if (auto directory = mapping_directory(*o.base_root))
+          if (auto admitted = capture.admit_root("base", *directory); !admitted)
+            return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
+    }
     std::expected<void, registration_error> operator()(const command_run_options& o) const {
-      return admit_ledger(capture,o.ledger);
+      if (auto admitted = admit_ledger(capture, o.ledger); !admitted)
+        return admitted;
+      if (o.provenance)
+        if (auto admitted = capture.admit_file("provenance", *o.provenance, admission_file_role::observation); !admitted)
+          return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
     }
     std::expected<void, registration_error> operator()(const command_preview_options& o) const {
       return admit_ledger(capture, o.ledger);
@@ -6157,8 +6471,8 @@ bool same_options(const command_options& a, const command_options& b) {
     }
     bool operator()(const command_history_options& x) const {
       const auto& y = std::get<command_history_options>(other);
-      return x.ledger == y.ledger && x.revision == y.revision && x.at_event == y.at_event && x.event==y.event && x.after_event == y.after_event &&
-             x.request_id == y.request_id && x.limit == y.limit;
+      return x.ledger == y.ledger && x.revision == y.revision && x.at_event == y.at_event && x.event == y.event &&
+             x.after_event == y.after_event && x.request_id == y.request_id && x.limit == y.limit;
     }
     bool operator()(const command_export_options& x) const {
       const auto& y = std::get<command_export_options>(other);
@@ -6170,7 +6484,9 @@ bool same_options(const command_options& a, const command_options& b) {
              x.expect_revision == y.expect_revision && x.request_id == y.request_id && x.actor == y.actor &&
              x.expected_head == y.expected_head;
     }
-    bool operator()(const command_check_options& x)const{return x==std::get<command_check_options>(other);}
+    bool operator()(const command_check_options& x) const {
+      return x == std::get<command_check_options>(other);
+    }
     bool operator()(const command_activate_options& x) const {
       const auto& y = std::get<command_activate_options>(other);
       return x.ledger == y.ledger && x.job == y.job && x.expect_revision == y.expect_revision && x.expect_job == y.expect_job &&
@@ -6182,19 +6498,23 @@ bool same_options(const command_options& a, const command_options& b) {
              x.registry == y.registry;
     }
     bool operator()(const command_recovery_options& x) const {
-      const auto& y=std::get<command_recovery_options>(other);
-      return x.operation==y.operation && x.ledger==y.ledger && x.run==y.run && x.request_id==y.request_id && x.actor==y.actor && x.expect_fp==y.expect_fp && x.reason==y.reason && x.observations==y.observations && x.provenance==y.provenance;
+      const auto& y = std::get<command_recovery_options>(other);
+      return x.operation == y.operation && x.ledger == y.ledger && x.run == y.run && x.request_id == y.request_id &&
+             x.actor == y.actor && x.expect_fp == y.expect_fp && x.reason == y.reason && x.observations == y.observations &&
+             x.provenance == y.provenance;
     }
     bool operator()(const command_recover_options& x) const {
-      const auto& y=std::get<command_recover_options>(other); return x.ledger==y.ledger && x.role==y.role && x.root==y.root && x.base_root==y.base_root;
+      const auto& y = std::get<command_recover_options>(other);
+      return x.ledger == y.ledger && x.role == y.role && x.root == y.root && x.base_root == y.base_root;
     }
     bool operator()(const command_run_options& x) const {
-      const auto& y=std::get<command_run_options>(other);
-      return x.ledger==y.ledger && x.job==y.job && x.role==y.role && x.request_id==y.request_id && x.actor==y.actor && x.run_id==y.run_id && x.provenance==y.provenance;
+      const auto& y = std::get<command_run_options>(other);
+      return x.ledger == y.ledger && x.job == y.job && x.role == y.role && x.request_id == y.request_id && x.actor == y.actor &&
+             x.run_id == y.run_id && x.provenance == y.provenance;
     }
     bool operator()(const command_preview_options& x) const {
       const auto& y = std::get<command_preview_options>(other);
-      return x.ledger == y.ledger && x.role == y.role && x.since==y.since;
+      return x.ledger == y.ledger && x.role == y.role && x.since == y.since;
     }
   };
   return std::visit(visitor{b}, a);
@@ -6351,6 +6671,7 @@ std::expected<value_ptr, diagnostic> profile_invocation::run_known(command_optio
     auto* vm = _owner->vm._owner.get();
     if (!vm)
       return std::unexpected(profile_owner_protocol_error().detail);
+    services.bind_execution_profile(vm->command.effective_digest_bytes);
     return invoke_known(_owner->vm, *vm, std::move(options), services);
   } catch (const diagnostic& error) {
     return std::unexpected(error);

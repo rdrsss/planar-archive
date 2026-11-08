@@ -47,7 +47,7 @@ struct command_history_options {
   std::optional<std::int64_t> after_event; ///< Positive canonical page cursor.
   std::optional<std::string>  request_id;  ///< Bounded request key.
   std::optional<std::int32_t> limit;       ///< Checked 1..100 page size.
-  std::optional<std::int64_t> event; ///< Expanded retained event.
+  std::optional<std::int64_t> event;       ///< Expanded retained event.
 };
 /// Parsed export intent retained throughout publication and response validation.
 struct command_export_options {
@@ -85,23 +85,23 @@ struct command_status_options {
 };
 /// Native preview intent (execution-contract P2-1): a read of the active job's role packet, no request framing.
 struct command_preview_options {
-  std::string ledger; ///< Private ledger path.
-  std::string role;   ///< Role to preview.
-  std::optional<std::string> since; ///< Retained render digest to compare.
+  std::string                ledger; ///< Private ledger path.
+  std::string                role;   ///< Role to preview.
+  std::optional<std::string> since;  ///< Retained render digest to compare.
 };
 /// Native token-scoped recovery mutation. Secrets stay in this native intent.
 struct command_recovery_options {
-  std::string operation,ledger,run,request_id,actor,expect_fp,reason;
-  std::optional<std::string> observations,provenance;
+  std::string                operation, ledger, run, request_id, actor, expect_fp, reason;
+  std::optional<std::string> observations, provenance;
 };
 /// Bound retained recovery read.
 struct command_recover_options {
-  std::string ledger,role;
-  std::optional<std::string> root,base_root;
+  std::string                ledger, role;
+  std::optional<std::string> root, base_root;
 };
 /// Native run acquisition intent; takeover is selected by a supplied run identifier.
 struct command_run_options {
-  std::string ledger, job, role, request_id, actor;
+  std::string                ledger, job, role, request_id, actor;
   std::optional<std::string> run_id;
   std::optional<std::string> provenance;
 };
@@ -117,18 +117,20 @@ struct command_authoring_options {
   std::string            diagnostic;                                 ///< Normalized diagnostic file path or empty.
   std::string            from;                                       ///< Normalized observation directory or empty.
   std::string            job;                                        ///< Selected job ID or empty.
+  std::string            ledger;                                     ///< Explicit ledger for live orchestrator mode, or empty.
 };
 #endif
 /// R17/R18 invocation-local execution intent; secrets stay out of request framing.
 struct command_check_options {
-  std::string operation,ledger,run,run_id,reservation,confirm_stopped,root,base_root,scratch,verdict,request_id,actor;
+  std::string operation, ledger, run, run_id, reservation, confirm_stopped, root, base_root, scratch, verdict, request_id, actor;
   std::optional<std::string> provenance;
-  bool operator==(const command_check_options&) const = default;
+  bool                       operator==(const command_check_options&) const = default;
 };
 /// Exactly one compiled family intent, copied into the invocation owner.
 using command_options =
     std::variant<command_render_options, command_init_options, command_history_options, command_export_options,
-                 command_load_options, command_activate_options, command_status_options, command_preview_options, command_run_options, command_recovery_options, command_recover_options, command_check_options>;
+                 command_load_options, command_activate_options, command_status_options, command_preview_options,
+                 command_run_options, command_recovery_options, command_recover_options, command_check_options>;
 /// Verified history selector passed to the finite native boundary.
 struct command_history_selector {
   std::string  selector;   ///< Fixed selector name.
@@ -148,6 +150,8 @@ public:
   /// Finite R17/R18 service boundary; native adapters retain captured facts across calls.
   virtual command_service_result check_step(const command_check_options&, std::string_view, const value_ptr&);
   virtual ~command_services() = default;
+  /// Bind the verified effective stdlib identity before executing a selected profile family.
+  virtual void bind_execution_profile(std::string_view digest);
   /// @brief Capture the declaration at the private workspace option.
   /// @param options Retained parsed native intent.
   /// @return Captured portable filename/declaration or typed native error.
@@ -226,8 +230,10 @@ public:
   virtual command_service_result read_execution(const command_recover_options& options);
   virtual command_service_result read_observations(const command_recovery_options& options);
   virtual command_service_result read_provenance(const command_recovery_options& options);
-  virtual command_service_result commit_execution(const command_recovery_options& options,const value_ptr& change);
+  virtual command_service_result commit_execution(const command_recovery_options& options, const value_ptr& change);
   virtual command_service_result read_recovery(const command_recover_options& options);
+  /// Capture current/base outputs under accepted recovery role boundaries, without writes.
+  virtual command_service_result capture_outputs(const command_recover_options& options);
   virtual command_service_result read_dispatch(const command_preview_options& options);
   virtual command_service_result read_execution(const command_run_options& options);
   virtual command_service_result read_provenance(const command_run_options& options);
@@ -270,6 +276,10 @@ public:
   /// @return Orchestrator capture or typed failure. Default refuses unsupported authoring.
   virtual command_service_result capture_orchestrator(const command_authoring_options& options, const value_ptr& route,
                                                       std::string_view job);
+  /// @brief Read accepted execution state for a live orchestrator prompt without capturing declarations.
+  /// @param options Invocation containing the explicit ledger path.
+  /// @return Verified execution snapshot or a typed ledger refusal.
+  virtual command_service_result read_orchestrator(const command_authoring_options& options);
   /// @brief Read the bounded diagnostic file named by the authoring intent.
   /// @param options Retained authoring intent.
   /// @return Diagnostic bytes facts or typed failure. Default refuses unsupported authoring.

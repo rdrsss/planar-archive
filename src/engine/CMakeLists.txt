@@ -102,6 +102,8 @@ planar_embed_lua(planar_runtime_source planar.engine.runtime_source
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/commands.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -216,6 +218,8 @@ foreach(variant RANGE 0 20)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${v502b1_generated}/commands_${variant}.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -519,6 +523,8 @@ foreach(variant RANGE 0 5)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${r14d6_generated}/commands_${variant}.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -556,6 +562,8 @@ foreach(variant RANGE 0 0)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${r14d6c01_generated}/commands_${variant}.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -645,6 +653,8 @@ foreach(variant RANGE 0 1)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${x05a0_commands}"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")

@@ -53,6 +53,7 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   return latest and latest.output
  end
  function M.completion_mismatches(S,c)
+  if not c then return arr({})end
   local out={}
   for _,u in ipairs(c.units or {})do local o=owner(S,u.work);if o and o.role==c.role then local current=observed(S,u.work);if current~=u.output then out[u.work]={work=u.work,recorded=u.output,current=current or "none"}end end end
   for _,v in ipairs(c.vectors or {})do for _,t in ipairs(v.targets or {})do local o=owner(S,t.work);if o and o.role~=c.role then local current=M.unit_output(M.current_completion(S,o.role),t.work);if current~=t.output then out[t.work]={work=t.work,recorded=t.output,current=current or "none"}end end end end
@@ -120,7 +121,7 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
    contracts[#contracts+1]=obj({id=c.id,work=c.producer,path=path or "",bytes=bytes or (type(expected)=="string" and expected or ""),bytes_digest=entry.semantic or ""})
   end end
   local facets={};for _,f in ipairs(location and location.spec.facets or W.facets or {})do if selected[f.producer or f.work]then facets[#facets+1]=obj({work=f.producer or f.work,facet=f.id,paths=f.paths})end end
-  local registry=location and location.registry or {}
+  local registry=location and location.bundle.registry or {}
   return obj({version=1,job=S.active_job,role=role,run=scalar_text(r.run.id),generation=scalar_text(r.generation.id),root=W.root,base=W.base.label,registry=obj({id=registry.id or "",revision=registry.revision or ""}),units=sorted(units,function(v)return v.work end),checks=sorted(plan_checks,function(v)return v.work.."\0"..v.check end),contracts=sorted(contracts,function(v)return v.id end),facets=sorted(facets,function(v)return v.work.."\0"..v.facet end),owned=sorted(owned,function(v)return v end),frozen=W.ownership.frozen,excluded=W.ownership.excluded,producers=sorted(producers,function(v)return v.work end)})
  end
  local function add(set,key)set[key]=true end
@@ -145,8 +146,18 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   for _,v in ipairs(S.roles or {})do if v.job==plan.job then vector[#vector+1]=obj({job=v.job,role=v.role,state=v.role==plan.role and #reasons==0 and "done" or v.state,drifted=v.drifted==true})end end
   local facts={reservation=result.reservation or options.reservation,evidence=result.evidence,observation=result.observation,blockers_cleared=arr({})}
   if #reasons==0 then facts.completion=obj({publications=result.facets or result.publications or arr({})})end
-  if M.hooks.blockers_to_clear then facts.blockers_cleared=M.hooks.blockers_to_clear(S,{operation="check",job=plan.job})end
-  local change=obj({version=1,operation="check",facts=obj(facts),vector=sorted(vector,function(v)return v.role end),transitions=arr(transitions),expected=arr({}),withheld=arr(reasons)})
+  if M.hooks.blockers_to_clear then facts.blockers_cleared=arr(M.hooks.blockers_to_clear(S,{operation="check",job=plan.job}))end
+  local expected={obj({kind="request_unused",request_id=options.request_id or ""})}
+  if #reasons==0 then
+   expected[#expected+1]=obj({kind="active_revision",revision=S.active_revision})
+   expected[#expected+1]=obj({kind="active_job",job=plan.job})
+   expected[#expected+1]=obj({kind="role_state",job=plan.job,role=plan.role,state="running",drifted=false,run=plan.run})
+   expected[#expected+1]=obj({kind="generation_current",job=plan.job,role=plan.role,generation=plan.generation})
+  end
+  expected[#expected+1]=obj({kind="run_active",job=plan.job,role=plan.role,run=plan.run,generation=plan.generation})
+  expected[#expected+1]=obj({kind="reservation_open",reservation=facts.reservation})
+  if #reasons==0 then for _,v in ipairs(S.roles or {})do if v.job==plan.job then expected[#expected+1]=obj({kind="fact_version",job=v.job,role=v.role,fact_version=v.fact_version})end end end
+  local change=obj({version=1,operation="check",snapshot_seq=options.snapshot_seq,facts=obj(facts),vector=sorted(vector,function(v)return v.role end),transitions=arr(transitions),expected=arr(expected),withheld=arr(reasons)})
   change=M.rederive(S,change,plan,result)
   if M.hooks.reconcile then change=M.hooks.reconcile(S,change,plan,result)end
   return change
@@ -158,7 +169,7 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   for _,r in ipairs(S.roles or {})do local c={};for k,v in pairs(r)do c[k]=v end;next.roles[#next.roles+1]=c;original[r.role]=r end
   for _,t in ipairs(change.transitions or {})do explicit[t.role]=t;for _,r in ipairs(next.roles)do if r.job==t.job and r.role==t.role then r.state=t.after_state;r.drifted=t.after_drifted;if r.state~="running"then r.run="none"end end end end
   if plan and result and change.facts.completion then
-   local r=original[plan.role];local current=M.current_work(S,r);local sequence=tonumber(S.last_seq or "0");for _,c in ipairs(S.completions or {})do sequence=math.max(sequence,tonumber(c.seq))end;sequence=sequence+1;local units=result.observation and result.observation.units or {}
+   local r=original[plan.role];local current=M.current_work(S,r);local sequence=tonumber(change.snapshot_seq or S.last_seq or "0");for _,c in ipairs(S.completions or {})do sequence=math.max(sequence,tonumber(c.seq))end;sequence=sequence+1;local units=result.observation and result.observation.units or {}
    local vectors={};for _,e in ipairs(result.evidence or {})do if e.vector then vectors[#vectors+1]={work=e.work,targets=e.vector.targets}end end
    next.completions={};for _,c in ipairs(S.completions or {})do next.completions[#next.completions+1]=c end
    next.completions[#next.completions+1]={id="0",job=plan.job,role=plan.role,generation=r.generation.id,run=plan.run,dispatch=r.run.dispatch.id,work_fp=current.digest,seq=scalar_text(sequence),units=units,vectors=vectors}

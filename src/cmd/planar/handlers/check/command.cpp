@@ -1,6 +1,7 @@
 module planar.cmd.execution.check;
 import std;
 import cli11;
+import planar.cmd.invocation;
 namespace planar::cmd::handlers {
 namespace {
 [[maybe_unused]] bool positive(std::string_view s) {
@@ -82,5 +83,27 @@ CLI::App& attach_check(CLI::App& root, check_options& options) {
       ->multi_option_policy(CLI::MultiOptionPolicy::Throw)
       ->check(explicit_value);
   return command;
+}
+
+namespace {
+engine::command_check_options intent(const check_options& o) {
+  engine::command_check_options v;
+  v.operation  = "check";
+  v.ledger     = o.ledger;
+  v.run        = o.run;
+  v.root       = o.root;
+  v.base_root  = o.base_root;
+  v.scratch    = o.scratch;
+  v.request_id = o.request_id;
+  v.actor      = o.actor;
+  v.provenance = o.provenance;
+  return v;
+}
+} // namespace
+response check_command(const check_options& o, engine::command_vm* vm) {
+  return execute(intent(o), vm);
+}
+response check_with_profile(const check_options& o, std::string_view selector) {
+  return execute_with_profile(intent(o), selector);
 }
 } // namespace planar::cmd::handlers

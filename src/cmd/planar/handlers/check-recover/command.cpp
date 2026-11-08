@@ -1,6 +1,7 @@
 module planar.cmd.execution.check_recover;
 import std;
 import cli11;
+import planar.cmd.invocation;
 namespace planar::cmd::handlers {
 namespace {
 [[maybe_unused]] bool positive(std::string_view s) {
@@ -75,5 +76,25 @@ CLI::App& attach_check_recover(CLI::App& root, check_recover_options& options) {
       ->check(CLI::Validator([](std::string& s) { return s.size() <= 256 && engine::valid_text(s) ? "" : "Invalid actor"; },
                              "ACTOR"));
   return command;
+}
+
+namespace {
+engine::command_check_options intent(const check_recover_options& o) {
+  engine::command_check_options v;
+  v.operation       = "check-recover";
+  v.ledger          = o.ledger;
+  v.run_id          = o.run_id;
+  v.reservation     = o.reservation;
+  v.confirm_stopped = o.confirm_stopped;
+  v.request_id      = o.request_id;
+  v.actor           = o.actor;
+  return v;
+}
+} // namespace
+response check_recover_command(const check_recover_options& o, engine::command_vm* vm) {
+  return execute(intent(o), vm);
+}
+response check_recover_with_profile(const check_recover_options& o, std::string_view selector) {
+  return execute_with_profile(intent(o), selector);
 }
 } // namespace planar::cmd::handlers

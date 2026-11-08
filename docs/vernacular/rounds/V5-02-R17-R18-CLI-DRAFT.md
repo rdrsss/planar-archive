@@ -1,55 +1,42 @@
-# R17/R18 CLI and live orchestrator draft surface
+# R17/R18 command integration draft
 
-2026-11-08 resumed draft implementation. This record tracks the staged surface work;
-shared runtime/native wiring follows integration of the R16 lane.
+Implementation checkpoint, 2026-11-08. The operator requested all feature/code implementation before review,
+verification and validation cycles. This is development evidence, not review approval or a release gate.
 
-New CLI11 handler modules bind `check`, `check-recover` and `verdict`, with canonical
-positive IDs, run-token grammar, request and actor bounds, separate required values,
-and explicit `--confirm-stopped true`. Their command forwarding is completed when the
-new runtime option alternatives enter the integrated tree; these modules are not yet
-registered in CMake or bootstrap.
+The production catalog now includes `check`, `check-recover` and `verdict` (17 production commands); the authoring
+composition additionally exposes six authoring commands, including `orchestrator --ledger` (23 commands).
+CLI11 owns each family. The retained command VM exposes only the command's finite native services; check retries
+reuse the original native execution result and cannot rerun children. Native request framing excludes run secrets,
+normalizes private paths, performs early replay and retains publication uncertainty after complete commits.
 
-The authoring orchestrator now accepts exactly one form: the existing three declaration
-options together, or `--ledger` alone. Ledger input is normalized through the existing
-explicit-file path boundary. The Lua live branch consumes `read_execution`, recorded
-interpretation and sealed command names, emits `orchestrator_state` after actions and
-lists legal actions, blockers and the check execution isolation limit. The declaration
-projection remains unchanged when the live context is absent.
+R17 wiring joins accepted-snapshot planning, descriptor-based preparation, reservation, bounded child execution,
+boundary evidence and recapture with trusted completion/prerequisite policy and ledger commits. Reserve and
+completion expectation lists are checked against invocation-owned snapshots. `check-recover` interrupts an explicit
+open reservation and saves the interrupted response for both request IDs. R18 joins normalized verdict input,
+current target/policy derivation and ledger verdict commits. Status projects open reservations, output-vector
+mismatches and derived review acceptance. Recovery packets include recorded evidence and carried findings.
 
-Pending shared integration: authoring native ledger option, bootstrap copy, runtime
-optional descriptor and execution-read capability, native service sealed command names,
-run request IDs in snapshots, handler forwarding and CMake/test registration. The new
-CLI tests cover all execution-path requirements, recovery confirmation, run-token
-refusal and orchestrator form exclusivity. Tests not run yet; Lua syntax parsed.
+The live orchestrator reads the recorded ledger without a fresh declaration capture, includes current state,
+runs, blockers and available commands, and never exposes run secrets. Native profile framing and metadata admission
+cover the execution command families. The Lua policy uses metered sorting and the shipped restricted standard
+library; development exposed and fixed typed empty-list and next-state `run: none` integration errors.
 
-No full gates, reviews, mutation probes or Linux runs, per draft-mode instruction.
+Development checks:
 
-`lua tests/native/orchestrator-live-policy.lua .` passed the standalone live projection
-scenario: recorded state and check action are rendered, and a supplied token/secret is
-not exposed. This exercises the pure projection only, not the pending native adapter.
+- Direct debug build of `planar`, `planar_authoring_stack`, `planar_execution_recovery_capture_tests`,
+  `planar_ledger_execution_tests` and `planar_execution_change_value_tests` (serialized per build directory).
+- `lua tests/native/r17-checks-policy.lua`: applicability, vector staleness, identity restoration, readiness and
+  same-commit approval derivation scenarios passed.
+- `lua tests/native/orchestrator-live-policy.lua`: live recorded-state projection passed.
+- `python3 tests/native/r17-r18-cli-draft.py`: isolated source-built CLI workflow: initialize/load/activate,
+  worker claim, real child check, exact check replay, completed worker/readiness, reviewer claim, approval verdict,
+  exact verdict replay and accepted status.
+- Isolated interrupted-check exercise: check recovery, byte-identical recovery replay, and original reserved check
+  request replaying the same interruption response. This used a development-only open reservation left by a refused
+  pre-fix command; no operator ledger was accessed.
+- Adjacent agents exercised the R16 lifecycle, live authoring CLI, native recovery capture and ledger/decoder cases;
+  their counts and evidence remain in their round records.
 
-## Integration update (2026-11-08)
-
-The integrated branch now contains command registration and finite native services
-for checks, reservation recovery and verdicts. Live orchestrator plumbing now carries
-the ledger intent through CLI normalization, bootstrap and the runtime, reads the
-accepted snapshot through a read-only native service and appends sealed command names.
-The declaration and ledger forms have separate service-call paths. The catalog and
-malformed-bundle generation anchors reflect the optional orchestrator option set and
-its two capabilities. `orchestrator_state` is reserved alongside the prior sections.
-
-The standalone live projection scenario still passes. The shared development build
-and targeted command exercises are in progress; no final gate or review is claimed.
-
-Focused native orchestrator exercise passed: production `init`, `load`, `activate`
-against the quota fixture, then `planar_authoring_stack orchestrator --ledger`.
-The prompt includes the recorded workspace, live state and sealed check action.
-Scratch ledger and result stayed under a temporary directory; no installed binary
-or operator database was used. The production/authoring split remains the D148
-contract (17 production commands, 23 in the authoring bundle). The live read is
-exempt from interpretation binding under D108.
-
-The pure live projection test additionally covers an open check reservation,
-active run identity and the exact max-rounds blocker clearing guidance. Recovery
-lifecycle development exercise passed 19 command calls in separate scratch data,
-including exact replay, retained checkpoint identity, captured outputs and history.
+No full test gate, independent review, Linux verification, installation or publication was performed. The new
+colocated CLI grammar cases are registered for the later consolidated verification phase. The source-built draft
+workflow and focused checks above do not replace that phase.

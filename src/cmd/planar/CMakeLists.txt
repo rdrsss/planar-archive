@@ -50,6 +50,15 @@ planar_rewrite_module(planar_release_command
 planar_rewrite_module(planar_recover_command
   INTERFACE handlers/recover/command.cppm SOURCES handlers/recover/command.cpp
   DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_check_command
+ INTERFACE handlers/check/command.cppm SOURCES handlers/check/command.cpp
+ DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_check_recover_command
+ INTERFACE handlers/check-recover/command.cppm SOURCES handlers/check-recover/command.cpp
+ DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_verdict_command
+ INTERFACE handlers/verdict/command.cppm SOURCES handlers/verdict/command.cpp
+ DEPENDS planar_command_invocation CLI11::CLI11_Module)
 planar_rewrite_module(planar_command_envelope
   INTERFACE envelope.cppm
   SOURCES envelope.cpp
@@ -80,13 +89,14 @@ planar_rewrite_module(planar_command
   DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command planar_activate_command CLI11::CLI11_Module
     planar_command_authoring ${planar_authoring_family_targets}
   TESTS bootstrap.t.cpp authoring.t.cpp authoring_prompts.t.cpp authoring_observe.t.cpp authoring_orchestrator.t.cpp
-    activate.t.cpp load_format3.t.cpp)
+    activate.t.cpp load_format3.t.cpp execution_check_cli.t.cpp orchestrator_live_cli.t.cpp)
 # Draft (R15-C P3): the format3 execution modules reach every invocation copy through the shared response target, and the
 # real activate handler reaches every bootstrap copy through the shared envelope target; the audited generators keep
 # their fixed dependency lists (DD27).
 target_link_libraries(planar_command_response PUBLIC planar_ledger_execution planar_execution_snapshot_value
   planar_execution_drafts planar_execution_change_value planar_execution_provenance_input planar_history_provenance planar_canonical)
-target_link_libraries(planar_command_envelope PUBLIC planar_activate_command planar_status_command planar_preview_command planar_claim_command planar_takeover_command planar_refresh_command planar_checkpoint_command planar_release_command planar_recover_command)
+target_link_libraries(planar_command_response PUBLIC planar_execution_check planar_execution_verdict planar_execution_recovery_capture)
+target_link_libraries(planar_command_envelope PUBLIC planar_check_command planar_check_recover_command planar_verdict_command planar_activate_command planar_status_command planar_preview_command planar_claim_command planar_takeover_command planar_refresh_command planar_checkpoint_command planar_release_command planar_recover_command)
 target_compile_definitions(planar_command_tests PRIVATE
   PLANAR_B2_WORKSPACE_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota/workspace/workspace.lua")
 add_executable(planar main.cpp)
@@ -131,6 +141,8 @@ foreach(variant RANGE 0 5)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -189,6 +201,8 @@ planar_embed_lua(planar_load_cli_probe_source planar.engine.load_cli_probe_sourc
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
   "${d7b_generated}/commands.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -243,6 +257,8 @@ foreach(variant RANGE 0 4)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -392,6 +408,8 @@ set(authoring_lua_files
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/checks.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/prompts.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observe.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/orchestrator.lua")
@@ -495,9 +513,9 @@ function(planar_authoring_variant_commands index variable)
   elseif(index EQUAL 13)
     planar_authoring_once(text "capability=\"observation_directory_v1\"" "capability=\"authoring_capture_v1\"")
   elseif(index EQUAL 14)
-    planar_authoring_once(text "option(\"registry\",\"text\",true),option(\"job\",\"text\",true)}" "option(\"registry\",\"text\",true)}")
+    planar_authoring_once(text "option(\"registry\",\"text\",false),option(\"job\",\"text\",false)}" "option(\"registry\",\"text\",false)}")
   elseif(index EQUAL 15)
-    planar_authoring_once(text "option(\"job\",\"text\",true)}" "option(\"jobs\",\"text\",true)}")
+    planar_authoring_once(text "option(\"job\",\"text\",false)}" "option(\"jobs\",\"text\",false)}")
   elseif(index EQUAL 16)
     set(row "[\"spec-prompt\"]={family=\"spec-prompt\",handler=\"shipped.spec_prompt.v1\",kind=\"spec_prompt_v1\",capability=\"authoring_capture_v1\",options={option(\"workspace\",\"text\",true),option(\"registry\",\"text\",true)}}")
     string(REPLACE "option(\"registry\",\"text\",true)}}" "option(\"registry\",\"decimal\",true)}}" changed "${row}")
@@ -523,8 +541,8 @@ foreach(variant RANGE 0 21)
     string(REPLACE "module planar.engine.runtime;" "module planar.engine.authoring_variant_${variant};" text "${text}")
     string(REPLACE "namespace planar::engine {" "namespace planar::engine::authoring_variant_${variant} {" text "${text}")
     if(variant EQUAL 20 AND name STREQUAL "runtime.cpp")
-      planar_authoring_once(text "std::array<bundle_row, 20> bundle_table{{" "std::array<bundle_row, 21> bundle_table{{")
-      set(orchestrator_row [=[    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "orchestrator_capture_v1", true},
+      planar_authoring_once(text "std::array<bundle_row, 23> bundle_table{{" "std::array<bundle_row, 24> bundle_table{{")
+      set(orchestrator_row [=[    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "execution_read_v1", true, "orchestrator_capture_v1"},
 ]=])
       set(status_row [=[    {"status", "shipped.status.v1", "status_v1", "render_capture_v1", true},
 ]=])
