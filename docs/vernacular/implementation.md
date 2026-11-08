@@ -121,6 +121,9 @@ Use these repository files:
   typed native diagnostics and bounded follow-on slices; independently approved in D3.
 - [`execution-contract.md`](execution-contract.md): the R15 execution contract (format3, request framing,
   execution commit protocol, reconcile rules and role lineage) that R15-B to R15-E implement.
+- [`execution-contract-r16.md`](execution-contract-r16.md), [`execution-contract-r17.md`](execution-contract-r17.md)
+  and [`execution-contract-r18.md`](execution-contract-r18.md): unreviewed draft contracts (draft mode) for refresh
+  and recovery, checks and review; draft lanes code against them until the fixing rounds review them.
 - `v5-alignment.md`: retained/new/pending direction, conflicts and contract gates.
 - `acceptance-matrix.md`: every v5 matrix row, current evidence and remaining owner.
 - `rounds/<id>.md`: brief, search findings, implementation evidence, reviewer
