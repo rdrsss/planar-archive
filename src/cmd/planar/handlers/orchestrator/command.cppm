@@ -8,9 +8,10 @@ export import planar.cmd.authoring;
 export namespace planar::cmd::authoring {
 /// Invocation-owned option state of `orchestrator`; alive through parsing and dispatch.
 struct orchestrator_options {
-  std::string workspace; ///< Raw `--workspace` value.
-  std::string registry;  ///< Raw `--registry` value.
-  std::string job;       ///< Raw `--job` value.
+  std::string workspace;   ///< Raw `--workspace` value.
+  std::string registry;    ///< Raw `--registry` value.
+  std::string job;         ///< Raw `--job` value.
+  std::string ledger = {}; ///< Raw --ledger value, exclusive with the declaration form.
 };
 /// Attach the `orchestrator` syntax to the invocation-local root parser.
 /// @param root Invocation-local parser.

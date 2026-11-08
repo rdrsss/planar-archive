@@ -114,7 +114,7 @@ do
     local function section(id,heading,body) sections[#sections+1]={id=id,text="## "..heading.."\n"..body,mandatory=true} end
     section("orchestrator_authority","Orchestrator authority",
       "This prompt describes the graph of job "..c.job.id.." in workspace "..c.workspace.id.." and spec "..c.spec.id..".\n"..
-      "The driver schedules sessions; Planar does not. Planar prints this prompt and states no execution state.\n"..
+      (c.live and "The driver schedules sessions; Planar does not. The recorded state below is a snapshot, not a scheduling promise.\n" or "The driver schedules sessions; Planar does not. Planar prints this prompt and states no execution state.\n")..
       "Use only the actions marked as available below; actions marked as future are unavailable.\n")
     local body={"- shape: "..c.shape.kind.." max_rounds "..c.shape.max_rounds.."\n"}
     for i,stage in ipairs(c.shape.stages) do body[#body+1]="- stage "..i..": "..list_text(stage).."\n" end
@@ -137,9 +137,50 @@ do
     body={}
     for _,a in ipairs(c.actions) do body[#body+1]="- "..a.command.." ("..a.status.."): "..a.purpose.."\n" end
     section("orchestrator_actions","Orchestrator actions",table.concat(body))
+    if c.live then
+      body={"Ledger "..c.live.ledger.." revision "..c.live.revision.." event "..c.live.last_event.." activation "..c.live.activation..".\n"}
+      for _,r in ipairs(c.live.roles) do
+        local actions={}
+        if r.state=="ready" or r.state=="stale" then actions={"preview","claim"}
+        elseif r.state=="running" then
+          local reservation=type(r.run)=="table" and r.run.reservation
+          if reservation and reservation~="none" then actions={"check-recover (only after confirming the check process stopped)"}
+          elseif r.drifted then actions={"refresh","checkpoint","release","recover","takeover"}
+          else actions={r.kind=="reviewer" and "verdict" or "check","refresh","checkpoint","release","recover","takeover"}end
+        elseif r.state=="blocked" then actions={"wait for prerequisites","status"}
+        elseif r.state=="done" then actions={"none"}
+        else actions={"none"}end
+        body[#body+1]="- "..r.role..": "..r.state..(r.drifted and " (drifted)" or "").."; next: "..table.concat(actions,", ")..".\n"
+      end
+      body[#body+1]="Always run check before treating a worker role as done. Refresh drifted runs before checking.\n"
+      body[#body+1]="Checks run trusted registry commands with bounded time, output, cwd and environment and no OS sandbox; escaping descendants are not tracked.\n"
+      for _,b in ipairs(c.live.blockers)do body[#body+1]="- blocker "..tostring(b.id)..": "..b.kind..".\n"end
+      section("orchestrator_state","Orchestrator state",table.concat(body))
+    end
     return {version=1,sections=sections}
   end
   orchestrator_command_impl=function(invocation,context)
+    if invocation.present and invocation.present.ledger then
+      local read=context.read_execution({})
+      if not read.ok then return read end
+      local outer=read.value;local S=outer.snapshot
+      if type(S)~="table" or S.active_job=="" then return {ok=false,error={code="no_active_job",message="No active job matches the request",field=""}}end
+      local interpretation=S.revision and S.revision.interpretation
+      if not interpretation or not names_valid(outer.commands)then return refusal()end
+      local validated={bundle=interpretation.bundle,jobs=interpretation.semantic.jobs}
+      local c=build_context(validated,{job=S.active_job},build_actions(outer.commands))
+      if not c then return refusal()end
+      local roles,runs={},{}
+      for _,r in ipairs(S.roles or {})do if r.job==S.active_job then
+        local run="none"
+        if type(r.run)=="table"then run=engine.object({id=r.run.id,generation=r.generation.ordinal,reservation=r.run.reservation or "none"});runs[#runs+1]=engine.object({id=r.run.id,role=r.role,generation=r.generation.ordinal,request_id=r.run.request_id or "none"}) end
+        roles[#roles+1]=engine.object({role=r.role,kind=r.generation.structure.kind,state=r.state,drifted=r.drifted==true,run=run})
+      end end
+      c.live=engine.object({ledger=outer.ledger or S.ledger,revision=S.active_revision,last_event=outer.last_seq,activation=S.activation or "none",roles=sort_copy(roles,function(r)return r.role end),runs=engine.array(runs),blockers=S.review and S.review.blockers or engine.array({})})
+      local result=project(c);local parts={"# Planar orchestrator prompt\n"};for _,section in ipairs(result.sections)do parts[#parts+1]=section.text end
+      local markdown=table.concat(parts,"\n");local registry=validated.bundle.registry
+      return {ok=true,value=engine.object({version=1,kind="prompt",prompt=engine.object({kind="orchestrator",markdown=markdown,bytes=#markdown,digest=engine.fragment_digest(markdown),inputs=engine.object({files=engine.array({}),registry=engine.object({id=registry.id,revision=registry.revision})})})})}
+    end
     local opened=context.open_workspace({workspace=invocation.options.workspace})
     if not opened.ok then return opened end
     local routed=route_workspace(opened.value)

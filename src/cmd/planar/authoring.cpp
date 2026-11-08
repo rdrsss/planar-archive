@@ -129,7 +129,7 @@ std::array<std::string_view, 6> root_help_lines() {
           "planar ingest --workspace FILE_OR_NAME --registry FILE\n",
           "planar explain-rejection --diagnostic FILE\n",
           "planar observe --from DIRECTORY\n",
-          "planar orchestrator --workspace FILE_OR_NAME --registry FILE --job ID\n"};
+          "planar orchestrator --workspace FILE_OR_NAME --registry FILE --job ID\n  or --ledger PATH\n"};
 }
 std::optional<std::string> splice_root_help(std::string_view default_help) {
   if (!default_help.ends_with(final_help_line))
@@ -159,6 +159,16 @@ readers process_readers() {
 }
 std::expected<void, engine::diagnostic> prepare_inputs(verb which, inputs& values, const readers& io) {
   cwd_snapshot cwd(io);
+  if (which == verb::orchestrator) {
+    const bool live     = !values.ledger.empty();
+    const bool declared = !values.workspace.empty() && !values.registry.empty() && !values.job.empty();
+    if ((live && (!values.workspace.empty() || !values.registry.empty() || !values.job.empty())) || (!live && !declared))
+      return std::unexpected(make_diagnostic("usage", "Invalid command syntax"));
+    if (live) {
+      std::array<std::string*, 1> files{&values.ledger};
+      return prepare_explicit(files, nullptr, cwd, false);
+    }
+  }
   switch (which) {
   case verb::spec_prompt:
   case verb::critique:
