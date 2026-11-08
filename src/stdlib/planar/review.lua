@@ -7,6 +7,18 @@
 -- current work_exec_v1 W (R15-C reconcile); review.hooks.reconcile(snapshot, change) -> change adds the M17 to M22
 -- prerequisite rederivation (identity when absent, DB-R4). Not embedded and not registered yet (DB-R4).
 local review=(function()
+local function metered_sort(values,less)
+ less=less or function(a,b)return a<b end
+ local n,width=#values,1
+ while width<n do
+  local out={}
+  for lo=1,n,width*2 do local mid,hi=math.min(lo+width,n+1),math.min(lo+2*width,n+1);local a,b=lo,mid
+   for i=lo,hi-1 do if b>=hi or (a<mid and not less(values[b],values[a]))then out[i]=values[a];a=a+1 else out[i]=values[b];b=b+1 end end
+  end
+  for i=1,n do values[i]=out[i]end;width=width*2
+ end
+end
+local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return ""..v end;return v==nil and "nil" or v==true and "true" or v==false and "false" or "unsupported"end
   local M={hooks={}}
   local prefix="xxh3_128:"
   local reviewer_authority="reviewer_role_v1"
@@ -19,8 +31,8 @@ local review=(function()
   end
   local function dec(v)
     local n=num(v)
-    if n==nil then return tostring(v) end
-    return string.format("%d",n)
+    if n==nil then return scalar_text(v) end
+    return ""..n
   end
   local function same_id(a,b)
     if a==nil or b==nil then return false end
@@ -29,17 +41,21 @@ local review=(function()
   local function is_integer(v)
     if type(v)~="number" then return false end
     if math and math.type then return math.type(v)=="integer" end
-    return v==v and v%1==0 and not string.find(tostring(v),"[.eEn]")
+    return v==v and v%1==0
+  end
+  local function digits(s,first,hex)
+    if type(s)~="string" or #s<(first or 1) then return false end
+    for i=first or 1,#s do local c=string.byte(s,i);if not(c>=48 and c<=57) and not(hex and c>=97 and c<=102)then return false end end;return true
+  end
+  local function portable(s,colon)
+    for i=1,#s do local c=string.byte(s,i);if not((c>=65 and c<=90)or(c>=97 and c<=122)or(c>=48 and c<=57)or c==95 or c==46 or c==45 or(colon and c==58))then return false end end;return true
   end
   local function identifier(s)
-    return type(s)=="string" and #s>=1 and #s<=64 and string.find(s,"^[a-z][a-z0-9_]*$")~=nil
+    if type(s)~="string"or #s<1 or #s>64 then return false end
+    for i=1,#s do local c=string.byte(s,i);if not(c>=97 and c<=122)and not(i>1 and ((c>=48 and c<=57)or c==95))then return false end end;return true
   end
-  local function finding_identifier(s)
-    return type(s)=="string" and #s>=1 and #s<=128 and string.find(s,"^[A-Za-z0-9_.:%-]+$")~=nil
-  end
-  local function digest_text(s)
-    return type(s)=="string" and #s==41 and string.sub(s,1,9)==prefix and string.find(s,"^[0-9a-f]+$",10)~=nil
-  end
+  local function finding_identifier(s)return type(s)=="string"and #s>=1 and #s<=128 and portable(s,true)end
+  local function digest_text(s)return type(s)=="string"and #s==41 and string.sub(s,1,9)==prefix and digits(s,10,true)end
   local function fp(s)
     if type(s)=="string" and string.sub(s,1,9)~=prefix then return prefix..s end
     return s
@@ -75,11 +91,11 @@ local review=(function()
   -- Portable source path: declaration segment rules with 1 to 4096 bytes (DB-R14, as the native codec).
   local function source_path(p)
     if type(p)~="string" or #p==0 or #p>4096 or string.sub(p,-1)=="/" then return false end
-    for part in string.gmatch(p.."/","([^/]*)/") do
-      if #part==0 or #part>128 or part=="." or part==".." then return false end
-      if string.lower(part)==".git" then return false end
-      if not string.find(part,"^[A-Za-z0-9_.%-]+$") then return false end
-    end
+    local begin=1
+    for i=1,#p+1 do if i>#p or string.byte(p,i)==47 then
+      local part=string.sub(p,begin,i-1);begin=i+1
+      if #part==0 or #part>128 or part=="."or part==".."or string.lower(part)==".git"or not portable(part,false)then return false end
+    end end
     return true
   end
   local function is_list(t)
@@ -96,7 +112,7 @@ local review=(function()
   local function sorted_copy(list,less)
     local out={}
     for i,v in ipairs(list or {}) do out[i]=v end
-    table.sort(out,less)
+    metered_sort(out,less)
     return out
   end
   local function set_of(list)
@@ -182,7 +198,7 @@ local review=(function()
     for _,b in ipairs(review_part(snapshot).blockers or {}) do
       if b.job==job and not (cleared and cleared[dec(b.id)]) then out[#out+1]=b end
     end
-    table.sort(out,function(a,b) return num(a.id)<num(b.id) end)
+    metered_sort(out,function(a,b) return num(a.id)<num(b.id) end)
     return out
   end
 
@@ -217,7 +233,7 @@ local review=(function()
     if type(shape)=="table" then
       local value=shape.max_rounds
       if is_integer(value) and value>=0 then return value end
-      if type(value)=="string" and string.find(value,"^%d+$") and (value=="0" or string.sub(value,1,1)~="0") then
+      if type(value)=="string" and digits(value) and (value=="0" or string.sub(value,1,1)~="0") then
         return tonumber(value)
       end
     end
@@ -273,7 +289,7 @@ local review=(function()
     for _,k in ipairs(optional or {}) do known[k]=true end
     local unknown={}
     for k in pairs(v) do if not known[k] then unknown[#unknown+1]=k end end
-    table.sort(unknown)
+    metered_sort(unknown)
     if #unknown>0 then fail(field.."."..unknown[1],"Unknown field") end
     for _,k in ipairs(required) do if v[k]==nil then fail(field.."."..k,"Required field") end end
   end
@@ -497,7 +513,7 @@ local review=(function()
     for _,r in ipairs(workers_of(snapshot,job)) do
       for _,w in ipairs(structure(r).work or {}) do units[#units+1]={work=w,role=r} end
     end
-    table.sort(units,function(a,b) return a.work<b.work end)
+    metered_sort(units,function(a,b) return a.work<b.work end)
     local out={}
     for _,u in ipairs(units) do
       local why={}
@@ -526,7 +542,7 @@ local review=(function()
     local text=f.text or ""
     local start=1
     while true do
-      local at=string.find(text,"\n",start,true)
+      local at=nil;for i=start,#text do if string.byte(text,i)==10 then at=i;break end end
       if at==nil then
         out[#out+1]="    "..string.sub(text,start)
         break
@@ -584,7 +600,7 @@ local review=(function()
     end
     local out={}
     for _,e in pairs(latest) do out[#out+1]=e end
-    table.sort(out,function(a,b)
+    metered_sort(out,function(a,b)
       if a.work~=b.work then return a.work<b.work end
       return a.check<b.check
     end)
@@ -608,7 +624,7 @@ local review=(function()
     local observations={"Check summaries (recorded evidence):"}
     for _,e in ipairs(summaries) do
       local line="- "..e.work.." "..e.check..": "..e.outcome
-      if e.outcome~="pass" then line=line.." ("..tostring(e.reason)..")" end
+      if e.outcome~="pass" then line=line.." ("..scalar_text(e.reason)..")" end
       observations[#observations+1]=line
     end
     local findings=nil
@@ -712,7 +728,7 @@ local review=(function()
     local first=change.transitions[1]
     local rest={}
     for i=2,#change.transitions do rest[#rest+1]=change.transitions[i] end
-    table.sort(rest,function(a,b) return a.role<b.role end)
+    metered_sort(rest,function(a,b) return a.role<b.role end)
     change.transitions={first}
     for _,t in ipairs(rest) do change.transitions[#change.transitions+1]=t end
     local after={}

@@ -154,7 +154,7 @@ do
       end
       body[#body+1]="Always run check before treating a worker role as done. Refresh drifted runs before checking.\n"
       body[#body+1]="Checks run trusted registry commands with bounded time, output, cwd and environment and no OS sandbox; escaping descendants are not tracked.\n"
-      for _,b in ipairs(c.live.blockers)do body[#body+1]="- blocker "..tostring(b.id)..": "..b.kind..".\n"end
+      for _,b in ipairs(c.live.blockers)do body[#body+1]="- blocker "..(""..b.id)..": "..b.kind..".\n"end
       section("orchestrator_state","Orchestrator state",table.concat(body))
     end
     return {version=1,sections=sections}

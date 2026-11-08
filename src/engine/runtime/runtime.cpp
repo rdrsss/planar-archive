@@ -1207,6 +1207,7 @@ struct command_state {
   extension_history_bridge                 extension_history;
   std::map<std::string, const void*>       handles;
   std::size_t                              calls       = 0;
+  unsigned check_stage=0, check_attempts=0;
   int                                      owner_first = 0, owner_last = 0;
   bool                                     registering = true, invoked = false, export_published = false;
   const void* profile_frame_owner = nullptr; ///< Identity of the profile_invocation that began the frame.
@@ -1354,6 +1355,9 @@ std::vector<signature_option> command_signature(std::string_view name) {
   if (name == "load")
     return {{"--ledger", "text", true},          {"--workspace", "text", true},  {"--registry", "text", true},
             {"--expect-revision", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  if(name=="check")return {{"--ledger","text",true},{"--run","text",true},{"--root","text",true},{"--base-root","text",true},{"--scratch","text",true},{"--request-id","text",true},{"--actor","text",true},{"--provenance","text",false}};
+  if(name=="check-recover")return {{"--ledger","text",true},{"--run-id","text",true},{"--reservation","text",true},{"--confirm-stopped","text",true},{"--request-id","text",true},{"--actor","text",true}};
+  if(name=="verdict")return {{"--ledger","text",true},{"--run","text",true},{"--verdict","text",true},{"--request-id","text",true},{"--actor","text",true}};
   if (name == "activate")
     return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
             {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
@@ -1369,8 +1373,12 @@ void help_text(const std::string& text) {
 struct bundle_row {
   std::string_view name, handler, kind, capability;
   bool             authoring_only;
+  std::string_view capability2={},capability3={};
 };
-constexpr std::array<bundle_row, 12> bundle_table{{
+constexpr std::array<bundle_row, 15> bundle_table{{
+    {"check","shipped.check.v1","check_v1","execution_commit_v1",false,"provenance_read_v1","check_run_v1"},
+    {"check-recover","shipped.check_recover.v1","check_v1","execution_commit_v1",false},
+    {"verdict","shipped.verdict.v1","verdict_response_v1","execution_commit_v1",false,"verdict_read_v1"},
     {"render", "shipped.render.v1", "render_v1", "render_capture_v1", false},
     {"activate", "shipped.activate.v1", "activate_v1", "execution_commit_v1", false},
     {"init", "shipped.init.v1", "init_v1", "initialize_ledger_v1", false},
@@ -1426,10 +1434,12 @@ void seal_catalog(state& s) {
     auto signature = command_signature(name);
     help_text(text_field(d, "help"));
     auto caps = d->fields.at("capabilities"), options = d->fields.at("options");
-    if (caps->kind != value_kind::list || caps->items.size() != 1 || caps->items[0]->kind != value_kind::string)
+    if (caps->kind != value_kind::list || caps->items.size() != 1+std::size_t(!row->capability2.empty())+std::size_t(!row->capability3.empty()) || caps->items[0]->kind != value_kind::string)
       command_refuse();
     if (caps->items[0]->string != row->capability)
       command_refuse();
+    if(!row->capability2.empty() && (caps->items[1]->kind!=value_kind::string || caps->items[1]->string!=row->capability2))command_refuse();
+    if(!row->capability3.empty() && (caps->items[2]->kind!=value_kind::string || caps->items[2]->string!=row->capability3))command_refuse();
     if (options->kind != value_kind::list)
       command_refuse();
     if (options->items.size() != signature.size())
@@ -2515,6 +2525,12 @@ void prepare_invocation(command_state& c) {
           add("expect-revision", command_text(o.expect_revision));
           add("request-id", command_text(o.request_id));
           add("actor", command_text(o.actor));
+        } else if constexpr(std::is_same_v<T,command_check_options>){
+          c.name=o.operation;if(c.name!="check"&&c.name!="check-recover"&&c.name!="verdict")command_refuse();
+          path("ledger",o.ledger);require_token(o.request_id);require_token(o.actor);
+          add("request-id",command_text(o.request_id));add("actor",command_text(o.actor));
+          if(c.name=="check-recover"){add("run-id",command_text(o.run_id));add("reservation",command_text(o.reservation));add("confirm-stopped",command_text(o.confirm_stopped));if(o.confirm_stopped!="true")command_refuse();}
+          else {require_token(o.run);add("run",command_text(o.run));if(c.name=="verdict")path("verdict",o.verdict);else{path("root",o.root);path("base-root",o.base_root);path("scratch",o.scratch);if(o.provenance)path("provenance",*o.provenance);else add("provenance",command_text(""),false);}}
         } else if constexpr (std::is_same_v<T, command_activate_options>) {
           c.name = "activate";
           path("ledger", o.ledger);
@@ -3137,7 +3153,26 @@ void call_service_native(lua_State* l, int operation) {
       result = c.services->open_workspace(std::get<command_render_options>(c.options));
   } else {
     auto args = convert(l, 1, 1);
-    if (operation == 1) {
+    if(operation>=30 && operation<=37){
+      auto* option=std::get_if<command_check_options>(&c.options);if(!option)command_refuse();
+      static constexpr std::array<std::string_view,8> names={"read_execution","read_provenance","prepare_check","reserve_check","run_checks","commit_check","read_verdict","commit_verdict"};
+      bool allowed=false;
+      if(c.name=="check"){
+        if(operation==30&&(c.check_stage==0||c.check_stage==5||c.check_stage==7)){allowed=++c.check_attempts<=5;c.check_stage=c.check_stage==0?1:6;}
+        else if(operation==31&&c.check_stage==1&&option->provenance){allowed=true;c.check_stage=2;}
+        else if(operation==32&&(c.check_stage==2||(c.check_stage==1&&!option->provenance))){allowed=true;c.check_stage=3;}
+        else if(operation==33&&c.check_stage==3){allowed=true;c.check_stage=4;}
+        else if(operation==34&&c.check_stage==4){allowed=true;c.check_stage=5;}
+        else if(operation==35&&c.check_stage==6){allowed=true;c.check_stage=7;}
+      }else if(c.name=="check-recover"){
+        if(operation==30&&c.check_stage==0){allowed=true;c.check_stage=1;}else if(operation==35&&c.check_stage==1){allowed=true;c.check_stage=7;}
+      }else if(c.name=="verdict"){
+        if(operation==30&&c.check_stage==0){allowed=true;c.check_stage=1;}else if(operation==36&&c.check_stage==1){allowed=true;c.check_stage=2;}else if(operation==37&&c.check_stage==2){allowed=true;c.check_stage=7;}
+      }
+      if(!allowed)command_refuse();
+      if(operation==32)exact(args,{"plan"});else if(operation==35&&c.name=="check"||operation==37)exact(args,{"change"});else exact(args,{});
+      result=c.services->check_step(*option,names[operation-30],args);
+    } else if (operation == 1) {
       if (c.name != "render" || c.calls != 1)
         command_refuse();
       exact(args, {"route"});
@@ -3463,6 +3498,11 @@ int execute_command(lua_State* l) {
     lua_pushcclosure(l, call_service, 1);
     lua_setfield(l, -2, "commit_execution");
   }
+  if(std::holds_alternative<command_check_options>(commands(l).options)){
+    static constexpr std::array<const char*,8> names={"read_execution","read_provenance","prepare_check","reserve_check","run_checks","commit_check","read_verdict","commit_execution"};
+    const auto& name=commands(l).name;
+    for(int i=0;i<8;++i){bool offered=(name=="check"&&i<=5)||(name=="check-recover"&&(i==0||i==5))||(name=="verdict"&&(i==0||i>=6));if(offered){lua_pushinteger(l,30+i);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,name=="check-recover"&&i==5?"recover_reservation":names[i]);}}
+  }
   lua_call(l, 2, LUA_MULTRET);
   return lua_gettop(l);
 }
@@ -3532,6 +3572,10 @@ void validate_response(command_state& c, const value_ptr& response) {
     return;
   }
 #endif
+  if(std::holds_alternative<command_check_options>(c.options)){
+    if(c.check_stage!=7||!same(response->fields.at("value"),c.facts))command_refuse();
+    auto encoded=codec_encode(c.facts);if(!encoded)throw encoded.error().detail;return;
+  }
   const std::size_t load_calls = c.load_format3 ? 4 : 3;
   if (c.calls != (c.name == "render" ? 2 : c.name == "load" ? load_calls : c.name == "activate" ? 2 : 1))
     command_refuse();
@@ -4166,6 +4210,7 @@ command_service_result command_services::accept_load(const command_load_options&
                                                      ledger::completion_receipt&) {
   command_refuse();
 }
+command_service_result command_services::check_step(const command_check_options&,std::string_view,const value_ptr&){command_refuse();}
 command_service_result command_services::read_execution(const command_activate_options&) {
   command_refuse();
 }
@@ -5763,6 +5808,7 @@ std::expected<void, registration_error> admit_family_slots(profile_capture& capt
     std::expected<void, registration_error> operator()(const command_load_options&) const {
       return std::unexpected(profile_owner_protocol_error());
     }
+    std::expected<void,registration_error> operator()(const command_check_options& o)const{return admit_ledger(capture,o.ledger);}
     std::expected<void, registration_error> operator()(const command_activate_options& o) const {
       return admit_ledger(capture, o.ledger);
     }
@@ -5800,6 +5846,7 @@ bool same_options(const command_options& a, const command_options& b) {
              x.expect_revision == y.expect_revision && x.request_id == y.request_id && x.actor == y.actor &&
              x.expected_head == y.expected_head;
     }
+    bool operator()(const command_check_options& x)const{return x==std::get<command_check_options>(other);}
     bool operator()(const command_activate_options& x) const {
       const auto& y = std::get<command_activate_options>(other);
       return x.ledger == y.ledger && x.job == y.job && x.expect_revision == y.expect_revision && x.expect_job == y.expect_job &&

@@ -1,12 +1,24 @@
 -- R17 trusted check planning and completion applicability. Pure over accepted snapshots; native owns all I/O.
 -- Embed after dispatch.lua, before review.lua. Integration installs hooks.acceptance and hooks.blockers_to_clear.
 local checks=(function()
+local function metered_sort(values,less)
+ less=less or function(a,b)return a<b end
+ local n,width=#values,1
+ while width<n do
+  local out={}
+  for lo=1,n,width*2 do local mid,hi=math.min(lo+width,n+1),math.min(lo+2*width,n+1);local a,b=lo,mid
+   for i=lo,hi-1 do if b>=hi or (a<mid and not less(values[b],values[a]))then out[i]=values[a];a=a+1 else out[i]=values[b];b=b+1 end end
+  end
+  for i=1,n do values[i]=out[i]end;width=width*2
+ end
+end
+local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return ""..v end;return v==nil and "nil" or v==true and "true" or v==false and "false" or "unsupported"end
  local M={hooks={}}
  local function arr(t)return engine and engine.array and engine.array(t or {}) or (t or {}) end
  local function obj(t)return engine and engine.object and engine.object(t) or t end
  local function fp(v)if type(v)=="string" and #v==32 then return "xxh3_128:"..v end;return v end
- local function eq(a,b)return a~=nil and b~=nil and tostring(a)==tostring(b) end
- local function sorted(t,key)local out={};for _,v in ipairs(t or {})do out[#out+1]=v end;table.sort(out,function(a,b)return key(a)<key(b)end);return arr(out)end
+ local function eq(a,b)return a~=nil and b~=nil and scalar_text(a)==scalar_text(b) end
+ local function sorted(t,key)local out={};for _,v in ipairs(t or {})do out[#out+1]=v end;metered_sort(out,function(a,b)return key(a)<key(b)end);return arr(out)end
  local function row(S,role)for _,r in ipairs(S.roles or {})do if r.job==S.active_job and r.role==role then return r end end end
  local function structure(r)return r and type(r.generation)=="table" and r.generation.structure or {} end
  local function lineage(r,g)
@@ -18,7 +30,7 @@ local checks=(function()
  local function completion_list(S,role)
   local r=row(S,role);local out={}
   for _,c in ipairs(S.completions or {})do if c.job==S.active_job and c.role==role and lineage(r,c.generation)then out[#out+1]=c end end
-  table.sort(out,function(a,b)return tonumber(a.seq)>tonumber(b.seq)end);return out
+  metered_sort(out,function(a,b)return tonumber(a.seq)>tonumber(b.seq)end);return out
  end
  function M.current_completion(S,role)return completion_list(S,role)[1]end
  function M.unit_output(c,work)for _,u in ipairs(c and c.units or {})do if u.work==work then return u.output end end end
@@ -66,7 +78,7 @@ local checks=(function()
   for _,e in ipairs(W.effective_checks or {})do for _,id in ipairs(e.checks)do local c=definitions[id];local t=c and tools[c.toolchain];if not t then return nil,"internal"end
    local env={};for _,v in ipairs(t.environment or {})do env[v.name]=v.value end
    local vector={e.work};for _,input in ipairs(c.inputs or {})do if input=="output_vector"then for id in pairs(producer_ids)do vector[#vector+1]=id end elseif input=="expected_contracts"then need_contracts=true end end
-   table.sort(vector)
+   metered_sort(vector)
    plan_checks[#plan_checks+1]=obj({work=e.work,check=c.id,toolchain=c.toolchain,command=t.command,argv=c.argv,environment=obj(env),timeout_ms=c.timeout_ms,max_output_bytes=c.max_output_bytes,selection=c.selection,inputs=c.inputs,coverage=c.coverage,vector=arr(vector)})
   end end
   if need_contracts then for _,entry in ipairs(W.contracts or {})do
@@ -78,7 +90,7 @@ local checks=(function()
   end end
   local facets={};for _,f in ipairs(location and location.spec.facets or W.facets or {})do if selected[f.producer or f.work]then facets[#facets+1]=obj({work=f.producer or f.work,facet=f.id,paths=f.paths})end end
   local registry=location and location.registry or {}
-  return obj({version=1,job=S.active_job,role=role,run=tostring(r.run.id),generation=tostring(r.generation.id),root=W.root,base=W.base.label,registry=obj({id=registry.id or "",revision=registry.revision or ""}),units=sorted(units,function(v)return v.work end),checks=sorted(plan_checks,function(v)return v.work.."\0"..v.check end),contracts=sorted(contracts,function(v)return v.id end),facets=sorted(facets,function(v)return v.work.."\0"..v.facet end),owned=sorted(owned,function(v)return v end),frozen=W.ownership.frozen,excluded=W.ownership.excluded,producers=sorted(producers,function(v)return v.work end)})
+  return obj({version=1,job=S.active_job,role=role,run=scalar_text(r.run.id),generation=scalar_text(r.generation.id),root=W.root,base=W.base.label,registry=obj({id=registry.id or "",revision=registry.revision or ""}),units=sorted(units,function(v)return v.work end),checks=sorted(plan_checks,function(v)return v.work.."\0"..v.check end),contracts=sorted(contracts,function(v)return v.id end),facets=sorted(facets,function(v)return v.work.."\0"..v.facet end),owned=sorted(owned,function(v)return v end),frozen=W.ownership.frozen,excluded=W.ownership.excluded,producers=sorted(producers,function(v)return v.work end)})
  end
  local function add(set,key)set[key]=true end
  function M.evaluate(S,plan,result,options)
@@ -96,7 +108,7 @@ local checks=(function()
    if not ok then add(withheld,"complete_prerequisite")end
   end end
   if options.retry_exhausted then add(withheld,"retry_exhausted")end
-  local reasons={};for reason in pairs(withheld)do reasons[#reasons+1]=reason end;table.sort(reasons)
+  local reasons={};for reason in pairs(withheld)do reasons[#reasons+1]=reason end;metered_sort(reasons)
   local transitions,vector={},{}
   if #reasons==0 then transitions[1]=obj({job=plan.job,role=plan.role,before_state="running",before_drifted=false,after_state="done",after_drifted=false,reason="completed"})end
   for _,v in ipairs(S.roles or {})do if v.job==plan.job then vector[#vector+1]=obj({job=v.job,role=v.role,state=v.role==plan.role and #reasons==0 and "done" or v.state,drifted=v.drifted==true})end end
@@ -118,10 +130,10 @@ local checks=(function()
    local r=original[plan.role];local current=M.current_work(S,r);local sequence=tonumber(S.last_seq or "0");for _,c in ipairs(S.completions or {})do sequence=math.max(sequence,tonumber(c.seq))end;sequence=sequence+1;local units=result.observation and result.observation.units or {}
    local vectors={};for _,e in ipairs(result.evidence or {})do if e.vector then vectors[#vectors+1]={work=e.work,targets=e.vector.targets}end end
    next.completions={};for _,c in ipairs(S.completions or {})do next.completions[#next.completions+1]=c end
-   next.completions[#next.completions+1]={id="0",job=plan.job,role=plan.role,generation=r.generation.id,run=plan.run,dispatch=r.run.dispatch.id,work_fp=current.digest,seq=tostring(sequence),units=units,vectors=vectors}
+   next.completions[#next.completions+1]={id="0",job=plan.job,role=plan.role,generation=r.generation.id,run=plan.run,dispatch=r.run.dispatch.id,work_fp=current.digest,seq=scalar_text(sequence),units=units,vectors=vectors}
    local own={};for _,u in ipairs(plan.units)do own[u.work]=true end
    next.observed={};for _,o in ipairs(S.observed or {})do if not own[o.work]then next.observed[#next.observed+1]=o end end
-   for _,u in ipairs(units)do if own[u.work]then next.observed[#next.observed+1]={work=u.work,output=u.output,seq=tostring(sequence)}end end
+   for _,u in ipairs(units)do if own[u.work]then next.observed[#next.observed+1]={work=u.work,output=u.output,seq=scalar_text(sequence)}end end
    next.publications={};local new={};for _,f in ipairs(result.facets or result.publications or {})do new[f.facet]=true;next.publications[#next.publications+1]={job=plan.job,role=plan.role,work=f.work,facet=f.facet,semantic=f.semantic}end
    for _,f in ipairs(S.publications or {})do if not new[f.facet]then next.publications[#next.publications+1]=f end end
   end

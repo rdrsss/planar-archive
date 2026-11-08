@@ -87,9 +87,15 @@ struct command_authoring_options {
   std::string            job;                                        ///< Selected job ID or empty.
 };
 #endif
+/// R17/R18 invocation-local execution intent; secrets stay out of request framing.
+struct command_check_options {
+  std::string operation,ledger,run,run_id,reservation,confirm_stopped,root,base_root,scratch,verdict,request_id,actor;
+  std::optional<std::string> provenance;
+  bool operator==(const command_check_options&) const = default;
+};
 /// Exactly one compiled family intent, copied into the invocation owner.
 using command_options = std::variant<command_render_options, command_init_options, command_history_options,
-                                     command_export_options, command_load_options, command_activate_options>;
+                                     command_export_options, command_load_options, command_activate_options, command_check_options>;
 /// Verified history selector passed to the finite native boundary.
 struct command_history_selector {
   std::string  selector;   ///< Fixed selector name.
@@ -106,6 +112,8 @@ struct command_service_result {
 /// @note Implementations are called synchronously without concurrent VM access. They must release write locks before returning.
 class command_services {
 public:
+  /// Finite R17/R18 service boundary; native adapters retain captured facts across calls.
+  virtual command_service_result check_step(const command_check_options&, std::string_view, const value_ptr&);
   virtual ~command_services() = default;
   /// @brief Capture the declaration at the private workspace option.
   /// @param options Retained parsed native intent.
