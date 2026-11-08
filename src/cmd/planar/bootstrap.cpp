@@ -10,6 +10,14 @@ import planar.cmd.planar.handlers.source_export;
 import planar.cmd.planar.handlers.load;
 import planar.cmd.planar.handlers.extension;
 import planar.cmd.execution.activate;
+import planar.cmd.execution.status;
+import planar.cmd.execution.preview;
+import planar.cmd.execution.claim;
+import planar.cmd.execution.refresh;
+import planar.cmd.execution.checkpoint;
+import planar.cmd.execution.release;
+import planar.cmd.execution.recover;
+import planar.cmd.execution.takeover;
 #ifdef PLANAR_AUTHORING_BUNDLE
 import planar.cmd.authoring;
 import planar.cmd.authoring.spec_prompt;
@@ -34,6 +42,14 @@ constexpr std::string_view default_root_help =
     "--actor TEXT\n"
     "planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor "
     "TEXT\n"
+    "planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE --registry FILE]\n"
+    "planar preview --ledger PATH --role ID\n"
+    "planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]\n"
+    "planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]\n"
+    "planar refresh --ledger PATH --run TOKEN --request-id ID --actor TEXT\n"
+    "planar checkpoint --ledger PATH --run TOKEN --request-id ID --actor TEXT\n"
+    "planar release --ledger PATH --run TOKEN --request-id ID --actor TEXT\n"
+    "planar recover --ledger PATH --role ID [--root ID=DIRECTORY --base-root ID=DIRECTORY]\n"
     "planar --help\n";
 } // namespace
 namespace {
@@ -79,6 +95,22 @@ struct shipped_families {
   // Activate binds through the real handler module in every composition (DD27), hence the qualified names.
   ::planar::cmd::handlers::activate_options activate;
   CLI::App*                                 activate_command = nullptr;
+  ::planar::cmd::handlers::status_options status;
+  ::planar::cmd::handlers::preview_options preview;
+  CLI::App* status_command = nullptr;
+  CLI::App* preview_command = nullptr;
+  ::planar::cmd::handlers::claim_options claim;
+  ::planar::cmd::handlers::takeover_options takeover;
+  CLI::App* claim_command=nullptr;
+  ::planar::cmd::handlers::refresh_options refresh;
+  CLI::App* refresh_command=nullptr;
+  ::planar::cmd::handlers::checkpoint_options checkpoint;
+  CLI::App* checkpoint_command=nullptr;
+  ::planar::cmd::handlers::release_options release;
+  CLI::App* release_command=nullptr;
+  ::planar::cmd::handlers::recover_options recover;
+  CLI::App* recover_command=nullptr;
+  CLI::App* takeover_command=nullptr;
   CLI::App*                 render_command  = nullptr;
   CLI::App*                 init_command    = nullptr;
   CLI::App*                 history_command = nullptr;
@@ -92,16 +124,24 @@ struct shipped_families {
     load_command    = &handlers::attach_load(root, load);
     // P2-7 order: the R15 verbs follow load.
     activate_command = &::planar::cmd::handlers::attach_activate(root, activate);
+    status_command = &::planar::cmd::handlers::attach_status(root, status);
+    preview_command = &::planar::cmd::handlers::attach_preview(root, preview);
+    claim_command=&::planar::cmd::handlers::attach_claim(root,claim);
+    refresh_command=&::planar::cmd::handlers::attach_refresh(root,refresh);
+    checkpoint_command=&::planar::cmd::handlers::attach_checkpoint(root,checkpoint);
+    release_command=&::planar::cmd::handlers::attach_release(root,release);
+    recover_command=&::planar::cmd::handlers::attach_recover(root,recover);
+    takeover_command=&::planar::cmd::handlers::attach_takeover(root,takeover);
   }
   std::size_t selected() const {
     return render_command->count() + init_command->count() + history_command->count() + export_command->count() +
-           load_command->count() + activate_command->count();
+           load_command->count() + activate_command->count() + status_command->count() + preview_command->count() + claim_command->count() + refresh_command->count() + checkpoint_command->count() + release_command->count() + recover_command->count() + takeover_command->count();
   }
   /// Tokens CLI11 bound to the selected command: its name plus one per flag and two per scalar option.
   std::size_t parsed_tokens() const {
     std::size_t total = selected();
     for (const auto* registered :
-         {render_command, init_command, history_command, export_command, load_command, activate_command})
+         {render_command, init_command, history_command, export_command, load_command, activate_command, status_command, preview_command, claim_command, refresh_command, checkpoint_command, release_command, recover_command, takeover_command})
       for (const auto* option : registered->get_options())
         total += option->count() * (option->get_expected_max() == 0 ? 1 : 2);
     return total;
@@ -406,6 +446,14 @@ response invoke_with_profile(const envelope::prefix_binding& binding, std::size_
       return detail::usage();
     if (families.activate_command->count() == 1)
       return ::planar::cmd::handlers::activate_with_profile(families.activate, prefix.selector);
+    if (families.status_command->count() == 1) return ::planar::cmd::handlers::status_with_profile(families.status, prefix.selector);
+    if (families.preview_command->count() == 1) return ::planar::cmd::handlers::preview_with_profile(families.preview, prefix.selector);
+    if (families.takeover_command->count() == 1) return ::planar::cmd::handlers::takeover_with_profile(families.takeover, prefix.selector);
+    if (families.recover_command->count() == 1) return ::planar::cmd::handlers::recover_with_profile(families.recover, prefix.selector);
+    if (families.release_command->count() == 1) return ::planar::cmd::handlers::release_with_profile(families.release, prefix.selector);
+    if (families.checkpoint_command->count() == 1) return ::planar::cmd::handlers::checkpoint_with_profile(families.checkpoint, prefix.selector);
+    if (families.refresh_command->count() == 1) return ::planar::cmd::handlers::refresh_with_profile(families.refresh, prefix.selector);
+    if (families.claim_command->count() == 1) return ::planar::cmd::handlers::claim_with_profile(families.claim, prefix.selector);
     // The probe state is the final state: the same options object is admitted and dispatched.
     return execute_with_profile(families.intent(), prefix.selector);
   }
@@ -478,6 +526,14 @@ response invoke(std::span<const std::string_view> arguments) {
 #endif
     if (families.activate_command->count() == 1)
       return ::planar::cmd::handlers::activate_command(families.activate);
+    if (families.status_command->count() == 1) return ::planar::cmd::handlers::status_command(families.status);
+    if (families.preview_command->count() == 1) return ::planar::cmd::handlers::preview_command(families.preview);
+    if (families.takeover_command->count() == 1) return ::planar::cmd::handlers::takeover_command(families.takeover);
+    if (families.recover_command->count() == 1) return ::planar::cmd::handlers::recover_command(families.recover);
+    if (families.release_command->count() == 1) return ::planar::cmd::handlers::release_command(families.release);
+    if (families.checkpoint_command->count() == 1) return ::planar::cmd::handlers::checkpoint_command(families.checkpoint);
+    if (families.refresh_command->count() == 1) return ::planar::cmd::handlers::refresh_command(families.refresh);
+    if (families.claim_command->count() == 1) return ::planar::cmd::handlers::claim_command(families.claim);
     if (families.load_command->count() == 1)
       return handlers::load_command(families.load, &*vm);
     if (families.export_command->count() == 1)

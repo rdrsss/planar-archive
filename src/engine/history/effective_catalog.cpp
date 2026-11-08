@@ -171,6 +171,27 @@ std::vector<signature> shipped_signature(std::string_view name) {
   if (name == "activate")
     return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
             {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  if (name=="recover") return {{"--ledger","text",true},{"--role","text",true},{"--root","text",false},{"--base-root","text",false}};
+  if (name=="refresh" || name=="checkpoint" || name=="release") {
+    std::vector<signature> o{{"--ledger","text",true},{"--run","text",true},{"--request-id","text",true},{"--actor","text",true},{"--observations","text",name=="checkpoint"}};
+    if (name=="refresh") o.push_back({"--expect-fp","text",true});
+    if (name=="release") {o.push_back({"--reason","text",true});o.push_back({"--provenance","text",false});}
+    return o;
+  }
+  if (name == "claim" || name == "takeover") {
+    std::vector<signature> options{{"--ledger","text",true},{"--job","text",true},{"--role","text",true},
+      {"--request-id","text",true},{"--actor","text",true},{"--provenance","text",false}};
+    if (name=="takeover") options.push_back({"--run-id","text",true});
+    return options;
+  }
+  if (name == "status")
+    return {{"--ledger", "text", true},
+            {"--role", "text", false},
+            {"--request-id", "text", false},
+            {"--workspace", "text", false},
+            {"--registry", "text", false}};
+  if (name == "preview")
+    return {{"--ledger", "text", true}, {"--role", "text", true},{"--since","text",false}};
   return {};
 }
 void validate(const value_ptr& root, std::span<const std::string_view> shipped, std::span<const std::string_view> external) {
@@ -187,7 +208,11 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
                                                             {"history", "read_history_v1"},
                                                             {"export", "export_source_v1"},
                                                             {"load", "accept_load_v1"},
-                                                            {"activate", "execution_commit_v1"}};
+                                                            {"activate", "execution_commit_v1"},
+                                                            {"status", "execution_read_v1"},
+                                                            {"preview", "execution_read_v1"}, {"claim","execution_commit_v1"}, {"takeover","execution_commit_v1"},{"refresh","execution_commit_v1"},{"checkpoint","execution_commit_v1"},{"release","execution_commit_v1"},{"recover","execution_read_v1"}};
+  // Draft (R15-D P1, DD-D1): additional capabilities of the shipped rows that carry a capability list.
+  const std::map<std::string_view, std::string_view> native_more{{"status", "draft_capture_v1"},{"claim","provenance_read_v1"},{"takeover","provenance_read_v1"}};
   for (auto kind : {"commands", "shapes", "projections"}) {
     std::string_view previous;
     bool             first = true;
@@ -238,7 +263,8 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
       std::vector<signature> expected;
       if (is_shipped) {
         if (!native.contains(name) || family != name || handler != std::string("shipped.") + std::string(name) + ".v1" ||
-            response != std::string(name) + "_v1" || caps.size() != 1 || !caps.contains(native.at(name)))
+            response != std::string(name=="takeover" ? "claim" : name) + "_v1" || caps.size() != (native_more.contains(name) ? 2u : 1u) ||
+            !caps.contains(native.at(name)) || (native_more.contains(name) && !caps.contains(native_more.at(name))))
           c.fail();
         mandatory.insert(name);
         expected = shipped_signature(name);
@@ -297,7 +323,7 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
     }
     c.field = "catalog";
   }
-  if (mandatory.size() != 6)
+  if (mandatory.size() != native.size())
     c.fail();
 }
 catalog_error codec_error(const diagnostic& error) {

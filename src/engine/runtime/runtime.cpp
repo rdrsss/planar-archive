@@ -23,7 +23,7 @@ import planar.engine.history.effective_catalog;
 import planar.engine.history.effective_provenance;
 namespace planar::engine {
 namespace {
-constexpr std::size_t command_catalog_size     = 6;
+constexpr std::size_t command_catalog_size     = 14;
 constexpr std::size_t command_registration_cap = 64;
 // Compile-time bundle selection: only test variant targets define PLANAR_AUTHORING_BUNDLE.
 #ifdef PLANAR_AUTHORING_BUNDLE
@@ -1204,6 +1204,7 @@ struct command_state {
   ledger::completion_receipt               completion;
   command_services*                        services = nullptr;
   bool load_format3 = false; ///< Latched when the handler starts: the services offered read_execution to load (DD1).
+  value_ptr execution_read;  ///< Result of read_execution for status and preview; the response must name its ledger.
   extension_history_bridge                 extension_history;
   std::map<std::string, const void*>       handles;
   std::size_t                              calls       = 0;
@@ -1341,7 +1342,7 @@ std::vector<signature_option> command_signature(std::string_view name) {
     return {{"--ledger", "text", true}, {"--workspace-id", "text", true}};
   if (name == "history")
     return {{"--ledger", "text", true},       {"--request-id", "text", false},     {"--revision", "decimal", false},
-            {"--at-event", "decimal", false}, {"--after-event", "decimal", false}, {"--limit", "decimal", false}};
+            {"--at-event", "decimal", false}, {"--after-event", "decimal", false}, {"--limit", "decimal", false},{"--event","decimal",false}};
   if (name == "export")
     return {{"--ledger", "text", true}, {"--target", "text", true}, {"--revision", "decimal", true}};
   if (name == "spec-prompt" || name == "critique" || name == "ingest")
@@ -1361,6 +1362,29 @@ std::vector<signature_option> command_signature(std::string_view name) {
   if (name == "activate")
     return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
             {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  // P2-7: status --ledger! and four optional text options; preview --ledger! --role!.
+  if (name=="recover") return {{"--ledger","text",true},{"--role","text",true},{"--root","text",false},{"--base-root","text",false}};
+  if (name=="refresh" || name=="checkpoint" || name=="release") {
+    std::vector<signature_option> o{{"--ledger","text",true},{"--run","text",true},{"--request-id","text",true},{"--actor","text",true},
+      {"--observations","text",name=="checkpoint"}};
+    if (name=="refresh") o.push_back({"--expect-fp","text",true});
+    if (name=="release") {o.push_back({"--reason","text",true});o.push_back({"--provenance","text",false});}
+    return o;
+  }
+  if (name == "claim" || name == "takeover") {
+    std::vector<signature_option> options{{"--ledger","text",true},{"--job","text",true},{"--role","text",true},
+      {"--request-id","text",true},{"--actor","text",true},{"--provenance","text",false}};
+    if (name == "takeover") options.push_back({"--run-id","text",true});
+    return options;
+  }
+  if (name == "status")
+    return {{"--ledger", "text", true},
+            {"--role", "text", false},
+            {"--request-id", "text", false},
+            {"--workspace", "text", false},
+            {"--registry", "text", false}};
+  if (name == "preview")
+    return {{"--ledger", "text", true}, {"--role", "text", true},{"--since","text",false}};
   command_refuse();
 }
 void help_text(const std::string& text) {
@@ -1370,17 +1394,27 @@ void help_text(const std::string& text) {
     if ((ch < 32 && ch != '\n' && ch != '\t') || ch == 127)
       command_refuse();
 }
+/// One embedded catalog row. Capabilities form an ordered list (draft decision DD-D1); `capability_more` is the optional
+/// second member, empty for single-capability rows. Lists are sorted by unsigned bytes, as the effective catalog requires.
 struct bundle_row {
   std::string_view name, handler, kind, capability;
   bool             authoring_only;
   std::string_view capability2={},capability3={};
 };
-constexpr std::array<bundle_row, 15> bundle_table{{
-    {"check","shipped.check.v1","check_v1","execution_commit_v1",false,"provenance_read_v1","check_run_v1"},
+constexpr std::array<bundle_row, 23> bundle_table{{
+    {"check","shipped.check.v1","check_v1","check_run_v1",false,"execution_commit_v1","provenance_read_v1"},
     {"check-recover","shipped.check_recover.v1","check_v1","execution_commit_v1",false},
     {"verdict","shipped.verdict.v1","verdict_response_v1","execution_commit_v1",false,"verdict_read_v1"},
     {"render", "shipped.render.v1", "render_v1", "render_capture_v1", false},
     {"activate", "shipped.activate.v1", "activate_v1", "execution_commit_v1", false},
+    {"refresh","shipped.refresh.v1","refresh_v1","execution_commit_v1",false},
+    {"checkpoint","shipped.checkpoint.v1","checkpoint_v1","execution_commit_v1",false},
+    {"release","shipped.release.v1","release_v1","execution_commit_v1",false},
+    {"recover","shipped.recover.v1","recover_v1","execution_read_v1",false},
+    {"claim", "shipped.claim.v1", "claim_v1", "execution_commit_v1", false, "provenance_read_v1"},
+    {"takeover", "shipped.takeover.v1", "claim_v1", "execution_commit_v1", false, "provenance_read_v1"},
+    {"status", "shipped.status.v1", "status_v1", "draft_capture_v1", false, "execution_read_v1"},
+    {"preview", "shipped.preview.v1", "preview_v1", "execution_read_v1", false},
     {"init", "shipped.init.v1", "init_v1", "initialize_ledger_v1", false},
     {"history", "shipped.history.v1", "history_v1", "read_history_v1", false},
     {"export", "shipped.export.v1", "export_v1", "export_source_v1", false},
@@ -2493,8 +2527,9 @@ void prepare_invocation(command_state& c) {
           };
           id("revision", o.revision);
           id("at-event", o.at_event);
+          id("event",o.event);
           id("after-event", o.after_event);
-          int selectors = o.revision.has_value() + o.at_event.has_value() + o.request_id.has_value();
+          int selectors = o.revision.has_value() + o.at_event.has_value() + o.request_id.has_value() + o.event.has_value();
           if (selectors > 1 || (selectors && (o.after_event || o.limit)))
             command_refuse();
           if (o.request_id) {
@@ -2551,6 +2586,49 @@ void prepare_invocation(command_state& c) {
           add("expect-job", command_text(o.expect_job));
           add("request-id", command_text(o.request_id));
           add("actor", command_text(o.actor));
+        } else if constexpr (std::is_same_v<T, command_recovery_options>) {
+          c.name=o.operation; path("ledger",o.ledger);
+          if (o.run.empty()) command_refuse();
+          add("run",command_text("native")); add("request-id",command_text(o.request_id)); add("actor",command_text(o.actor));
+          path("observations",o.observations.value_or(""),o.observations.has_value());
+          if (o.operation=="refresh") add("expect-fp",command_text(o.expect_fp));
+          if (o.operation=="release") {add("reason",command_text(o.reason));path("provenance",o.provenance.value_or(""),o.provenance.has_value());}
+        } else if constexpr (std::is_same_v<T, command_recover_options>) {
+          c.name="recover"; path("ledger",o.ledger); require_token(o.role); add("role",command_text(o.role));
+          path("root",o.root.value_or(""),o.root.has_value()); path("base-root",o.base_root.value_or(""),o.base_root.has_value());
+        } else if constexpr (std::is_same_v<T, command_run_options>) {
+          c.name=o.run_id ? "takeover" : "claim";
+          path("ledger",o.ledger); require_token(o.job); require_token(o.role);
+          add("job",command_text(o.job)); add("role",command_text(o.role));
+          add("request-id",command_text(o.request_id)); add("actor",command_text(o.actor));
+          path("provenance",o.provenance.value_or(""),o.provenance.has_value());
+          if (o.run_id) { if (!decimal_id(*o.run_id)) command_refuse(); add("run-id",command_text(*o.run_id)); }
+        } else if constexpr (std::is_same_v<T, command_status_options>) {
+          // P2-1: --role excludes --request-id; --workspace and --registry both or neither.
+          c.name = "status";
+          path("ledger", o.ledger);
+          if ((o.role && o.request_id) || o.workspace.has_value() != o.registry.has_value())
+            command_refuse();
+          if (o.role)
+            require_token(*o.role);
+          if (o.request_id) {
+            if (o.request_id->empty() || o.request_id->size() > 128)
+              command_refuse();
+            for (unsigned char ch : *o.request_id)
+              if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_' || ch == '.' ||
+                    ch == ':' || ch == '-'))
+                command_refuse();
+          }
+          path("workspace", o.workspace.value_or(""), o.workspace.has_value());
+          path("registry", o.registry.value_or(""), o.registry.has_value());
+          add("role", command_text(o.role.value_or("")), o.role.has_value());
+          add("request-id", command_text(o.request_id.value_or("")), o.request_id.has_value());
+        } else if constexpr (std::is_same_v<T, command_preview_options>) {
+          c.name = "preview";
+          path("ledger", o.ledger);
+          require_token(o.role);
+          add("role", command_text(o.role));
+          add("since",command_text(o.since.value_or("")),o.since.has_value());
         } else {
           c.name = "export";
           path("ledger", o.ledger);
@@ -3079,6 +3157,8 @@ command_history_selector history_selector(const command_history_options& o) {
   if (o.revision) {
     s.selector = "revision";
     s.id       = std::to_string(*o.revision);
+  } else if (o.event) {
+    s.selector="event"; s.id=std::to_string(*o.event);
   } else if (o.at_event) {
     s.selector = "state";
     s.id       = std::to_string(*o.at_event);
@@ -3113,6 +3193,14 @@ void validate_route(command_state& c, const value_ptr& route) {
       command_refuse();
   }
 }
+/// The status intent of a status invocation, or null for every other command.
+const command_status_options* status_intent(const command_state& c) {
+  return c.name == "status" ? std::get_if<command_status_options>(&c.options) : nullptr;
+}
+/// Ordinal of the draft open_workspace call of a status invocation: after read_execution and, when present, read_request.
+std::size_t status_open_call(const command_status_options& o) {
+  return o.request_id ? 2 : 1;
+}
 // Native argument/result owners exist only in this non-allocating-Lua frame.
 void call_service_native(lua_State* l, int operation) {
   auto& s = context(l);
@@ -3128,8 +3216,10 @@ void call_service_native(lua_State* l, int operation) {
 #else
     constexpr bool authoring_open = false;
 #endif
-    if ((!authoring_open && c.name != "render" && c.name != "load") || c.calls != 0 || lua_type(l, 1) != LUA_TTABLE ||
-        lua_getmetatable(l, 1))
+    const auto* status      = status_intent(c);
+    const bool  status_open = status && status->workspace && c.calls == status_open_call(*status);
+    if ((!authoring_open && c.name != "render" && c.name != "load" && !status_open) || (!status_open && c.calls != 0) ||
+        lua_type(l, 1) != LUA_TTABLE || lua_getmetatable(l, 1))
       command_refuse();
     lua_pushnil(l);
     int fields = 0;
@@ -3149,6 +3239,8 @@ void call_service_native(lua_State* l, int operation) {
 #endif
         if (c.name == "load")
       result = c.services->open_workspace(std::get<command_load_options>(c.options));
+    else if (status_open)
+      result = c.services->open_workspace(*status);
     else
       result = c.services->open_workspace(std::get<command_render_options>(c.options));
   } else {
@@ -3215,12 +3307,24 @@ void call_service_native(lua_State* l, int operation) {
       result = c.services->capture_load(std::get<command_load_options>(c.options), args->fields.at("route"));
     } else if (operation == 11) {
       // read_execution({}): format3 load after capture (DD1), or the first activate service.
-      const bool load_read = c.name == "load" && c.load_format3 && c.calls == 2;
-      if (!load_read && !(c.name == "activate" && c.calls == 0))
+      // status and preview read first (P2-1 services table).
+      const bool load_read  = c.name == "load" && c.load_format3 && c.calls == 2;
+      const bool first_read = (c.name == "activate" || c.name == "status" || c.name == "preview" || c.name == "claim" || c.name == "takeover" || c.name == "refresh" || c.name == "checkpoint" || c.name == "release" || c.name == "recover") && c.calls == 0;
+      if (!load_read && !first_read)
         command_refuse();
       exact(args, {});
       if (load_read)
         result = c.services->read_execution(std::get<command_load_options>(c.options));
+      else if (c.name == "refresh" || c.name == "checkpoint" || c.name == "release")
+        result=c.services->read_execution(std::get<command_recovery_options>(c.options));
+      else if (c.name == "recover")
+        result=c.services->read_execution(std::get<command_recover_options>(c.options));
+      else if (c.name == "claim" || c.name == "takeover")
+        result = c.services->read_execution(std::get<command_run_options>(c.options));
+      else if (c.name == "status")
+        result = c.services->read_execution(std::get<command_status_options>(c.options));
+      else if (c.name == "preview")
+        result = c.services->read_execution(std::get<command_preview_options>(c.options));
       else
         result = c.services->read_execution(std::get<command_activate_options>(c.options));
     } else if (operation == 12) {
@@ -3230,6 +3334,53 @@ void call_service_native(lua_State* l, int operation) {
       if (args->fields.at("change")->kind != value_kind::record)
         command_refuse();
       result = c.services->commit_execution(std::get<command_activate_options>(c.options), args->fields.at("change"));
+    } else if (operation == 17) {
+      const auto& o=std::get<command_recovery_options>(c.options);
+      if (c.calls!=1 || !o.observations) command_refuse();
+      exact(args,{"observations"}); result=c.services->read_observations(o);
+    } else if (operation == 18) {
+      const auto& o=std::get<command_recovery_options>(c.options);
+      if (c.calls!=(o.observations ? 2u : 1u) || !o.provenance) command_refuse();
+      exact(args,{"provenance"}); result=c.services->read_provenance(o);
+    } else if (operation == 19) {
+      const auto& o=std::get<command_recovery_options>(c.options);
+      if (c.calls!=1u+o.observations.has_value()+o.provenance.has_value()) command_refuse();
+      exact(args,{"change"}); result=c.services->commit_execution(o,args->fields.at("change"));
+    } else if (operation == 20) {
+      if (c.name!="recover" || c.calls!=1) command_refuse();
+      exact(args,{"job","role"}); result=c.services->read_recovery(std::get<command_recover_options>(c.options));
+    } else if (operation == 21) {
+      if (c.name!="preview" || c.calls!=1) command_refuse();
+      exact(args,{"job","role","render_fp"}); result=c.services->read_dispatch(std::get<command_preview_options>(c.options));
+    } else if (operation == 15) {
+      const auto& o=std::get<command_run_options>(c.options);
+      if (!o.provenance || c.calls!=1) command_refuse();
+      exact(args,{"provenance"});
+      const auto slot=c.handles.find("provenance");
+      if (slot==c.handles.end()) command_refuse();
+      result=c.services->read_provenance(o);
+    } else if (operation == 16) {
+      const auto& o=std::get<command_run_options>(c.options);
+      if (c.calls!=(o.provenance ? 2u : 1u)) command_refuse();
+      exact(args,{"change"});
+      result=c.services->commit_execution(o,args->fields.at("change"));
+    } else if (operation == 13) {
+      // read_request({request_id}): status --request-id, right after read_execution.
+      const auto* status = status_intent(c);
+      if (!status || !status->request_id || c.calls != 1)
+        command_refuse();
+      exact(args, {"request_id"});
+      if (text_field(args, "request_id") != *status->request_id)
+        command_refuse();
+      result = c.services->read_request(*status);
+    } else if (operation == 14) {
+      // capture_drafts({route}): status --workspace --registry, right after its open_workspace.
+      const auto* status = status_intent(c);
+      if (!status || !status->workspace || c.calls != status_open_call(*status) + 1)
+        command_refuse();
+      exact(args, {"route"});
+      validate_route(c, args->fields.at("route"));
+      result = c.services->capture_drafts(*status, args->fields.at("route"));
     } else if (operation == 6) {
       const bool format3 = c.name == "load" && c.load_format3;
       if (c.name != "load" || c.calls != (format3 ? 3u : 2u))
@@ -3373,11 +3524,46 @@ void call_service_native(lua_State* l, int operation) {
     if (operation == 5)
       exact(copied, {"bundle"});
     if (operation == 11) {
-      exact(copied, {"version", "ledger", "last_seq", "snapshot"});
+      if (std::holds_alternative<command_recovery_options>(c.options)) exact(copied,{"version","ledger","last_seq","snapshot","target_job","target_role"});
+      else exact(copied, {"version", "ledger", "last_seq", "snapshot"});
       if (copied->fields.at("version")->kind != value_kind::integer || copied->fields.at("version")->integer != 1 ||
           !ledger_identity(text_field(copied, "ledger")) || !decimal_id(text_field(copied, "last_seq"), true) ||
           copied->fields.at("snapshot")->kind != value_kind::record)
         command_refuse();
+      c.execution_read = copied;
+    }
+    if (operation == 13) {
+      const bool execution_run = copied->fields.contains("disposition");
+      if (execution_run)
+        exact(copied, {"request_id", "operation", "outcome", "result", "disposition"});
+      else
+        exact(copied, {"request_id", "operation", "outcome", "result"});
+      const auto& operation_name = text_field(copied, "operation");
+      if (text_field(copied, "request_id") != *std::get<command_status_options>(c.options).request_id ||
+          execution_run != (operation_name == "claim" || operation_name == "takeover"))
+        command_refuse();
+      text_field(copied, "outcome");
+      if (execution_run) {
+        const auto& disposition = text_field(copied, "disposition");
+        if (disposition != "current" && disposition != "completed" && disposition != "released" &&
+            disposition != "interrupted" && disposition != "fenced")
+          command_refuse();
+      }
+    }
+    if (operation == 14) {
+      const auto& outcome = text_field(copied, "outcome");
+      if (outcome == "captured")
+        exact(copied, {"outcome", "bundle", "changed"});
+      else if (outcome == "rejected") {
+        exact(copied, {"outcome", "error", "changed"});
+        native_error_schema(copied->fields.at("error"));
+      } else
+        command_refuse();
+      if (copied->fields.at("changed")->kind != value_kind::list)
+        command_refuse();
+      for (const auto& item : copied->fields.at("changed")->items)
+        if (item->kind != value_kind::string || !valid_path(item->string))
+          command_refuse();
     }
     if (operation == 12) {
       const auto& o = std::get<command_activate_options>(c.options);
@@ -3467,8 +3653,10 @@ int execute_command(lua_State* l) {
     bool offered = (commands(l).name == "render" && i < 2) || (commands(l).name == "init" && i == 2) ||
                    (commands(l).name == "history" && i == 3) || (commands(l).name == "export" && i == 4) ||
                    (commands(l).name == "load" && (i == 0 || i == 5 || i == 6));
-    if (commands(l).name == "activate")
+    if (commands(l).name == "activate" || commands(l).name == "preview")
       offered = false;
+    if (const auto* status = status_intent(commands(l)))
+      offered = i == 0 && status->workspace.has_value();
 #ifdef PLANAR_AUTHORING_BUNDLE
     if (auto& authoring = commands(l).authoring_options) {
       using verb = command_authoring_verb;
@@ -3487,11 +3675,40 @@ int execute_command(lua_State* l) {
   // Execution services (operations 11 and 12): read_execution for activate and, on a format3 ledger only, for load (DD1);
   // commit_execution for activate.
   commands(l).load_format3 = commands(l).name == "load" && commands(l).services && commands(l).services->load_execution();
-  const bool execution_read = commands(l).name == "activate" || commands(l).load_format3;
+  const bool execution_read = commands(l).name == "activate" || commands(l).name == "status" ||
+                              commands(l).name == "preview" || commands(l).name == "claim" || commands(l).name == "takeover" || commands(l).name == "refresh" || commands(l).name == "checkpoint" || commands(l).name == "release" || commands(l).name == "recover" || commands(l).load_format3;
   if (execution_read) {
     lua_pushinteger(l, 11);
     lua_pushcclosure(l, call_service, 1);
     lua_setfield(l, -2, "read_execution");
+  }
+  // status (P2-1): read_request only with --request-id; capture_drafts only with --workspace and --registry.
+  if (const auto* status = status_intent(commands(l))) {
+    if (status->request_id) {
+      lua_pushinteger(l, 13);
+      lua_pushcclosure(l, call_service, 1);
+      lua_setfield(l, -2, "read_request");
+    }
+    if (status->workspace) {
+      lua_pushinteger(l, 14);
+      lua_pushcclosure(l, call_service, 1);
+      lua_setfield(l, -2, "capture_drafts");
+    }
+  }
+  if (const auto* o=std::get_if<command_recovery_options>(&commands(l).options)) {
+    if (o->observations) {lua_pushinteger(l,17);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_observations");}
+    if (o->provenance) {lua_pushinteger(l,18);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_provenance");}
+    lua_pushinteger(l,19);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"commit_execution");
+  }
+  if (commands(l).name=="recover") {lua_pushinteger(l,20);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_recovery");}
+  if (const auto* o=std::get_if<command_preview_options>(&commands(l).options); o && o->since) {
+    lua_pushinteger(l,21);lua_pushcclosure(l,call_service,1);lua_setfield(l,-2,"read_dispatch");
+  }
+  if (commands(l).name == "claim" || commands(l).name == "takeover") {
+    if (std::get<command_run_options>(commands(l).options).provenance) {
+      lua_pushinteger(l,15); lua_pushcclosure(l,call_service,1); lua_setfield(l,-2,"read_provenance");
+    }
+    lua_pushinteger(l,16); lua_pushcclosure(l,call_service,1); lua_setfield(l,-2,"commit_execution");
   }
   if (commands(l).name == "activate") {
     lua_pushinteger(l, 12);
@@ -3552,6 +3769,49 @@ void validate_authoring_response(command_state& c, const value_ptr& envelope) {
     throw encoded.error().detail;
 }
 #endif
+/// Structural checks of the Lua-built `status_v1` and `preview_v1` envelopes (P2-1): exact keys, the ledger and last event
+/// of the read snapshot, the requested role, and the optional members present exactly when their options were given.
+void validate_execution_read_response(command_state& c, const value_ptr& envelope) {
+  if (!c.execution_read)
+    command_refuse();
+  const auto& read = c.execution_read;
+  if (text_field(envelope, "ledger") != text_field(read, "ledger"))
+    command_refuse();
+  if (c.name == "status") {
+    const auto&                      o = std::get<command_status_options>(c.options);
+    std::initializer_list<std::string_view> base{"version", "kind",       "ledger", "active_revision",
+                                                 "active_job", "last_event", "roles"};
+    std::set<std::string_view>       keys(base);
+    if (o.role)
+      keys.insert("role_detail");
+    if (o.request_id)
+      keys.insert("request");
+    if (o.workspace)
+      keys.insert("drafts");
+    if (envelope->fields.size() != keys.size())
+      command_refuse();
+    for (const auto& [key, _] : envelope->fields)
+      if (!keys.contains(key))
+        command_refuse();
+    if (text_field(envelope, "last_event") != text_field(read, "last_seq") ||
+        envelope->fields.at("roles")->kind != value_kind::list)
+      command_refuse();
+    if (o.role && text_field(envelope->fields.at("role_detail"), "role") != *o.role)
+      command_refuse();
+    if (o.request_id && text_field(envelope->fields.at("request"), "request_id") != *o.request_id)
+      command_refuse();
+    return;
+  }
+  const auto& o = std::get<command_preview_options>(c.options);
+  if (o.since) exact(envelope,{"version","kind","ledger","revision","job","role","generation","state","work_fp","render_digest","bytes","packet","manifest","since"});
+  else exact(envelope, {"version", "kind", "ledger", "revision", "job", "role", "generation", "state", "work_fp", "render_digest",
+                   "bytes", "packet", "manifest"});
+  if (text_field(envelope, "role") != o.role || envelope->fields.at("bytes")->kind != value_kind::integer ||
+      envelope->fields.at("packet")->kind != value_kind::record || envelope->fields.at("manifest")->kind != value_kind::record ||
+      static_cast<std::uint64_t>(envelope->fields.at("bytes")->integer) !=
+          text_field(envelope->fields.at("packet"), "markdown").size())
+    command_refuse();
+}
 void validate_response(command_state& c, const value_ptr& response) {
   if (!response || response->kind != value_kind::record || !response->fields.contains("ok") ||
       response->fields.at("ok")->kind != value_kind::boolean)
@@ -3577,16 +3837,28 @@ void validate_response(command_state& c, const value_ptr& response) {
     auto encoded=codec_encode(c.facts);if(!encoded)throw encoded.error().detail;return;
   }
   const std::size_t load_calls = c.load_format3 ? 4 : 3;
-  if (c.calls != (c.name == "render" ? 2 : c.name == "load" ? load_calls : c.name == "activate" ? 2 : 1))
+  std::size_t       status_calls = 1;
+  if (const auto* status = status_intent(c))
+    status_calls += (status->request_id ? 1 : 0) + (status->workspace ? 2 : 0);
+  const auto* run_options=std::get_if<command_run_options>(&c.options);
+  const auto* recovery_options=std::get_if<command_recovery_options>(&c.options);
+  const auto* preview_options=std::get_if<command_preview_options>(&c.options);
+  if (c.calls != (recovery_options ? 2u+recovery_options->observations.has_value()+recovery_options->provenance.has_value() : c.name=="recover" ? 2u : preview_options ? 1u+preview_options->since.has_value() : run_options ? (run_options->provenance ? 3u : 2u) : c.name == "render"     ? 2
+                  : c.name == "load"     ? load_calls
+                  : c.name == "activate" ? 2
+                  : c.name == "status"   ? status_calls
+                                         : 1))
     command_refuse();
   auto envelope = response->fields.at("value");
   if (!envelope || envelope->kind != value_kind::record || !envelope->fields.contains("version") ||
       envelope->fields.at("version")->kind != value_kind::integer || envelope->fields.at("version")->integer != 1 ||
-      (text_field(envelope, "kind") != c.name && !(c.name == "render" && text_field(envelope, "kind") == "render_external")))
+      (text_field(envelope, "kind") != c.name && !(c.name == "render" && text_field(envelope, "kind") == "render_external") && !(c.name == "takeover" && text_field(envelope,"kind")=="claim")))
     command_refuse();
-  if (c.name == "history" || c.name == "load" || c.name == "activate") {
+  if (c.name == "history" || c.name == "load" || c.name == "activate" || c.name == "claim" || c.name == "takeover" || c.name == "refresh" || c.name == "checkpoint" || c.name == "release") {
     if (!same(envelope, c.facts))
       command_refuse();
+  } else if (c.name == "status" || c.name == "preview") {
+    validate_execution_read_response(c, envelope);
   } else if (c.name == "init" || c.name == "export") {
     if (c.name == "init")
       exact(c.facts, {"ledger", "workspace", "active_revision", "event"});
@@ -3597,6 +3869,8 @@ void validate_response(command_state& c, const value_ptr& response) {
     expected->fields["kind"]    = command_text(c.name);
     if (!same(envelope, expected))
       command_refuse();
+  } else if (c.name=="recover") {
+    if (!c.execution_read || text_field(envelope,"ledger")!=text_field(c.execution_read,"ledger")) command_refuse();
   } else if (text_field(envelope, "kind") == "render_external") {
     // An external shape adds its identity record beside the packet and manifest.
     exact(envelope, {"version", "kind", "packet", "manifest", "shape"});
@@ -4215,6 +4489,31 @@ command_service_result command_services::read_execution(const command_activate_o
   command_refuse();
 }
 command_service_result command_services::commit_execution(const command_activate_options&, const value_ptr&) {
+  command_refuse();
+}
+command_service_result command_services::read_execution(const command_recovery_options&) {command_refuse();}
+command_service_result command_services::read_execution(const command_recover_options&) {command_refuse();}
+command_service_result command_services::read_observations(const command_recovery_options&) {command_refuse();}
+command_service_result command_services::read_provenance(const command_recovery_options&) {command_refuse();}
+command_service_result command_services::commit_execution(const command_recovery_options&,const value_ptr&) {command_refuse();}
+command_service_result command_services::read_recovery(const command_recover_options&) {command_refuse();}
+command_service_result command_services::read_dispatch(const command_preview_options&) {command_refuse();}
+command_service_result command_services::read_execution(const command_run_options&) { command_refuse(); }
+command_service_result command_services::read_provenance(const command_run_options&) { command_refuse(); }
+command_service_result command_services::commit_execution(const command_run_options&, const value_ptr&) { command_refuse(); }
+command_service_result command_services::read_execution(const command_status_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_execution(const command_preview_options&) {
+  command_refuse();
+}
+command_service_result command_services::read_request(const command_status_options&) {
+  command_refuse();
+}
+command_service_result command_services::open_workspace(const command_status_options&) {
+  command_refuse();
+}
+command_service_result command_services::capture_drafts(const command_status_options&, const value_ptr&) {
   command_refuse();
 }
 #ifdef PLANAR_AUTHORING_BUNDLE
@@ -5812,6 +6111,31 @@ std::expected<void, registration_error> admit_family_slots(profile_capture& capt
     std::expected<void, registration_error> operator()(const command_activate_options& o) const {
       return admit_ledger(capture, o.ledger);
     }
+    // P2-7 with-profile slots: the ledger, and for status the draft workspace and registry when supplied.
+    std::expected<void, registration_error> operator()(const command_status_options& o) const {
+      if (auto admitted = admit_ledger(capture, o.ledger); !admitted)
+        return admitted;
+      if (!o.workspace || !o.registry)
+        return {};
+      const auto host = std::filesystem::path(*o.workspace).parent_path().string();
+      if (auto admitted = capture.admit_root("workspace", host); !admitted)
+        return std::unexpected(from_profile_error(std::move(admitted.error())));
+      if (auto admitted = capture.admit_file("declaration", *o.workspace, admission_file_role::declaration); !admitted)
+        return std::unexpected(registration_error{
+            acceptance::known_declaration_error(admitted.error().detail, capture.last_admission_refusal_was_absent()).detail,
+            "profile"});
+      if (auto admitted = capture.admit_file("registry", *o.registry, admission_file_role::registry); !admitted)
+        return std::unexpected(from_profile_error(std::move(admitted.error())));
+      return {};
+    }
+    std::expected<void, registration_error> operator()(const command_recovery_options& o) const {return admit_ledger(capture,o.ledger);}
+    std::expected<void, registration_error> operator()(const command_recover_options& o) const {return admit_ledger(capture,o.ledger);}
+    std::expected<void, registration_error> operator()(const command_run_options& o) const {
+      return admit_ledger(capture,o.ledger);
+    }
+    std::expected<void, registration_error> operator()(const command_preview_options& o) const {
+      return admit_ledger(capture, o.ledger);
+    }
   };
   return std::visit(visitor{capture}, family);
 }
@@ -5833,7 +6157,7 @@ bool same_options(const command_options& a, const command_options& b) {
     }
     bool operator()(const command_history_options& x) const {
       const auto& y = std::get<command_history_options>(other);
-      return x.ledger == y.ledger && x.revision == y.revision && x.at_event == y.at_event && x.after_event == y.after_event &&
+      return x.ledger == y.ledger && x.revision == y.revision && x.at_event == y.at_event && x.event==y.event && x.after_event == y.after_event &&
              x.request_id == y.request_id && x.limit == y.limit;
     }
     bool operator()(const command_export_options& x) const {
@@ -5851,6 +6175,26 @@ bool same_options(const command_options& a, const command_options& b) {
       const auto& y = std::get<command_activate_options>(other);
       return x.ledger == y.ledger && x.job == y.job && x.expect_revision == y.expect_revision && x.expect_job == y.expect_job &&
              x.request_id == y.request_id && x.actor == y.actor;
+    }
+    bool operator()(const command_status_options& x) const {
+      const auto& y = std::get<command_status_options>(other);
+      return x.ledger == y.ledger && x.role == y.role && x.request_id == y.request_id && x.workspace == y.workspace &&
+             x.registry == y.registry;
+    }
+    bool operator()(const command_recovery_options& x) const {
+      const auto& y=std::get<command_recovery_options>(other);
+      return x.operation==y.operation && x.ledger==y.ledger && x.run==y.run && x.request_id==y.request_id && x.actor==y.actor && x.expect_fp==y.expect_fp && x.reason==y.reason && x.observations==y.observations && x.provenance==y.provenance;
+    }
+    bool operator()(const command_recover_options& x) const {
+      const auto& y=std::get<command_recover_options>(other); return x.ledger==y.ledger && x.role==y.role && x.root==y.root && x.base_root==y.base_root;
+    }
+    bool operator()(const command_run_options& x) const {
+      const auto& y=std::get<command_run_options>(other);
+      return x.ledger==y.ledger && x.job==y.job && x.role==y.role && x.request_id==y.request_id && x.actor==y.actor && x.run_id==y.run_id && x.provenance==y.provenance;
+    }
+    bool operator()(const command_preview_options& x) const {
+      const auto& y = std::get<command_preview_options>(other);
+      return x.ledger == y.ledger && x.role == y.role && x.since==y.since;
     }
   };
   return std::visit(visitor{b}, a);

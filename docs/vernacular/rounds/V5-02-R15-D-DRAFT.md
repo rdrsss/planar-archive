@@ -248,3 +248,25 @@ continue); none is an operator decision.
   Lua-memory pins moved by stdlib growth (R15-C DD8), and every existing test broken by catalog growth that the draft
   packages did not repair.
 - Evidence directories and the acceptance-matrix rows.
+
+## Resume implementation, 2026-11-08
+
+Resumed the existing P1 edits and added status/preview, claim/takeover and R16 token
+mutation/recovery command wiring. Runtime intents, CLI11 handlers, catalog rows, native
+services and trusted Lua handlers are present. Native R16/history is committed separately
+as `634be228`. Draft mode remains in force: no review, mutation probes, Linux or full gate.
+
+Development checks: `cmake --build build/rewrite-debug --target planar -j 3` succeeded.
+A temporary-root CLI workflow completed init, load, activate, bare status, preview, claim,
+recover and release. The same development run exposed a repeated Lua array-tag operation
+in status role detail and raw/prefixed digest mismatches in refresh and preview since;
+these were corrected after the run and require the next integrated development build.
+The pre-existing one-job acceptance bug was corrected by copying normalized lists before
+calling the metered sorting helper. No installed binary or operator database was used.
+
+Remaining implementation work moves to the integrated checkout: recover output capture
+(the root options presently have no capture implementation); checkpoint section binding
+for notes supplied during refresh; R17 evidence-dependent release reconciliation; live
+orchestrator service wiring by the sibling command agent. These are implementation gaps,
+not review-only debt. Acquisition/recovery profile framing and capture admission need
+integrated attention. The command draft compiles but is not claimed validated.

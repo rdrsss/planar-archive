@@ -255,7 +255,7 @@ do
     if engine.kind(run)~="object" then bad("run")
     elseif run.kind=="preview" then
       if run.request~=nil or run.previous~=nil then bad("run") end
-    elseif run.kind=="claim" or run.kind=="takeover" then
+    elseif run.kind=="claim" or run.kind=="takeover" or run.kind=="refresh" then
       if type(run.request)~="string" or #run.request==0 then bad("run.request") end
       if (run.kind=="takeover")~=(run.previous~=nil) then bad("run.previous") end
     else bad("run.kind") end
@@ -291,6 +291,10 @@ do
       if i==1 then text="## authority\n\n"..authority_text(context,generation,revision).."\n" end
       sections[#sections+1]={id=entry.id,text=text,mandatory=entry.mandatory,included=true}
       if i==1 then sections[#sections+1]={id="run",text="## run\n\n"..run_text(context.run,role.kind),mandatory=true,included=true} end
+    end
+    if (context.run.kind=="refresh" or context.run.kind=="preview") and context.checkpoint and context.checkpoint~="none" then
+      local c=context.checkpoint
+      sections[#sections+1]={id="checkpoint",text="## checkpoint\n\nCheckpoint "..c.id.." recorded by run "..c.run.." at event "..c.event.."; session note, unverified.\n"..presentation_data("checkpoint; session note, unverified",presentation_json(c.value)),mandatory=false,included=true}
     end
     local assembled=assemble_sections(ctx,sections,{},budget)
     if not assembled then return ctx.finish({}) end
