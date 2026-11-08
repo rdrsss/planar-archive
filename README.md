@@ -8,7 +8,7 @@ bundle includes authoring helpers and live orchestrator prompts. Render remains
 database-free. Execution uses an explicit ledger and driver-supplied checkout;
 Planar does not call models, schedule sessions or manage worktrees.
 
-The execution implementation is being completed on `dev/planar-v2-vernacular`.
+The execution implementation draft is integrated on `dev/planar-v2-vernacular`.
 It is an unreviewed draft: development compilation and focused checks do not
 constitute the final validation gate. The operator requested implementation
 completion before review and fixing rounds. See the [roadmap](docs/vernacular/roadmap.md)

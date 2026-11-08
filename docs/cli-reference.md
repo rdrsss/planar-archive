@@ -2,7 +2,7 @@
 
 The rewrite provides declaration rendering and acceptance, recorded history and export,
 and draft execution commands for run ownership, recovery, checks and review. The
-execution surface is being completed under the operator's implementation-first
+execution surface is integrated under the operator's implementation-first
 workflow; it has not passed the final integrated review or acceptance gate. See the
 [roadmap](vernacular/roadmap.md#current-status) for the exact delivery checkpoint.
 
