@@ -63,6 +63,37 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   local current=M.current_work(S,r);if not current then return nil end
   for _,c in ipairs(completion_list(S,role))do if fp(c.work_fp)==fp(current.digest) and #M.completion_mismatches(S,c)==0 then return c end end
  end
+ -- Qualities affect readiness, never the work fingerprint. Keep current_work pure so review
+ -- acceptance can inspect completion applicability without recursively deriving prerequisites.
+ function M.material(S,r)
+  local material=M.current_work(S,r);if not material then return nil end
+  local W=material.work;local selected={};for _,u in ipairs(W.units or {})do selected[u.id]=true end
+  local accepted
+  local function quality(d)
+   if selected[d.producer]then return true end
+   if d.quality=="done"then local producer=owner(S,d.producer);return producer and M.applicable_completion(S,producer.role)~=nil end
+   if d.quality=="accepted"then
+    if not accepted then accepted={};for _,u in ipairs(M.hooks.acceptance and M.hooks.acceptance(S) or {})do accepted[u.work]=u.accepted end end
+    return accepted[d.producer]==true
+   end
+   if d.source=="contract"then return true end
+   for _,p in ipairs(S.publications or {})do if p.facet==d.ref then return true end end
+   return false
+  end
+  local dependencies={};for _,d in ipairs(W.dependencies or {})do dependencies[d.id]=d end
+  local blocked=false
+  for _,p in ipairs(material.prerequisites or {})do
+   local d=dependencies[p.id]
+   if d then p.status=quality(d) and "available" or "unavailable"
+   elseif p.producer_role then p.status=M.applicable_completion(S,p.producer_role) and "available" or "unavailable" end
+   if p.phase=="start" and p.status~="available" and p.status~="answered" and not(d and selected[d.producer])then blocked=true end
+  end
+  if structure(r).kind=="reviewer"then
+   for _,producer in ipairs(S.roles or {})do if producer.job==S.active_job and producer.state~="retired" and structure(producer).kind=="worker" and not M.applicable_completion(S,producer.role)then blocked=true end end
+  end
+  material.blocked=blocked
+  return material
+ end
  function M.plan(S,role)
   local r=row(S,role);if not r or type(r.run)~="table" then return nil,"fenced"end
   if structure(r).kind=="reviewer"then return nil,"reference"end
@@ -100,7 +131,7 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   for _,e in ipairs(result.evidence or {})do if e.outcome~="pass"then add(withheld,e.reason=="input_changed" and "input_changed" or e.check=="planar.boundary_v1" and "boundary" or "check_failed")end end
   if result.recapture=="differs" or result.recapture_matches==false then add(withheld,"input_changed")end
   if r.drifted then add(withheld,"drifted")end
-  local material=M.current_work(S,r)
+  local material=M.material(S,r)
   for _,p in ipairs(material and material.prerequisites or {})do if p.status~="available" and p.status~="answered"then add(withheld,p.phase=="start" and "start_prerequisite" or "complete_prerequisite")end end
   for _,d in ipairs(material and material.work.dependencies or {})do if d.phase=="complete" and (d.quality=="done" or d.quality=="accepted")then
    local o=owner(S,d.producer);local ok=o and (o.role==plan.role or M.applicable_completion(S,o.role)~=nil)
@@ -141,7 +172,7 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   for _=1,#next.roles+1 do
    local changed=false
    for _,r in ipairs(next.roles)do if r.job==S.active_job and r.state~="retired" and not explicit[r.role]then
-    local before=original[r.role];local material=M.current_work(next,r)
+    local before=original[r.role];local material=M.material(next,r)
     if material then
      local state,drift=r.state,r.drifted==true;local reason
      if r.state=="running"then

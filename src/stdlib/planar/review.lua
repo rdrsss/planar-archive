@@ -756,3 +756,32 @@ if checks then
  checks.hooks.acceptance=review.acceptance
  checks.hooks.blockers_to_clear=review.blockers_to_clear
 end
+
+-- Late-bound dispatch hooks keep the earlier renderer independent of review module order.
+if dispatch_internal then
+ dispatch_internal.material=function(S,role)
+  for _,r in ipairs(S.roles or {})do if r.job==S.active_job and r.role==role then return checks.material(S,r)end end
+ end
+ dispatch_internal.section=function(S,role,kind,id,text)
+  if kind=="reviewer"then
+   local context=review.review_context(S,role)
+   if id=="outputs"then return "## outputs\n\n"..table.concat(context.outputs,"\n").."\n"end
+   if id=="observations"then return "## observations\n\n"..table.concat(context.observations,"\n").."\n"end
+  elseif id=="observations"then
+   local carried=review.carried_findings(S,role)
+   if carried then return text.."\n"..table.concat(carried.lines,"\n").."\n"end
+  end
+  return text
+ end
+end
+
+if dispatch_internal then
+ dispatch_internal.applicable=checks.applicable_completion
+ dispatch_internal.clear_blockers=function(S,input,job)
+  local view={};for k,v in pairs(S)do view[k]=v end
+  if input.operation=="load"then view.revision={interpretation=input.candidate}end
+  view.active_job=job
+  local location=view.revision and dispatch_internal.locate(view.revision.interpretation,job)
+  return engine.array(review.blockers_to_clear(S,{operation=input.operation,job=job,snapshot=view,max_rounds=location and location.job.max_rounds}))
+ end
+end

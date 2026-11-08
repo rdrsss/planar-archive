@@ -25,3 +25,19 @@ assert(checks.current_completion(S,"consumer")==nil)
 S.roles[2].generation.lineage={"1","2"}
 assert(checks.current_completion(S,"consumer").id=="2")
 print("R17 policy: applicability, vector staleness, identity restoration and lineage passed")
+-- Readiness follows applicable completion and approval, not a stale done state.
+local quality="done"
+checks.hooks.current_work=function(_,r)
+ return {digest=digest,work={units={{id=r.role=="producer" and "p" or "c"}},dependencies=r.role=="consumer" and {{id="dep",producer="p",consumer="c",source="contract",phase="start",quality=quality}} or {}},prerequisites=r.role=="consumer" and {{id="dep",phase="start",status="available"}} or {},blocked=false}
+end
+assert(not checks.material(S,S.roles[2]).blocked)
+S.observed[1].output="changed"
+assert(checks.material(S,S.roles[2]).blocked)
+S.observed[1].output="p1"
+quality="accepted"
+checks.hooks.acceptance=function()return {{work="p",accepted=false}}end
+assert(checks.material(S,S.roles[2]).blocked)
+checks.hooks.acceptance=function()return {{work="p",accepted=true}}end
+assert(not checks.material(S,S.roles[2]).blocked)
+assert(checks.material(S,S.roles[2]).digest==digest)
+print("R17 readiness: completion applicability and accepted quality passed")

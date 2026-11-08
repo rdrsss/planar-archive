@@ -271,7 +271,7 @@ do
     local location,missing=locate(context.interpretation,context.job,context.role)
     if not location then return selection_issue(ctx,missing) end
     local role_states=nil
-    local material=role_material(location,context.publications,context.repair,role_states)
+    local material=dispatch_internal.material and context.snapshot and dispatch_internal.material(context.snapshot,context.role) or role_material(location,context.publications,context.repair,role_states)
     local role,job,w,s,b=location.role,location.job,location.workspace,location.spec,location.bundle
     local budget=context.budget_bytes or role.budget_bytes or job.budget_bytes
     local registry=engine.object({id=b.registry.id,revision=b.registry.revision,authority="driver_selected_trusted_configuration"})
@@ -288,6 +288,7 @@ do
     local sections={}
     for i,entry in ipairs(prepared.value.base) do
       local text=entry.text
+      if dispatch_internal.section and context.snapshot then text=dispatch_internal.section(context.snapshot,context.role,role.kind,entry.id,text) end
       if i==1 then text="## authority\n\n"..authority_text(context,generation,revision).."\n" end
       sections[#sections+1]={id=entry.id,text=text,mandatory=entry.mandatory,included=true}
       if i==1 then sections[#sections+1]={id="run",text="## run\n\n"..run_text(context.run,role.kind),mandatory=true,included=true} end

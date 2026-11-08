@@ -85,25 +85,31 @@ std::expected<value_ptr, snapshot_value_error> role_value(const ledger::executio
     run                          = record({{"id", decimal(*row.run_id)},
                                            {"generation", decimal(row.generation_ordinal)},
                                            {"dispatch", record({{"id", decimal(row.dispatch->id)},
-                                                                {"work_fp", text("xxh3_128:"+row.dispatch->work_fp)},
-                                                                {"render_fp", text("xxh3_128:"+row.dispatch->render_fp)},
+                                                                {"work_fp", text("xxh3_128:" + row.dispatch->work_fp)},
+                                                                {"render_fp", text("xxh3_128:" + row.dispatch->render_fp)},
                                                                 {"revision", decimal(revision)},
                                                                 {"work", row.dispatch->work}})}});
   }
   std::vector<value_ptr> lineage;
-  for(auto id:row.lineage)lineage.push_back(decimal(id));
-  return record(
-      {{"job", text(row.job)},
-       {"role", text(row.role)},
-       {"kind", text(row.structure.kind)},
-       {"generation",
-        record({{"id", decimal(row.generation_id)}, {"ordinal", decimal(row.generation_ordinal)}, {"structure", *structure}, {"lineage",list(std::move(lineage))}})},
-       {"state", text(row.state)},
-       {"drifted", flag(row.drifted)},
-       {"fact_version", decimal(row.fact_version)},
-       {"run", run},
-       {"checkpoint",row.checkpoint ? record({{"id",decimal(row.checkpoint->id)},{"run",decimal(row.checkpoint->run_id)},
-          {"event",decimal(row.checkpoint->seq)},{"value",row.checkpoint->value}}) : text("none")}});
+  for (auto id : row.lineage)
+    lineage.push_back(decimal(id));
+  return record({{"job", text(row.job)},
+                 {"role", text(row.role)},
+                 {"kind", text(row.structure.kind)},
+                 {"generation", record({{"id", decimal(row.generation_id)},
+                                        {"ordinal", decimal(row.generation_ordinal)},
+                                        {"structure", *structure},
+                                        {"lineage", list(std::move(lineage))},
+                                        {"lineage_opened", decimal(row.lineage_opened)}})},
+                 {"state", text(row.state)},
+                 {"drifted", flag(row.drifted)},
+                 {"fact_version", decimal(row.fact_version)},
+                 {"run", run},
+                 {"checkpoint", row.checkpoint ? record({{"id", decimal(row.checkpoint->id)},
+                                                         {"run", decimal(row.checkpoint->run_id)},
+                                                         {"event", decimal(row.checkpoint->seq)},
+                                                         {"value", row.checkpoint->value}})
+                                               : text("none")}});
 }
 
 } // namespace

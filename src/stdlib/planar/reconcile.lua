@@ -124,6 +124,32 @@ do
       after_job=job_id
     else
       local candidate=input.candidate
+      local view={};for k,v in pairs(S)do view[k]=v end
+      view.revision={interpretation=candidate}
+      -- Structural replacement closes old completion lineage before qualities are derived.
+      view.roles={}
+      local reset={}
+      for _,old in ipairs(S.roles)do
+        local copy={};for k,v in pairs(old)do copy[k]=v end
+        if old.job==active_job then
+          local next_location=locate(candidate,active_job,old.role)
+          if next_location then
+            local next_structure,next_digest=role_structure(next_location)
+            if old.state=="retired" or engine.hash_value("role_structure_v1",old.generation.structure)~=next_digest then
+              copy.generation={id=old.generation.id,structure=next_structure,lineage={}}
+              copy.state="ready";copy.run="none";reset[old.role]=true
+            end
+          else copy.state="retired" end
+        end
+        view.roles[#view.roles+1]=copy
+      end
+      if S.review then
+        view.review={};for k,v in pairs(S.review)do view.review[k]=v end
+        view.review.repairs={};for _,repair in ipairs(S.review.repairs or {})do if not reset[repair.role]then view.review.repairs[#view.review.repairs+1]=repair end end
+      end
+      local function policy_material(role,fallback)
+        return dispatch_internal.material and dispatch_internal.material(view,role) or fallback
+      end
       if active_job~="" then
         local location=locate(candidate,active_job)
         if not location then
@@ -138,7 +164,7 @@ do
             interest(active_job,r.id)
             local role_location=locate(candidate,active_job,r.id)
             local structure,digest=role_structure(role_location)
-            local material=role_material(role_location,publications,"0",states)
+            local material=policy_material(r.id,role_material(role_location,publications,"0",states))
             local key=row_key(active_job,r.id)
             local row=rows[key]
             if not row then
@@ -169,16 +195,13 @@ do
             elseif material.blocked then
               if row.state~="blocked" then record(active_job,r.id,row,"blocked",false,"prerequisite_unavailable") end
               after[key]={job=active_job,role=r.id,state="blocked",drifted=false}
+            elseif dispatch_internal.applicable and dispatch_internal.applicable(view,r.id) then
+              if row.state~="done" then record(active_job,r.id,row,"done",false,"prerequisite_available") end
+              after[key]={job=active_job,role=r.id,state="done",drifted=false}
             elseif row.state=="done" then
-              -- M24: the W moves. The previous W is the one under the active revision's recorded interpretation.
-              local previous=recorded and locate(recorded,active_job,r.id)
-              local moved=previous and role_material(previous,publications,"0",states).digest~=material.digest
-              if moved then
-                record(active_job,r.id,row,"stale",false,"work_changed")
-                after[key]={job=active_job,role=r.id,state="stale",drifted=false}
-              else after[key]={job=active_job,role=r.id,state="done",drifted=false} end
+              record(active_job,r.id,row,"stale",false,"work_changed")
+              after[key]={job=active_job,role=r.id,state="stale",drifted=false}
             elseif row.state=="blocked" then
-              -- R15 has no completion facts, so a blocked role whose prerequisites return never completed (M20).
               record(active_job,r.id,row,"ready",false,"prerequisite_available")
               after[key]={job=active_job,role=r.id,state="ready",drifted=false}
             else
@@ -239,6 +262,7 @@ do
     for _,id in ipairs(sort_copy(fenced,numeric_key)) do fenced_runs[#fenced_runs+1]=id end
     -- Draft: both operations carry {job,generations,fenced_runs}; job is the active job after the commit.
     local facts=engine.object({job=after_job,generations=by_role(generations),fenced_runs=engine.array(fenced_runs)})
+    if dispatch_internal.clear_blockers then facts.blockers_cleared=dispatch_internal.clear_blockers(S,input,after_job) end
     return ctx.finish(engine.object({version=1,operation=operation,snapshot_seq=last_seq,facts=facts,
       vector=by_role(vector),transitions=by_role(transitions),expected=engine.array(expected)}))
   end

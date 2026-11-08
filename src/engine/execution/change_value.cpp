@@ -334,7 +334,17 @@ ledger::execution_change decode(const value_ptr& root, const ledger::execution_s
         using T = std::decay_t<decltype(options)>;
         if constexpr (std::is_same_v<T, load_options> || std::is_same_v<T, activate_options>) {
           // Draft decision DD13: load and activate facts are {job,generations,fenced_runs}.
-          exact_keys(facts, {"job", "generations", "fenced_runs"}, {}, facts_path);
+          exact_keys(facts, {"job", "generations", "fenced_runs"}, {"blockers_cleared"}, facts_path);
+          if (facts.fields.contains("blockers_cleared")) {
+            for (const auto& x : items(facts, "blockers_cleared", facts_path)) {
+              if (!x || x->kind != value_kind::string)
+                refuse(facts_path + ".blockers_cleared");
+              auto id = parse_decimal(x->string);
+              if (!id || !*id)
+                refuse(facts_path + ".blockers_cleared");
+              out.blockers_cleared.push_back(*id);
+            }
+          }
           out.job                 = text(facts, "job", facts_path);
           const auto& generations = items(facts, "generations", facts_path);
           for (std::size_t i = 0; i < generations.size(); ++i)
