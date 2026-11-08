@@ -155,6 +155,255 @@ format2" (XD5: names kept, only that assertion changes; listed in the coder repo
 - DD8: new stdlib files change the embedded stdlib digest and VM instruction counts. Pinned digests or budget-ceiling
   fixtures that move are updated or reported as failing; ceilings are not raised in this draft.
 
+### P1 draft decisions (Lua reconcile and dispatch projection)
+
+Interfaces P2 and P3 code against. Fixed exports: `work_exec`, `render_dispatch`, `reconcile_execution`.
+
+- DD9 (`work_exec` input/output): `{interpretation:{bundle,semantic},job,role,publications?,repair?}` returns
+  `{work:W,digest,structure,structure_digest}`; `digest` is `H("work_exec_v1",W)`, `structure_digest` is
+  `H("role_structure_v1",structure)` (the same domain as native `role_structure_digest`). Unknown job or role is
+  `reference` with `Unknown selected job`/`selection.job` or `Unknown selected role`/`selection.role`.
+- DD10 (`dispatch_context_v1` exact form): `revision` is `{id,source,interpretation}` (decimal strings: the revision id
+  and the record ids of `revisions.source_id` and `revisions.interpretation_id`, which the snapshot value does not carry,
+  so the handler supplies them); `interpretation` is the decoded recorded `{bundle,semantic,...}` envelope; `generation`
+  is the ordinal decimal string; `run` is `{request,kind:"claim"}`, `{request,kind:"takeover",previous}` or
+  `{kind:"preview"}`; `snapshot_role` is accepted and unused; `publications` and `repair` default to `[]` and `"0"`;
+  `budget_bytes` defaults to the role budget. `render_dispatch` returns `{version:1,kind:"dispatch",packet,manifest,work}`.
+- DD11 (packet body): every section other than `authority` and `run` reuses the render base-section builder
+  (`role_base_material`) with `observation` `not_captured`, no files and no observations, so outputs, checks and
+  dependencies keep render prose ("Not executed by render", "Outputs and base not captured"). Rewording those bodies
+  for dispatch is left to the fixing rounds; the contract pins only the authority and run bytes.
+- DD12 (prerequisite qualities in R15): contract dependencies are `available`; a facet dependency of quality
+  `available` needs a publication of the facet; quality `done` (and pipeline predecessors) are available only when the
+  producer role's ledger state is `done`; `accepted` is `unavailable` until R18; questions are `answered` or
+  `unavailable`. A dependency whose producer unit belongs to the same role never blocks that role. A reviewer is
+  blocked until every worker role of the job is `done` (semantic graph edge `role:<worker>:complete ->
+  role:<reviewer>:start`); this rule is not listed in the manifest prerequisites.
+- DD13 (`execution_change_v1` spellings): `snapshot_seq` is `snapshot.last_seq` (L16). `facts` is
+  `{job,generations,fenced_runs}` for both load and activate (`job` is the active job after the commit, `""` when D94
+  clears it; activate needs `fenced_runs` too because ledger `execution_change` carries them, a superset of the
+  P2-1 `{job,generations}`). A generation is `{job,role,reason,structure}`; `fenced_runs` are sorted decimal strings.
+  A transition is `{job,role,before_state?,before_drifted?,after_state,after_drifted,reason}`; NULL-first means the
+  two before keys are absent. A vector entry is `{job,role,state,drifted,run}` with `run` a decimal string or `"none"`;
+  the vector holds every `role_state` row the active job has after the commit (retired rows included) and is `[]`
+  when no job is active afterwards. Transitions, generations and vector are sorted by (job, role).
+- DD14 (`expected` spellings): `{kind:"request_unused",request_id?}`, `{kind:"active_revision",revision}` (decimal or
+  `none`), `{kind:"active_job",job}` (`""` for none), then per (job, role) sorted: `{kind:"fact_version",job,role,
+  fact_version}` and `{kind:"role_state",job,role,state,drifted,run}` for a role with a row, or
+  `{kind:"role_state",job,role,no_row:true}` for one without (L20, A4). "Roles of the active job" is the union of its
+  `role_state` rows, the roles it declares in the active revision and, for load, in the candidate; for activate the
+  same union is taken for the activated job.
+- DD15 (no state-machine row): a role newly added to the active job by load (no row, NULL before) gets a new
+  generation and transition with reason `structural_change`; the role table has no load row with a NULL before.
+- DD16 (no completion facts in R15): `done` becomes `stale` (`work_changed`, M24) when the role's W under the candidate
+  differs from its W under the active revision; a `blocked` role whose prerequisites return becomes `ready` (M20, never
+  M21/M22); `stale` never returns to `done` (M40 needs R17 facts). Activation computes fresh states with no producer
+  `done` because every generation starts empty.
+
+### P2 draft decisions (native execution services)
+
+- DD17 (snapshot value `revision.source`): P2-1 names `source` among the revision keys without its form. It is
+  `{id,digest}` (decimal record id and 32 lowercase hex digest), the same form as `registry`. `interpretation` and
+  `versions` are the decoded recorded values, `stdlib_digest` the bare hex digest. Dispatch `work_fp` and `render_fp`
+  are the bare 32-hex texts the D24 value S already uses; the `xxh3_128:` text form stays a response spelling (claim,
+  status). The snapshot value minus the revision expansion is byte-for-byte the D24 value S (pinned by a test).
+- DD18 (empty lists from Lua): `decode_execution_change` reads an empty record as an empty list, because an empty Lua
+  table crosses the bridge without an array tag. Any non-empty record where a list is expected is still refused.
+- DD19 (`generation_current` spelling): `{kind:"generation_current",job,role,generation}` with `generation` the decimal
+  generation identifier (what `execution_expectation::number` stores), not the ordinal. Claim/takeover handlers (R15-D)
+  must emit this spelling.
+- DD20 (claim/takeover facts and lineage): claim facts are exactly `{role,provenance?}` and takeover facts
+  `{role,previous_run,provenance?}` (P2-1). `facts.provenance` must be present exactly when native read a provenance
+  file and must be canonically equal to that document; the ledger change always takes the native document. The
+  takeover generation (`reason:"takeover"`, the snapshot row's structure) and `fenced_runs = [--run-id]` are built
+  natively, not read from Lua. A claim/takeover change carries `packet` `{markdown,manifest,work}`; load/activate never.
+- DD21 (L20 enforcement site): the decoder requires a no-row `role_state` member for every (job, role) whose first row
+  the change writes (a transition without before keys, or a generation for a role with no snapshot row), and refuses a
+  no-row member that names a role with a snapshot row. The rest of the exact-set rule (members for declared roles that
+  the change leaves untouched) stays with the ledger's `check_snapshot` and the Lua builder; native cannot enumerate
+  declared roles without the interpretation.
+- DD22 (change failures): every decode failure is `change_error{field}` with a dotted member path for diagnostics; the
+  runtime service maps it to redacted `internal` ("handler response mismatch", D151). No new message.
+- DD23 (provenance messages): P2-4 schema refusals reuse the schema normalizer messages of `schema.lua`: `Invalid
+  JSON` (grammar, field `provenance`), `Required field`, `Unknown field`, `Expected object`, `Expected list`,
+  `Expected version integer`, `Unsupported schema version`, `Invalid string` (empty, NUL, wrong type or an object other
+  than `{"status":"unknown"}`) and `Duplicate value` (repeated setting name, code `schema`). Capture refusals reuse the
+  authoring `--diagnostic` rows; a file that grows past 65536 bytes between the gate and the read is
+  `resource_limit provenance_bytes`. The capture goes through the shared `capture_diagnostic` after a native size gate.
+- DD24 (L2 residuals without the full stdlib proof): the format3 verifier checks the five residuals natively:
+  directory edges equal the encoded children (and every edge parent is a directory), each revision's three trees
+  reconstruct through `tree_core` under their profiles (the stdlib profile follows the recorded family), the
+  interpretation's embedded `versions` equals the versions record byte for byte, the bundle workspace id equals
+  `ledger_meta.workspace_id`, and each load request's selector (profile argument present or not) matches the revision's
+  recorded family (`classify_recorded_interpretation`). It does not run `verify_recorded_interpretation`, which would
+  recompute the stdlib tree digest against the shipped stdlib file set; the stdlib digest is already tied to the
+  versions record by the existing D23 check. Running the full proof is left to the fixing rounds (it would reject the
+  R15-B test fixtures, which seed a one-file stdlib).
+- DD25 (G2 hook shape): `execution_change::prepared` is an optional `execution_prepared_revision` (three
+  `{files,profile}` trees and the interpretation and versions canonical bytes). It is allowed only on an accepted
+  (non-noop) load; under the lock, after the preconditions and before `check_revision_records`, native interns every
+  tree record and value record collision-safe (D38 exact-row reuse, `hash_collision` otherwise), writes the edges of a
+  newly inserted directory, and uses the interned ids in place of the five ids of `revision`. A noop load names the
+  active revision's ids directly and carries no prepared records.
+- DD26 (A1): `execution_dispatch` gains `revision` (the dispatch row's `revision_id`), and `execution_state_bytes`
+  measures each dispatch at that revision, so it equals the reader's `state_bytes`.
+
+### P3 draft decisions (format3 load and activate)
+
+- DD27 (activate handler module and compositions): the CLI11 family lives in `src/cmd/planar/handlers/activate/` as the
+  module `planar.cmd.execution.activate` (namespace `planar::cmd::handlers`), deliberately outside the
+  `planar.cmd.planar.handlers.` prefix. The audited composition generators under `tests/native/` copy `bootstrap.cpp`
+  and a fixed handler list and rewrite that prefix; with the prefix the copies would import a module that no generator
+  produces. Every composition therefore binds and dispatches activate through the one real module with a fresh VM of the
+  real runtime (the bootstrap calls it with fully qualified names and never passes its own VM, whose type differs in a
+  composition). The format3 modules reach the generated invocation copies through `planar_command_response` and the
+  activate module reaches the generated bootstrap copies through `planar_command_envelope` (PUBLIC link items in
+  `src/cmd/planar/CMakeLists.txt`); the generators keep their fixed dependency lists. Extending the generators is left
+  to the fixing rounds.
+- DD28 (format3 completion site): the format3 branch of load completion is implemented in the native load service of
+  `src/cmd/planar/invocation.cpp` (prepare the candidate, decide noop natively, decode the change with the `request_v2`
+  framing, `stage_execution` with the G2 prepared records, final receipt verification, COMMIT, completion receipt), not in
+  `src/engine/ledger/acceptance{,_seam}.cpp`. Those sources are cloned by the audited `r14c3b2` and `x03-b2-b-c01`
+  generators whose targets cannot import the execution ledger; adding the import there breaks the clones. The
+  acceptance module is unchanged, and `acceptance.t.cpp` gains no case (its test target does not link the format3
+  schema); the format3 completion is covered by `src/cmd/planar/load_format3.t.cpp`.
+- DD29 (no-row members, EX-3 wording): only roles of the snapshot's active job assert a no-row `role_state` member.
+  For `activate`, roles of the job being activated assert members only when they already have a row (EX-3 "Format3
+  load and activate preconditions"), and the R15-B ledger refuses a no-row member outside the active job. This narrows
+  DD14 (P1) and DD21 (P2): `reconcile.lua` and `change_value.cpp` were adjusted in P3 so that a first activation and a
+  job switch commit.
+- DD30 (noop decision): native decides a format3 noop load by comparing the candidate's five records with the active
+  revision (the three tree root digests via `digest_tree`, the registry digest from the snapshot registry value, and the
+  canonical bytes of the interpretation and versions values). A noop names the active identifiers and carries no
+  prepared records; Lua's change for an identical candidate has no transitions, generations or fenced runs.
+- DD31 (activate refusal sites): steps (2) and (3) run in the native prelude (`lookup_execution_request` with the
+  `request_v3` framing built natively, which refuses format1 and format2 first); steps (4) and (5) run inside the
+  `read_execution` service on the very snapshot Lua receives (the EX-6 digest is the embedded stdlib tree digest of
+  this binary); step (7) is the reconcile pass (`Unknown selected job`, `selection.job`), which also covers a ledger
+  with no active revision. A decode failure of the Lua change is `internal` with the existing message `Invalid embedded
+  command protocol`.
+- DD32 (with-profile activate): the activate row joins the with-profile catalog completeness rule (six shipped rows,
+  `effective_catalog.cpp`) and the admission visitor admits its ledger slot. The EX-6 binding under a profile still
+  compares the embedded stdlib digest, which is wrong for a revision accepted under a profile; recorded as a gap.
+- DD33 (activate output): the response is the saved `activate_v1` bytes from the ledger plus LF, as load prints its saved
+  bytes; the runtime checks the Lua envelope equals the decoded saved value. The post-commit fallback is the EX-7
+  `Activate may be complete ...` pair.
+
+- DD34 (runtime latch): the runtime latches `load_format3` in the command state when the load handler starts, because the
+  services pointer is cleared before the response is validated; the format3 load expects four service calls and the
+  activate handler two.
+
+P3 results (draft, Debug). New tests: `src/cmd/planar/load_format3.t.cpp` (5 cases) and `src/cmd/planar/activate.t.cpp`
+(6 cases); `ctest -R` over them plus the P1 reconcile/dispatch and P2 change-value suites matched 45 tests, all passing
+after the DD29 test updates in `reconcile.t.cpp` and `change_value.t.cpp`. One run of every `unit`-labelled test (1618)
+had 101 failures, grouped by cause: (a) the catalog growing to six production rows and the variant growing to six
+alternatives (effective catalog, C4, X05, RA01, v2/recorded profile, `command load` private-catalog and registry
+fixtures, `X07 root help bytes`, RA01 root help and orchestrator verb labels); (b) the new EX-7 activate messages
+flagged by `X07 command sources add no diagnostic outside the closed table`; (c) DD8 stdlib growth from P1 (provenance
+originals 12 vs 10, interpretation goldens, effective provenance); (d) unrelated to P3 (`ledger format initializes exact
+metadata` cannot read its expected-schema evidence file; three timeouts under `-j8`). Found, not fixed: a load of a
+workspace with exactly one job fails `internal` in every format, because `acceptance.lua` passes the already-typed
+single-entry `bundle.jobs` list to `sorted()`, which retags a list of at most one item (`already_typed`); the D94 test
+uses a two-job workspace for that reason.
+
+### P4 draft decisions (init cutover and format3 read compatibility)
+
+- DD35 (storage format3 read variant): `ledger_format` gains `v3`. The storage header and `native::verify` accept
+  user_version 3 with a reduced check: the format3 table set (24 tables, including the seven execution tables named in
+  the check), event versions 1 and 2, record codecs 1 to 3, `integrity_check`, `foreign_key_check`, the singleton rows
+  and the `ledger_meta` metadata with `format=3`. A file marked 3 without the format3 tables stays
+  `unsupported_version` ("Unsupported ledger format version"), so forged-marker guards keep their code. It skips
+  `validate_records` and `verify_history`, because format3 holds codec-3 request records and execution value codecs
+  that the storage record codec cannot decode, and the format3 history rules live in the execution module. Storage
+  cannot import that module (the `planar_ledger_execution_schema` target depends on storage, and the generated storage
+  clones have fixed dependency lists), so the command services for `history` and `export` in `invocation.cpp` run
+  `verify_execution_ledger` before reading a format3 ledger. Writable access to format3 through storage
+  (`open_existing(..., read_write)`, `begin_write`, record writers, format1/format2 acceptance) is refused as
+  `unsupported_version`, the same bytes as before the cutover.
+- DD36 (format3 events in storage): storage validates the row shape, the 14 event types, version 1 only for
+  `ledger_initialized` at sequence 1 and 2 otherwise, and the typed `job`, `role`, `generation_id`, `run_id` columns
+  (carried as new trailing fields of `event_row`). Payload version 2 is decoded by the history projection through the
+  execution codec (`planar_history_read` now depends on `planar_history_execution_codec`).
+- DD37 (format3 `--at-event` reading of P2-5): `active_revision` and `active_job` come from the event's own payload
+  (`after`; `ledger_initialized` is none and empty). `activation` is the latest `job_activations` row with `event_seq`
+  at most the event, even after D94 cleared the job (literal P2-5). A role's `run` is reported only while its last
+  after-state is `running`: the run whose `claimed_seq` is the role's last transition into `running`, with that run's
+  generation ordinal. `runs` are exactly the runs of the running roles, sorted by id. The replay is a typed storage
+  read (`read_execution_state_at`) with no Lua.
+- DD38 (format3 `--request-id`): the request row is read without its body (`read_execution_request`); `load` is
+  checked with the existing load result codec, `activate` with `activate_v1`, and `claim`/`takeover` with `claim_v1`
+  and returned as saved, without packet and manifest assembly, which R15-D adds. The data stays
+  `{selector:"request",result}`.
+- DD39 (init diagnostics): `initialize_format3` failures map onto the existing `format_error` categories and are
+  rendered by the unchanged `ledger_error`, so every init diagnostic keeps its bytes (an invalid workspace stays
+  `schema` "Invalid ledger arguments"; `execution_error_value` would have said `internal`).
+- DD40 (load prelude after the cutover): the format3 load prelude recognizes a format3 ledger by `open_existing`
+  succeeding with `format == v3` (it used to rely on the open refusing it). The with-profile load path refuses a format3
+  ledger as `unsupported_version` before any request lookup, as before.
+- DD41 (outside the file list): `src/engine/ledger/format.{cppm,cpp}` gained the two `format_file` forwarders the history
+  projection needs, and `src/engine/CMakeLists.txt` gained the history-read codec edge and two test-only link edges
+  (history read tests to the format3 initializer, the non-fault export tests to the execution ledger API). The
+  configure-time source generators accepted the edited storage and format sources unchanged.
+
+## Round result (draft finisher, 2026-11-08)
+
+Implemented across P1 to P4: `reconcile.lua` and `dispatch.lua` (EX-4/EX-5 reconcile, `work_exec_v1`,
+`role_structure_v1`, dispatch packet and `dispatch_manifest_v1`); native execution services under
+`src/engine/execution/` (`snapshot_value`, `change_value`, `provenance_input`) and the execution ledger staging API;
+format3 load reconciliation in the load service and `activate` end to end (`handlers/activate/`); init cutover to
+format3 with the storage `v3` read variant, format3 history (page, revision, request, `--at-event`) and export.
+
+Build: `cmake --preset debug` then `cmake --build build/rewrite-debug --target planar_tests`, exit 0 (1369 steps,
+incremental on the lane's existing tree, no compile or link error to fix in the finisher pass).
+
+New tests: `ctest --test-dir build/rewrite-debug -R 'R15-C|format3|replacement\.(reconcile|dispatch|execution|provenance
+input) |activate' -j6` matched 221 tests, 221 passed. The match covers the P1 reconcile/dispatch suites, the P2
+`execution_change_value`, `execution_provenance_input` and `execution_snapshot_value` suites and the ledger execution
+additions, the P3 `load_format3` and `activate` suites and the P4 `[format3]` bootstrap, history-read, storage and
+export cases (plus pre-existing tests whose names contain those words).
+
+Existing tests of the touched modules (1100 tests from `planar_runtime_tests`, `planar_command_tests`, the ledger
+storage/execution/execution-schema/format/acceptance suites, history read/effective catalog/effective
+provenance/provenance/interpretation/execution codec suites, source export and export fault suites, and the three
+execution suites) run through `ctest --tests-from-file -j6`: 1026 passed, 74 failed. The full suite was not run.
+
+Failing tests, by cause (all expected draft breakage, none repaired):
+
+- Catalog grew to six production rows / options variant to six alternatives (P3): `effective catalog count and
+  canonical byte ceilings`, `... external descriptors and reserved namespaces`, `... help and grammar bounds`, `... history
+  id capability matrix`, `... roundtrip and immutable aliases`, `... static read capability signatures`; C4 A (9 cases:
+  `Lua allocation exhaustion ...`, `absent scalar defaults ...`, `closed context exposes no service`, `lifecycle refuses
+  ...`, `maximum summary and UTF8 boundaries ...`, `original command index ...`, `rejects malformed return arity ...`,
+  `rejects public wrapper unknown code ...`, `semantic text has no standalone quota ...`); C4 B3 (3: `C01 history missing
+  known services ...`, `C01 missing raw service lookup ...`, `caught missing capability calls ...`); C4 D4 (2: `order once
+  arguments ...`, `role projection refuses mismatched input ...`); RA01-B1 (10: `command options variant stays closed at
+  five members`, `default embedded catalog stays the five HEAD rows`, the five `profile registering a reserved ...`/
+  `reserved command ...`/`reserved pre check ...` cases, `authoring root help inserts the six RA-1 lines ...`, `default
+  invoke and production binary refuse all six authoring verbs as usage`); RA01-B2 `orchestrator labels every catalog
+  verb ...`; X05 A3 (10 cases, C01 to C04 and the base set); `X07 root help bytes are unchanged and omit with-profile`;
+  `command load ...` (11 private-catalog/registry cases, 739-749) and `command registry seals mandatory embedded families
+  without services`; recorded profile (`recorded effective history selects wider fixed tree profile ...`, `recorded
+  profile history reconstructs effective v2 ...`, `recorded profile saved accepted and noop replay ...`, `recorded profile
+  unknown interpretation preserves raw export ...`).
+- New EX-7 activate diagnostics flagged by the closed-table guard: `X07 command sources add no diagnostic outside the
+  closed table`.
+- DD8 stdlib growth (P1): `provenance generated originals and legacy assembled chunk match exact authored bytes`,
+  `interpretation complete quota outputs match reviewed JSON and canonical goldens`, the nine `effective provenance ...`
+  cases, `X06 D C03 a recovered allocation refusal ...` and `X08 C01 role preparation outputs-off boundary pins the
+  request-record conversion charge` (Lua memory pins).
+- P4 behavior change (DD35): `storage header check refuses user version 3 on its own` (a format3 header is now a read
+  variant, not a refusal on its own).
+- Not caused by this round: `ledger format initializes exact metadata schema and Glaze event` (cannot read its
+  expected-schema evidence file).
+
+Gaps (in addition to the P1 to P4 decision notes): the one-job workspace load failure in `acceptance.lua`
+(`sorted()` on an already-typed single-entry list, found in P3) is not fixed; EX-6 binding under a profile compares the
+embedded stdlib digest (DD32); the audited `tests/native/` composition generators are not extended (DD27, DD28); the
+Lua output is not cross-checked against the native `encode_work_exec_v1`/`encode_dispatch_manifest_v1` codecs; M21,
+M22, M40, M41 are not produced (DD16); the dispatch packet body sections keep render prose (DD11); `--request-id` for
+claim/takeover returns the saved `claim_v1` without packet assembly (DD38, R15-D). Draft decisions DD9 to DD41 above
+stand as recorded; the finisher added none.
+
 ## Left for the fixing rounds
 
 - Full gate (Debug, RelWithDebInfo, Linux Docker, format, Doxygen, no-change build), rewrite-check gate.

@@ -22,6 +22,10 @@ planar_rewrite_module(planar_export_command
 planar_rewrite_module(planar_load_command
   INTERFACE handlers/load/command.cppm SOURCES handlers/load/command.cpp
   DEPENDS planar_command_invocation CLI11::CLI11_Module)
+# R15-C activate (DD27): one real handler module, outside the generated handler prefix, shared by every composition.
+planar_rewrite_module(planar_activate_command
+  INTERFACE handlers/activate/command.cppm SOURCES handlers/activate/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
 planar_rewrite_module(planar_command_envelope
   INTERFACE envelope.cppm
   SOURCES envelope.cpp
@@ -49,9 +53,16 @@ endforeach()
 planar_rewrite_module(planar_command
   INTERFACE bootstrap.cppm
   SOURCES bootstrap.cpp
-  DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command CLI11::CLI11_Module
+  DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command planar_activate_command CLI11::CLI11_Module
     planar_command_authoring ${planar_authoring_family_targets}
-  TESTS bootstrap.t.cpp authoring.t.cpp authoring_prompts.t.cpp authoring_observe.t.cpp authoring_orchestrator.t.cpp)
+  TESTS bootstrap.t.cpp authoring.t.cpp authoring_prompts.t.cpp authoring_observe.t.cpp authoring_orchestrator.t.cpp
+    activate.t.cpp load_format3.t.cpp)
+# Draft (R15-C P3): the format3 execution modules reach every invocation copy through the shared response target, and the
+# real activate handler reaches every bootstrap copy through the shared envelope target; the audited generators keep
+# their fixed dependency lists (DD27).
+target_link_libraries(planar_command_response PUBLIC planar_ledger_execution planar_execution_snapshot_value
+  planar_execution_change_value planar_history_provenance planar_canonical)
+target_link_libraries(planar_command_envelope PUBLIC planar_activate_command)
 target_compile_definitions(planar_command_tests PRIVATE
   PLANAR_B2_WORKSPACE_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota/workspace/workspace.lua")
 add_executable(planar main.cpp)
@@ -94,6 +105,8 @@ foreach(variant RANGE 0 5)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -150,6 +163,8 @@ planar_embed_lua(planar_load_cli_probe_source planar.engine.load_cli_probe_sourc
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
   "${d7b_generated}/commands.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -202,6 +217,8 @@ foreach(variant RANGE 0 4)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -349,6 +366,8 @@ set(authoring_lua_files
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/prompts.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observe.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/orchestrator.lua")
@@ -480,13 +499,13 @@ foreach(variant RANGE 0 21)
     string(REPLACE "module planar.engine.runtime;" "module planar.engine.authoring_variant_${variant};" text "${text}")
     string(REPLACE "namespace planar::engine {" "namespace planar::engine::authoring_variant_${variant} {" text "${text}")
     if(variant EQUAL 20 AND name STREQUAL "runtime.cpp")
-      planar_authoring_once(text "std::array<bundle_row, 11> bundle_table{{" "std::array<bundle_row, 12> bundle_table{{")
+      planar_authoring_once(text "std::array<bundle_row, 12> bundle_table{{" "std::array<bundle_row, 13> bundle_table{{")
       set(orchestrator_row [=[    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "orchestrator_capture_v1", true},
 ]=])
       set(status_row [=[    {"status", "shipped.status.v1", "status_v1", "render_capture_v1", true},
 ]=])
       planar_authoring_once(text "${orchestrator_row}" "${orchestrator_row}${status_row}")
-      set(load_signature [=[  if (name == "load" && command_catalog_size == 5)
+      set(load_signature [=[  if (name == "load")
 ]=])
       set(status_signature [=[  if (name == "status")
     return {};

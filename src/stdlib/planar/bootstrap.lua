@@ -35,4 +35,7 @@ return {
   render_profile_material = render_profile_material,
   role_profile_material = role_profile_material,
   role_projection_base_material = role_projection_base_material,
+  work_exec = work_exec,
+  render_dispatch = render_dispatch,
+  reconcile_execution = reconcile_execution,
 }

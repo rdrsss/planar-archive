@@ -56,6 +56,15 @@ public:
   /// @param limit Explicit count from one through 100.
   /// @return Owned bounded page; invalid arguments and actual failures invalidate all reads.
   std::expected<event_page, format_error> read_events_after(std::uint64_t cursor, std::size_t limit) const;
+  /// @brief Read a format3 request row of any execution operation, without its private body.
+  /// @param key ASCII request token of one through 128 bytes.
+  /// @return Owned row or optional miss; invalid_argument on format1 or format2; failures invalidate all reads.
+  std::expected<std::optional<::planar::engine::ledger::execution_request_row>, format_error> read_execution_request(std::string_view key) const;
+  /// @brief Replay the format3 execution state at one event from immutable rows, without Lua.
+  /// @param sequence Positive event sequence.
+  /// @param job Active job at that event, or empty for none.
+  /// @return Replayed activation, roles and runs; invalid_argument on format1 or format2; failures invalidate all reads.
+  std::expected<::planar::engine::ledger::execution_state_at, format_error> read_execution_state_at(std::uint64_t sequence, std::string_view job) const;
 
 private:
   friend std::expected<format_file, format_error>     open_existing(const std::filesystem::path&, ledger_access);

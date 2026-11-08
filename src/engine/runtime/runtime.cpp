@@ -23,7 +23,7 @@ import planar.engine.history.effective_catalog;
 import planar.engine.history.effective_provenance;
 namespace planar::engine {
 namespace {
-constexpr std::size_t command_catalog_size     = 5;
+constexpr std::size_t command_catalog_size     = 6;
 constexpr std::size_t command_registration_cap = 64;
 // Compile-time bundle selection: only test variant targets define PLANAR_AUTHORING_BUNDLE.
 #ifdef PLANAR_AUTHORING_BUNDLE
@@ -1203,6 +1203,7 @@ struct command_state {
   std::vector<history::tree_file>          provenance;
   ledger::completion_receipt               completion;
   command_services*                        services = nullptr;
+  bool load_format3 = false; ///< Latched when the handler starts: the services offered read_execution to load (DD1).
   extension_history_bridge                 extension_history;
   std::map<std::string, const void*>       handles;
   std::size_t                              calls       = 0;
@@ -1350,9 +1351,12 @@ std::vector<signature_option> command_signature(std::string_view name) {
     return {{"--from", "text", true}};
   if (name == "orchestrator")
     return {{"--job", "text", true}, {"--registry", "text", true}, {"--workspace", "text", true}};
-  if (name == "load" && command_catalog_size == 5)
+  if (name == "load")
     return {{"--ledger", "text", true},          {"--workspace", "text", true},  {"--registry", "text", true},
             {"--expect-revision", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  if (name == "activate")
+    return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
+            {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
   command_refuse();
 }
 void help_text(const std::string& text) {
@@ -1366,8 +1370,9 @@ struct bundle_row {
   std::string_view name, handler, kind, capability;
   bool             authoring_only;
 };
-constexpr std::array<bundle_row, 11> bundle_table{{
+constexpr std::array<bundle_row, 12> bundle_table{{
     {"render", "shipped.render.v1", "render_v1", "render_capture_v1", false},
+    {"activate", "shipped.activate.v1", "activate_v1", "execution_commit_v1", false},
     {"init", "shipped.init.v1", "init_v1", "initialize_ledger_v1", false},
     {"history", "shipped.history.v1", "history_v1", "read_history_v1", false},
     {"export", "shipped.export.v1", "export_v1", "export_source_v1", false},
@@ -2495,8 +2500,6 @@ void prepare_invocation(command_state& c) {
             command_refuse();
           add("limit", command_integer(o.limit.value_or(0)), o.limit.has_value());
         } else if constexpr (std::is_same_v<T, command_load_options>) {
-          if (command_catalog_size != 5)
-            command_refuse();
           c.name = "load";
           path("ledger", o.ledger);
           path("workspace", o.workspace);
@@ -2510,6 +2513,26 @@ void prepare_invocation(command_state& c) {
                   ch == ':' || ch == '-'))
               command_refuse();
           add("expect-revision", command_text(o.expect_revision));
+          add("request-id", command_text(o.request_id));
+          add("actor", command_text(o.actor));
+        } else if constexpr (std::is_same_v<T, command_activate_options>) {
+          c.name = "activate";
+          path("ledger", o.ledger);
+          require_token(o.job);
+          require_token(o.expect_job);
+          if ((o.expect_revision != "none" &&
+               (o.expect_revision.empty() || o.expect_revision.front() < '1' || o.expect_revision.front() > '9' ||
+                !std::ranges::all_of(o.expect_revision, [](char ch) { return ch >= '0' && ch <= '9'; }))) ||
+              o.request_id.empty() || o.request_id.size() > 128 || o.actor.empty() || o.actor.size() > 256 ||
+              !valid_text(o.actor))
+            command_refuse();
+          for (unsigned char ch : o.request_id)
+            if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_' || ch == '.' ||
+                  ch == ':' || ch == '-'))
+              command_refuse();
+          add("job", command_text(o.job));
+          add("expect-revision", command_text(o.expect_revision));
+          add("expect-job", command_text(o.expect_job));
           add("request-id", command_text(o.request_id));
           add("actor", command_text(o.actor));
         } else {
@@ -3155,11 +3178,33 @@ void call_service_native(lua_State* l, int operation) {
       exact(args, {"route"});
       validate_route(c, args->fields.at("route"));
       result = c.services->capture_load(std::get<command_load_options>(c.options), args->fields.at("route"));
-    } else if (operation == 6) {
-      if (c.name != "load" || c.calls != 2)
+    } else if (operation == 11) {
+      // read_execution({}): format3 load after capture (DD1), or the first activate service.
+      const bool load_read = c.name == "load" && c.load_format3 && c.calls == 2;
+      if (!load_read && !(c.name == "activate" && c.calls == 0))
         command_refuse();
-      exact(args, {"bundle", "semantic"});
-      if (args->fields.at("bundle")->kind != value_kind::record || args->fields.at("semantic")->kind != value_kind::record)
+      exact(args, {});
+      if (load_read)
+        result = c.services->read_execution(std::get<command_load_options>(c.options));
+      else
+        result = c.services->read_execution(std::get<command_activate_options>(c.options));
+    } else if (operation == 12) {
+      if (c.name != "activate" || c.calls != 1)
+        command_refuse();
+      exact(args, {"change"});
+      if (args->fields.at("change")->kind != value_kind::record)
+        command_refuse();
+      result = c.services->commit_execution(std::get<command_activate_options>(c.options), args->fields.at("change"));
+    } else if (operation == 6) {
+      const bool format3 = c.name == "load" && c.load_format3;
+      if (c.name != "load" || c.calls != (format3 ? 3u : 2u))
+        command_refuse();
+      if (format3)
+        exact(args, {"bundle", "semantic", "execution"});
+      else
+        exact(args, {"bundle", "semantic"});
+      if (args->fields.at("bundle")->kind != value_kind::record || args->fields.at("semantic")->kind != value_kind::record ||
+          (format3 && args->fields.at("execution")->kind != value_kind::record))
         command_refuse();
       // Registration retains identity only. Charge the owned acceptance copies
       // cumulatively, before the codec allocates and before native completion.
@@ -3170,8 +3215,13 @@ void call_service_native(lua_State* l, int operation) {
       if (!provenance)
         command_refuse();
       c.provenance = std::move(provenance->files);
-      result       = c.services->accept_load(std::get<command_load_options>(c.options), args->fields.at("bundle"),
-                                             args->fields.at("semantic"), c.provenance, c.completion);
+      if (format3)
+        result = c.services->accept_load(std::get<command_load_options>(c.options), args->fields.at("bundle"),
+                                         args->fields.at("semantic"), args->fields.at("execution"), c.provenance,
+                                         c.completion);
+      else
+        result = c.services->accept_load(std::get<command_load_options>(c.options), args->fields.at("bundle"),
+                                         args->fields.at("semantic"), c.provenance, c.completion);
 #ifdef PLANAR_AUTHORING_BUNDLE
     } else if (operation == 7) {
       // spec-prompt captures the workspace only; critique and ingest capture the spec as well (RA-2).
@@ -3287,6 +3337,24 @@ void call_service_native(lua_State* l, int operation) {
 #endif
     if (operation == 5)
       exact(copied, {"bundle"});
+    if (operation == 11) {
+      exact(copied, {"version", "ledger", "last_seq", "snapshot"});
+      if (copied->fields.at("version")->kind != value_kind::integer || copied->fields.at("version")->integer != 1 ||
+          !ledger_identity(text_field(copied, "ledger")) || !decimal_id(text_field(copied, "last_seq"), true) ||
+          copied->fields.at("snapshot")->kind != value_kind::record)
+        command_refuse();
+    }
+    if (operation == 12) {
+      const auto& o = std::get<command_activate_options>(c.options);
+      exact(copied,
+            {"version", "kind", "ledger", "request_id", "revision", "job", "previous_job", "activation", "event", "roles"});
+      if (copied->fields.at("version")->kind != value_kind::integer || copied->fields.at("version")->integer != 1 ||
+          text_field(copied, "kind") != "activate" || !ledger_identity(text_field(copied, "ledger")) ||
+          text_field(copied, "request_id") != o.request_id || text_field(copied, "job") != o.job ||
+          !decimal_id(text_field(copied, "revision")) || !decimal_id(text_field(copied, "activation")) ||
+          !decimal_id(text_field(copied, "event")) || copied->fields.at("roles")->kind != value_kind::list)
+        command_refuse();
+    }
     if (operation == 6) {
       exact(copied, {"version", "kind", "ledger", "request_id", "outcome", "revision", "parent", "event"});
       if (copied->fields.at("version")->kind != value_kind::integer || copied->fields.at("version")->integer != 1 ||
@@ -3364,6 +3432,8 @@ int execute_command(lua_State* l) {
     bool offered = (commands(l).name == "render" && i < 2) || (commands(l).name == "init" && i == 2) ||
                    (commands(l).name == "history" && i == 3) || (commands(l).name == "export" && i == 4) ||
                    (commands(l).name == "load" && (i == 0 || i == 5 || i == 6));
+    if (commands(l).name == "activate")
+      offered = false;
 #ifdef PLANAR_AUTHORING_BUNDLE
     if (auto& authoring = commands(l).authoring_options) {
       using verb = command_authoring_verb;
@@ -3378,6 +3448,20 @@ int execute_command(lua_State* l) {
       lua_pushcclosure(l, call_service, 1);
       lua_setfield(l, -2, methods[i]);
     }
+  }
+  // Execution services (operations 11 and 12): read_execution for activate and, on a format3 ledger only, for load (DD1);
+  // commit_execution for activate.
+  commands(l).load_format3 = commands(l).name == "load" && commands(l).services && commands(l).services->load_execution();
+  const bool execution_read = commands(l).name == "activate" || commands(l).load_format3;
+  if (execution_read) {
+    lua_pushinteger(l, 11);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "read_execution");
+  }
+  if (commands(l).name == "activate") {
+    lua_pushinteger(l, 12);
+    lua_pushcclosure(l, call_service, 1);
+    lua_setfield(l, -2, "commit_execution");
   }
   lua_call(l, 2, LUA_MULTRET);
   return lua_gettop(l);
@@ -3435,7 +3519,9 @@ void validate_response(command_state& c, const value_ptr& response) {
   if (!response->fields.at("ok")->boolean) {
     exact(response, {"ok", "error"});
     native_error_schema(response->fields.at("error"));
-    if (c.name == "load" && c.calls == 3)
+    if (c.name == "load" && c.calls == (c.load_format3 ? 4u : 3u))
+      command_refuse();
+    if (c.name == "activate" && c.calls == 2)
       command_refuse();
     return;
   }
@@ -3446,14 +3532,15 @@ void validate_response(command_state& c, const value_ptr& response) {
     return;
   }
 #endif
-  if (c.calls != (c.name == "render" ? 2 : c.name == "load" ? 3 : 1))
+  const std::size_t load_calls = c.load_format3 ? 4 : 3;
+  if (c.calls != (c.name == "render" ? 2 : c.name == "load" ? load_calls : c.name == "activate" ? 2 : 1))
     command_refuse();
   auto envelope = response->fields.at("value");
   if (!envelope || envelope->kind != value_kind::record || !envelope->fields.contains("version") ||
       envelope->fields.at("version")->kind != value_kind::integer || envelope->fields.at("version")->integer != 1 ||
       (text_field(envelope, "kind") != c.name && !(c.name == "render" && text_field(envelope, "kind") == "render_external")))
     command_refuse();
-  if (c.name == "history" || c.name == "load") {
+  if (c.name == "history" || c.name == "load" || c.name == "activate") {
     if (!same(envelope, c.facts))
       command_refuse();
   } else if (c.name == "init" || c.name == "export") {
@@ -4066,6 +4153,23 @@ command_service_result command_services::capture_load(const command_load_options
 }
 command_service_result command_services::accept_load(const command_load_options&, const value_ptr&, const value_ptr&,
                                                      std::span<const history::tree_file>, ledger::completion_receipt&) {
+  command_refuse();
+}
+bool command_services::load_execution() const {
+  return false;
+}
+command_service_result command_services::read_execution(const command_load_options&) {
+  command_refuse();
+}
+command_service_result command_services::accept_load(const command_load_options&, const value_ptr&, const value_ptr&,
+                                                     const value_ptr&, std::span<const history::tree_file>,
+                                                     ledger::completion_receipt&) {
+  command_refuse();
+}
+command_service_result command_services::read_execution(const command_activate_options&) {
+  command_refuse();
+}
+command_service_result command_services::commit_execution(const command_activate_options&, const value_ptr&) {
   command_refuse();
 }
 #ifdef PLANAR_AUTHORING_BUNDLE
@@ -5659,6 +5763,9 @@ std::expected<void, registration_error> admit_family_slots(profile_capture& capt
     std::expected<void, registration_error> operator()(const command_load_options&) const {
       return std::unexpected(profile_owner_protocol_error());
     }
+    std::expected<void, registration_error> operator()(const command_activate_options& o) const {
+      return admit_ledger(capture, o.ledger);
+    }
   };
   return std::visit(visitor{capture}, family);
 }
@@ -5692,6 +5799,11 @@ bool same_options(const command_options& a, const command_options& b) {
       return x.ledger == y.ledger && x.workspace == y.workspace && x.registry == y.registry &&
              x.expect_revision == y.expect_revision && x.request_id == y.request_id && x.actor == y.actor &&
              x.expected_head == y.expected_head;
+    }
+    bool operator()(const command_activate_options& x) const {
+      const auto& y = std::get<command_activate_options>(other);
+      return x.ledger == y.ledger && x.job == y.job && x.expect_revision == y.expect_revision && x.expect_job == y.expect_job &&
+             x.request_id == y.request_id && x.actor == y.actor;
     }
   };
   return std::visit(visitor{b}, a);

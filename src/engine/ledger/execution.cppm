@@ -3,7 +3,10 @@
 ///
 /// Entry points are `read_execution_snapshot` and `verify_execution_ledger` (reader), `lookup_execution_request` (exact
 /// replay or conflict), `authorize_run_token` (run token secret and state), and `stage_execution` with `commit_execution`
-/// (the EX-3 commit protocol). Every entry point refuses format1 and format2 ledgers with `unsupported_ledger_version`
+/// (the EX-3 commit protocol). The verifier also checks the five format2-era residuals of EX-1 invariant 20 (tree
+/// reachability, directory edges, embedded versions, workspace identity, recorded family versus the load selector), and an
+/// accepted load may carry prepared records that the commit interns in its own write transaction (G2). Every entry
+/// point refuses format1 and format2 ledgers with `unsupported_ledger_version`
 /// before any other work. Failures use the closed `execution_error_code` vocabulary of `execution_schema`. The module
 /// imports no runtime, command or acceptance code; the saved load result is built natively from allocated identifiers.
 export module planar.engine.ledger.execution;
@@ -13,6 +16,7 @@ export import planar.engine.ledger.execution_schema;
 export import planar.engine.history.request_v2;
 export import planar.engine.history.request_v3;
 export import planar.engine.history.execution_codec;
+export import planar.engine.history.tree_core;
 
 export namespace planar::engine::ledger {
 
@@ -25,6 +29,7 @@ struct execution_dispatch {
   std::uint64_t packet_id   = 0; ///< Packet file record identifier.
   std::uint64_t manifest_id = 0; ///< Manifest value record identifier.
   std::uint64_t work_id     = 0; ///< W value record identifier.
+  std::uint64_t revision    = 0; ///< dispatches.revision_id: the revision the dispatch was rendered at (advisory A1).
   value_ptr     work;            ///< Decoded W value.
 };
 
@@ -81,8 +86,9 @@ std::expected<void, execution_error> verify_execution_ledger(const std::filesyst
 
 /// @brief Measure the D24 canonical byte length of the snapshot value S with the revision's recorded values excluded.
 /// @param snapshot Snapshot whose roles, revision reference and active job form S.
-/// @return Canonical_v1 byte length of execution_snapshot_v1 S, the same measure the reader and writer enforce.
-/// @note Pure function: no I/O and no shared state; R15-C reuses this single definition.
+/// @return Canonical_v1 byte length of execution_snapshot_v1 S. Each dispatch is measured at its own recorded revision
+/// (`execution_dispatch::revision`, advisory A1), so the result equals the measure the reader stores in `state_bytes`.
+/// @note Pure function: no I/O and no shared state.
 std::uint64_t execution_state_bytes(const execution_snapshot& snapshot);
 
 /// @brief Framing of an execution request: request_v2 for load, request_v3 for every other execution operation.
@@ -199,6 +205,23 @@ struct execution_revision_input {
   bool          noop           = false; ///< Whether the load answers the active revision unchanged.
 };
 
+/// @brief One complete tree of a load candidate, interned by the commit inside its own write transaction (G2).
+struct execution_prepared_tree {
+  std::vector<history::tree_file> files;                                   ///< Complete file list of the tree.
+  history::tree_profile           profile = history::tree_profile::source; ///< Bounds profile of the tree.
+};
+
+/// @brief Prepared records of an accepted load candidate (G2): the three trees and the two canonical_v1 values.
+/// @note The commit interns every record collision-safe (D38) under the lock, before the revision record check, and
+/// the allocated root and value identifiers replace the five identifiers of `execution_change::revision`.
+struct execution_prepared_revision {
+  execution_prepared_tree source;         ///< Source tree, source profile.
+  execution_prepared_tree registry;       ///< Registry tree with the single input.json file, provenance profile.
+  execution_prepared_tree stdlib;         ///< Standard-library tree, provenance or effective_provenance profile.
+  std::string             interpretation; ///< Canonical_v1 bytes of the interpretation value.
+  std::string             versions;       ///< Canonical_v1 bytes of the versions value.
+};
+
 /// @brief Complete execution change built by a handler from one snapshot (D12, D13, D37).
 struct execution_change {
   std::string       operation;  ///< load, activate, claim or takeover.
@@ -210,8 +233,11 @@ struct execution_change {
   std::string                             role;         ///< Claim and takeover: the target role; otherwise empty.
   std::optional<std::uint64_t>            previous_run; ///< Takeover only: the run that the takeover fences.
   std::optional<execution_revision_input> revision;     ///< Load only.
-  std::vector<execution_generation_input> generations;  ///< Generations this change opens.
-  std::vector<std::uint64_t>              fenced_runs;  ///< Runs this change fences.
+  /// Accepted load only (G2, additive): records to intern inside the staged transaction; when present, the five
+  /// identifiers of `revision` are ignored and replaced by the interned identifiers.
+  std::optional<execution_prepared_revision> prepared;
+  std::vector<execution_generation_input>    generations; ///< Generations this change opens.
+  std::vector<std::uint64_t>                 fenced_runs; ///< Runs this change fences.
   std::vector<execution_transition_input>
       transitions; ///< Ordinal is position plus one; ordinal 1 is the target for claim and takeover (D20).
   std::vector<execution_vector_entry> vector; ///< Complete next role-state vector of the active job after the commit.

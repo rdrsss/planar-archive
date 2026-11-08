@@ -8,6 +8,11 @@ import planar.engine.ledger.acceptance;
 import planar.engine.history.read;
 import planar.engine.source_export;
 import planar.engine.runtime; // X07-REAL-RUNTIME
+import planar.engine.canonical;
+import planar.engine.ledger.execution;
+import planar.engine.execution.snapshot_value;
+import planar.engine.execution.change_value;
+import planar.engine.history.provenance;
 #ifdef PLANAR_AUTHORING_BUNDLE
 import planar.engine.capture.directory;
 import planar.engine.hash;
@@ -49,6 +54,158 @@ value_ptr load_error(const acceptance::load_error& error) {
   if (error.code == acceptance::load_error_code::resource_limit)
     return native_error({"resource_limit", "Load exceeds native resource limits"});
   return native_error({"internal", "Invalid native load preparation"});
+}
+value_ptr activate_uncertainty_error(std::string operation) {
+  return object({{"code", text("io")},
+                 {"message", text("Activate may be complete; retry the same request ID or inspect request history")},
+                 {"field", text("")},
+                 {"details", object({{"operation", text(std::move(operation))}})}});
+}
+/// Closed public mapping of the format3 execution failure categories (execution-contract EX-7 and Messages): reused codes
+/// keep their existing messages byte for byte; the E16 codes use their fixed messages.
+value_ptr execution_error_value(const ledger::execution_error& error) {
+  using enum ledger::execution_error_code;
+  auto plain = [](std::string code, std::string message) {
+    return object({{"code", text(std::move(code))}, {"message", text(std::move(message))}, {"field", text("")}});
+  };
+  auto with = [](std::string code, std::string message, value_ptr details) {
+    return object({{"code", text(std::move(code))},
+                   {"message", text(std::move(message))},
+                   {"field", text("")},
+                   {"details", std::move(details)}});
+  };
+  auto ledger_io = [&](std::string message) { return with("io", std::move(message), object({{"operation", text("ledger")}})); };
+  switch (error.code) {
+  case unsupported_ledger_version:
+    return plain("unsupported_ledger_version", "Ledger version or state is unsupported");
+  case foreign_ledger:
+    return plain("foreign_ledger", "File is not a Planar ledger");
+  case ledger_not_found:
+    return plain("ledger_not_found", "Ledger was not found");
+  case ledger_exists:
+    return plain("ledger_exists", "Ledger target already exists");
+  case ledger_corrupt:
+    return plain("ledger_corrupt", "Ledger integrity verification failed");
+  case ledger_busy:
+    return plain("ledger_busy", "Ledger is busy");
+  case storage_full:
+    return plain("storage_full", "Ledger storage is full");
+  case io:
+    return ledger_io("Ledger operation failed");
+  case path_denied:
+    return plain("path_denied", "Ledger path requires existing real parent directories and a valid target");
+  case recovery_required:
+    return ledger_io("Explicit ledger recovery is required");
+  case request_conflict:
+    return plain("request_conflict", "Ledger request conflicts with its saved intent");
+  case revision_conflict:
+    return with("revision_conflict", "Ledger revision does not match the expected revision",
+                object({{"expected", text(error.expected)}, {"actual", text(error.actual)}}));
+  case state_conflict:
+    return plain("state_conflict", "Execution state changed since the request was prepared");
+  case claim_conflict:
+    return with("claim_conflict", "Role state does not allow this operation", object({{"state", text(error.state)}}));
+  case fenced:
+    return with("fenced", "Run is not current", object({{"run_state", text(error.state)}}));
+  case resource_limit:
+    return with("resource_limit", "Execution resource limit exceeded",
+                object({{"limit", text(error.limit)}, {"maximum", integer(static_cast<std::int64_t>(error.maximum))}}));
+  case hash_collision: {
+    std::map<std::string, value_ptr> details{{"kind", text(error.record_kind)}};
+    if (!error.record_digest.empty())
+      details["digest"] = text(error.record_digest);
+    return with("hash_collision", "Ledger record identity collision", object(std::move(details)));
+  }
+  case invalid_change:
+  case unknown_run:
+    break;
+  }
+  return plain("internal", "Invalid embedded command protocol");
+}
+/// Map a format3 initialization or open failure to the existing ledger refusal, so init and the format3 read variant keep
+/// the closed `ledger_error` bytes of format1 and format2 (EX-1, Q13 A: the init response and diagnostics are unchanged).
+ledger::types::format_error init_format_error(const ledger::execution_error& error) {
+  using enum ledger::execution_error_code;
+  using code = ledger::types::format_error_code;
+  switch (error.code) {
+  case unsupported_ledger_version:
+    return {code::unsupported_version, ""};
+  case foreign_ledger:
+    return {code::foreign_ledger, ""};
+  case ledger_not_found:
+    return {code::not_found, ""};
+  case ledger_exists:
+    return {code::exists, ""};
+  case ledger_corrupt:
+    return {code::corrupt, ""};
+  case ledger_busy:
+    return {code::busy, ""};
+  case storage_full:
+    return {code::storage_full, ""};
+  case path_denied:
+    return {code::unsafe_path, ""};
+  case recovery_required:
+    return {code::recovery_required, ""};
+  case invalid_change:
+    return {code::invalid_argument, ""};
+  default:
+    return {code::io, ""};
+  }
+}
+/// Complete format3 verification before a format3 read through the storage read variant (R15-C DD35): the storage
+/// reader checks only the format3 shape, the execution module verifies every format3 invariant.
+/// @return Null when the ledger is not format3 or verifies, otherwise the public refusal.
+value_ptr verify_format3_read(const std::filesystem::path& path, const ledger::ledger_metadata& metadata) {
+  if (metadata.format != ledger::ledger_format::v3)
+    return nullptr;
+  auto verified = ledger::verify_execution_ledger(path);
+  if (!verified)
+    return ledger_error(init_format_error(verified.error()));
+  return nullptr;
+}
+ledger::execution_error execution_failure(ledger::execution_error_code code) {
+  ledger::execution_error error{};
+  error.code = code;
+  return error;
+}
+/// The fixed EX-7 code messages that native execution sites of activate raise before the commit.
+value_ptr execution_code(std::string_view code) {
+  std::string message = code == "no_active_job"             ? "No active job matches the request"
+                        : code == "interpretation_mismatch" ? "Interpretation does not match the active revision"
+                                                            : "Execution state changed since the request was prepared";
+  return object({{"code", text(std::string(code))}, {"message", text(std::move(message))}, {"field", text("")}});
+}
+std::string digest_hex(const history::record_digest& digest) {
+  std::string out;
+  for (auto byte : digest)
+    out += std::format("{:02x}", byte);
+  return out;
+}
+/// Portable root digest of a complete tree, as the format3 ledger records it, without storage.
+std::optional<std::string> tree_digest(const std::vector<history::tree_file>& files, history::tree_profile profile) {
+  std::vector<history::tree_file_view> views;
+  views.reserve(files.size());
+  for (const auto& file : files)
+    views.push_back(history::tree_file_view{file.path, file.payload, file.mode});
+  auto digest = history::digest_tree(views, profile);
+  if (!digest)
+    return std::nullopt;
+  return digest_hex(*digest);
+}
+/// The stdlib digest of this binary's embedded standard library (EX-6 binding for the embedded factory).
+std::optional<std::string> embedded_stdlib_digest() {
+  auto prepared = history::prepare_embedded_stdlib();
+  if (!prepared)
+    return std::nullopt;
+  return tree_digest(prepared->files, history::tree_profile::provenance);
+}
+std::optional<std::string> canonical_text(const value_ptr& node) {
+  if (!node)
+    return std::nullopt;
+  auto bytes = canonical_encode(node);
+  if (!bytes)
+    return std::nullopt;
+  return std::move(*bytes);
 }
 bool stage_token(std::string_view s) {
   constexpr std::string_view prefix = ".planar-export-";
@@ -186,6 +343,163 @@ public:
       return {{}, native_error({"internal", "Invalid saved load response"})};
     return {*decoded, {}};
   }
+  // Format3 load (R15-C P3, DD1): set by the load prelude when the ledger is format3; the snapshot is the one
+  // read_execution returned, and every later step of the invocation uses exactly that snapshot.
+  bool                                      load_format3 = false;
+  std::string                               execution_workspace;
+  std::optional<ledger::execution_snapshot> execution_state;
+  // Activate: the prelude identity, and the saved result once the commit is known to have happened.
+  std::string activate_identity;
+  std::string activate_saved;
+  bool        activate_committed = false;
+  bool        load_execution() const override {
+    return load_format3;
+  }
+  command_service_result read_execution(const engine::command_load_options& options) override {
+    auto snapshot = ledger::read_execution_snapshot(options.ledger);
+    if (!snapshot)
+      return {{}, execution_error_value(snapshot.error())};
+    if (snapshot->identity != load_ledger_identity)
+      return {{}, execution_error_value(execution_failure(ledger::execution_error_code::path_denied))};
+    auto encoded = execution::snapshot_value(*snapshot);
+    if (!encoded)
+      return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+    execution_state = std::move(*snapshot);
+    return {*encoded, {}};
+  }
+  command_service_result accept_load(const engine::command_load_options& options, const value_ptr& bundle,
+                                     const value_ptr& semantic, const value_ptr& reconciled,
+                                     std::span<const history::tree_file> provenance,
+                                     ledger::completion_receipt&         completion) override {
+    load_receipt = &completion;
+    if (!load_capture || !load_intent || !execution_state)
+      return {{}, native_error({"internal", "Missing native load intent"})};
+    auto intent_data = load_intent->data();
+    if (!intent_data || !(*intent_data)->version2)
+      return {{}, native_error({"internal", "Missing native load intent"})};
+    auto candidate = load_capture->prepare(bundle, semantic, provenance);
+    if (!candidate)
+      return {{}, load_error(candidate.error())};
+    auto data = candidate->data();
+    if (!data)
+      return {{}, native_error({"internal", "Invalid native load preparation"})};
+    const auto& input = **data;
+    if (input.workspace_id != execution_workspace)
+      return {{}, ledger_error({ledger::format_error_code::invalid_argument, ""})};
+    // The candidate records (G2): interned by the commit inside its own write transaction.
+    ledger::execution_prepared_revision records{
+        {input.source, history::tree_profile::source},
+        {input.registry.files, history::tree_profile::provenance},
+        {input.stdlib.files, history::tree_profile::provenance},
+        input.interpretation.encoded,
+        input.interpretation.versions_encoded};
+    // A load whose five records equal the active revision exactly is a noop: it names the active identifiers and carries
+    // no prepared records (EX-4, DD25).
+    ledger::execution_revision_input revision{};
+    bool                             noop = false;
+    if (const auto& active = execution_state->revision) {
+      const auto registry_digest =
+          active->registry_value && active->registry_value->fields.contains("digest") &&
+                  active->registry_value->fields.at("digest")->kind == value_kind::string
+              ? std::optional<std::string>(active->registry_value->fields.at("digest")->string)
+              : std::nullopt;
+      noop = tree_digest(records.source.files, records.source.profile) == std::optional<std::string>(active->source_digest) &&
+             tree_digest(records.stdlib.files, records.stdlib.profile) == std::optional<std::string>(active->stdlib_digest) &&
+             registry_digest && tree_digest(records.registry.files, records.registry.profile) == registry_digest &&
+             canonical_text(active->interpretation_value) == std::optional<std::string>(records.interpretation) &&
+             canonical_text(active->versions_value) == std::optional<std::string>(records.versions);
+      if (noop)
+        revision = ledger::execution_revision_input{active->source, active->registry, active->stdlib,
+                                                    active->interpretation, active->versions, true};
+    }
+    execution::load_options typed{*(*intent_data)->version2, revision, std::nullopt};
+    if (!noop)
+      typed.prepared = std::move(records);
+    const execution::change_request request{(*intent_data)->request_id, (*intent_data)->fields.actor, std::nullopt,
+                                            std::move(typed), nullptr};
+    auto change = execution::decode_execution_change(reconciled, *execution_state, request);
+    if (!change)
+      return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+    auto staged = ledger::stage_execution(options.ledger, *execution_state, *change);
+    if (!staged)
+      return {{}, execution_error_value(staged.error())};
+    if (staged->result().replayed) {
+      completion.saved_result = staged->result().saved_result;
+      completion.phase        = ledger::completion_phase::replayed;
+    } else {
+      // Final receipt verification immediately before COMMIT, exactly as the format1 and format2 path.
+      if (!candidate->verify()) {
+        staged->abort();
+        return {{}, ledger_error({ledger::format_error_code::capture_changed, ""})};
+      }
+      completion.saved_result = staged->result().saved_result;
+      completion.phase        = ledger::completion_phase::commit_uncertain;
+      if (auto committed = staged->commit(); !committed) {
+        // A refused COMMIT leaves nothing written (execution_write::commit).
+        completion.phase = ledger::completion_phase::not_completed;
+        completion.saved_result.clear();
+        return {{}, execution_error_value(committed.error())};
+      }
+      completion.phase = ledger::completion_phase::committed;
+    }
+    auto saved_value = engine::codec_decode(completion.saved_result);
+    if (!saved_value)
+      return {{}, native_error({"internal", "Invalid saved load response"})};
+    return {*saved_value, {}};
+  }
+  command_service_result read_execution(const engine::command_activate_options& options) override {
+    auto snapshot = ledger::read_execution_snapshot(options.ledger);
+    if (!snapshot)
+      return {{}, execution_error_value(snapshot.error())};
+    if (snapshot->identity != activate_identity)
+      return {{}, execution_error_value(execution_failure(ledger::execution_error_code::path_denied))};
+    // Refusal step (4): EX-6 interpretation binding, only when an active revision exists.
+    if (snapshot->revision) {
+      const auto embedded = embedded_stdlib_digest();
+      if (!embedded)
+        return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+      if (*embedded != snapshot->revision->stdlib_digest)
+        return {{}, execution_code("interpretation_mismatch")};
+    }
+    // Refusal step (5): expectations (D111). --expect-job NONE while a job is active is the D149 state_conflict site.
+    const std::string actual = snapshot->revision ? std::to_string(snapshot->revision->id) : std::string("none");
+    if (options.expect_revision != actual) {
+      auto conflict = execution_failure(ledger::execution_error_code::revision_conflict);
+      conflict.expected = options.expect_revision;
+      conflict.actual   = actual;
+      return {{}, execution_error_value(conflict)};
+    }
+    if (options.expect_job == "NONE") {
+      if (!snapshot->active_job.empty())
+        return {{}, execution_code("state_conflict")};
+    } else if (snapshot->active_job != options.expect_job) {
+      return {{}, execution_code("no_active_job")};
+    }
+    auto encoded = execution::snapshot_value(*snapshot);
+    if (!encoded)
+      return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+    execution_state = std::move(*snapshot);
+    return {*encoded, {}};
+  }
+  command_service_result commit_execution(const engine::command_activate_options& options, const value_ptr& change) override {
+    if (!execution_state)
+      return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+    const execution::change_request request{
+        options.request_id, options.actor, std::nullopt,
+        execution::activate_options{options.job, options.expect_revision, options.expect_job}, nullptr};
+    auto decoded = execution::decode_execution_change(change, *execution_state, request);
+    if (!decoded)
+      return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+    auto committed = ledger::commit_execution(options.ledger, *execution_state, *decoded);
+    if (!committed)
+      return {{}, execution_error_value(committed.error())};
+    activate_saved     = committed->saved_result;
+    activate_committed = true;
+    auto saved_value   = engine::codec_decode(activate_saved);
+    if (!saved_value)
+      return {{}, native_error({"internal", "Invalid embedded command protocol"})};
+    return {*saved_value, {}};
+  }
   command_service_result open_workspace(const command_render_options& options) override {
     return capture_boundary([&]() -> command_service_result {
       const std::filesystem::path file(required(resolve_explicit_file(options.workspace)));
@@ -262,9 +576,10 @@ public:
   }
   command_service_result initialize_ledger(const command_init_options& options) override {
     try {
-      auto metadata = engine::ledger::initialize_new_v2(options.ledger, options.workspace_id);
+      // Init cutover (EX-1, Q13 A, XD5): a new ledger is format3; the CLI signature and response bytes are unchanged.
+      auto metadata = engine::ledger::initialize_format3(options.ledger, options.workspace_id);
       if (!metadata)
-        return {{}, ledger_error(metadata.error())};
+        return {{}, ledger_error(init_format_error(metadata.error()))};
       return {object({{"ledger", text(metadata->identity)},
                       {"workspace", text(metadata->workspace_id)},
                       {"active_revision", text("none")},
@@ -293,6 +608,8 @@ public:
       auto file    = engine::ledger::open_existing(options.ledger);
       if (!file)
         return {{}, ledger_error(file.error())};
+      if (auto refused = verify_format3_read(options.ledger, file->metadata()))
+        return {{}, refused};
       auto result = engine::history::read_history(*file, q);
       if (result)
         return {*result, {}};
@@ -313,6 +630,14 @@ public:
     }
   }
   command_service_result export_source(const command_export_options& options) override {
+    {
+      // Format3 sources are read by the storage read variant after the complete format3 verification (DD35, DD7).
+      auto file = engine::ledger::open_existing(options.ledger);
+      if (file) {
+        if (auto refused = verify_format3_read(options.ledger, file->metadata()))
+          return {{}, refused};
+      }
+    }
     auto result = engine::source_export::export_source(options.ledger, options.revision, options.target);
     if (!result)
       return {{}, export_error(result.error())};
@@ -494,6 +819,8 @@ prepare_invocation_paths(engine::command_options&                               
     selected.push_back({&exporting->target, 0});
   } else if (auto* initializing = std::get_if<engine::command_init_options>(&options)) {
     selected.push_back({&initializing->ledger, 0});
+  } else if (auto* activating = std::get_if<engine::command_activate_options>(&options)) {
+    selected.push_back({&activating->ledger, 0});
   } else {
     selected.push_back({&std::get<engine::command_history_options>(options).ledger, 0});
   }
@@ -619,6 +946,10 @@ response execute_profile_load(const engine::acceptance::request_intent& intent, 
       if (!ledger)
         return failed(ledger_error(ledger.error()));
       ledger_identity = ledger->metadata().identity;
+      // A format3 ledger opens read-only through storage since the cutover (DD35); the profile load path stays refused
+      // there exactly as before, ahead of any request lookup.
+      if (ledger->metadata().format == engine::ledger::ledger_format::v3)
+        return failed(ledger_error({engine::ledger::format_error_code::unsupported_version, ""}));
       auto saved      = ledger->read_request(request.request_id);
       if (!saved)
         return failed(ledger_error(saved.error()));
@@ -715,6 +1046,98 @@ response native_export_failure(const engine::source_export::export_error& error)
     result.status = 4;
   return result;
 }
+namespace {
+/// Outcome of the format3 load prelude: whether the ledger is format3, and the typed refusal when one applies.
+struct format3_selection {
+  bool      selected = false; ///< True when the ledger is format3 and the execution path owns the load.
+  value_ptr refusal;          ///< Public error value; null when the load continues.
+};
+/// Format3 load prelude (EX-3 step 1, DD1): verify the format3 ledger, frame request_v2 and answer exact replay through
+/// the execution lookup. Format1 and format2 ledgers, and every refusal the existing open reports, keep the existing path.
+format3_selection format3_load_prelude(const engine::command_load_options& load, native_services& services,
+                                       engine::ledger::completion_receipt& receipt) {
+  format3_selection out;
+  {
+    // The storage reader opens format3 read-only since the cutover (DD35); format1 and format2 keep the existing path.
+    auto legacy = engine::ledger::open_existing(load.ledger, engine::ledger::ledger_access::read_only);
+    if (legacy ? legacy->metadata().format != engine::ledger::ledger_format::v3
+               : legacy.error().code != engine::ledger::format_error_code::unsupported_version)
+      return out;
+  }
+  std::string identity, workspace;
+  {
+    auto opened = engine::ledger::open_format3(load.ledger, engine::ledger::execution_access::read_only);
+    if (!opened) {
+      if (opened.error().code == engine::ledger::execution_error_code::unsupported_ledger_version)
+        return out;
+      out.selected = true;
+      out.refusal  = execution_error_value(opened.error());
+      return out;
+    }
+    identity  = opened->metadata().identity;
+    workspace = opened->metadata().workspace_id;
+  } // The verified read connection is released before the lookup opens its own.
+  out.selected = true;
+  auto framed  = engine::acceptance::request_intent::create_v2(load.request_id, load.actor, load.expected_head, load.workspace,
+                                                               load.registry);
+  if (!framed) {
+    out.refusal = framed.error().code == engine::acceptance::preparation_error_code::resource_limit
+                      ? detail::native_error({"resource_limit", "Load request exceeds native resource limits"})
+                      : detail::native_error({"schema", "Invalid load arguments"});
+    return out;
+  }
+  services.load_intent.emplace(std::move(*framed));
+  auto data = services.load_intent->data();
+  if (!data || !(*data)->version2) {
+    out.refusal = detail::native_error({"internal", "Missing native load intent"});
+    return out;
+  }
+  auto found = engine::ledger::lookup_execution_request(load.ledger, load.request_id,
+                                                        engine::ledger::execution_framing{*(*data)->version2});
+  if (!found) {
+    out.refusal = execution_error_value(found.error());
+    return out;
+  }
+  if (found->state == engine::ledger::request_state::conflict) {
+    out.refusal = execution_error_value(execution_failure(engine::ledger::execution_error_code::request_conflict));
+    return out;
+  }
+  if (found->state == engine::ledger::request_state::replay) {
+    receipt.saved_result = std::move(found->result);
+    receipt.phase        = engine::ledger::completion_phase::replayed;
+  }
+  services.load_ledger_identity = std::move(identity);
+  services.execution_workspace  = std::move(workspace);
+  services.load_format3         = true;
+  return out;
+}
+/// Activate prelude, refusal steps (2) and (3) of P2-1: format3 only, then exact replay of the request_v3 framing.
+/// @return Public refusal, or null when the invocation continues (the receipt is filled for a replay).
+value_ptr activate_prelude(const engine::command_activate_options& options, native_services& services,
+                           engine::ledger::completion_receipt& receipt) {
+  auto framing = engine::execution::build_request_v3(
+      options.actor, engine::execution::activate_options{options.job, options.expect_revision, options.expect_job},
+      std::nullopt);
+  if (!framing)
+    return detail::native_error({"internal", "Invalid embedded command protocol"});
+  auto found = engine::ledger::lookup_execution_request(options.ledger, options.request_id,
+                                                        engine::ledger::execution_framing{std::move(*framing)});
+  if (!found)
+    return execution_error_value(found.error());
+  if (found->state == engine::ledger::request_state::conflict)
+    return execution_error_value(execution_failure(engine::ledger::execution_error_code::request_conflict));
+  if (found->state == engine::ledger::request_state::replay) {
+    receipt.saved_result = std::move(found->result);
+    receipt.phase        = engine::ledger::completion_phase::replayed;
+    return nullptr;
+  }
+  auto opened = engine::ledger::open_format3(options.ledger, engine::ledger::execution_access::read_only);
+  if (!opened)
+    return execution_error_value(opened.error());
+  services.activate_identity = opened->metadata().identity;
+  return nullptr;
+}
+} // namespace
 response execute(engine::command_options options, engine::command_vm* registered) {
   using namespace detail;
   response                           fallback{4, "", ""};
@@ -726,7 +1149,8 @@ response execute(engine::command_options options, engine::command_vm* registered
   auto                               published = [&]() {
     return (services &&
             (services->export_published ||
-             (services->load_receipt && services->load_receipt->phase != engine::ledger::completion_phase::not_completed))) ||
+             (services->load_receipt && services->load_receipt->phase != engine::ledger::completion_phase::not_completed) ||
+             services->activate_committed)) ||
            (vm && (vm->export_may_be_complete() || vm->load_may_be_complete())) ||
            early_completion.phase != engine::ledger::completion_phase::not_completed;
   };
@@ -756,6 +1180,17 @@ response execute(engine::command_options options, engine::command_vm* registered
         return {4, "", ""};
     }
     services = std::make_unique<native_services>();
+    const bool activating = std::holds_alternative<engine::command_activate_options>(options);
+    if (activating) {
+      fallback     = failed(activate_uncertainty_error("activate"));
+      stdout_error = failed(activate_uncertainty_error("stdout")).error;
+      if (fallback.error.empty() || stdout_error.empty())
+        return {4, "", ""};
+      if (auto refusal = activate_prelude(std::get<engine::command_activate_options>(options), *services, early_completion))
+        return failed(refusal);
+      if (early_completion.phase == engine::ledger::completion_phase::replayed)
+        return {0, early_completion.saved_result + "\n", "", std::move(stdout_error)};
+    }
     if (loading) {
       const auto& load = std::get<engine::command_load_options>(options);
       auto intent = engine::acceptance::request_intent::create(load.request_id, load.actor, load.expected_head, load.workspace,
@@ -766,7 +1201,11 @@ response execute(engine::command_options options, engine::command_vm* registered
         return failed(native_error({"schema", "Invalid load arguments"}));
       }
       services->load_intent.emplace(std::move(*intent));
-      {
+      // Format3 (DD1): the prelude selects the request_v2 framing and answers early replay through the execution lookup.
+      const auto format3 = format3_load_prelude(load, *services, early_completion);
+      if (format3.refusal)
+        return failed(format3.refusal);
+      if (!format3.selected) {
         auto ledger = engine::ledger::open_existing(load.ledger, engine::ledger::ledger_access::read_only);
         if (!ledger)
           return failed(ledger_error(ledger.error()));
@@ -811,6 +1250,11 @@ response execute(engine::command_options options, engine::command_vm* registered
         response.status = 4;
       return response;
     }
+    if (activating) {
+      if (!services->activate_committed)
+        return published() ? std::move(fallback) : failed(native_error({"internal", "Missing load completion"}));
+      return {0, services->activate_saved + "\n", "", std::move(stdout_error)};
+    }
     if (loading) {
       const auto* completion = vm->load_completion();
       if (!completion || (completion->phase != engine::ledger::completion_phase::committed &&
@@ -840,7 +1284,7 @@ response execute_with_profile(engine::command_options options, std::string_view 
   response                         fallback{4, "", ""};
   std::string                      stdout_error;
   std::unique_ptr<native_services> services;
-  const auto                       published = [&]() { return services && services->export_published; };
+  const auto published = [&]() { return services && (services->export_published || services->activate_committed); };
   try {
     invocation_snapshot snapshot;
     auto selector = prepare_profile_invocation(profile_selector, options, snapshot, process_cwd, process_workspace_directory);
@@ -863,7 +1307,19 @@ response execute_with_profile(engine::command_options options, std::string_view 
       if (fallback.error.empty() || stdout_error.empty())
         return {4, "", ""};
     }
-    services    = std::make_unique<native_services>();
+    services = std::make_unique<native_services>();
+    if (std::holds_alternative<engine::command_activate_options>(options)) {
+      // Steps (2) and (3) run before the profile is read, as for a profile load.
+      fallback     = failed(activate_uncertainty_error("activate"));
+      stdout_error = failed(activate_uncertainty_error("stdout")).error;
+      if (fallback.error.empty() || stdout_error.empty())
+        return {4, "", ""};
+      engine::ledger::completion_receipt replay;
+      if (auto refusal = activate_prelude(std::get<engine::command_activate_options>(options), *services, replay))
+        return failed(refusal);
+      if (replay.phase == engine::ledger::completion_phase::replayed)
+        return {0, replay.saved_result + "\n", "", std::move(stdout_error)};
+    }
     auto opened = engine::profile_invocation::open_with_profile(*selector, options);
     if (!opened)
       return registration_failed(opened.error().detail);

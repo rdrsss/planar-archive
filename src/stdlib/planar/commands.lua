@@ -13,6 +13,16 @@ if registration then
     if rendered.error then return failed(rendered.error) end
     return result(rendered.value)
   end
+  -- Format3 load (DD1): native offers read_execution only on a format3 ledger. The reconciled change rides with the
+  -- candidate into accept_load, which prepares, interns and commits it in one write transaction (G2).
+  local function load_execution(context,normalized)
+    local read=context.read_execution({})
+    if not read.ok then return read end
+    local candidate={bundle=normalized.bundle,semantic=normalized.semantic}
+    local change=reconcile_execution({operation="load",snapshot=read.value,candidate=candidate})
+    if change.error then return failed(change.error) end
+    return context.accept_load({bundle=candidate.bundle,semantic=candidate.semantic,execution=change.value})
+  end
   local function load_command(invocation,context)
     local opened=context.open_workspace({workspace=invocation.options.workspace})
     if not opened.ok then return opened end
@@ -23,7 +33,17 @@ if registration then
     local interpreted=interpret_bundle(captured.value.bundle)
     if interpreted.error then return failed(interpreted.error) end
     local normalized=interpreted.value
+    if context.read_execution then return load_execution(context,normalized) end
     return context.accept_load({bundle=normalized.bundle,semantic=normalized.semantic})
+  end
+  -- activate (execution-contract P2-1): native runs refusal steps (1) to (5) before and inside read_execution; the
+  -- reconcile pass refuses an unknown job (step 7) and builds the change native validates and commits.
+  local function activate_command(invocation,context)
+    local read=context.read_execution({})
+    if not read.ok then return read end
+    local change=reconcile_execution({operation="activate",snapshot=read.value,job=invocation.options.job})
+    if change.error then return failed(change.error) end
+    return context.commit_execution({change=change.value})
   end
   local function init_command(invocation,context)
     local id=invocation.options["workspace-id"]
@@ -94,6 +114,10 @@ if registration then
     option("ledger","text",true),option("workspace","text",true),option("registry","text",true),
     option("expect-revision","text",true),option("request-id","text",true),option("actor","text",true)
   }),load_command)
+  registration.add(descriptor("activate","execution_commit_v1",{
+    option("ledger","text",true),option("job","text",true),option("expect-revision","text",true),
+    option("expect-job","text",true),option("request-id","text",true),option("actor","text",true)
+  }),activate_command)
   if registration.authoring then
     registration.add(authoring_descriptor("spec-prompt"),spec_prompt_command)
     registration.add(authoring_descriptor("critique"),critique_command)

@@ -94,6 +94,8 @@ planar_embed_lua(planar_runtime_source planar.engine.runtime_source
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/commands.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -105,6 +107,7 @@ planar_rewrite_module(planar_runtime
   INTERFACE runtime/runtime.cppm SOURCES runtime/runtime.cpp
   DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source
   TESTS runtime/runtime.t.cpp runtime/schema.t.cpp runtime/commands.t.cpp runtime/external_registration.t.cpp
+    runtime/reconcile.t.cpp runtime/dispatch.t.cpp
   TEST_TIMEOUT 120)
 planar_embed_lua(planar_runtime_test_source planar.engine.runtime_test_source
   "${PROJECT_SOURCE_DIR}/tests/stdlib/bridge.lua")
@@ -205,6 +208,8 @@ foreach(variant RANGE 0 20)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${v502b1_generated}/commands_${variant}.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -274,9 +279,23 @@ target_link_libraries(planar_ledger_execution_schema_tests PRIVATE planar_ledger
 planar_rewrite_module(planar_ledger_execution
   INTERFACE ledger/execution.cppm SOURCES ledger/execution.cpp
   DEPENDS planar_ledger_execution_schema planar_ledger_history_codec planar_history_request_v2 planar_history_request_v3 planar_history_execution_codec planar_hash planar_canonical planar_history_record planar_ledger_sqlite
+    planar_history_tree_core planar_history_recorded_interpretation
   TESTS ledger/execution.t.cpp TEST_TIMEOUT 120)
 # Test-only: the format1/format2 refusals and the legacy-ledger fixtures open ledgers through the existing format surface.
 target_link_libraries(planar_ledger_execution_tests PRIVATE planar_ledger_format)
+
+# R15-C native execution services (EX-9 placement): the read_execution snapshot value, execution_change_v1 decoding with
+# native request framing, and the read_provenance single-file capture.
+planar_rewrite_module(planar_execution_snapshot_value
+  INTERFACE execution/snapshot_value.cppm SOURCES execution/snapshot_value.cpp
+  DEPENDS planar_ledger_execution planar_value planar_canonical TESTS execution/snapshot_value.t.cpp)
+planar_rewrite_module(planar_execution_change_value
+  INTERFACE execution/change_value.cppm SOURCES execution/change_value.cpp
+  DEPENDS planar_ledger_execution planar_value planar_canonical TESTS execution/change_value.t.cpp)
+planar_rewrite_module(planar_execution_provenance_input
+  INTERFACE execution/provenance_input.cppm SOURCES execution/provenance_input.cpp
+  DEPENDS planar_capture planar_json_codec planar_history_execution_codec planar_value
+  TESTS execution/provenance_input.t.cpp)
 
 planar_rewrite_module(planar_history_tree_core
   INTERFACE history/tree_core.cppm SOURCES history/tree_core.cpp
@@ -407,7 +426,10 @@ set_target_properties(planar_atomic_digest_test planar_atomic_storage_test plana
 planar_rewrite_module(planar_history_read
   INTERFACE history/read.cppm SOURCES history/read.cpp
   DEPENDS planar_ledger_format planar_history_interpretation_codec planar_history_recorded_interpretation planar_history_tree planar_json_codec
+    planar_history_execution_codec
   TESTS history/read.t.cpp)
+# Test-only edge (R15-C P4): the format3 history cases create their ledger with the format3 initializer.
+target_link_libraries(planar_history_read_tests PRIVATE planar_ledger_execution_schema)
 
 add_executable(planar_history_fixture EXCLUDE_FROM_ALL
   "${PROJECT_SOURCE_DIR}/tests/native/r14e2-support/fixture.cpp")
@@ -421,6 +443,8 @@ planar_rewrite_module(planar_source_export
   INTERFACE export/source_export.cppm SOURCES export/source_export.cpp
   DEPENDS planar_history_tree TESTS export/source_export.t.cpp TEST_TIMEOUT 120)
 target_link_libraries(planar_source_export_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared planar_history_provenance_codec planar_canonical)
+# Test-only edge (R15-C P4): the format3 export case commits its revision through the execution ledger API.
+target_link_libraries(planar_source_export_tests PRIVATE planar_ledger_execution)
 target_compile_definitions(planar_source_export_tests PRIVATE
   PLANAR_PREPARED_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures"
   PLANAR_EXPORT_FIXTURE="$<TARGET_FILE:planar_history_fixture>")
@@ -477,6 +501,8 @@ foreach(variant RANGE 0 5)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${r14d6_generated}/commands_${variant}.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -512,6 +538,8 @@ foreach(variant RANGE 0 0)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${r14d6c01_generated}/commands_${variant}.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
@@ -599,6 +627,8 @@ foreach(variant RANGE 0 1)
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/presentation.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/observations.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/render.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/dispatch.lua"
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/reconcile.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${x05a0_commands}"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")

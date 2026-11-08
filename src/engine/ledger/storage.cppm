@@ -5,6 +5,8 @@
 /// shared redacted `format_error` vocabulary. Every owner is thread-confined and move-only. No raw SQLite handle, callback
 /// or caller-supplied SQL escapes: `write_transaction` exposes a finite set of typed operations, and any failed operation
 /// rolls the whole transaction back and invalidates it. The module imports neither runtime, acceptance nor format.
+/// Format3 ledgers open read-only with a reduced shape check (R15-C DD35); their complete verification and every format3
+/// write belong to the execution module, and writable format3 access here is refused as an unsupported version.
 module;
 #include <sys/stat.h>
 #include <unistd.h>
@@ -92,6 +94,15 @@ public:
   /// @param limit Explicit count from one through 100.
   /// @return Owned bounded page; failures invalidate all reads.
   std::expected<event_page, format_error> read_events_after(std::uint64_t cursor, std::size_t limit) const;
+  /// @brief Read a format3 request row of any execution operation, without its private body.
+  /// @param key ASCII request token of one through 128 bytes.
+  /// @return Owned row or successful optional miss; invalid_argument on a format1 or format2 snapshot; failures invalidate.
+  std::expected<std::optional<::planar::engine::ledger::execution_request_row>, format_error> read_execution_request(std::string_view key) const;
+  /// @brief Replay the format3 execution state at one event from immutable rows, without Lua (P2-5 `--at-event`).
+  /// @param sequence Positive event sequence; rows with a greater sequence are ignored.
+  /// @param job Active job at that event, or empty for none (then no roles or runs are replayed).
+  /// @return Latest activation, the job's roles and the active runs; invalid_argument on format1 or format2.
+  std::expected<::planar::engine::ledger::execution_state_at, format_error> read_execution_state_at(std::uint64_t sequence, std::string_view job) const;
   /// @brief Copy this pinned snapshot into an already staged destination through SQLite online backup.
   /// @param destination Existing staged file owned by the caller.
   /// @return Success or storage failure mapped to the shared vocabulary.

@@ -289,6 +289,13 @@ stored store_value(connection& db, const value_ptr& input) {
   return store_record(db, hist::record{hist::value_record{.codec = "canonical_v1", .encoded = bytes_of(input)}});
 }
 
+/// Interpretation value of a seeded revision: the tag, the embedded versions and the bundle workspace (L2 residuals).
+value_ptr seeded_interpretation(std::string_view tag, const value_ptr& versions, std::string_view workspace = workspace_name) {
+  return vrec({{"tag", vstr(std::string(tag))},
+               {"bundle", vrec({{"workspace", vrec({{"id", vstr(std::string(workspace))}})}})},
+               {"versions", versions}});
+}
+
 /// Identifiers of the five immutable records one revision names.
 struct revision_ids {
   std::uint64_t source         = 0;
@@ -301,15 +308,17 @@ struct revision_ids {
 /// Insert the five format2-shaped records of one revision. Stdlib content is constant across seeds, so every seed
 /// carries the same stdlib digest; the source and interpretation carry the tag so distinct seeds differ.
 revision_ids seed_revision(const std::filesystem::path& path, std::string_view tag) {
-  auto db             = open_raw(path);
-  auto lib_file       = store_file(db, "stdlib body v1");
-  auto stdlib         = store_directory(db, {child{"stdlib.lua", hist::record_kind::file, lib_file}});
-  auto source_file    = store_file(db, std::format("source {}", tag));
-  auto source         = store_directory(db, {child{"source.txt", hist::record_kind::file, source_file}});
-  auto input_file     = store_file(db, std::format("{{\"tag\":\"{}\"}}", tag));
-  auto registry       = store_directory(db, {child{"input.json", hist::record_kind::file, input_file}});
-  auto interpretation = store_value(db, vrec({{"tag", vstr(std::string(tag))}}));
-  auto versions       = store_value(db, vrec({{"stdlib_digest", vstr(digest_hex(stdlib.digest))}}));
+  auto db          = open_raw(path);
+  auto lib_file    = store_file(db, "stdlib body v1");
+  auto stdlib      = store_directory(db, {child{"stdlib.lua", hist::record_kind::file, lib_file}});
+  auto source_file = store_file(db, std::format("source {}", tag));
+  auto source      = store_directory(db, {child{"source.txt", hist::record_kind::file, source_file}});
+  auto input_file  = store_file(db, std::format("{{\"tag\":\"{}\"}}", tag));
+  auto registry    = store_directory(db, {child{"input.json", hist::record_kind::file, input_file}});
+  // L2 residuals: the interpretation embeds the versions value and names the ledger workspace.
+  const auto versions_value = vrec({{"stdlib_digest", vstr(digest_hex(stdlib.digest))}});
+  auto       interpretation = store_value(db, seeded_interpretation(tag, versions_value));
+  auto       versions       = store_value(db, versions_value);
   return revision_ids{source.id, registry.id, stdlib.id, interpretation.id, versions.id};
 }
 
@@ -1694,8 +1703,9 @@ TEST_CASE("format3 snapshot decodes the recorded revision values") {
   auto        db       = open_raw(path);
   REQUIRE(revision.interpretation_value != nullptr);
   REQUIRE(revision.versions_value != nullptr);
-  REQUIRE(bytes_of(revision.interpretation_value) == bytes_of(vrec({{"tag", vstr("one")}})));
   const auto stdlib_hex = to_hex(blob_of(db, std::format("SELECT digest FROM records WHERE id = {}", revision.stdlib)));
+  REQUIRE(bytes_of(revision.interpretation_value) ==
+          bytes_of(seeded_interpretation("one", vrec({{"stdlib_digest", vstr(stdlib_hex)}}))));
   REQUIRE(bytes_of(revision.versions_value) == bytes_of(vrec({{"stdlib_digest", vstr(stdlib_hex)}})));
   REQUIRE(revision.stdlib_digest == stdlib_hex);
   REQUIRE(revision.source_digest ==
@@ -3650,4 +3660,200 @@ TEST_CASE("execution refuses a snapshot taken from a replaced ledger") {
   REQUIRE(!error);
   REQUIRE(commit_execution(path, snapA, change).has_value());
   require_verifies(path);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// R15-C (draft) additions: the five L2 residual cross-row checks, advisory A1 and the G2 interning hook.
+
+namespace {
+
+/// Repoint one revision record column of revision 1 and its accepting event reference to another record (D43 style).
+void repoint_revision(const std::filesystem::path& path, std::string_view column, std::string_view reference,
+                      std::uint64_t record) {
+  corrupt(path, {std::format("UPDATE revisions SET {} = {} WHERE id = 1", column, record),
+                 payload_update_sql(path, seq_of_type(path, "declaration_accepted"), [&](hist::event_payload_v2& payload) {
+                   payload.references[std::string(reference)] = std::to_string(record);
+                 })});
+}
+
+std::string stdlib_hex_of(connection& db) {
+  return to_hex(blob_of(db, "SELECT digest FROM records WHERE id = (SELECT stdlib_id FROM revisions WHERE id = 1)"));
+}
+
+/// Prepared records of a load candidate for the G2 hook: tagged source, the registry input and a fixed stdlib tree.
+execution_prepared_revision prepared_candidate(std::string_view tag) {
+  execution_prepared_revision out;
+  out.source.profile   = hist::tree_profile::source;
+  out.source.files     = {hist::tree_file{"jobs/main.lua", std::format("-- source {}\n", tag), 420},
+                          hist::tree_file{"workspace.lua", "return {}\n", 420}};
+  out.registry.profile = hist::tree_profile::provenance;
+  out.registry.files   = {hist::tree_file{"input.json", std::format("{{\"tag\":\"{}\"}}", tag), 420}};
+  out.stdlib.profile   = hist::tree_profile::provenance;
+  out.stdlib.files     = {hist::tree_file{"planar/stdlib.lua", "stdlib body prepared\n", 420}};
+  std::vector<hist::tree_file_view> views;
+  for (const auto& file : out.stdlib.files)
+    views.push_back(hist::tree_file_view{file.path, file.payload, file.mode});
+  auto digest = hist::digest_tree(views, hist::tree_profile::provenance);
+  REQUIRE(digest.has_value());
+  const auto versions = vrec({{"stdlib_digest", vstr(digest_hex(*digest))}});
+  out.interpretation  = bytes_of(seeded_interpretation(tag, versions));
+  out.versions        = bytes_of(versions);
+  return out;
+}
+
+} // namespace
+
+TEST_CASE("format3 verification rejects directory edges that disagree with the encoded children") {
+  scratch    dir;
+  const auto path = activated_ledger(dir);
+  require_verifies(path);
+  // The source root's single edge is renamed: the encoded child stays "source.txt", the edge says "renamed.txt". Tree
+  // reconstruction reads the encoded children, so only the edge check can see this.
+  corrupt(path, {"UPDATE tree_edges SET name = 'renamed.txt' WHERE name = 'source.txt'"});
+  expect_corrupt(path);
+}
+
+TEST_CASE("format3 verification rejects a revision tree that does not reconstruct") {
+  scratch    dir;
+  const auto path = activated_ledger(dir);
+  require_verifies(path);
+  // A source root whose only child is an empty subdirectory: every record and edge is consistent, but the tree is not
+  // reachable as files (an empty non-root directory never results from a captured tree).
+  auto       db    = open_raw(path);
+  const auto empty = store_directory(db, {});
+  const auto root  = store_directory(db, {child{"empty", hist::record_kind::directory, empty}});
+  repoint_revision(path, "source_id", "source", root.id);
+  expect_corrupt(path);
+}
+
+TEST_CASE("format3 verification rejects an interpretation whose embedded versions differ from the versions record") {
+  scratch    dir;
+  const auto path = activated_ledger(dir);
+  require_verifies(path);
+  // The new versions record keeps the right stdlib digest (so the D23 shape check passes) but adds a field the
+  // interpretation's embedded versions do not carry.
+  auto       db       = open_raw(path);
+  const auto versions = store_value(db, vrec({{"stdlib_digest", vstr(stdlib_hex_of(db))}, {"extra", vstr("x")}}));
+  repoint_revision(path, "versions_id", "versions", versions.id);
+  expect_corrupt(path);
+}
+
+TEST_CASE("format3 verification rejects an interpretation naming another workspace") {
+  scratch    dir;
+  const auto path = activated_ledger(dir);
+  require_verifies(path);
+  auto       db       = open_raw(path);
+  const auto versions = vrec({{"stdlib_digest", vstr(stdlib_hex_of(db))}});
+  const auto other    = store_value(db, seeded_interpretation("one", versions, "other_workspace"));
+  repoint_revision(path, "interpretation_id", "interpretation", other.id);
+  expect_corrupt(path);
+  // The same interpretation naming the ledger workspace verifies: the check compares with ledger_meta, not a constant.
+  scratch    good_dir;
+  const auto good = activated_ledger(good_dir);
+  auto       gdb  = open_raw(good);
+  const auto same = store_value(gdb, seeded_interpretation("one", vrec({{"stdlib_digest", vstr(stdlib_hex_of(gdb))}})));
+  REQUIRE(same.id > 0);
+  require_verifies(good);
+}
+
+TEST_CASE("format3 verification rejects a recorded family that disagrees with the load profile selector") {
+  scratch    dir;
+  const auto path = activated_ledger(dir);
+  require_verifies(path);
+  // The load body gains a profile argument (selector 01) while the recorded interpretation is the embedded family.
+  auto             db = open_raw(path);
+  hist::request_v2 body;
+  body.operation          = "load";
+  body.actor              = "tester";
+  body.expected_head      = "none";
+  body.workspace_argument = std::string(workspace_name);
+  body.registry_argument  = "registry";
+  body.profile_argument   = "/private/profile";
+  auto encoded            = hist::encode_request_v2(body);
+  auto digest             = hist::digest_request_v2(body);
+  REQUIRE(encoded.has_value());
+  REQUIRE(digest.has_value());
+  const auto body_id = insert_frame(db, 4, 2, digest_text(*digest), *encoded);
+  corrupt(path, {std::format("UPDATE requests SET body_id = {} WHERE request_id = 'load-1'", body_id)});
+  expect_corrupt(path);
+}
+
+TEST_CASE("execution state bytes measures each dispatch at its own revision") {
+  scratch    dir;
+  const auto path = activated_ledger(dir);
+  // Revisions 2 to 9, a claim at revision 9, then revision 10: the dispatch revision ("9") and the active revision
+  // ("10") differ in decimal width, the case advisory A1 names.
+  for (int i = 2; i <= 9; ++i)
+    commit_load(path, std::format("load-{}", i), seed_revision(path, std::format("rev{}", i)));
+  commit_claim(path, "claim-1", "alpha", "builder");
+  commit_load(path, "load-10", seed_revision(path, "rev10"));
+  const auto snapshot = snapshot_of(path);
+  REQUIRE(snapshot.revision.has_value());
+  REQUIRE(snapshot.revision->id == 10);
+  const auto* builder = find_role(snapshot, "alpha", "builder");
+  REQUIRE(builder != nullptr);
+  REQUIRE(builder->dispatch.has_value());
+  auto db = open_raw(path);
+  REQUIRE(builder->dispatch->revision ==
+          static_cast<std::uint64_t>(
+              int_of(db, std::format("SELECT revision_id FROM dispatches WHERE id = {}", builder->dispatch->id))));
+  REQUIRE(builder->dispatch->revision == 9);
+  REQUIRE(execution_state_bytes(snapshot) == snapshot.state_bytes);
+}
+
+TEST_CASE("execution load interns prepared records inside its own transaction") {
+  scratch    dir;
+  const auto path = dir.ledger();
+  REQUIRE(initialize_format3(path, workspace_name).has_value());
+  const auto records_before = [&] {
+    auto db = open_raw(path);
+    return count_rows(db, "records");
+  }();
+  auto snapshot     = snapshot_of(path);
+  auto change       = load_change(snapshot, "load-1", "none", revision_input(revision_ids{}));
+  change.prepared   = prepared_candidate("one");
+  const auto result = commit_execution(path, snapshot, change);
+  INFO("commit failed with error code " << (result.has_value() ? -1 : static_cast<int>(result.error().code)));
+  REQUIRE(result.has_value());
+  require_verifies(path);
+  auto db = open_raw(path);
+  REQUIRE(count_rows(db, "revisions") == 1);
+  REQUIRE(count_rows(db, "records") > records_before);
+  // The revision roots are directory records with edges written for every encoded child.
+  for (const auto* column : {"source_id", "registry_id", "stdlib_id"}) {
+    const auto root = int_of(db, std::format("SELECT {} FROM revisions WHERE id = 1", column));
+    REQUIRE(int_of(db, std::format("SELECT kind FROM records WHERE id = {}", root)) == 2);
+    REQUIRE(int_of(db, std::format("SELECT count(*) FROM tree_edges WHERE parent_id = {}", root)) > 0);
+  }
+  const auto loaded = snapshot_of(path);
+  REQUIRE(loaded.revision.has_value());
+  REQUIRE(bytes_of(loaded.revision->interpretation_value) == change.prepared->interpretation);
+
+  // A second candidate sharing the stdlib tree reuses its records (exact-row reuse, D38) and duplicates no edge.
+  const auto stdlib_one = int_of(db, "SELECT stdlib_id FROM revisions WHERE id = 1");
+  const auto edges_one  = count_rows(db, "tree_edges");
+  auto       second     = snapshot_of(path);
+  auto       next       = load_change(second, "load-2", "1", revision_input(revision_ids{}));
+  next.prepared         = prepared_candidate("two");
+  REQUIRE(commit_execution(path, second, next).has_value());
+  require_verifies(path);
+  REQUIRE(int_of(db, "SELECT stdlib_id FROM revisions WHERE id = 2") == stdlib_one);
+  REQUIRE(count_rows(db, "tree_edges") > edges_one);
+
+  // Prepared records are refused on a noop load and on any other operation.
+  auto noop     = load_change(snapshot_of(path), "load-3", "2", revision_input(ids_of(snapshot_of(path)), true));
+  noop.prepared = prepared_candidate("two");
+  require_code(commit_execution(path, snapshot_of(path), noop), execution_error_code::invalid_change);
+}
+
+TEST_CASE("execution load with prepared records writes nothing when the commit is refused") {
+  scratch    dir;
+  const auto path = dir.ledger();
+  REQUIRE(initialize_format3(path, workspace_name).has_value());
+  auto snapshot     = snapshot_of(path);
+  auto change       = load_change(snapshot, "load-1", "7", revision_input(revision_ids{}));
+  change.prepared   = prepared_candidate("one");
+  const auto before = file_contents(dir.root);
+  require_code(commit_execution(path, snapshot, change), execution_error_code::revision_conflict);
+  REQUIRE(file_contents(dir.root) == before);
 }
