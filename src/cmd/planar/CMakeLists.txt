@@ -26,6 +26,30 @@ planar_rewrite_module(planar_load_command
 planar_rewrite_module(planar_activate_command
   INTERFACE handlers/activate/command.cppm SOURCES handlers/activate/command.cpp
   DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_status_command
+  INTERFACE handlers/status/command.cppm SOURCES handlers/status/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_preview_command
+  INTERFACE handlers/preview/command.cppm SOURCES handlers/preview/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_claim_command
+  INTERFACE handlers/claim/command.cppm SOURCES handlers/claim/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_takeover_command
+  INTERFACE handlers/takeover/command.cppm SOURCES handlers/takeover/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_refresh_command
+  INTERFACE handlers/refresh/command.cppm SOURCES handlers/refresh/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_checkpoint_command
+  INTERFACE handlers/checkpoint/command.cppm SOURCES handlers/checkpoint/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_release_command
+  INTERFACE handlers/release/command.cppm SOURCES handlers/release/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
+planar_rewrite_module(planar_recover_command
+  INTERFACE handlers/recover/command.cppm SOURCES handlers/recover/command.cpp
+  DEPENDS planar_command_invocation CLI11::CLI11_Module)
 planar_rewrite_module(planar_command_envelope
   INTERFACE envelope.cppm
   SOURCES envelope.cpp
@@ -61,8 +85,8 @@ planar_rewrite_module(planar_command
 # real activate handler reaches every bootstrap copy through the shared envelope target; the audited generators keep
 # their fixed dependency lists (DD27).
 target_link_libraries(planar_command_response PUBLIC planar_ledger_execution planar_execution_snapshot_value
-  planar_execution_change_value planar_history_provenance planar_canonical)
-target_link_libraries(planar_command_envelope PUBLIC planar_activate_command)
+  planar_execution_drafts planar_execution_change_value planar_execution_provenance_input planar_history_provenance planar_canonical)
+target_link_libraries(planar_command_envelope PUBLIC planar_activate_command planar_status_command planar_preview_command planar_claim_command planar_takeover_command planar_refresh_command planar_checkpoint_command planar_release_command planar_recover_command)
 target_compile_definitions(planar_command_tests PRIVATE
   PLANAR_B2_WORKSPACE_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota/workspace/workspace.lua")
 add_executable(planar main.cpp)
@@ -499,7 +523,7 @@ foreach(variant RANGE 0 21)
     string(REPLACE "module planar.engine.runtime;" "module planar.engine.authoring_variant_${variant};" text "${text}")
     string(REPLACE "namespace planar::engine {" "namespace planar::engine::authoring_variant_${variant} {" text "${text}")
     if(variant EQUAL 20 AND name STREQUAL "runtime.cpp")
-      planar_authoring_once(text "std::array<bundle_row, 12> bundle_table{{" "std::array<bundle_row, 13> bundle_table{{")
+      planar_authoring_once(text "std::array<bundle_row, 20> bundle_table{{" "std::array<bundle_row, 21> bundle_table{{")
       set(orchestrator_row [=[    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "orchestrator_capture_v1", true},
 ]=])
       set(status_row [=[    {"status", "shipped.status.v1", "status_v1", "render_capture_v1", true},

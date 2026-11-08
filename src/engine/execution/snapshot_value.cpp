@@ -59,8 +59,11 @@ std::expected<value_ptr, snapshot_value_error> revision_value(const ledger::exec
   if (!revision.interpretation_value || !revision.versions_value || !revision.registry_value)
     return fail("snapshot.revision");
   // Draft decision DD17: source is {id,digest} like the registry identity, so a handler can name the source record.
+  // Draft decision DD-D3 (R15-D): interpretation_id is the record id of revisions.interpretation_id, the manifest's
+  // inputs.interpretation; an internal key that is never driver-visible.
   return record({{"id", decimal(revision.id)},
                  {"interpretation", revision.interpretation_value},
+                 {"interpretation_id", decimal(revision.interpretation)},
                  {"versions", revision.versions_value},
                  {"stdlib_digest", text(revision.stdlib_digest)},
                  {"registry", revision.registry_value},
@@ -82,8 +85,8 @@ std::expected<value_ptr, snapshot_value_error> role_value(const ledger::executio
     run                          = record({{"id", decimal(*row.run_id)},
                                            {"generation", decimal(row.generation_ordinal)},
                                            {"dispatch", record({{"id", decimal(row.dispatch->id)},
-                                                                {"work_fp", text(row.dispatch->work_fp)},
-                                                                {"render_fp", text(row.dispatch->render_fp)},
+                                                                {"work_fp", text("xxh3_128:"+row.dispatch->work_fp)},
+                                                                {"render_fp", text("xxh3_128:"+row.dispatch->render_fp)},
                                                                 {"revision", decimal(revision)},
                                                                 {"work", row.dispatch->work}})}});
   }
@@ -96,7 +99,9 @@ std::expected<value_ptr, snapshot_value_error> role_value(const ledger::executio
        {"state", text(row.state)},
        {"drifted", flag(row.drifted)},
        {"fact_version", decimal(row.fact_version)},
-       {"run", run}});
+       {"run", run},
+       {"checkpoint",row.checkpoint ? record({{"id",decimal(row.checkpoint->id)},{"run",decimal(row.checkpoint->run_id)},
+          {"event",decimal(row.checkpoint->seq)},{"value",row.checkpoint->value}}) : text("none")}});
 }
 
 } // namespace

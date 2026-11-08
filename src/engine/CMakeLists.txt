@@ -239,7 +239,7 @@ planar_rewrite_module(planar_ledger_storage_types
 
 planar_rewrite_module(planar_ledger_storage
   INTERFACE ledger/storage.cppm SOURCES ledger/storage.cpp
-  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec planar_history_execution_codec
     planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical
   TESTS ledger/storage.t.cpp)
 # Test-only edge: the storage tests exercise the public format surface.
@@ -292,6 +292,10 @@ planar_rewrite_module(planar_execution_snapshot_value
 planar_rewrite_module(planar_execution_change_value
   INTERFACE execution/change_value.cppm SOURCES execution/change_value.cpp
   DEPENDS planar_ledger_execution planar_value planar_canonical TESTS execution/change_value.t.cpp)
+# R15-D P1 (DD-D6): the status drafts comparison of a captured declaration closure with the recorded source tree.
+planar_rewrite_module(planar_execution_drafts
+  INTERFACE execution/drafts.cppm SOURCES execution/drafts.cpp
+  DEPENDS planar_history_tree_core TESTS execution/drafts.t.cpp)
 planar_rewrite_module(planar_execution_provenance_input
   INTERFACE execution/provenance_input.cppm SOURCES execution/provenance_input.cpp
   DEPENDS planar_capture planar_json_codec planar_history_execution_codec planar_value
@@ -342,7 +346,7 @@ planar_rewrite_module(planar_record_digest_test
   INTERFACE "${r13b1_support}/digest.cppm" DEPENDS planar_history_record)
 planar_rewrite_module(planar_record_storage_test
   INTERFACE "${r13b1_generated}/storage.cppm" SOURCES "${r13b1_generated}/storage.cpp"
-  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec planar_history_execution_codec
     planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_record_digest_test)
 planar_rewrite_module(planar_record_format_test
   INTERFACE "${r13b1_generated}/format.cppm" SOURCES "${r13b1_generated}/format.cpp"
@@ -407,7 +411,7 @@ planar_rewrite_module(planar_atomic_digest_test
   INTERFACE "${r14c3b2_support}/digest.cppm" DEPENDS planar_history_record planar_history_request_v2)
 planar_rewrite_module(planar_atomic_storage_test
   INTERFACE "${r14c3b2_generated}/storage.cppm" SOURCES "${r14c3b2_generated}/storage.cpp"
-  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec planar_history_execution_codec
     planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_atomic_digest_test)
 planar_rewrite_module(planar_atomic_acceptance_test
   INTERFACE "${r14c3b2_generated}/acceptance.cppm" "${r14c3b2_generated}/acceptance_seam.cppm"
@@ -580,7 +584,7 @@ planar_rewrite_module(planar_metadata_fixture
   INTERFACE "${x03b2bc01_support}/fixture.cppm")
 planar_rewrite_module(planar_metadata_storage_test
   INTERFACE "${x03b2bc01_generated}/storage.cppm" SOURCES "${x03b2bc01_generated}/storage.cpp"
-  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
+  DEPENDS planar_ledger_storage_types planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec planar_history_execution_codec
     planar_history_tree_core planar_history_provenance_codec planar_history_interpretation_codec planar_history_recorded_interpretation planar_canonical planar_metadata_fixture)
 planar_rewrite_module(planar_metadata_acceptance_test
   INTERFACE "${x03b2bc01_generated}/acceptance.cppm" "${x03b2bc01_generated}/acceptance_seam.cppm"
@@ -684,3 +688,5 @@ planar_rewrite_module(planar_history_recorded_interpretation
 target_compile_definitions(planar_history_recorded_interpretation_tests PRIVATE
   PLANAR_V2_VECTORS="${PROJECT_SOURCE_DIR}/tests/vectors/interpretation-v2"
   PLANAR_V1_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
+
+target_link_libraries(planar_ledger_execution_tests PRIVATE planar_history_read)

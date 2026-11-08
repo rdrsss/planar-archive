@@ -47,6 +47,7 @@ struct command_history_options {
   std::optional<std::int64_t> after_event; ///< Positive canonical page cursor.
   std::optional<std::string>  request_id;  ///< Bounded request key.
   std::optional<std::int32_t> limit;       ///< Checked 1..100 page size.
+  std::optional<std::int64_t> event; ///< Expanded retained event.
 };
 /// Parsed export intent retained throughout publication and response validation.
 struct command_export_options {
@@ -73,6 +74,37 @@ struct command_activate_options {
   std::string request_id;      ///< Bounded ASCII request key.
   std::string actor;           ///< Bounded nonempty UTF-8 driver assertion.
 };
+/// Native status intent (execution-contract P2-1); each optional member is absent exactly when its option was not given.
+/// `role` excludes `request_id`; `workspace` and `registry` are both present or both absent (usage otherwise).
+struct command_status_options {
+  std::string                ledger;     ///< Private ledger path.
+  std::optional<std::string> role;       ///< Role to detail (`--role`).
+  std::optional<std::string> request_id; ///< Request to look up (`--request-id`).
+  std::optional<std::string> workspace;  ///< Private normalized draft workspace path (`--workspace`).
+  std::optional<std::string> registry;   ///< Private normalized draft registry path (`--registry`).
+};
+/// Native preview intent (execution-contract P2-1): a read of the active job's role packet, no request framing.
+struct command_preview_options {
+  std::string ledger; ///< Private ledger path.
+  std::string role;   ///< Role to preview.
+  std::optional<std::string> since; ///< Retained render digest to compare.
+};
+/// Native token-scoped recovery mutation. Secrets stay in this native intent.
+struct command_recovery_options {
+  std::string operation,ledger,run,request_id,actor,expect_fp,reason;
+  std::optional<std::string> observations,provenance;
+};
+/// Bound retained recovery read.
+struct command_recover_options {
+  std::string ledger,role;
+  std::optional<std::string> root,base_root;
+};
+/// Native run acquisition intent; takeover is selected by a supplied run identifier.
+struct command_run_options {
+  std::string ledger, job, role, request_id, actor;
+  std::optional<std::string> run_id;
+  std::optional<std::string> provenance;
+};
 #ifdef PLANAR_AUTHORING_BUNDLE
 /// The six embedded-only authoring verbs; exists only in the authoring stack and its variants.
 enum class command_authoring_verb { spec_prompt, critique, ingest, explain_rejection, observe, orchestrator };
@@ -88,8 +120,9 @@ struct command_authoring_options {
 };
 #endif
 /// Exactly one compiled family intent, copied into the invocation owner.
-using command_options = std::variant<command_render_options, command_init_options, command_history_options,
-                                     command_export_options, command_load_options, command_activate_options>;
+using command_options =
+    std::variant<command_render_options, command_init_options, command_history_options, command_export_options,
+                 command_load_options, command_activate_options, command_status_options, command_preview_options, command_run_options, command_recovery_options, command_recover_options>;
 /// Verified history selector passed to the finite native boundary.
 struct command_history_selector {
   std::string  selector;   ///< Fixed selector name.
@@ -178,6 +211,38 @@ public:
   /// @param change `execution_change_v1` value of operation activate.
   /// @return Decoded saved `activate_v1` response or typed failure. Default refuses.
   virtual command_service_result commit_execution(const command_activate_options& options, const value_ptr& change);
+  /// @brief Read the verified format3 execution snapshot for status (EX-6 binding and no_active_job only with `--role`).
+  /// @param options Retained native status intent.
+  /// @return Exact `{version:1,ledger,last_seq,snapshot}` or typed failure. Default refuses.
+  virtual command_service_result read_execution(const command_recovery_options& options);
+  virtual command_service_result read_execution(const command_recover_options& options);
+  virtual command_service_result read_observations(const command_recovery_options& options);
+  virtual command_service_result read_provenance(const command_recovery_options& options);
+  virtual command_service_result commit_execution(const command_recovery_options& options,const value_ptr& change);
+  virtual command_service_result read_recovery(const command_recover_options& options);
+  virtual command_service_result read_dispatch(const command_preview_options& options);
+  virtual command_service_result read_execution(const command_run_options& options);
+  virtual command_service_result read_provenance(const command_run_options& options);
+  virtual command_service_result commit_execution(const command_run_options& options, const value_ptr& change);
+  virtual command_service_result read_execution(const command_status_options& options);
+  /// @brief Read the verified format3 execution snapshot for preview, after the EX-6 binding and the active-job check.
+  /// @param options Retained native preview intent.
+  /// @return Exact `{version:1,ledger,last_seq,snapshot}` or typed failure. Default refuses.
+  virtual command_service_result read_execution(const command_preview_options& options);
+  /// @brief Look up one saved execution request for `status --request-id`.
+  /// @param options Retained native status intent; `request_id` is present.
+  /// @return `{request_id,operation,outcome,result,disposition?}` or `request_not_found`. Default refuses.
+  virtual command_service_result read_request(const command_status_options& options);
+  /// @brief Open the private draft workspace of `status --workspace --registry`, synchronously and once.
+  /// @param options Retained native status intent; `workspace` and `registry` are present.
+  /// @return Exact {file,workspace} or typed failure. Default refuses.
+  virtual command_service_result open_workspace(const command_status_options& options);
+  /// @brief Capture the routed declaration closure and compare it with the active revision's source tree (DD-D6).
+  /// @param options Retained native status intent.
+  /// @param route Deep-copied normalized route.
+  /// @return `{outcome:"captured",bundle,changed}`, `{outcome:"rejected",error,changed}` for a declaration-content
+  /// refusal, or a typed failure for every other class. Default refuses.
+  virtual command_service_result capture_drafts(const command_status_options& options, const value_ptr& route);
 #ifdef PLANAR_AUTHORING_BUNDLE
   /// @brief Open the private authoring workspace, synchronously and once.
   /// @param options Retained authoring intent; no Lua-selected host path.
