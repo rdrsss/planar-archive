@@ -87,12 +87,14 @@ std::expected<value_ptr, snapshot_value_error> role_value(const ledger::executio
                                                                 {"revision", decimal(revision)},
                                                                 {"work", row.dispatch->work}})}});
   }
+  std::vector<value_ptr> lineage;
+  for(auto id:row.lineage)lineage.push_back(decimal(id));
   return record(
       {{"job", text(row.job)},
        {"role", text(row.role)},
        {"kind", text(row.structure.kind)},
        {"generation",
-        record({{"id", decimal(row.generation_id)}, {"ordinal", decimal(row.generation_ordinal)}, {"structure", *structure}})},
+        record({{"id", decimal(row.generation_id)}, {"ordinal", decimal(row.generation_ordinal)}, {"structure", *structure}, {"lineage",list(std::move(lineage))}})},
        {"state", text(row.state)},
        {"drifted", flag(row.drifted)},
        {"fact_version", decimal(row.fact_version)},

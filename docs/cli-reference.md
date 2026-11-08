@@ -1,18 +1,17 @@
 # Planar CLI
 
-`render` previews scoped context; `init` creates an explicit new ledger;
-`history` reads recorded events, revisions, requests and state;
-`export` reconstructs recorded source into an explicit new directory; `load`
-accepts a complete declaration closure atomically. Render is database-free; ledger
-paths are explicit. The D7-B load integration is a candidate pending independent
-review; full R14 acceptance remains pending.
+The rewrite provides declaration rendering and acceptance, recorded history and export,
+and draft execution commands for run ownership, recovery, checks and review. The
+execution surface is being completed under the operator's implementation-first
+workflow; it has not passed the final integrated review or acceptance gate. See the
+[roadmap](vernacular/roadmap.md#current-status) for the exact delivery checkpoint.
 
-This reference describes implemented commands. [V5 alignment](vernacular/v5-alignment.md)
-records approved V5-02-A/B1/B2 and candidate C workspace naming before more load
-work, then authoring/observe in RA01 and execution in R15–R19. Ingest, observe,
-claims, checks, status, explain and orchestrator rendering are not exposed
-here. CLI11 separate-token parsing, native paths and Glaze diagnostics remain
-current; v5's illustrative positional examples are not additional syntax.
+Render is database-free. Ledger paths are explicit; new ledgers use format3.
+Execution commands refuse older ledger formats. The source-built binary is not
+installed over an existing Planar installation.
+
+CLI11 separate-token parsing, native paths and Glaze diagnostics remain current;
+v5's illustrative positional examples are not additional syntax.
 `planar --help` prints fixed root usage and exits 0 without Lua registration.
 Parser usage errors precede embedded registration failures. Workspace selector
 and path validation follow successful catalog validation. Ordinary commands validate
@@ -21,6 +20,63 @@ compiled family services. Invalid shipped registration returns redacted `interna
 (exit 4); bounded registration exhaustion returns `resource_limit` (exit 3).
 Select the source-built binary explicitly, for example
 `build/rewrite-debug/bin/planar`. There is no version command or legacy CLI.
+
+## Draft execution workflow
+
+Load declarations into a ledger, select a job with `activate`, inspect `status` or
+`preview`, then `claim` a role. The claim result contains the run token and the
+retained dispatch packet. The driver runs the session and owns the working tree.
+Use a stable request ID for each mutation: retrying the same request returns its
+recorded result; reusing the ID with a different request refuses.
+
+| Command | Required options | Optional options |
+| --- | --- | --- |
+| `activate` | `--ledger`, `--job`, `--expect-revision`, `--expect-job`, `--request-id`, `--actor` | |
+| `status` | `--ledger` | `--role` or `--request-id`; `--workspace` and `--registry` together |
+| `preview` | `--ledger`, `--role` | `--since` retained render digest |
+| `claim` | `--ledger`, `--job`, `--role`, `--request-id`, `--actor` | `--provenance` |
+| `takeover` | `--ledger`, `--job`, `--role`, `--run-id`, `--request-id`, `--actor` | `--provenance` |
+| `refresh` | `--ledger`, `--run`, `--expect-fp`, `--request-id`, `--actor` | `--observations` |
+| `checkpoint` | `--ledger`, `--run`, `--observations`, `--request-id`, `--actor` | |
+| `release` | `--ledger`, `--run`, `--reason`, `--request-id`, `--actor` | `--observations`, `--provenance` |
+| `recover` | `--ledger`, `--role` | `--root` and `--base-root` together |
+| `check` | `--ledger`, `--run`, `--root`, `--base-root`, `--scratch`, `--request-id`, `--actor` | `--provenance` |
+| `check-recover` | `--ledger`, `--run-id`, `--reservation`, `--confirm-stopped true`, `--request-id`, `--actor` | |
+| `verdict` | `--ledger`, `--run`, `--verdict`, `--request-id`, `--actor` | |
+
+`--run` takes the claim token; `--run-id` takes its numeric run identifier.
+`--expect-fp` and `--since` take `xxh3_128:` digests. `release --reason` is
+`released` or `interrupted`. Check roots are directory paths; recovery roots use
+`logical_id=directory`. Check scratch must be outside both checked roots.
+
+Checkpoints are unverified session notes and do not complete work. `refresh`
+acknowledges current work for the same run; `recover` reads retained context
+without acknowledging it. A lost claim response can be recovered through
+`status --request-id` or `history --request-id`. `history --event` expands the
+retained event; ordinary status, history events and recovery do not reveal tokens.
+
+`check` runs the accepted required check set, compares current and base outputs,
+and records evidence. A recorded failing or inconclusive outcome still exits 0;
+the response distinguishes recorded evidence from a completed role. A stopped
+check leaves a durable reservation: once the driver confirms the process stopped,
+`check-recover` interrupts it without completing the role. A reviewer submits a
+JSON verdict against exact output and policy identities; current rejections can
+admit repairs or open a blocker at the job's review limit.
+
+Checks run trusted registry commands with bounded time, output, cwd and environment
+and no OS sandbox; escaping descendants are not tracked.
+
+The authoring bundle's `orchestrator --ledger PATH` renders live next-action
+guidance. Its existing database-free form uses `--workspace`, `--registry` and
+`--job` together. The production bundle does not expose authoring verbs.
+
+The exact interfaces and failure order are defined by the
+[execution contract](vernacular/execution-contract.md) and the draft
+[recovery](vernacular/execution-contract-r16.md),
+[checks](vernacular/execution-contract-r17.md) and
+[review](vernacular/execution-contract-r18.md) contracts.
+
+## Render preview
 
 ```sh
 build/rewrite-debug/bin/planar render \
