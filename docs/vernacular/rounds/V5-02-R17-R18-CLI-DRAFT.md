@@ -27,3 +27,16 @@ No full gates, reviews, mutation probes or Linux runs, per draft-mode instructio
 `lua tests/native/orchestrator-live-policy.lua .` passed the standalone live projection
 scenario: recorded state and check action are rendered, and a supplied token/secret is
 not exposed. This exercises the pure projection only, not the pending native adapter.
+
+## Integration update (2026-11-08)
+
+The integrated branch now contains command registration and finite native services
+for checks, reservation recovery and verdicts. Live orchestrator plumbing now carries
+the ledger intent through CLI normalization, bootstrap and the runtime, reads the
+accepted snapshot through a read-only native service and appends sealed command names.
+The declaration and ledger forms have separate service-call paths. The catalog and
+malformed-bundle generation anchors reflect the optional orchestrator option set and
+its two capabilities. `orchestrator_state` is reserved alongside the prior sections.
+
+The standalone live projection scenario still passes. The shared development build
+and targeted command exercises are in progress; no final gate or review is claimed.
