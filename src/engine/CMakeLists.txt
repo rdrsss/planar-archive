@@ -654,3 +654,9 @@ planar_rewrite_module(planar_history_recorded_interpretation
 target_compile_definitions(planar_history_recorded_interpretation_tests PRIVATE
   PLANAR_V2_VECTORS="${PROJECT_SOURCE_DIR}/tests/vectors/interpretation-v2"
   PLANAR_V1_GOLDENS="${PROJECT_SOURCE_DIR}/tests/native/r13c2-fixtures")
+
+planar_rewrite_module(planar_process_resolve
+  INTERFACE process/resolve.cppm SOURCES process/resolve.cpp TESTS process/resolve.t.cpp)
+
+planar_rewrite_module(planar_process_runner
+  INTERFACE process/runner.cppm SOURCES process/runner.cpp TESTS process/runner.t.cpp TEST_TIMEOUT 60)
