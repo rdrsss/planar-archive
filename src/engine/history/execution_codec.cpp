@@ -39,7 +39,8 @@ constexpr std::array<std::string_view, 16> transition_reasons{"activated",
                                                               "retired",
                                                               "recreated",
                                                               "drift_cleared"};
-constexpr std::array<std::string_view, 5>  payload_operations{"load", "activate", "claim", "takeover", "verdict"};
+constexpr std::array<std::string_view, 7>  payload_operations{"load",    "activate", "claim",        "takeover",
+                                                              "verdict", "check",    "check-recover"};
 // R18-2 and EX-8 row "Verdict file (R18)".
 constexpr std::size_t verdict_targets_ceiling       = 256;
 constexpr std::size_t verdict_findings_ceiling      = 256;
@@ -137,7 +138,8 @@ bool strictly_increasing(const std::vector<std::string>& items) {
 
 bool known_codec(std::string_view codec) {
   return codec == codec_dispatch_manifest_v1 || codec == codec_work_exec_v1 || codec == codec_driver_provenance_v1 ||
-         codec == codec_role_structure_v1 || codec == codec_verdict_v1;
+         codec == codec_role_structure_v1 || codec == codec_verdict_v1 || codec == codec_check_definition_v1 ||
+         codec == codec_output_vector_v1 || codec == codec_check_observation_v1 || codec == codec_boundary_diff_v1;
 }
 
 // ---- value construction --------------------------------------------------------------------------------------------
@@ -304,6 +306,15 @@ void validate_references(std::string_view event_type, const std::map<std::string
   } else if (event_type == "run_taken_over") {
     required           = {"run", "previous_run", "dispatch", "packet", "manifest", "work"};
     provenance_allowed = true;
+  } else if (event_type == "check_reserved") {
+    required           = {"reservation", "run", "dispatch"};
+    provenance_allowed = true;
+  } else if (event_type == "check_recorded") {
+    required = {"reservation", "observation"};
+    if (refs.contains("completion"))
+      required.push_back("completion");
+  } else if (event_type == "check_interrupted") {
+    required = {"reservation"};
   } else if (event_type == "verdict_recorded") {
     // R18-4: value record id, runs.id and verdicts.id; a verdict attaches no provenance (P2-4).
     required = {"body", "run", "verdict"};
@@ -329,7 +340,10 @@ void validate_payload(std::string_view event_type, const event_payload_v2& p) {
   // EX-4 event payload and D101: the event reason is the reason of transition ordinal 1, or empty when the event has none.
   // Only a load event can carry no transition (a noop, or a first acceptance with no active job); every other event
   // carries a transition reason.
-  const bool empty_reason_allowed = (event_type == "load_noop" || event_type == "declaration_accepted") && p.reason.empty();
+  const bool empty_reason_allowed =
+      (event_type == "load_noop" || event_type == "declaration_accepted" || event_type == "check_reserved" ||
+       event_type == "check_recorded" || event_type == "check_interrupted") &&
+      p.reason.empty();
   if (!empty_reason_allowed && !one_of(p.reason, transition_reasons))
     invalid();
   validate_references(event_type, p.references);
@@ -1459,6 +1473,88 @@ std::expected<value_ptr, execution_codec_error> assemble_packet_value(const pack
                         {"kind", make_text(fields.kind)},
                         {"work", make_texts(fields.work)},
                         {"markdown", make_text(fields.markdown)}});
+  });
+}
+
+namespace {
+void validate_check_value(std::string_view codec, const value_ptr& doc) {
+  if (!doc || doc->kind != value_kind::record)
+    invalid();
+  const auto version = doc->fields.find("version");
+  if (version == doc->fields.end() || !version->second || version->second->kind != value_kind::integer ||
+      version->second->integer != 1)
+    invalid();
+  auto list = [&](std::string_view key) {
+    auto it = doc->fields.find(std::string(key));
+    if (it == doc->fields.end() || !it->second || it->second->kind != value_kind::list)
+      invalid();
+    return it->second;
+  };
+  if (codec == codec_output_vector_v1) {
+    if (!exact_keys(*doc, {"version", "targets"}))
+      invalid();
+    std::string previous;
+    for (const auto& item : list("targets")->items) {
+      if (!item || !exact_keys(*item, {"work", "output"}))
+        invalid();
+      auto work = text_field(*item, "work"), output = text_field(*item, "output");
+      if (!identifier(work) || (!previous.empty() && previous >= work) || output.size() != 41 || !output.starts_with("xxh3_128:"))
+        invalid();
+      previous = work;
+    }
+  } else if (codec == codec_check_observation_v1) {
+    if (!exact_keys(*doc, {"version", "root", "base", "observation", "units", "contracts"}))
+      invalid();
+    (void)text_field(*doc, "root");
+    (void)text_field(*doc, "base");
+    (void)text_field(*doc, "observation");
+    (void)list("units");
+    (void)list("contracts");
+  } else if (codec == codec_boundary_diff_v1) {
+    if (!exact_keys(*doc, {"version", "changes"}))
+      invalid();
+    for (const auto& item : list("changes")->items) {
+      if (!item || !exact_keys(*item, {"path", "change", "class"}))
+        invalid();
+      (void)text_field(*item, "path");
+      auto change = text_field(*item, "change"), classification = text_field(*item, "class");
+      if (change != "added" && change != "deleted" && change != "modified" && change != "mode")
+        invalid();
+      if (classification != "own" && classification != "producer" && classification != "frozen" && classification != "outside")
+        invalid();
+    }
+  } else if (codec == codec_check_definition_v1) {
+    (void)text_field(*doc, "work");
+    (void)text_field(*doc, "check");
+    auto gate = text_field(*doc, "gate");
+    if (gate != "registry" && gate != "boundary_v1")
+      invalid();
+    (void)list("inputs");
+    if (gate == "registry") {
+      (void)list("command");
+      (void)list("environment");
+      (void)list("reserved");
+    } else {
+      (void)list("owned");
+      (void)list("frozen");
+      (void)list("excluded");
+      (void)list("producers");
+    }
+  } else
+    invalid();
+}
+} // namespace
+std::expected<std::string, execution_codec_error> encode_check_value(std::string_view codec, const value_ptr& doc) {
+  return guarded<std::string>([&] {
+    validate_check_value(codec, doc);
+    return canonical_text(doc);
+  });
+}
+std::expected<value_ptr, execution_codec_error> decode_check_value(std::string_view codec, std::string_view bytes) {
+  return guarded<value_ptr>([&] {
+    auto doc = canonical_value(bytes);
+    validate_check_value(codec, doc);
+    return doc;
   });
 }
 

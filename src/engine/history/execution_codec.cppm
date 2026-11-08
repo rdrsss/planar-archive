@@ -26,6 +26,15 @@ inline constexpr std::string_view codec_driver_provenance_v1 = "driver_provenanc
 inline constexpr std::string_view codec_role_structure_v1 = "role_structure_v1";
 /// Codec identifier of a normalized verdict document value record (R18-2).
 inline constexpr std::string_view codec_verdict_v1 = "verdict_v1";
+/// @brief Canonical R17 retained value codec.
+inline constexpr std::string_view codec_check_definition_v1 = "check_definition_v1";
+/// @brief Canonical R17 retained value codec.
+inline constexpr std::string_view codec_output_vector_v1 = "output_vector_v1";
+/// @brief Canonical R17 retained value codec.
+inline constexpr std::string_view codec_check_observation_v1 = "check_observation_v1";
+/// @brief Canonical R17 retained value codec.
+inline constexpr std::string_view codec_boundary_diff_v1 = "boundary_diff_v1";
+
 /// The only verdict authority this build supports (R18-7); normalization adds it when absent.
 inline constexpr std::string_view verdict_authority_reviewer = "reviewer_role_v1";
 /// Owned value record: a codec identifier and its encoded typed bytes.
@@ -318,4 +327,15 @@ struct packet_fields {
 /// @param fields Owned packet fields; unsorted or duplicate work identifiers are refused.
 /// @return Packet value with keys version, mode, workspace, spec, job, role, kind, work and markdown, or an invalid refusal.
 std::expected<value_ptr, execution_codec_error> assemble_packet_value(const packet_fields& fields);
+/// @brief Encode a structurally validated R17 retained value in canonical form.
+/// @param codec One of the four R17 value codec identifiers.
+/// @param document Value to validate and encode.
+/// @return Canonical bytes, or invalid/resource_limit.
+std::expected<std::string, execution_codec_error> encode_check_value(std::string_view codec, const value_ptr& document);
+/// @brief Decode and validate an R17 canonical value.
+/// @param codec Expected codec identifier.
+/// @param bytes Canonical encoded value.
+/// @return Validated value, or invalid/resource_limit.
+std::expected<value_ptr, execution_codec_error> decode_check_value(std::string_view codec, std::string_view bytes);
+
 } // namespace planar::engine::history

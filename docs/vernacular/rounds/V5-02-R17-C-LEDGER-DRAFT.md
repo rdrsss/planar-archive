@@ -1,0 +1,11 @@
+# R17-C ledger implementation draft
+
+Resumed 2026-11-08 under the operator's instruction to finish feature/code implementation before review, verification and validation cycles. This is unreviewed implementation, not acceptance evidence.
+
+The native execution module now reserves checks before process execution, records evidence and optional completions/publications atomically, and interrupts abandoned reservations with both request outcomes. A reservation is visible after reopening; its original request is replayable after completion or interruption. Token, active revision/job and completion fact versions are checked under the write lock. Output and definition records are retained through the existing collision-safe record interner. Check codecs and snapshot reservation/evidence/publication/observed fields are added. The shared replay reader handles check events, with row checks and completion run transitions. The transaction calls the shared verifier before commit.
+
+Development checks: `cmake --build build/rewrite-debug --target planar_ledger_execution_tests -j 3`; `build/rewrite-debug/src/engine/planar_ledger_execution_tests 'R17 ledger*'`. The first implementation passed two cases (314 assertions); final rebuild passed, and the same two cases passed 316 assertions after adding open-request lookup and the R18 completion-reader integration. No full suite, platform gate, mutation probes or independent review.
+
+Integration remaining: command services convert native adapter results into the ledger facts; snapshot Lua conversion and check history/recovery expansion must carry the added fields. The service must preserve the native adapter's immutable result and compare the plan with accepted material. Completion policy, retries and downstream state derivation belong to trusted Lua and the command service. These are implementation work, not deferred acceptance claims.
+
+Fixing-round attention: adversarial codec/schema validation, complete cross-row corruption matrix, storage faults and process races, secret handling, observation lineage filtering, exact snapshot bounds and immutable evidence equivalence. Existing R18 structural completion fixtures may require replacement with actual check commits now that completion reads enforce R17 records. No claim of full contract conformance is made by these focused checks.

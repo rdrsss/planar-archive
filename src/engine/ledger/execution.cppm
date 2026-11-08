@@ -75,6 +75,7 @@ struct execution_completion {
   std::uint64_t                          dispatch   = 0; ///< Acknowledged dispatch identifier.
   std::string                            work_fp;        ///< 32 lowercase hex work fingerprint of that dispatch.
   std::uint64_t                          seq = 0;        ///< Completing event sequence.
+  std::vector<value_ptr>                 vectors;        ///< Per-work evidence target vectors.
   std::vector<execution_completion_unit> units;          ///< Unit outputs sorted by work.
 };
 
@@ -114,17 +115,71 @@ struct execution_review {
   std::vector<execution_repair>  repairs;  ///< Current-lineage repair revisions of the active job, sorted by role.
 };
 
+/// @brief Open check reservation associated with one run.
+struct execution_reservation {
+  std::uint64_t id = 0, run = 0, opened_seq = 0;
+  std::string   request_id;
+};
+/// @brief Native observed evidence and its retained definition and target vector.
+struct execution_check_evidence {
+  std::string                  work, check, outcome, reason;
+  std::optional<std::uint64_t> matched;
+  std::optional<int>           exit_status;
+  std::uint64_t                duration_ms = 0, output_bytes = 0;
+  bool                         output_truncated = false;
+  std::string                  output;
+  value_ptr                    definition, vector;
+};
+/// @brief One mode-normalized facet file to retain atomically with completion.
+struct execution_publication_file {
+  std::string   path, bytes;
+  std::uint32_t mode = 420;
+};
+/// @brief Facet output established by the native verified observation.
+struct execution_check_publication {
+  std::string                             work, facet, semantic;
+  std::vector<execution_publication_file> files;
+};
+/// @brief Immutable native result supplied to the complete transaction.
+struct execution_check_result {
+  std::vector<execution_check_evidence>    evidence;
+  value_ptr                                observation;
+  std::vector<execution_check_publication> publications;
+  bool                                     recapture_matches = false;
+};
+/// @brief Snapshot check evidence in a current role lineage.
+struct execution_evidence {
+  std::uint64_t                id = 0, reservation = 0, seq = 0;
+  std::string                  job, role, work, check, outcome, reason;
+  std::optional<std::uint64_t> matched;
+  value_ptr                    vector;
+};
+/// @brief Current published facet identity.
+struct execution_publication {
+  std::uint64_t publication = 0, completion = 0;
+  std::string   job, role, work, facet, semantic;
+};
+/// @brief Latest observed output of a unit.
+struct execution_observed {
+  std::string   work, output;
+  std::uint64_t seq = 0;
+};
+
 /// @brief Verified execution snapshot read in one read transaction at one last_seq.
 struct execution_snapshot {
-  std::string                       identity;        ///< Ledger identity, 32 lowercase hex.
-  std::uint64_t                     last_seq = 0;    ///< Last committed event sequence at the read.
-  std::optional<execution_revision> revision;        ///< Active revision, absent when none.
-  std::string                       active_job;      ///< Active job identifier, or the empty string.
-  std::optional<std::uint64_t>      activation;      ///< Latest activation identifier, absent when none.
-  std::vector<execution_role>       roles;           ///< Every role_state row, sorted by job then role.
-  std::vector<execution_completion> completions;     ///< R18 (DRAFT-STUB R17-C): current-lineage completions of the active job.
-  execution_review                  review;          ///< R18: the DR18-8 review value.
-  std::uint64_t                     state_bytes = 0; ///< Canonical byte length of the D24 snapshot value S.
+  std::string                        identity;     ///< Ledger identity, 32 lowercase hex.
+  std::uint64_t                      last_seq = 0; ///< Last committed event sequence at the read.
+  std::optional<execution_revision>  revision;     ///< Active revision, absent when none.
+  std::string                        active_job;   ///< Active job identifier, or the empty string.
+  std::optional<std::uint64_t>       activation;   ///< Latest activation identifier, absent when none.
+  std::vector<execution_role>        roles;        ///< Every role_state row, sorted by job then role.
+  std::vector<execution_completion>  completions;  ///< R18 (DRAFT-STUB R17-C): current-lineage completions of the active job.
+  std::vector<execution_reservation> reservations;
+  std::vector<execution_evidence>    evidence;
+  std::vector<execution_publication> publications;
+  std::vector<execution_observed>    observed;
+  execution_review                   review;          ///< R18: the DR18-8 review value.
+  std::uint64_t                      state_bytes = 0; ///< Canonical byte length of the D24 snapshot value S.
 };
 
 /// @brief Read and verify the whole format3 ledger, then return the consistent execution snapshot.
@@ -260,21 +315,21 @@ struct execution_revision_input {
 /// @brief Target vector and policy a verdict change was evaluated against (R18-1 items 3 and 4).
 struct execution_verdict_current {
   std::vector<history::verdict_target>
-              targets; ///< Complete entries of the current target vector sorted by work; fewer than the reviewer targets when incomplete.
-  std::string policy;  ///< xxh3_128 text of the reviewer's current W (E9 A).
-  value_ptr   work;    ///< The reviewer's current W, equal to its acknowledged dispatch W (DB-R5).
+      targets; ///< Complete entries of the current target vector sorted by work; fewer than the reviewer targets when incomplete.
+  std::string policy; ///< xxh3_128 text of the reviewer's current W (E9 A).
+  value_ptr   work;   ///< The reviewer's current W, equal to its acknowledged dispatch W (DB-R5).
 };
 
 /// @brief Facts of a verdict change (R18 execution_change_v1 for verdict); every member is re-derived natively.
 struct execution_verdict_facts {
-  std::string         role;     ///< Reviewer role of the active job.
-  std::uint64_t       run = 0;  ///< Reviewer run named by the token.
-  value_ptr           document; ///< Parsed verdict document read by this invocation (R18-2 steps 1 to 3).
-  history::verdict_v1 verdict;  ///< Normalized document; must equal the native normalization of document.
-  execution_verdict_current current;        ///< Current target vector, policy and W.
-  std::uint64_t             max_rounds = 0; ///< shape.max_rounds of the reviewer W (DB-R5).
-  std::string               admission;      ///< R18-5 case: approve, admitted, capped, unowned or historical.
-  std::vector<std::string>  repairs;        ///< Repaired worker roles, sorted; nonempty exactly when admitted.
+  std::string               role;            ///< Reviewer role of the active job.
+  std::uint64_t             run = 0;         ///< Reviewer run named by the token.
+  value_ptr                 document;        ///< Parsed verdict document read by this invocation (R18-2 steps 1 to 3).
+  history::verdict_v1       verdict;         ///< Normalized document; must equal the native normalization of document.
+  execution_verdict_current current;         ///< Current target vector, policy and W.
+  std::uint64_t             max_rounds = 0;  ///< shape.max_rounds of the reviewer W (DB-R5).
+  std::string               admission;       ///< R18-5 case: approve, admitted, capped, unowned or historical.
+  std::vector<std::string>  repairs;         ///< Repaired worker roles, sorted; nonempty exactly when admitted.
   std::vector<std::string>  blockers_opened; ///< Blocker kinds this verdict opens (R18-5).
 };
 
@@ -296,9 +351,9 @@ struct execution_change {
   std::vector<execution_vector_entry> vector; ///< Complete next role-state vector of the active job after the commit.
   std::optional<execution_packet>     packet; ///< Claim and takeover only.
   value_ptr provenance; ///< Normalized driver_provenance_v1 document, claim and takeover only; absent when not supplied.
-  std::vector<execution_expectation> expected; ///< Precondition set checked under the lock.
-  std::optional<execution_verdict_facts> verdict; ///< R18: verdict facts, operation verdict only.
-  std::vector<std::uint64_t> blockers_cleared; ///< R18: blocker ids this commit clears (load, activate, verdict; DR18-8).
+  std::vector<execution_expectation>     expected; ///< Precondition set checked under the lock.
+  std::optional<execution_verdict_facts> verdict;  ///< R18: verdict facts, operation verdict only.
+  std::vector<std::uint64_t> blockers_cleared;     ///< R18: blocker ids this commit clears (load, activate, verdict; DR18-8).
 };
 
 /// @brief Result of a committed or replayed execution change.
@@ -308,6 +363,27 @@ struct execution_commit_result {
   std::uint64_t              event_seq = 0;    ///< Event sequence of the change; zero for a replay.
   std::optional<std::string> token;            ///< Run token text of a claim or takeover commit, once.
 };
+
+/// @brief Reserve a check under the snapshot and current token before spawning commands.
+/// @return Durable reservation or a typed refusal; no process is started here.
+std::expected<execution_reservation, execution_error> reserve_check(const std::filesystem::path& path,
+                                                                    const execution_snapshot&    snapshot,
+                                                                    std::string_view request_id, std::string_view actor,
+                                                                    const history::request_v3& request, std::string_view token,
+                                                                    const value_ptr& provenance = {});
+/// @brief Atomically retain check evidence and optional completion after native observation.
+/// @return Saved result or a typed refusal leaving the reservation open.
+std::expected<execution_commit_result, execution_error>
+complete_check(const std::filesystem::path& path, const execution_snapshot& snapshot, std::uint64_t reservation,
+               std::string_view token, const execution_check_result& result, bool completion,
+               const std::vector<execution_transition_input>& transitions,
+               const std::vector<std::uint64_t>& blockers_cleared = {}, const std::vector<std::string>& withheld = {});
+/// @brief Interrupt a confirmed-stopped reservation, recording both request outcomes atomically.
+/// @return Saved interruption result or a typed refusal.
+std::expected<execution_commit_result, execution_error> recover_check(const std::filesystem::path& path,
+                                                                      std::string_view request_id, std::string_view actor,
+                                                                      const history::request_v3& request, std::uint64_t run,
+                                                                      std::uint64_t reservation);
 
 /// @brief One staged execution transaction: rows written and not yet committed; move-only and thread-confined (D13, D42).
 class execution_write {
@@ -457,9 +533,8 @@ std::expected<void, execution_error> check_verdict_locked(connection& db, const 
 /// @param now Commit timestamp.
 /// @return Saved verdict_response_v1 bytes and the event sequence, or the closed failure category.
 std::expected<execution_commit_result, execution_error> write_verdict(connection& db, std::string_view identity,
-                                                                      const execution_change& change,
-                                                                      std::uint64_t request_body, std::uint64_t verdict_body,
-                                                                      std::string_view now);
+                                                                      const execution_change& change, std::uint64_t request_body,
+                                                                      std::uint64_t verdict_body, std::string_view now);
 
 /// @brief Clear blockers inside the caller's transaction: each must be open under the lock (else state_conflict).
 /// @param db Open connection inside the write transaction.
