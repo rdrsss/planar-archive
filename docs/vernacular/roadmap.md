@@ -9,6 +9,8 @@ Superseded status checkpoints are preserved verbatim in [history](history.md).
 
 ## Current status
 
+**Resume checkpoint (2026-11-08): implementation first.** The operator reaffirmed completing all remaining feature and code implementation before review, verification and validation cycles. The earlier Claude run stopped at its usage limit, leaving R15-C committed and R15-D partial in `draft/lane-a`, and the R17 runner plus R18 core committed in `draft/lane-b`; neither lane had been integrated. Work resumes from those exact edits. Lane A completes R15/R16 and retained history; lane B completes check capture, adapters, ledger transactions and review integration. Development compilation and focused new tests continue; full gates, platform runs, probes and independent reviews remain deferred. R19's real spec has not been located or selected; this does not block implementation. Older bullets below are historical checkpoints and do not override this instruction.
+
 Rounds replace this section when status changes; move nothing older than the
 latest checkpoint here. Round records under [rounds](rounds/) and evidence under
 `tests/native/*-evidence/` are authoritative.
