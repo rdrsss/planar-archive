@@ -270,6 +270,13 @@ std::expected<void, format_error> header(int fd);
 /// @param where Retained location.
 /// @return Success or typed refusal.
 std::expected<void, format_error> no_sidecars(const location& where);
+/// @brief Liveness-aware sidecar check for the execution opener, forwarding the same rule the read snapshot applies.
+/// @note A -wal or -shm always refuses. A -journal refuses unless a live writer holds the RESERVED byte of the borrowed
+/// descriptor, in which case SQLite busy handling decides. The refusal category is recovery_required.
+/// @param where Retained location.
+/// @param fd Borrowed read-only ledger descriptor, used only for the RESERVED probe and never closed here.
+/// @return Success when no sidecar blocks the open, recovery_required for an orphan sidecar, or the shared io failure.
+std::expected<void, format_error> check_orphan_sidecars(const location& where, int fd);
 /// @brief Fully verify schema, records and accepted history under the current transaction.
 /// @param db Open connection inside a transaction.
 /// @return Verified metadata or typed failure.

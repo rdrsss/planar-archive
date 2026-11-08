@@ -1226,6 +1226,11 @@ std::expected<void, format_error> no_orphan_sidecars(const location& where, int 
   return {};
 }
 } // namespace
+namespace native {
+std::expected<void, format_error> check_orphan_sidecars(const location& where, int fd) {
+  return no_orphan_sidecars(where, fd);
+}
+} // namespace native
 std::expected<read_snapshot, format_error> read_snapshot::open_read(const std::filesystem::path& path, ledger_access access,
                                                                     std::shared_ptr<storage_read_guard> guard) {
   if (access != ledger_access::read_only && access != ledger_access::read_write)

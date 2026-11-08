@@ -66,6 +66,13 @@ planar_rewrite_module(planar_history_request_v2
 target_compile_definitions(planar_history_request_v2_tests PRIVATE
   PLANAR_RECORD_VECTOR_DIR="${PROJECT_SOURCE_DIR}/tests/vectors/records")
 
+planar_rewrite_module(planar_history_request_v3
+  INTERFACE history/request_v3.cppm SOURCES history/request_v3.cpp
+  DEPENDS planar_history_record planar_canonical planar_xxhash TESTS history/request_v3.t.cpp)
+planar_rewrite_module(planar_history_execution_codec
+  INTERFACE history/execution_codec.cppm SOURCES history/execution_codec.cpp
+  DEPENDS planar_history_record planar_canonical planar_hash planar_json_codec planar_xxhash TESTS history/execution_codec.t.cpp)
+
 planar_rewrite_module(planar_json_codec
   INTERFACE json_codec/codec.cppm SOURCES json_codec/codec.cpp
   DEPENDS planar_value planar_glaze TESTS json_codec/codec.t.cpp)
@@ -256,6 +263,20 @@ planar_rewrite_module(planar_ledger_format
 target_link_libraries(planar_ledger_format_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared)
 target_compile_definitions(planar_ledger_format_tests PRIVATE
   PLANAR_LEDGER_SCHEMA="${PROJECT_SOURCE_DIR}/tests/native/r12b-evidence/expected-schema.sql")
+
+planar_rewrite_module(planar_ledger_execution_schema
+  INTERFACE ledger/execution_schema.cppm SOURCES ledger/execution_schema.cpp
+  DEPENDS planar_ledger_sqlite planar_ledger_storage planar_ledger_storage_types planar_json_codec planar_ledger_history_codec
+  TESTS ledger/execution_schema.t.cpp)
+# Test-only: the format1/format2 refusal and G1 guard open legacy ledgers through the existing format surface.
+target_link_libraries(planar_ledger_execution_schema_tests PRIVATE planar_ledger_format)
+
+planar_rewrite_module(planar_ledger_execution
+  INTERFACE ledger/execution.cppm SOURCES ledger/execution.cpp
+  DEPENDS planar_ledger_execution_schema planar_ledger_history_codec planar_history_request_v2 planar_history_request_v3 planar_history_execution_codec planar_hash planar_canonical planar_history_record planar_ledger_sqlite
+  TESTS ledger/execution.t.cpp TEST_TIMEOUT 120)
+# Test-only: the format1/format2 refusals and the legacy-ledger fixtures open ledgers through the existing format surface.
+target_link_libraries(planar_ledger_execution_tests PRIVATE planar_ledger_format)
 
 planar_rewrite_module(planar_history_tree_core
   INTERFACE history/tree_core.cppm SOURCES history/tree_core.cpp
