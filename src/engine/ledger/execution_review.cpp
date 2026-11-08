@@ -1,7 +1,7 @@
 // R18 ledger read side of planar.engine.ledger.execution (DB-R3): the derived review values (repair revision, verdict
 // activation, review count, open blockers, structural lineage), the cross-row invariants 21 to 27 of R18-T, the
-// DRAFT-STUB R17-C completion read, and the snapshot review value of DR18-8. Every function reads through the caller's
-// open connection inside its transaction; every violated invariant is ledger_corrupt.
+// R17 completion/event/vector consistency checks, and the snapshot review value of DR18-8. Every function reads through the
+// caller's open connection inside its transaction; every violated invariant is ledger_corrupt.
 module;
 #include <sqlite3.h>
 module planar.engine.ledger.execution;
@@ -63,7 +63,7 @@ checked each_row(connection& db, std::string_view sql, const std::vector<bind_va
   if (!query)
     return std::unexpected(map_sqlite(query.error()));
   for (std::size_t i = 0; i < binds.size(); ++i) {
-    const int index = static_cast<int>(i + 1);
+    const int                         index = static_cast<int>(i + 1);
     std::expected<void, sqlite_error> bound{};
     if (const auto* number = std::get_if<std::int64_t>(&binds[i]))
       bound = query->bind_integer(index, *number);
@@ -726,7 +726,11 @@ checked check_admission_replay(connection& db, const std::vector<verdict_image>&
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-// DRAFT-STUB R17-C completions: structural checks and the unit list of the observation value.
+// R17 completions: event/reservation/dispatch linkage and evidence vectors of the recorded observation.
+
+value_ptr text_node(std::string text);
+value_ptr list_node(std::vector<value_ptr> items);
+value_ptr record_node(std::map<std::string, value_ptr> fields);
 
 result<std::vector<execution_completion>> load_completions(connection& db, std::uint64_t last_seq) {
   std::vector<execution_completion> out;
@@ -761,6 +765,91 @@ result<std::vector<execution_completion>> load_completions(connection& db, std::
   if (!scan)
     return std::unexpected(scan.error());
   for (std::size_t i = 0; i < out.size(); ++i) {
+    const auto&                  completion = out[i];
+    std::optional<std::uint64_t> reservation;
+    auto                         linked = each_row(
+        db,
+        "SELECT e.type,e.payload,e.run_id,r.id,r.run_id,r.opened_seq,rs.state,rs.last_seq,s.state "
+        "FROM events e JOIN reservations r ON r.request_id=e.request_id "
+        "JOIN reservation_state rs ON rs.reservation_id=r.id JOIN run_state s ON s.run_id=r.run_id WHERE e.seq=?1",
+        {as_bind(completion.seq)}, [&](statement& row) -> checked {
+          auto type = text_col(row, 0), payload = blob_col(row, 1), state = text_col(row, 6), run_state = text_col(row, 8);
+          auto event_run = id_col(row, 2), id = id_col(row, 3), run = id_col(row, 4), opened = id_col(row, 5),
+               last = id_col(row, 7);
+          if (!type || !payload || !state || !run_state || !event_run || !id || !run || !opened || !last ||
+              *type != "check_recorded" || *state != "completed" || *last != completion.seq || *event_run != completion.run ||
+              *run != completion.run || *run_state != "completed" || *opened >= completion.seq)
+            return std::unexpected(corrupt());
+          auto decoded = hist::decode_event_payload_v2(*type, *payload);
+          if (!decoded || !decoded->references.contains("completion") ||
+              decoded->references.at("completion") != decimal(completion.id) ||
+              decoded->references.at("observation") != decimal(observations[i]) ||
+              decoded->references.at("reservation") != decimal(*id))
+            return std::unexpected(corrupt());
+          bool dispatch_ok = false;
+          auto dispatched = each_row(db, "SELECT id FROM dispatches WHERE run_id=?1 AND seq<?2 ORDER BY seq DESC,id DESC LIMIT 1",
+                                     {as_bind(completion.run), as_bind(*opened)}, [&](statement& d) -> checked {
+                                       auto dispatch = id_col(d, 0);
+                                       if (!dispatch)
+                                         return std::unexpected(corrupt());
+                                       dispatch_ok = *dispatch == completion.dispatch;
+                                       return {};
+                                     });
+          if (!dispatched)
+            return dispatched;
+          if (!dispatch_ok || reservation)
+            return std::unexpected(corrupt());
+          reservation = *id;
+          return {};
+        });
+    if (!linked)
+      return std::unexpected(linked.error());
+    if (!reservation)
+      return std::unexpected(corrupt());
+    std::map<std::string, value_ptr> vectors;
+    linked = each_row(
+        db, "SELECT work,vector_id,outcome,seq FROM evidence WHERE reservation_id=?1 ORDER BY work,\"check\"",
+        {as_bind(*reservation)}, [&](statement& row) -> checked {
+          auto work = text_col(row, 0), outcome = text_col(row, 2);
+          auto vector_id = id_col(row, 1), seq = id_col(row, 3);
+          if (!work || !outcome || !vector_id || !seq || *outcome != "pass" || *seq != completion.seq)
+            return std::unexpected(corrupt());
+          auto vector = value_record(db, *vector_id);
+          if (!vector)
+            return std::unexpected(vector.error());
+          auto decoded = canonical_decode(vector->canonical);
+          if (!decoded || !*decoded || (*decoded)->kind != value_kind::record)
+            return std::unexpected(corrupt());
+          auto targets = (*decoded)->fields.find("targets");
+          if (targets == (*decoded)->fields.end() || targets->second->kind != value_kind::list)
+            return std::unexpected(corrupt());
+          auto                             old = vectors.find(*work);
+          std::map<std::string, value_ptr> union_targets;
+          if (old != vectors.end())
+            for (const auto& t : old->second->items)
+              union_targets[t->fields.at("work")->string] = t;
+          for (const auto& t : targets->second->items) {
+            if (!t || t->kind != value_kind::record || !t->fields.contains("work") || !t->fields.contains("output") ||
+                t->fields.at("work")->kind != value_kind::string || t->fields.at("output")->kind != value_kind::string)
+              return std::unexpected(corrupt());
+            auto key   = t->fields.at("work")->string;
+            auto prior = union_targets.find(key);
+            if (prior != union_targets.end() && prior->second->fields.at("output")->string != t->fields.at("output")->string)
+              return std::unexpected(corrupt());
+            union_targets[key] = t;
+          }
+          std::vector<value_ptr> merged;
+          for (const auto& [_, t] : union_targets)
+            merged.push_back(t);
+          vectors[*work] = list_node(std::move(merged));
+          return {};
+        });
+    if (!linked)
+      return std::unexpected(linked.error());
+    if (vectors.empty())
+      return std::unexpected(corrupt());
+    for (const auto& [work, targets] : vectors)
+      out[i].vectors.push_back(record_node({{"work", text_node(work)}, {"targets", targets}}));
     auto record = value_record(db, observations[i]);
     if (!record)
       return std::unexpected(record.error());
@@ -1007,7 +1096,8 @@ std::vector<std::pair<std::string, value_ptr>> review_state_entries(const execut
                                    {"dispatch", text_node(decimal(c.dispatch))},
                                    {"work_fp", text_node(c.work_fp)},
                                    {"seq", text_node(decimal(c.seq))},
-                                   {"units", list_node(std::move(units))}}));
+                                   {"units", list_node(std::move(units))},
+                                   {"vectors", list_node(c.vectors)}}));
     }
     out.emplace_back("completions", list_node(std::move(items)));
   }
@@ -1109,7 +1199,8 @@ bool same_targets(const std::vector<hist::verdict_target>& left, const std::vect
 // The worker role of the job whose structure owns the work unit.
 const execution_role* owner_of(const execution_snapshot& snapshot, std::string_view job, std::string_view work) {
   for (const auto& row : snapshot.roles)
-    if (row.job == job && row.structure.kind == "worker" && std::ranges::find(row.structure.work, work) != row.structure.work.end())
+    if (row.job == job && row.structure.kind == "worker" &&
+        std::ranges::find(row.structure.work, work) != row.structure.work.end())
       return &row;
   return nullptr;
 }
@@ -1184,7 +1275,7 @@ checked check_verdict_transitions(const execution_snapshot& snapshot, const exec
     return std::unexpected(invalid());
   std::vector<hist::transition_row> rows;
   for (std::size_t i = 0; i < change.transitions.size(); ++i) {
-    const auto&         t = change.transitions[i];
+    const auto&          t = change.transitions[i];
     hist::transition_row row;
     row.ordinal        = i + 1;
     row.job            = t.job;
@@ -1206,9 +1297,11 @@ checked check_verdict_vector(const execution_snapshot& snapshot, const execution
   std::map<std::string, execution_vector_entry> wanted;
   for (const auto& row : snapshot.roles)
     if (row.job == snapshot.active_job)
-      wanted[row.role] = execution_vector_entry{.job = row.job, .role = row.role, .state = row.state, .drifted = row.drifted, .run = row.run_id};
+      wanted[row.role] =
+          execution_vector_entry{.job = row.job, .role = row.role, .state = row.state, .drifted = row.drifted, .run = row.run_id};
   for (const auto& t : change.transitions)
-    wanted[t.role] = execution_vector_entry{.job = t.job, .role = t.role, .state = t.after_state, .drifted = false, .run = std::nullopt};
+    wanted[t.role] =
+        execution_vector_entry{.job = t.job, .role = t.role, .state = t.after_state, .drifted = false, .run = std::nullopt};
   if (change.vector.size() != wanted.size())
     return std::unexpected(invalid());
   std::set<std::string> seen;
@@ -1223,11 +1316,12 @@ checked check_verdict_vector(const execution_snapshot& snapshot, const execution
 
 // The exact R18-4 precondition set: active_revision, active_job, fact_version of every role of the active job,
 // role_state(reviewer) == (running, false, run), generation_current(reviewer, G), run_active(run, G), request_unused.
-checked check_verdict_expected(const execution_snapshot& snapshot, const execution_change& change, const execution_role& reviewer) {
-  using kind_t      = execution_expectation::kind_t;
-  const auto& facts = *change.verdict;
+checked check_verdict_expected(const execution_snapshot& snapshot, const execution_change& change,
+                               const execution_role& reviewer) {
+  using kind_t                             = execution_expectation::kind_t;
+  const auto&                        facts = *change.verdict;
   std::vector<execution_expectation> wanted;
-  auto add = [&](kind_t kind) -> execution_expectation& {
+  auto                               add = [&](kind_t kind) -> execution_expectation& {
     wanted.push_back(execution_expectation{});
     wanted.back().kind = kind;
     return wanted.back();
@@ -1241,13 +1335,13 @@ checked check_verdict_expected(const execution_snapshot& snapshot, const executi
       fact.role   = row.role;
       fact.number = row.fact_version;
     }
-  auto& state   = add(kind_t::role_state);
-  state.job     = reviewer.job;
-  state.role    = reviewer.role;
-  state.state   = "running";
-  state.drifted = false;
-  state.run     = facts.run;
-  auto& current = add(kind_t::generation_current);
+  auto& state    = add(kind_t::role_state);
+  state.job      = reviewer.job;
+  state.role     = reviewer.role;
+  state.state    = "running";
+  state.drifted  = false;
+  state.run      = facts.run;
+  auto& current  = add(kind_t::generation_current);
   current.job    = reviewer.job;
   current.role   = reviewer.role;
   current.number = reviewer.generation_id;
@@ -1312,9 +1406,9 @@ result<std::optional<locked_role_row>> read_role_row(connection& db, std::string
   auto scan = each_row(db, "SELECT generation_id,state,drifted,run_id,fact_version FROM role_state WHERE job=?1 AND role=?2",
                        {std::string(job), std::string(role)}, [&](statement& row) -> checked {
                          auto generation = id_col(row, 0), fact = id_col(row, 4);
-                         auto state      = text_col(row, 1);
-                         auto drifted    = opt_int(row, 2);
-                         auto run        = opt_id_col(row, 3);
+                         auto state   = text_col(row, 1);
+                         auto drifted = opt_int(row, 2);
+                         auto run     = opt_id_col(row, 3);
                          if (!generation || !fact || !state || !drifted || !*drifted || !run)
                            return std::unexpected(corrupt());
                          out = locked_role_row{*generation, *state, **drifted != 0, *run, *fact};
@@ -1332,14 +1426,15 @@ struct locked_run_row {
 
 result<std::optional<locked_run_row>> read_run_row(connection& db, std::uint64_t run) {
   std::optional<locked_run_row> out;
-  auto scan = each_row(db, "SELECT state,generation_id FROM run_state WHERE run_id=?1", {as_bind(run)}, [&](statement& row) -> checked {
-    auto state      = text_col(row, 0);
-    auto generation = id_col(row, 1);
-    if (!state || !generation)
-      return std::unexpected(corrupt());
-    out = locked_run_row{*state, *generation};
-    return {};
-  });
+  auto                          scan =
+      each_row(db, "SELECT state,generation_id FROM run_state WHERE run_id=?1", {as_bind(run)}, [&](statement& row) -> checked {
+        auto state      = text_col(row, 0);
+        auto generation = id_col(row, 1);
+        if (!state || !generation)
+          return std::unexpected(corrupt());
+        out = locked_run_row{*state, *generation};
+        return {};
+      });
   if (!scan)
     return std::unexpected(scan.error());
   return out;
@@ -1347,7 +1442,7 @@ result<std::optional<locked_run_row>> read_run_row(connection& db, std::uint64_t
 
 result<std::uint64_t> next_of(connection& db, std::string_view sql) {
   std::optional<std::uint64_t> out;
-  auto scan = each_row(db, sql, {}, [&](statement& row) -> checked {
+  auto                         scan = each_row(db, sql, {}, [&](statement& row) -> checked {
     auto value = opt_int(row, 0);
     if (!value || !*value || **value < 0)
       return std::unexpected(corrupt());
@@ -1405,7 +1500,8 @@ std::expected<void, execution_error> check_verdict_shape(const execution_change&
   for (const auto& kind : facts.blockers_opened)
     if (kind != "max_rounds" && kind != "unowned_rejection")
       return std::unexpected(invalid());
-  if (std::set<std::uint64_t>(change.blockers_cleared.begin(), change.blockers_cleared.end()).size() != change.blockers_cleared.size())
+  if (std::set<std::uint64_t>(change.blockers_cleared.begin(), change.blockers_cleared.end()).size() !=
+      change.blockers_cleared.size())
     return std::unexpected(invalid());
   for (const auto& member : change.expected) {
     if (member.no_row || member.kind == kind_t::reservation_open)
@@ -1484,7 +1580,7 @@ std::expected<void, execution_error> check_verdict_snapshot(const execution_snap
   }
 
   // Applicability (R18-3) and the admission case (R18-5) from the native count.
-  const bool current   = complete && same_targets(verdict.targets, facts.current.targets) && verdict.policy == facts.current.policy;
+  const bool current = complete && same_targets(verdict.targets, facts.current.targets) && verdict.policy == facts.current.policy;
   const auto admission = admission_case(current, verdict, snapshot.review.count, facts.max_rounds);
   if (facts.admission != admission)
     return std::unexpected(invalid());
@@ -1530,19 +1626,20 @@ std::expected<void, execution_error> check_blockers_cleared(const execution_snap
 }
 
 std::expected<void, execution_error> check_verdict_locked(connection& db, const execution_change& change) {
-  using kind_t      = execution_expectation::kind_t;
-  const auto& facts = *change.verdict;
+  using kind_t                       = execution_expectation::kind_t;
+  const auto&                  facts = *change.verdict;
   std::optional<std::uint64_t> revision;
   std::string                  job;
-  auto head = each_row(db, "SELECT active_revision_id,active_job FROM current_state WHERE singleton=1", {}, [&](statement& row) -> checked {
-    auto rev    = opt_id_col(row, 0);
-    auto active = opt_text_col(row, 1);
-    if (!rev || !active)
-      return std::unexpected(corrupt());
-    revision = *rev;
-    job      = active->value_or(std::string{});
-    return {};
-  });
+  auto head = each_row(db, "SELECT active_revision_id,active_job FROM current_state WHERE singleton=1", {},
+                       [&](statement& row) -> checked {
+                         auto rev    = opt_id_col(row, 0);
+                         auto active = opt_text_col(row, 1);
+                         if (!rev || !active)
+                           return std::unexpected(corrupt());
+                         revision = *rev;
+                         job      = active->value_or(std::string{});
+                         return {};
+                       });
   if (!head)
     return std::unexpected(head.error());
 
@@ -1603,7 +1700,8 @@ std::expected<void, execution_error> check_verdict_locked(connection& db, const 
       auto run = read_run_row(db, facts.run);
       if (!run)
         return std::unexpected(run.error());
-      ok = *run && (*run)->state == "active" && (*run)->generation == member.number && member.run == std::optional<std::uint64_t>(facts.run);
+      ok = *run && (*run)->state == "active" && (*run)->generation == member.number &&
+           member.run == std::optional<std::uint64_t>(facts.run);
       break;
     }
     case kind_t::request_unused:
@@ -1650,9 +1748,8 @@ std::expected<void, execution_error> clear_blockers(connection& db, const std::v
 }
 
 std::expected<execution_commit_result, execution_error> write_verdict(connection& db, std::string_view identity,
-                                                                      const execution_change& change,
-                                                                      std::uint64_t request_body, std::uint64_t verdict_body,
-                                                                      std::string_view now) {
+                                                                      const execution_change& change, std::uint64_t request_body,
+                                                                      std::uint64_t verdict_body, std::string_view now) {
   const auto&                  facts = *change.verdict;
   std::optional<std::uint64_t> revision;
   std::optional<std::uint64_t> activation;
@@ -1787,9 +1884,10 @@ std::expected<execution_commit_result, execution_error> write_verdict(connection
                           {change.request_id, as_bind(request_body), s, as_bind(*revision), blob_value{*saved}});
       !ok)
     return std::unexpected(ok.error());
-  if (auto ok = write_sql(db, "INSERT INTO verdicts(id,request_id,run_id,seq,body_id,applicability,decision) VALUES(?1,?2,?3,?4,?5,?6,?7)",
-                          {as_bind(*verdict_id), change.request_id, as_bind(facts.run), s, as_bind(verdict_body),
-                           result.applicability, facts.verdict.decision});
+  if (auto ok = write_sql(
+          db, "INSERT INTO verdicts(id,request_id,run_id,seq,body_id,applicability,decision) VALUES(?1,?2,?3,?4,?5,?6,?7)",
+          {as_bind(*verdict_id), change.request_id, as_bind(facts.run), s, as_bind(verdict_body), result.applicability,
+           facts.verdict.decision});
       !ok)
     return std::unexpected(ok.error());
 
@@ -1803,11 +1901,12 @@ std::expected<execution_commit_result, execution_error> write_verdict(connection
     if (!*row)
       return std::unexpected(conflict());
     befores.push_back(**row);
-    if (auto ok = write_sql(db,
-                            "INSERT INTO transitions(event_seq,ordinal,job,role,generation_id,before_state,after_state,"
-                            "before_drifted,after_drifted,reason) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
-                            {s, static_cast<std::int64_t>(i + 1), t.job, t.role, as_bind((*row)->generation), (*row)->state,
-                             t.after_state, std::int64_t{(*row)->drifted ? 1 : 0}, std::int64_t{t.after_drifted ? 1 : 0}, t.reason});
+    if (auto ok =
+            write_sql(db,
+                      "INSERT INTO transitions(event_seq,ordinal,job,role,generation_id,before_state,after_state,"
+                      "before_drifted,after_drifted,reason) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
+                      {s, static_cast<std::int64_t>(i + 1), t.job, t.role, as_bind((*row)->generation), (*row)->state,
+                       t.after_state, std::int64_t{(*row)->drifted ? 1 : 0}, std::int64_t{t.after_drifted ? 1 : 0}, t.reason});
         !ok)
       return std::unexpected(ok.error());
   }
@@ -1825,7 +1924,9 @@ std::expected<execution_commit_result, execution_error> write_verdict(connection
                             {id, s, job, facts.blockers_opened[i], as_bind(*verdict_id)});
         !ok)
       return std::unexpected(ok.error());
-    if (auto ok = write_sql(db, "INSERT INTO blocker_state(blocker_id,state,cleared_seq,last_seq) VALUES(?1,'open',NULL,?2)", {id, s}); !ok)
+    if (auto ok =
+            write_sql(db, "INSERT INTO blocker_state(blocker_id,state,cleared_seq,last_seq) VALUES(?1,'open',NULL,?2)", {id, s});
+        !ok)
       return std::unexpected(ok.error());
   }
   // N11: the reviewer run completes. Then the role_state delta: transitioned roles bump fact_version (EX-3, D16).
@@ -1941,7 +2042,7 @@ std::expected<std::optional<value_ptr>, execution_error> read_verdict_expansion(
                   "SELECT r.role,g.ordinal,r.revision FROM repairs r JOIN generations g ON g.id=r.generation_id "
                   "WHERE r.verdict_id=?1 ORDER BY r.role",
                   {as_bind(verdict_id)}, [&](statement& row) -> checked {
-                    auto role = text_col(row, 0);
+                    auto role    = text_col(row, 0);
                     auto ordinal = id_col(row, 1), revision = id_col(row, 2);
                     if (!role || !ordinal || !revision)
                       return std::unexpected(corrupt());
@@ -1953,14 +2054,15 @@ std::expected<std::optional<value_ptr>, execution_error> read_verdict_expansion(
   if (!scan)
     return std::unexpected(scan.error());
   std::vector<value_ptr> opened;
-  scan = each_row(db, "SELECT id,kind FROM blockers WHERE verdict_id=?1 ORDER BY id", {as_bind(verdict_id)}, [&](statement& row) -> checked {
-    auto id   = id_col(row, 0);
-    auto kind = text_col(row, 1);
-    if (!id || !kind)
-      return std::unexpected(corrupt());
-    opened.push_back(record_node({{"id", text_node(decimal(*id))}, {"kind", text_node(*kind)}}));
-    return {};
-  });
+  scan = each_row(db, "SELECT id,kind FROM blockers WHERE verdict_id=?1 ORDER BY id", {as_bind(verdict_id)},
+                  [&](statement& row) -> checked {
+                    auto id   = id_col(row, 0);
+                    auto kind = text_col(row, 1);
+                    if (!id || !kind)
+                      return std::unexpected(corrupt());
+                    opened.push_back(record_node({{"id", text_node(decimal(*id))}, {"kind", text_node(*kind)}}));
+                    return {};
+                  });
   if (!scan)
     return std::unexpected(scan.error());
   std::vector<value_ptr> cleared;
@@ -2024,21 +2126,22 @@ std::expected<std::optional<value_ptr>, execution_error> read_verdict_expansion(
   auto ordinal = generation_ordinal_of(db, found->generation);
   if (!ordinal)
     return std::unexpected(ordinal.error());
-  auto native = record_node({{"ledger", text_node(database->metadata().identity)},
-                             {"revision", text_node(decimal(found->revision))},
-                             {"source", record_node({{"id", text_node(decimal(source_id))}, {"digest", text_node(source_digest)}})},
-                             {"job", text_node(found->job)},
-                             {"role", text_node(found->role)},
-                             {"generation", text_node(decimal(*ordinal))},
-                             {"base_label", base_label},
-                             {"work_fp", text_node(work_fp)},
-                             {"render_fp", text_node(render_fp)},
-                             {"preferences", record_node({{"model", unknown_node()}, {"session", unknown_node()}})}});
-  return std::optional<value_ptr>(
-      record_node({{"verdict", verdict},
-                   {"repairs", list_node(std::move(repairs))},
-                   {"blockers", record_node({{"opened", list_node(std::move(opened))}, {"cleared", list_node(std::move(cleared))}})},
-                   {"provenance", record_node({{"native", native}})}}));
+  auto native =
+      record_node({{"ledger", text_node(database->metadata().identity)},
+                   {"revision", text_node(decimal(found->revision))},
+                   {"source", record_node({{"id", text_node(decimal(source_id))}, {"digest", text_node(source_digest)}})},
+                   {"job", text_node(found->job)},
+                   {"role", text_node(found->role)},
+                   {"generation", text_node(decimal(*ordinal))},
+                   {"base_label", base_label},
+                   {"work_fp", text_node(work_fp)},
+                   {"render_fp", text_node(render_fp)},
+                   {"preferences", record_node({{"model", unknown_node()}, {"session", unknown_node()}})}});
+  return std::optional<value_ptr>(record_node(
+      {{"verdict", verdict},
+       {"repairs", list_node(std::move(repairs))},
+       {"blockers", record_node({{"opened", list_node(std::move(opened))}, {"cleared", list_node(std::move(cleared))}})},
+       {"provenance", record_node({{"native", native}})}}));
 }
 
 std::expected<std::optional<std::string>, execution_error> read_saved_result(const std::filesystem::path& path,

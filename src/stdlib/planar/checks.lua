@@ -4,6 +4,7 @@ local checks=(function()
  local M={hooks={}}
  local function arr(t)return engine and engine.array and engine.array(t or {}) or (t or {}) end
  local function obj(t)return engine and engine.object and engine.object(t) or t end
+ local function fp(v)if type(v)=="string" and #v==32 then return "xxh3_128:"..v end;return v end
  local function eq(a,b)return a~=nil and b~=nil and tostring(a)==tostring(b) end
  local function sorted(t,key)local out={};for _,v in ipairs(t or {})do out[#out+1]=v end;table.sort(out,function(a,b)return key(a)<key(b)end);return arr(out)end
  local function row(S,role)for _,r in ipairs(S.roles or {})do if r.job==S.active_job and r.role==role then return r end end end
@@ -48,7 +49,7 @@ local checks=(function()
  function M.applicable_completion(S,role)
   local r=row(S,role);if not r then return nil end
   local current=M.current_work(S,r);if not current then return nil end
-  for _,c in ipairs(completion_list(S,role))do if c.work_fp==current.digest and #M.completion_mismatches(S,c)==0 then return c end end
+  for _,c in ipairs(completion_list(S,role))do if fp(c.work_fp)==fp(current.digest) and #M.completion_mismatches(S,c)==0 then return c end end
  end
  function M.plan(S,role)
   local r=row(S,role);if not r or type(r.run)~="table" then return nil,"fenced"end
@@ -91,7 +92,7 @@ local checks=(function()
   for _,p in ipairs(material and material.prerequisites or {})do if p.status~="available" and p.status~="answered"then add(withheld,p.phase=="start" and "start_prerequisite" or "complete_prerequisite")end end
   for _,d in ipairs(material and material.work.dependencies or {})do if d.phase=="complete" and (d.quality=="done" or d.quality=="accepted")then
    local o=owner(S,d.producer);local ok=o and (o.role==plan.role or M.applicable_completion(S,o.role)~=nil)
-   if d.quality=="accepted"then ok=false;if M.hooks.acceptance then local accepted=M.hooks.acceptance(S);for _,u in ipairs(accepted.units or {})do if u.work==d.producer and u.accepted then ok=true end end end end
+   if d.quality=="accepted"then ok=false;if M.hooks.acceptance then local accepted=M.hooks.acceptance(S);for _,u in ipairs(accepted.units or accepted or {})do if u.work==d.producer and u.accepted then ok=true end end end end
    if not ok then add(withheld,"complete_prerequisite")end
   end end
   if options.retry_exhausted then add(withheld,"retry_exhausted")end
@@ -103,7 +104,57 @@ local checks=(function()
   if #reasons==0 then facts.completion=obj({publications=result.facets or result.publications or arr({})})end
   if M.hooks.blockers_to_clear then facts.blockers_cleared=M.hooks.blockers_to_clear(S,{operation="check",job=plan.job})end
   local change=obj({version=1,operation="check",facts=obj(facts),vector=sorted(vector,function(v)return v.role end),transitions=arr(transitions),expected=arr({}),withheld=arr(reasons)})
+  change=M.rederive(S,change,plan,result)
   if M.hooks.reconcile then change=M.hooks.reconcile(S,change,plan,result)end
+  return change
+ end
+ -- Derive downstream roles against a hypothetical committed snapshot; never mutate the input snapshot.
+ function M.rederive(S,change,plan,result)
+  local next={};for k,v in pairs(S)do next[k]=v end
+  next.roles={};local original,explicit={},{}
+  for _,r in ipairs(S.roles or {})do local c={};for k,v in pairs(r)do c[k]=v end;next.roles[#next.roles+1]=c;original[r.role]=r end
+  for _,t in ipairs(change.transitions or {})do explicit[t.role]=t;for _,r in ipairs(next.roles)do if r.job==t.job and r.role==t.role then r.state=t.after_state;r.drifted=t.after_drifted;if r.state~="running"then r.run="none"end end end end
+  if plan and result and change.facts.completion then
+   local r=original[plan.role];local current=M.current_work(S,r);local sequence=tonumber(S.last_seq or "0");for _,c in ipairs(S.completions or {})do sequence=math.max(sequence,tonumber(c.seq))end;sequence=sequence+1;local units=result.observation and result.observation.units or {}
+   local vectors={};for _,e in ipairs(result.evidence or {})do if e.vector then vectors[#vectors+1]={work=e.work,targets=e.vector.targets}end end
+   next.completions={};for _,c in ipairs(S.completions or {})do next.completions[#next.completions+1]=c end
+   next.completions[#next.completions+1]={id="0",job=plan.job,role=plan.role,generation=r.generation.id,run=plan.run,dispatch=r.run.dispatch.id,work_fp=current.digest,seq=tostring(sequence),units=units,vectors=vectors}
+   local own={};for _,u in ipairs(plan.units)do own[u.work]=true end
+   next.observed={};for _,o in ipairs(S.observed or {})do if not own[o.work]then next.observed[#next.observed+1]=o end end
+   for _,u in ipairs(units)do if own[u.work]then next.observed[#next.observed+1]={work=u.work,output=u.output,seq=tostring(sequence)}end end
+   next.publications={};local new={};for _,f in ipairs(result.facets or result.publications or {})do new[f.facet]=true;next.publications[#next.publications+1]={job=plan.job,role=plan.role,work=f.work,facet=f.facet,semantic=f.semantic}end
+   for _,f in ipairs(S.publications or {})do if not new[f.facet]then next.publications[#next.publications+1]=f end end
+  end
+  local derived={}
+  for _=1,#next.roles+1 do
+   local changed=false
+   for _,r in ipairs(next.roles)do if r.job==S.active_job and r.state~="retired" and not explicit[r.role]then
+    local before=original[r.role];local material=M.current_work(next,r)
+    if material then
+     local state,drift=r.state,r.drifted==true;local reason
+     if r.state=="running"then
+      local acknowledged=type(r.run)=="table" and r.run.dispatch and r.run.dispatch.work_fp
+      drift=fp(acknowledged)~=fp(material.digest)
+      if drift~=r.drifted then reason=drift and "work_changed" or "drift_cleared"end
+     elseif material.blocked then state="blocked";reason="prerequisite_unavailable"
+     elseif structure(r).kind=="worker"then
+      local applicable=M.applicable_completion(next,r.role)
+      if applicable then state="done";reason=r.state=="blocked" and "prerequisite_available" or "evidence_inapplicable"
+      elseif r.state=="done"then state="stale";reason="evidence_inapplicable"
+      elseif r.state=="blocked"then state="ready";reason="prerequisite_available"end
+     elseif r.state=="blocked"then state="ready";reason="prerequisite_available"end
+     if state~=r.state or drift~=(r.drifted==true)then
+      r.state=state;r.drifted=drift;changed=true
+      derived[r.role]=obj({job=r.job,role=r.role,before_state=before.state,before_drifted=before.drifted==true,after_state=state,after_drifted=drift,reason=reason})
+     end
+    end
+   end end
+   if not changed then break end
+  end
+  local tail={};for _,t in pairs(derived)do if t.before_state~=t.after_state or t.before_drifted~=t.after_drifted then tail[#tail+1]=t end end
+  for _,t in ipairs(sorted(tail,function(t)return t.role end))do change.transitions[#change.transitions+1]=t end
+  local vector={};for _,r in ipairs(next.roles)do if r.job==S.active_job then vector[#vector+1]=obj({job=r.job,role=r.role,state=r.state,drifted=r.drifted==true,run=type(r.run)=="table" and r.run.id or "none"})end end
+  change.vector=sorted(vector,function(r)return r.role end)
   return change
  end
  function M.evidence_lines(S,role)

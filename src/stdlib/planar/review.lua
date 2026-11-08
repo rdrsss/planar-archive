@@ -191,6 +191,7 @@ local review=(function()
   -- role (DB-R5), else nil.
   local function current_work(snapshot,r)
     if r==nil then return nil end
+    if checks and checks.current_work then return checks.current_work(snapshot,r) end
     if M.hooks.current_work then
       local cw=M.hooks.current_work(snapshot,r)
       if cw then return {work=cw.work,digest=fp(cw.digest)} end
@@ -705,6 +706,7 @@ local review=(function()
         max_rounds=max_rounds,case=classified.case,repairs=classified.repairs,blockers_opened=blockers_opened,
         blockers_cleared=cleared},
       transitions=transitions,expected=expected}
+    if checks and checks.rederive then change=checks.rederive(snapshot,change) end
     if M.hooks.reconcile then change=M.hooks.reconcile(snapshot,change) or change end
     -- Ordinal 1 stays the reviewer; the rest ascend by role (DB-R29).
     local first=change.transitions[1]
@@ -732,3 +734,9 @@ local review=(function()
 
   return M
 end)()
+
+-- Bind the shipped review policy to check completion policy after both modules exist.
+if checks then
+ checks.hooks.acceptance=review.acceptance
+ checks.hooks.blockers_to_clear=review.blockers_to_clear
+end

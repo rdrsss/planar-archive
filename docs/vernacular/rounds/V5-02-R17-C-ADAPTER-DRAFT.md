@@ -49,3 +49,18 @@ populate accepted snapshot observed/evidence/publication rows.
 The five focused checks preceded the final small edits preserving matched counts on a failed
 process and enforcing aggregate facet bounds before reserve; final compilation is coordinated
 with the ledger package. Those edits require the final integration check.
+
+## Completion/review integration follow-up
+
+The R18 completion reader now requires real R17 check_recorded events and completed
+reservations, verifies the acknowledged dispatch preceding reserve, and reads passing
+evidence target vectors into completions. The former structural-only completion stub is
+removed. Old R18 tests that manufacture a completion by SQL without a check event need
+conversion to the real R17 reserve/complete API in the final fixing work.
+
+checks.lua rederives downstream role state over a hypothetical completion, including
+producer publication changes and evidence-vector staleness. review.lua uses the real
+check completion policy and installs acceptance/blocker functions after embedding.
+`lua tests/native/r17-checks-policy.lua .` passed four policy scenarios: vector staleness,
+identity restoration, lineage filtering and downstream evidence invalidation. Native
+compilation is coordinated with the ledger package; full verification remains deferred.
