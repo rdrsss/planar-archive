@@ -168,6 +168,22 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
    next.publications={};local new={};for _,f in ipairs(result.facets or result.publications or {})do new[f.facet]=true;next.publications[#next.publications+1]={job=plan.job,role=plan.role,work=f.work,facet=f.facet,semantic=f.semantic}end
    for _,f in ipairs(S.publications or {})do if not new[f.facet]then next.publications[#next.publications+1]=f end end
   end
+  -- Reconcile against the review facts being committed, including repair identity increments.
+  if change.operation=="verdict" then
+   local f=change.facts;next.review={}
+   for k,v in pairs(S.review or {})do next.review[k]=v end
+   local sequence=tonumber(change.snapshot_seq or S.last_seq or "0")+1
+   next.review.verdicts={};for _,v in ipairs(S.review and S.review.verdicts or {})do next.review.verdicts[#next.review.verdicts+1]=v;sequence=math.max(sequence,tonumber(v.seq)+1)end
+   next.review.verdicts[#next.review.verdicts+1]={id="pending",run=f.run,seq=scalar_text(sequence),applicability=f.case=="historical" and "historical" or "current",decision=f.verdict.decision,body=f.verdict}
+   local cleared={};for _,id in ipairs(f.blockers_cleared or {})do cleared[scalar_text(id)]=true end
+   next.review.blockers={};for _,b in ipairs(S.review and S.review.blockers or {})do if not cleared[scalar_text(b.id)]then next.review.blockers[#next.review.blockers+1]=b end end
+   for i,kind in ipairs(f.blockers_opened or {})do next.review.blockers[#next.review.blockers+1]={id=scalar_text(sequence+i),job=S.active_job,kind=kind,verdict="pending"}end
+   local repairs={};for _,role in ipairs(f.repairs or {})do repairs[role]=true end
+   next.review.repairs={};for _,r in ipairs(S.review and S.review.repairs or {})do
+    next.review.repairs[#next.review.repairs+1]={job=r.job,role=r.role,revision=repairs[r.role] and scalar_text(tonumber(r.revision)+1) or r.revision};repairs[r.role]=nil
+   end
+   for role in pairs(repairs)do next.review.repairs[#next.review.repairs+1]={job=S.active_job,role=role,revision="1"}end
+  end
   local derived={}
   for _=1,#next.roles+1 do
    local changed=false

@@ -41,3 +41,13 @@ checks.hooks.acceptance=function()return {{work="p",accepted=true}}end
 assert(not checks.material(S,S.roles[2]).blocked)
 assert(checks.material(S,S.roles[2]).digest==digest)
 print("R17 readiness: completion applicability and accepted quality passed")
+-- An approval must be visible while deriving downstream transitions in the same commit.
+S.roles[2].state="blocked"
+S.review={count="0",verdicts={},repairs={},blockers={}}
+checks.hooks.acceptance=function(snapshot)
+ return {{work="p",accepted=#(snapshot.review.verdicts or {})>0}}
+end
+local approved=checks.rederive(S,{operation="verdict",snapshot_seq="10",facts={run="4",case="approve",verdict={decision="approve"},repairs={},blockers_opened={},blockers_cleared={}},transitions={}})
+assert(#approved.transitions==1 and approved.transitions[1].role=="consumer" and approved.transitions[1].after_state=="done")
+assert(#S.review.verdicts==0 and S.roles[2].state=="blocked")
+print("R18 readiness: same-commit approval derivation preserves input snapshot")
