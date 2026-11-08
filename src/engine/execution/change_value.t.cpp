@@ -462,3 +462,48 @@ TEST_CASE("execution change decoded load commits on a fresh format3 ledger") {
   std::get<load_options>(wrong.options).request.actor = "intruder";
   require_field(decode_execution_change(change, *snapshot, wrong), "request.framing");
 }
+
+TEST_CASE("R18 verdict change decoder preserves native document and refuses another run") {
+  auto             snapshot = base_snapshot();
+  auto             digest   = "xxh3_128:" + std::string(32, 'a');
+  auto             targets  = vlist({vrec({{"work", vstr("alpha")}, {"output", vstr(digest)}, {"work_fp", vstr(digest)}})});
+  auto             document = vrec({{"version", vint(1)},
+                                    {"targets", targets},
+                                    {"policy", vstr(digest)},
+                                    {"decision", vstr("approve")},
+                                    {"findings", vlist({})},
+                                    {"repair", vlist({})},
+                                    {"summary", vstr("checked")},
+                                    {"authority", vstr("reviewer_role_v1")}});
+  auto             facts    = vrec({{"role", vstr("reviewer")},
+                                    {"run", vstr("4")},
+                                    {"verdict", document},
+                                    {"current", vrec({{"targets", targets}, {"policy", vstr(digest)}, {"work", vrec({})}})},
+                                    {"max_rounds", vint(2)},
+                                    {"case", vstr("approve")},
+                                    {"repairs", vlist({})},
+                                    {"blockers_opened", vlist({})},
+                                    {"blockers_cleared", vlist({})}});
+  auto             change   = vrec({{"version", vint(1)},
+                                    {"operation", vstr("verdict")},
+                                    {"snapshot_seq", vstr("9")},
+                                    {"facts", facts},
+                                    {"vector", vlist({})},
+                                    {"transitions", vlist({})},
+                                    {"expected", vlist({vrec({{"kind", vstr("run_active")},
+                                                              {"job", vstr("alpha")},
+                                                              {"role", vstr("reviewer")},
+                                                              {"run", vstr("4")},
+                                                              {"generation", vstr("3")}})})}});
+  hist::request_v3 request{.operation        = "verdict",
+                           .actor            = "tester",
+                           .parameters       = bytes_of(vrec({{"run_id", vstr("4")}, {"verdict_path", vstr("/verdict.json")}})),
+                           .profile_argument = std::nullopt};
+  auto             decoded = decode_verdict_change(change, snapshot, "review-1", request, 4, document);
+  REQUIRE(decoded);
+  REQUIRE(decoded->verdict);
+  REQUIRE(decoded->verdict->max_rounds == 2);
+  REQUIRE(decoded->verdict->document == document);
+  REQUIRE(decoded->expected.front().number == 3);
+  REQUIRE_FALSE(decode_verdict_change(change, snapshot, "review-1", request, 5, document));
+}

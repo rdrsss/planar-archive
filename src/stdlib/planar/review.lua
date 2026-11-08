@@ -690,16 +690,16 @@ local review=(function()
     end
     local blockers_opened={}
     for i,k in ipairs(classified.blockers_opened) do blockers_opened[i]=k end
-    local expected={{kind="request_unused",text=options.request_id},
+    local expected={{kind="request_unused",request_id=options.request_id},
       {kind="active_revision",revision=snapshot.active_revision},
-      {kind="active_job",text=job}}
+      {kind="active_job",job=job}}
     for _,r in ipairs(roles_of(snapshot,job)) do
-      expected[#expected+1]={kind="fact_version",job=r.job,role=r.role,number=dec(r.fact_version)}
+      expected[#expected+1]={kind="fact_version",job=r.job,role=r.role,fact_version=dec(r.fact_version)}
     end
     expected[#expected+1]={kind="role_state",job=job,role=reviewer.role,state="running",drifted=false,run=reviewer.run.id}
-    expected[#expected+1]={kind="generation_current",job=job,role=reviewer.role,number=reviewer.generation.id}
+    expected[#expected+1]={kind="generation_current",job=job,role=reviewer.role,generation=reviewer.generation.id}
     expected[#expected+1]={kind="run_active",job=job,role=reviewer.role,run=reviewer.run.id,
-      number=reviewer.generation.id}
+      generation=reviewer.generation.id}
     local change={version=1,operation="verdict",snapshot_seq=options.snapshot_seq,
       facts={role=reviewer.role,run=reviewer.run.id,verdict=verdict,
         current={targets=vector.targets,policy=policy and policy.digest,work=policy and policy.work},

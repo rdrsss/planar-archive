@@ -158,8 +158,7 @@ std::expected<value_ptr, history_read_error> format3_state_view(const ledger::fo
   auto runs  = std::make_shared<value>();
   runs->kind = value_kind::list;
   for (const auto& run : replayed->runs)
-    runs->items.push_back(
-        object({{"id", text(id(run.id))}, {"role", text(run.role)}, {"generation", text(id(run.generation))}}));
+    runs->items.push_back(object({{"id", text(id(run.id))}, {"role", text(run.role)}, {"generation", text(id(run.generation))}}));
   auto revision = text("none");
   if (active_revision) {
     auto r = file.read_revision(static_cast<std::uint64_t>(*active_revision));

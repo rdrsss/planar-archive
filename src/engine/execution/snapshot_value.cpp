@@ -129,12 +129,81 @@ std::expected<value_ptr, snapshot_value_error> snapshot_value(const ledger::exec
       return std::unexpected(row.error());
     roles.push_back(*row);
   }
+  std::vector<value_ptr> completions, evidence, observed, publications, reservations, verdicts, blockers, repairs;
+  for (const auto& c : snapshot.completions) {
+    std::vector<value_ptr> units;
+    for (const auto& u : c.units)
+      units.push_back(record({{"work", text(u.work)}, {"output", text(u.output)}}));
+    completions.push_back(record({{"id", decimal(c.id)},
+                                  {"job", text(c.job)},
+                                  {"role", text(c.role)},
+                                  {"generation", decimal(c.generation)},
+                                  {"run", decimal(c.run)},
+                                  {"dispatch", decimal(c.dispatch)},
+                                  {"work_fp", text("xxh3_128:" + c.work_fp)},
+                                  {"seq", decimal(c.seq)},
+                                  {"units", list(std::move(units))},
+                                  {"vectors", list(c.vectors)}}));
+  }
+  for (const auto& e : snapshot.evidence)
+    evidence.push_back(record({{"id", decimal(e.id)},
+                               {"reservation", decimal(e.reservation)},
+                               {"work", text(e.work)},
+                               {"check", text(e.check)},
+                               {"outcome", text(e.outcome)},
+                               {"reason", text(e.reason)},
+                               {"matched", e.matched ? decimal(*e.matched) : text("none")},
+                               {"seq", decimal(e.seq)},
+                               {"vector", e.vector}}));
+  for (const auto& o : snapshot.observed)
+    observed.push_back(record({{"work", text(o.work)}, {"output", text(o.output)}, {"seq", decimal(o.seq)}}));
+  for (const auto& p : snapshot.publications)
+    publications.push_back(record({{"publication", decimal(p.publication)},
+                                   {"completion", decimal(p.completion)},
+                                   {"job", text(p.job)},
+                                   {"role", text(p.role)},
+                                   {"work", text(p.work)},
+                                   {"facet", text(p.facet)},
+                                   {"semantic", text(p.semantic)}}));
+  for (const auto& r : snapshot.reservations)
+    reservations.push_back(record({{"id", decimal(r.id)},
+                                   {"run", decimal(r.run)},
+                                   {"request_id", text(r.request_id)},
+                                   {"opened_seq", decimal(r.opened_seq)}}));
+  for (const auto& v : snapshot.review.verdicts) {
+    auto body = history::verdict_value(v.body);
+    if (!body)
+      return fail("snapshot.review.verdicts");
+    verdicts.push_back(record({{"id", decimal(v.id)},
+                               {"request_id", text(v.request_id)},
+                               {"run", decimal(v.run)},
+                               {"seq", decimal(v.seq)},
+                               {"applicability", text(v.applicability)},
+                               {"decision", text(v.decision)},
+                               {"body", *body}}));
+  }
+  for (const auto& b : snapshot.review.blockers)
+    blockers.push_back(record({{"id", decimal(b.id)},
+                               {"seq", decimal(b.seq)},
+                               {"job", text(b.job)},
+                               {"kind", text(b.kind)},
+                               {"verdict", decimal(b.verdict)}}));
+  for (const auto& r : snapshot.review.repairs)
+    repairs.push_back(record({{"job", text(r.job)}, {"role", text(r.role)}, {"revision", decimal(r.revision)}}));
   auto inner = record({{"active_revision", active ? decimal(*active) : text("none")},
                        {"active_job", text(snapshot.active_job)},
                        {"activation", snapshot.activation ? decimal(*snapshot.activation) : text("none")},
                        {"revision", revision},
                        {"roles", list(std::move(roles))},
-                       {"publications", list({})}});
+                       {"publications", list(std::move(publications))},
+                       {"completions", list(std::move(completions))},
+                       {"evidence", list(std::move(evidence))},
+                       {"observed", list(std::move(observed))},
+                       {"reservations", list(std::move(reservations))},
+                       {"review", record({{"count", decimal(snapshot.review.count)},
+                                          {"verdicts", list(std::move(verdicts))},
+                                          {"blockers", list(std::move(blockers))},
+                                          {"repairs", list(std::move(repairs))}})}});
   return record({{"version", integer(1)},
                  {"ledger", text(snapshot.identity)},
                  {"last_seq", decimal(snapshot.last_seq)},

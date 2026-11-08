@@ -477,4 +477,89 @@ decode_execution_change(const value_ptr& change, const ledger::execution_snapsho
   }
 }
 
+std::expected<ledger::execution_change, change_error>
+decode_verdict_change(const value_ptr& root, const ledger::execution_snapshot& snapshot, std::string_view request_id,
+                      const history::request_v3& request, std::uint64_t run, const value_ptr& document) {
+  try {
+    const auto& change = as_record(root, "change");
+    exact_keys(change, {"version", "operation", "snapshot_seq", "facts", "vector", "transitions", "expected"}, {}, "change");
+    if (text(change, "operation", "change") != "verdict" || decimal(change, "snapshot_seq", "change") != snapshot.last_seq ||
+        request.operation != "verdict")
+      refuse("change.operation");
+    const auto& f = as_record(member(change, "facts", "change"), "change.facts");
+    exact_keys(f, {"role", "run", "verdict", "current", "max_rounds", "case", "repairs", "blockers_opened", "blockers_cleared"},
+               {}, "change.facts");
+    if (positive(f, "run", "change.facts") != run)
+      refuse("change.facts.run");
+    auto normalized = history::verdict_from_value(member(f, "verdict", "change.facts"));
+    if (!normalized)
+      refuse("change.facts.verdict");
+    const auto& current = as_record(member(f, "current", "change.facts"), "change.facts.current");
+    exact_keys(current, {"targets", "policy", "work"}, {}, "change.facts.current");
+    ledger::execution_change out;
+    out.operation  = "verdict";
+    out.request_id = request_id;
+    out.actor      = request.actor;
+    out.request    = request;
+    out.job        = snapshot.active_job;
+    out.role       = text(f, "role", "change.facts");
+    ledger::execution_verdict_facts facts;
+    facts.role         = out.role;
+    facts.run          = run;
+    facts.document     = document;
+    facts.verdict      = *normalized;
+    const auto& rounds = member(f, "max_rounds", "change.facts");
+    if (rounds->kind != value_kind::integer || rounds->integer < 0)
+      refuse("change.facts.max_rounds");
+    facts.max_rounds     = static_cast<std::uint64_t>(rounds->integer);
+    facts.admission      = text(f, "case", "change.facts");
+    facts.current.policy = text(current, "policy", "change.facts.current");
+    facts.current.work   = member(current, "work", "change.facts.current");
+    for (const auto& target : items(current, "targets", "change.facts.current")) {
+      const auto& t = as_record(target, "change.facts.current.targets");
+      exact_keys(t, {"work", "output", "work_fp"}, {}, "change.facts.current.targets");
+      facts.current.targets.push_back({text(t, "work", "target"), text(t, "output", "target"), text(t, "work_fp", "target")});
+    }
+    for (const auto& x : items(f, "repairs", "change.facts")) {
+      if (!x || x->kind != value_kind::string)
+        refuse("change.facts.repairs");
+      facts.repairs.push_back(x->string);
+    }
+    for (const auto& x : items(f, "blockers_opened", "change.facts")) {
+      if (!x || x->kind != value_kind::string)
+        refuse("change.facts.blockers_opened");
+      facts.blockers_opened.push_back(x->string);
+    }
+    for (const auto& x : items(f, "blockers_cleared", "change.facts")) {
+      if (!x || x->kind != value_kind::string)
+        refuse("change.facts.blockers_cleared");
+      auto id = parse_decimal(x->string);
+      if (!id || !*id)
+        refuse("change.facts.blockers_cleared");
+      out.blockers_cleared.push_back(*id);
+    }
+    out.verdict = std::move(facts);
+    for (const auto& t : items(change, "transitions", "change"))
+      out.transitions.push_back(transition_of(t, "change.transitions"));
+    for (const auto& v : items(change, "vector", "change"))
+      out.vector.push_back(vector_of(v, "change.vector"));
+    for (const auto& e : items(change, "expected", "change")) {
+      const auto& field = as_record(e, "change.expected");
+      if (text(field, "kind", "change.expected") == "run_active") {
+        ledger::execution_expectation expected;
+        expected.kind   = kind_t::run_active;
+        expected.job    = out.job;
+        expected.role   = out.role;
+        expected.run    = positive(field, "run", "change.expected");
+        expected.number = positive(field, "generation", "change.expected");
+        out.expected.push_back(expected);
+      } else
+        out.expected.push_back(expectation_of(e, "change.expected", std::string(request_id)));
+    }
+    return out;
+  } catch (const mismatch& error) {
+    return std::unexpected(change_error{error.field});
+  }
+}
+
 } // namespace planar::engine::execution

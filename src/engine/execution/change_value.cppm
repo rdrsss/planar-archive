@@ -88,4 +88,16 @@ std::expected<ledger::execution_framing, change_error> build_framing(const chang
 std::expected<ledger::execution_change, change_error>
 decode_execution_change(const value_ptr& change, const ledger::execution_snapshot& snapshot, const change_request& request);
 
+/// @brief Decode a verdict change against its native document and request framing.
+/// @param change Trusted Lua verdict change value.
+/// @param snapshot Snapshot used by the policy evaluation.
+/// @param request_id Idempotency key.
+/// @param request Native framed request with private normalized verdict path.
+/// @param run Target reviewer run identifier authorized by the caller.
+/// @param document Native normalized input document.
+/// @return Complete verdict ledger change, or a structural mismatch.
+std::expected<ledger::execution_change, change_error>
+decode_verdict_change(const value_ptr& change, const ledger::execution_snapshot& snapshot, std::string_view request_id,
+                      const history::request_v3& request, std::uint64_t run, const value_ptr& document);
+
 } // namespace planar::engine::execution
