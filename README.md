@@ -2,8 +2,9 @@
 
 Planar compiles restricted Lua declarations and captured observations into scoped
 worker and reviewer context. This checkout builds one `planar` binary with rendering,
-ledger loading and history, authoring helpers, and draft execution commands for
-run ownership, recovery, finite checks and reviewer verdicts. Render remains
+ledger loading and history, and draft execution commands for
+run ownership, recovery, finite checks and reviewer verdicts. The separate authoring
+bundle includes authoring helpers and live orchestrator prompts. Render remains
 database-free. Execution uses an explicit ledger and driver-supplied checkout;
 Planar does not call models, schedule sessions or manage worktrees.
 

@@ -151,10 +151,15 @@ do
         elseif r.state=="done" then actions={"none"}
         else actions={"none"}end
         body[#body+1]="- "..r.role..": "..r.state..(r.drifted and " (drifted)" or "").."; next: "..table.concat(actions,", ")..".\n"
+        if c.carried_findings and c.carried_findings[r.role] then body[#body+1]="findings carried from verdict "..c.carried_findings[r.role].."\n"end
       end
       body[#body+1]="Always run check before treating a worker role as done. Refresh drifted runs before checking.\n"
       body[#body+1]="Checks run trusted registry commands with bounded time, output, cwd and environment and no OS sandbox; escaping descendants are not tracked.\n"
-      for _,b in ipairs(c.live.blockers)do body[#body+1]="- blocker "..(""..b.id)..": "..b.kind..".\n"end
+      for _,run in ipairs(c.live.runs)do body[#body+1]="- run "..run.id..": role "..run.role..", generation "..run.generation..", request "..run.request_id..".\n"end
+      for _,b in ipairs(c.live.blockers)do
+        local condition=b.kind=="max_rounds" and "a later revision raises max_rounds above "..(c.review_count or "0") or "the reviewed outputs or review policy change"
+        body[#body+1]="- blocker "..(""..b.id)..": "..b.kind.." (verdict "..(""..b.verdict).."); clears when "..condition.."\n"
+      end
       section("orchestrator_state","Orchestrator state",table.concat(body))
     end
     return {version=1,sections=sections}
@@ -171,12 +176,17 @@ do
       local c=build_context(validated,{job=S.active_job},build_actions(outer.commands))
       if not c then return refusal()end
       local roles,runs={},{}
+      c.review_count=S.review and S.review.count or "0"
+      c.carried_findings={}
+      if review then for _,r in ipairs(S.roles or {})do if r.job==S.active_job and r.state=="stale"then local carried=review.carried_findings(S,r.role);if carried then c.carried_findings[r.role]=carried.verdict end end end end
       for _,r in ipairs(S.roles or {})do if r.job==S.active_job then
         local run="none"
-        if type(r.run)=="table"then run=engine.object({id=r.run.id,generation=r.generation.ordinal,reservation=r.run.reservation or "none"});runs[#runs+1]=engine.object({id=r.run.id,role=r.role,generation=r.generation.ordinal,request_id=r.run.request_id or "none"}) end
+        if type(r.run)=="table"then
+          local reservation="none";for _,pending in ipairs(S.reservations or {})do if pending.run==r.run.id then reservation=pending.id end end
+          run=engine.object({id=r.run.id,generation=r.generation.ordinal,reservation=reservation});runs[#runs+1]=engine.object({id=r.run.id,role=r.role,generation=r.generation.ordinal,request_id=r.run.request_id or "none"}) end
         roles[#roles+1]=engine.object({role=r.role,kind=r.generation.structure.kind,state=r.state,drifted=r.drifted==true,run=run})
       end end
-      c.live=engine.object({ledger=outer.ledger or S.ledger,revision=S.active_revision,last_event=outer.last_seq,activation=S.activation or "none",roles=sort_copy(roles,function(r)return r.role end),runs=engine.array(runs),blockers=S.review and S.review.blockers or engine.array({})})
+      c.live=engine.object({ledger=outer.ledger or S.ledger,revision=S.active_revision,last_event=outer.last_seq,activation=S.activation or "none",roles=sort_copy(roles,function(r)return r.role end),runs=sort_copy(runs,function(r)return r.role end),blockers=S.review and S.review.blockers or engine.array({})})
       local result=project(c);local parts={"# Planar orchestrator prompt\n"};for _,section in ipairs(result.sections)do parts[#parts+1]=section.text end
       local markdown=table.concat(parts,"\n");local registry=validated.bundle.registry
       return {ok=true,value=engine.object({version=1,kind="prompt",prompt=engine.object({kind="orchestrator",markdown=markdown,bytes=#markdown,digest=engine.fragment_digest(markdown),inputs=engine.object({files=engine.array({}),registry=engine.object({id=registry.id,revision=registry.revision})})})})}

@@ -24,3 +24,12 @@ assert(text:find("check (available)",1,true))
 assert(text:find("escaping descendants are not tracked",1,true))
 assert(not text:find("DO_NOT_PRINT",1,true))
 print("Live orchestrator projection passed: recorded state, available check and no token disclosure")
+snapshot.reservations={{run="1",id="7"}}
+snapshot.review={count="2",blockers={{id="8",kind="max_rounds",verdict="6"}}}
+local held=command({present={ledger=true},options={ledger="opaque"}},{read_execution=function()return {ok=true,value={ledger="identity",last_seq="9",commands={"check","check-recover","claim","orchestrator","status"},snapshot=snapshot}}end})
+assert(held.ok)
+local held_text=held.value.prompt.markdown
+assert(held_text:find("check-recover (only after confirming the check process stopped)",1,true))
+assert(held_text:find("blocker 8: max_rounds (verdict 6); clears when a later revision raises max_rounds above 2",1,true))
+assert(held_text:find("run 1: role worker, generation 1, request claim",1,true))
+print("Live orchestrator reservation, run identity and blocker guidance passed")
