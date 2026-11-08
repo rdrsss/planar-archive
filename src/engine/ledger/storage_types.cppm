@@ -39,16 +39,16 @@ struct revision_row {
 };
 /// Owned event row retaining exact saved canonical payload bytes.
 struct event_row {
-  std::int64_t                sequence;    ///< Positive event sequence.
-  std::string                 type;        ///< Fixed event type.
-  std::int64_t                version;     ///< Event row version.
-  std::optional<std::int64_t> revision;    ///< Absent only at initialization.
-  std::optional<std::string>  request_id;  ///< Absent only at initialization.
-  std::string                 actor;       ///< Bounded UTF-8 native assertion.
-  std::string                 occurred_at; ///< Contextual UTC time.
-  std::string                 payload;     ///< Exact canonical event bytes; decode with the pure history codec.
-  std::string                 job{};       ///< Format3 `events.job`; empty when NULL and on format1/format2.
-  std::string                 role{};      ///< Format3 `events.role`; empty when NULL and on format1/format2.
+  std::int64_t                sequence;        ///< Positive event sequence.
+  std::string                 type;            ///< Fixed event type.
+  std::int64_t                version;         ///< Event row version.
+  std::optional<std::int64_t> revision;        ///< Absent only at initialization.
+  std::optional<std::string>  request_id;      ///< Absent only at initialization.
+  std::string                 actor;           ///< Bounded UTF-8 native assertion.
+  std::string                 occurred_at;     ///< Contextual UTC time.
+  std::string                 payload;         ///< Exact canonical event bytes; decode with the pure history codec.
+  std::string                 job{};           ///< Format3 `events.job`; empty when NULL and on format1/format2.
+  std::string                 role{};          ///< Format3 `events.role`; empty when NULL and on format1/format2.
   std::optional<std::int64_t> generation_id{}; ///< Format3 `events.generation_id`; absent when NULL.
   std::optional<std::int64_t> run_id{};        ///< Format3 `events.run_id`; absent when NULL.
 };
@@ -71,6 +71,21 @@ struct execution_request_row {
   std::int64_t revision;       ///< Revision named by the request row.
   std::string  result;         ///< Exact saved canonical result bytes (at most 1 MiB).
 };
+/// @brief Owned transition fields for an event expansion, with no private run secret.
+struct execution_transition_detail {
+  std::int64_t               ordinal = 0, generation = 0;
+  std::string                job, role, after, reason;
+  std::optional<std::string> before;
+  std::optional<bool>        before_drifted;
+  bool                       after_drifted = false;
+};
+/// @brief Native metadata needed to expand a recorded execution event within its pinned snapshot.
+struct execution_event_detail {
+  std::vector<execution_transition_detail> transitions;
+  std::optional<std::int64_t> run, generation, dispatch, packet, manifest, work, checkpoint, checkpoint_body, provenance,
+      structure;
+  std::string run_request, dispatch_kind, work_fp, render_fp;
+};
 /// Run of a replayed format3 role: its identifier and the ordinal of its generation.
 struct state_run_reference {
   std::int64_t id;         ///< Positive run identifier.
@@ -78,11 +93,11 @@ struct state_run_reference {
 };
 /// One role of the active job replayed at an event from its last transition row.
 struct state_role_row {
-  std::string                       role;       ///< Role identifier.
-  std::int64_t                      generation; ///< Generation ordinal of the last transition.
-  std::string                       state;      ///< After-state of the last transition.
-  bool                              drifted;    ///< After-drift of the last transition.
-  std::optional<state_run_reference> run;       ///< Run claimed at the last transition into running, while running.
+  std::string                        role;       ///< Role identifier.
+  std::int64_t                       generation; ///< Generation ordinal of the last transition.
+  std::string                        state;      ///< After-state of the last transition.
+  bool                               drifted;    ///< After-drift of the last transition.
+  std::optional<state_run_reference> run;        ///< Run claimed at the last transition into running, while running.
 };
 /// One run active at a replayed event.
 struct state_run_row {

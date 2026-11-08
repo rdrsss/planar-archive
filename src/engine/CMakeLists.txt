@@ -288,7 +288,13 @@ planar_rewrite_module(planar_ledger_execution
     planar_history_tree_core planar_history_recorded_interpretation planar_json_codec
   TESTS ledger/execution.t.cpp ledger/execution_review.t.cpp TEST_TIMEOUT 120)
 # Test-only: the format1/format2 refusals and the legacy-ledger fixtures open ledgers through the existing format surface.
-target_link_libraries(planar_ledger_execution_tests PRIVATE planar_ledger_format)
+target_link_libraries(planar_ledger_execution_tests PRIVATE planar_ledger_format planar_history_read)
+
+target_link_libraries(planar_ledger_storage PUBLIC planar_history_execution_codec)
+
+planar_rewrite_module(planar_ledger_recovery
+  INTERFACE ledger/recovery.cppm SOURCES ledger/recovery.cpp
+  DEPENDS planar_ledger_execution)
 
 # R15-C native execution services (EX-9 placement): the read_execution snapshot value, execution_change_v1 decoding with
 # native request framing, and the read_provenance single-file capture.

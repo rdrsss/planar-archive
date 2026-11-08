@@ -45,8 +45,17 @@ struct takeover_options {
   std::optional<std::string> provenance_path; ///< Normalized absolute private `--provenance` path, when supplied.
 };
 
+/// @brief Typed recovery mutation input; the token remains native and is never framed.
+struct recovery_options {
+  std::string                operation;                          ///< refresh, checkpoint or release.
+  std::string                job, role;                          ///< Authorized run's target.
+  std::string                run_token;                          ///< Ephemeral run authorization.
+  std::string                expect_fp;                          ///< Refresh acknowledged work digest.
+  std::string                reason;                             ///< Release reason.
+  std::optional<std::string> observations_path, provenance_path; ///< Opaque native file slots.
+};
 /// @brief Options of one execution operation; the alternative selects the operation.
-using operation_options = std::variant<load_options, activate_options, claim_options, takeover_options>;
+using operation_options = std::variant<load_options, activate_options, claim_options, takeover_options, recovery_options>;
 
 /// @brief Everything native knows about a request before Lua builds its change.
 struct change_request {

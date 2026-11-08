@@ -59,12 +59,19 @@ public:
   /// @brief Read a format3 request row of any execution operation, without its private body.
   /// @param key ASCII request token of one through 128 bytes.
   /// @return Owned row or optional miss; invalid_argument on format1 or format2; failures invalidate all reads.
-  std::expected<std::optional<::planar::engine::ledger::execution_request_row>, format_error> read_execution_request(std::string_view key) const;
+  std::expected<std::optional<::planar::engine::ledger::execution_request_row>, format_error>
+  read_execution_request(std::string_view key) const;
   /// @brief Replay the format3 execution state at one event from immutable rows, without Lua.
   /// @param sequence Positive event sequence.
   /// @param job Active job at that event, or empty for none.
   /// @return Replayed activation, roles and runs; invalid_argument on format1 or format2; failures invalidate all reads.
-  std::expected<::planar::engine::ledger::execution_state_at, format_error> read_execution_state_at(std::uint64_t sequence, std::string_view job) const;
+  std::expected<::planar::engine::ledger::execution_state_at, format_error> read_execution_state_at(std::uint64_t    sequence,
+                                                                                                    std::string_view job) const;
+
+  /// @brief Read execution event metadata and transitions without selecting run secrets.
+  /// @param sequence Positive event sequence in this owner's snapshot.
+  /// @return Owned metadata or a sticky typed failure.
+  std::expected<execution_event_detail, format_error> read_execution_event(std::uint64_t sequence) const;
 
 private:
   friend std::expected<format_file, format_error>     open_existing(const std::filesystem::path&, ledger_access);

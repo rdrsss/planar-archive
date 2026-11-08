@@ -33,11 +33,12 @@ struct readers {
 readers process_readers();
 /// Raw option values of one authoring invocation; unused members stay empty.
 struct inputs {
-  std::string workspace;  ///< Workspace argument.
-  std::string registry;   ///< Registry argument.
-  std::string diagnostic; ///< Diagnostic argument.
-  std::string from;       ///< Observation directory argument.
-  std::string job;        ///< Job ID argument of `orchestrator`; never a path, untouched by prepare_inputs.
+  std::string workspace;   ///< Workspace argument.
+  std::string registry;    ///< Registry argument.
+  std::string diagnostic;  ///< Diagnostic argument.
+  std::string from;        ///< Observation directory argument.
+  std::string job;         ///< Job ID argument of `orchestrator`; never a path, untouched by prepare_inputs.
+  std::string ledger = {}; ///< Ledger path of the live orchestrator form; exclusive with workspace/registry/job.
 };
 /// Resolve the host paths a verb names into canonical spellings.
 /// @param which Selected verb.

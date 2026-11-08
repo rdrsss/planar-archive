@@ -14,6 +14,7 @@ import planar.engine.history.provenance_codec;
 import planar.engine.history.interpretation_codec;
 import planar.engine.history.recorded_interpretation;
 import planar.engine.canonical;
+import planar.engine.history.execution_codec;
 namespace planar::engine::ledger {
 namespace {
 constexpr std::string_view             init_actor = "planar:init";
@@ -401,6 +402,15 @@ std::expected<stored_record, format_error> load_record(connection& db, std::uint
       return refuse(format_error_code::corrupt, "Request record has directory edges");
     return stored_record{{id, record_kind::request, *hash}, std::move(*value)};
   }
+  if (**kind == 3 && **codec == 1) {
+    auto execution = history::decode_execution_value_record(**encoded);
+    if (execution) {
+      auto hash = history::digest_execution_value_record(**encoded);
+      if (!hash || digest_bytes(*hash) != **digest)
+        return refuse(format_error_code::corrupt, "Record digest disagrees with encoding");
+      return stored_record{{id, record_kind::value, *hash}, history::value_record{execution->codec, execution->encoded}};
+    }
+  }
   auto value = decode_record(**encoded);
   if (!value)
     return refuse(value.error().code == record_error_code::unsupported_codec ? format_error_code::unsupported_state
@@ -681,9 +691,9 @@ constexpr std::string_view event_columns_v3 =
     "FROM events ";
 bool format3_event_type(std::string_view type) {
   static constexpr std::array<std::string_view, 14> types = {
-      "ledger_initialized", "declaration_accepted", "load_noop",         "job_activated",    "run_claimed",
-      "run_taken_over",     "run_refreshed",        "checkpoint_recorded", "run_released",   "run_interrupted",
-      "check_reserved",     "check_recorded",       "check_interrupted", "verdict_recorded"};
+      "ledger_initialized", "declaration_accepted", "load_noop",           "job_activated",   "run_claimed",
+      "run_taken_over",     "run_refreshed",        "checkpoint_recorded", "run_released",    "run_interrupted",
+      "check_reserved",     "check_recorded",       "check_interrupted",   "verdict_recorded"};
   return std::ranges::find(types, type) != types.end();
 }
 // Format3 event row (R15-C DD35): shape and the typed reference columns only; the version-2 payload is decoded by the
@@ -765,8 +775,7 @@ bool format3_outcome(std::string_view outcome) {
                                                                "refreshed", "recorded", "released",  "interrupted"};
   return std::ranges::find(outcomes, outcome) != outcomes.end();
 }
-std::expected<std::optional<execution_request_row>, format_error> lookup_format3_request(connection& db,
-                                                                                          std::string_view key) {
+std::expected<std::optional<execution_request_row>, format_error> lookup_format3_request(connection& db, std::string_view key) {
   if (!valid_request_key(key))
     return refuse(format_error_code::invalid_argument, "A bounded ASCII request token is required");
   auto row = db.prepare("SELECT octet_length(request_id),request_id,octet_length(operation),operation,event_seq,revision_id,"
@@ -799,8 +808,8 @@ std::expected<std::optional<execution_request_row>, format_error> lookup_format3
   if (*id != key || !format3_operation(*operation) || !format3_outcome(*outcome) || !*event || **event <= 0 || !*revision ||
       **revision <= 0)
     return history_corrupt();
-  return execution_request_row{std::move(*id), std::move(*operation), std::move(*outcome), **event, **revision,
-                               std::move(*result)};
+  return execution_request_row{std::move(*id), std::move(*operation), std::move(*outcome), **event,
+                               **revision,     std::move(*result)};
 }
 // Replay of the format3 at-event state (P2-5) from immutable rows with sequence at most `sequence`, without Lua.
 std::expected<execution_state_at, format_error> replay_execution_state(connection& db, std::int64_t sequence,
@@ -869,7 +878,7 @@ std::expected<execution_state_at, format_error> replay_execution_state(connectio
     auto run = db.prepare(
         "SELECT r.id,g.ordinal FROM runs r JOIN generations g ON g.id=r.generation_id WHERE g.job=?2 AND g.role=?3 AND "
         "r.claimed_seq=(SELECT max(event_seq) FROM transitions WHERE job=?2 AND role=?3 AND after_state='running' AND "
-        "event_seq<=?1) ORDER BY r.id DESC LIMIT 1");
+        "event_seq<=?1 AND reason IN ('claimed','taken_over')) ORDER BY r.id DESC LIMIT 1");
     if (!run)
       return storage(run.error());
     auto first = run->bind_integer(1, sequence);
@@ -1210,7 +1219,7 @@ std::expected<ledger_metadata, format_error> verify(connection& db) {
     return std::unexpected(version.error());
   if (*version != 1 && *version != 2 && *version != 3)
     return refuse(format_error_code::unsupported_version, "Unsupported ledger format version");
-  const auto format = static_cast<ledger_format>(*version);
+  const auto format  = static_cast<ledger_format>(*version);
   const bool format3 = format == ledger_format::v3;
   for (auto [sql, wanted] : {std::pair{"PRAGMA application_id", 1347178034}}) {
     auto n = scalar(db, sql);
@@ -1661,10 +1670,99 @@ read_snapshot::read_execution_request(std::string_view key) const {
   if (_state && _state->info.format != ledger_format::v3)
     return refuse(format_error_code::invalid_argument, "A format3 ledger is required");
   return checked_read<std::optional<execution_request_row>>(_state,
-                                                           [&](connection& db) { return lookup_format3_request(db, key); });
+                                                            [&](connection& db) { return lookup_format3_request(db, key); });
 }
-std::expected<execution_state_at, format_error> read_snapshot::read_execution_state_at(std::uint64_t sequence,
-                                                                                     std::string_view job) const {
+std::expected<execution_event_detail, format_error> read_snapshot::read_execution_event(std::uint64_t sequence) const {
+  if (!positive_id(sequence))
+    return refuse(format_error_code::invalid_argument, "A positive signed-64 ID is required");
+  return checked_read<execution_event_detail>(_state, [&](connection& db) -> std::expected<execution_event_detail, format_error> {
+    execution_event_detail out;
+    if (_state->info.format != ledger_format::v3)
+      return out;
+    auto t = db.prepare(
+        "SELECT t.ordinal,t.job,t.role,g.ordinal,t.before_state,t.before_drifted,t.after_state,t.after_drifted,t.reason FROM "
+        "transitions t JOIN generations g ON g.id=t.generation_id WHERE event_seq=?1 ORDER BY t.ordinal");
+    if (!t)
+      return storage(t.error());
+    if (auto ok = t->bind_integer(1, sequence); !ok)
+      return storage(ok.error());
+    for (;;) {
+      auto step = t->step();
+      if (!step)
+        return storage(step.error());
+      if (*step == step_result::done)
+        break;
+      auto ordinal = t->integer(0), generation = t->integer(3), before_drift = t->integer(5), after_drift = t->integer(7);
+      auto job = t->text(1), role = t->text(2), before = t->text(4), after = t->text(6), reason = t->text(8);
+      if (!ordinal || !*ordinal || !generation || !*generation || !before_drift || !after_drift || !*after_drift || !job ||
+          !*job || !role || !*role || !before || !after || !*after || !reason || !*reason)
+        return history_corrupt();
+      out.transitions.push_back({**ordinal, **generation, **job, **role, **after, **reason, *before,
+                                 *before_drift ? std::optional<bool>(**before_drift != 0) : std::nullopt, **after_drift != 0});
+    }
+    auto r = db.prepare("SELECT r.id,g.ordinal,r.request_id,r.provenance_id,g.structure_id FROM events e JOIN runs r ON "
+                        "r.id=e.run_id JOIN generations g ON g.id=r.generation_id WHERE e.seq=?1");
+    if (!r)
+      return storage(r.error());
+    if (auto ok = r->bind_integer(1, sequence); !ok)
+      return storage(ok.error());
+    auto step = r->step();
+    if (!step)
+      return storage(step.error());
+    if (*step == step_result::row) {
+      auto run = r->integer(0), gen = r->integer(1), prov = r->integer(3), structure = r->integer(4);
+      auto request = r->text(2);
+      if (!run || !*run || !gen || !*gen || !prov || !structure || !*structure || !request || !*request)
+        return history_corrupt();
+      out.run         = *run;
+      out.generation  = *gen;
+      out.provenance  = *prov;
+      out.structure   = *structure;
+      out.run_request = **request;
+    }
+    auto d = db.prepare(
+        "SELECT id,packet_id,manifest_id,work_id,kind,lower(hex(work_fp)),lower(hex(render_fp)) FROM dispatches WHERE seq=?1");
+    if (!d)
+      return storage(d.error());
+    if (auto ok = d->bind_integer(1, sequence); !ok)
+      return storage(ok.error());
+    step = d->step();
+    if (!step)
+      return storage(step.error());
+    if (*step == step_result::row) {
+      auto id = d->integer(0), packet = d->integer(1), manifest = d->integer(2), work = d->integer(3);
+      auto kind = d->text(4), fp = d->text(5), render = d->text(6);
+      if (!id || !*id || !packet || !*packet || !manifest || !*manifest || !work || !*work || !kind || !*kind || !fp || !*fp ||
+          !render || !*render)
+        return history_corrupt();
+      out.dispatch      = *id;
+      out.packet        = *packet;
+      out.manifest      = *manifest;
+      out.work          = *work;
+      out.dispatch_kind = **kind;
+      out.work_fp       = **fp;
+      out.render_fp     = **render;
+    }
+    auto c = db.prepare("SELECT id,body_id FROM checkpoints WHERE seq=?1");
+    if (!c)
+      return storage(c.error());
+    if (auto ok = c->bind_integer(1, sequence); !ok)
+      return storage(ok.error());
+    step = c->step();
+    if (!step)
+      return storage(step.error());
+    if (*step == step_result::row) {
+      auto id = c->integer(0), body = c->integer(1);
+      if (!id || !*id || !body || !*body)
+        return history_corrupt();
+      out.checkpoint      = *id;
+      out.checkpoint_body = *body;
+    }
+    return out;
+  });
+}
+std::expected<execution_state_at, format_error> read_snapshot::read_execution_state_at(std::uint64_t    sequence,
+                                                                                       std::string_view job) const {
   if (_state && _state->info.format != ledger_format::v3)
     return refuse(format_error_code::invalid_argument, "A format3 ledger is required");
   if (!positive_id(sequence))
@@ -1680,7 +1778,7 @@ std::expected<event_page, format_error> read_snapshot::read_events_after(std::ui
     if (!head)
       return std::unexpected(head.error());
     const bool format3 = _state->info.format == ledger_format::v3;
-    auto rows = db.prepare(std::string(format3 ? event_columns_v3 : event_columns) + "WHERE seq>?1 ORDER BY seq LIMIT ?2");
+    auto       rows = db.prepare(std::string(format3 ? event_columns_v3 : event_columns) + "WHERE seq>?1 ORDER BY seq LIMIT ?2");
     if (!rows)
       return storage(rows.error());
     auto bound = rows->bind_integer(1, std::int64_t(cursor));

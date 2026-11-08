@@ -1,0 +1,25 @@
+# R17/R18 CLI and live orchestrator draft surface
+
+2026-11-08 resumed draft implementation. This record tracks the staged surface work;
+shared runtime/native wiring follows integration of the R16 lane.
+
+New CLI11 handler modules bind `check`, `check-recover` and `verdict`, with canonical
+positive IDs, run-token grammar, request and actor bounds, separate required values,
+and explicit `--confirm-stopped true`. Their command forwarding is completed when the
+new runtime option alternatives enter the integrated tree; these modules are not yet
+registered in CMake or bootstrap.
+
+The authoring orchestrator now accepts exactly one form: the existing three declaration
+options together, or `--ledger` alone. Ledger input is normalized through the existing
+explicit-file path boundary. The Lua live branch consumes `read_execution`, recorded
+interpretation and sealed command names, emits `orchestrator_state` after actions and
+lists legal actions, blockers and the check execution isolation limit. The declaration
+projection remains unchanged when the live context is absent.
+
+Pending shared integration: authoring native ledger option, bootstrap copy, runtime
+optional descriptor and execution-read capability, native service sealed command names,
+run request IDs in snapshots, handler forwarding and CMake/test registration. The new
+CLI tests cover all execution-path requirements, recovery confirmation, run-token
+refusal and orchestrator form exclusivity. Tests not run yet; Lua syntax parsed.
+
+No full gates, reviews, mutation probes or Linux runs, per draft-mode instruction.
