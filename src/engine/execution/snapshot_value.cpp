@@ -206,6 +206,7 @@ std::expected<value_ptr, snapshot_value_error> snapshot_value(const ledger::exec
   auto inner = record({{"active_revision", active ? decimal(*active) : text("none")},
                        {"active_job", text(snapshot.active_job)},
                        {"activation", snapshot.activation ? decimal(*snapshot.activation) : text("none")},
+                       {"next_checkpoint_id",decimal(snapshot.next_checkpoint_id)},
                        {"revision", revision},
                        {"roles", list(std::move(roles))},
                        {"publications", list(std::move(publications))},
