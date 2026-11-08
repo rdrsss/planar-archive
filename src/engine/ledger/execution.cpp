@@ -2094,7 +2094,8 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
       return std::unexpected(corrupt());
     role.lineage_opened = rows.generations.at(role.lineage.front()).opened_seq;
   }
-  snapshot->state_bytes = measure_state(*snapshot, dispatch_revisions);
+  snapshot->next_checkpoint_id = rows.checkpoints.size() + 1;
+  snapshot->state_bytes        = measure_state(*snapshot, dispatch_revisions);
   return snapshot;
 }
 
@@ -3817,6 +3818,8 @@ value_result<locked_outcome> apply_locked(execution_database& database, const ex
     if (!next)
       return std::unexpected(next.error());
     checkpoint_id = *next;
+    if (refresh && (*checkpoint_id != snapshot.next_checkpoint_id || *seq != snapshot.last_seq + 1))
+      return std::unexpected(failure(execution_error_code::state_conflict));
   }
   if (prepared.packet) {
     auto id = intern(db, *prepared.packet);
@@ -5197,6 +5200,10 @@ std::expected<recovery_records, execution_error> read_recovery_records(const std
       break;
     --first;
   }
+  std::uint64_t lineage_opened = 0;
+  for (const auto& [id, g] : rows.generations)
+    if (g.job == job && g.role == role && g.ordinal == first)
+      lineage_opened = g.opened_seq;
   std::set<std::uint64_t> runs;
   for (const auto& [id, r] : rows.runs) {
     const auto& g = rows.generations.at(r.generation);
@@ -5271,17 +5278,19 @@ std::expected<recovery_records, execution_error> read_recovery_records(const std
   auto structure = hist::decode_role_structure_v1((*stored)->canonical);
   if (!structure)
     return std::unexpected(corrupt());
-  auto reject = first_row(db->sql(),
-                          "SELECT v.id,v.body_id,v.applicability FROM verdicts v JOIN runs r ON r.id=v.run_id JOIN generations g "
-                          "ON g.id=r.generation_id WHERE g.job=?1 AND v.decision='reject' AND v.seq>=(SELECT "
-                          "COALESCE(MAX(event_seq),0) FROM job_activations WHERE job=?1) ORDER BY v.seq DESC LIMIT 1",
-                          {text_arg(job)});
+  auto reject =
+      first_row(db->sql(),
+                "SELECT v.id,v.body_id,v.applicability,v.seq FROM verdicts v JOIN runs r ON r.id=v.run_id JOIN generations g "
+                "ON g.id=r.generation_id WHERE g.job=?1 AND v.decision='reject' AND v.seq>=(SELECT "
+                "COALESCE(MAX(event_seq),0) FROM job_activations WHERE job=?1) ORDER BY v.seq DESC LIMIT 1",
+                {text_arg(job)});
   if (!reject)
     return std::unexpected(reject.error());
   if (*reject) {
     row_reader q(**reject);
     auto       id = q.id(0), body = q.id(1);
     auto       applicability = q.text(2);
+    auto       verdict_seq   = q.id(3);
     if (auto valid = q.finish(); !valid)
       return std::unexpected(valid.error());
     auto record = value_of(rows, body, hist::codec_verdict_v1);
@@ -5291,8 +5300,8 @@ std::expected<recovery_records, execution_error> read_recovery_records(const std
     if (!verdict)
       return std::unexpected(corrupt());
     const bool selected =
-        structure->kind == "reviewer" ||
-        (applicability == "current" && std::ranges::find(verdict->repair, std::string(role)) != verdict->repair.end());
+        structure->kind == "reviewer" || (applicability == "current" && verdict_seq >= lineage_opened &&
+                                          std::ranges::find(verdict->repair, std::string(role)) != verdict->repair.end());
     if (selected)
       for (const auto& f : verdict->findings) {
         if (structure->kind == "worker" && std::ranges::find(structure->work, f.work) == structure->work.end())

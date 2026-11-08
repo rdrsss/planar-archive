@@ -302,8 +302,8 @@ TEST_CASE("execution change refuses any member outside the closed shape") {
                 "change.operation");
   // An activate change cannot carry a packet.
   require_field(decode_execution_change(with(activate_value(), "packet", vrec({})), snapshot, request), "change.packet");
-  // run_active and reservation_open are outside the R15 vocabulary.
-  require_field(decode_execution_change(activate_value({vrec({{"kind", vstr("run_active")}})}), snapshot, request),
+  // Unknown expectation kinds stay outside the closed execution vocabulary.
+  require_field(decode_execution_change(activate_value({vrec({{"kind", vstr("unsupported_expectation")}})}), snapshot, request),
                 "change.expected.7.kind");
   // A request_unused member naming another request.
   auto other = activate_value();

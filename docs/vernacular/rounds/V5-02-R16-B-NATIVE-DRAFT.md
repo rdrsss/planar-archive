@@ -61,6 +61,15 @@ recreations. Pinned history snapshots expand reserved, recorded and interrupted
 checks, and verdict bodies, repairs and blocker changes. Saved check and verdict
 requests are decoded without exposing execution secrets or check output bytes.
 
-Focused test cases were extended for these read paths. Their integrated compile
-and run are pending the shared runtime merge and catalog configuration update.
-No review or full validation gate is claimed.
+Focused test cases were extended for these read paths. The integrated ledger,
+history and decoder targets compile. Decoder tests pass (9 cases, 153 assertions).
+The R16/R17 focused cases pass; the added R18 history case initially stops in its
+legacy load fixture because its interpretation omitted embedded versions and
+workspace identity. That fixture now includes the required relations; its rerun
+is pending the shared build slot. No review or full validation gate is claimed.
+
+Fresh refresh checkpoint rendering uses the snapshot's predicted checkpoint ID
+and next event sequence. The locked native writer compares both allocations to
+those predictions and refuses a raced snapshot with `state_conflict`, preserving
+Lua's exact packet rendering and budget policy. A focused race test passes.
+Recovery findings also exclude verdicts predating a worker's structural lineage.

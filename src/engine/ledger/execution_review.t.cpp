@@ -285,8 +285,12 @@ revision_ids seed_revision(const std::filesystem::path& path, std::string_view t
   auto source         = store_directory(db, {child{"source.txt", hist::record_kind::file, source_file}});
   auto input_file     = store_file(db, std::format("{{\"tag\":\"{}\"}}", tag));
   auto registry       = store_directory(db, {child{"input.json", hist::record_kind::file, input_file}});
-  auto interpretation = store_value(db, vrec({{"tag", vstr(std::string(tag))}}));
-  auto versions       = store_value(db, vrec({{"stdlib_digest", vstr(digest_hex(stdlib.digest))}}));
+  auto version_value  = vrec({{"stdlib_digest", vstr(digest_hex(stdlib.digest))}});
+  auto versions       = store_value(db, version_value);
+  auto interpretation = store_value(
+      db, vrec({{"tag", vstr(std::string(tag))},
+                {"versions", version_value},
+                {"bundle", vrec({{"workspace", vrec({{"id", vstr(std::string(workspace_name))}})}, {"jobs", vlist({})}})}}));
   return revision_ids{source.id, registry.id, stdlib.id, interpretation.id, versions.id};
 }
 
@@ -487,6 +491,7 @@ execution_packet make_packet(const execution_snapshot& snapshot, const execution
 
 void commit_or_fail(const std::filesystem::path& path, const execution_snapshot& snapshot, const execution_change& change) {
   auto result = commit_execution(path, snapshot, change);
+  INFO("operation " << change.operation << " request " << change.request_id);
   INFO("commit failed with error code " << (result.has_value() ? -1 : static_cast<int>(result.error().code)));
   REQUIRE(result.has_value());
 }

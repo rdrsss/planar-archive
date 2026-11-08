@@ -4144,3 +4144,26 @@ TEST_CASE("R16 history expands retained execution events and request packets") {
     CHECK(saved->fields.contains("manifest"));
   }
 }
+
+TEST_CASE("R16 refresh checkpoint predictions refuse an intervening checkpoint commit") {
+  scratch    dir;
+  const auto path  = activated_ledger(dir);
+  const auto claim = commit_claim(path, "claim-prediction", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto snapshot = snapshot_of(path);
+  CHECK(snapshot.next_checkpoint_id == 1);
+  auto refresh       = recovery_change(snapshot, "refresh", "refresh-prediction", *claim.token);
+  auto note          = recovery_change(snapshot, "checkpoint", "note-prediction", *claim.token);
+  refresh.checkpoint = note.checkpoint;
+  auto& request      = std::get<hist::request_v3>(refresh.request);
+  request.parameters = params_bytes({{"run_id", decimal(*refresh.run)},
+                                     {"expect_fp", "xxh3_128:" + find_role(snapshot, "alpha", "builder")->dispatch->work_fp},
+                                     {"observations_path", "notes.json"}});
+  REQUIRE(commit_execution(path, snapshot, note));
+  auto refused = commit_execution(path, snapshot, refresh);
+  REQUIRE_FALSE(refused);
+  CHECK(refused.error().code == execution_error_code::state_conflict);
+  auto current = snapshot_of(path);
+  CHECK(current.next_checkpoint_id == 2);
+  CHECK(current.last_seq == snapshot.last_seq + 1);
+}

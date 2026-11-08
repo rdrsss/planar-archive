@@ -121,7 +121,7 @@ struct execution_completion_unit {
   std::string output; ///< Output identity text as recorded in the observation value.
 };
 
-/// @brief One completion of a role in its current lineage (DRAFT-STUB R17-C: minimal R17-7 snapshot shape).
+/// @brief One retained completion of a role in its current structural lineage.
 struct execution_completion {
   std::uint64_t                          id = 0;         ///< completions.id.
   std::string                            job;            ///< Job of the completing run.
@@ -223,13 +223,15 @@ struct execution_observed {
 
 /// @brief Verified execution snapshot read in one read transaction at one last_seq.
 struct execution_snapshot {
-  std::string                        identity;     ///< Ledger identity, 32 lowercase hex.
-  std::uint64_t                      last_seq = 0; ///< Last committed event sequence at the read.
-  std::optional<execution_revision>  revision;     ///< Active revision, absent when none.
-  std::string                        active_job;   ///< Active job identifier, or the empty string.
-  std::optional<std::uint64_t>       activation;   ///< Latest activation identifier, absent when none.
-  std::vector<execution_role>        roles;        ///< Every role_state row, sorted by job then role.
-  std::vector<execution_completion>  completions;  ///< R18 (DRAFT-STUB R17-C): current-lineage completions of the active job.
+  std::string   identity;     ///< Ledger identity, 32 lowercase hex.
+  std::uint64_t last_seq = 0; ///< Last committed event sequence at the read.
+  std::uint64_t next_checkpoint_id =
+      1; ///< Next checkpoint identifier predicted by this snapshot; rechecked under the write lock.
+  std::optional<execution_revision>  revision;    ///< Active revision, absent when none.
+  std::string                        active_job;  ///< Active job identifier, or the empty string.
+  std::optional<std::uint64_t>       activation;  ///< Latest activation identifier, absent when none.
+  std::vector<execution_role>        roles;       ///< Every role_state row, sorted by job then role.
+  std::vector<execution_completion>  completions; ///< Current-lineage completions of the active job.
   std::vector<execution_reservation> reservations;
   std::vector<execution_evidence>    evidence;
   std::vector<execution_publication> publications;
@@ -571,7 +573,7 @@ std::expected<std::uint64_t, execution_error> review_count(connection& db, std::
 /// @return Open blocker rows.
 std::expected<std::vector<execution_blocker>, execution_error> open_blockers(connection& db, std::string_view job);
 
-/// @brief Verify invariants 21 to 27 and the DRAFT-STUB completion rows, then fill snapshot completions and review.
+/// @brief Verify review invariants and retained completion rows, then fill snapshot completions and review.
 /// @param db Open connection inside the verifier's transaction; the EX-1 verifier has already accepted every other table.
 /// @param snapshot Snapshot built from the verified rows; its completions and review members are replaced.
 /// @return Success, ledger_corrupt for any violated invariant, or a storage category.
