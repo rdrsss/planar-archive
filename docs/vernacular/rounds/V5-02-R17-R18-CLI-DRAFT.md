@@ -23,3 +23,7 @@ CLI tests cover all execution-path requirements, recovery confirmation, run-toke
 refusal and orchestrator form exclusivity. Tests not run yet; Lua syntax parsed.
 
 No full gates, reviews, mutation probes or Linux runs, per draft-mode instruction.
+
+`lua tests/native/orchestrator-live-policy.lua .` passed the standalone live projection
+scenario: recorded state and check action are rendered, and a supplied token/secret is
+not exposed. This exercises the pure projection only, not the pending native adapter.
