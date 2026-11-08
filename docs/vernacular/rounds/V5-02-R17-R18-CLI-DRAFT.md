@@ -40,3 +40,16 @@ its two capabilities. `orchestrator_state` is reserved alongside the prior secti
 
 The standalone live projection scenario still passes. The shared development build
 and targeted command exercises are in progress; no final gate or review is claimed.
+
+Focused native orchestrator exercise passed: production `init`, `load`, `activate`
+against the quota fixture, then `planar_authoring_stack orchestrator --ledger`.
+The prompt includes the recorded workspace, live state and sealed check action.
+Scratch ledger and result stayed under a temporary directory; no installed binary
+or operator database was used. The production/authoring split remains the D148
+contract (17 production commands, 23 in the authoring bundle). The live read is
+exempt from interpretation binding under D108.
+
+The pure live projection test additionally covers an open check reservation,
+active run identity and the exact max-rounds blocker clearing guidance. Recovery
+lifecycle development exercise passed 19 command calls in separate scratch data,
+including exact replay, retained checkpoint identity, captured outputs and history.
