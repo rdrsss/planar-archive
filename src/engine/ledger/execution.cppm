@@ -94,10 +94,11 @@ struct execution_role {
   std::string                        state;                  ///< One of the six role states.
   bool                               drifted = false;        ///< Drift flag, true only when running.
   std::optional<std::uint64_t>       run_id;                 ///< Active run, present exactly when running.
-  std::uint64_t                      fact_version = 0;       ///< role_state.fact_version.
-  std::uint64_t                      last_seq     = 0;       ///< role_state.last_seq.
-  std::optional<retained_checkpoint> checkpoint;             ///< Latest checkpoint of the active run.
-  std::optional<execution_dispatch>  dispatch;               ///< Acknowledged dispatch of the active run.
+  std::string                        run_request_id;   ///< Claim or takeover request of the active run; empty without a run.
+  std::uint64_t                      fact_version = 0; ///< role_state.fact_version.
+  std::uint64_t                      last_seq     = 0; ///< role_state.last_seq.
+  std::optional<retained_checkpoint> checkpoint;       ///< Latest checkpoint of the active run.
+  std::optional<execution_dispatch>  dispatch;         ///< Acknowledged dispatch of the active run.
 };
 
 /// @brief Recorded revision values of the active revision, decoded from its immutable records.

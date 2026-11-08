@@ -3771,6 +3771,11 @@ TEST_CASE("R17 ledger completion retains evidence and changes run to completed a
   auto                       completed = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
   INFO((completed.has_value() ? -1 : static_cast<int>(completed.error().code)));
   REQUIRE(completed);
+  auto saved_response = planar::engine::codec_decode(completed->saved_result);
+  REQUIRE(saved_response);
+  auto expected_observation_digest = hash_value("check_observation_v1", result.observation);
+  REQUIRE(expected_observation_digest);
+  CHECK((*saved_response)->fields.at("observation")->fields.at("digest")->string == *expected_observation_digest);
   auto after = read_execution_snapshot(path);
   INFO((after.has_value() ? -1 : static_cast<int>(after.error().code)));
   REQUIRE(after);
@@ -4058,6 +4063,7 @@ TEST_CASE("R16 native checkpoint refresh release preserve retained recovery and 
   REQUIRE(claim.token);
   auto       initial  = snapshot_of(path);
   const auto original = find_role(initial, "alpha", "builder")->dispatch->id;
+  CHECK(find_role(initial, "alpha", "builder")->run_request_id == "claim-r16");
   for (auto op : {"checkpoint", "refresh", "release"}) {
     auto snapshot = snapshot_of(path);
     auto change   = recovery_change(snapshot, op, std::string(op) + "-r16", *claim.token);

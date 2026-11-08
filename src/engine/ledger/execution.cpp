@@ -1126,8 +1126,8 @@ checked apply_transitions(const ledger_rows& rows, const event_entry& event, con
       if (fenced == state.runs.end() || fenced->second.state != "active")
         return std::unexpected(corrupt());
       // R18: the reviewer run of a verdict completes (N11) instead of being fenced.
-      const bool completes    = (event.type == "verdict_recorded" || event.type == "check_recorded") && transition.ordinal == 1 &&
-                                transition.after_state == "done";
+      const bool completes    = transition.ordinal == 1 && (event.type == "verdict_recorded" ||
+                                                            (event.type == "check_recorded" && transition.after_state == "done"));
       fenced->second.state    = completes                         ? "completed"
                                 : event.type == "run_released"    ? "released"
                                 : event.type == "run_interrupted" ? "interrupted"
@@ -1962,6 +1962,7 @@ value_result<execution_snapshot> build_snapshot(const ledger_rows& rows, const r
     role.fact_version = row.fact_version;
     role.last_seq     = row.last_seq;
     if (row.run) {
+      role.run_request_id  = rows.runs.at(*row.run).request_id;
       const auto& dispatch = rows.dispatches.at(rows.dispatch_by_run.at(*row.run));
       auto        work     = hist::decode_work_exec_v1(rows.records.at(dispatch.work).canonical);
       if (!work)
@@ -4890,7 +4891,7 @@ complete_check(const std::filesystem::path& path, const execution_snapshot& snap
   if (!obs_digest)
     return std::unexpected(invalid_error());
   auto observation_value = record_node({{"id", text_node(std::to_string(*observation))},
-                                        {"digest", text_node("xxh3_128:" + *obs_digest)},
+                                        {"digest", text_node(*obs_digest)},
                                         {"units", result.observation->fields.at("units")}});
   auto response = check_response(database->metadata().identity, request, *run, reservation, completion ? "completed" : "recorded",
                                  list_node(std::move(evidence_values)), observation_value, completion_value, withheld);

@@ -83,6 +83,7 @@ std::expected<value_ptr, snapshot_value_error> role_value(const ledger::executio
     // L18 / A1: the dispatch names its own recorded revision; a zero (unknown) revision falls back to the active one.
     const std::uint64_t revision = row.dispatch->revision != 0 ? row.dispatch->revision : active_revision.value_or(0);
     run                          = record({{"id", decimal(*row.run_id)},
+                                           {"request_id", text(row.run_request_id)},
                                            {"generation", decimal(row.generation_ordinal)},
                                            {"dispatch", record({{"id", decimal(row.dispatch->id)},
                                                                 {"work_fp", text("xxh3_128:" + row.dispatch->work_fp)},
@@ -206,7 +207,7 @@ std::expected<value_ptr, snapshot_value_error> snapshot_value(const ledger::exec
   auto inner = record({{"active_revision", active ? decimal(*active) : text("none")},
                        {"active_job", text(snapshot.active_job)},
                        {"activation", snapshot.activation ? decimal(*snapshot.activation) : text("none")},
-                       {"next_checkpoint_id",decimal(snapshot.next_checkpoint_id)},
+                       {"next_checkpoint_id", decimal(snapshot.next_checkpoint_id)},
                        {"revision", revision},
                        {"roles", list(std::move(roles))},
                        {"publications", list(std::move(publications))},

@@ -1152,14 +1152,59 @@ void complete_builder(const std::filesystem::path& path, std::string_view reques
         static_cast<std::int64_t>(observation.id)});
 }
 
+/// Complete the history fixture through the integrated R17 reservation and evidence transaction.
+void complete_builder_native(const std::filesystem::path& path, std::string_view request_id, std::string_view output,
+                             std::string_view token) {
+  auto        snapshot = snapshot_of(path);
+  const auto* builder  = find_role(snapshot, "alpha", "builder");
+  REQUIRE(builder);
+  hist::request_v3 request{
+      .operation  = "check",
+      .actor      = "tester",
+      .parameters = params_bytes(
+          {{"base_root", "/base"}, {"root", "/root"}, {"run_id", decimal(*builder->run_id)}, {"scratch", "/scratch"}}),
+      .profile_argument = std::nullopt};
+  auto reservation = reserve_check(path, snapshot, request_id, "tester", request, token);
+  REQUIRE(reservation);
+  auto                   units = vlist({vrec({{"work", vstr("unit_one")}, {"output", vstr(std::string(output))}})});
+  execution_check_result result;
+  result.recapture_matches = true;
+  result.observation       = vrec({{"version", vint(1)},
+                                   {"root", vstr("root")},
+                                   {"base", vstr(std::string(output))},
+                                   {"observation", vstr(std::string(output))},
+                                   {"units", units},
+                                   {"contracts", vlist({})}});
+  execution_check_evidence evidence;
+  evidence.work       = "unit_one";
+  evidence.check      = "planar.boundary_v1";
+  evidence.outcome    = "pass";
+  evidence.reason     = "passed";
+  evidence.vector     = vrec({{"version", vint(1)}, {"targets", units}});
+  evidence.definition = vrec({{"version", vint(1)},
+                              {"work", vstr("unit_one")},
+                              {"check", vstr("planar.boundary_v1")},
+                              {"gate", vstr("boundary_v1")},
+                              {"inputs", vstrs({"own_output", "output_vector"})},
+                              {"owned", vstrs({"src/"})},
+                              {"frozen", vlist({})},
+                              {"excluded", vlist({})},
+                              {"producers", vlist({})}});
+  result.evidence.push_back(evidence);
+  snapshot       = snapshot_of(path);
+  auto completed = complete_check(path, snapshot, reservation->id, token, result, true,
+                                  {step_to(*find_role(snapshot, "alpha", "builder"), "done", "completed")});
+  REQUIRE(completed);
+}
+
 /// Fresh ledger: load, activate (builder and reviewer ready), builder claimed and completed with output_one, reviewer
 /// claimed with the given max_rounds. Returns the reviewer token.
 std::string reviewing_ledger(const std::filesystem::path& path, std::int64_t max_rounds = 2) {
   REQUIRE(initialize_format3(path, workspace_name).has_value());
   commit_load(path, "load-1", seed_revision(path, "one"));
   commit_activate(path);
-  claim_with(path, "claim-builder-1", "builder", max_rounds, "0");
-  complete_builder(path, "complete-1", output_one);
+  auto builder_token = claim_with(path, "claim-builder-1", "builder", max_rounds, "0");
+  complete_builder_native(path, "complete-1", output_one, builder_token);
   return claim_with(path, "claim-reviewer-1", "reviewer", max_rounds, "0");
 }
 
