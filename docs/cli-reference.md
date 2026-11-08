@@ -166,8 +166,8 @@ Shell redirection is the caller's choice.
 The complete schemas, identity recipes, diagnostics, exclusions, resource limits
 and budget behavior are authoritative in the
 [render contract](vernacular/render-contract.md) and
-[declaration contract](vernacular/declarations.md). There is no claim, refresh,
-check execution or approval operation in this slice.
+[declaration contract](vernacular/declarations.md). Render itself performs no claim, refresh, check execution or approval operation.
+Those operations use the separate draft execution commands described above.
 
 Canonical JSON uses pinned Glaze string spelling: short C0 escapes where
 available and uppercase hexadecimal otherwise, sorted UTF-8 keys and no extra

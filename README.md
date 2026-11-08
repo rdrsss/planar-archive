@@ -1,24 +1,22 @@
 # Planar
 
 Planar compiles restricted Lua declarations and captured observations into scoped
-worker and reviewer context. This checkout builds one `planar` binary with four
-commands: `render`, `init`, `history` and `export`. Render uses one spec and source
-root, manually declared job grouping, and explicit trusted toolchain registry and
-observation inputs. Init creates an explicit new-format ledger; history reads
-recorded state; export reconstructs recorded source into a new directory.
+worker and reviewer context. This checkout builds one `planar` binary with rendering,
+ledger loading and history, authoring helpers, and draft execution commands for
+run ownership, recovery, finite checks and reviewer verdicts. Render remains
+database-free. Execution uses an explicit ledger and driver-supplied checkout;
+Planar does not call models, schedule sessions or manage worktrees.
 
-Native acceptance transactions and prepared-capture APIs are implemented, but no
-load service or load CLI is exposed. The ordinary CLI cannot yet populate accepted
-history. Load membership is declaration-closure-only; load service/CLI and the
-remaining R14 acceptance matrix are pending.
+The execution implementation is being completed on `dev/planar-v2-vernacular`.
+It is an unreviewed draft: development compilation and focused checks do not
+constitute the final validation gate. The operator requested implementation
+completion before review and fixing rounds. See the [roadmap](docs/vernacular/roadmap.md)
+for current status and the [CLI reference](docs/cli-reference.md) for the command surface.
 
-[V5](docs/vernacular/planar-design-spec-v5.md) is the product-direction baseline;
-[the alignment assessment](docs/vernacular/v5-alignment.md) distinguishes current
-behavior from planned work. Next is V5-02 contract alignment before load resumes,
-then remaining R14, RA01 authoring/observe and R15–R19 execution. Prompts,
-workspace-name convenience, Lua extension verbs and orchestrator rendering are
-future work. Exact approved contracts and explicit operator decisions govern
-current APIs; v5 examples do not add commands.
+[V5](docs/vernacular/planar-design-spec-v5.md) is the product-direction baseline.
+Exact contracts and explicit operator decisions govern current APIs; v5 examples
+do not add commands. The [alignment assessment](docs/vernacular/v5-alignment.md)
+tracks the relationship between the design and implementation.
 
 This is a breaking rewrite. There is no legacy database migration, upgrade path
 or compatibility CLI. Git preserves the previous implementation. No installer
@@ -49,7 +47,8 @@ Inputs are explicit; no home configuration or legacy database is consulted.
 
 Render does not execute registry commands, verify driver assertions, activate
 runs, record completion or approval, call models, schedule sessions, manage
-worktrees or persist state. An external driver owns those future operations.
+worktrees or persist state. The execution commands provide finite run, check and verdict operations; an
+external driver owns sessions and scheduling.
 Capture detects observed changes under a cooperative stable-input contract;
 it is not an atomic OS snapshot.
 

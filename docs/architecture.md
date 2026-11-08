@@ -135,12 +135,12 @@ Codec allocations are separate from Lua's allocator: each encode uses at most
 Cumulative native bridge conversion retains its 512 MiB accounting ceiling.
 
 `main.cpp` performs checked process writes. `bootstrap` creates the CLI11 root,
-attaches render, init, history and export command handlers, counts
-bindings across all five, and dispatches exactly one selected command. Six
-authoring families (spec-prompt, critique, ingest, explain-rejection, observe,
-orchestrator) are embedded-only and exist only in a bundle selected at compile
-time (see the authoring bundle paragraph below); the production binary refuses
-those verbs as usage. The
+attaches the shipped command families and dispatches exactly one selected command.
+Rendering, ledger operations, authoring and execution handlers retain their own
+CLI11 option state through parsing. The draft execution surface adds run lifecycle,
+recovery, finite check execution and reviewer verdicts through bounded runtime
+services. Trusted Lua derives changes; native services capture inputs, enforce
+identity and token preconditions, and commit the ledger transaction. The
 render handler owns option bindings through parsing and execution, host path
 resolution, capture routing and trusted render composition. The shared response
 module sits below both bootstrap and handlers, avoiding a dependency cycle.
