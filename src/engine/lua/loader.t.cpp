@@ -320,3 +320,111 @@ TEST_CASE("X06 D C02 loader module graph does not depend on capture admission", 
   auto interface = c02_read("src/engine/lua/loader.cppm") + c02_read("src/engine/lua/loader.cpp");
   CHECK(interface.find("import planar.engine.budget;") != std::string::npos);
 }
+
+namespace {
+// Refuse recoverable growth, but permit Lua's immediate GC retry. No sticky sink
+// state hides whether the loader itself preserves the first terminal diagnostic.
+struct retry_sink : counting_sink {
+  std::size_t                     failures = 0, allowed_retries = 0;
+  std::size_t                     refusal_count = 1;
+  bool                            retry_pending = false, arm_conversion = false, native_first = false, armed = false;
+  std::expected<void, diagnostic> charge_native(std::size_t bytes) override {
+    if ((arm_conversion || native_first) && !armed) {
+      armed = true;
+      if (native_first)
+        return std::unexpected(diagnostic{"schema", "First native diagnostic"});
+    }
+    return counting_sink::charge_native(bytes);
+  }
+  std::expected<void, diagnostic> acquire_lua(std::size_t bytes) override {
+    if (retry_pending) {
+      retry_pending = false;
+      ++allowed_retries;
+    } else if (failures < refusal_count && ((arm_conversion || native_first) ? armed : bytes >= 4096)) {
+      ++failures;
+      retry_pending = true;
+      return std::unexpected(diagnostic{"resource_limit", failures == 1 ? "First recoverable refusal" : "Later refusal",
+                                        "lua_bytes", 1000 + failures});
+    }
+    return counting_sink::acquire_lua(bytes);
+  }
+};
+} // namespace
+
+TEST_CASE("C07 loader keeps recoverable allocator refusal terminal", "[loader][c07]") {
+  const std::string source  = "local x='abcdefghijklmnop'; for i=1,12 do x=x..x end; return planar.spec{}";
+  auto              control = std::make_shared<counting_sink>();
+  REQUIRE(load_declaration(source, control));
+  CHECK(control->live == 0);
+  for (std::size_t refusals : {1, 2}) {
+    auto sink           = std::make_shared<retry_sink>();
+    sink->refusal_count = refusals;
+    auto result         = load_declaration(source, sink);
+    CHECK(sink->failures == refusals);
+    CHECK(sink->allowed_retries >= refusals);
+    CHECK(sink->live == 0);
+    CHECK_FALSE(result);
+    if (!result) {
+      CHECK(result.error().message == "First recoverable refusal");
+      CHECK(result.error().limit == "lua_bytes");
+      CHECK(result.error().maximum == 1001);
+    }
+  }
+}
+
+TEST_CASE("C07 loader preserves allocator refusal across parse and conversion boundaries", "[loader][c07]") {
+  SECTION("syntax adaptation cannot replace an earlier allocator refusal") {
+    auto sink   = std::make_shared<retry_sink>();
+    auto result = load_declaration("local x='" + std::string(8192, 'x') + "'; this is not Lua", sink);
+    REQUIRE(sink->failures == 1);
+    CHECK(sink->live == 0);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().message == "First recoverable refusal");
+    CHECK(result.error().maximum == 1001);
+  }
+  SECTION("protected table anchoring cannot clear a recovered refusal") {
+    auto sink            = std::make_shared<retry_sink>();
+    sink->arm_conversion = true;
+    auto result          = load_declaration("return planar.spec{}", sink);
+    REQUIRE(sink->failures == 1);
+    CHECK(sink->allowed_retries >= 1);
+    // No later native conversion charge may cross the failed protected anchor.
+    CHECK(sink->native_calls == 1);
+    CHECK(sink->live == 0);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().message == "First recoverable refusal");
+  }
+  SECTION("later native semantic error cannot replace earlier allocator refusal") {
+    auto sink   = std::make_shared<retry_sink>();
+    auto result = load_declaration("local x='abcdefghijklmnop'; for i=1,12 do x=x..x end; return planar.file('../bad')", sink);
+    REQUIRE(sink->failures == 1);
+    CHECK(sink->live == 0);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().message == "First recoverable refusal");
+  }
+  SECTION("native semantic failure precedes later error-message allocation refusal") {
+    auto sink          = std::make_shared<retry_sink>();
+    sink->native_first = true;
+    auto result        = load_declaration("return planar.spec{}", sink);
+    REQUIRE(sink->failures == 1);
+    CHECK(sink->live == 0);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == "schema");
+    CHECK(result.error().message == "First native diagnostic");
+  }
+}
+
+TEST_CASE("C08 loader execute boundary retains refusal without a later constructor", "[loader][c08]") {
+  const std::string source  = "local result=planar.spec{}; local x='abcdefghijklmnop'; for i=1,12 do x=x..x end; return result";
+  auto              control = std::make_shared<counting_sink>();
+  REQUIRE(load_declaration(source, control));
+  CHECK(control->live == 0);
+  auto sink   = std::make_shared<retry_sink>();
+  auto result = load_declaration(source, sink);
+  REQUIRE(sink->failures == 1);
+  CHECK(sink->allowed_retries >= 1);
+  CHECK(sink->live == 0);
+  REQUIRE_FALSE(result);
+  CHECK(result.error().message == "First recoverable refusal");
+  CHECK(result.error().maximum == 1001);
+}

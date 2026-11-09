@@ -1,0 +1,81 @@
+[
+  {
+    "id": "NOOP",
+    "status": "CONTROL_PASS",
+    "baseline_cases": 5,
+    "baseline_assertions": 2181,
+    "variant_cases": 5,
+    "variant_successes": 2181,
+    "variant_failures": 0,
+    "failed_expressions": [],
+    "record_sha256": "ea4a79b0b7a90c9caccb990c54696985ffbed632f5aa07abed83030b486f3e56"
+  },
+  {
+    "id": "B10",
+    "status": "KILLED",
+    "baseline_cases": 1,
+    "baseline_assertions": 37,
+    "variant_cases": 1,
+    "variant_successes": 26,
+    "variant_failures": 1,
+    "failed_expressions": [
+      "!(subject.ok)"
+    ],
+    "record_sha256": "aec91bf2dc72721531f2fb89ee4d011a2de8ce28ec3f484c38ce8eaa2b4aeb5c"
+  },
+  {
+    "id": "B14",
+    "status": "KILLED",
+    "baseline_cases": 1,
+    "baseline_assertions": 40,
+    "variant_cases": 1,
+    "variant_successes": 38,
+    "variant_failures": 2,
+    "failed_expressions": [
+      "p.native_bytes * 4 <= budget_native_max * 3",
+      "q.native_bytes * 4 <= budget_native_max * 3"
+    ],
+    "record_sha256": "a1658c8a1a00054809e63062cf0a58a6d34bda40ac6fa9a70cb966c1ffd976e3"
+  },
+  {
+    "id": "B15",
+    "status": "KILLED",
+    "baseline_cases": 1,
+    "baseline_assertions": 40,
+    "variant_cases": 1,
+    "variant_successes": 37,
+    "variant_failures": 3,
+    "failed_expressions": [
+      "p.open_instructions * 4 <= budget_registration_instruction_max * 3",
+      "q.open_instructions * 4 <= budget_registration_instruction_max * 3",
+      "budget_registration_instruction_max == 1000000"
+    ],
+    "record_sha256": "8a44b9129992b3446bf3c81db599b8bb59ade9241efab0bc18f9414aab83fd52"
+  },
+  {
+    "id": "B16",
+    "status": "KILLED",
+    "baseline_cases": 1,
+    "baseline_assertions": 40,
+    "variant_cases": 1,
+    "variant_successes": 39,
+    "variant_failures": 1,
+    "failed_expressions": [
+      "budget_registration_instruction_max == 1000000"
+    ],
+    "record_sha256": "b53389b84ce74c6d298387ec80ebe21cb3a9b5bcb06eaff1986a3affd1e5944c"
+  },
+  {
+    "id": "B21",
+    "status": "KILLED",
+    "baseline_cases": 1,
+    "baseline_assertions": 37,
+    "variant_cases": 1,
+    "variant_successes": 26,
+    "variant_failures": 1,
+    "failed_expressions": [
+      "!(subject.ok)"
+    ],
+    "record_sha256": "56a501a63faa3121bef4204ecafdabddf6a2c910b252fef8759d429231b3fd31"
+  }
+]

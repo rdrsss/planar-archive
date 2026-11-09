@@ -443,12 +443,14 @@ void format3_revision(const std::filesystem::path& ledger) {
   take(initialize_format3(ledger, "quota"));
   const std::vector<tree_file> stdlib{{"stdlib.lua", "return {}", 420}};
   std::vector<tree_file_view>  views{{stdlib[0].path, stdlib[0].payload, stdlib[0].mode}};
-  const auto                   versions = export_record({{"stdlib_digest", export_text(hex(take(digest_tree(views, tree_profile::provenance))))}});
+  const auto versions = export_record({{"stdlib_digest", export_text(hex(take(digest_tree(views, tree_profile::provenance))))}});
   const auto interpretation =
-      export_record({{"tag", export_text("export")}, {"bundle", export_record({{"workspace", export_record({{"id", export_text("quota")}})}})}, {"versions", versions}});
-  auto state = take(read_execution_snapshot(ledger));
+      export_record({{"tag", export_text("export")},
+                     {"bundle", export_record({{"workspace", export_record({{"id", export_text("quota")}})}})},
+                     {"versions", versions}});
+  auto             state = take(read_execution_snapshot(ledger));
   execution_change change;
-  change.operation = "load";
+  change.operation  = "load";
   change.request_id = "seed";
   change.actor      = "tester";
   request_v2 request;

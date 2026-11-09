@@ -40,9 +40,9 @@ CLI::App& attach_activate(CLI::App& root, activate_options& options) {
           [](std::string& token) { return token == "none" || positive(token) ? "" : "Expected canonical revision or none"; },
           "ID_OR_NONE"));
   add("--expect-job", options.expect_job)
-      ->check(CLI::Validator(
-          [](std::string& token) { return token == "NONE" || identifier(token) ? "" : "Expected job ID or NONE"; },
-          "JOB_OR_NONE"));
+      ->check(
+          CLI::Validator([](std::string& token) { return token == "NONE" || identifier(token) ? "" : "Expected job ID or NONE"; },
+                         "JOB_OR_NONE"));
   add("--request-id", options.request_id)
       ->check(CLI::Validator(
           [](std::string& token) {

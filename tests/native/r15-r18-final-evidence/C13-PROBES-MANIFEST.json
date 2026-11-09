@@ -1,0 +1,295 @@
+{
+  "version": 1,
+  "scope": "C13 Debug descriptor fixture sensitivity; no integrated acceptance.",
+  "runner_test_sha256": "70ea1208b8a70020523a94e1e94a1c6d52b2aee23cbe67263f6c96bdf804c65f",
+  "source_files": 272,
+  "product_inputs_equal": 190,
+  "private_compiled_faults_caught": 6,
+  "intended_failed_assertions": 8,
+  "linux": {
+    "baseline": {
+      "exit": 0,
+      "cases": 28,
+      "assertions": {
+        "successes": 248,
+        "failures": 0,
+        "expectedFailures": 0
+      },
+      "skips": 0,
+      "binary_sha256": "5ed113bee533cd9e8ef1980f7a042a6714b797b85e1b7151914b1fd167da0b82"
+    },
+    "restored": {
+      "exit": 0,
+      "cases": 28,
+      "assertions": {
+        "successes": 248,
+        "failures": 0,
+        "expectedFailures": 0
+      },
+      "skips": 0,
+      "binary_sha256": "5ed113bee533cd9e8ef1980f7a042a6714b797b85e1b7151914b1fd167da0b82"
+    },
+    "registered_baseline_and_restored": "28/28,zero skips",
+    "markers": "3 and23 bothcases pass; positive23 has no23-observation credit",
+    "variants": {
+      "I02-pipe-cloexec": {
+        "baseline": {
+          "exit": 0,
+          "cases": 1,
+          "assertions": {
+            "successes": 23,
+            "failures": 0,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "5ed113bee533cd9e8ef1980f7a042a6714b797b85e1b7151914b1fd167da0b82"
+        },
+        "mutant": {
+          "exit": 42,
+          "cases": 1,
+          "assertions": {
+            "successes": 22,
+            "failures": 1,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "0e91188bf3da3c618cca477bb5cc089d86ba7475275e93294f0541440c7142b1"
+        },
+        "failed_expressions": [
+          {
+            "original": "\n        result.output.empty()\n      ",
+            "expanded": "\n        false\n      ",
+            "filename": "/home/planar/src/src/engine/process/runner.t.cpp",
+            "line": "363"
+          }
+        ]
+      },
+      "I03-devnull-cloexec": {
+        "baseline": {
+          "exit": 0,
+          "cases": 1,
+          "assertions": {
+            "successes": 23,
+            "failures": 0,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "5ed113bee533cd9e8ef1980f7a042a6714b797b85e1b7151914b1fd167da0b82"
+        },
+        "mutant": {
+          "exit": 42,
+          "cases": 1,
+          "assertions": {
+            "successes": 22,
+            "failures": 1,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "e4ff1104d43d01b817457cd85231204690135ffc55085fab878c41984fbfcf26"
+        },
+        "failed_expressions": [
+          {
+            "original": "\n        result.output.empty()\n      ",
+            "expanded": "\n        false\n      ",
+            "filename": "/home/planar/src/src/engine/process/runner.t.cpp",
+            "line": "363"
+          }
+        ]
+      },
+      "I05-empty-probe": {
+        "baseline": {
+          "exit": 0,
+          "cases": 1,
+          "assertions": {
+            "successes": 13,
+            "failures": 0,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "5ed113bee533cd9e8ef1980f7a042a6714b797b85e1b7151914b1fd167da0b82"
+        },
+        "mutant": {
+          "exit": 42,
+          "cases": 1,
+          "assertions": {
+            "successes": 12,
+            "failures": 1,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "4df3e88c22ae4c86312dc4cba183602a2d8eac40cd3bf7b8f53ff1b548587373"
+        },
+        "failed_expressions": [
+          {
+            "original": "\n        result.output == \"9\\n\"\n      ",
+            "expanded": "\n        \"\"\n==\n\"9\n\"\n      ",
+            "filename": "/home/planar/src/src/engine/process/runner.t.cpp",
+            "line": "385"
+          }
+        ]
+      },
+      "I06-no-original-restore": {
+        "baseline": {
+          "exit": 0,
+          "cases": 1,
+          "assertions": {
+            "successes": 23,
+            "failures": 0,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "5ed113bee533cd9e8ef1980f7a042a6714b797b85e1b7151914b1fd167da0b82"
+        },
+        "mutant": {
+          "exit": 42,
+          "cases": 1,
+          "assertions": {
+            "successes": 20,
+            "failures": 3,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "3b1c8edc90b93da0943651499bf3b338a491fac3ba69b530a5a2ed4b49d02a64"
+        },
+        "failed_expressions": [
+          {
+            "original": "\n        ::fcntl(ambient.fd, 1) == original_flags\n      ",
+            "expanded": "\n        1 == 0\n      ",
+            "filename": "/home/planar/src/src/engine/process/runner.t.cpp",
+            "line": "323"
+          },
+          {
+            "original": "\n        ::fcntl(ambient.fd, 1) == original_flags\n      ",
+            "expanded": "\n        1 == 0\n      ",
+            "filename": "/home/planar/src/src/engine/process/runner.t.cpp",
+            "line": "333"
+          },
+          {
+            "original": "\n        ::fcntl(ambient.fd, 1) == original_flags\n      ",
+            "expanded": "\n        1 == 0\n      ",
+            "filename": "/home/planar/src/src/engine/process/runner.t.cpp",
+            "line": "365"
+          }
+        ]
+      }
+    }
+  },
+  "macos": {
+    "baseline": {
+      "exit": 0,
+      "cases": 28,
+      "assertions": {
+        "successes": 252,
+        "failures": 0,
+        "expectedFailures": 0
+      },
+      "skips": 0,
+      "binary_sha256": "355c7b60086009b2f420487e76fd6aeced80e217eb56b63abbc49ef0a13907c4",
+      "failed_expressions": []
+    },
+    "restored": {
+      "exit": 0,
+      "cases": 28,
+      "assertions": {
+        "successes": 252,
+        "failures": 0,
+        "expectedFailures": 0
+      },
+      "skips": 0,
+      "binary_sha256": "355c7b60086009b2f420487e76fd6aeced80e217eb56b63abbc49ef0a13907c4",
+      "failed_expressions": []
+    },
+    "bound_inputs_unchanged": 11,
+    "variants": {
+      "I04-mac-default": {
+        "baseline": {
+          "exit": 0,
+          "cases": 1,
+          "assertions": {
+            "successes": 27,
+            "failures": 0,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "d6f0767445f1eda9de38a444e680e8b96fe85be173312a9e88d84350e7e9fdcd",
+          "failed_expressions": []
+        },
+        "mutant": {
+          "exit": 42,
+          "cases": 1,
+          "assertions": {
+            "successes": 26,
+            "failures": 1,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "12e5746c912826654e2be8abe6bdd0b9d76f290e2c42a2205c6f90efa90e4aea",
+          "failed_expressions": [
+            {
+              "original": "\n        result.output.empty()\n      ",
+              "expanded": "\n        false\n      ",
+              "filename": "<repo>/src/engine/process/runner.t.cpp",
+              "line": "363"
+            }
+          ]
+        },
+        "fault": "Omit POSIX_SPAWN_CLOEXEC_DEFAULT; newly-created intentionally inheritable held descriptor reaches child."
+      },
+      "I06-late-recapture": {
+        "baseline": {
+          "exit": 0,
+          "cases": 1,
+          "assertions": {
+            "successes": 27,
+            "failures": 0,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "d4db69a8e38f3cdb75c08d5966245197e4c7e0b3884e384d6dce9cdd2ecb3ba2",
+          "failed_expressions": []
+        },
+        "mutant": {
+          "exit": 42,
+          "cases": 1,
+          "assertions": {
+            "successes": 28,
+            "failures": 1,
+            "expectedFailures": 0
+          },
+          "skips": 0,
+          "binary_sha256": "9759a96618549a3c9dfbe11312b09cb401cd395a51323881e184b995358c7db5",
+          "failed_expressions": [
+            {
+              "original": "\n        (inheritable_flags & 1) == 0\n      ",
+              "expanded": "\n        1 == 0\n      ",
+              "filename": "<temp-root>/planar-c13-mac-probes-l6r3c8bb/I06-late-recapture/runner.t.cpp",
+              "line": "359"
+            }
+          ]
+        },
+        "fault": "Restore then recapture ambient isolation after creating test subjects, before immediate inheritable flag check; catches late capture masking."
+      }
+    }
+  },
+  "raw_index": {
+    "path": "tests/native/r15-r18-c13-evidence/probes/FILE-HASHES.json",
+    "sha256": "04447480743fa90ac5e25c7805ca8c0792381e6dd75e53bedbe7c33a7ddbe536",
+    "bytes": 63492,
+    "files": 394
+  },
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-C13-probes.md",
+    "sha256": "b8777313456413e39ea91ddd6b0f4b4d9e175d08d69b926d10faeb738f0c4de5",
+    "bytes": 7235
+  },
+  "setup_exclusions": [
+    "setup-attempt1/EXCLUDED.json",
+    "setup-attempt2/EXCLUDED.json"
+  ],
+  "limits": [
+    "Debugfaultproofonly;noReleasefaultclaim",
+    "Linuxaarch64andmacOSarm64;notx86_64",
+    "D15andfullplatformgatesseparate",
+    "R19realprojectunselected"
+  ]
+}

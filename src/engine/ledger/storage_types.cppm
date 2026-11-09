@@ -74,19 +74,34 @@ struct execution_request_row {
 };
 /// @brief Owned transition fields for an event expansion, with no private run secret.
 struct execution_transition_detail {
-  std::int64_t               ordinal = 0, generation = 0;
-  std::string                job, role, after, reason;
-  std::optional<std::string> before;
-  std::optional<bool>        before_drifted;
-  bool                       after_drifted = false;
+  std::int64_t               ordinal    = 0;        ///< Transition ordinal within the event.
+  std::int64_t               generation = 0;        ///< Generation identifier after the transition.
+  std::string                job;                   ///< Owning job identifier.
+  std::string                role;                  ///< Transitioned role identifier.
+  std::string                after;                 ///< Resulting role state.
+  std::string                reason;                ///< Persisted transition reason.
+  std::optional<std::string> before;                ///< Prior role state, absent for a new role.
+  std::optional<bool>        before_drifted;        ///< Prior drift flag, absent for a new role.
+  bool                       after_drifted = false; ///< Resulting drift flag.
 };
 /// @brief Native metadata needed to expand a recorded execution event within its pinned snapshot.
 struct execution_event_detail {
-  std::vector<execution_transition_detail> transitions;
-  std::optional<std::int64_t> run, generation, dispatch, packet, manifest, work, checkpoint, checkpoint_body, provenance,
-      structure;
-  std::string run_request, dispatch_kind, work_fp, render_fp;
-  value_ptr   supplemental; ///< Check/verdict expansion, excluding native provenance.
+  std::vector<execution_transition_detail> transitions; ///< Ordered role transitions in this event.
+  std::optional<std::int64_t>              run;         ///< Run identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t>              generation;  ///< Generation identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t>              dispatch;    ///< Dispatch identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> packet;     ///< Retained packet record identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> manifest;   ///< Retained manifest record identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> work;       ///< Retained work value record identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> checkpoint; ///< Checkpoint row identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> checkpoint_body; ///< Checkpoint value record identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> provenance;      ///< Provenance value record identifier. Absent when the event does not carry it.
+  std::optional<std::int64_t> structure;       ///< Role structure record identifier. Absent when the event does not carry it.
+  std::string                 run_request;     ///< Request that opened the run.
+  std::string                 dispatch_kind;   ///< Kind of the retained dispatch.
+  std::string                 work_fp;         ///< Retained work fingerprint.
+  std::string                 render_fp;       ///< Retained render fingerprint.
+  value_ptr                   supplemental;    ///< Check/verdict expansion, excluding native provenance.
 };
 /// Run of a replayed format3 role: its identifier and the ordinal of its generation.
 struct state_run_reference {

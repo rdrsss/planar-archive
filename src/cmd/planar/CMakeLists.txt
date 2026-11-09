@@ -89,7 +89,7 @@ planar_rewrite_module(planar_command
   DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command planar_activate_command CLI11::CLI11_Module
     planar_command_authoring ${planar_authoring_family_targets}
   TESTS bootstrap.t.cpp authoring.t.cpp authoring_prompts.t.cpp authoring_observe.t.cpp authoring_orchestrator.t.cpp
-    activate.t.cpp load_format3.t.cpp execution_check_cli.t.cpp orchestrator_live_cli.t.cpp)
+    activate.t.cpp load_format3.t.cpp profile_format3.t.cpp execution_check_cli.t.cpp orchestrator_live_cli.t.cpp)
 # Draft (R15-C P3): the format3 execution modules reach every invocation copy through the shared response target, and the
 # real activate handler reaches every bootstrap copy through the shared envelope target; the audited generators keep
 # their fixed dependency lists (DD27).
@@ -500,7 +500,7 @@ function(planar_authoring_variant_commands index variable)
     planar_authoring_once(text "registration.add(descriptor(\"load\"," ";(function() end)(descriptor(\"load\",")
   elseif(index EQUAL 8 OR index EQUAL 20)
     set(anchor "    registration.add(authoring_descriptor(\"orchestrator\"),orchestrator_command)\n")
-    planar_authoring_once(text "${anchor}" "${anchor}    registration.add(descriptor(\"status\",\"render_capture_v1\",{}),orchestrator_command)\n")
+    planar_authoring_once(text "${anchor}" "${anchor}    registration.add(descriptor(\"catalogprobe\",\"render_capture_v1\",{}),orchestrator_command)\n")
   elseif(index EQUAL 9)
     set(anchor "    registration.add(authoring_descriptor(\"critique\"),critique_command)\n")
     planar_authoring_once(text "${anchor}" "${anchor}${anchor}")
@@ -544,15 +544,15 @@ foreach(variant RANGE 0 21)
       planar_authoring_once(text "std::array<bundle_row, 23> bundle_table{{" "std::array<bundle_row, 24> bundle_table{{")
       set(orchestrator_row [=[    {"orchestrator", "shipped.orchestrator.v1", "orchestrator_v1", "execution_read_v1", true, "orchestrator_capture_v1"},
 ]=])
-      set(status_row [=[    {"status", "shipped.status.v1", "status_v1", "render_capture_v1", true},
+      set(catalogprobe_row [=[    {"catalogprobe", "shipped.catalogprobe.v1", "catalogprobe_v1", "render_capture_v1", true},
 ]=])
-      planar_authoring_once(text "${orchestrator_row}" "${orchestrator_row}${status_row}")
+      planar_authoring_once(text "${orchestrator_row}" "${orchestrator_row}${catalogprobe_row}")
       set(load_signature [=[  if (name == "load")
 ]=])
-      set(status_signature [=[  if (name == "status")
+      set(catalogprobe_signature [=[  if (name == "catalogprobe")
     return {};
 ]=])
-      planar_authoring_once(text "${load_signature}" "${status_signature}${load_signature}")
+      planar_authoring_once(text "${load_signature}" "${catalogprobe_signature}${load_signature}")
     endif()
     planar_authoring_emit("${generated}/${name}" "${text}")
   endforeach()
@@ -604,10 +604,69 @@ target_link_libraries(planar_authoring_catalog_tests PRIVATE Catch2::Catch2WithM
 add_dependencies(planar_tests planar_authoring_catalog_tests)
 catch_discover_tests(planar_authoring_catalog_tests TEST_PREFIX "replacement." PROPERTIES LABELS unit TIMEOUT 60)
 
-# R18-B-core P4: review.lua is not embedded yet (DB-R4); its standalone harness loads the source from PLANAR_SOURCE_ROOT.
+# Actual shipped checks/review policy harness, loaded from PLANAR_SOURCE_ROOT for focused semantic regressions.
 add_executable(planar_review_lua_tests EXCLUDE_FROM_ALL review_lua.t.cpp)
 planar_native_target(planar_review_lua_tests)
 target_link_libraries(planar_review_lua_tests PRIVATE Catch2::Catch2WithMain planar_lua_trusted_libs)
 target_compile_definitions(planar_review_lua_tests PRIVATE PLANAR_SOURCE_ROOT="${PROJECT_SOURCE_DIR}")
 add_dependencies(planar_tests planar_review_lua_tests)
 catch_discover_tests(planar_review_lua_tests TEST_PREFIX "replacement." PROPERTIES LABELS unit TIMEOUT 60)
+
+# Integrated execution regressions use only source-built Planar and per-test scratch ledgers.
+add_test(NAME replacement.execution_runtime_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c01-runtime.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_runtime_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 180)
+add_test(NAME replacement.execution_cli_workflow
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r17-r18-cli-draft.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_cli_workflow PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 180)
+add_test(NAME replacement.execution_policy_cli_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c01-policy-cli.py" --binary "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_policy_cli_regressions PROPERTIES LABELS integration TIMEOUT 180)
+add_test(NAME replacement.execution_policy_c02_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c02-policy-cli.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_policy_c02_regressions PROPERTIES LABELS integration TIMEOUT 180)
+add_test(NAME replacement.execution_release_c03_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c03-release-cli.py" "$<TARGET_FILE:planar>")
+add_test(NAME replacement.execution_vector_c03_corruption
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c03-vector-cli.py" "$<TARGET_FILE:planar>")
+add_test(NAME replacement.execution_vectors_c03_workflows
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c03-vectors-cli.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_release_c03_regressions replacement.execution_vector_c03_corruption
+  replacement.execution_vectors_c03_workflows PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 180)
+add_test(NAME replacement.execution_profile_c04_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c04-profile-cli.py"
+    "$<TARGET_FILE:planar>" --variant "$<TARGET_FILE:planar_x07_variant_3>")
+set_tests_properties(replacement.execution_profile_c04_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 240)
+add_test(NAME replacement.execution_publication_c04_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c04-publication-cli.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_publication_c04_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 180)
+
+add_test(NAME replacement.execution_diagnostics_c06_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c06-diagnostics-cli.py" "$<TARGET_FILE:planar>")
+add_test(NAME replacement.execution_lineage_c06_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c06-lineage-cli.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_diagnostics_c06_regressions replacement.execution_lineage_c06_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 240)
+
+add_test(NAME replacement.execution_policy_c07_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c07-policy-cli.py" "$<TARGET_FILE:planar>")
+add_test(NAME replacement.execution_replay_stdout_c07_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c07-replay-stdout-cli.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_policy_c07_regressions replacement.execution_replay_stdout_c07_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 240)
+
+add_test(NAME replacement.execution_observed_c07_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c07-observed-cli.py"
+    "$<TARGET_FILE:planar>" --snapshot-probe "$<TARGET_FILE:planar_execution_snapshot_probe>")
+set_tests_properties(replacement.execution_observed_c07_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 240)
+
+add_test(NAME replacement.execution_saved_response_c08_regressions
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c08-saved-response-cli.py" "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.execution_saved_response_c08_regressions PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 480)

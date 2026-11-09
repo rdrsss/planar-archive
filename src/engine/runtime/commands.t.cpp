@@ -9,7 +9,7 @@ TEST_CASE("command registry seals mandatory embedded families without services",
   INFO((vm ? "created" : vm.error().message));
   REQUIRE(vm.has_value());
   REQUIRE(vm->catalog());
-  CHECK(vm->catalog()->fields.at("commands")->items.size() == 5);
+  CHECK(vm->catalog()->fields.at("commands")->items.size() == 17);
   CHECK_FALSE(vm->seal().empty());
 }
 import planar.engine.command_test_0;
@@ -782,7 +782,7 @@ TEST_CASE("command load private catalog routes and interprets in retained VM wit
   load_services<load_types> provider;
   auto                      vm = load_types::vm::create();
   REQUIRE(vm);
-  CHECK(vm->catalog()->fields.at("commands")->items.size() == 5);
+  CHECK(vm->catalog()->fields.at("commands")->items.size() == 17);
   auto r = vm->invoke(f.options<load_types>(), provider);
   REQUIRE(r);
   CHECK((*r)->fields.at("ok")->boolean);
@@ -965,7 +965,7 @@ TEST_CASE("command load defers provenance refusal until fresh acceptance", "[com
   SECTION("registration and ordinary invocation bypass acceptance provenance") {
     auto vm = types::vm::create();
     REQUIRE(vm);
-    CHECK(vm->catalog()->fields.at("commands")->items.size() == 5);
+    CHECK(vm->catalog()->fields.at("commands")->items.size() == 17);
     fake_services<types> provider;
     auto                 result = vm->invoke(types::init{"private-ledger.db", "ordinary"}, provider);
     REQUIRE(result);

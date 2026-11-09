@@ -1,0 +1,105 @@
+{
+  "scope": "Read-only proposed exact whitespace pairs; no candidate edits or workflow execution. Python local interpreter only. C14 full gates apply to tested originals; proposal must be independently reproduced/reviewed after exact edits.",
+  "python_version": "3.15.2 (main, Oct 25 2026, 16:57:51) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "pairs": [
+    {
+      "path": "tests/native/r15-r18-c02-policy-cli.py",
+      "changed_lines": [
+        24,
+        74
+      ],
+      "original_sha256": "0ce05f0966cbfa009d7febc360d3336544e6f75a59c4cc4a6c2bafb42c980138",
+      "proposed_sha256": "8b254fa4370af2c0e6269fc6d5e8188abae0bcf90c99f48c6ac258be6d6a113e",
+      "original_bytes": 10197,
+      "proposed_bytes": 10189,
+      "newlines_preserved": true,
+      "ast_with_attributes_identical": true,
+      "ast_sha256": "d6ae4bef8b2086ab01e010a856f0c7794ba77835b94c22f402315f33616f245c",
+      "same_filename": "tests/native/r15-r18-c02-policy-cli.py",
+      "compile_flags": 0,
+      "dont_inherit": true,
+      "optimize": 0,
+      "marshal_format": 6,
+      "marshal_sha256": "566441a39a292b2c937f4080e5efe2ed22da55429deb9a7605444fd4e7284ba1",
+      "nested_code_objects": [
+        [
+          "<module>",
+          "566441a39a292b2c937f4080e5efe2ed22da55429deb9a7605444fd4e7284ba1"
+        ],
+        [
+          "readiness",
+          "36d00e462eff0859b0e3df1c77f14bab898e5d4192c3cd5860cb46e16dcd9c97"
+        ],
+        [
+          "run",
+          "fbf77fa6ab760899be585b1a5a20a63f95b61f7f300562ce5df2c9c9bb40ed8c"
+        ],
+        [
+          "inactive_restoration",
+          "2907e0a33e7568f82ddc64caa0b8a5589b8c1dcb77f90820848112499d50e396"
+        ],
+        [
+          "recovery",
+          "43e856c96f7780f39e6c28f91664ff2867d93478217386d2ffa1c30fe01dcf78"
+        ],
+        [
+          "run",
+          "3af4ae3535a7f9466f4492e469ba49d55bf314baa07a57c493fd7256028c88ae"
+        ]
+      ],
+      "semantic_tokens_and_positions_identical_excluding_NL_and_ENCODING": true,
+      "semantic_token_count": 2117
+    },
+    {
+      "path": "tests/native/r15-r18-c03-release-cli.py",
+      "changed_lines": [
+        25
+      ],
+      "original_sha256": "c24ea9561ce40014e56f05f76e4d35392ef987f36632ab06b559ef46759b4076",
+      "proposed_sha256": "0bbdfe951b051fdde625272620cfa4d397fb5124304b3af1ac089aa0b5dbd3a4",
+      "original_bytes": 5914,
+      "proposed_bytes": 5910,
+      "newlines_preserved": true,
+      "ast_with_attributes_identical": true,
+      "ast_sha256": "907cb7c5973d7459bfeea23aaf75d02cd493c3cad77d50460d366157e6344731",
+      "same_filename": "tests/native/r15-r18-c03-release-cli.py",
+      "compile_flags": 0,
+      "dont_inherit": true,
+      "optimize": 0,
+      "marshal_format": 6,
+      "marshal_sha256": "dee31466369612dc3777492194a08ddb73f76570c4516922dd9575366e2698ea",
+      "nested_code_objects": [
+        [
+          "<module>",
+          "dee31466369612dc3777492194a08ddb73f76570c4516922dd9575366e2698ea"
+        ],
+        [
+          "readiness",
+          "70bcba47ced26dbace3c6c6efa1d83fb51137b9b3d99a77cbec38fd7bb702241"
+        ],
+        [
+          "run",
+          "a95b8ee8e72870aa9b6e1ac90d740f702a3c786d9d40a9f03a6c069334b8b126"
+        ]
+      ],
+      "semantic_tokens_and_positions_identical_excluding_NL_and_ENCODING": true,
+      "semantic_token_count": 1241
+    }
+  ],
+  "source_frozen_count": 272,
+  "source_frozen_mismatches": [],
+  "prose_eof": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-CODE-REVIEW.md",
+    "current_redacted_original_sha256": "7d9f949a6788e4108232a407a61a8f96eace157609bdd26f218cefbb1b84a430",
+    "proposed_redacted_sha256": "498a44f503173a52d207fe97586529ba70e982f632c2c39557ac71cd6c17c25c",
+    "removed_bytes_hex": "0a",
+    "original_publication_backup": {
+      "path": "docs/vernacular/rounds/V5-02-R15-R18-CODE-REVIEW.md",
+      "backup": "tests/native/r15-r18-final-evidence/final-review-c14/pre-publication/before-publication/docs/vernacular/rounds/V5-02-R15-R18-CODE-REVIEW.md",
+      "sha256": "7d9f949a6788e4108232a407a61a8f96eace157609bdd26f218cefbb1b84a430",
+      "bytes": 3215
+    },
+    "backup_still_matches_original_sha256": true,
+    "constraint": "Preserve old ORIGINALS.json and raw backup. Declare exactly one terminal LF removal separately from existing path-redaction transforms; inverse must reappend LF before validating original backup."
+  }
+}

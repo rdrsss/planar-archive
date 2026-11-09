@@ -1,0 +1,229 @@
+{
+  "disposition": "approve",
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "marshal_version": 6,
+  "scope": "Exact two pinned source pairs only; C14 tested-original full-gate evidence plus explicit C15 interpreted-code identity supplement; no Linux interpreter or new full gate/calibration execution.",
+  "pairs": [
+    {
+      "path": "tests/native/r15-r18-c02-policy-cli.py",
+      "old_sha256": "0ce05f0966cbfa009d7febc360d3336544e6f75a59c4cc4a6c2bafb42c980138",
+      "new_sha256": "8b254fa4370af2c0e6269fc6d5e8188abae0bcf90c99f48c6ac258be6d6a113e",
+      "changed_lines": [
+        24,
+        74
+      ],
+      "old_bytes": 10197,
+      "new_bytes": 10189,
+      "line_count": 110,
+      "LF_count": 110,
+      "all_other_bytes_equal": true,
+      "AST_attributes_equal": true,
+      "AST_sha256": "d6ae4bef8b2086ab01e010a856f0c7794ba77835b94c22f402315f33616f245c",
+      "semantic_tokens_equal": true,
+      "semantic_token_count": 2117,
+      "compile_flags": 0,
+      "dont_inherit": true,
+      "optimize": 0,
+      "marshaled_objects_equal": true,
+      "compilations": [
+        {
+          "filename": "tests/native/r15-r18-c02-policy-cli.py",
+          "objects": [
+            {
+              "object": "module",
+              "sha256": "a47547afb4adf26e4a2a2349bd6caa18a9d1694c79f11386bae914730bada868"
+            },
+            {
+              "object": "module/2:readiness",
+              "sha256": "791262de9de9d918408d33e59228792034cbf43fce3c3767c9584fe29d09a695"
+            },
+            {
+              "object": "module/2:readiness/45:run",
+              "sha256": "fbf77fa6ab760899be585b1a5a20a63f95b61f7f300562ce5df2c9c9bb40ed8c"
+            },
+            {
+              "object": "module/3:inactive_restoration",
+              "sha256": "2907e0a33e7568f82ddc64caa0b8a5589b8c1dcb77f90820848112499d50e396"
+            },
+            {
+              "object": "module/4:recovery",
+              "sha256": "b39b0e703609d269835bbe5ba16d2830ae9a70ffbf52576c6db275e26db8d217"
+            },
+            {
+              "object": "module/4:recovery/45:run",
+              "sha256": "3af4ae3535a7f9466f4492e469ba49d55bf314baa07a57c493fd7256028c88ae"
+            }
+          ]
+        },
+        {
+          "filename": "<repo>/tests/native/r15-r18-c02-policy-cli.py",
+          "objects": [
+            {
+              "object": "module",
+              "sha256": "1050e25a6910a56c2cab253c811ca9e975cfd0377c6e61af15cbb261ddd0a3e8"
+            },
+            {
+              "object": "module/2:readiness",
+              "sha256": "88be6ef77521685ba4522a92694a4c320779698a6f091c159d44a4e39636935f"
+            },
+            {
+              "object": "module/2:readiness/45:run",
+              "sha256": "0c954adcaaf989950c4fb7fa30e6e778a4bbe8c7c9c396ec603bb3c85b43a46b"
+            },
+            {
+              "object": "module/3:inactive_restoration",
+              "sha256": "bfb5a39e73766e24328377a91f84e2e74af6a57f4e169286943d7ed7cba36307"
+            },
+            {
+              "object": "module/4:recovery",
+              "sha256": "2212487cf83a33c981a43ad9dd910939aa84b3aec960006520999cd0fbd91df9"
+            },
+            {
+              "object": "module/4:recovery/45:run",
+              "sha256": "a6f181310ad8da0c731fb22960b90938a711551a433d6470edef829c6d6a2104"
+            }
+          ]
+        },
+        {
+          "filename": "/home/planar/src/tests/native/r15-r18-c02-policy-cli.py",
+          "objects": [
+            {
+              "object": "module",
+              "sha256": "a24ca1473db55bd2857f6c7d38a4b7508f86e430a4f5e08cb1ed3fd66a3fc48e"
+            },
+            {
+              "object": "module/2:readiness",
+              "sha256": "a9d7a8bc789a042624334fc214297a0714c8c1cff9b73dea879b2f6e777aa9ce"
+            },
+            {
+              "object": "module/2:readiness/45:run",
+              "sha256": "38cddaee87fe7ec66de341717444a3ced85042ef845db09fc94b5f152368ed16"
+            },
+            {
+              "object": "module/3:inactive_restoration",
+              "sha256": "5b213d84ee5456061d05379bfcbe0d47f228fdbdd8b26b4082b6c9f6d2673244"
+            },
+            {
+              "object": "module/4:recovery",
+              "sha256": "1b0c4466b3f7df134e3d4e471ea4c0f777bc57ee7b6e79e498f8bbe09f41c569"
+            },
+            {
+              "object": "module/4:recovery/45:run",
+              "sha256": "278aa69b530d97bfda3a9a584623242dcbe94cf1214f1041144c659c3a4ec894"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/native/r15-r18-c03-release-cli.py",
+      "old_sha256": "c24ea9561ce40014e56f05f76e4d35392ef987f36632ab06b559ef46759b4076",
+      "new_sha256": "0bbdfe951b051fdde625272620cfa4d397fb5124304b3af1ac089aa0b5dbd3a4",
+      "changed_lines": [
+        25
+      ],
+      "old_bytes": 5914,
+      "new_bytes": 5910,
+      "line_count": 68,
+      "LF_count": 68,
+      "all_other_bytes_equal": true,
+      "AST_attributes_equal": true,
+      "AST_sha256": "907cb7c5973d7459bfeea23aaf75d02cd493c3cad77d50460d366157e6344731",
+      "semantic_tokens_equal": true,
+      "semantic_token_count": 1241,
+      "compile_flags": 0,
+      "dont_inherit": true,
+      "optimize": 0,
+      "marshaled_objects_equal": true,
+      "compilations": [
+        {
+          "filename": "tests/native/r15-r18-c03-release-cli.py",
+          "objects": [
+            {
+              "object": "module",
+              "sha256": "b1c2418395c49c0e10ccec29b2b1a2c36ef49b6d3ec59cf4d9b3a755dd6c223c"
+            },
+            {
+              "object": "module/2:readiness",
+              "sha256": "edee2e6907e0c3dcbc3a166dcca5820ef61d8840b1f4132740c7718ea4528b0b"
+            },
+            {
+              "object": "module/2:readiness/46:run",
+              "sha256": "a95b8ee8e72870aa9b6e1ac90d740f702a3c786d9d40a9f03a6c069334b8b126"
+            }
+          ]
+        },
+        {
+          "filename": "<repo>/tests/native/r15-r18-c03-release-cli.py",
+          "objects": [
+            {
+              "object": "module",
+              "sha256": "cd7166d9129f7d111ae4b912b9b231a61f834de0c954d372ccac697f4cffaa92"
+            },
+            {
+              "object": "module/2:readiness",
+              "sha256": "cd49e9aabc9b3fef71fd35144bca7ae86df66e6f5a02ba9eb03dc253ed9e3f2f"
+            },
+            {
+              "object": "module/2:readiness/46:run",
+              "sha256": "930479308c528fe2b29d4cf490b0c220289b1b0c01e669f50ac7e1b9babc4406"
+            }
+          ]
+        },
+        {
+          "filename": "/home/planar/src/tests/native/r15-r18-c03-release-cli.py",
+          "objects": [
+            {
+              "object": "module",
+              "sha256": "54d51607afd561f2bb2fae3f205995d9d59df46e24fe877cbc2fa0dc720224a9"
+            },
+            {
+              "object": "module/2:readiness",
+              "sha256": "a5afcfebdfbcf31f8c416365b4c992eda02d910816d17396b03652f01fd43a52"
+            },
+            {
+              "object": "module/2:readiness/46:run",
+              "sha256": "d8b1d8a78686867214f023302038ba65a178bf88b41fa5f4dadd22939e831133"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prose": {
+    "original_sha256": "7d9f949a6788e4108232a407a61a8f96eace157609bdd26f218cefbb1b84a430",
+    "current_sha256": "498a44f503173a52d207fe97586529ba70e982f632c2c39557ac71cd6c17c25c",
+    "inverse_one_LF_exact": true,
+    "outside_redaction_layers": true,
+    "original_backup": "tests/native/r15-r18-final-evidence/final-review-c14/pre-publication/before-publication/docs/vernacular/rounds/V5-02-R15-R18-CODE-REVIEW.md"
+  },
+  "frozen_src_files": 272,
+  "engine_files": 179,
+  "product_inputs": 190,
+  "frozen_all_equal": true,
+  "focused_coder_evidence": [
+    {
+      "configuration": "debug",
+      "selected": 2,
+      "passed": 2,
+      "failures": 0,
+      "skips": 0,
+      "harness_scenarios": 5,
+      "log_sha256": "efa67fe023227052c5b94ed3ef25902c08b2cef28b9045d918fd52ade84c6f98",
+      "xml_sha256": "a119346336a9a46427e18b6ae48039d613816886e9d973b4d213949d4b582971"
+    },
+    {
+      "configuration": "release",
+      "selected": 2,
+      "passed": 2,
+      "failures": 0,
+      "skips": 0,
+      "harness_scenarios": 5,
+      "log_sha256": "08cdfe243224ea1d92bef9696055a395bfe7453d687cacc82be2f0c4576d5387",
+      "xml_sha256": "b13b3a22d705d24c8219596a9710107a43d32145c031b5482086fd3cd4b59127"
+    }
+  ],
+  "coder_manifest_files_checked": 31,
+  "source_consumers": "Only the two CMake Python interpreter registrations; manual full-source review confirms no self-source inspection.",
+  "review_execution": "Read-only proof and evidence accounting only; no workflow/build/measurement rerun."
+}

@@ -1,0 +1,38 @@
+{
+  "disposition": "request-changes",
+  "blocking_finding": "GA-C12-1 Linux descriptor tests fail in both configurations",
+  "files": {
+    "docs/vernacular/rounds/V5-02-R15-R18-FINAL-ACCEPTANCE-C12.md": {
+      "bytes": 13476,
+      "sha256": "86335948f85ccdacc1b513a96cbdd5e7504bc91363f07700bb5284f5539a092f"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/independent-record-audit.json": {
+      "bytes": 1016,
+      "sha256": "57754ab8ace1cd24baf9f3bf609e0404710e999efb5cea971bd25e0be28c6e9f"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/manifest-sensitivity-audit.json": {
+      "bytes": 776,
+      "sha256": "ea5c0c73e14bf373e63f00fa8e7d0769ce56a22e53cf6f5ca890a41cdd225618"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/c12-record-audit.json": {
+      "bytes": 1221,
+      "sha256": "403b93149e36953392fc29c3c34feada9f38bb6e0ecb3833b46677612d13228e"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/linux-record-audit.json": {
+      "bytes": 1838,
+      "sha256": "dae34a5f0ff9431d8d1e81e456681f215dc9cb23ad05eb49969d0700c7d15c34"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/audit_records.py": {
+      "bytes": 7851,
+      "sha256": "88f09a55e2b73696b3a253c56234e7767560c4eec1b2f04b16e79e3e5c691c35"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/audit_c12.py": {
+      "bytes": 5643,
+      "sha256": "a968f923f58114aea6ee98f70cb49821884b77343f6cfad32f8bc214f313a691"
+    },
+    "tests/native/r15-r18-final-evidence/final-review/audit_linux.py": {
+      "bytes": 4620,
+      "sha256": "dad5178190e7627d984d2f9fe21e5b6f3bb812389a6c22fb8a46c3fbfdf9ff50"
+    }
+  }
+}

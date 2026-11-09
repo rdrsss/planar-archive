@@ -43,17 +43,24 @@ Planar compiles restricted Lua declarations and captured observations into scope
 role context. Trusted Lua owns schemas, shapes, input selection, materiality and
 projections. A small native engine owns isolation, captured file access,
 canonical encoding, hashing, native ledger transactions, recorded reads and exact
-source export. Finite execution evidence remains a later cut. An external driver
-owns sessions and scheduling.
+source export. The current source also implements retained run ownership,
+refresh/recovery, finite check evidence and reviewer verdict/repair transactions.
+An external driver owns sessions, scheduling, model calls and working checkouts.
+The roadmap distinguishes this implementation from pending integrated acceptance.
 
 The first slice of implementation work was render-only: one spec, one source
 root, manually selected job grouping, and explicit observation inputs. It did
 not create a ledger. Current `init`, `history` and `export` commands operate on
 explicit new-format ledger paths; render remains database-free. Native prepared
 acceptance and atomic transactions are implemented. The approved load service/CLI
-populates accepted history; D8 closes applicable R14 acceptance portions. The product does
-not claim work, execute checks, call models, schedule sessions, manage worktrees,
-or install a replacement over existing Planar.
+populates accepted history; D8 closes applicable R14 acceptance portions. The R15–R18 source implements explicit claims, fencing, finite trusted checks,
+completion/publication and review evidence against accepted revisions. Corrective
+rounds C01–C15 provide bounded source reviews and scoped mutation/equivalence evidence.
+The [final platform record](rounds/V5-02-R15-R18-FINAL-GATES.md) records passing
+current host/Linux gates; publication and integrated acceptance are tracked by
+the roadmap.
+Planar does not call models, schedule sessions, manage worktrees or install a
+replacement over existing Planar.
 
 ## Agent protocol
 

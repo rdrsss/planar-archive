@@ -151,8 +151,8 @@ std::string head(const scratch& s) {
   return read.revision ? std::to_string(read.revision->id) : std::string("none");
 }
 
-const planar::engine::ledger::execution_role* role(const planar::engine::ledger::execution_snapshot& state,
-                                                   std::string_view job, std::string_view name) {
+const planar::engine::ledger::execution_role* role(const planar::engine::ledger::execution_snapshot& state, std::string_view job,
+                                                   std::string_view name) {
   for (const auto& row : state.roles)
     if (row.job == job && row.role == name)
       return &row;
@@ -255,8 +255,8 @@ TEST_CASE("format3 load reconciles structural change, removal and re-addition in
   const auto restored = load(s, head(s), "restored");
   INFO(restored.error);
   REQUIRE(restored.status == 0);
-  const auto after = snapshot(s);
-  const auto* back = role(after, "split", "cli_worker");
+  const auto  after = snapshot(s);
+  const auto* back  = role(after, "split", "cli_worker");
   REQUIRE(back);
   CHECK(back->state == "ready");
   CHECK(back->generation_ordinal == 2);
@@ -284,8 +284,8 @@ TEST_CASE("format3 load clears an active job absent from the new revision", "[lo
 TEST_CASE("format1 and format2 loads keep the three-service path", "[load_format3]") {
   for (int format : {1, 2}) {
     scratch s;
-    REQUIRE((format == 1 ? planar::engine::ledger::initialize_new : planar::engine::ledger::initialize_new_v2)(s.ledger(),
-                                                                                                             "quota"));
+    REQUIRE(
+        (format == 1 ? planar::engine::ledger::initialize_new : planar::engine::ledger::initialize_new_v2)(s.ledger(), "quota"));
     const auto first = load(s, "none", "first");
     INFO(first.error);
     REQUIRE(first.status == 0);

@@ -1637,3 +1637,51 @@ TEST_CASE("R18-B verdict_result_v1 saved JSON round trip", "[r18][execution_code
   CHECK_FALSE(
       decode_verdict_result_v1(replaced(std::string(verdict_result_json), R"j("run":"11",)j", R"j("run":"11","token":"x",)j")));
 }
+
+TEST_CASE("C04 event payload operation matches its carrying event", "[execution_codec][c04]") {
+  struct sample {
+    std::string                        event;
+    std::string                        operation;
+    std::map<std::string, std::string> references;
+  };
+  const std::vector<sample> samples{
+      {"declaration_accepted",
+       "load",
+       {{"source", "1"}, {"registry", "1"}, {"stdlib", "1"}, {"interpretation", "1"}, {"versions", "1"}}},
+      {"load_noop", "load", {{"source", "1"}, {"registry", "1"}, {"stdlib", "1"}, {"interpretation", "1"}, {"versions", "1"}}},
+      {"job_activated", "activate", {{"activation", "1"}, {"revision", "1"}}},
+      {"run_claimed", "claim", {{"run", "1"}, {"dispatch", "1"}, {"packet", "1"}, {"manifest", "1"}, {"work", "1"}}},
+      {"run_taken_over",
+       "takeover",
+       {{"run", "1"}, {"previous_run", "1"}, {"dispatch", "1"}, {"packet", "1"}, {"manifest", "1"}, {"work", "1"}}},
+      {"run_refreshed", "refresh", {{"run", "1"}, {"dispatch", "1"}, {"packet", "1"}, {"manifest", "1"}, {"work", "1"}}},
+      {"checkpoint_recorded", "checkpoint", {{"run", "1"}, {"checkpoint", "1"}}},
+      {"run_released", "release", {{"run", "1"}}},
+      {"run_interrupted", "release", {{"run", "1"}}},
+      {"check_reserved", "check", {{"reservation", "1"}, {"run", "1"}, {"dispatch", "1"}}},
+      {"check_recorded", "check", {{"reservation", "1"}, {"observation", "1"}}},
+      {"check_interrupted", "check-recover", {{"reservation", "1"}}},
+      {"verdict_recorded", "verdict", {{"body", "1"}, {"run", "1"}, {"verdict", "1"}}},
+  };
+  for (const auto& sample : samples) {
+    INFO(sample.event);
+    event_payload_v2 p;
+    p.operation  = sample.operation;
+    p.before     = {"1", "j"};
+    p.after      = p.before;
+    p.reason     = "completed";
+    p.references = sample.references;
+    auto encoded = encode_event_payload_v2(sample.event, p);
+    REQUIRE(encoded);
+    REQUIRE(decode_event_payload_v2(sample.event, *encoded));
+    const std::string wrong = sample.operation == "load" ? "check" : "load";
+    p.operation             = wrong;
+    CHECK_FALSE(encode_event_payload_v2(sample.event, p));
+    auto       mutated  = *encoded;
+    const auto position = mutated.find("\"operation\":\"" + sample.operation + "\"");
+    REQUIRE(position != std::string::npos);
+    mutated.replace(position, std::string("\"operation\":\"" + sample.operation + "\"").size(),
+                    "\"operation\":\"" + wrong + "\"");
+    CHECK_FALSE(decode_event_payload_v2(sample.event, mutated));
+  }
+}

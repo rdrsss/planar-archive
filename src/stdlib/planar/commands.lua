@@ -93,7 +93,7 @@ if registration then
   local function dispatch_context(S,row,run)
     return engine.object({revision=engine.object({id=S.revision.id,source=S.revision.source.id,interpretation=S.revision.interpretation_id}),
       interpretation=S.revision.interpretation,job=S.active_job,role=row.role,generation=row.generation.ordinal,
-      run=engine.object(run),publications=S.publications,checkpoint=row.checkpoint,snapshot=S})
+      run=engine.object(run),publications=S.publications,repair=checks.repair_revision(S,row.role),checkpoint=row.checkpoint,snapshot=S})
   end
   local function preview_command(invocation,context)
     local read=context.read_execution({})
@@ -236,7 +236,7 @@ if registration then
     for _,r in ipairs(S.roles) do if r.job==S.active_job then
       expected[#expected+1]=engine.object({kind="fact_version",job=r.job,role=r.role,fact_version=r.fact_version})
       vector[#vector+1]=engine.object({job=r.job,role=r.role,state=r.role==row.role and "running" or r.state,
-        drifted=r.role~=row.role and r.drifted or false,run=engine.kind(r.run)=="object" and r.run.id or "none"})
+        drifted=r.role~=row.role and r.drifted or false,run=r.role~=row.role and engine.kind(r.run)=="object" and r.run.id or "none"})
     end end
     expected[#expected+1]=engine.object({kind="role_state",job=row.job,role=row.role,state=row.state,drifted=row.drifted,
       run=engine.kind(row.run)=="object" and row.run.id or "none"})
@@ -287,9 +287,9 @@ if registration then
     local after=row.state
     if operation=="release" then
       if material.blocked then after="blocked"
-      elseif checks and checks.applicable_completion(S,row.role) then after="done"
+      elseif checks and checks.role_completion(S,row.role) then after="done"
       else
-        local previous=checks and checks.current_completion(S,row.role)
+        local previous=checks and checks.role_completion(S,row.role,true)
         after=previous and "stale" or "ready"
       end
     end
@@ -308,6 +308,7 @@ if registration then
     end
     local change=engine.object({version=1,operation=operation,snapshot_seq=read.value.last_seq,facts=facts,
       expected=engine.array(expected),vector=engine.array(vector),transitions=engine.array(transitions)})
+    if operation=="release" then change=checks.rederive(S,change) end
     if operation=="refresh" then
       local dc=dispatch_context(S,row,{request=invocation.options["request-id"],kind="refresh"})
       dc.checkpoint=facts.checkpoint and engine.object({id=S.next_checkpoint_id,run=row.run.id,event=""..(tonumber(read.value.last_seq)+1),value=facts.checkpoint}) or row.checkpoint
@@ -322,7 +323,7 @@ if registration then
     local row=selected_row(S,invocation.options.role); if not row then return unknown_role() end
     local records=context.read_recovery({job=S.active_job,role=row.role}); if not records.ok then return records end
     local R=records.value
-    local current=work_exec(engine.object({interpretation=S.revision.interpretation,job=S.active_job,role=row.role,publications=S.publications}))
+    local current=work_exec(engine.object({interpretation=S.revision.interpretation,job=S.active_job,role=row.role,publications=S.publications,repair=checks.repair_revision(S,row.role)}))
     if current.error and row.state~="retired" then return failed(current.error) end
     local now=current.value and engine.object({work_fp=current.value.digest}) or "none"
     local sections={}

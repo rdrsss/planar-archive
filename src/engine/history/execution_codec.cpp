@@ -347,6 +347,18 @@ void validate_references(std::string_view event_type, const std::map<std::string
 void validate_payload(std::string_view event_type, const event_payload_v2& p) {
   if (!one_of(p.operation, payload_operations))
     invalid();
+  // An allowed operation is not interchangeable with the operation of this carrying event.
+  const std::map<std::string_view, std::string_view> operations{
+      {"declaration_accepted", "load"},      {"load_noop", "load"},
+      {"job_activated", "activate"},         {"run_claimed", "claim"},
+      {"run_taken_over", "takeover"},        {"run_refreshed", "refresh"},
+      {"checkpoint_recorded", "checkpoint"}, {"run_released", "release"},
+      {"run_interrupted", "release"},        {"check_reserved", "check"},
+      {"check_recorded", "check"},           {"check_interrupted", "check-recover"},
+      {"verdict_recorded", "verdict"}};
+  auto operation = operations.find(event_type);
+  if (operation == operations.end() || operation->second != p.operation)
+    invalid();
   validate_position(p.before);
   validate_position(p.after);
   // EX-4 event payload and D101: the event reason is the reason of transition ordinal 1, or empty when the event has none.

@@ -677,7 +677,8 @@ bool open_at(const std::vector<blocker_image>& blockers, std::string_view job, s
 // 27: replaying verdicts in seq order reproduces admitted, capped and unowned exactly as R18-5.
 checked check_admission_replay(connection& db, const std::vector<verdict_image>& verdicts,
                                const std::vector<repair_image>& repairs, const std::vector<blocker_image>& blockers,
-                               const std::vector<activation_image>& activations) {
+                               const std::vector<activation_image>&             activations,
+                               const std::map<std::uint64_t, generation_image>& generations, std::string_view identity) {
   std::map<std::pair<std::string, std::uint64_t>, std::uint64_t> counts; // (job, activation) -> admitted rejections
   for (const auto& v : verdicts) {
     const bool has_repairs = std::ranges::any_of(repairs, [&](const repair_image& r) { return r.verdict == v.id; });
@@ -689,36 +690,85 @@ checked check_admission_replay(connection& db, const std::vector<verdict_image>&
     auto  response = hist::decode_verdict_result_v1(v.saved);
     if (!response)
       return std::unexpected(corrupt());
-    if (v.decision == "approve" || v.applicability == "historical") {
-      if (has_repairs || blocker != blockers.end() || response->admitted)
-        return std::unexpected(corrupt());
-      continue;
-    }
     auto max_rounds = max_rounds_at(db, v.run, v.seq);
     if (!max_rounds)
       return std::unexpected(max_rounds.error());
-    std::string expected_kind;
-    bool        admitted = false;
-    if (v.body.repair.empty()) {
-      expected_kind = "unowned_rejection";
-    } else if (count < *max_rounds) {
-      admitted = true;
+    bool admitted = false;
+    if (v.decision == "approve" || v.applicability == "historical") {
+      if (has_repairs || blocker != blockers.end())
+        return std::unexpected(corrupt());
     } else {
-      expected_kind = "max_rounds";
+      std::string expected_kind;
+      if (v.body.repair.empty())
+        expected_kind = "unowned_rejection";
+      else if (count < *max_rounds)
+        admitted = true;
+      else
+        expected_kind = "max_rounds";
+      if (admitted != has_repairs)
+        return std::unexpected(corrupt());
+      if (admitted) {
+        if (blocker != blockers.end())
+          return std::unexpected(corrupt());
+        ++count;
+      } else {
+        const bool should_open = !open_at(blockers, v.job, expected_kind, v.seq);
+        if (should_open != (blocker != blockers.end()))
+          return std::unexpected(corrupt());
+        if (should_open && blocker->kind != expected_kind)
+          return std::unexpected(corrupt());
+      }
     }
-    if (admitted != has_repairs || response->admitted != admitted)
+    hist::verdict_result_v1 expected;
+    expected.ledger        = std::string(identity);
+    expected.request_id    = v.request_id;
+    expected.job           = v.job;
+    expected.role          = v.role;
+    expected.run           = decimal(v.run);
+    expected.event         = decimal(v.seq);
+    expected.verdict_id    = decimal(v.id);
+    expected.applicability = v.applicability;
+    expected.decision      = v.decision;
+    expected.admitted      = admitted;
+    expected.count         = decimal(count);
+    expected.max_rounds    = decimal(*max_rounds);
+    auto revision = each_row(db, "SELECT revision_id FROM events WHERE seq=?1", {as_bind(v.seq)}, [&](statement& row) -> checked {
+      auto id = id_col(row, 0);
+      if (!id)
+        return std::unexpected(corrupt());
+      expected.revision = decimal(*id);
+      return {};
+    });
+    if (!revision)
+      return revision;
+    for (const auto& repair : repairs)
+      if (repair.verdict == v.id) {
+        auto generation = generations.find(repair.generation);
+        if (generation == generations.end())
+          return std::unexpected(corrupt());
+        expected.repairs.push_back({repair.role, decimal(generation->second.ordinal), decimal(repair.revision)});
+      }
+    std::ranges::sort(expected.repairs, {}, &hist::verdict_result_repair::role);
+    for (const auto& item : blockers) {
+      if (item.verdict == v.id)
+        expected.opened.push_back({decimal(item.id), item.kind});
+      if (item.cleared_seq == v.seq)
+        expected.cleared.push_back(decimal(item.id));
+    }
+    auto transitions = each_row(db, "SELECT role,after_state,after_drifted FROM transitions WHERE event_seq=?1 ORDER BY role",
+                                {as_bind(v.seq)}, [&](statement& row) -> checked {
+                                  auto role = text_col(row, 0), state = text_col(row, 1);
+                                  auto drifted = opt_int(row, 2);
+                                  if (!role || !state || !drifted || !*drifted || (**drifted != 0 && **drifted != 1))
+                                    return std::unexpected(corrupt());
+                                  expected.roles.push_back({*role, *state, **drifted == 1});
+                                  return {};
+                                });
+    if (!transitions)
+      return transitions;
+    auto encoded = hist::encode_verdict_result_v1(expected);
+    if (!encoded || *encoded != v.saved)
       return std::unexpected(corrupt());
-    if (admitted) {
-      if (blocker != blockers.end())
-        return std::unexpected(corrupt());
-      ++count;
-    } else {
-      const bool should_open = !open_at(blockers, v.job, expected_kind, v.seq);
-      if (should_open != (blocker != blockers.end()))
-        return std::unexpected(corrupt());
-      if (should_open && blocker->kind != expected_kind)
-        return std::unexpected(corrupt());
-    }
     if (response->count != decimal(count) || response->max_rounds != decimal(*max_rounds))
       return std::unexpected(corrupt());
   }
@@ -1025,7 +1075,7 @@ std::expected<void, execution_error> read_review(connection& db, execution_snaps
     return ok;
   if (auto ok = check_repairs_and_blockers(verdicts, *repairs, *blockers, *generations, snapshot.last_seq); !ok)
     return ok;
-  if (auto ok = check_admission_replay(db, verdicts, *repairs, *blockers, *activations); !ok)
+  if (auto ok = check_admission_replay(db, verdicts, *repairs, *blockers, *activations, *generations, snapshot.identity); !ok)
     return ok;
 
   // Snapshot values (DR18-8). Only the active job's current lineages contribute.
@@ -1038,7 +1088,7 @@ std::expected<void, execution_error> read_review(connection& db, execution_snaps
     return {};
   std::set<std::uint64_t> selected;
   for (const auto& role : snapshot.roles) {
-    if (role.job != snapshot.active_job)
+    if (role.job != snapshot.active_job || role.state == "retired")
       continue;
     auto lineage = lineage_of(*generations, role.generation_id);
     if (!lineage)
@@ -1075,8 +1125,8 @@ std::expected<void, execution_error> read_review(connection& db, execution_snaps
   }
   for (const auto& v : verdicts)
     if (selected.contains(v.id))
-      snapshot.review.verdicts.push_back(
-          execution_verdict{v.id, v.request_id, v.run, v.seq, v.applicability, v.decision, v.body});
+      snapshot.review.verdicts.push_back(execution_verdict{v.id, v.request_id, v.run, v.seq, v.applicability, v.decision, v.body,
+                                                           v.generation, activation_at(*activations, v.job, v.seq)});
   return {};
 }
 
@@ -1109,6 +1159,8 @@ std::vector<std::pair<std::string, value_ptr>> review_state_entries(const execut
       verdicts.push_back(record_node({{"id", text_node(decimal(v.id))},
                                       {"request_id", text_node(v.request_id)},
                                       {"run", text_node(decimal(v.run))},
+                                      {"generation", text_node(decimal(v.generation))},
+                                      {"activation", text_node(v.activation ? decimal(*v.activation) : "none")},
                                       {"seq", text_node(decimal(v.seq))},
                                       {"applicability", text_node(v.applicability)},
                                       {"decision", text_node(v.decision)},

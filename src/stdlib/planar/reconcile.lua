@@ -18,6 +18,52 @@ do
   end
   local function row_key(job,role) return job.."\0"..role end
 
+  -- Project captured evidence into a hypothetical post-operation owning lineage.
+  -- Persistent history remains in the ledger; only current facts feed readiness.
+  local function current_facts(view,prior)
+    local owners,old_owners={},{}
+    local function collect(snapshot,out)
+      for _,r in ipairs(snapshot.roles or {})do
+        if r.job==snapshot.active_job and r.state~="retired" and r.generation.structure.kind=="worker"then
+          for _,w in ipairs(r.generation.structure.work or {})do out[w]=r end
+        end
+      end
+    end
+    collect(view,owners);collect(prior,old_owners)
+    local function contains(r,g)
+      for _,id in ipairs(r.generation.lineage or {r.generation.id})do if id==g then return true end end
+      return false
+    end
+    local completions,latest={},{}
+    for _,c in ipairs(prior.completions or {})do
+      local valid=false
+      for _,u in ipairs(c.units or {})do local r=owners[u.work]
+        if r and r.job==c.job and r.role==c.role and contains(r,c.generation)then valid=true end
+      end
+      if valid then
+        completions[#completions+1]=c
+        local key=row_key(c.job,c.role)
+        if not latest[key] or tonumber(c.seq)>tonumber(latest[key].seq)then latest[key]=c end
+      end
+    end
+    view.completions=engine.array(completions)
+    local publications={}
+    for _,p in ipairs(prior.publications or {})do local r=owners[p.work]
+      local c=r and latest[row_key(r.job,r.role)]
+      if c and p.job==r.job and p.role==r.role and p.completion==c.id then publications[#publications+1]=p end
+    end
+    view.publications=engine.array(publications)
+    local function carried(work)
+      local r,old=owners[work],old_owners[work]
+      return r and old and r.job==old.job and r.role==old.role and contains(r,old.generation.id)
+    end
+    for _,name in ipairs({"observed","evidence"})do
+      local kept={};for _,v in ipairs(prior[name] or {})do if carried(v.work)then kept[#kept+1]=v end end
+      view[name]=engine.array(kept)
+    end
+    return view
+  end
+
   local function transition(job,role,row,after_state,after_drifted,reason)
     local t={job=job,role=role,after_state=after_state,after_drifted=after_drifted,reason=reason}
     -- NULL-first: a first transition of a (job, role) carries no before keys (EX-4 Derivation, D19).
@@ -64,6 +110,7 @@ do
       return states
     end
     local publications=S.publications or {}
+    local view={};for k,v in pairs(S)do view[k]=v end
     local transitions,generations,fenced,after={}, {}, {}, {}
     local function fence(row)
       local id=row.state=="running" and run_id(row) or nil
@@ -109,6 +156,15 @@ do
       for _,row in ipairs(rows_by_job[job_id] or {}) do interest(job_id,row.role) end
       for _,r in ipairs(location.job.roles) do interest(job_id,r.id) end
       if active_job~="" and active_job~=job_id then retire_all(active_job) end
+      view.active_job=job_id
+      view.roles={}
+      for _,r in ipairs(location.job.roles)do
+        view.roles[#view.roles+1]={job=job_id,role=r.id,state="ready",drifted=false,run="none",
+          generation={structure=role_structure(locate(recorded,job_id,r.id)),lineage={}}}
+      end
+      current_facts(view,S)
+      publications=view.publications
+      view.review={repairs={}}
       local states={} -- every generation of the job starts empty: no producer completion applies
       for _,r in ipairs(location.job.roles) do
         local role_location=locate(recorded,job_id,r.id)
@@ -120,11 +176,11 @@ do
         if row then fence(row) end
         record(job_id,r.id,row,state,false,"activated")
         after[row_key(job_id,r.id)]={job=job_id,role=r.id,state=state,drifted=false}
+        for _,v in ipairs(view.roles)do if v.role==r.id then v.state=state end end
       end
       after_job=job_id
     else
       local candidate=input.candidate
-      local view={};for k,v in pairs(S)do view[k]=v end
       view.revision={interpretation=candidate}
       -- Structural replacement closes old completion lineage before qualities are derived.
       view.roles={}
@@ -143,6 +199,16 @@ do
         end
         view.roles[#view.roles+1]=copy
       end
+      local next_job=locate(candidate,active_job)
+      if next_job then
+        for _,r in ipairs(next_job.job.roles)do
+          local found=false;for _,v in ipairs(view.roles)do if v.job==active_job and v.role==r.id then found=true end end
+          if not found then view.roles[#view.roles+1]={job=active_job,role=r.id,state="ready",drifted=false,run="none",
+            generation={structure=role_structure(locate(candidate,active_job,r.id)),lineage={}}}end
+        end
+      end
+      current_facts(view,S)
+      publications=view.publications
       if S.review then
         view.review={};for k,v in pairs(S.review)do view.review[k]=v end
         view.review.repairs={};for _,repair in ipairs(S.review.repairs or {})do if not reset[repair.role]then view.review.repairs[#view.review.repairs+1]=repair end end
@@ -159,7 +225,13 @@ do
         else
           local states=states_of(active_job)
           local declared={}
-          for _,r in ipairs(location.job.roles) do
+          -- Review readiness consumes the committed worker states, including restored
+          -- completions and active-run precedence, independently of declaration order.
+          local ordered={}
+          for _,kind in ipairs({"worker","reviewer"})do
+            for _,r in ipairs(location.job.roles)do if r.kind==kind then ordered[#ordered+1]=r end end
+          end
+          for _,r in ipairs(ordered) do
             declared[r.id]=true
             interest(active_job,r.id)
             local role_location=locate(candidate,active_job,r.id)
@@ -198,8 +270,8 @@ do
             elseif dispatch_internal.applicable and dispatch_internal.applicable(view,r.id) then
               if row.state~="done" then record(active_job,r.id,row,"done",false,"prerequisite_available") end
               after[key]={job=active_job,role=r.id,state="done",drifted=false}
-            elseif row.state=="done" then
-              record(active_job,r.id,row,"stale",false,"work_changed")
+            elseif dispatch_internal.applicable and dispatch_internal.applicable(view,r.id,true) then
+              if row.state~="stale" then record(active_job,r.id,row,"stale",false,row.state=="blocked" and "prerequisite_available" or "work_changed") end
               after[key]={job=active_job,role=r.id,state="stale",drifted=false}
             elseif row.state=="blocked" then
               record(active_job,r.id,row,"ready",false,"prerequisite_available")
@@ -207,6 +279,16 @@ do
             else
               after[key]={job=active_job,role=r.id,state=row.state,drifted=false}
             end
+            local projected=after[key]
+            states[r.id]=projected.state
+            local found=false
+            for _,v in ipairs(view.roles)do if v.job==active_job and v.role==r.id then
+              v.state=projected.state;v.drifted=projected.drifted
+              if projected.state~="running"then v.run="none"end
+              found=true
+            end end
+            if not found then view.roles[#view.roles+1]={job=active_job,role=r.id,state=projected.state,
+              drifted=projected.drifted,run="none",generation={structure=structure,lineage={}}}end
           end
           -- Roles removed from the active job retire (M13/M14 cause (a)).
           retire_all(active_job,declared)
@@ -262,7 +344,7 @@ do
     for _,id in ipairs(sort_copy(fenced,numeric_key)) do fenced_runs[#fenced_runs+1]=id end
     -- Draft: both operations carry {job,generations,fenced_runs}; job is the active job after the commit.
     local facts=engine.object({job=after_job,generations=by_role(generations),fenced_runs=engine.array(fenced_runs)})
-    if dispatch_internal.clear_blockers then facts.blockers_cleared=dispatch_internal.clear_blockers(S,input,after_job) end
+    if dispatch_internal.clear_blockers then facts.blockers_cleared=dispatch_internal.clear_blockers(S,input,after_job,view) end
     return ctx.finish(engine.object({version=1,operation=operation,snapshot_seq=last_seq,facts=facts,
       vector=by_role(vector),transitions=by_role(transitions),expected=engine.array(expected)}))
   end

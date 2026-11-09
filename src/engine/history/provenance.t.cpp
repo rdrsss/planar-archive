@@ -57,7 +57,8 @@ TEST_CASE("provenance registry retains exact captured bytes and normalized mode"
 }
 TEST_CASE("provenance generated originals and legacy assembled chunk match exact authored bytes", "[provenance]") {
   const std::array names{"planar/json.lua",         "planar/schema.lua",       "planar/semantic.lua", "planar/selection.lua",
-                         "planar/presentation.lua", "planar/observations.lua", "planar/render.lua",   "planar/acceptance.lua",
+                         "planar/presentation.lua", "planar/observations.lua", "planar/render.lua",   "planar/dispatch.lua",
+                         "planar/reconcile.lua",    "planar/checks.lua",       "planar/review.lua",   "planar/acceptance.lua",
                          "planar/commands.lua",     "planar/bootstrap.lua"};
   auto             originals = embedded::originals();
   REQUIRE(originals.size() == names.size());

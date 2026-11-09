@@ -1,0 +1,34 @@
+{
+  "source_sha256": "3b5e3ec80a8861b44838a975d8a0713022ea6dbb607831cb27822973205b6fb0",
+  "original_sha256": "0adf2e89d58d322cf3018cb194115f65a3c2b9d988b96ee5b42a4ab464112387",
+  "raw_evidence_files": 28,
+  "pre_inputs": 790,
+  "changed_inputs": [
+    "tests/native/r15-r18-c08-saved-response-cli.py"
+  ],
+  "source_files": 272,
+  "configurations": {
+    "debug": {
+      "build_inputs": 1628,
+      "registered_binaries": 76,
+      "inventory": 1844,
+      "final_entry_log_sha256": "6bb0d0be05ab8e5359583d8eac8624b25b593ce569d7ad533b7db49c84df4676",
+      "binary_sha256": "b214db8c3831e5acb62ac1797eb35e964992f552b2618ba30b621ef7dc469190"
+    },
+    "release": {
+      "build_inputs": 1628,
+      "registered_binaries": 76,
+      "inventory": 1844,
+      "final_entry_log_sha256": "b7f3baed0264e4870021db9b03bbdc138a5374fbe4115b35bc2bd2fe43387e98",
+      "binary_sha256": "2d93c41104f558dd66c29378e85cd0c91dfaad09afe195d41521a6acea07ef48"
+    }
+  },
+  "same_variant_archive_sha256": "375fb34cfc7ba51a6443fa2254801a251f544b24db1766b07e732b214a301a44",
+  "link_inputs": 91,
+  "mutant_incorrect_acceptance_per_composition": [
+    "status",
+    "history"
+  ],
+  "exact_replay_mutant_kill_credit": false,
+  "errors": []
+}

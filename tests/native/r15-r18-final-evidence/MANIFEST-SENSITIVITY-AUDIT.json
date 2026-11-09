@@ -1,0 +1,36 @@
+{
+  "calibration_raw": {
+    "files": 2228,
+    "errors": []
+  },
+  "calibration_evidence": {
+    "files": 37,
+    "errors": []
+  },
+  "execution_probe_evidence": {
+    "files": 773,
+    "errors": []
+  },
+  "c11_experiment_evidence": {
+    "files": 137,
+    "errors": []
+  },
+  "native_attempt_statuses": {
+    "PASS_NOOP": 2,
+    "SURVIVED": 10,
+    "KILLED": 80,
+    "INVALID_COMPILE": 3
+  },
+  "native_credited_compiled_linked_and_baseline_green": true,
+  "required58": {
+    "KILLED": 46,
+    "REGISTERED_DEFAULT_KILL": 4,
+    "REGISTERED_CLI_KILL": 1,
+    "REGISTERED_KILL": 1,
+    "MASKED_SINGLE_SITE_PAIRED_LOGICAL_KILL": 2,
+    "CURRENT_COHERENT_RACE_KILL": 2,
+    "REGISTERED_REAL_WORKFLOW_KILL": 1,
+    "DUPLICATE_SUPERSEDED": 1
+  },
+  "required58_unique_ids": 58
+}

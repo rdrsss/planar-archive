@@ -1,0 +1,14 @@
+{
+  "scope": "Historical bindings retained in their original scope; no current whole-source/SDK identity or new mutation execution claim. Archived original paths resolve through independently streamed indices.",
+  "counts": {
+    "c09_probe_files": 773,
+    "c11_evidence_files": 137,
+    "c11_external_artifacts": 96,
+    "budget_evidence_files": 74,
+    "budget_external_artifacts": 393,
+    "budget_baseline_link_inputs": 114,
+    "budget_shared_runtime": 2
+  },
+  "hashes_read": 1495,
+  "errors": []
+}

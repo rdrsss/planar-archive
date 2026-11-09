@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "scope": "Actual post-C13 final-source macOS resource calibration: fresh normal Debug/RelWithDebInfo instrumentation plus fresh raised Debug scaling. No integrated acceptance claim.",
+  "source_files": 272,
+  "engine_source_files": 179,
+  "all_source_manifests_equal": true,
+  "sole_source_delta_from_c11": "src/engine/process/runner.t.cpp",
+  "runner_test_sha256": "70ea1208b8a70020523a94e1e94a1c6d52b2aee23cbe67263f6c96bdf804c65f",
+  "normal_runtime_artifact_reuse": false,
+  "configurations": {
+    "debug": {
+      "ordinary_runtime_cases": 484,
+      "instrumentation_only_cases": 3,
+      "instrumented_runtime_cases": 487,
+      "runtime_assertions": 86924,
+      "loader_cases": 22,
+      "loader_assertions": 194,
+      "cases": 509,
+      "assertions": 87118,
+      "failures": 0,
+      "expected_failures": 0,
+      "skips": 0,
+      "budget_rows": 31,
+      "margin_problems": 0
+    },
+    "release": {
+      "ordinary_runtime_cases": 484,
+      "instrumentation_only_cases": 3,
+      "instrumented_runtime_cases": 487,
+      "runtime_assertions": 86924,
+      "loader_cases": 22,
+      "loader_assertions": 194,
+      "cases": 509,
+      "assertions": 87118,
+      "failures": 0,
+      "expected_failures": 0,
+      "skips": 0,
+      "budget_rows": 31,
+      "margin_problems": 0
+    }
+  },
+  "raised_debug": {
+    "fresh_build": true,
+    "probe_count": 16,
+    "normal_refusal_assertion_expected_failure": 1,
+    "expected_failure_macro": "REQUIRE_FALSE",
+    "expected_failure_original": "!(subject.ok)",
+    "tail_instructions": [
+      27719200,
+      28620200,
+      29521200
+    ],
+    "not_margin_or_acceptance_rows": true
+  },
+  "verification_attempts": {
+    "excluded_setup_failures": 2,
+    "reasons": [
+      "temporary /var and/private/var path spellings",
+      "SDK alias canonical lookup"
+    ],
+    "final_strict_verifier_exit": 0,
+    "native_measurement_data_changed_by_repairs": false
+  },
+  "evidence": {
+    "tests/native/r15-r18-c13-evidence/calibration/source-before.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/source-changes-from-c11.json": {
+      "sha256": "d1331079d636bbaa303574335a8cb2cf2ab5a7ac70ab3d331d6767666164121f",
+      "bytes": 392
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/snapshot.json": {
+      "sha256": "a1fe7642b463989dd79b38d0b2478b021025f5a99494f269fb66e5ab3c4270ff",
+      "bytes": 502
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/input-debug-artifacts.json": {
+      "sha256": "47a4f7a299a08891cdd0f6fbd5110aec8f3325947968f73a727757cf171d5474",
+      "bytes": 688874
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/input-release-artifacts.json": {
+      "sha256": "11c44a8e08dad29f5b5970c802c5976c441e9cd563a6e743e9683a9efa45656c",
+      "bytes": 688661
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/debug-target-checks.json": {
+      "sha256": "66777552a2a6e276932778dbd2fb83679747dd17c1b48f601ffc8f8c036126d0",
+      "bytes": 285
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/release-target-checks.json": {
+      "sha256": "ed860e9984c91d8ea335ab82952bcbb01c12533bb612e5b8990ff5eec94a29ba",
+      "bytes": 287
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/PREP-INPUTS.json": {
+      "sha256": "a34ba5a8b06e90eacf393fc49ce9aca2dd26adb95196496990427b3707da395b",
+      "bytes": 1981
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/snapshot_inputs.py": {
+      "sha256": "87767bdb8be6b1adb902ede7275b6a4ef54ba802f6a124ad730ce0301ccdab6c",
+      "bytes": 6222
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/build_measure.py": {
+      "sha256": "65c2f7ed0cf85fd214f9dc1e101625d3ec0d7e2d1a504a50ccf6f410f15803e3",
+      "bytes": 4032
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/run_measurements.py": {
+      "sha256": "02270c9d463f0f6c9775f8ec626dde04ee69e54d841447ca6f0ede15feb02dc3",
+      "bytes": 13086
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/aggregate.py": {
+      "sha256": "608553a6fbfe4076b8063d11f59e4f247212f986962f18724cde6c955a4ecd91",
+      "bytes": 5862
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/run_all.py": {
+      "sha256": "c4e769b6f44fe87966c509787946751eb6c69e8ac4b6a187ee00ed22a3a0eb5b",
+      "bytes": 2910
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/verify_finalize.py": {
+      "sha256": "19bcd254102ef8f19727424975fa5d955ecfb7c602307e77817a3f458e7629fc",
+      "bytes": 10858
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-debug-identity.json": {
+      "sha256": "439cf0af206cfb4f35224dfe5a850005d3253a1d883619697a4d08283b768306",
+      "bytes": 4753
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-release-identity.json": {
+      "sha256": "9782d3156147ecf212d39898d55547d637cc4c575721ff626176871d4d073d0e",
+      "bytes": 4768
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-raised-identity.json": {
+      "sha256": "c0c031e83fa427e170040f7de60e5764d8ada8b9bb5d791f4e88b66fd8516fcd",
+      "bytes": 1384
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-debug-source-hashes.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-release-source-hashes.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-raised-source-hashes.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/source-after-measurement.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/source-after-final-verification.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/actual-steps.json": {
+      "sha256": "e2ea595d14fcca0d4351cc9028fdedd124635e81ea09e18ade077e4b1ffa0f64",
+      "bytes": 4250
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/actual-normal-statistics.json": {
+      "sha256": "b7ed32baf755498dab1e93e3cfb863f83ec9b6f2d9841ced10fbaca982fd88ab",
+      "bytes": 3587
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-debug-statistics.json": {
+      "sha256": "0595dcf2533160c3e7b653d4dbf017d9e1e660851e1aece63ed61a8c3a9e7888",
+      "bytes": 1653
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-release-statistics.json": {
+      "sha256": "0595dcf2533160c3e7b653d4dbf017d9e1e660851e1aece63ed61a8c3a9e7888",
+      "bytes": 1653
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/private-compile-dependency-check.json": {
+      "sha256": "da89ee9e4f6ae312983d934f274fa427d12644730e6c54a46ec4f6158c1dacf9",
+      "bytes": 305
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/input-closure-after.json": {
+      "sha256": "ebc87976a176f8e155ad99a989018b4e4d70d978b332fe7e9118581a4f6839e8",
+      "bytes": 251
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/dynamic-and-tool-identities.json": {
+      "sha256": "a31101f2bcf7e8cd9f0cfe0f10246231a243baad6952a9041c9b193a4162ae47",
+      "bytes": 1476
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/tools-current-match-c11.json": {
+      "sha256": "4fbb477fc963883e089a1c38a6c958e9edb7b76753e5c794d95c82d994fa3736",
+      "bytes": 898
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/tool-versions.json": {
+      "sha256": "fed7ab99715e2fece78632cc025258bdaebe0f53df5df41c328e5f494ee45a31",
+      "bytes": 379
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/verification-summary.json": {
+      "sha256": "46c89f71164975d08074d59040609e58c004bbd1c803dc3e324b936d9856de55",
+      "bytes": 4575
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/verification-strict.log": {
+      "sha256": "46aac7a34c4661fdfb487b4486c3268874a5269e8448ef396ecd6afb1c694ae8",
+      "bytes": 109
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/verification-attempt1-path-alias.json": {
+      "sha256": "25074b930c151c064b99efbb9961e620429a11fa7844b7a6a5d566ff64364f1d",
+      "bytes": 413
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/verification-attempt2-sdk-alias.json": {
+      "sha256": "233cadc728d1d58e1bf312c93a70a648b5436b52ddb8430a5adef85defe8669d",
+      "bytes": 447
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-raised-summary.json": {
+      "sha256": "b2233aed9351de91bb748ae66056e8193ac389d035f75cbc75fc0636b44869c0",
+      "bytes": 23787
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/post-raised-probe-results.json": {
+      "sha256": "8299c225637fcfa753bdc916196b2afaec574b0944915480eb179cea6d01b441",
+      "bytes": 21102
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/raised-role-results.json": {
+      "sha256": "16ca0099b6ed34418926b92b26b414413d7e4a269734f7a8aa7cc72ff813420c",
+      "bytes": 1216
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/coupled-model-confirmed.json": {
+      "sha256": "1d1ee0b93d28666ea5589656ae77a3aa45f147d3acebe81a8d52b1d4b5676026",
+      "bytes": 4884
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/measurement-delta-vs-c11.json": {
+      "sha256": "76422eb4a77efc476fc12d4aaa88a1ebca10879d67736121bed4f03eafd831fe",
+      "bytes": 438
+    },
+    "tests/native/r15-r18-c13-evidence/calibration/compact-generation.log": {
+      "sha256": "c7c722583ad284722db7643f890e38e48ef2ccc3ca861ef510a4f6b4678528fe",
+      "bytes": 119
+    },
+    "tests/native/r15-r18-c13-evidence/CALIBRATION-PEAKS.json": {
+      "sha256": "59fdc6eee329a22483b15fbe5a395d78020d8ce68b14bcad4461cc148db3052d",
+      "bytes": 45821
+    },
+    "tests/native/r15-r18-c13-evidence/SOURCE-FROZEN.json": {
+      "sha256": "3d9286749fcafb9cd80b69995f00e8711e4b4f001d60d34566917d40d7de0896",
+      "bytes": 29920
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C13-calibration.md": {
+      "sha256": "2a61b5264c948f1f6083077ffdd9f8385c95e8bb5a69f4ec92ba8382304643dc",
+      "bytes": 8155
+    }
+  },
+  "raw_tree": {
+    "inventory": "tests/native/r15-r18-c13-evidence/calibration/raw-files.json",
+    "sha256": "2320d0d166e89152eecb247324f514853a866baec3c24777a9cdecc2ed848543",
+    "inventory_bytes": 305095,
+    "bytes": 18899060,
+    "files": 2266
+  }
+}

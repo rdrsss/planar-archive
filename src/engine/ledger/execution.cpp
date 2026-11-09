@@ -1201,18 +1201,32 @@ checked check_request(const ledger_rows& rows, const execution_metadata& metadat
     return {};
   }
   if (event.type == "job_activated") {
-    auto saved = hist::decode_activate_result_v1(request.result);
-    if (!state.activation)
+    if (!state.activation || request.attachment)
       return std::unexpected(corrupt());
-    const auto& activation = rows.activations[*state.activation - 1];
-    if (!saved || saved->ledger != metadata.identity || saved->request_id != request.request_id || saved->job != *event.job ||
-        saved->revision != std::to_string(*event.revision) || saved->activation != std::to_string(activation.id) ||
-        saved->event != std::to_string(event.seq) || saved->previous_job != payload.before.active_job)
-      return std::unexpected(corrupt());
-    if (request.attachment)
+    const auto&              activation = rows.activations[*state.activation - 1];
+    hist::activate_result_v1 expected;
+    expected.ledger       = metadata.identity;
+    expected.request_id   = request.request_id;
+    expected.job          = *event.job;
+    expected.revision     = std::to_string(*event.revision);
+    expected.activation   = std::to_string(activation.id);
+    expected.event        = std::to_string(event.seq);
+    expected.previous_job = payload.before.active_job;
+    for (const auto& transition : rows.transitions[event.seq - 1]) {
+      if (transition.job != *event.job)
+        continue;
+      const auto* generation = generation_of(rows, transition.generation_id);
+      if (!generation)
+        return std::unexpected(corrupt());
+      expected.roles.push_back({transition.role, std::to_string(generation->ordinal), transition.after_state});
+    }
+    std::ranges::sort(expected.roles, {}, &hist::activate_role_v1::role);
+    auto encoded = hist::encode_activate_result_v1(expected);
+    if (!encoded || *encoded != request.result)
       return std::unexpected(corrupt());
     return {};
   }
+
   if (event.type == "check_reserved" || event.type == "check_interrupted") {
     auto result = codec_decode(request.result);
     if (!result || !*result || (*result)->kind != value_kind::record || request.attachment)
@@ -1230,63 +1244,104 @@ checked check_request(const ledger_rows& rows, const execution_metadata& metadat
       return std::unexpected(corrupt());
     return {};
   }
-  if (request.operation == "refresh" || request.operation == "checkpoint" || request.operation == "release") {
-    if (request.operation == "refresh" && !hist::decode_refresh_result_v1(request.result))
+  // Each remaining result is reconstructed solely from the original event's retained facts.
+  // The replay state has already applied this event's transitions, so it must not supply before-drift.
+  if (!event.run || !rows.runs.contains(*event.run))
+    return std::unexpected(corrupt());
+  const auto& run        = rows.runs.at(*event.run);
+  const auto* generation = generation_of(rows, run.generation);
+  if (!generation)
+    return std::unexpected(corrupt());
+  auto identity = [&](hist::recovery_result_identity& result) {
+    result.ledger     = metadata.identity;
+    result.request_id = request.request_id;
+    result.job        = *event.job;
+    result.role       = *event.role;
+    result.run_id     = std::to_string(run.id);
+    result.generation = std::to_string(generation->ordinal);
+  };
+  auto dispatch_metadata = [&](auto& result) -> checked {
+    const auto id = parse_decimal(ref_of(payload.references, "dispatch"));
+    if (!id || !rows.dispatches.contains(*id))
       return std::unexpected(corrupt());
-    if (request.operation == "checkpoint" && !hist::decode_checkpoint_result_v1(request.result))
+    const auto& dispatch = rows.dispatches.at(*id);
+    if (request.attachment != dispatch.packet)
       return std::unexpected(corrupt());
-    if (request.operation == "release" && !hist::decode_release_result_v1(request.result))
+    const auto packet = record_of(rows, dispatch.packet, 1);
+    if (!packet || (*packet)->codec != 1)
       return std::unexpected(corrupt());
-    auto saved = ::planar::engine::codec_decode(request.result);
-    if (!saved || !*saved || (*saved)->kind != value_kind::record)
+    const auto  decoded = hist::decode_record((*packet)->encoded);
+    const auto* file    = decoded ? std::get_if<hist::file_record>(&*decoded) : nullptr;
+    if (!file)
       return std::unexpected(corrupt());
-    const auto& fields = (*saved)->fields;
-    for (const auto& [key, expected] : std::map<std::string, std::string>{{"kind", request.operation},
-                                                                          {"ledger", metadata.identity},
-                                                                          {"request_id", request.request_id},
-                                                                          {"job", *event.job},
-                                                                          {"role", *event.role}}) {
-      auto found = fields.find(key);
-      if (found == fields.end() || !found->second || found->second->kind != value_kind::string ||
-          found->second->string != expected)
-        return std::unexpected(corrupt());
-    }
-    auto again = ::planar::engine::codec_encode(*saved);
-    if (!again || *again != request.result)
-      return std::unexpected(corrupt());
-    if (request.operation == "refresh") {
-      auto packet = parse_decimal(ref_of(payload.references, "packet"));
-      if (!packet || request.attachment != packet)
-        return std::unexpected(corrupt());
-    } else if (request.attachment)
+    result.dispatch_id   = std::to_string(dispatch.id);
+    result.work_fp       = "xxh3_128:" + hex_of(dispatch.work_fp);
+    result.render_digest = "xxh3_128:" + hex_of(dispatch.render_fp);
+    result.bytes         = file->payload.size();
+    return {};
+  };
+  std::optional<std::string> checkpoint;
+  if (has_ref(payload.references, "checkpoint"))
+    checkpoint = ref_of(payload.references, "checkpoint");
+  if (request.operation == "refresh") {
+    hist::refresh_result_v1 expected;
+    identity(expected);
+    expected.revision      = std::to_string(*event.revision);
+    expected.checkpoint    = checkpoint;
+    expected.drift_cleared = !rows.transitions[event.seq - 1].empty();
+    if (auto ok = dispatch_metadata(expected); !ok)
+      return ok;
+    auto encoded = hist::encode_refresh_result_v1(expected);
+    if (!encoded || *encoded != request.result)
       return std::unexpected(corrupt());
     return {};
   }
-  // claim and takeover: the saved result names the run and its token, and the request names the packet record.
-  auto dispatch_ref = parse_decimal(ref_of(payload.references, "dispatch"));
-  if (!dispatch_ref || !rows.dispatches.contains(*dispatch_ref))
-    return std::unexpected(corrupt());
-  const auto& dispatch = rows.dispatches.at(*dispatch_ref);
-  if (!request.attachment || *request.attachment != dispatch.packet)
-    return std::unexpected(corrupt());
-  const auto                   run     = rows.runs.at(*event.run);
-  const auto                   ordinal = generation_of(rows, run.generation)->ordinal;
+  if (request.operation == "checkpoint") {
+    if (!checkpoint || request.attachment)
+      return std::unexpected(corrupt());
+    hist::checkpoint_result_v1 expected;
+    identity(expected);
+    expected.checkpoint = *checkpoint;
+    expected.event      = std::to_string(event.seq);
+    auto encoded        = hist::encode_checkpoint_result_v1(expected);
+    if (!encoded || *encoded != request.result)
+      return std::unexpected(corrupt());
+    return {};
+  }
+  if (request.operation == "release") {
+    const auto& transitions = rows.transitions[event.seq - 1];
+    if (request.attachment || transitions.empty())
+      return std::unexpected(corrupt());
+    hist::release_result_v1 expected;
+    identity(expected);
+    expected.state      = event.type == "run_released" ? "released" : "interrupted";
+    expected.role_state = transitions.front().after_state;
+    expected.event      = std::to_string(event.seq);
+    expected.checkpoint = checkpoint;
+    auto encoded        = hist::encode_release_result_v1(expected);
+    if (!encoded || *encoded != request.result)
+      return std::unexpected(corrupt());
+    return {};
+  }
+  hist::claim_result_v1 expected;
+  expected.ledger     = metadata.identity;
+  expected.request_id = request.request_id;
+  expected.job        = *event.job;
+  expected.role       = *event.role;
+  expected.revision   = std::to_string(*event.revision);
+  expected.run_id     = std::to_string(run.id);
+  expected.generation = std::to_string(generation->ordinal);
   std::array<std::uint8_t, 16> secret{};
   for (std::size_t i = 0; i < secret.size(); ++i)
     secret[i] = static_cast<std::uint8_t>(run.secret[i]);
-  const auto token = format_run_token(run_token{run.id, ordinal, secret});
-  auto       saved = hist::decode_claim_result_v1(request.result);
-  if (!saved || saved->ledger != metadata.identity || saved->request_id != request.request_id || saved->job != *event.job ||
-      saved->role != *event.role || saved->revision != std::to_string(*event.revision) ||
-      saved->run_id != std::to_string(run.id) || saved->generation != std::to_string(ordinal) || saved->token != token ||
-      saved->dispatch_id != std::to_string(dispatch.id))
+  expected.token = format_run_token(run_token{run.id, generation->ordinal, secret});
+  if (event.type == "run_taken_over")
+    expected.previous_run = ref_of(payload.references, "previous_run");
+  if (auto ok = dispatch_metadata(expected); !ok)
+    return ok;
+  auto encoded = hist::encode_claim_result_v1(expected);
+  if (!encoded || *encoded != request.result)
     return std::unexpected(corrupt());
-  if (event.type == "run_taken_over") {
-    if (!saved->previous_run || *saved->previous_run != ref_of(payload.references, "previous_run"))
-      return std::unexpected(corrupt());
-  } else if (saved->previous_run) {
-    return std::unexpected(corrupt());
-  }
   return {};
 }
 
@@ -1383,10 +1438,17 @@ checked replay_events(const ledger_rows& rows, const execution_metadata& metadat
           return std::unexpected(corrupt());
         if (event.type == "run_released" || event.type == "run_interrupted") {
           auto reason = event.type == "run_released" ? "released" : "interrupted";
-          if (transitions.size() != 1 || transitions[0].job != *event.job || transitions[0].role != *event.role ||
+          if (transitions.empty() || transitions[0].job != *event.job || transitions[0].role != *event.role ||
               transitions[0].reason != reason || transitions[0].after_state == "running" ||
               transitions[0].after_state == "retired")
             return std::unexpected(corrupt());
+          for (std::size_t i = 1; i < transitions.size(); ++i) {
+            const auto& t = transitions[i];
+            if (t.job != *event.job || t.role == *event.role || t.before_state != "blocked" ||
+                t.reason != "prerequisite_available" || t.after_drifted ||
+                (t.after_state != "ready" && t.after_state != "done" && t.after_state != "stale"))
+              return std::unexpected(corrupt());
+          }
         }
         if (event.type == "run_refreshed") {
           auto id = parse_decimal(ref_of(payload->references, "dispatch"));
@@ -2100,7 +2162,391 @@ value_result<execution_snapshot> verify_rows(connection& db, const execution_met
   return snapshot;
 }
 
+bool is_identifier(std::string_view text);
+
+// Reconstruct every retained check response from its rows, including historical reservations.
+checked verify_check_results(connection& db, const ledger_rows& rows, std::string_view identity) {
+  auto same = [](const value_ptr& a, const value_ptr& b) {
+    if (!a || !b)
+      return false;
+    auto x = canonical_encode(a), y = canonical_encode(b);
+    return x && y && *x == *y;
+  };
+  auto field = [](const value_ptr& v, std::string_view name) -> value_ptr {
+    if (!v || v->kind != value_kind::record)
+      return {};
+    auto i = v->fields.find(std::string(name));
+    return i == v->fields.end() ? value_ptr{} : i->second;
+  };
+  return for_each(
+      db,
+      "SELECT r.id,r.run_id,r.opened_seq,r.request_id,s.state,s.last_seq FROM reservations r JOIN reservation_state s ON "
+      "s.reservation_id=r.id",
+      [&](row_reader& q) -> checked {
+        auto id = q.id(0), run = q.id(1), opened = q.id(2), last = q.id(5);
+        auto request = q.text(3), state = q.text(4);
+        if (state == "open")
+          return {};
+        if (!rows.runs.contains(run) || last == 0 || last > rows.events.size())
+          return std::unexpected(corrupt());
+        const auto& g     = rows.generations.at(rows.runs.at(run).generation);
+        const auto& event = rows.events[last - 1];
+        if (event.run != run || event.generation != g.id || !event.request_id)
+          return std::unexpected(corrupt());
+        auto payload = hist::decode_event_payload_v2(event.type, event.payload);
+        if (!payload || ref_of(payload->references, "reservation") != std::to_string(id))
+          return std::unexpected(corrupt());
+        const dispatch_entry* dispatch = nullptr;
+        for (const auto& [_, d] : rows.dispatches)
+          if (d.run == run && d.seq < opened && (!dispatch || d.seq > dispatch->seq))
+            dispatch = &d;
+        if (!dispatch)
+          return std::unexpected(corrupt());
+        auto decoded = hist::decode_work_exec_v1(rows.records.at(dispatch->work).canonical);
+        if (!decoded)
+          return std::unexpected(corrupt());
+        auto                                          work = *decoded;
+        std::set<std::pair<std::string, std::string>> expected, actual;
+        for (const auto& u : field(work, "units")->items) {
+          auto name = u->kind == value_kind::string ? u : field(u, "id");
+          if (!name || name->kind != value_kind::string)
+            return std::unexpected(corrupt());
+          expected.emplace(name->string, "planar.boundary_v1");
+        }
+        for (const auto& e : field(work, "effective_checks")->items) {
+          auto w = field(e, "work"), checks = field(e, "checks");
+          if (!w || !checks || w->kind != value_kind::string || checks->kind != value_kind::list)
+            return std::unexpected(corrupt());
+          for (const auto& c : checks->items) {
+            if (c->kind != value_kind::string || !expected.emplace(w->string, c->string).second)
+              return std::unexpected(corrupt());
+          }
+        }
+        // Check vectors are per consuming work, including grouped internal producers.
+        std::set<std::string>                                                own, observed_members;
+        std::map<std::pair<std::string, std::string>, std::set<std::string>> vector_members;
+        for (const auto& pair : expected) {
+          if (pair.second == "planar.boundary_v1")
+            own.insert(pair.first);
+        }
+        observed_members  = own;
+        auto declarations = field(work, "checks"), dependencies = field(work, "dependencies");
+        if (!declarations || declarations->kind != value_kind::list || !dependencies || dependencies->kind != value_kind::list)
+          return std::unexpected(corrupt());
+        for (const auto& pair : expected) {
+          auto& targets = vector_members[pair];
+          targets.insert(pair.first);
+          if (pair.second == "planar.boundary_v1")
+            continue;
+          value_ptr declaration;
+          for (const auto& d : declarations->items)
+            if (same(field(d, "id"), text_node(pair.second)))
+              declaration = d;
+          auto inputs = field(declaration, "inputs");
+          if (!inputs || inputs->kind != value_kind::list)
+            return std::unexpected(corrupt());
+          bool wants_vector = false;
+          for (const auto& input : inputs->items)
+            if (same(input, text_node("output_vector")))
+              wants_vector = true;
+          if (wants_vector)
+            for (const auto& d : dependencies->items) {
+              if (same(field(d, "consumer"), text_node(pair.first)) && same(field(d, "phase"), text_node("complete"))) {
+                auto producer = field(d, "producer");
+                if (!producer || producer->kind != value_kind::string || !is_identifier(producer->string))
+                  return std::unexpected(corrupt());
+                targets.insert(producer->string);
+              }
+            }
+          observed_members.insert(targets.begin(), targets.end());
+        }
+        std::map<std::string, std::string> observed_outputs;
+        if (state == "completed") {
+          auto oid = parse_decimal(ref_of(payload->references, "observation"));
+          if (!oid || !rows.records.contains(*oid))
+            return std::unexpected(corrupt());
+          auto observation = hist::decode_check_value(hist::codec_check_observation_v1, rows.records.at(*oid).canonical);
+          auto units       = observation ? field(*observation, "units") : value_ptr{};
+          if (!units || units->kind != value_kind::list)
+            return std::unexpected(corrupt());
+          std::string previous;
+          for (const auto& unit : units->items) {
+            auto name = field(unit, "work"), output = field(unit, "output");
+            if (!unit || unit->kind != value_kind::record || unit->fields.size() != 2 || !name || !output ||
+                name->kind != value_kind::string || output->kind != value_kind::string || !is_identifier(name->string) ||
+                name->string <= previous || !digest_bytes_of_text(output->string))
+              return std::unexpected(corrupt());
+            previous = name->string;
+            observed_outputs.emplace(name->string, output->string);
+          }
+          std::set<std::string> actual_observed;
+          for (const auto& [name, _] : observed_outputs)
+            actual_observed.insert(name);
+          if (actual_observed != observed_members)
+            return std::unexpected(corrupt());
+        }
+        std::vector<value_ptr> evidence;
+        auto                   scanned = for_each(
+            db,
+            std::format("SELECT "
+                        "id,work,\"check\",outcome,reason,matched,exit_status,duration_ms,output_bytes,output_truncated,output_"
+                        "id,seq,definition_id,vector_id FROM evidence WHERE reservation_id={} ORDER BY work,\"check\"",
+                        id),
+            [&](row_reader& e) -> checked {
+              auto eid = e.id(0);
+              auto w = e.text(1), c = e.text(2), outcome = e.text(3), reason = e.text(4);
+              auto matched = e.optional_number(5), exit = e.optional_number(6);
+              auto duration = e.number(7), bytes = e.number(8), truncated = e.number(9);
+              auto output = e.optional_id(10);
+              auto seq = e.id(11), definition = e.id(12);
+              auto vector_id = e.id(13);
+              if (!rows.records.contains(vector_id))
+                return std::unexpected(corrupt());
+              auto vector = hist::decode_check_value(hist::codec_output_vector_v1, rows.records.at(vector_id).canonical);
+              if (!vector)
+                return std::unexpected(corrupt());
+              std::set<std::string> actual_targets;
+              for (const auto& target : field(*vector, "targets")->items) {
+                auto name = field(target, "work"), output = field(target, "output");
+                if (!name || !output || !observed_outputs.contains(name->string) ||
+                    observed_outputs.at(name->string) != output->string)
+                  return std::unexpected(corrupt());
+                actual_targets.insert(name->string);
+              }
+              auto expected_targets = vector_members.find({w, c});
+              if (expected_targets == vector_members.end() || actual_targets != expected_targets->second)
+                return std::unexpected(corrupt());
+              bool reason_ok =
+                  (outcome == "pass" && reason == "passed") || (outcome == "inconclusive" && reason == "input_changed") ||
+                  (outcome == "fail" &&
+                   (reason == "exit_status" || reason == "zero_selected" || reason == "missing_executable" ||
+                    reason == "timeout" || reason == "output_limit" || reason == "malformed_result" || reason == "boundary"));
+              if (!reason_ok || seq != last || duration < 0 || bytes < 0 || (truncated != 0 && truncated != 1) ||
+                  !actual.emplace(w, c).second || !rows.records.contains(definition))
+                return std::unexpected(corrupt());
+              auto d = hist::decode_check_value(hist::codec_check_definition_v1, rows.records.at(definition).canonical);
+              if (!d || !same(field(*d, "work"), text_node(w)) || !same(field(*d, "check"), text_node(c)) ||
+                  !same(field(*d, "gate"), text_node(c == "planar.boundary_v1" ? "boundary_v1" : "registry")))
+                return std::unexpected(corrupt());
+              std::set<std::string> definition_keys{"version", "work", "check", "gate", "inputs"};
+              if (c == "planar.boundary_v1") {
+                definition_keys.insert({"cwd", "owned", "frozen", "excluded", "producers"});
+              } else {
+                definition_keys.insert({"registry", "toolchain", "command", "environment", "reserved", "cwd", "timeout_ms",
+                                        "max_output_bytes", "selection", "coverage"});
+              }
+              if ((*d)->fields.size() != definition_keys.size())
+                return std::unexpected(corrupt());
+              for (const auto& [name, _] : (*d)->fields)
+                if (!definition_keys.contains(name))
+                  return std::unexpected(corrupt());
+              if (c != "planar.boundary_v1") {
+                value_ptr declaration;
+                for (const auto& x : field(work, "checks")->items)
+                  if (same(field(x, "id"), text_node(c)))
+                    declaration = x;
+                if (!declaration)
+                  return std::unexpected(corrupt());
+                for (auto name : {"toolchain", "timeout_ms", "max_output_bytes", "selection", "inputs", "coverage"})
+                  if (!same(field(*d, name), field(declaration, name)))
+                    return std::unexpected(corrupt());
+              }
+              if (c == "planar.boundary_v1" && (exit || matched))
+                return std::unexpected(corrupt());
+              if (reason == "missing_executable" && exit)
+                return std::unexpected(corrupt());
+              evidence.push_back(record_node({{"evidence", text_node(std::to_string(eid))},
+                                              {"work", text_node(w)},
+                                              {"check", text_node(c)},
+                                              {"outcome", text_node(outcome)},
+                                              {"reason", text_node(reason)},
+                                              {"matched", text_node(matched ? std::to_string(*matched) : "none")},
+                                              {"exit_status", text_node(exit ? std::to_string(*exit) : "none")},
+                                              {"duration_ms", integer_node(duration)},
+                                              {"output_bytes", integer_node(bytes)},
+                                              {"output_truncated", bool_node(truncated != 0)},
+                                              {"output", text_node(output ? std::to_string(*output) : "none")}}));
+              return {};
+            });
+        if (!scanned)
+          return scanned;
+        if ((state == "completed" && actual != expected) || (state == "interrupted" && !actual.empty()))
+          return std::unexpected(corrupt());
+        value_ptr observation = text_node("none"), completion = text_node("none");
+        if (state == "completed") {
+          auto oid = parse_decimal(ref_of(payload->references, "observation"));
+          if (!oid || !rows.records.contains(*oid))
+            return std::unexpected(corrupt());
+          auto o = hist::decode_check_value(hist::codec_check_observation_v1, rows.records.at(*oid).canonical);
+          if (!o)
+            return std::unexpected(corrupt());
+          auto digest = hash_value("check_observation_v1", *o);
+          if (!digest)
+            return std::unexpected(corrupt());
+          observation = record_node(
+              {{"id", text_node(std::to_string(*oid))}, {"digest", text_node(*digest)}, {"units", field(*o, "units")}});
+          auto cid = payload->references.find("completion");
+          if (cid != payload->references.end()) {
+            auto n = parse_decimal(cid->second);
+            if (!n)
+              return std::unexpected(corrupt());
+            bool found = false;
+            auto check =
+                for_each(db, std::format("SELECT run_id,seq,dispatch_id,work_fp,observation_id FROM completions WHERE id={}", *n),
+                         [&](row_reader& c) -> checked {
+                           if (c.id(0) != run || c.id(1) != last || c.id(2) != dispatch->id || c.blob(3) != dispatch->work_fp ||
+                               c.id(4) != *oid)
+                             return std::unexpected(corrupt());
+                           found = true;
+                           return {};
+                         });
+            if (!check || !found)
+              return std::unexpected(corrupt());
+            std::vector<value_ptr> publications;
+            check = for_each(
+                db, std::format("SELECT id,work,facet,semantic FROM publications WHERE completion_id={} ORDER BY work,facet", *n),
+                [&](row_reader& p) -> checked {
+                  publications.push_back(record_node({{"publication", text_node(std::to_string(p.id(0)))},
+                                                      {"work", text_node(p.text(1))},
+                                                      {"facet", text_node(p.text(2))},
+                                                      {"semantic", text_node("xxh3_128:" + hex_of(p.blob(3)))}}));
+                  return {};
+                });
+            if (!check)
+              return check;
+            completion = record_node({{"id", text_node(cid->second)},
+                                      {"work_fp", text_node("xxh3_128:" + hex_of(dispatch->work_fp))},
+                                      {"publications", list_node(std::move(publications))}});
+          }
+        }
+        for (const auto& name : std::set<std::string>{request, *event.request_id}) {
+          auto r = rows.requests.find(name);
+          if (r == rows.requests.end())
+            return std::unexpected(corrupt());
+          auto saved = codec_decode(r->second.result);
+          if (!saved)
+            return std::unexpected(corrupt());
+          auto withheld = field(*saved, "withheld");
+          if (!withheld || withheld->kind != value_kind::list)
+            return std::unexpected(corrupt());
+          std::string prior;
+          for (const auto& reason : withheld->items) {
+            if (reason->kind != value_kind::string || reason->string <= prior)
+              return std::unexpected(corrupt());
+            prior = reason->string;
+            if (prior != "input_changed" && prior != "boundary" && prior != "check_failed" && prior != "drifted" &&
+                prior != "start_prerequisite" && prior != "complete_prerequisite" && prior != "retry_exhausted")
+              return std::unexpected(corrupt());
+          }
+          bool completed = completion->kind == value_kind::record;
+          if ((completed || state == "interrupted") && !withheld->items.empty())
+            return std::unexpected(corrupt());
+          auto expected_response = record_node({{"version", integer_node(1)},
+                                                {"kind", text_node("check")},
+                                                {"ledger", text_node(identity)},
+                                                {"request_id", text_node(*event.request_id)},
+                                                {"job", text_node(g.job)},
+                                                {"role", text_node(g.role)},
+                                                {"run", record_node({{"id", text_node(std::to_string(run))},
+                                                                     {"generation", text_node(std::to_string(g.ordinal))}})},
+                                                {"reservation", text_node(std::to_string(id))},
+                                                {"outcome", text_node(state == "interrupted" ? "interrupted"
+                                                                      : completed            ? "completed"
+                                                                                             : "recorded")},
+                                                {"withheld", withheld},
+                                                {"evidence", list_node(evidence)},
+                                                {"observation", observation},
+                                                {"completion", completion}});
+          if (!same(*saved, expected_response))
+            return std::unexpected(corrupt());
+        }
+        return {};
+      });
+}
+
+// Publication integrity uses the dispatch revision, never the active declaration or the live checkout.
+// W lists consumed facets only, so an own facet's declaration comes from its retained interpretation.
+checked verify_publication(const ledger_rows& rows, std::uint64_t dispatch_id, std::string_view work_id,
+                           std::string_view facet_id, std::uint64_t payload_id, std::string_view semantic) {
+  auto field = [](const value_ptr& v, std::string_view key) -> value_ptr {
+    if (!v || v->kind != value_kind::record)
+      return {};
+    auto i = v->fields.find(std::string(key));
+    return i == v->fields.end() ? value_ptr{} : i->second;
+  };
+  auto is_text = [](const value_ptr& v, std::string_view text) {
+    return v && v->kind == value_kind::string && v->string == text;
+  };
+  auto d = rows.dispatches.find(dispatch_id);
+  if (d == rows.dispatches.end())
+    return std::unexpected(corrupt());
+  auto r = rows.revisions.find(d->second.revision);
+  if (r == rows.revisions.end() || !rows.records.contains(d->second.work) || !rows.records.contains(r->second.interpretation))
+    return std::unexpected(corrupt());
+  auto decoded_work   = hist::decode_work_exec_v1(rows.records.at(d->second.work).canonical);
+  auto interpretation = canonical_decode(rows.records.at(r->second.interpretation).canonical);
+  if (!decoded_work || !interpretation)
+    return std::unexpected(corrupt());
+  auto work  = *decoded_work;
+  auto units = field(work, "units"), root = field(work, "root");
+  auto spec   = field(field(*interpretation, "bundle"), "spec");
+  auto facets = field(spec, "facets");
+  if (!units || units->kind != value_kind::list || !root || root->kind != value_kind::string || !facets ||
+      facets->kind != value_kind::list || !field(spec, "id") || !is_text(field(work, "spec"), field(spec, "id")->string))
+    return std::unexpected(corrupt());
+  bool owns = false;
+  for (const auto& u : units->items)
+    owns = owns || is_text(u->kind == value_kind::string ? u : field(u, "id"), work_id);
+  if (!owns)
+    return std::unexpected(corrupt());
+  value_ptr declaration;
+  for (const auto& f : facets->items)
+    if (is_text(field(f, "id"), facet_id)) {
+      if (declaration)
+        return std::unexpected(corrupt());
+      declaration = f;
+    }
+  auto paths = field(declaration, "paths");
+  if (!is_text(field(declaration, "producer"), work_id) || !paths || paths->kind != value_kind::list || paths->items.empty())
+    return std::unexpected(corrupt());
+  auto files = read_tree(rows, payload_id, hist::tree_profile::source);
+  if (!files || files->size() != paths->items.size())
+    return std::unexpected(corrupt());
+  std::vector<value_ptr> entries;
+  std::string            previous;
+  std::uint64_t          total = 0;
+  for (std::size_t i = 0; i < files->size(); ++i) {
+    const auto& file = (*files)[i];
+    const auto& path = paths->items[i];
+    if (!is_text(path, file.path) || file.path <= previous || (file.mode != 420 && file.mode != 493))
+      return std::unexpected(corrupt());
+    previous = file.path;
+    total += file.payload.size();
+    if (total > 4194304)
+      return std::unexpected(corrupt());
+    auto content = file_digest(file.payload);
+    if (!content)
+      return std::unexpected(corrupt());
+    entries.push_back(record_node({{"root", root},
+                                   {"path", text_node(file.path)},
+                                   {"kind", text_node("file")},
+                                   {"mode", text_node(file.mode == 493 ? "0755" : "0644")},
+                                   {"size", integer_node(file.payload.size())},
+                                   {"content", text_node(*content)}}));
+  }
+  auto computed = hash_value("facet_v1", record_node({{"kind", text_node("files")},
+                                                      {"normalizer", text_node("exact_bytes_v1")},
+                                                      {"root", root},
+                                                      {"paths", paths},
+                                                      {"entries", list_node(std::move(entries))}}));
+  if (!computed || *computed != "xxh3_128:" + hex_of(semantic))
+    return std::unexpected(corrupt());
+  return {};
+}
+
 checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledger_rows& rows) {
+  if (auto verified = verify_check_results(db, rows, snapshot.identity); !verified)
+    return verified;
   auto value_record = [&](std::uint64_t id, std::string_view codec) -> value_result<value_ptr> {
     auto record = rows.records.find(id);
     if (record == rows.records.end() || record->second.value_codec != codec)
@@ -2153,6 +2599,10 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
                         });
   if (!count)
     return count;
+  auto owns = [&](const execution_role& role, std::string_view work) {
+    return role.job == snapshot.active_job && role.state != "retired" && role.structure.kind == "worker" &&
+           std::ranges::find(role.structure.work, work) != role.structure.work.end();
+  };
   std::map<std::pair<std::string, std::string>, execution_evidence> latest;
   auto                                                              evidence =
       for_each(db,
@@ -2193,7 +2643,7 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
                    return std::unexpected(corrupt());
                  const auto role =
                      std::ranges::find_if(snapshot.roles, [&](const auto& r) { return r.job == e.job && r.role == e.role; });
-                 if (role != snapshot.roles.end() && e.job == snapshot.active_job) {
+                 if (role != snapshot.roles.end() && owns(*role, e.work)) {
                    auto lineage = lineage_generations(db, role->generation_id);
                    if (!lineage)
                      return std::unexpected(lineage.error());
@@ -2207,11 +2657,10 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
   for (auto& [key, e] : latest)
     snapshot.evidence.push_back(std::move(e));
   std::map<std::string, execution_observed> observed;
-  for (const auto& c : snapshot.completions)
-    for (const auto& u : c.units)
-      if (!observed.contains(u.work) || observed[u.work].seq < c.seq)
-        observed[u.work] = {u.work, u.output, c.seq};
-  // Failed and inconclusive check observations also replace the latest observed own outputs.
+  // Every completion is verified against its check_recorded event. Scan those events,
+  // including failed/inconclusive checks, once in order and select only original own
+  // units of the current owning lineage. Completion observations also contain consumed
+  // producer units and cannot independently seed authoritative observed outputs.
   for (const auto& event : rows.events)
     if (event.type == "check_recorded") {
       auto payload = hist::decode_event_payload_v2(event.type, event.payload);
@@ -2233,7 +2682,7 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
         continue;
       const auto selected_role =
           std::ranges::find_if(snapshot.roles, [&](const auto& r) { return r.job == gen->job && r.role == gen->role; });
-      if (selected_role == snapshot.roles.end())
+      if (selected_role == snapshot.roles.end() || selected_role->state == "retired")
         continue;
       auto lineage = lineage_generations(db, selected_role->generation_id);
       if (!lineage)
@@ -2250,14 +2699,16 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
         if (!u || u->kind != value_kind::record || !u->fields.contains("work") || !u->fields.contains("output"))
           return std::unexpected(corrupt());
         auto work = u->fields.at("work")->string;
-        if (std::ranges::find(shape->work, work) != shape->work.end())
+        if (owns(*selected_role, work) && std::ranges::find(shape->work, work) != shape->work.end())
           observed[work] = {work, u->fields.at("output")->string, event.seq};
       }
     }
   for (auto& [key, o] : observed)
     snapshot.observed.push_back(std::move(o));
   auto publications =
-      for_each(db, "SELECT p.id,p.completion_id,p.work,p.facet,p.semantic,p.payload_id FROM publications p ORDER BY p.id",
+      for_each(db,
+               "SELECT p.id,p.completion_id,p.work,p.facet,p.semantic,p.payload_id,c.dispatch_id FROM publications p "
+               "LEFT JOIN completions c ON c.id=p.completion_id ORDER BY p.id",
                [&](row_reader& q) -> checked {
                  execution_publication p;
                  p.publication = q.id(0);
@@ -2266,11 +2717,18 @@ checked read_check_rows(connection& db, execution_snapshot& snapshot, const ledg
                  p.facet       = q.text(3);
                  auto semantic = q.blob(4);
                  auto payload  = q.id(5);
+                 auto dispatch = q.id(6);
+                 if (auto valid = verify_publication(rows, dispatch, p.work, p.facet, payload, semantic); !valid)
+                   return valid;
                  if (semantic.size() != 16 || !rows.records.contains(payload) || rows.records.at(payload).kind != 2)
                    return std::unexpected(corrupt());
                  p.semantic = "xxh3_128:" + hex_of(semantic);
                  auto c     = std::ranges::find(snapshot.completions, p.completion, &execution_completion::id);
                  if (c == snapshot.completions.end())
+                   return {};
+                 const auto role = std::ranges::find_if(
+                     snapshot.roles, [&](const auto& r) { return r.job == c->job && r.role == c->role && owns(r, p.work); });
+                 if (role == snapshot.roles.end())
                    return {};
                  p.job      = c->job;
                  p.role     = c->role;
@@ -2928,9 +3386,17 @@ checked check_shape(const execution_change& change) {
     if (op == "release" && (change.release_reason != "released" && change.release_reason != "interrupted"))
       return std::unexpected(invalid_error());
     if (op == "release" &&
-        (change.transitions.size() != 1 || change.transitions[0].after_state == "running" ||
-         change.transitions[0].after_state == "retired" || change.transitions[0].reason != change.release_reason))
+        (change.transitions.empty() || change.transitions[0].job != change.job || change.transitions[0].role != change.role ||
+         change.transitions[0].after_state == "running" || change.transitions[0].after_state == "retired" ||
+         change.transitions[0].reason != change.release_reason))
       return std::unexpected(invalid_error());
+    if (op == "release")
+      for (std::size_t i = 1; i < change.transitions.size(); ++i) {
+        const auto& t = change.transitions[i];
+        if (t.job != change.job || t.role == change.role || t.before_state != "blocked" || t.reason != "prerequisite_available" ||
+            t.after_drifted || (t.after_state != "ready" && t.after_state != "done" && t.after_state != "stale"))
+          return std::unexpected(invalid_error());
+      }
   } else if (change.run || change.checkpoint || !change.run_token_text.empty() || !change.release_reason.empty())
     return std::unexpected(invalid_error());
 
@@ -3355,7 +3821,7 @@ value_result<std::uint64_t> generation_ordinal(connection& db, const std::map<st
   return ordinal;
 }
 
-/// The first failing claim or takeover target member maps to the claim or takeover category (Q-PREC option A, D11).
+/// Map a failed target member to claim conflict or loss of the named run (Q-PREC, R16 token refusal step 10).
 value_result<execution_error> target_conflict(connection& db, const execution_change& change,
                                               const std::optional<role_row>& row) {
   if (change.operation == "claim") {
@@ -3366,8 +3832,9 @@ value_result<execution_error> target_conflict(connection& db, const execution_ch
     }
     return failure(execution_error_code::state_conflict);
   }
-  if (row && change.previous_run && row->run != change.previous_run) {
-    auto state = locked_run_state(db, *change.previous_run);
+  const auto named_run = change.operation == "takeover" ? change.previous_run : change.run;
+  if (named_run && (!row || row->run != named_run)) {
+    auto state = locked_run_state(db, *named_run);
     if (!state)
       return std::unexpected(state.error());
     if (*state) {
@@ -3415,8 +3882,9 @@ checked check_preconditions(connection& db, const execution_change& change, cons
           return std::unexpected(failure(execution_error_code::state_conflict));
         break;
       }
-      const bool target = (change.operation == "claim" || change.operation == "takeover") && member.job == change.job &&
-                          member.role == change.role;
+      const bool target = (change.operation == "claim" || change.operation == "takeover" || change.operation == "checkpoint" ||
+                           change.operation == "refresh" || change.operation == "release") &&
+                          member.job == change.job && member.role == change.role;
       if (!*row || (*row)->state != member.state || (*row)->drifted != member.drifted || (*row)->run != member.run) {
         if (!target)
           return std::unexpected(failure(execution_error_code::state_conflict));
@@ -4468,7 +4936,7 @@ value_result<check_run_row> check_run_locked(connection& db, std::uint64_t run, 
   }
   return out;
 }
-checked check_snapshot_locked(connection& db, const execution_snapshot& snapshot, bool facts) {
+checked check_identity_locked(connection& db, const execution_snapshot& snapshot) {
   auto id = first_row(db, "SELECT identity FROM ledger_meta");
   if (!id)
     return std::unexpected(id.error());
@@ -4480,6 +4948,11 @@ checked check_snapshot_locked(connection& db, const execution_snapshot& snapshot
     return ok;
   if (identity != snapshot.identity)
     return std::unexpected(failure(execution_error_code::path_denied));
+  return {};
+}
+checked check_snapshot_locked(connection& db, const execution_snapshot& snapshot, bool facts) {
+  if (auto ok = check_identity_locked(db, snapshot); !ok)
+    return ok;
   auto head = read_head(db);
   if (!head)
     return std::unexpected(head.error());
@@ -4667,6 +5140,8 @@ complete_check(const std::filesystem::path& path, const execution_snapshot& snap
   auto  tx = db.begin(true);
   if (!tx)
     return std::unexpected(map_sqlite(tx.error()));
+  if (auto ok = check_identity_locked(db, snapshot); !ok)
+    return std::unexpected(ok.error());
   auto run = check_run_locked(db, token->run_id, token);
   if (!run)
     return std::unexpected(run.error());
@@ -4820,7 +5295,7 @@ complete_check(const std::filesystem::path& path, const execution_snapshot& snap
         auto         digest = hist::digest_record(record);
         if (!frame || !digest)
           return std::unexpected(invalid_error());
-        auto id = intern(db, artifact{2, 1, *frame, digest_bytes(*digest), "directory"});
+        auto id = intern_codec1(db, record);
         if (!id)
           return std::unexpected(id.error());
         return std::pair(*id, *digest);

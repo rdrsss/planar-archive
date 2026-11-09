@@ -308,7 +308,7 @@ struct revision_ids {
 
 /// Insert the five format2-shaped records of one revision. Stdlib content is constant across seeds, so every seed
 /// carries the same stdlib digest; the source and interpretation carry the tag so distinct seeds differ.
-revision_ids seed_revision(const std::filesystem::path& path, std::string_view tag) {
+revision_ids seed_revision(const std::filesystem::path& path, std::string_view tag, bool with_facet = false) {
   auto db          = open_raw(path);
   auto lib_file    = store_file(db, "stdlib body v1");
   auto stdlib      = store_directory(db, {child{"stdlib.lua", hist::record_kind::file, lib_file}});
@@ -318,8 +318,18 @@ revision_ids seed_revision(const std::filesystem::path& path, std::string_view t
   auto registry    = store_directory(db, {child{"input.json", hist::record_kind::file, input_file}});
   // L2 residuals: the interpretation embeds the versions value and names the ledger workspace.
   const auto versions_value = vrec({{"stdlib_digest", vstr(digest_hex(stdlib.digest))}});
-  auto       interpretation = store_value(db, seeded_interpretation(tag, versions_value));
-  auto       versions       = store_value(db, versions_value);
+  auto       interpreted    = seeded_interpretation(tag, versions_value);
+  if (with_facet) {
+    auto value             = std::make_shared<planar::engine::value>(*interpreted);
+    auto bundle            = std::make_shared<planar::engine::value>(*value->fields.at("bundle"));
+    bundle->fields["spec"] = vrec(
+        {{"id", vstr("spec_one")},
+         {"facets", vlist({vrec({{"id", vstr("api")}, {"producer", vstr("unit_one")}, {"paths", vstrs({"include/api.h"})}})})}});
+    value->fields["bundle"] = bundle;
+    interpreted             = value;
+  }
+  auto interpretation = store_value(db, interpreted);
+  auto versions       = store_value(db, versions_value);
   return revision_ids{source.id, registry.id, stdlib.id, interpretation.id, versions.id};
 }
 
@@ -751,10 +761,10 @@ execution_commit_result commit_claim(const std::filesystem::path& path, std::str
 }
 
 /// A fresh ledger with one accepted revision (seeded "one") and job alpha activated: builder ready, reviewer blocked.
-std::filesystem::path activated_ledger(const scratch& dir) {
+std::filesystem::path activated_ledger(const scratch& dir, bool with_facet = false) {
   const auto path = dir.ledger();
   REQUIRE(initialize_format3(path, workspace_name).has_value());
-  const auto ids = seed_revision(path, "one");
+  const auto ids = seed_revision(path, "one", with_facet);
   commit_load(path, "load-1", ids);
   commit_activate(path, "activate-1", "alpha", standard_roles());
   return path;
@@ -3705,22 +3715,29 @@ TEST_CASE("R17 ledger reservation survives restart and recovery closes both requ
   REQUIRE(replay->state == request_state::replay);
   REQUIRE(replay->result == recovered->saved_result);
   REQUIRE(authorize_run_token(path, *claim.token));
-  auto file = open_existing(path, ledger_access::read_only);
-  REQUIRE(file);
-  for (auto seq : {reserved->opened_seq, recovered->event_seq}) {
-    hist::history_query query;
-    query.selector = hist::history_selector::event;
-    query.id       = seq;
-    auto h         = hist::read_history(*file, query);
-    REQUIRE(h);
-    const auto& expansion = (*h)->fields.at("data")->fields.at("execution");
-    CHECK(expansion->fields.at("reservation")->fields.at("id")->string == std::to_string(reserved->id));
+  {
+    auto file = open_existing(path, ledger_access::read_only);
+    REQUIRE(file);
+    for (auto seq : {reserved->opened_seq, recovered->event_seq}) {
+      hist::history_query query;
+      query.selector = hist::history_selector::event;
+      query.id       = seq;
+      auto h         = hist::read_history(*file, query);
+      REQUIRE(h);
+      const auto& expansion = (*h)->fields.at("data")->fields.at("execution");
+      CHECK(expansion->fields.at("reservation")->fields.at("id")->string == std::to_string(reserved->id));
+    }
+  }
+  SECTION("C02 malformed interrupted response") {
+    corrupt(path,
+            {"UPDATE requests SET result=CAST('{\"kind\":\"check\"}' AS BLOB) WHERE operation IN ('check','check-recover')"});
+    expect_corrupt(path);
   }
 }
 
 TEST_CASE("R17 ledger completion retains evidence and changes run to completed atomically") {
   scratch dir;
-  auto    path  = activated_ledger(dir);
+  auto    path  = activated_ledger(dir, true);
   auto    claim = commit_claim(path, "claim-check", "alpha", "builder");
   REQUIRE(claim.token);
   auto token = parse_run_token(*claim.token);
@@ -3734,7 +3751,7 @@ TEST_CASE("R17 ledger completion retains evidence and changes run to completed a
   auto reserved = reserve_check(path, snapshot_of(path), "check-1", "tester", request, *claim.token);
   REQUIRE(reserved);
   auto                   output = "xxh3_128:" + std::string(32, 'a');
-  auto                   units  = vlist({vrec({{"work", vstr("alpha_work")}, {"output", vstr(output)}})});
+  auto                   units  = vlist({vrec({{"work", vstr("unit_one")}, {"output", vstr(output)}})});
   execution_check_result result;
   result.recapture_matches = true;
   result.observation       = vrec({{"version", vint(1)},
@@ -3744,15 +3761,16 @@ TEST_CASE("R17 ledger completion retains evidence and changes run to completed a
                                    {"units", units},
                                    {"contracts", vlist({})}});
   execution_check_evidence evidence;
-  evidence.work       = "alpha_work";
+  evidence.work       = "unit_one";
   evidence.check      = "planar.boundary_v1";
   evidence.outcome    = "pass";
   evidence.reason     = "passed";
   evidence.vector     = vrec({{"version", vint(1)}, {"targets", units}});
   evidence.definition = vrec({{"version", vint(1)},
-                              {"work", vstr("alpha_work")},
+                              {"work", vstr("unit_one")},
                               {"check", vstr("planar.boundary_v1")},
                               {"gate", vstr("boundary_v1")},
+                              {"cwd", vrec({{"root", vstr("root")}})},
                               {"inputs", vstrs({"own_output", "output_vector"})},
                               {"owned", vstrs({"src/"})},
                               {"frozen", vlist({})},
@@ -3768,41 +3786,204 @@ TEST_CASE("R17 ledger completion retains evidence and changes run to completed a
                                .after_state    = "done",
                                .after_drifted  = false,
                                .reason         = "completed"};
-  auto                       completed = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
-  INFO((completed.has_value() ? -1 : static_cast<int>(completed.error().code)));
-  REQUIRE(completed);
-  auto saved_response = planar::engine::codec_decode(completed->saved_result);
-  REQUIRE(saved_response);
-  auto expected_observation_digest = hash_value("check_observation_v1", result.observation);
-  REQUIRE(expected_observation_digest);
-  CHECK((*saved_response)->fields.at("observation")->fields.at("digest")->string == *expected_observation_digest);
-  auto after = read_execution_snapshot(path);
-  INFO((after.has_value() ? -1 : static_cast<int>(after.error().code)));
-  REQUIRE(after);
-  REQUIRE(after->completions.size() == 1);
-  REQUIRE(after->evidence.size() == 1);
-  REQUIRE(after->reservations.empty());
-  auto authorization = authorize_run_token(path, *claim.token);
-  REQUIRE_FALSE(authorization);
-  REQUIRE(authorization.error().state == "completed");
-  auto recovery = read_recovery_records(path, "alpha", "builder");
-  REQUIRE(recovery);
-  REQUIRE(recovery->evidence.size() == 1);
-  CHECK(recovery->evidence[0]->fields.at("outcome")->string == "pass");
-  auto file = open_existing(path, ledger_access::read_only);
-  REQUIRE(file);
-  hist::history_query query;
-  query.selector = hist::history_selector::event;
-  query.id       = completed->event_seq;
-  auto expanded  = hist::read_history(*file, query);
-  REQUIRE(expanded);
-  const auto& details = (*expanded)->fields.at("data")->fields.at("execution");
-  CHECK(details->fields.at("evidence")->items.size() == 1);
-  CHECK(details->fields.contains("completion"));
-  CHECK(details->fields.contains("observation"));
-  query.selector   = hist::history_selector::request;
-  query.request_id = "check-1";
-  REQUIRE(hist::read_history(*file, query));
+  SECTION("C03 nonempty facet payload retains directory edges") {
+    auto content = planar::engine::file_digest("declaration");
+    REQUIRE(content);
+    auto facet = hash_value("facet_v1", vrec({{"kind", vstr("files")},
+                                              {"normalizer", vstr("exact_bytes_v1")},
+                                              {"root", vstr("root")},
+                                              {"paths", vstrs({"include/api.h"})},
+                                              {"entries", vlist({vrec({{"root", vstr("root")},
+                                                                       {"path", vstr("include/api.h")},
+                                                                       {"kind", vstr("file")},
+                                                                       {"mode", vstr("0644")},
+                                                                       {"size", vint(11)},
+                                                                       {"content", vstr(*content)}})})}}));
+    REQUIRE(facet);
+    result.publications.push_back({"unit_one", "api", *facet, {{"include/api.h", "declaration", 420}}});
+    auto published = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
+    REQUIRE(published);
+    auto after = snapshot_of(path);
+    REQUIRE(after.publications.size() == 1);
+    {
+      auto db = open_raw(path);
+      CHECK(int_of(db, "SELECT COUNT(*) FROM tree_edges WHERE parent_id=(SELECT payload_id FROM publications)") == 1);
+      CHECK(int_of(db, "SELECT COUNT(*) FROM tree_edges WHERE parent_id=(SELECT child_id FROM tree_edges WHERE parent_id=(SELECT "
+                       "payload_id FROM publications))") == 1);
+    }
+    SECTION("C06 retirement removes former lineage facts but keeps historical publication") {
+      const auto old_event = published->event_seq;
+      commit_with(path, [&](const execution_snapshot& s) {
+        auto change = load_change(s, "retire-builder", head_text(s), revision_input(seed_revision(path, "retired")));
+        change.transitions.push_back(execution_transition_input{.job            = "alpha",
+                                                                .role           = "builder",
+                                                                .before_state   = "done",
+                                                                .before_drifted = false,
+                                                                .after_state    = "retired",
+                                                                .after_drifted  = false,
+                                                                .reason         = "retired"});
+        settle_vector(change, s);
+        return change;
+      });
+      auto current = snapshot_of(path);
+      CHECK(current.completions.empty());
+      CHECK(current.publications.empty());
+      CHECK(current.observed.empty());
+      CHECK(current.evidence.empty());
+      {
+        auto db = open_raw(path);
+        CHECK(int_of(db, "SELECT COUNT(*) FROM completions") == 1);
+        CHECK(int_of(db, "SELECT COUNT(*) FROM publications") == 1);
+        CHECK(int_of(db, "SELECT COUNT(*) FROM evidence") == 1);
+      }
+      {
+        auto file = open_existing(path, ledger_access::read_only);
+        REQUIRE(file);
+        hist::history_query query;
+        query.selector = hist::history_selector::event;
+        query.id       = old_event;
+        auto history   = hist::read_history(*file, query);
+        REQUIRE(history);
+        CHECK((*history)->fields.at("data")->fields.at("execution")->fields.contains("completion"));
+      }
+      // Filtering a publication out of the current view must not skip historical integrity.
+      corrupt(path, {"UPDATE publications SET payload_id=(SELECT source_id FROM revisions LIMIT 1)"});
+      expect_corrupt(path);
+    }
+    SECTION("N8 unrelated complete directory") {
+      corrupt(path, {"UPDATE publications SET payload_id=(SELECT source_id FROM revisions LIMIT 1)"});
+      expect_corrupt(path);
+    }
+    SECTION("N8 semantic differs while saved response agrees") {
+      const auto changed = "xxh3_128:" + std::string(32, '4');
+      corrupt(
+          path,
+          {"UPDATE publications SET semantic=X'44444444444444444444444444444444'",
+           std::format("UPDATE requests SET result=CAST(replace(CAST(result AS TEXT),'{}','{}') AS BLOB) WHERE operation='check'",
+                       *facet, changed)});
+      expect_corrupt(path);
+    }
+  }
+  SECTION("C03 evidence-only rejects mismatched snapshot identity") {
+    auto before        = snapshot_of(path);
+    snapshot->identity = "different-ledger";
+    auto denied        = complete_check(path, *snapshot, reserved->id, *claim.token, result, false, {});
+    REQUIRE_FALSE(denied);
+    CHECK(denied.error().code == execution_error_code::path_denied);
+    auto after = snapshot_of(path);
+    CHECK(after.last_seq == before.last_seq);
+    CHECK(after.reservations.size() == before.reservations.size());
+  }
+  SECTION("C03 evidence-only keeps weaker revision and fact preconditions") {
+    snapshot->revision->id += 100;
+    for (auto& role : snapshot->roles)
+      role.fact_version += 100;
+    auto recorded = complete_check(path, *snapshot, reserved->id, *claim.token, result, false, {});
+    REQUIRE(recorded);
+    CHECK(snapshot_of(path).completions.empty());
+  }
+  SECTION("C03 boundary vector cannot name another work") {
+    result.evidence[0].vector =
+        vrec({{"version", vint(1)}, {"targets", vlist({vrec({{"work", vstr("other")}, {"output", vstr(output)}})})}});
+    auto denied = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
+    REQUIRE_FALSE(denied);
+    CHECK(snapshot_of(path).last_seq == snapshot->last_seq);
+  }
+  SECTION("C03 boundary vector output must match observation") {
+    result.evidence[0].vector =
+        vrec({{"version", vint(1)},
+              {"targets", vlist({vrec({{"work", vstr("unit_one")}, {"output", vstr("xxh3_128:" + std::string(32, 'b'))}})})}});
+    auto denied = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
+    REQUIRE_FALSE(denied);
+    CHECK(snapshot_of(path).last_seq == snapshot->last_seq);
+  }
+  SECTION("C03 observation requires exact own unit membership") {
+    auto changed             = std::make_shared<value>(*result.observation);
+    changed->fields["units"] = vlist({});
+    result.observation       = changed;
+    auto denied              = complete_check(path, *snapshot, reserved->id, *claim.token, result, false, {});
+    REQUIRE_FALSE(denied);
+    CHECK(snapshot_of(path).last_seq == snapshot->last_seq);
+  }
+  SECTION("C03 observation refuses duplicate units") {
+    auto changed             = std::make_shared<value>(*result.observation);
+    changed->fields["units"] = vlist({units->items[0], units->items[0]});
+    result.observation       = changed;
+    auto denied              = complete_check(path, *snapshot, reserved->id, *claim.token, result, false, {});
+    REQUIRE_FALSE(denied);
+    CHECK(snapshot_of(path).last_seq == snapshot->last_seq);
+  }
+  SECTION("C11 observation refuses an extra unused unit") {
+    const auto before        = snapshot_of(path);
+    auto       changed       = std::make_shared<value>(*result.observation);
+    changed->fields["units"] = vlist({units->items[0], vrec({{"work", vstr("unused")}, {"output", vstr(output)}})});
+    result.observation       = changed;
+    auto denied              = complete_check(path, *snapshot, reserved->id, *claim.token, result, false, {});
+    REQUIRE_FALSE(denied);
+    CHECK(denied.error().code == execution_error_code::invalid_change);
+    const auto after = snapshot_of(path);
+    CHECK(after.last_seq == before.last_seq);
+    CHECK(after.reservations.size() == before.reservations.size());
+    CHECK(after.completions.size() == before.completions.size());
+  }
+  SECTION("R17 completed result and retained corruption checks") {
+    auto completed = complete_check(path, *snapshot, reserved->id, *claim.token, result, true, {t});
+    INFO((completed.has_value() ? -1 : static_cast<int>(completed.error().code)));
+    REQUIRE(completed);
+    auto saved_response = planar::engine::codec_decode(completed->saved_result);
+    REQUIRE(saved_response);
+    auto expected_observation_digest = hash_value("check_observation_v1", result.observation);
+    REQUIRE(expected_observation_digest);
+    CHECK((*saved_response)->fields.at("observation")->fields.at("digest")->string == *expected_observation_digest);
+    auto after = read_execution_snapshot(path);
+    INFO((after.has_value() ? -1 : static_cast<int>(after.error().code)));
+    REQUIRE(after);
+    REQUIRE(after->completions.size() == 1);
+    REQUIRE(after->evidence.size() == 1);
+    REQUIRE(after->reservations.empty());
+    auto authorization = authorize_run_token(path, *claim.token);
+    REQUIRE_FALSE(authorization);
+    REQUIRE(authorization.error().state == "completed");
+    auto recovery = read_recovery_records(path, "alpha", "builder");
+    REQUIRE(recovery);
+    REQUIRE(recovery->evidence.size() == 1);
+    CHECK(recovery->evidence[0]->fields.at("outcome")->string == "pass");
+    {
+      auto file = open_existing(path, ledger_access::read_only);
+      REQUIRE(file);
+      hist::history_query query;
+      query.selector = hist::history_selector::event;
+      query.id       = completed->event_seq;
+      auto expanded  = hist::read_history(*file, query);
+      REQUIRE(expanded);
+      const auto& details = (*expanded)->fields.at("data")->fields.at("execution");
+      CHECK(details->fields.at("evidence")->items.size() == 1);
+      CHECK(details->fields.contains("completion"));
+      CHECK(details->fields.contains("observation"));
+      query.selector   = hist::history_selector::request;
+      query.request_id = "check-1";
+      REQUIRE(hist::read_history(*file, query));
+    }
+    SECTION("C02 malformed completed response") {
+      corrupt(path, {"UPDATE requests SET result=CAST('{\"kind\":\"check\"}' AS BLOB) WHERE request_id='check-1'"});
+      expect_corrupt(path);
+    }
+    SECTION("C02 invalid outcome reason") {
+      corrupt(path, {"UPDATE evidence SET reason='not_a_reason'"});
+      expect_corrupt(path);
+    }
+    SECTION("C03 invalid reason agrees with saved response") {
+      corrupt(
+          path,
+          {"UPDATE evidence SET reason='not_a_reason'",
+           R"sql(UPDATE requests SET result=CAST(replace(CAST(result AS TEXT),'"reason":"passed"','"reason":"not_a_reason"') AS BLOB) WHERE request_id='check-1')sql"});
+      expect_corrupt(path);
+    }
+    SECTION("C02 missing required boundary evidence") {
+      corrupt(path, {"DELETE FROM evidence"});
+      expect_corrupt(path);
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -4056,6 +4237,37 @@ execution_change recovery_change(const execution_snapshot& snapshot, std::string
   return c;
 }
 } // namespace
+TEST_CASE("C03 release rejects non-derived extra transitions and wrong target") {
+  scratch    dir;
+  const auto path  = activated_ledger(dir);
+  const auto claim = commit_claim(path, "claim-release-shape", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto snapshot = snapshot_of(path);
+  auto change   = recovery_change(snapshot, "release", "release-shape", *claim.token);
+  SECTION("target remains first") {
+    change.transitions[0].role = "reviewer";
+  }
+  SECTION("target reason matches request") {
+    change.transitions[0].reason = "released";
+  }
+  SECTION("extra transition must derive prerequisite readiness") {
+    const auto* reviewer = find_role(snapshot, "alpha", "reviewer");
+    REQUIRE(reviewer);
+    change.transitions.push_back({.job            = "alpha",
+                                  .role           = "reviewer",
+                                  .before_state   = reviewer->state,
+                                  .before_drifted = reviewer->drifted,
+                                  .after_state    = "done",
+                                  .after_drifted  = false,
+                                  .reason         = "evidence_inapplicable"});
+    for (auto& r : change.vector)
+      if (r.role == "reviewer")
+        r.state = "done";
+  }
+  require_code(commit_execution(path, snapshot, change), execution_error_code::invalid_change);
+  CHECK(snapshot_of(path).last_seq == snapshot.last_seq);
+}
+
 TEST_CASE("R16 native checkpoint refresh release preserve retained recovery and replay") {
   scratch    dir;
   const auto path  = activated_ledger(dir);
@@ -4172,4 +4384,46 @@ TEST_CASE("R16 refresh checkpoint predictions refuse an intervening checkpoint c
   auto current = snapshot_of(path);
   CHECK(current.next_checkpoint_id == 2);
   CHECK(current.last_seq == snapshot.last_seq + 1);
+}
+
+TEST_CASE("C01 token mutations losing to release report the terminal run state") {
+  for (auto op : {"refresh", "release"}) {
+    CAPTURE(op);
+    scratch    dir;
+    const auto path  = activated_ledger(dir);
+    const auto claim = commit_claim(path, "claim-race", "alpha", "builder");
+    REQUIRE(claim.token);
+    const auto stale  = snapshot_of(path);
+    const auto change = recovery_change(stale, op, std::string(op) + "-race", *claim.token);
+    REQUIRE(commit_execution(path, stale, recovery_change(stale, "release", "release-winner", *claim.token)));
+    const auto before = file_contents(dir.root);
+    const auto result = commit_execution(path, stale, change);
+    REQUIRE_FALSE(result);
+    CHECK(result.error().code == execution_error_code::fenced);
+    CHECK(result.error().state == "interrupted");
+    CHECK(file_contents(dir.root) == before);
+  }
+}
+
+TEST_CASE("C01 token mutations losing to takeover preserve earlier fact conflict precedence") {
+  for (auto op : {"refresh", "release"}) {
+    CAPTURE(op);
+    scratch    dir;
+    const auto path  = activated_ledger(dir);
+    const auto claim = commit_claim(path, "claim-race", "alpha", "builder");
+    REQUIRE(claim.token);
+    const auto stale  = snapshot_of(path);
+    const auto change = recovery_change(stale, op, std::string(op) + "-race", *claim.token);
+    commit_takeover_current(path, "takeover-winner", "alpha", "builder");
+    const auto before = file_contents(dir.root);
+    const auto result = commit_execution(path, stale, change);
+    REQUIRE_FALSE(result);
+    // Takeover changes fact_version before role_state is checked (EX-3 order).
+    CHECK(result.error().code == execution_error_code::state_conflict);
+    auto authorized = authorize_run_token(path, *claim.token);
+    REQUIRE_FALSE(authorized);
+    CHECK(authorized.error().code == execution_error_code::fenced);
+    CHECK(authorized.error().state == "fenced");
+    CHECK(file_contents(dir.root) == before);
+  }
 }

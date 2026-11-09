@@ -200,11 +200,13 @@ return p.job {
 }
 )";
 
-/// The eleven names of the stack's sealed catalog and the twelve future names, typed from the contract.
-const std::vector<std::string> catalog_names = {"critique", "explain-rejection", "export",       "history", "ingest",     "init",
-                                                "load",     "observe",           "orchestrator", "render",  "spec-prompt"};
-const std::vector<std::string> future_names  = {"activate",   "status",  "preview", "claim", "takeover",      "refresh",
-                                                "checkpoint", "release", "recover", "check", "check-recover", "verdict"};
+/// Current production and authoring command names, specified independently.
+const std::vector<std::string> catalog_names = {
+    "activate", "check",   "check-recover", "checkpoint", "claim",  "critique",    "explain-rejection",
+    "export",   "history", "ingest",        "init",       "load",   "observe",     "orchestrator",
+    "preview",  "recover", "refresh",       "release",    "render", "spec-prompt", "status",
+    "takeover", "verdict"};
+const std::vector<std::string> future_names = {};
 } // namespace
 
 // Mutant (W2-06n): runtime.cpp prepare_authoring_invocation passes command_text(path) instead of the opaque handle for
@@ -443,7 +445,7 @@ TEST_CASE("RA01-B2 orchestrator prompt carries five sections in order", "[author
   CHECK(has(3, "command_rule"));
   CHECK_FALSE(has(3, "(available)"));
   CHECK(has(4, "- orchestrator (available): "));
-  CHECK(has(4, "- verdict (future): "));
+  CHECK(has(4, "- verdict (available): "));
   // Envelope shape of RA-3: closed keys, one final LF, byte count, fragment digest form, inputs form.
   CHECK(keys(doc.prompt) == std::vector<std::string>{"bytes", "digest", "inputs", "kind", "markdown"});
   CHECK(field(doc.prompt, "bytes")->integer == static_cast<std::int64_t>(doc.markdown.size()));
@@ -483,7 +485,7 @@ TEST_CASE("RA01-B2 orchestrator prompt carries five sections in order", "[author
   CHECK_FALSE(listed("combined.lua"));
 }
 
-// Mutant (W2-69): orchestrator.lua marks every action future, drops check-recover from the future list, emits the lines
+// Mutant (W2-69): orchestrator.lua marks every action future, drops check-recover from the action list, emits the lines
 // unsorted, or lets a purpose be empty or longer than 200 bytes.
 TEST_CASE("RA01-B2 orchestrator labels every catalog verb available and every future verb future",
           "[authoring][ra01][orchestrator]") {
@@ -518,8 +520,8 @@ TEST_CASE("RA01-B2 orchestrator labels every catalog verb available and every fu
     CHECK(entry.status == (in_catalog ? "available" : "future"));
   }
   CHECK(commands == expected_commands);
-  CHECK(std::ranges::count_if(parsed, [](const action& a) { return a.status == "available"; }) == 11);
-  CHECK(std::ranges::count_if(parsed, [](const action& a) { return a.status == "future"; }) == 12);
+  CHECK(std::ranges::count_if(parsed, [](const action& a) { return a.status == "available"; }) == 23);
+  CHECK(std::ranges::count_if(parsed, [](const action& a) { return a.status == "future"; }) == 0);
   // with-profile is never an action.
   CHECK(std::ranges::find(commands, "with-profile") == commands.end());
 }
@@ -885,11 +887,12 @@ TEST_CASE("RA01-C-C01 orchestrator projection wrapper is versioned and mandatory
       if (at != std::string::npos)
         previous = at;
     }
-    CHECK(c01_occurrences(text, "section(\"orchestrator_") == 5);
-    // (v) the consumer iterates the wrapper's sections and binds project(c) once.
-    CHECK(c01_occurrences(text, "ipairs(result.sections)") == 1);
+    CHECK(c01_occurrences(text, "section(\"orchestrator_") == 6);
+    CHECK(c01_occurrences(text, "section(\"orchestrator_state\"") == 1);
+    // (v) Both declared and live consumers iterate the wrapper and bind project(c) once each.
+    CHECK(c01_occurrences(text, "ipairs(result.sections)") == 2);
     CHECK(c01_occurrences(text, "ipairs(project(c))") == 0);
-    CHECK(c01_occurrences(text, "localresult=project(c)") == 1);
+    CHECK(c01_occurrences(text, "localresult=project(c)") == 2);
   }
 }
 

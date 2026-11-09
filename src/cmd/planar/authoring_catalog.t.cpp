@@ -91,9 +91,12 @@ outcome variant(int n) {
   }
   return {};
 }
-const std::vector<std::string> eleven = {"critique", "explain-rejection", "export",       "history", "ingest",     "init",
-                                         "load",     "observe",           "orchestrator", "render",  "spec-prompt"};
-const std::vector<std::string> six    = {"spec-prompt", "critique", "ingest", "explain-rejection", "observe", "orchestrator"};
+const std::vector<std::string> all_commands = {
+    "activate", "check",   "check-recover", "checkpoint", "claim",  "critique",    "explain-rejection",
+    "export",   "history", "ingest",        "init",       "load",   "observe",     "orchestrator",
+    "preview",  "recover", "refresh",       "release",    "render", "spec-prompt", "status",
+    "takeover", "verdict"};
+const std::vector<std::string> six = {"spec-prompt", "critique", "ingest", "explain-rejection", "observe", "orchestrator"};
 struct row_spec {
   std::string                                             handler, kind, capability;
   std::vector<std::tuple<std::string, std::string, bool>> options;
@@ -119,7 +122,7 @@ const std::map<std::string, row_spec>& ra1() {
        {"shipped.orchestrator.v1",
         "orchestrator_v1",
         "orchestrator_capture_v1",
-        {{"--job", "text", true}, {"--registry", "text", true}, {"--workspace", "text", true}}}}};
+        {{"--job", "text", false}, {"--ledger", "text", false}, {"--registry", "text", false}, {"--workspace", "text", false}}}}};
   return table;
 }
 std::vector<value_ptr> commands_of(const outcome& o) {
@@ -332,15 +335,15 @@ drive_result drive_spec_prompt(const fs::path& workspace_file, const fs::path& r
                     planar::engine::ns::command_authoring_verb>(workspace, registry)
 } // namespace
 
-TEST_CASE("RA01-B1 authoring catalog seals the eleven RA-1 rows in sorted order", "[authoring-catalog]") {
+TEST_CASE("RA01-B1 authoring catalog seals the 23 production and authoring rows in sorted order", "[authoring-catalog]") {
   auto control = variant(0);
   REQUIRE(control.sealed);
   auto rows = commands_of(control);
-  REQUIRE(rows.size() == 11);
+  REQUIRE(rows.size() == 23);
   for (std::size_t i = 0; i < rows.size(); ++i) {
     CAPTURE(i);
-    CHECK(name_of(rows[i]) == eleven[i]);
-    CHECK(rows[i]->fields.at("family")->string == eleven[i]);
+    CHECK(name_of(rows[i]) == all_commands[i]);
+    CHECK(rows[i]->fields.at("family")->string == all_commands[i]);
   }
 }
 
@@ -364,8 +367,10 @@ TEST_CASE("RA01-B1 authoring capabilities are the exact per row sets", "[authori
     auto row = find_row(rows, name);
     REQUIRE(row);
     auto caps = row->fields.at("capabilities");
-    REQUIRE(caps->items.size() == 1);
-    CHECK(caps->items[0]->string == spec.capability);
+    REQUIRE(caps->items.size() == (name == "orchestrator" ? 2 : 1));
+    if (name == "orchestrator")
+      CHECK(caps->items[0]->string == "execution_read_v1");
+    CHECK(caps->items.back()->string == spec.capability);
   }
 }
 
@@ -388,15 +393,15 @@ TEST_CASE("RA01-B1 authoring option signatures are exactly the RA-1 table", "[au
   }
 }
 
-TEST_CASE("RA01-B1 authoring catalog keeps the five shipped descriptors identical", "[authoring-catalog]") {
+TEST_CASE("RA01-B1 authoring catalog keeps the 17 shipped descriptors identical", "[authoring-catalog]") {
   require_control();
   auto control = variant(0);
   auto prod    = planar::engine::command_vm::create();
   REQUIRE(prod);
   auto prod_rows = prod->catalog()->fields.at("commands")->items;
   auto rows      = commands_of(control);
-  REQUIRE(prod_rows.size() == 5);
-  REQUIRE(rows.size() == 11);
+  REQUIRE(prod_rows.size() == 17);
+  REQUIRE(rows.size() == 23);
   for (auto& p : prod_rows) {
     CAPTURE(name_of(p));
     auto c = find_row(rows, name_of(p));
@@ -420,8 +425,8 @@ TEST_CASE("RA01-B1 control bundle seals and a refused bundle maps to internal ex
 
 TEST_CASE("RA01-B1 default catalog refuses authoring rows registered without the request", "[authoring-catalog]") {
   require_control();
-  // The refusal is only meaningful beside a control that seals the full eleven-row bundle.
-  REQUIRE(commands_of(variant(0)).size() == 11);
+  // The refusal is only meaningful beside a control that seals the full 23-row bundle.
+  REQUIRE(commands_of(variant(0)).size() == 23);
   expect_refused(18);
 }
 
@@ -431,7 +436,7 @@ TEST_CASE("RA01-B1 validator refuses a catalog missing one row", "[authoring-cat
     expect_refused(n);
 }
 
-TEST_CASE("RA01-B1 validator refuses the five shipped rows when eleven are required", "[authoring-catalog]") {
+TEST_CASE("RA01-B1 validator refuses the 17 shipped rows when 23 are required", "[authoring-catalog]") {
   require_control();
   expect_refused(19);
 }
@@ -486,7 +491,7 @@ TEST_CASE("RA01-B1 validator refuses a wrong required flag", "[authoring-catalog
   expect_refused(17);
 }
 
-TEST_CASE("RA01-B1 defined runtime keeps profile VMs at five rows", "[authoring-catalog]") {
+TEST_CASE("RA01-B1 defined runtime keeps profile VMs exclude authoring rows", "[authoring-catalog]") {
   require_control();
   auto vm = planar::engine::authoring_variant_0::command_vm::create(inspect_profile());
   REQUIRE(vm);
@@ -495,7 +500,9 @@ TEST_CASE("RA01-B1 defined runtime keeps profile VMs at five rows", "[authoring-
   // A profile catalog wraps every row as {descriptor, ...}; the shipped catalog lists bare descriptors.
   for (auto& r : rows)
     names.push_back(name_of(r->fields.at("descriptor")));
-  CHECK(names == std::vector<std::string>{"export", "history", "init", "inspect", "load", "render"});
+  CHECK(names == std::vector<std::string>{"activate", "check", "check-recover", "checkpoint", "claim", "export", "history",
+                                          "init", "inspect", "load", "preview", "recover", "refresh", "release", "render",
+                                          "status", "takeover", "verdict"});
 }
 
 // W2-05. Mutant killed: runtime.cpp call_service_native, operation capture_authoring, dropping the check that the include

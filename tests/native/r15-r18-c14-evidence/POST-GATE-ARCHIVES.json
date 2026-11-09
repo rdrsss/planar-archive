@@ -1,0 +1,2249 @@
+{
+  "scope": "Post-gate archive identity: only exact 12-byte ar member mtime fields differ; all remaining bytes identical. This is not raw artifact hash equality.",
+  "original_manifest": "tests/native/r15-r18-final-evidence/final-review-c14/post-gate-archive-overlay.json",
+  "original_manifest_sha256": "df6a92c5f4370cb8222d445e745f7db43da08315d14cbb77df89446f3dea595b",
+  "archives": 112,
+  "unexplained_changes": 0,
+  "rows": [
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_0.a",
+      "bytes": 503256,
+      "old_sha256": "c0a30d227713565080de99aa45ec2aec1ddf9d89c60fdb7548bd8586ea08a24e",
+      "current_sha256": "55a93b44ca34461e752cd462693a1ef583452192ab6277ccdf659c07bbd4ac71",
+      "masked_sha256": "282d563d8fbc51def2e97a8f45985efd2f26084006692d47334bd7af98759398",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "324d36050d2b445ab9d875b5e68e72bf21bee5aac1d7a55bc6d42aaa4035c3f9"
+        },
+        {
+          "name": "planar_command_source_0.cppm.o",
+          "body_sha256": "b67c006bd76f2d209fca092e3b9ce1cb5c56add5d00fbe2414bac4c5f0a112fa"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_1.a",
+      "bytes": 494248,
+      "old_sha256": "1c69294165a5b7632062f9d2bc8d2fff98634dd26cce555ada407f8c8c1aaca8",
+      "current_sha256": "051b5e8eb5b85ff3983985ab5c6c6c770c5c62cab10a96f99941be461d761102",
+      "masked_sha256": "0926322a961e0d71c9292148e3c1ade810ed7318d307e6206d534d8bca40b44f",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "2ddeb32be0b6abae138ce7647a417e88bb30fc2cf7019a5e236f58f4f91a7a9e"
+        },
+        {
+          "name": "planar_command_source_1.cppm.o",
+          "body_sha256": "c7223959391842f4a7584dc2d741fd5bcca7357db07d9e7e4e4fa44b100a8e3c"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_10.a",
+      "bytes": 494472,
+      "old_sha256": "6f3bdda9c1749414ae8ae64d6c574937b462772eafe444356a57bb9ba8d843be",
+      "current_sha256": "d59cfbbc2453984b328d28a4afc168bc6fe4a7a47441290152873ab2750eff53",
+      "masked_sha256": "707760f2b56eedebc33844e51c1acce6947fac9be99a5d932f2d88bebfd819fc",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e0c6e833cb2ca7d8078faafd0a8b1f60368505a172dbde161b87708cc6a95f17"
+        },
+        {
+          "name": "planar_command_source_10.cppm.o",
+          "body_sha256": "bfcb9c055083ea17584846cc329431111ba01334541b32eb5c9ea03717369e0c"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_11.a",
+      "bytes": 494392,
+      "old_sha256": "ac06f020098cf7bf48e722f217d57cc6e32f81a66e104f204748e5ccb99bb205",
+      "current_sha256": "34c8af9c8ff27ad9b255fc4f19e34d45687d02ecbb9f773468a6a303f33518b3",
+      "masked_sha256": "ad1da56d10737e71eba4da39fed8567b7e8699fcd17149ce62ee52bccbaa2aff",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "3a2446257e19e50dc3ab1a440c75e7c986fec174f2d2ba10d7075027b773ce77"
+        },
+        {
+          "name": "planar_command_source_11.cppm.o",
+          "body_sha256": "88c6747560e47cb5a21e1b2e41081fb507500326e6aa7b21320bf827d0113ea5"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_12.a",
+      "bytes": 494336,
+      "old_sha256": "52fdb6613e1dad906715122cd3229f731cac50966da20053071b4610d12f2155",
+      "current_sha256": "766296a0a69e5b422247c2aa2322cc42a6138e03d791239df008bb187e74be5e",
+      "masked_sha256": "67a85d512aa99b6cd6320ce6d437bed817f4c19fc9e80dcf5ba314ccd2bffbb3",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d7fdbb25ac82d1efa9f97db041c58e04f3bd268ace77166e3a01b2d78142644f"
+        },
+        {
+          "name": "planar_command_source_12.cppm.o",
+          "body_sha256": "6f3e24313d5e8ce3480421088129c5b2f52bbcee83089a609714dd86bcdc29b2"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_13.a",
+      "bytes": 494312,
+      "old_sha256": "7b48998aeefa0042bacf2cbe49e6e732ed1cc87690f0334644d82c721a1331dc",
+      "current_sha256": "6e077e2d992a64b706326a7163f7ed2ba46aaa8790e8df461dafce3f9878cf31",
+      "masked_sha256": "c850fb1f5f2775be41c24fca3b3387a5f86b3dd7dc4059476728b418af604c66",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "9d1fd08de2ea3a2cbb7763b2377ae98e9625ed8e7f184c6fce8f95b38704172b"
+        },
+        {
+          "name": "planar_command_source_13.cppm.o",
+          "body_sha256": "954da36982d39a6d18378d6203da87303a2ca2f9c6243f2b4516b5f933856959"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_14.a",
+      "bytes": 494352,
+      "old_sha256": "b5a561ae88edc82f1fcaacd28dd3fb6678c062e03b2116dc56fa1dc5c2da03d1",
+      "current_sha256": "9face088569eecec11d6077d2a66d70274b8598ff0efc0fd0ff9ef5798861220",
+      "masked_sha256": "76dbf002fabb89dbc135b406ba96053401591eb097e88b4c2c597065739e0c82",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "65c3eb64ab6a306854eb574c53e590dee3bb4c3890d55c57504d1aee75ee2355"
+        },
+        {
+          "name": "planar_command_source_14.cppm.o",
+          "body_sha256": "7408701d0ceda645539e906ae3ec3384aab2e4a8eab8cba5230e5972c8b0df62"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_15.a",
+      "bytes": 494288,
+      "old_sha256": "0461dfff8aab146c38bc756297c73ee888dc558a3c7b3fc2f2a0d07023779474",
+      "current_sha256": "7aca4b57121b80ea9ae902936361a8b20ae2381e607723aca3c0675387b09a30",
+      "masked_sha256": "80d7239bf00150570f809c6c59bdabf857834446b0ca98cf59af8c8427a461be",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "3d850ce26f999c03ce5001981cbda57c66241e42d09fdc86dd80fb3a6b7fc6a4"
+        },
+        {
+          "name": "planar_command_source_15.cppm.o",
+          "body_sha256": "2a9e32024f765140dac728588bcf8d532cc2135cc95789d38f016e0f2f90841c"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_16.a",
+      "bytes": 494408,
+      "old_sha256": "e90dc9cecf1f8a505e8cd265eb382df6b1fbe4d70d86356c41972d27ffc4f278",
+      "current_sha256": "9e2ed8d26d6b3fd82ed8aaf38ba63be46d3fcad32154e14a8301620a170f3104",
+      "masked_sha256": "cfc4eacb56dd9d34e5703e8c2a296e7d284dd6ccaffac1173955045f71b09e9f",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "3d69797b59ca14597b7311aac48af6a473ed1ab8dddcbb270e963105b9b115f7"
+        },
+        {
+          "name": "planar_command_source_16.cppm.o",
+          "body_sha256": "8a6d28f269b51d4e8d388df0d4e83af9ad13cdb4fc63521e300f8888f79a5623"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_17.a",
+      "bytes": 527808,
+      "old_sha256": "d69818671596a994bce6fc9e4ccd41ab83990b754532930170643bf6dd53d877",
+      "current_sha256": "eba43282f9f90d2291e86c739328645f0a9e0dafde2b46d4db167c2103143cd3",
+      "masked_sha256": "4ce9750274bcb4bcc1836de41659353305fb9d484bfadfeb1b91ee21a8aafd25",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "40dd8d9ca5bc6cdad68ec9acb225eeda54971201f769bf4681605ca18c080ec8"
+        },
+        {
+          "name": "planar_command_source_17.cppm.o",
+          "body_sha256": "07e2335a920dff40af2c40bec4db5b8574c44ae23bd82a70e0c85be9fd21b72d"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_18.a",
+      "bytes": 498024,
+      "old_sha256": "c79aa3fd1506c23345dd04a4b487a44d2dbc3650234820a3a8063ef3a9aac2e7",
+      "current_sha256": "3b7596cab64553ec79aa97489693179ec3f4bc5ed9cd4fdb8cecfc6c4dbea939",
+      "masked_sha256": "c323016a5808dfa11ef566689e9c6b0daccbb483002eb028a40bdb8b32549195",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "1c3d29137c155bfc4fba454bbaf1f0f5598f0282a0ac861da7f9352fab07ec77"
+        },
+        {
+          "name": "planar_command_source_18.cppm.o",
+          "body_sha256": "fd3ab92611353fa5f37e8056998fdc982f4399dcf1e6dbf99d4bd13454871182"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_19.a",
+      "bytes": 494472,
+      "old_sha256": "8eb1e54b3c019ef65bf129866dfec97441549f81833d1e82fde66b24d8cb986d",
+      "current_sha256": "5723d14f42bbd3736d8dfb7198a909be2fbf5a9a58cefa66c603a865994410ec",
+      "masked_sha256": "c162ffddf2af93660aecd4b508d0c1552617e9165c9713bbd0d0444f40875ad7",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "36975ec28289445992f484c504d172ead3b5994a5a30635503bb167ec191de64"
+        },
+        {
+          "name": "planar_command_source_19.cppm.o",
+          "body_sha256": "9e8933b898b57270255b3de44abdd1296362443c3952a20429d6867d3ccc587e"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_2.a",
+      "bytes": 494240,
+      "old_sha256": "c390c6d1529507ceef5457e07eac475f6a7ebfb60d3434d72c508f99ac182821",
+      "current_sha256": "087f2cc4ef973543d7a3eb5f24fb54b7c78aa40eaf729f3897d22bdfdfaa7093",
+      "masked_sha256": "a9de2c03126046985c73d2fc8928ffdd136d0827c9a3b2ab769338508a6e2513",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4e39db17158b64ad271883af4aa5b88c297e2938ad9a8f3762cd0fb0a01dbb90"
+        },
+        {
+          "name": "planar_command_source_2.cppm.o",
+          "body_sha256": "ba0739497f95c04b75c7770ce59b064f932a386e03ee2f28efae5a43e90ba78b"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_20.a",
+      "bytes": 494472,
+      "old_sha256": "bce9b939d4bb309d55cbfa49772c5897b9d40162ffae681d9b27f841145532cf",
+      "current_sha256": "2361d075ad4b4b51800fbcf9ed3c3607e8bc81e1407b1625f057b18fd46e6185",
+      "masked_sha256": "a20c4fca5d7c4fed36bca778cc00e64596b38686a11d4ab8236aa82bcecbdfca",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "808b75f577cc2dc90870327e3cd37224560194c640cfd0e82a89a85b9eb3379b"
+        },
+        {
+          "name": "planar_command_source_20.cppm.o",
+          "body_sha256": "60f74e43bffe2d99c7e457b5886f6d7bea128d177c3dec08406c4e56cb58774c"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_3.a",
+      "bytes": 494272,
+      "old_sha256": "e80a98c8202586acd488cb40cc15dd26d94b315a6c636b613095687ffbfecce8",
+      "current_sha256": "6111ac6f0cd669fee48a8e12c88f3b3fb52bd720df812d45cb9403a7ddf74170",
+      "masked_sha256": "61ef55ded6baa9b24b4d77fdd5ba752a88f086b7ca5fd0a77b7ab9fb9e2ac2d8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "2ef7bf531c937c514529e41fe979128266eda6d4e30a5f801d5397869fb803a9"
+        },
+        {
+          "name": "planar_command_source_3.cppm.o",
+          "body_sha256": "67d6afe9ae718e3c495a6c178de1674f3cf9e0db0e007f11e7a56be59a4a6c69"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_4.a",
+      "bytes": 494248,
+      "old_sha256": "d83720120ecb34d5fa6619225fd245fbe0f8cc252beb165b46b21abe158e8f6c",
+      "current_sha256": "17810bfbfa876181c00fd8a247bb7210600863de1c9b0605bf6393c4824d2f94",
+      "masked_sha256": "72244f40284791dcc8610d493b35e1800a4c3bb1c40bbf01d674e50ca754b3d9",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "b454f4e004076a8d053de2a6de2a145244f191265d509b4a221a98cb851c5eca"
+        },
+        {
+          "name": "planar_command_source_4.cppm.o",
+          "body_sha256": "0a76a947e5e31026e4c1281205bab267864e11e1805438b6381a7179728ee631"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_5.a",
+      "bytes": 494232,
+      "old_sha256": "5cf0dfd58abdfcf2f0f23a4f2633c5b4a6e254fff4a84705d8f5f0bd20ade8b8",
+      "current_sha256": "78eaa1592c6aba114bb1852a34e903ef4a9dafd8f8be8eb5ca62d0c0f5ad3ae8",
+      "masked_sha256": "891a8c6b416929dd01d7dd6c76a889a8bc953aa350881634a5eaae82f254fd57",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "141addbafa48164009875bb2674e069effce4bb7fca4a66af864e73b0f2c855d"
+        },
+        {
+          "name": "planar_command_source_5.cppm.o",
+          "body_sha256": "0431dfd5a69b225636562de2b1e447b149b1a9e5d9051974ccb7b1833bf6a017"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_6.a",
+      "bytes": 494224,
+      "old_sha256": "45acb70c5fab3c5717aea89e52c99928f3f6c366d10f4ae7dcf1dc4fa2f6d637",
+      "current_sha256": "56125007e2b63df8686c9a274fd71aaffeabe18fa9318078b0abd836064435cf",
+      "masked_sha256": "59bd035ff3496fc26a838132a1736cc4e0832abe6ca86b909231564e63f9dc55",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "a2f90e9d39c2e3b8f2536f2416e4ed9ff6c5db9f268aa92cf3c5e43b5ca7ef4f"
+        },
+        {
+          "name": "planar_command_source_6.cppm.o",
+          "body_sha256": "6b8abd6b6ee783a7a99fad0baef1fa32ad4f78efeac905b418143ca2ed849d8d"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_7.a",
+      "bytes": 494520,
+      "old_sha256": "853beb04b8b258fe01412aab23f0dcda2182e2f49584b3ff1468ba286a12d7ec",
+      "current_sha256": "ecd4da65ffd889858c2a1b1aa80ba8307b426c9d1bee910490e4433b3ec1f17d",
+      "masked_sha256": "32d62730e27ab63f994b3dcf51bdbad1bd0a48963bc2ef511508af05695831e8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "097572ff48c2dac0c851c7eded57e607e5dd8ff57ee87c2519b15a7ab1b7d081"
+        },
+        {
+          "name": "planar_command_source_7.cppm.o",
+          "body_sha256": "d35845ccd04b99dcf2bff1e81d3f1cc130881c4d965eca77c041b4ef51e72258"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_8.a",
+      "bytes": 494256,
+      "old_sha256": "2199c31014e3cf073ecbb69b529becdb3e62cfff0e3b3e241796af5ee335042b",
+      "current_sha256": "335557891afac45b069de05ecef0fb8436cb1b124575d8f4a9b6f771cccf3e50",
+      "masked_sha256": "1229a85685292790d67503c4b0dfb806e7b983b86a8221cae601bd544797f744",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "973a1aaa87cbfe4f8e8b2d5500908346b8cb06a23abbd51f800976beaaf80759"
+        },
+        {
+          "name": "planar_command_source_8.cppm.o",
+          "body_sha256": "20e4b88c2f099e3954bf4cb669df91c8ef656a10369a11923e33aec8be556d42"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_source_9.a",
+      "bytes": 494320,
+      "old_sha256": "e8a40760bf5cddf86288717c65041fd67e184b16d4123e2e6a5566e059e84cb5",
+      "current_sha256": "b133bc72a502600dfe8c9251185da179edb324106380ab647bd8ee4e8fb2987a",
+      "masked_sha256": "256073ef15530f5e56aedd7081b35849c967093498b5024688191221cae53d34",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "765d460280eecf489a0bb90f4093ff38a97fbb0cd00d5d5d28bc3c49632ebd41"
+        },
+        {
+          "name": "planar_command_source_9.cppm.o",
+          "body_sha256": "d8ef3c9cb94d6a6fdee499a2589dc533db90ba4550d578f14571775a6e987e1d"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_0.a",
+      "bytes": 13018464,
+      "old_sha256": "61a9a89a24195638ddc1fe5dce1a374901b06adf94b6a04d5c02b67ce086d024",
+      "current_sha256": "1358a08ec3b414d2c17b4b525b47b9dabfacab83b18d9f816e95f7529b1ec7cf",
+      "masked_sha256": "6d17e79f29bf2729793539e66b85e8d8efde51c0b2d77856ca0463e9d5b21067",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "29343e2205bfc1e2f5d67645dbc56711c2987adcd6268f0469927be91b068ebd"
+        },
+        {
+          "name": "runtime_0.cpp.o",
+          "body_sha256": "e26944bd60781d270e16b5bcb61bb9a8c1bdced70335fa4bc3e1340461769fac"
+        },
+        {
+          "name": "runtime_0.cppm.o",
+          "body_sha256": "9bd0b4417db7d01587b9a44427520a7dd3999e9f192a16d26466406bfcb0dea7"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_1.a",
+      "bytes": 13018464,
+      "old_sha256": "10d607777c292d5832d772963b84bfb79d123dce1a46ae0b765c7cc5d5856986",
+      "current_sha256": "f547d77a03933ce3ac58075cd690ba278c3a1e0cd7850d017b4bac3a3c36b2a5",
+      "masked_sha256": "a209df461ec8d0126c4d16e28ca57d03fd4c5ff98ae5a6cf497980694caf0205",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "c533da94948917d4afb416c0e6f6cc4c6d0125667c990c499632270aa52fb446"
+        },
+        {
+          "name": "runtime_1.cpp.o",
+          "body_sha256": "069d90c4a02f01d9c9819d41f1c84e6cd04701b0c2abd7ba1864b4fe4a5cd933"
+        },
+        {
+          "name": "runtime_1.cppm.o",
+          "body_sha256": "c7233c8c2fcd49e2fb02211b2d77d849c34e6ecd3d4abb7347409af2353422ee"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_10.a",
+      "bytes": 13051504,
+      "old_sha256": "1ff48bebbeeb915e77ba3b19c190d19e1ca9837f31a0399a14b92701fcb96432",
+      "current_sha256": "4f3725be63eb0caa662fd3c3941a2beb59652e399b36f3609115e70772944a23",
+      "masked_sha256": "95af5fb745b7b9815782a4b975a6202b90550ca083e9aca63cad2f31e7f434c0",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "53cb8b0b095d16db598f8c4138b486170004895a8b04246b44f2a3dbe72f2b83"
+        },
+        {
+          "name": "runtime_10.cpp.o",
+          "body_sha256": "dd7f1aef07b2d0b740a73e846e561df1e3e253445dbc272187efbde8126913b6"
+        },
+        {
+          "name": "runtime_10.cppm.o",
+          "body_sha256": "ff0ff581edb466cc7e84bed9f21ddb2acbb5e94471aa4fd2f63013643144df93"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_11.a",
+      "bytes": 13051504,
+      "old_sha256": "2520e4323db462b6b38baab47350ead447b4eae9e70afd9909a523d75708c897",
+      "current_sha256": "89b724b371d9afa06da0763fa74a2f56adbdc2449a7283e3f102977e9c973993",
+      "masked_sha256": "1a252c36c0cbc24cafab92d4a967c09065f5b430e0ed3a644546a49e1a3be212",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "a5be8821732cda04e875ad1348a584170f0d6abf8781f012acf04fac555fb6fd"
+        },
+        {
+          "name": "runtime_11.cpp.o",
+          "body_sha256": "ae2357195401568ccaabea6d20ec4d6c0b0344a123c40b790af37b56b4b2bac6"
+        },
+        {
+          "name": "runtime_11.cppm.o",
+          "body_sha256": "1e44975800c992a0abd7fc745cfa408cf149646bd82703d8796ae0163b82c0ec"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_12.a",
+      "bytes": 13051504,
+      "old_sha256": "0e40f1ca342be2fbc3a2943381ee388aa0cb56f480b7e48b91d3d6264e2c846a",
+      "current_sha256": "2d8ff072ede85d0725b2af4494ceae01d4711bb19de823d899c99542ac2431ca",
+      "masked_sha256": "2f74111afeb9f6c6f4a32a469dfdcb97938ad1eeae8483bb48b5e61583170a48",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "6ba6062b7cfbcea4bd9869eccdce058cb086f10e447305e5522a3f6db36c62e6"
+        },
+        {
+          "name": "runtime_12.cpp.o",
+          "body_sha256": "2c07f522809568289eb76a272db648ccd31b78f77b93f63c275bbfe32bd3f972"
+        },
+        {
+          "name": "runtime_12.cppm.o",
+          "body_sha256": "325f55bac9f5914b1b63660587f29c1fe215ce40dfd3563fa1e82e7d178b4eb4"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_13.a",
+      "bytes": 13051504,
+      "old_sha256": "ed90a33f39fc7bd4e7e6dbda386d1f7b772358bf9f4f048c61d2d6c3e6205a42",
+      "current_sha256": "11ad3949224c87d05075f4a7f063ac85e3f1caa1c356408459b7706975f4c054",
+      "masked_sha256": "21a70aabaa3ad1dd6df8b597e4e4daac0b8b19128ac037072df11965c290f0ef",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "56600b5f1346ef58f0567f8084cb23e06e85407afca8120ddbd42f971b21f618"
+        },
+        {
+          "name": "runtime_13.cpp.o",
+          "body_sha256": "3b8aba55183220bd01d067a96a73f63f019c99ef4ab99415f30324ee273b5451"
+        },
+        {
+          "name": "runtime_13.cppm.o",
+          "body_sha256": "4b2e08f5256a7b624bf672db38ce5e9d048e37b5a8840514e868d6b24b1ad33e"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_14.a",
+      "bytes": 13051504,
+      "old_sha256": "1bd2ec4a1011fdd3c866d456197603fc752c8533ed1c9d49742244e9ee87c7b1",
+      "current_sha256": "872d41020a891f24a5403f64cd1a7342222902e602c0b491f73d7430872007cf",
+      "masked_sha256": "67aa28fd5d440b0500642ca0fb866d669ce0cd968932914c6800a6ad1d25c55d",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "0950b94c80b0eae4457958eaca5aa4f99db6c0fe929d3f824a4bdcd17aa6dc2f"
+        },
+        {
+          "name": "runtime_14.cpp.o",
+          "body_sha256": "d4b5ca077240e0e6e09caf1ad0fe48003152dcbff042797c459cb873aa3664b9"
+        },
+        {
+          "name": "runtime_14.cppm.o",
+          "body_sha256": "cc5a7be112d119a3bdbec2e876737ea66e5df7a4c5c48985d844eb378240b1fd"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_15.a",
+      "bytes": 13051504,
+      "old_sha256": "98839e61013b0b99010d8c7fd6a830cd76fe5716a323a3be3c5be21bbb06ce01",
+      "current_sha256": "e3a00329e3fabdb1af6c58189fb851b1e6167a124577744015411a5d60f12771",
+      "masked_sha256": "390df8e021ce9b5ae65c60e79b9815017b92b4b3b7268162e6a409f13c61ddb8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d47430a93b26b1f63f718ced668eddec91abfedbff481b7634cbea8cb1a0baee"
+        },
+        {
+          "name": "runtime_15.cpp.o",
+          "body_sha256": "0e1ad2c29f26cab7b56fb791edd196256f1bda2831effdc816e2aec31c380b58"
+        },
+        {
+          "name": "runtime_15.cppm.o",
+          "body_sha256": "f372042d9f06720fe50526be2b1e895dec50d23c98fc9a86263e4c8d2c192c7f"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_16.a",
+      "bytes": 13051504,
+      "old_sha256": "0de1d02bc5ecffb0751e007e0e283a2ab6900aae5738b581aabde9eb30469879",
+      "current_sha256": "9b9e9e1da970181b813f3194fd269fdbb1ae03a14e1e34bd635ddfefc17dc318",
+      "masked_sha256": "4684dc13717110f90d275bd9be1a672cd7bb15c62a5ff9b84661a3af3c7bf202",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "7e911721d278f49fde52279ffd6ca10376a443ef85811206ec03b3344186e505"
+        },
+        {
+          "name": "runtime_16.cpp.o",
+          "body_sha256": "8ac30d04612c807eae0da992636c724ab7bf31a31dfa2fae90c037c6c5ca8931"
+        },
+        {
+          "name": "runtime_16.cppm.o",
+          "body_sha256": "2c858a9f47881a247ea72bd82a5519d5c99fd80e95e9feba83a471effdfb3fa3"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_17.a",
+      "bytes": 13051504,
+      "old_sha256": "83eb55a8a50ff427829498de52087bff914ec7b221f1f933d2ac60eab0f7add6",
+      "current_sha256": "4b910facdd9fa74fc6a0e2972e2ef3684c655e061ee2842b9c8d03718a2ed483",
+      "masked_sha256": "6fbabb33b8afda892dbde4cf1db36527edb73770cbfb587ac283a0fbd1cc7e94",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "cab208a81500fee768c00e10ea3018227332416f6854128d110df2457d7a8025"
+        },
+        {
+          "name": "runtime_17.cpp.o",
+          "body_sha256": "ed904451c379a0f4ffb6b4e540a2e38ec98b972dc3662fac2befccb264ec1ed3"
+        },
+        {
+          "name": "runtime_17.cppm.o",
+          "body_sha256": "4bd1bd83e0d3ed245614c3a2fa76e6216ffe9c8a808fb9e2470b69801af91e60"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_18.a",
+      "bytes": 13051504,
+      "old_sha256": "bdde8a1a298b897739e0ae9f8621786e3f243db235f5cfc3110cb10bb1c68c1d",
+      "current_sha256": "ce60c65e7226f55a65cc5d11bc60cc6759e2d9b05b25b8aa9e88fc192f6ab287",
+      "masked_sha256": "8eb82df49f01e8be4dd3aaf2d46149fe1c12effc85db1e05f14594499676eb78",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "fa210d5bd58acb6aed4fd376f0079d313825dfa94fe8fa0872dc87ce47fe434c"
+        },
+        {
+          "name": "runtime_18.cpp.o",
+          "body_sha256": "5d506aba0826cdd4a086bed11de2c59fb566111db55a80f641569b7c21662865"
+        },
+        {
+          "name": "runtime_18.cppm.o",
+          "body_sha256": "6abe444e10f3405801101aacb6c42e6964c3bd0469d58bf16111738d7a059a0a"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_19.a",
+      "bytes": 13051504,
+      "old_sha256": "da0cbba662709a89c77c00bbc5e08488d4f22b7401e82783f03237373c577cdc",
+      "current_sha256": "cd25e07a54705e2eeb9922c60181f686a3e8b93b3906ae0f0c3f57069cad8da0",
+      "masked_sha256": "e8844426a718319646be07963499b5b88fec06e31002b64f0f5a29ee34ce49a2",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e1f30e576cbc3b4b4b8af051b05a76d540b0ed0a233a375f022bf6c87bcbf298"
+        },
+        {
+          "name": "runtime_19.cpp.o",
+          "body_sha256": "d31ad1f23094f625e9b92b9409c8f0fd4095de42bfdc6dce04ebbee6ff0d7d81"
+        },
+        {
+          "name": "runtime_19.cppm.o",
+          "body_sha256": "977163fac1b299348c048efef71264aabca44416cdbaf3284f0dd824d30d18a0"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_2.a",
+      "bytes": 13018464,
+      "old_sha256": "5a96a42a5701b53b58b691c5eed29f2f698827aea9e214a6a5a8c1b194397d8e",
+      "current_sha256": "e3c2539eb78349cacfe2a2e695c61dc9e1fb8f8eab75f83c3c0432859454ae5a",
+      "masked_sha256": "01de5f44635cb2cb57974c7d68156e38374357ffec49c6aa1b028dd7edb6114a",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "9cdc940f0bd0ce9181dfe8c51163264783c7138d3346c629b50cc212698a5230"
+        },
+        {
+          "name": "runtime_2.cpp.o",
+          "body_sha256": "b70919228e70e383c09b8b23c5354cea11f9b90e0b26be6f8dfb0c90d847f7da"
+        },
+        {
+          "name": "runtime_2.cppm.o",
+          "body_sha256": "be4f042eeadb9e963b30d259b4e928ae15b63b5c675d7d5c7e669096ead6f551"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_20.a",
+      "bytes": 13051504,
+      "old_sha256": "280344ef729c47afd7cb50709524c6774384bc51cfb33013532e4ed9a36a49e4",
+      "current_sha256": "efe21e0e1c22653fc5b5caf400632c3697ce4414dfc88fe22ff5377df56bfe2f",
+      "masked_sha256": "5d2fb797ca6791ea7971922d4f3df6d5cdacc30a0ba0fe2becbd9f33f3f28502",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "6416d72d3a0accc66a1c68ed877808fa32abe8ded97ae3f32af0bb020d5e0872"
+        },
+        {
+          "name": "runtime_20.cpp.o",
+          "body_sha256": "cb2ae84b6f624cb2edfbbaa56ea9d449cdba84f7d3b8263db340933d078a9eb6"
+        },
+        {
+          "name": "runtime_20.cppm.o",
+          "body_sha256": "b22193ecf6749bd1bb16f523a8f86a4f7f3a471b0cd3020d474687af85ecc1c1"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_3.a",
+      "bytes": 13018464,
+      "old_sha256": "81cd15f0a76e352d3ad5c21e0fd38d40ddbd793ab3ddfc35e40eb0345d8826ef",
+      "current_sha256": "1175556187f392790c8b921447f16d515e82e1af2c3664ad1fa9c5afc37ff40d",
+      "masked_sha256": "ad4281586831de76bdd0ca378996ef3e4852eba5607fb05a7f4e1c25b58ac06c",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "ef7f52ad19598cddeaf90dd42290c9bbdb07987112e4d3de8827d789da30ec9b"
+        },
+        {
+          "name": "runtime_3.cpp.o",
+          "body_sha256": "f8bdc207f3cdb38e4a5104450f802fa66a95361753059f924e66598df7382e66"
+        },
+        {
+          "name": "runtime_3.cppm.o",
+          "body_sha256": "998c216eed891e3da6c13d16524fe4fcfe673524733d1d9fa71024c49d8d8d36"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_4.a",
+      "bytes": 13018464,
+      "old_sha256": "76ca2f50596fad555db8addc645fb0c6b014a5db9a0305c96afaa6cc7a3e190f",
+      "current_sha256": "ef52c85ccc86cb58f5eac42385ebdce7b3893338876fef69a0244c2be4d2d730",
+      "masked_sha256": "0ca9c53a9da6700adbda12acd292df257220670e21416b3bd1595127bb7ab156",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "779411b26503fa474cc4ee838280f58e7cd76119aafd76dffaea1a1f1b7f1f1f"
+        },
+        {
+          "name": "runtime_4.cpp.o",
+          "body_sha256": "96f49b1c5304c3dabd04d93f3d336f7140dd053550ef233c97c608cfffbd2252"
+        },
+        {
+          "name": "runtime_4.cppm.o",
+          "body_sha256": "2c7cc91d04f9b424dedba18dcc9bb0ce1a48ce291d8820f37eea53655ab6057f"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_5.a",
+      "bytes": 13018464,
+      "old_sha256": "685c7f09b6eb543e05e80fe857c09664933caf8716934e0d50c52ec1fe61d8e9",
+      "current_sha256": "03d94c0399d04749b952bf84f96918ce74bdce75eee5c3cd240e01738979da60",
+      "masked_sha256": "56820a6725c9154f37d3f6274f8c36e10dfff41296aab679004a58c9ace2660a",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "9dae064f6d9de72badff92bff19770fc1820e1e739efeac80ae577726d64189f"
+        },
+        {
+          "name": "runtime_5.cpp.o",
+          "body_sha256": "5f700298ef867776d70c49def86817fede456228d1f99cae5ac79358f4f6f85a"
+        },
+        {
+          "name": "runtime_5.cppm.o",
+          "body_sha256": "438d9721dcc080ef4c2e6401f54fd4252093cc5112b4ddc3d6b7ca744d8e8691"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_6.a",
+      "bytes": 13018464,
+      "old_sha256": "85c6f6a3451f974ab1bbdd57eba9e28bbf434e46cf164adda5941242511d63f3",
+      "current_sha256": "418a5db19f22369ceee031624bca26e8f09ad0e8b10567385abeff2cd5efbfff",
+      "masked_sha256": "3ade17db87314fe3f892dad630f49ce8a1f5aacb717033ee20b14929d4d3cc1e",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "b2c8b48904039f3c54996a05bdf0cabfc4d9cca107cb671a481d20e46259db88"
+        },
+        {
+          "name": "runtime_6.cpp.o",
+          "body_sha256": "9ee1482d7fe0a510b902071f2f694596838cc32cecfd876e47d7e9b508bdda10"
+        },
+        {
+          "name": "runtime_6.cppm.o",
+          "body_sha256": "b50eb601ca68a4ebf7b325aa92e5b9d340baa9ad8612476f8b1b462cc1bc9c92"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_7.a",
+      "bytes": 13018464,
+      "old_sha256": "a90df739b1d57aede29ff3a7306d5caaf1f4767b59d6b8615e3cfff2368d30d8",
+      "current_sha256": "b09187ec20d8c88f14898beb6dad354923722b36d93a9edcf623bb1a4cf20dd3",
+      "masked_sha256": "630258473a14853a31b4b915816f01b64001e666e7e77c68f05f8d983cc825f8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "61c7a5d7fabe61e74ad662f7122f7361689a09f595b10784eb536e1919a4d82e"
+        },
+        {
+          "name": "runtime_7.cpp.o",
+          "body_sha256": "41a6228e6e79a553ee12ae51aba759bb09772dc928ad0caaabf2aa8c4a71c410"
+        },
+        {
+          "name": "runtime_7.cppm.o",
+          "body_sha256": "40b3a2cbadb0addbeb21bb91e28997a64889c0a8b78e8e7f8a3049a29b743e97"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_8.a",
+      "bytes": 13018464,
+      "old_sha256": "e553cef9efe3e589734fa1ab344da7506d5af02b10a7ab9b0cc7487e53663aa5",
+      "current_sha256": "cd498386be3ad2f5519a25b692510607bf41ed49534266c93a6280fcb6027ec2",
+      "masked_sha256": "08d75496fde55d7d0dabe140205b6a756dd865c8ceedee7aa1c8da998fef8e61",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "7b16488dc308af4fe1f6d3b146349f95cbe0ea82a81bcba5dee314d94db19b6f"
+        },
+        {
+          "name": "runtime_8.cpp.o",
+          "body_sha256": "f7ea7c3c37717b12d4a790a852529b1921f7ce984fec06965e47ffb457070371"
+        },
+        {
+          "name": "runtime_8.cppm.o",
+          "body_sha256": "4f465550305d09b84d9b63d64342221723743394e67ae69e026033ad68b25474"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_command_variant_9.a",
+      "bytes": 13018464,
+      "old_sha256": "d5891a75fe635646b76c8c28709c2f56e20b3a529d39ede099837c9595e5afbe",
+      "current_sha256": "9f734e4e8ffdfa5f5bd84e79249276744b8aaa260ade089332cdeb4ca3c2ce8e",
+      "masked_sha256": "fbafde0b00d96d57029ac64111ea39b7cd51fe1cf49303d2d70024cdf55fe750",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "5606e2e3cc6bed8a299150a2c4fe5e9bf5ba4cc10a4240e212b165c341417257"
+        },
+        {
+          "name": "runtime_9.cpp.o",
+          "body_sha256": "6022768298c47b43b8ec929fd0d0a34cd64f72e8a3c670d5f8fa8d8b0bd0309c"
+        },
+        {
+          "name": "runtime_9.cppm.o",
+          "body_sha256": "fa07fd77291eef6ffff6affa83fcf2bd774dc47786b2833d027e88f1e4a25cae"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_c01_source.a",
+      "bytes": 497632,
+      "old_sha256": "66100836804c871d978ab8905d3dc5631eab8bc4d5abea296fc2a31719a55564",
+      "current_sha256": "e3b39720a69b97727ed30336f0f242d91660c2af2058071aecd88a96efb43c34",
+      "masked_sha256": "b90288f62d1b744344f3070704b80bbb6456673873d2475b3b827442cded9a53",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "988e4e5f3593d5a08c2b61af2119bcc9ab74fdc1d9d04d379f77f515358a2752"
+        },
+        {
+          "name": "planar_load_c01_source.cppm.o",
+          "body_sha256": "2fc1164a18af81345ecf7081ed29b626fccf5dfddcc89cc3ccfbe1986d6c70cd"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_c01_variant.a",
+      "bytes": 12986552,
+      "old_sha256": "e1aaceee4e9e62bc56a1ae795007f513c2cfdff200e4102dd99474439f80f768",
+      "current_sha256": "1e2c92d965937191c37da06148f6eae2df51e4ce4c994745845aa78ce984a98d",
+      "masked_sha256": "3c36136b0ddc5f922f8e280d412db45f130c8c0fa23c19a9d591ab536bf7f44d",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e382156ed6fac6ff62bdc843ea101f06c685b7b71ad18f8a2a13375cbec330ae"
+        },
+        {
+          "name": "runtime_0.cpp.o",
+          "body_sha256": "f7e3df54ec4d90dac13241193217e0a1c1654f6e788065249e4913e026891e73"
+        },
+        {
+          "name": "runtime_0.cppm.o",
+          "body_sha256": "ccf0aa61ffe54d3d7e881010d0aa2155c6b53047744d2f3366eae14bb7556c66"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_source_0.a",
+      "bytes": 497464,
+      "old_sha256": "c20615f236cf15398194b1b57e5b53c57e3d8e194d893459386128163eb648d9",
+      "current_sha256": "6699705297aae4d18e9711080aabd9a5b91e9c617a3fd48c548126c6e80a0abd",
+      "masked_sha256": "e94a2341223a62dd8a060517e370f98d7a60149c32f1dfc637da076a5e06af95",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "ae516dbbb11616f15df1d74c3a5eb34c5cb69c7b9f6f013dbe5007837b715dd5"
+        },
+        {
+          "name": "planar_load_source_0.cppm.o",
+          "body_sha256": "c884345f30a414feda12ee875362ab421f895c161cd892fb9a8f1553fe56ee26"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_source_1.a",
+      "bytes": 497592,
+      "old_sha256": "cc5b7c0091228f62eb2b762d89af4ed97df3d8292dd6a5efd01a3ab5034f15f4",
+      "current_sha256": "f50c86ce6355c05ae64c0a60c9c486c56c8002e718ba70c0700bee8491828de2",
+      "masked_sha256": "a7ab2ffa7efc00681d63f690ad4d1289b665b49b83a45a5fefa5d8d0caff75b8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "ccc96b2494b4a7c9db06bc19d4e463413aee321d880395e53d4df52447f099e6"
+        },
+        {
+          "name": "planar_load_source_1.cppm.o",
+          "body_sha256": "f74b47fd0cd648ce7bc58e80bbd05b8bbf09af15f328f955a6ea03607f54992f"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_source_2.a",
+      "bytes": 496912,
+      "old_sha256": "f42616fe566a7d7a1fc815fdbcd9258cf4ac4b7e389c70a34281ab814f80f407",
+      "current_sha256": "43ebbc80c976053fce96bf7b3056b6e3534e7c05f51ba69ffcf3753155ba37c5",
+      "masked_sha256": "c767b1310de67d59a0cf39a7a8b982e7cd554099223ec0ce3ab22e1089a8bf3e",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "ccceda3bc6a345f516fc276c50941f0c6416de70f689483c8fe3896b8b70f26b"
+        },
+        {
+          "name": "planar_load_source_2.cppm.o",
+          "body_sha256": "c6dc491faa3d592cf0c8fa5766cfadfa2bc9b197cfda78a07c8770ca8f46d858"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_source_3.a",
+      "bytes": 497464,
+      "old_sha256": "0e12000b5268b522bc364dde978ac72e0c0beabb67cba67b7ef35226aa0597a5",
+      "current_sha256": "1ec2813a18ebec6f894da6df246cd519dcb762a6a6ea577b6f4eb9d70cd2317f",
+      "masked_sha256": "6d286a23ca57d6bd7b52190a6d33661074d752d01ba0b6807d019c9635444cb8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "6e491683387a338fead11251f5a1a7b168343bce5fdca5d3196f102c2aa5d900"
+        },
+        {
+          "name": "planar_load_source_3.cppm.o",
+          "body_sha256": "971733762334b709b9a1df1a05f56f83eb00f58b1ce41ab52bb7f226feb0d294"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_source_4.a",
+      "bytes": 498008,
+      "old_sha256": "463b740406ef1d6ab233458df3201447434817c56adfc93557f681add929a31f",
+      "current_sha256": "81d2fa8584259cd8398ae07f3512fe9ef74c8d7f8459045ba9b2297db7b9b1dc",
+      "masked_sha256": "a155b8ba1b4c0949d9706e380bd3421d396d976783bfee7cea509e8fea88af2c",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4001a7c22a4c59f0c1e0950fb05a500eaa03a8f18a24ed32e3c75260c898418c"
+        },
+        {
+          "name": "planar_load_source_4.cppm.o",
+          "body_sha256": "f0806e92b0834eb813cc6cd79207bcefb58486d8026d7a9014388ff7db94449b"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_source_5.a",
+      "bytes": 497472,
+      "old_sha256": "7c02d223e4a4d3d5a1a4bc1f1562eff1d06f866f41a24eea05b57663f39a2b87",
+      "current_sha256": "cf2197ef6443a916d500df17beec7b608ba8c9913b5750be9c96deaaf3993d78",
+      "masked_sha256": "31ee09c5f037c92fa6cf1c77297c232232d65cd026c0e5d76851a104dec23f2b",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "eac01bd1fe1ef31283e4e073df2777b84c57cd573b5f0a7af499658a4bede6ff"
+        },
+        {
+          "name": "planar_load_source_5.cppm.o",
+          "body_sha256": "6a5f6cd5aefaadce9508a69208bdfc6eeb2e2971182dbcbee7e6f31c6a235e75"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_variant_0.a",
+      "bytes": 12919736,
+      "old_sha256": "68fe3a57ca2e3d2c5cc92a231deff8e06e65c315888b62cba47c537e1bcbd00d",
+      "current_sha256": "ae3bfc8e8593238136f779c74036d1863e65eed56858d86ad0ada2645b1a11b8",
+      "masked_sha256": "ed6165d955bf081adfe9b0a29308c0da841beb2b50e3e468277a38d8e1d00ce3",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e98e84420d2e41350c04e457bd7b9a889d38d0c13a97e67f372fd8cedf004f0c"
+        },
+        {
+          "name": "runtime_0.cpp.o",
+          "body_sha256": "6141edc86d6c4dc08beebc4ad49479554935c1cca77e8a1ec335933b5129f29c"
+        },
+        {
+          "name": "runtime_0.cppm.o",
+          "body_sha256": "ceeaeb4f6caf024a6cf7d740ef116462e2c1209ff5acd8bd0f6df52643dc717e"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_variant_1.a",
+      "bytes": 12919736,
+      "old_sha256": "b532a38798f17bead72e1722112dd90f9891de007d13bc547958ec41975a0152",
+      "current_sha256": "9efa2c907d4e8e27bea9c7603f710e69ba5ee7c23e6a19d431f760afcb3dc003",
+      "masked_sha256": "690f193c71426ea65187194e7c8230d736435520cf6b782b9df381a6baf62d0c",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "ca7b843bc61199e00fd2121be6fa048bff21a6185fe6880451df8ce24a43e6cd"
+        },
+        {
+          "name": "runtime_1.cpp.o",
+          "body_sha256": "b86defebbc4ce49d23ca3e55cc4f8a291aaa9572c30d2f3132b855642e8cf465"
+        },
+        {
+          "name": "runtime_1.cppm.o",
+          "body_sha256": "f42a94672c054111eb470e9913fdcb119b5451ce02211378d2ff8fd74f154fff"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_variant_2.a",
+      "bytes": 12919736,
+      "old_sha256": "19dedb2faaff2557a49406e2bf05569dea9fb46ea2593634ff1278b6b6961866",
+      "current_sha256": "129dfefe1e3cfee35588bfaf48affddee3fe945b703f3414181b9a09869ec042",
+      "masked_sha256": "273ea5e3806b4752d942b0799d47e63602582ef0653ce8fa2e62de421ff786f5",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "689d2cac7b4c21f08ccef72d8bef4eeced491484f27a90e6c072c05acec82279"
+        },
+        {
+          "name": "runtime_2.cpp.o",
+          "body_sha256": "d1726dd74eaf018fa7ef961264959921400643cf103d1411ae66e521b4923905"
+        },
+        {
+          "name": "runtime_2.cppm.o",
+          "body_sha256": "293c8b090c83dfb707b69fed9db562159ca1c94bf9b1f0776315b6efab195073"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_variant_3.a",
+      "bytes": 12919736,
+      "old_sha256": "c3a19e26167f76c15f7dd18136577a8e397a85f82edf65c868b0a3eba9ca00d5",
+      "current_sha256": "788b8f1e40b4ea6d259c121bb3ddcfd57947648cc4181c1367ef5120c1fd3156",
+      "masked_sha256": "6e1ed3496847009e6a22749b42fa5f294015188982bbd4317feb376b76b212f7",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "5562d2aa24be31eb1dbf00201ec91b00106a04715941eac36f1b1adb4f26fdd1"
+        },
+        {
+          "name": "runtime_3.cpp.o",
+          "body_sha256": "71c9214fa1df9a61c575e09e063629d38d3ae317b1c702a1aedad42ef17d1d1a"
+        },
+        {
+          "name": "runtime_3.cppm.o",
+          "body_sha256": "e68469c7627a9623df78c9d249b42bfc0cea0eaa53f5bff825506bc4740a788a"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_variant_4.a",
+      "bytes": 12919736,
+      "old_sha256": "5ffeecdb6ee131f5fb659f452d048f606ff32fdd111b15ad0626b6a993068dd6",
+      "current_sha256": "1759de6e023376381d3750caedf0e3e130a0b7d8eb896a14df0ecf4269506460",
+      "masked_sha256": "b96445b39bc1a277c76a3b71bb312a959e95aacf75424264df0fae8c14e6e134",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "5e0a9dda20ca74ae4073885b520c24531e863d7a25891ceefc5982e778f7773b"
+        },
+        {
+          "name": "runtime_4.cpp.o",
+          "body_sha256": "85aa5e432abccb06b05a9025a644805ca4adb9c3d54428a10dc44646a623195c"
+        },
+        {
+          "name": "runtime_4.cppm.o",
+          "body_sha256": "3c647547ed9ee1a77452619793a88d783a55858ae0e6c78f49ee1dba53326cb5"
+        }
+      ]
+    },
+    {
+      "configuration": "debug",
+      "path": "build/rewrite-debug/src/engine/libplanar_load_variant_5.a",
+      "bytes": 12919736,
+      "old_sha256": "4ee3d876068752a94799cf763fb24d618d6fdc2052401990271d9cdd9115e48e",
+      "current_sha256": "a4879e98d39003f0a990d11094429bfb5da7189d5f22324eb79da139b238b756",
+      "masked_sha256": "eafc0ce417134a6c95915920cd9959131ffdc227b3bc72769f0cd038643bf458",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d30c6c22f95a621e6e1559f324bc9442914eb9d3ba21afb91cabcb0fc4c1c4ec"
+        },
+        {
+          "name": "runtime_5.cpp.o",
+          "body_sha256": "80598903accdf3047344f10e50ba746114b920ea16b20a8c36e46e4d4739106c"
+        },
+        {
+          "name": "runtime_5.cppm.o",
+          "body_sha256": "d6e75161171256c537be64da41ba11c6a2000592515a6cbcf77c2f3eb38c2ed5"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_0.a",
+      "bytes": 499824,
+      "old_sha256": "100fc6282782ed843344d034ca78b1f13838ffe6026328f53a07bf3f7f8857be",
+      "current_sha256": "c455cc97eb1b817cd6c54a0cf3d24718c9f8fc62d019e573e445583dea1303e5",
+      "masked_sha256": "d9976297e53a916a00d11c9ae3586d7f37990b8807b44a7631228ba778999a02",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "5d95fa0c8e15209b1ae5c8d8709558702b340765e3f4c228dc8dfc4169d5db6c"
+        },
+        {
+          "name": "planar_command_source_0.cppm.o",
+          "body_sha256": "bb09b84f40cb2390211fc196688f673be8bd1aa14cdf356933ee3af3d85d30f7"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_1.a",
+      "bytes": 490816,
+      "old_sha256": "fa469f044ea1e2552a7e0126009e8cb007201f567e6e2d68ed8b474cf8fea7fa",
+      "current_sha256": "59c1da9a9a4446f34589300796389a916739748970bf9c27534048574fa212dd",
+      "masked_sha256": "c48c93bd9f8528cc03d090bbf468bd5eea4c09015af9257035a9198ac6764133",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "fadb3f8cc71b02bcaf28d15d267294ee70942a51fe8a81f55ac6d9c1f559b3e7"
+        },
+        {
+          "name": "planar_command_source_1.cppm.o",
+          "body_sha256": "f34eb50bf9d30324656d8eaf5a5b875ef8769ddba7f9c5dd0dbfda0a8fa0154d"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_10.a",
+      "bytes": 491040,
+      "old_sha256": "6779dabdc8ddca284df0d0fa17a0e75561abe3bf0710d325d25c7c4c224271f0",
+      "current_sha256": "a0f55c0395fb90ac6d7ebaa14a0e7e3ccf3c80664480a411b409ddae06f1c440",
+      "masked_sha256": "5362b66184ac90b2d7804a4f1784e72c624a944ecee41802c30cdb38b84e775a",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "7334e05719368e0a7d834816104d7e59d1ed995f6c555b3c5f4b2ba13e62a56b"
+        },
+        {
+          "name": "planar_command_source_10.cppm.o",
+          "body_sha256": "e55d28311504a018fade3f8d34739f872d800de3bf95a2f37deb0eff368b3916"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_11.a",
+      "bytes": 490960,
+      "old_sha256": "516bc5a46f34027bcec4dbe26f15daf34a9e93a1d39efdd7b54e9301c71ced16",
+      "current_sha256": "c1863cf6b01e28a2dacc55250f1088ea2d4b3aaf74f60323f10d95ddc2dc5429",
+      "masked_sha256": "d8913cce60fb85f16ec9a4a76576b320f9342780310cf35b947e2cab16b98520",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "25a6dd2852b587ff6f7c96f7db46f88a6c013a2186b8915216c80f9078f91b5d"
+        },
+        {
+          "name": "planar_command_source_11.cppm.o",
+          "body_sha256": "ad00297d73ca471ebe802c0a8caa2c5816ce6843406f87b2ef25b1eeb323ca7b"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_12.a",
+      "bytes": 490904,
+      "old_sha256": "8cd7ba2214aaa789f1d7ab7557e56a9992c7cb5d9c111cd854229805369baf72",
+      "current_sha256": "c4840186069823ac12ad51fcc13d8ecfc115b06cc4f02e6f6e59564f9dd7b76c",
+      "masked_sha256": "cc28b976e19371d8d7d70c10e3fcc7a05a0775dbc1fceb64132341278e176051",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "622408fe04cb5f309526c9984503f51f84e5f697f4d6ac047dc3e50dd1d8d5b4"
+        },
+        {
+          "name": "planar_command_source_12.cppm.o",
+          "body_sha256": "e97f38a8f38b4831035f22ac7e5757790b0198c47f1edb8f955e9735e267391a"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_13.a",
+      "bytes": 490880,
+      "old_sha256": "5d3bb92e4c633de48bf8355321b3235a881d5ad72cdb63ab4dcbe7754f0b54e1",
+      "current_sha256": "d2524de2a2e8142944329e84eb428d082e2960bc2a5d2ef1c3a09bca75c576b9",
+      "masked_sha256": "1148f8c82836f2512c93ab831893a1fd84974b07e146ce0cff9dfbdb6b8cefec",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "f8ee2301695a9514d6b9e13d02faf1b053415adfa4f0c3309e500729b5d246e3"
+        },
+        {
+          "name": "planar_command_source_13.cppm.o",
+          "body_sha256": "cb144e77185af6f1b80199fa5de5d4e0a8ad46f77147ba89cbb9e6e14cd27f04"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_14.a",
+      "bytes": 490920,
+      "old_sha256": "a22bd62414d0ca767c9d0f7fc499e14247840fee366fa73469b54cf4a438a582",
+      "current_sha256": "8bdd674599d97a42e31a202e06bc97a00ecde0eab656226e45d64631c9de1a7d",
+      "masked_sha256": "0adebbf614c52cb6124a0e702f3a7b80ba317c6b7e168bcd8ffa7e3a1d330e38",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d59184adc893e7bb999688c51c01321e7b3a71c2ff1e25262fde94d27134e608"
+        },
+        {
+          "name": "planar_command_source_14.cppm.o",
+          "body_sha256": "a3722cc206dcb7ec6d84035d0283353a9669f96e56909ec4c9fba2857cb43fcf"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_15.a",
+      "bytes": 490856,
+      "old_sha256": "2dcc7e22c53266d0443640570ffc28075a685059f2bd209ac76774e3b70917d5",
+      "current_sha256": "5ec0cdbc2d784b80004c69432068d558d0f9e2d3ab2f61bc2a7b74e99c32cde8",
+      "masked_sha256": "04f50db738468781669582b82bf8e0ad93a61dbfa35833873a522d6c76f89c89",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4e07b7c706bce968665bc83ddb6cf89143352565ce96530c884fb083d6cccab3"
+        },
+        {
+          "name": "planar_command_source_15.cppm.o",
+          "body_sha256": "d1377dc411fc41c65d4109cdc5088fb45143709edaddd04bae71dc17570780cd"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_16.a",
+      "bytes": 490976,
+      "old_sha256": "1519f1b933ed8b4b8f9152b26235dcc41f3cf34d1c65e4d7e5643bbd97d0073c",
+      "current_sha256": "ab6a8ea515c8ad0d363de2604b4b6f59202cf0f5102b26cc38536ba1a84328ec",
+      "masked_sha256": "5dab027b130fdaeaf12ef7f884424d8aba22688cbfc8e8591ba0ca61b4d640a4",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "698314df89682c02e4d76f43f592b086fee93c6fa4e9aa11ed470f5295c06aad"
+        },
+        {
+          "name": "planar_command_source_16.cppm.o",
+          "body_sha256": "18838f156eccd0a785e5d16617a8312e62724c743a53394aff80d6e6eba9859c"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_17.a",
+      "bytes": 524376,
+      "old_sha256": "cb50d6a86f2c2fe4f2ef14949b6ec8bf964bcece7c26f9412225e747d01954c9",
+      "current_sha256": "29cf031520199f683504d6835215f11883a3c74aae106f030dd7d8fd5dd19b1a",
+      "masked_sha256": "7581ba02debed52ffc05cf7cd453bab03548c853a167ba266e26ded48bfaa300",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "08c733458161d432668d3b6bd7879faab6d4e2e1e2034deeec82f0b84f35f183"
+        },
+        {
+          "name": "planar_command_source_17.cppm.o",
+          "body_sha256": "d071e2458222cce18695daf8efa909284b2e209301553beac86a01fb8fea9378"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_18.a",
+      "bytes": 494592,
+      "old_sha256": "d8e281d67df90101353c67f2d731dff94d43b44f077a8c051ad0c2f98a5ba1c1",
+      "current_sha256": "eddededeeaf78b36c850aacbcfe01696cd25ebc55c26ac76fc8afaf4ba02b3e1",
+      "masked_sha256": "2ad753de8d7c074ddc2eba71b631597ca5729cd67a9cfcd2776afd5ac5b2613d",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "b6aaa2d0226c0272604ea7a68667454a3e99b007ca0b3fcebf618489b7a82682"
+        },
+        {
+          "name": "planar_command_source_18.cppm.o",
+          "body_sha256": "3bf8dbf69c25df7c820ff04ac5ca184291ed84264f04935e59757c1d304d9685"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_19.a",
+      "bytes": 491040,
+      "old_sha256": "4527dde2cea0e158e6a5169d88e8fe98f10440730bfef673be501696244d9f3c",
+      "current_sha256": "37459e7c729d32fb57a75f144c6592baf2c91ce348f0ef194fc14874071277f8",
+      "masked_sha256": "9de5c3fb4c78e700bfd9d34fc6d299b039555d9363bf446cbbc2f62b7c130c3e",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4702e4c2b241dee14ffef171905d928097ce00db1b933a26e42e26c091b1b59d"
+        },
+        {
+          "name": "planar_command_source_19.cppm.o",
+          "body_sha256": "3e672ff7523e42e246ad206ce83563971cee6595d107f30f63435dc6a1388cfa"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_2.a",
+      "bytes": 490808,
+      "old_sha256": "69a69f999e6fa52ee56a8089b3f615336f7fc81b488c1a7b346a18f1be516445",
+      "current_sha256": "550f99d2f66b9fc40ddd16af783faa55c409794cf290a2e3b5abce31ebca37f1",
+      "masked_sha256": "1445b0a02ee90713bee1e7a88246c4251771297753db9da392c15598789ab4c8",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "1247841eeec6b9fea7d46639f6afc773d8db2c0c0a457306c4871004416f8dc6"
+        },
+        {
+          "name": "planar_command_source_2.cppm.o",
+          "body_sha256": "57d1cbb97516117d43e69c5d7dafbd3a7da291417f3a5f40a0e7e80a294adb6b"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_20.a",
+      "bytes": 491040,
+      "old_sha256": "727bb00aeb7c6da488420b61f3aa8602d7f2114c500e6a121481a96c193ba15b",
+      "current_sha256": "5b0ab4e5c3a715608b244115ecd9620c3a2ac2cf2bb7216bed5740089b1193f2",
+      "masked_sha256": "a521526af606dac2ab2892eea654578766916560b3f1ee306f2a8e1ae05ab505",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "9855affc0dc26b26f00b46c77afea40ba33b10eba4dbdf4a2bac9f3b38d9bbb8"
+        },
+        {
+          "name": "planar_command_source_20.cppm.o",
+          "body_sha256": "63ba7853dbd693d3f409e6b6a618f9570298c1efa426517b50a47e02e6358b44"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_3.a",
+      "bytes": 490840,
+      "old_sha256": "f4c448dfa3671518a004e06e7829ca1e06a01f3debdd097da77cfe4f7482f817",
+      "current_sha256": "85f775a1545b41a135f38d499e3f4d02eb59cfb3a9d13d942c58ca347e363fa7",
+      "masked_sha256": "a804d0b4259f78c3e4891f94063f4a0173887f70d2c3c06d8005f859f01cae79",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "2827ca7eacd65d6ada684035cfd11b130c33be3f26a9ff118092089c001f0fb6"
+        },
+        {
+          "name": "planar_command_source_3.cppm.o",
+          "body_sha256": "5ebedd5516a805bf227bc70f5cfc3ce1f4fb8347ad986470511c343b26ca9187"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_4.a",
+      "bytes": 490816,
+      "old_sha256": "3647863268ee83af5bafd6d881f3cdb0a0ff36361db3baf455ba1fd6d6bf075e",
+      "current_sha256": "15674863f45b9b92d7e93ad51b25ed6ca48a48412f4977acd5620794afb28130",
+      "masked_sha256": "9ed6fe7b985f7a18210b859ca102b0527d7868168a13b407aff26a7ef0f66c55",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "9135bc3eb1c9f8763107079263f10a62c93f6bb48b2f4eed1ac4eaee32765787"
+        },
+        {
+          "name": "planar_command_source_4.cppm.o",
+          "body_sha256": "b9d425ea0041cf70bdac298ac50c46883852b281d8608681c7ff193f69d81f61"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_5.a",
+      "bytes": 490800,
+      "old_sha256": "139bcd11f1118fd8b6748fe317d1c52e5e2a88ccc6117f7af1bbd3f309c72b37",
+      "current_sha256": "897ed067523d6c7d521fd9a7be2f5372609eca84fdf8dc2fdde9276cb8ddaa3b",
+      "masked_sha256": "7a742d53d09e6a8213e7396e97d52091587e140fcf92b0ae8168e5f668eb0777",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4afac5c042f592c70affa104589749f3b15c9dace4f576c589f16229996364d5"
+        },
+        {
+          "name": "planar_command_source_5.cppm.o",
+          "body_sha256": "84cabfbcc22522b3244a5d3ddf361bb98433d427b64818d19e2f6e74dc48b622"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_6.a",
+      "bytes": 490792,
+      "old_sha256": "0fc39d7df07dbaba24c79723a980ece93c1b402add78f130c86ffdd61b05f7f8",
+      "current_sha256": "5041de18e7b20188319ab3310c4fe5cb906bec373866bee0cfc6d1b65b9dee1d",
+      "masked_sha256": "f74345b29eb62b086f129603b2e6b5e5d17b768919027587c0672563b6338be9",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d108af175b78c9c7011ee88d547d7c65a2f205c71abf2db35346766422272574"
+        },
+        {
+          "name": "planar_command_source_6.cppm.o",
+          "body_sha256": "62a1923674a1b5f9f6f0d46e023137a30bd9c296149b89ec46128576e8fc784a"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_7.a",
+      "bytes": 491088,
+      "old_sha256": "8b210d6eef318c62c7957af66caa6dc1375c9259f2317f31e4a105bbf67dfa44",
+      "current_sha256": "7f2dc8c75b71d59e11db3ebbb83d35c61cb76e4580ed5137cd424763c0a1509d",
+      "masked_sha256": "117a1aa2bf1244bc47ce0e71338dc1ebe07eb6852b2629d401b2fe441e8b687b",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "78a0b9df0b496508abf02bf14a122ca537badcedf28516142a4df1b01be157db"
+        },
+        {
+          "name": "planar_command_source_7.cppm.o",
+          "body_sha256": "07a8a548d705ebf4c99d71f4ce39923114cf2b61d25d38f75130500bea230636"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_8.a",
+      "bytes": 490824,
+      "old_sha256": "8212cc23f97697d2b51b546cbd0fa15775e329345ffa7a01e32d8fe33b265fb9",
+      "current_sha256": "2e592243c989286f6a5e204812804036c24d0bbdf07a12f8389bca5d9c871474",
+      "masked_sha256": "448dddc196be32a8ec6f009ea5c05b3a2dadf7ede8e273085de99ca66839d384",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "6d38cee841bd34513e7f029e1406ea84475142d836da13807f8f83a1bdd2562d"
+        },
+        {
+          "name": "planar_command_source_8.cppm.o",
+          "body_sha256": "d781e48335e202721bc79eaadba43e10a85ca8b3a23c8a52daeed78f677ee14e"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_source_9.a",
+      "bytes": 490888,
+      "old_sha256": "366b36939ba0ff26c39656bd5e2952683932586f0479ff5fe0aadfc18104ac0c",
+      "current_sha256": "d53d1b77435197a2b33581029e11186d6a4d30badb1134a3b62036ef9294533e",
+      "masked_sha256": "c2300c01d67710970928f92c11db8660f2dfaeccdda38d97d8fe4e4dde8bf358",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "85d3b7d74a301ce7e735c7f60eb2f8be802239d542c12f586c431ab32794da01"
+        },
+        {
+          "name": "planar_command_source_9.cppm.o",
+          "body_sha256": "830064039fda61ec25f45c5d864af5df3e092fd7bad6c0a23271b76ed081e644"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_0.a",
+      "bytes": 10387288,
+      "old_sha256": "ba34d08469481c0bb889c03743c07880b8b719a12fff74c687e6760ec237f17c",
+      "current_sha256": "ebd9daa3fea0b31bb385d676407e9ef0d8b766adc726225a93ed5e1099d75c6f",
+      "masked_sha256": "6c9a0b4d2febb920cf28bd440f504a6fd6087c42ea9d87a805ab25fdf762f1fc",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "5d626e2e68cb0cd85dc32a3f44e73fb72e0d8cf10bf2cb7b79436da667892b9e"
+        },
+        {
+          "name": "runtime_0.cpp.o",
+          "body_sha256": "1cd8ac36795de32ed045f1fbc9fe0f529607bd44320513d289c85955f277c262"
+        },
+        {
+          "name": "runtime_0.cppm.o",
+          "body_sha256": "8146acde9bd8cdde9c9593b6dc9bb915304a12667fbf89d9e135932386345ebc"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_1.a",
+      "bytes": 10387288,
+      "old_sha256": "b8c2f1175f152e0f78032358627746b6193be5d849f545397ca2df66b33a1e24",
+      "current_sha256": "2aea31b1cc8544ed4341ae89efaee49dac47057add4b1b8b2902c9b1b8bc56f9",
+      "masked_sha256": "fb7d35e0748c13b7a42f7328a0bbe1df2e5306bf3e7035bedac88ed6610a9c15",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "c5b45cfc6d3cd10f0651916be17ae2e1def8d6cc7fffb0073ff550079beeaea1"
+        },
+        {
+          "name": "runtime_1.cpp.o",
+          "body_sha256": "bc71772a87610a4d31f683551c0e92730e818fa23b16122f809dace2aebfd68a"
+        },
+        {
+          "name": "runtime_1.cppm.o",
+          "body_sha256": "ee67082737291a217036a3df2b4b9449e6c3ad9c2d7e08685d769f0efb3d86b9"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_10.a",
+      "bytes": 10404968,
+      "old_sha256": "2ec9b68a4dfcb6e6049df35b66757f3a881ee8f7350e7afb8b5f3c523105722f",
+      "current_sha256": "3db3c1e49c33bb36f7be509ce54f0604f96f72739682b6a57693d6e93a043c0a",
+      "masked_sha256": "07fff42ac500d1d35a4ce344bb97d33044b9c705613912ac71259ab539dc9384",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "2d382ce9916fe4c0248d68da1f97ed30f7ed225df8b4d81770a099e65d0cdcfd"
+        },
+        {
+          "name": "runtime_10.cpp.o",
+          "body_sha256": "2eefe9afbd68f57a0d3ad47d4192bfe675a4219afd18ce8c59e9dcca46f75cad"
+        },
+        {
+          "name": "runtime_10.cppm.o",
+          "body_sha256": "9872aaa31750921a1ff83b7010378946a1cf1230cbda55b0daf2ac0d29971d8d"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_11.a",
+      "bytes": 10404968,
+      "old_sha256": "39e598ec9d6df8a79fc962a7211c68048d6bec64e4fa7f4c495ec1414a51f9df",
+      "current_sha256": "c1669e1dab206768936c1ae8be2fe9bd053e52aa402349569da212bbc045fcae",
+      "masked_sha256": "1ca3b8f7ca552fe50cecc66badca0bf2e5b1c4188830387a0241a7593d1b03a6",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "baae4db2730560bb9bc9b1634067312ad00ac04434f3e16e25b7c64e8ffddd2a"
+        },
+        {
+          "name": "runtime_11.cpp.o",
+          "body_sha256": "58d9b1fc2b859d6bb7f573ad028620fd4134f9312e17f0774bf718b32c34971b"
+        },
+        {
+          "name": "runtime_11.cppm.o",
+          "body_sha256": "a9590fb970c0f0aefd7ffa1f7cb677709b170fb1d64e7da2a76e4c3c0c98d155"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_12.a",
+      "bytes": 10404968,
+      "old_sha256": "95f33b184f23b3ddc680868f4abfdfc26d4f5ac42d28697e1b2638bba268787f",
+      "current_sha256": "5b1e65bcc2fd6a8c3ddccf279018289b052d6d3990e10640d784f920d2796455",
+      "masked_sha256": "b2e7f53a471eb895c42efd15a0762799d60aa47220731ccaf3b9185f99204c35",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4b9e0ec14bf3364d1d5b38b303d9e26dfe6c169fdadd1383d6a1932c6f379955"
+        },
+        {
+          "name": "runtime_12.cpp.o",
+          "body_sha256": "60bc17d38abbf40f1e2fbc6f08dc39405d64c3df4c8bc5e2775dc2413b6ff2cf"
+        },
+        {
+          "name": "runtime_12.cppm.o",
+          "body_sha256": "1542680d36c569aaf396d8d77a3ab4d676a08606dc12d4ecab3d43521ab6a291"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_13.a",
+      "bytes": 10404968,
+      "old_sha256": "9281b83ef851390ad84eda1c6ed99d465b3668336f6a308ce6d2f8f92de6a77a",
+      "current_sha256": "7d80262b099166698a119e02b0f280da62c43a6057d68f4377d411aeafe83f2a",
+      "masked_sha256": "6355db61e2f1b1d62ff2aec49b31c406e85f00ecf51744803277433371ccef9d",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "a2e659f4a07e55111624b1233b27aa23750deae1a08e481b022e3c472a1630ee"
+        },
+        {
+          "name": "runtime_13.cpp.o",
+          "body_sha256": "5e157c9ee34e10c40eb78a676b2f0e9efd820e1dadeb37004da2d944f8214b8e"
+        },
+        {
+          "name": "runtime_13.cppm.o",
+          "body_sha256": "2268e502841e33a4f712b27e6b6994ec40a8d203dffe3110930737812e553bdb"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_14.a",
+      "bytes": 10404968,
+      "old_sha256": "712bcd8c4f1381294bf00c12b0b3dfdf3b93f99d69674c1b4ecaf96f75c12c87",
+      "current_sha256": "a5f958cbd3e260ee1e1cee8bcaacdb771d4c366798844f718eb587d2ce5d605d",
+      "masked_sha256": "4f814e90a94a514bc6e49d6c9b94d62412b40c5bc1ad451f4d831cc38eace834",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "81e54618756a1972a36b4468a81951ddc991f18ee34d8ed7d5172d7c1faf58b0"
+        },
+        {
+          "name": "runtime_14.cpp.o",
+          "body_sha256": "17d5124367693b3faa0d446452cec4cc6606411238c0a54067cc2daeed5d6796"
+        },
+        {
+          "name": "runtime_14.cppm.o",
+          "body_sha256": "eeaa9eab557aecb65a38524da07858f2143e86e13d64ca00a53e29dc61c5226c"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_15.a",
+      "bytes": 10404968,
+      "old_sha256": "195c79992a829c3e90283c6bcab405057da879d4593310cb23b543f08de274b2",
+      "current_sha256": "c075ed0512bbdf5a731e2893220a099494894ae2d133e3f6db82b3bdf0e25834",
+      "masked_sha256": "f32e45c25ce472ba5807512321e06c9e853fa452ca6e8cd72cd0040df8a35c7a",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "8a44db8b6eeaf772707518cc2b59a467be0a9b350e0573a8d8caeb186343306a"
+        },
+        {
+          "name": "runtime_15.cpp.o",
+          "body_sha256": "7630889b08a0c09d83085fe9b9b0766103dafb49e282c85d3dbb09ffa04a48c3"
+        },
+        {
+          "name": "runtime_15.cppm.o",
+          "body_sha256": "a4d31b028fa481920c7a98cfe93399453ee99cb48c95644bc24c4ec74706cae2"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_16.a",
+      "bytes": 10404968,
+      "old_sha256": "4a28253bf0a58aa4abb647f7d9be8787fae6d21865ff5af7d4071d5922f25835",
+      "current_sha256": "20b4251009ffaf5ae57987adc0878532477e818739e28f3a46b6bfe1e1d521c7",
+      "masked_sha256": "61535bd1198f28a4b8a526a0b3004169cae4c4e7036f9343ae254bec27446a49",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d99c83b1caaf10047d5627f8d99230230a11755c2affc5c75e458889a6c5af11"
+        },
+        {
+          "name": "runtime_16.cpp.o",
+          "body_sha256": "4a10765a23f2709adbc15574caef35acc2b3dd385470fe4180781b129aa5d69f"
+        },
+        {
+          "name": "runtime_16.cppm.o",
+          "body_sha256": "5e7c518b8af2cd0db9c13a70f150cde9bd736af74cc131167cbe5b9d1c993a93"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_17.a",
+      "bytes": 10404968,
+      "old_sha256": "0f9546b3f3ffc7faafd9b5ad8e045ca06442d6c778fd1136e841e6f3a7ed124d",
+      "current_sha256": "f2ecec20fa496c3d5b031762965a961e9a3a1668500a8ceb18d0bfc811dd8180",
+      "masked_sha256": "37edba09587d544f91f467158f02d4a28cd7968b1454e5aa63935badb8eb131d",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "dce320bb207eebdf48b5c17a7e1232d8d63b0c203544d90a4d2440f1b4b379b1"
+        },
+        {
+          "name": "runtime_17.cpp.o",
+          "body_sha256": "5b80da42019b247af4c84da2a263a52984437769b9352bfedb5978ca5c19b939"
+        },
+        {
+          "name": "runtime_17.cppm.o",
+          "body_sha256": "0a2221e6ac7b6c0e618710294e2d7e6f46380a28ff294ee4e763bdb31afd2ce2"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_18.a",
+      "bytes": 10404968,
+      "old_sha256": "0eb613aad2a6ae4badbffaee310c936157be5cfd06a8fb1acef642d1361ccd34",
+      "current_sha256": "730008eb84f4c9db6b0b91b3d984e3bfdf65509b80ce5d6c70afaa2fe1b5fdfa",
+      "masked_sha256": "8c88c4427915a6c6733c5da10f389ea3601ce646b636482a26d9c8dd3dbbfb81",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "eccc83edf2411c5cde8372cbc2667d5262f5e9b0441d6671c2c2d5e25ec1d8e3"
+        },
+        {
+          "name": "runtime_18.cpp.o",
+          "body_sha256": "a8db3a48ecaa6d9498c16f3678389ef37bd6d9e30d128e84bacf93a8350f2cae"
+        },
+        {
+          "name": "runtime_18.cppm.o",
+          "body_sha256": "cc977a983116b15fa78cf8900f95c761687812f193de71fc810eb3b0e0e5f1b6"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_19.a",
+      "bytes": 10404968,
+      "old_sha256": "f520986e1ace816cd7afe00c6f5536585bd9dce4d0c2752a60caae7fdf539a52",
+      "current_sha256": "a929acf32d0b9467566f30a0bdf44fd0aaee897f6687cd29cd3587bce1a30cd8",
+      "masked_sha256": "f08034c47971b1e8001150843c35935a94777ee6f0d4e1eee75d30d65a2727ac",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "0473f988bea5416922048ab2df74e0a3b13c17146a1643454e4a059980d248ad"
+        },
+        {
+          "name": "runtime_19.cpp.o",
+          "body_sha256": "5db7f48c839ab8f4ff6d3dc0bbd518f7aedd37a1fee1a962577b4d75218c8edf"
+        },
+        {
+          "name": "runtime_19.cppm.o",
+          "body_sha256": "1df8ae47adf57b0e1b425604c0e5c4fa7b0aa70645b2316fa4c8e5c0f54881a2"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_2.a",
+      "bytes": 10387288,
+      "old_sha256": "4e0257eb783245f41981f807d61b8d56a807a88cfe447505ff15bfe1c1027e5e",
+      "current_sha256": "939676f5c6a1eccea520a0c21d4297f711e367b01a1f2b80ef21beac5bdb295a",
+      "masked_sha256": "817be6175238c3fca0dbc371a08ecdfadc4271fc5be4066908fda8c914b2dd41",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "20777e59b940242fd6a20b4290f73556d0bef6e84efa2cf658758c69c6842fbe"
+        },
+        {
+          "name": "runtime_2.cpp.o",
+          "body_sha256": "b32d35462d1a21576be87c80855d1d0d012d771777e996774affbca1c0ed39ff"
+        },
+        {
+          "name": "runtime_2.cppm.o",
+          "body_sha256": "ba192bffb3f2fdfa563ebc1c24f4445e80ac1949cc23fa76da7775fafed75950"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_20.a",
+      "bytes": 10404968,
+      "old_sha256": "ac8722d8281c948fab5b77b6962f62c3ac2e54044808ad67004b4e1062eedfbc",
+      "current_sha256": "5ae4e2c029cc126362f8675a616d51b61fa398869a4813cae0a8d3cd325c614b",
+      "masked_sha256": "3e317fc62f2c718aee4cb382d666cf53596d4a195f5dba8d7fd644986b4b1c25",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "6f6c1d022654197d890c1d6d423896b200089919674169796c80fe833a7aad00"
+        },
+        {
+          "name": "runtime_20.cpp.o",
+          "body_sha256": "778cd265ffd6ef8cbb10a702c6c9cd791d7fe6adb5429d6500ff952c2a6e16f9"
+        },
+        {
+          "name": "runtime_20.cppm.o",
+          "body_sha256": "120f28639f760cd5103de0fff190c6c59b4ae8fdd82d89bfcd5554245d803e3c"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_3.a",
+      "bytes": 10387288,
+      "old_sha256": "b15ec5193012b2ea154a85911c487fea0b265b28735de73e96a63b7adf7540dc",
+      "current_sha256": "ff0dadad24eec99b39f00c2c3b13746d9e11c3b7a69d0602e27265cf2f75758f",
+      "masked_sha256": "ab08f2a573d5f3cf949cf84ec5d29e403d295d0a5dca80533de83581730907b7",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4e192f0de853c93d0a61f19d05c273eba70ea6a255f1e8178e8ba9129421aeeb"
+        },
+        {
+          "name": "runtime_3.cpp.o",
+          "body_sha256": "100f51a66b2a77c5ea40b3a440ea09e51dcc62ba8dfc24e4542f0e90016a1478"
+        },
+        {
+          "name": "runtime_3.cppm.o",
+          "body_sha256": "e3b97724deb841c1e6e58d5c18449e5bd378d122495d33d49c93d8a94941e04d"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_4.a",
+      "bytes": 10387288,
+      "old_sha256": "38ce2e939e681c95e19f67832352bb5cc350516231cad0499a603a01cc8e9440",
+      "current_sha256": "a4ae421631bb86a35672979592dd66d36edc8bd01fab7b9b5a3dea3aa432fbdb",
+      "masked_sha256": "18e12b82448cce402101f7aff45bb4ae5de1892b61cca5cf3d17002d7804eecb",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "0e2dd9a1c62ad208b8c749f596c2b414d5f0800546711e1466229465a0d32176"
+        },
+        {
+          "name": "runtime_4.cpp.o",
+          "body_sha256": "fa0b2a6284dc62852dd4790d3fb422e040bee7c4a5612632d47b2c23e851625e"
+        },
+        {
+          "name": "runtime_4.cppm.o",
+          "body_sha256": "fdc378c864c0b9892cc2354402444b05a76db09a9200183eb9e606d61b3eae66"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_5.a",
+      "bytes": 10387288,
+      "old_sha256": "ed2cb66fad5d06b4210a09e1cbfaa4b4308b181b9f03d7fef10947cde7808b20",
+      "current_sha256": "08286a7c2226a6d6916221b9517e296dff902c1d9803f0d263bc5f39ef2282fa",
+      "masked_sha256": "3229510644bc57dea24a10d92b008398db01a4047e876e35c9bcd8b21eb5c46e",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "39814d61952b3275d44066247852e67656dbeff2220b378b2d200bd0c550aa1f"
+        },
+        {
+          "name": "runtime_5.cpp.o",
+          "body_sha256": "622b8001ee083e6942b0980ff31f6de9c6b5ba5044ebf0f099f1e7b46e14f034"
+        },
+        {
+          "name": "runtime_5.cppm.o",
+          "body_sha256": "49a8db6c3e10a33754e445a5adb0dc25ccd97264cd4e51f1298d311606cae152"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_6.a",
+      "bytes": 10387288,
+      "old_sha256": "85249d46569db86c17718f086ec493d55157d846766dbbbca2b63b18c0fd66dc",
+      "current_sha256": "d5992fa56b3518368e812bd70ad9f7e9e94da78cd62be8d2f43d96c946d91bb6",
+      "masked_sha256": "f21535d1224063c752b2148d5093c9647a6bbf01ce236e3cdc5806ef02a016d5",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "f4ad343234a040d050243d4f6832fe4bc8f8b7461cdd3e7dc7d18ce671f7a997"
+        },
+        {
+          "name": "runtime_6.cpp.o",
+          "body_sha256": "534cb7f1d2d3c7b74d79f7dc49fd67358e89ee6bab4c63b99fb635fa10ca961d"
+        },
+        {
+          "name": "runtime_6.cppm.o",
+          "body_sha256": "c43a7ff1961123a7e1049c76fe240db2a4dfc20342cbeacec17139be59482b30"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_7.a",
+      "bytes": 10387288,
+      "old_sha256": "83c2849425a27af63e05ea2ae0f70def6c89ebd8263932ed71dfba75e36febc3",
+      "current_sha256": "0c5932bbb102820e485e9cb060b5353a440265d49c2423a07a23fed6986cd33a",
+      "masked_sha256": "1f33e84d6672b1d66da1ecbbcefa3fe9f3ec52e83af0173eae658a789a8fb104",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "1f90e8607cd1f2f8427d9f1fb9edcea0d36fde77e6206e52f1eb2ba4bf5a1b2e"
+        },
+        {
+          "name": "runtime_7.cpp.o",
+          "body_sha256": "7bc70116e78393a7c16e1c5dac7a927355e57bbb18a693482008865267e2e55e"
+        },
+        {
+          "name": "runtime_7.cppm.o",
+          "body_sha256": "9c695a2b883865a761cc4a111c1070350ce2528f3692b07d7d9a41912cd7e40c"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_8.a",
+      "bytes": 10387288,
+      "old_sha256": "dae39018418d146c2821a304751cacb3ef63186e888a0846bc74ce0d67dadb1c",
+      "current_sha256": "17057e60f83b8e70c1ba6012846e13bc241d9c7387d28c4ee667b98d0114d355",
+      "masked_sha256": "03425f3d02946bf9e5c30fecc0f9e178c19df0b3397af66b0ba986c88d34148d",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d22ac0e4b4302214955220733b48a79dc03ed6678844641d0e35f981b4dd64c9"
+        },
+        {
+          "name": "runtime_8.cpp.o",
+          "body_sha256": "887e12cac166d11e01d33cc0ac2a608be3c63b5da93e8975ff9246d9d67b19da"
+        },
+        {
+          "name": "runtime_8.cppm.o",
+          "body_sha256": "cdd131326d13d47ffaa3922d204da482dbac0d5df2c45a0a5d39eb3fb0df6d4b"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_command_variant_9.a",
+      "bytes": 10387288,
+      "old_sha256": "c00dc12378199cc961e3ef8ebdecc5659b829bcd65067538ab465232443f2b7b",
+      "current_sha256": "236a3d73a215ee50032f32fa1db54091a6ad19899bb9d20e69bd4d383d213bc0",
+      "masked_sha256": "ed871dd118a1b51a853c874ee74984d1aa7eecf262872669709d6552a45bd5be",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "8cc5642cafd8955cc63b01b30b357c729264afd9250a9e91d81d9a8e9e50971b"
+        },
+        {
+          "name": "runtime_9.cpp.o",
+          "body_sha256": "bcb9aea6c9d1a393d5611d0ca6df20eb6c7c4dad06e56f3ed7df6d44f81dd92e"
+        },
+        {
+          "name": "runtime_9.cppm.o",
+          "body_sha256": "86977f450639f4074da1b2d311e9c195271d4153bd84f1cd7b0864fdb72cf140"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_c01_source.a",
+      "bytes": 494200,
+      "old_sha256": "5eba4783750420ede73c6c618ba461ded52beb302f9f4fd401dd76498b51508b",
+      "current_sha256": "6e0976cda4070e922142a5bafdc126ab7b121bb26ad45430e810792e1ab51e63",
+      "masked_sha256": "eedc26a9d1a383c808919a3b16e24f3e0818c3cd1669694d0da3627bc1bc10bd",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "0611f9a805c8b28f8808133db80645b13efdea8373ddc1983374d0d408882159"
+        },
+        {
+          "name": "planar_load_c01_source.cppm.o",
+          "body_sha256": "c78cd38b28f45489d32f8da39f7a7ff55379b37ffde82c1b0155e56e0e00d731"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_c01_variant.a",
+      "bytes": 10370512,
+      "old_sha256": "3167ac7f68fdbc079ba9d62d70b493943aa928ae6a105167b54718d60b3f5e54",
+      "current_sha256": "ce14186a8b7db1c07532a54e81263b57c541abf0fdfabe83d9c3f02222bc5241",
+      "masked_sha256": "4756868e91503d5cfdf4b5e855f5fd1e5ec43cc6c8fe9efa03fc72bd16a7b659",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4a77115e8b2ab5bee0ba9c336f9aae379a72abad173e59c103a8f294b2ff1a71"
+        },
+        {
+          "name": "runtime_0.cpp.o",
+          "body_sha256": "78e6c4953da9b5d43167f6c292ccc91e23e934edf0beb86bfb88dbc37457f96d"
+        },
+        {
+          "name": "runtime_0.cppm.o",
+          "body_sha256": "f72ef3221a7b0dbd3cd9d12a8135485dd954040e5a6615ae7cb8bd4b6d19bcd1"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_source_0.a",
+      "bytes": 494024,
+      "old_sha256": "fee7e1f251eeb32c94e31ff906541d18f3b0d5deedf5faadbc1e135420eb7580",
+      "current_sha256": "7625a7fc2cbf90fc83561c00e05e6175e610f788763f1d61584fc3caf0336199",
+      "masked_sha256": "ff16a8b244995d3b70cf99abf3d8e8bb17cf6d943704b65598ff32529270bc8c",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "c7aed0f378b5712ac556e5d2efea8f70caf2a07a2a13a6d1494bd97332061c9d"
+        },
+        {
+          "name": "planar_load_source_0.cppm.o",
+          "body_sha256": "aa08ae49656bbd451800da6bad7fde615ff938fc0ef14cfb0531a9d49083de60"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_source_1.a",
+      "bytes": 494152,
+      "old_sha256": "9db8037e33eae2d3c8dc5407b11a6e7f6c8285645c800f9415ad9b3000edc589",
+      "current_sha256": "4e84c7772731b92b147f9a33128deefe7e6cb328c5929024174ddf5e3677f3ca",
+      "masked_sha256": "76186e03d1899038e9d263837f101bd16d4e4ae0aa76572ec71bf43bba0b3a93",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e8412d3237a870da748a1a6a4d74cb7d7e4f926eaf64bf82306b82c32aa501f8"
+        },
+        {
+          "name": "planar_load_source_1.cppm.o",
+          "body_sha256": "cfb1d0188b8a6d17041f3b2d57abe714a01e6e36ad0a4a075c80cc1fd79032e5"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_source_2.a",
+      "bytes": 493472,
+      "old_sha256": "8fc0f07442b1b63011cae606ee1e0cd7f8eebcd3b043357c903cfb41c1ea7528",
+      "current_sha256": "eb65d9bc5fa20b880f65cbf8d2c7c3ea17834f80ad646aa243c00698b936bc0b",
+      "masked_sha256": "3b8cc9395414f52a2be64c5f9cbb3cd05bc044f1549c164df5add6b2ac371e79",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "79a7e705aa49675b80f8bd04746667f4de6d973e95d1c3556b7ebc70f3b6652b"
+        },
+        {
+          "name": "planar_load_source_2.cppm.o",
+          "body_sha256": "c735f94a4026d17280a1c9f15a57a172a8bafb808eeadb26100d99b5e4629a1c"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_source_3.a",
+      "bytes": 494024,
+      "old_sha256": "f942ee89f3fadc2cb0b066a1e1055679c157ba26229b3be1bf6650d2b906745f",
+      "current_sha256": "4c7b0b02b36adabc81149b7162afdd8892d7f39e446a13285e591bb37afdf2a5",
+      "masked_sha256": "0d23ca4646a6bc12518e65027b5e1b0ac6d157931058dd3ca18f97acb34ce5c4",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d282f4a2f4c25ed828d7a4b14e38a78dd0d080f90ba48a0aef3e08e568aa4839"
+        },
+        {
+          "name": "planar_load_source_3.cppm.o",
+          "body_sha256": "5864cf5b696ab029b113fe65b028c7b1811607bcecadc1373952f7fa5577e0f5"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_source_4.a",
+      "bytes": 494568,
+      "old_sha256": "d9c1e08f01573444089b187ad28848908634d110d5fe6aeee37ef72cfee875c1",
+      "current_sha256": "97c3f431f0b5708319f4eb32cca7c49b31758cd706f9fa8c0fc69363e1c68f2b",
+      "masked_sha256": "2b23f2f831b50c9ec4bf73eaa84f2f50280c54c998f95354f51adf76f7c5de39",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "4b8e495482733242430a343746cbe2d93e998acf4c660cddbbdf56b71d8ad895"
+        },
+        {
+          "name": "planar_load_source_4.cppm.o",
+          "body_sha256": "90d52789711364ad26236262b8d4be0ecd937b2665a7830cebd76d48b0fb262b"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_source_5.a",
+      "bytes": 494032,
+      "old_sha256": "abe584f2cbc3d4037f79e23a03a08705160cd303e7391126f1323fef6411d4bf",
+      "current_sha256": "631d49aed85d377b53c0c3e8c02ad3ad908ee9b3eec73d314be9c3c06708b660",
+      "masked_sha256": "56612651220e33a7c8d8b300a9079eb643f35bc0ae1e81a4bb8427484cc57eaf",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "b6a536d9b958a55fd04f2e9b1b0cc5edefda40eced0218de16cb54ea3a3d1644"
+        },
+        {
+          "name": "planar_load_source_5.cppm.o",
+          "body_sha256": "66b15403883683064f4917d1025d825b169c55ad150380ab43e1a79c86e8ba13"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_variant_0.a",
+      "bytes": 10334592,
+      "old_sha256": "526f131bb61d1a3b438506738b3598cd864709e5bb524ba3e56dd1b137b85192",
+      "current_sha256": "6ba665e03b5a54c639bcfa9ac14c87b4051f2d9d224ea1fef918d5a585102eee",
+      "masked_sha256": "f5f0ef443cc04cb21338e0fce1c27950f21a3885ce932e0fb237a848fba5a7e3",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "d170dab820c43452bc20470834a14aa80936b2c80060d4152eadd641c9f8bd6d"
+        },
+        {
+          "name": "runtime_0.cpp.o",
+          "body_sha256": "f81171c3b1e8e0b93ae32d5b41ee8fab9d7d86e95257267c221680589fd1be54"
+        },
+        {
+          "name": "runtime_0.cppm.o",
+          "body_sha256": "16c5d3f27fa46628fd7cb5143ce0ddce2fb57ff4be48cacc35cad3f864c5afb5"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_variant_1.a",
+      "bytes": 10334592,
+      "old_sha256": "945bfd7bcdd96d49364ce81ebb6e59f948896596a786da5a80e67757995b58ef",
+      "current_sha256": "65255a359756241a7bdf405c5299c1937f74c93d59bec463eaea5378f2d09013",
+      "masked_sha256": "e9b0a355677dc0648184f1c076be13b4da77b91028c99a5f65735bdf7b446f39",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "8b240bfe82326e96ba2e684427113519ed0f37578a19f308e8a1dc63b053c01c"
+        },
+        {
+          "name": "runtime_1.cpp.o",
+          "body_sha256": "0d6a9cdd9c88289c910f9fed58b7daa8b36e734b98bf195617712e190fb51bf9"
+        },
+        {
+          "name": "runtime_1.cppm.o",
+          "body_sha256": "4e3ff083fb8187937510cca2169f8ca628c69cd4cac972cfc30c336f95444c53"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_variant_2.a",
+      "bytes": 10334592,
+      "old_sha256": "e59e348cc0a2b4d06164727903647ddd0fe30e4f2c62fe82c1e6fead8f241215",
+      "current_sha256": "f9d7a6450dd00bfb30e0f9b2ffb98c3cf76e5aaf448ca6c465e6bc9ed079adce",
+      "masked_sha256": "be9e49d06f08e2e97c7caeb24b74632ab401983454772c813abff0ef41fc36f4",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e39478fb8c5ca67b73d50f2cccd5afcbb6d82eb2d2ef6366835af0c9b019c39f"
+        },
+        {
+          "name": "runtime_2.cpp.o",
+          "body_sha256": "ae1be524db9507a0774a0f6a537b8362f2c07e3497a88145aee74b1711d33b45"
+        },
+        {
+          "name": "runtime_2.cppm.o",
+          "body_sha256": "f83817c77bcc96c890203f05e2e7e02bd1951d4fca780dfc5ae5ddd82ce758bf"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_variant_3.a",
+      "bytes": 10334592,
+      "old_sha256": "256df72a1c71c30a37f9d5a472aa62f3ef39500c6eb806787c384ecfa3fd91e9",
+      "current_sha256": "36ccf44cc611efece2fb263e8d6782268402dd6f4dfc6e9f11d75e5633ff94ce",
+      "masked_sha256": "5e493f8c0aac6736b2574c931691936f541afcab0d335611b2f31e8a9f072147",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "e2de78e9ea4062ea0b311f5716ef7bda4b995f19ca6663137c5b8fc53db21ad6"
+        },
+        {
+          "name": "runtime_3.cpp.o",
+          "body_sha256": "21d38f128679d1634115331a69810176a5d9869ba8e659e1c0c56e7b72af0333"
+        },
+        {
+          "name": "runtime_3.cppm.o",
+          "body_sha256": "05d0a806f026d98edd27d2556f06756ed609d4e5a232a6e78a75b6942fb9c0f6"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_variant_4.a",
+      "bytes": 10334592,
+      "old_sha256": "bd3d73d31fd2c6be6efb20d3b0ef916dc7fe2a00a960080bc18e53ce0cd1f107",
+      "current_sha256": "6d057704e928b361597814da6688c5cc43512f49be285a55e617e6234a9668b1",
+      "masked_sha256": "4ff81cd6edb314627bda67e751f8c7eba9012f93ad28f9f155575b33b7895625",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "52359273e5c553cbb54653626dc3e29a3a872537346a6aca4cf69211f1db391d"
+        },
+        {
+          "name": "runtime_4.cpp.o",
+          "body_sha256": "734784c519278921966ac69d135682cdf54b5b228ca3e4ea7d724fd1cdd27273"
+        },
+        {
+          "name": "runtime_4.cppm.o",
+          "body_sha256": "15b84627b90f2541ed4486e15e13f424bf0d4e329503926437249a06f8815d86"
+        }
+      ]
+    },
+    {
+      "configuration": "release",
+      "path": "build/rewrite-release/src/engine/libplanar_load_variant_5.a",
+      "bytes": 10334592,
+      "old_sha256": "8e447ab1e248831ad6b5d9662397ea3a0b521c479ec33482e43d0a2f3fe788d9",
+      "current_sha256": "663235c0b8d3b56774b702aad69af0e484a700558349e6299c19c3c4ad13eb7b",
+      "masked_sha256": "77fba8beca82a81e9bbfd033fded52a98a0778e295f66c02bbeb5c2cd546a96e",
+      "members": [
+        {
+          "name": "__.SYMDEF SORTED",
+          "body_sha256": "ed672f2db0d4ae50673e36ddab92e12f5a4770c53f4a9096e23b42daec33b975"
+        },
+        {
+          "name": "runtime_5.cpp.o",
+          "body_sha256": "bca36b0e2d861df5236cb4b79a1a8c396423942e991ca001f3ed7f9400670e86"
+        },
+        {
+          "name": "runtime_5.cppm.o",
+          "body_sha256": "bf966c5cf13efc3a9b464da63de669c2e933d781b22a61b0a123a813d891ccb8"
+        }
+      ]
+    }
+  ]
+}

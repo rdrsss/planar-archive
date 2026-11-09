@@ -1,0 +1,194 @@
+{
+  "note": "Byte-identical compact copies. Paths inside each copy retain its original relative base. Originals and bulky raw evidence remain local. Redaction may subsequently be recorded separately.",
+  "entries": [
+    {
+      "copy": "tests/native/r15-r18-final-evidence/PROBES-C09-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/probes-c09/manifest.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/probes-c09",
+      "bytes": 84966,
+      "sha256": "819c2eb1b9d8f50329153743bd6b4392762b11104bdcd305f6a044e32f0aa87b"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/BUDGET-PROBES-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/budget-probes/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/budget-probes",
+      "bytes": 55132,
+      "sha256": "c705b00f99fe5a23ae69d419099f1e853c2f975f2e46645b11fefe47f00a6183"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C11-EXPERIMENTS-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c11-evidence/experiments/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c11-evidence/experiments",
+      "bytes": 35251,
+      "sha256": "f5e6d815821388d35833ab7bf71bd775d006e908ba79b584e69784eb9a167904"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/PROBES-REQUIRED58.json",
+      "original": "tests/native/r15-r18-final-evidence/probes-c09/required58-resolution.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/probes-c09",
+      "bytes": 8201,
+      "sha256": "9092972564caa54855a650b42bd52bd06302f50bc109ae7264b58e86db7ac8cd"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/PROBES-ATTEMPT-SUMMARY.json",
+      "original": "tests/native/r15-r18-final-evidence/probes-c09/final-attempt-summary.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/probes-c09",
+      "bytes": 21962,
+      "sha256": "992a841103e9ead6d2bbc4d5915127ef5b6b070a42012be1f857cd8f6c57d944"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C11-RERUN-VALIDATED.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c11-evidence/experiments/rerun-validated.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c11-evidence/experiments",
+      "bytes": 2274,
+      "sha256": "488b1e1f9985b99a88f394fdfa86cec4cc811dd2742abd3f35d494535ebcb145"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C11-CARRY-SCOPE.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c11-evidence/experiments/carry-scope-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c11-evidence/experiments",
+      "bytes": 7928,
+      "sha256": "3280c7b47ff9091c66e5fccf89a690810bc1a3434006c522224483f2c5346bda"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/INDEPENDENT-RECORD-AUDIT.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review/independent-record-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review",
+      "bytes": 1016,
+      "sha256": "57754ab8ace1cd24baf9f3bf609e0404710e999efb5cea971bd25e0be28c6e9f"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/MANIFEST-SENSITIVITY-AUDIT.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review/manifest-sensitivity-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review",
+      "bytes": 776,
+      "sha256": "ea5c0c73e14bf373e63f00fa8e7d0769ce56a22e53cf6f5ca890a41cdd225618"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C12-RECORD-AUDIT.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review/c12-record-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review",
+      "bytes": 1221,
+      "sha256": "403b93149e36953392fc29c3c34feada9f38bb6e0ecb3833b46677612d13228e"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C13-CODER-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/coder/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/coder",
+      "bytes": 39872,
+      "sha256": "92e264fec7deef220d89dbe159df639cbbba7dddbcc45fae4294fd30983c5616"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C13-DIAGNOSTIC-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/diagnostic/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/diagnostic",
+      "bytes": 10029,
+      "sha256": "cd394d19204fe63569397e2d7e55af696a8857a09225ef3ee6b7d10fe7161735"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C13-PROBES-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/probes/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/probes",
+      "bytes": 9281,
+      "sha256": "4c369923ae3a6904e9db0195336b370c402090900877603cfe3311d49defdac5"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C13-REVIEW-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/review/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c13-evidence/review",
+      "bytes": 1743,
+      "sha256": "6dedb54e1f021617efe94398d96e23a77ef0b90fbbaa0a67cd8b6de398354a3d"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/AUDIT-C13-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review-c13/AUDIT-C13-MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review-c13",
+      "bytes": 1220,
+      "sha256": "99cfd9d37f3a3a4a303c15a9f93e62c9c84e7b494866d6dea1fab2698387176f"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C14-CODER-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c14-evidence/coder/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c14-evidence/coder",
+      "bytes": 12904,
+      "sha256": "147f7e729f87f4d1fd7ce92c082b30de7fc2d6ff0c72d9253f127e1676f5e0fd"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C14-PROOF-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c14-evidence/proof/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c14-evidence/proof",
+      "bytes": 6343,
+      "sha256": "5ea79cbe048dcf23f6d522dc497160a42c7b51640b205f002e7cf55f6164b0b5"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C14-REVIEW-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c14-evidence/review/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c14-evidence/review",
+      "bytes": 6094,
+      "sha256": "043c6209e3d6bb8eaddd2f9588bb03e4ff8a47409058b92a4fd5f3cbeea3e24e"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/INDEPENDENT-RETENTION-AUDIT.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review-c14/independent-retention-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review-c14",
+      "bytes": 1384,
+      "sha256": "bd6cc646517620818ca814e9205940c21e86145ab53455b23e6c58204601af0d"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/CURRENT-ARTIFACT-RECONCILIATION.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review-c14/post-gate-normalized-current-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review-c14",
+      "bytes": 1026,
+      "sha256": "3971e54050b1953ad66933d8ec4df9663a483b81e5124ec3ac3b42b120c67396"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C14-CALIBRATION-AUDIT.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review-c14/independent-c14-calibration-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review-c14",
+      "bytes": 1538,
+      "sha256": "661efc3e466dbba9cec10915476d810243046bc1e9882758fb60969adc0c9bf0"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/HISTORICAL-BINDING-AUDIT.json",
+      "original": "tests/native/r15-r18-final-evidence/final-review-c14/independent-historical-binding-audit.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/final-review-c14",
+      "bytes": 506,
+      "sha256": "d93bef9559fecfc67edeeb652acb403073c41934b620961f9118f3b669586629"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C15-SOURCE-EQUIVALENCE.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/coder/ACTUAL-PROOF-RECHECK.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/coder",
+      "bytes": 9086,
+      "sha256": "4a14f102d218614d013f3aab78f4eb94178bec3016791e3192936cf334e17906"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C15-FOCUSED-RESULTS.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/coder/FOCUSED-RESULTS.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/coder",
+      "bytes": 2943,
+      "sha256": "2076fc308508fdc22779ce6579dd23a0dfb9d710aae13b378941dd846f562df9"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C15-CODER-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/coder/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/coder",
+      "bytes": 5813,
+      "sha256": "eb8d5397ce64f1fae650f88ad2c1ccfe78b9c7ae2de550f8333192f59b90e2a8"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C15-INDEPENDENT-REVIEW.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/review/RESULT.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/review",
+      "bytes": 8762,
+      "sha256": "a3e93fd9adeb3aad650afd644eb1396c92b8cc8f6c624dbba0adb33b8e423b7e"
+    },
+    {
+      "copy": "tests/native/r15-r18-final-evidence/C15-REVIEW-MANIFEST.json",
+      "original": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/review/MANIFEST.json",
+      "original_relative_base": "tests/native/r15-r18-final-evidence/../r15-r18-c15-evidence/review",
+      "bytes": 1311,
+      "sha256": "9f154a2706c5053500e5a1fc802846acc65c89a0f45c13d126e4a49e9d7a9dd8"
+    }
+  ]
+}

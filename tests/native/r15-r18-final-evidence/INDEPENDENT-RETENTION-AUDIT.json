@@ -1,0 +1,32 @@
+{
+  "scope": "Independent full streaming verification of retained historical owned scratch bytes. No extraction, product execution or current-source claim.",
+  "archives": [
+    {
+      "label": "INPUTS",
+      "archive": "tests/native/r15-r18-c13-evidence/retained-inputs/c11-measure-inputs.tar.gz",
+      "archive_sha256": "f5d986a2100a2db70d96c3e153135be6b932cdc41e177267584fabecaa8bb1a4",
+      "inventory_sha256": "96f7703c64ee1770568e4d4892165a57ee29363b9c9eec4b9d92c360d3fe784e",
+      "files_stream_verified": 12885,
+      "symlinks_verified": 0,
+      "original_file_bytes_verified": 9661968199,
+      "archive_bytes": 2551229235,
+      "root_basename": "planar-c11-measure-inputs-n4okru75",
+      "extracted_files": 0
+    },
+    {
+      "label": "EXPERIMENTS",
+      "archive": "tests/native/r15-r18-c13-evidence/retained-experiments/c11-experiments.tar.gz",
+      "archive_sha256": "396c609d35f22140138bf8dc0242c92a8fcf98817cf43e7961e1245a6da5bf1e",
+      "inventory_sha256": "9af260fcc3dff4b410a61a202a7defa3e2ace7cdfd1804d8c45f934d5b8d6980",
+      "files_stream_verified": 12534,
+      "symlinks_verified": 0,
+      "original_file_bytes_verified": 6563129472,
+      "archive_bytes": 1481478840,
+      "root_basename": "planar-c11-experiments-c3yv3463",
+      "extracted_files": 0
+    }
+  ],
+  "total_files": 25419,
+  "total_original_bytes": 16225097671,
+  "errors": []
+}

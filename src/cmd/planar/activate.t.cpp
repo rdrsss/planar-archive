@@ -106,8 +106,8 @@ std::string head(const scratch& s) {
   return read.revision ? std::to_string(read.revision->id) : std::string("none");
 }
 
-const planar::engine::ledger::execution_role* role(const planar::engine::ledger::execution_snapshot& state,
-                                                   std::string_view job, std::string_view name) {
+const planar::engine::ledger::execution_role* role(const planar::engine::ledger::execution_snapshot& state, std::string_view job,
+                                                   std::string_view name) {
   for (const auto& row : state.roles)
     if (row.job == job && row.role == name)
       return &row;
@@ -181,17 +181,17 @@ void seed_foreign_stdlib(const scratch& s) {
   request.registry_argument  = "registry";
   change.request             = request;
   change.revision            = ledger::execution_revision_input{};
-  change.prepared            = ledger::execution_prepared_revision{
-      {{{"source.txt", "source foreign", 420}}, hist::tree_profile::source},
-      {{{"input.json", "{\"tag\":\"foreign\"}", 420}}, hist::tree_profile::provenance},
-      {stdlib_files, hist::tree_profile::provenance},
-      *interpretation_bytes,
-      *versions_bytes};
+  change.prepared =
+      ledger::execution_prepared_revision{{{{"source.txt", "source foreign", 420}}, hist::tree_profile::source},
+                                          {{{"input.json", "{\"tag\":\"foreign\"}", 420}}, hist::tree_profile::provenance},
+                                          {stdlib_files, hist::tree_profile::provenance},
+                                          *interpretation_bytes,
+                                          *versions_bytes};
   using kind_t = ledger::execution_expectation::kind_t;
   ledger::execution_expectation revision, job, unused;
-  revision.kind = kind_t::active_revision;
-  job.kind      = kind_t::active_job;
-  unused.kind   = kind_t::request_unused;
+  revision.kind   = kind_t::active_revision;
+  job.kind        = kind_t::active_job;
+  unused.kind     = kind_t::request_unused;
   change.expected = {revision, job, unused};
   auto committed  = ledger::commit_execution(s.ledger(), *state, change);
   INFO("seed commit failed with code " << (committed ? -1 : static_cast<int>(committed.error().code)));
@@ -349,7 +349,7 @@ TEST_CASE("root help lists activate before the final help line", "[activate][hel
   REQUIRE(result.status == 0);
   const std::string line = "planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE "
                            "--request-id ID --actor TEXT\n";
-  const auto at = result.output.find(line);
+  const auto        at   = result.output.find(line);
   REQUIRE(at != std::string::npos);
   CHECK(result.output.find("planar --help\n") > at);
 }

@@ -146,11 +146,11 @@ target_link_libraries(planar_runtime_tests PRIVATE planar_capture planar_admissi
 # percent of each ceiling free (native bytes, live Lua, invocation instructions, registration instructions, nodes).
 # Bracketing classes are excluded per column: bisects, confirmation pairs, deliberate refusals, ceiling-sized families
 # and the tight variant. Peaks, margins and exclusions are in the Margin record section of
-# docs/vernacular/rounds/V5-02-X06-D-C04.md.
-set(PLANAR_BUDGET_NATIVE_MAX 39845888)
-set(PLANAR_BUDGET_INSTRUCTION_MAX 19900000)
+# docs/vernacular/rounds/V5-02-R15-R18-C07-calibration.md (authority: X06-D-C04 D9-D11).
+set(PLANAR_BUDGET_NATIVE_MAX 53477376)
+set(PLANAR_BUDGET_INSTRUCTION_MAX 29000000)
 set(PLANAR_BUDGET_REGISTRATION_INSTRUCTION_MAX 1000000)
-set(PLANAR_BUDGET_NODE_MAX 25000)
+set(PLANAR_BUDGET_NODE_MAX 37500)
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/runtime/runtime.cppm")
 file(READ "${planar_runtime_unit}" budget_unit_text)
 string(REPLACE "module planar.engine.runtime;" "module planar.engine.runtime_budget_test;" budget_unit_text "${budget_unit_text}")
@@ -293,6 +293,18 @@ planar_rewrite_module(planar_ledger_execution
   TESTS ledger/execution.t.cpp ledger/execution_review.t.cpp TEST_TIMEOUT 120)
 # Test-only: the format1/format2 refusals and the legacy-ledger fixtures open ledgers through the existing format surface.
 target_link_libraries(planar_ledger_execution_tests PRIVATE planar_ledger_format planar_history_read)
+
+# Test-only current-observation reader for the real execution workflow regression.
+add_executable(planar_execution_snapshot_probe EXCLUDE_FROM_ALL ledger/snapshot_probe.t.cpp)
+planar_native_target(planar_execution_snapshot_probe)
+target_link_libraries(planar_execution_snapshot_probe PRIVATE planar_ledger_execution)
+add_dependencies(planar_tests planar_execution_snapshot_probe)
+
+add_test(NAME replacement.execution_sections_c11_coverage
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r15-r18-c11-sections.py"
+    "$<TARGET_FILE:planar_ledger_execution_tests>")
+set_tests_properties(replacement.execution_sections_c11_coverage PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 120)
 
 target_link_libraries(planar_ledger_storage PUBLIC planar_history_execution_codec)
 
@@ -718,7 +730,7 @@ planar_rewrite_module(planar_process_runner
   INTERFACE process/runner.cppm SOURCES process/runner.cpp TESTS process/runner.t.cpp TEST_TIMEOUT 60)
 
 planar_rewrite_module(planar_capture_tree_digest
-  INTERFACE capture/tree_digest.cppm SOURCES capture/tree_digest.cpp
+  INTERFACE capture/tree_digest.cppm SOURCES capture/tree_digest.cpp TESTS capture/tree_digest.t.cpp
   DEPENDS planar_value planar_canonical planar_xxhash)
 planar_rewrite_module(planar_execution_check
   INTERFACE execution/check.cppm SOURCES execution/check.cpp

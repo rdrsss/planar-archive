@@ -214,7 +214,7 @@ TEST_CASE("X05 A3 empty captured profile retains catalog and digest", "[external
   auto vm = command_vm::create(profile({}));
   REQUIRE(vm);
   CHECK(vm->catalog()->fields.at("version")->integer == 2);
-  CHECK(vm->catalog()->fields.at("commands")->items.size() == 5);
+  CHECK(vm->catalog()->fields.at("commands")->items.size() == 17);
   CHECK_FALSE(vm->effective_catalog().empty());
   CHECK(vm->effective_digest().size() == 32);
 }
@@ -226,7 +226,7 @@ TEST_CASE("X05 A3 ordered external descriptors finalize and retain native owners
        "function() return {} end)"}));
   REQUIRE(vm);
   auto c = vm->catalog();
-  auto e = c->fields.at("commands")->items.at(3);
+  auto e = c->fields.at("commands")->items.at(8);
   CHECK(e->fields.at("descriptor")->fields.at("name")->string == "inspect");
   CHECK(e->fields.at("descriptor")->fields.at("help")->string == "final");
   CHECK(e->fields.at("owner")->fields.at("module")->string == "external/m1.lua");
@@ -330,10 +330,10 @@ TEST_CASE("X05 A3 separate identity namespaces and all reserved IDs", "[external
     refused("registration.projection({id='" + std::string(id) +
                 "',abi='projection_v1',revision='v1',input='role_context_v1',help=''},function() end)",
             "reference", "catalog.projections[1]");
-  refused(command("render"), "reference", "catalog.commands[6]");
+  refused(command("render"), "reference", "catalog.commands[18]");
   auto reserved = command("with-profile");
   reserved.replace(reserved.find("custom.with-profile"), 19, "custom.with_profile");
-  refused(reserved, "reference", "catalog.commands[6]");
+  refused(reserved, "reference", "catalog.commands[18]");
 }
 TEST_CASE("X05 A3 resource ceilings remain sticky when protected calls catch", "[external-registration]") {
   refused("pcall(function() while true do end end)", "resource_limit", "profile.modules[1]");
@@ -423,11 +423,11 @@ TEST_CASE("X05 A3 normalized options detect duplicate identities independently",
   refused("registration.add({name='custom',family='extension_read_v1',handler_id='custom.v1',options=engine.array{{name='--thing'"
           ",type='text',required=false,help=''},{name='--thing',type='text',required=false,help=''}},help='',response_kind='"
           "extension_v1',capabilities=engine.array{}},function() end)",
-          "reference", "catalog.commands[6]");
+          "reference", "catalog.commands[18]");
   refused(
       "registration.add({name='custom',family='extension_read_v1',handler_id='custom.v1',options=engine.array{{name='--help',"
       "type='text',required=false,help=''}},help='',response_kind='extension_v1',capabilities=engine.array{}},function() end)",
-      "reference", "catalog.commands[6]");
+      "reference", "catalog.commands[18]");
   refused("registration.shape({id='custom',abi='shape_v1',revision='v1',stages='optional',help=string.char(1)},function()end)",
           "internal", "catalog.shapes[1]");
 }
@@ -464,7 +464,7 @@ TEST_CASE("X05 A3 C01 malformed sort keys retain original fields", "[external-re
                                               kind == 0   ? "commands"
                                               : kind == 1 ? "shapes"
                                                           : "projections",
-                                              bad + 1 + (kind == 0 ? 5 : 0)));
+                                              bad + 1 + (kind == 0 ? 17 : 0)));
       }
 }
 TEST_CASE("X05 A3 C01 handler and option controls retain original command", "[external-registration]") {
@@ -476,22 +476,24 @@ TEST_CASE("X05 A3 C01 handler and option controls retain original command", "[ex
     REQUIRE_FALSE(vm);
     CHECK(vm.error().detail.code == "internal");
     CHECK(vm.error().detail.message == "Invalid external profile protocol");
-    CHECK(vm.error().field == "catalog.commands[7]");
+    CHECK(vm.error().field == "catalog.commands[19]");
   }
 }
 TEST_CASE("X05 A3 C01 high catalog bytes remain valid", "[external-registration]") {
   std::string source = "local help='" + std::string(4096, 'h') + "';";
   for (int kind = 0; kind < 3; ++kind)
-    for (int i = 0; i < (kind == 0 ? 59 : 64); ++i) {
+    for (int i = 0; i < (kind == 0 ? 47 : 64); ++i) {
       auto descriptor = kind == 0   ? std::format("name='v{}',family='extension_read_v1',handler_id='custom.v{}',options=engine."
                                                   "array{{}},response_kind='extension_v1',capabilities=engine.array{{}},",
                                                   i, i)
                         : kind == 1 ? std::format("id='s{}',abi='shape_v1',revision='v1',stages='optional',", i)
                                     : std::format("id='p{}',abi='projection_v1',revision='v1',input='role_context_v1',", i);
-      if (kind == 0 && i < 50) {
+      if (kind == 0) {
         auto at = descriptor.find("options=engine.array{}");
         descriptor.replace(at, std::string_view("options=engine.array{}").size(),
-                           "options=engine.array{{name='--detail',type='text',required=false,help=help}}");
+                           i < 13 ? "options=engine.array{{name='--detail',type='text',required=false,help=help},{name='--extra',"
+                                    "type='text',required=false,help=help}}"
+                                  : "options=engine.array{{name='--detail',type='text',required=false,help=help}}");
       }
       source += std::format("registration.{}({{{}help=help}},function() end);",
                             kind == 0   ? "add"
@@ -546,7 +548,7 @@ TEST_CASE("X05 A3 C02 sealing retains original mixed kind and module locations",
                                                 kind == 0   ? "commands"
                                                 : kind == 1 ? "shapes"
                                                             : "projections",
-                                                bad + 1 + (kind == 0 ? 5 : 0) + (second_module ? 1 : 0)));
+                                                bad + 1 + (kind == 0 ? 17 : 0) + (second_module ? 1 : 0)));
         }
 }
 TEST_CASE("X05 A3 C03 two digit seal locations retain original indices", "[external-registration]") {
@@ -563,13 +565,13 @@ TEST_CASE("X05 A3 C03 two digit seal locations retain original indices", "[exter
                        descriptor, callable);
   };
   for (int kind = 0; kind < 3; ++kind)
-    for (int index : {10, 64})
+    for (int index : {kind == 0 ? 20 : 10, 64})
       for (int fault = 0; fault < 3; ++fault) {
         // Prior module entries and other kinds must not shift the target kind's
-        // original index. The five shipped commands count toward command64.
+        // original index. The seventeen shipped commands count toward command64.
         auto first  = entry(0, 1, "function()end") + entry(1, 1, "function()end") + entry(2, 1, "function()end");
         auto second = "local n=0;" + entry((kind + 1) % 3, 2, "function()end");
-        int  total  = index - (kind == 0 ? 5 : 0);
+        int  total  = index - (kind == 0 ? 17 : 0);
         for (int id = 2; id <= total; ++id) {
           auto callable = id != total || fault == 0 ? "function()end" : fault == 1 ? "function() n=n+1 end" : "next";
           second += entry(kind, id, callable);
@@ -608,7 +610,7 @@ TEST_CASE("X05 A3 C04 successful callbacks leave module boundary and first refus
 }
 TEST_CASE("X05 A3 C04 original descriptor errors survive canonical remap at two digit indices", "[external-registration]") {
   for (int kind = 0; kind < 3; ++kind)
-    for (int index : {10, 64}) {
+    for (int index : {kind == 0 ? 20 : 10, 64}) {
       auto entry = [kind](int id, bool bad) {
         auto d = kind == 0 ? std::format("name='c{}',family='{}',handler_id='custom.c{}',options=engine.array{{}},help='',"
                                          "response_kind='extension_v1',capabilities=engine.array{{}}",
@@ -621,7 +623,7 @@ TEST_CASE("X05 A3 C04 original descriptor errors survive canonical remap at two 
       };
       auto        first = entry(1, false);
       std::string second;
-      int         total = index - (kind == 0 ? 5 : 0);
+      int         total = index - (kind == 0 ? 17 : 0);
       for (int id = 2; id <= total; ++id)
         second += entry(id, id == total);
       auto vm = command_vm::create(profile({first, second}));
@@ -3467,7 +3469,7 @@ void extension_execution_refused(std::string_view body, std::string_view code = 
   auto result = owner.execute();
   REQUIRE_FALSE(result);
   CHECK(std::get<registration_error>(result.error()).detail.code == code);
-  CHECK(std::get<registration_error>(result.error()).field == "catalog.commands[6]");
+  CHECK(std::get<registration_error>(result.error()).field == "catalog.commands[18]");
   auto original = std::get<registration_error>(result.error());
   auto moved    = std::move(owner);
   auto retry    = moved.execute();
@@ -3645,7 +3647,7 @@ TEST_CASE("C4 A original command index differs from module and canonical order",
   f.put("trusted/module.lua",
         extension_execution_source(extension_summary(), "zeta") + extension_execution_source("return nil", "alpha"));
   f.put("trusted/second.lua", extension_execution_source("return nil", "beta"));
-  for (auto [name, index] : {std::pair{"alpha", 7}, std::pair{"beta", 8}}) {
+  for (auto [name, index] : {std::pair{"alpha", 19}, std::pair{"beta", 20}}) {
     auto owner = f.owner();
     REQUIRE(owner.admit(name, {}, {}));
     auto result = owner.execute();
@@ -3765,7 +3767,7 @@ void c01_refused(const auto& result) {
   REQUIRE_FALSE(result);
   REQUIRE(std::holds_alternative<registration_error>(result.error()));
   CHECK(std::get<registration_error>(result.error()).detail.code == "internal");
-  CHECK(std::get<registration_error>(result.error()).field == "catalog.commands[6]");
+  CHECK(std::get<registration_error>(result.error()).field == "catalog.commands[18]");
 }
 } // namespace
 TEST_CASE("C4 B3 C01 history missing known services refuse through ordinary and raw aliases",
@@ -4452,8 +4454,8 @@ void c02_prefix(extension_fixture& f, std::string_view file, int iterations) {
   auto bytes = read_bytes(f.path / "workspaces/demo" / file);
   f.put("workspaces/demo/" + std::string(file), "for i=1," + std::to_string(iterations) + " do end\n" + bytes);
 }
-constexpr int c02_tail = 18400000; ///< Handler loop: ceiling minus 1,500,000 (19,900,000); with two 900000 prefixes it crosses
-                                   ///< the ceiling, with one it stays below.
+constexpr int c02_tail = 27400000; ///< Handler loop: ceiling minus 1,600,000 (29,000,000); two 900000 prefixes still cross it.
+                                   ///< One prefix uses 28,620,200 instructions, below the independent 28,680,000 margin fault.
 } // namespace
 TEST_CASE("X06 D C02 role preparation charges declaration chunks to the factory budget",
           "[external-registration][role-service][x06d]") {
@@ -4567,10 +4569,10 @@ std::int64_t c02_boundary(bool outputs) {
 // The unpadded roots measured 4524 (macOS, 36 bytes) and 4468 (Linux, 28 bytes).
 #if defined(__APPLE__)
 constexpr std::int64_t c02_outputs_gap  = 4742;
-constexpr std::int64_t c02_off_boundary = 227275; // macOS final pin of RA01-B-W2 (was 227525; see c02-pin.md)
+constexpr std::int64_t c02_off_boundary = 379083; // C07 measured 51 MiB pin; see C07 calibration record
 #else
 constexpr std::int64_t c02_outputs_gap  = 4737;
-constexpr std::int64_t c02_off_boundary = 227301; // Linux final pin of RA01-B-W2 (was 227551; Debug, see c02-pin.md)
+constexpr std::int64_t c02_off_boundary = 379109; // C07 measured Linux 51 MiB pin; see C07 calibration record
 #endif
 // Both re-pins (macOS 228586 to 227593 and Linux 228612 to 227619 after gate run 1; macOS 227593 to 227525 and Linux 227619 to
 // 227551 after the probe repair, 68 padding bytes) are authorised by the operator decision of 2026-10-30 ('re-pin and resume').
@@ -4643,17 +4645,18 @@ constexpr std::size_t  c03_pad_file_max = 900000;
 constexpr std::int64_t c03_window       = 1 << 18;
 constexpr std::size_t  c03_bytes_per_entry =
     100; ///< Divisor sizing one garbage fill to about three quarters of the live ceiling (75 to 110 recover).
-// Drop thresholds in padding units, calibrated on the unmutated product (Debug): floor(M * (1 - f / 2)), raised to 0.90 M
-// where that is lower. A tree mutant removes a whole enumeration (predicted drop about 0), so the tree floors are 0.90 M. A
+// Drop thresholds in padding units: the rounded midpoint of measured M and the predicted missing-charge drop, at least
+// floor(0.90 * M). A tree mutant removes a whole enumeration (predicted drop about 0), so its floor is floor(0.90 * M). A
 // registry or observation mutant removes only the read charge, one native byte per padded byte out of a slope of 58
 // (registry) or 51 (observations) bytes per byte, so f is 1/58 or 1/51 and the predicted mutated drops are 196552 and
 // 172416. The drops scale with c03_entries (= 1) and c03_registry_pad (= 200000): recalibrate when c03_entries,
 // c03_registry_pad or a ceiling changes. Measurements: the Margin record section of docs/vernacular/rounds/V5-02-X06-D-C04.md.
-// Tree floors for c03_entries = 1: 0.90 of the measured drop M = 3768.
-constexpr std::int64_t c03_cur_floor  = 3391;
+// C07 tree floors for c03_entries = 1: floor(0.90 * M), M = 3770 current and 3768 base.
+// Current measurements: docs/vernacular/rounds/V5-02-R15-R18-C07-calibration.md.
+constexpr std::int64_t c03_cur_floor  = 3393;
 constexpr std::int64_t c03_base_floor = 3391;
 constexpr std::int64_t c03_reg_floor  = 198276; // measured 200000; f = 1/58, mutated drop 196552
-constexpr std::int64_t c03_obs_floor  = 174140; // measured 175862; f = 1/51, mutated drop 172416
+constexpr std::int64_t c03_obs_floor  = 174140; // measured 175864; f = 1/51, mutated drop 172416
 
 void c03_tree(extension_fixture& f, std::string_view directory, std::size_t files) {
   for (std::size_t i = 0; i < files; ++i)
@@ -4851,7 +4854,7 @@ std::string x07_profile_selector(const extension_fixture& f) {
   return (f.path / "trusted/profile.json").string();
 }
 command_history_options x07_history(const std::filesystem::path& ledger) {
-  return {ledger.string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+  return {ledger.string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
 }
 acceptance::request_intent x07_load_intent(const extension_fixture& f) {
   auto intent =
@@ -4925,7 +4928,7 @@ TEST_CASE("X07 closed factory registers exactly once for every family", "[extern
                              "r=" + (f.path / "source").string(), "j", "worker", std::nullopt, std::nullopt, std::nullopt, false},
       command_init_options{(f.path / "new-ledger.db").string(), "w"},
       command_history_options{(f.path / "ledger.db").string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-                              std::nullopt},
+                              std::nullopt, std::nullopt},
       command_export_options{(f.path / "ledger.db").string(), (f.path / "export-target").string(), 1},
   };
   auto load = profile_invocation::open_with_profile(x07_load_intent(f), (f.path / "ledger.db").string());
@@ -5193,13 +5196,14 @@ std::expected<value_ptr, diagnostic> known_history(std::size_t chunks) {
   auto              ledger = (f.path / "ledger.db").string();
   auto              opened = rb::profile_invocation::open_with_profile(
       (f.path / "trusted/profile.json").string(),
-      rb::command_history_options{ledger, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt});
+      rb::command_history_options{ledger, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt});
   INFO((opened ? std::string("opened")
                : opened.error().detail.code + " " + opened.error().detail.message + " " + opened.error().field));
   REQUIRE(opened);
   padded_history_services services(chunks, 65536);
   return std::move(*opened).run_known(
-      rb::command_history_options{ledger, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt}, services);
+      rb::command_history_options{ledger, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt},
+      services);
 }
 } // namespace n30
 } // namespace
@@ -5240,12 +5244,12 @@ std::string ra01_projection(const std::string& id) {
 TEST_CASE("RA01-B1 profile registering a reserved authoring command name is refused as identity conflict",
           "[external-registration][ra01-b1]") {
   for (const auto& verb : ra01_verbs)
-    ra01_conflict(command(verb), "catalog.commands[6]");
+    ra01_conflict(command(verb), "catalog.commands[18]");
 }
 TEST_CASE("RA01-B1 reserved command collision field follows registration order", "[external-registration][ra01-b1]") {
   for (const auto& verb : ra01_verbs) {
-    ra01_conflict(command("zzz_first") + "; " + command(verb), "catalog.commands[7]");
-    ra01_conflict(command(verb) + "; " + command("aaa_second"), "catalog.commands[6]");
+    ra01_conflict(command("zzz_first") + "; " + command(verb), "catalog.commands[19]");
+    ra01_conflict(command(verb) + "; " + command("aaa_second"), "catalog.commands[18]");
   }
 }
 TEST_CASE("RA01-B1 profile registering a reserved authoring family name is refused as identity conflict",
@@ -5255,7 +5259,7 @@ TEST_CASE("RA01-B1 profile registering a reserved authoring family name is refus
     auto at     = source.find("family='extension_read_v1'");
     REQUIRE(at != std::string::npos);
     source.replace(at, std::string("family='extension_read_v1'").size(), "family='" + verb + "'");
-    ra01_conflict(source, "catalog.commands[6]");
+    ra01_conflict(source, "catalog.commands[18]");
   }
 }
 TEST_CASE("RA01-B1 profile registering a reserved authoring handler id is refused as identity conflict",
@@ -5265,7 +5269,7 @@ TEST_CASE("RA01-B1 profile registering a reserved authoring handler id is refuse
     auto at     = source.find("custom.mine");
     REQUIRE(at != std::string::npos);
     source.replace(at, std::string("custom.mine").size(), handler);
-    ra01_conflict(source, "catalog.commands[6]");
+    ra01_conflict(source, "catalog.commands[18]");
   }
 }
 TEST_CASE("RA01-B1 profile registering a reserved projection id is refused as identity conflict",
@@ -5295,19 +5299,19 @@ TEST_CASE("RA01-B2 orchestrator_context_v1 is refused as an external projection 
 TEST_CASE("RA01-B1 reserved command is refused when the profile also registers a projection",
           "[external-registration][ra01-b1]") {
   for (const auto& verb : ra01_verbs) {
-    ra01_conflict(command(verb) + "; " + ra01_projection("mine_projection"), "catalog.commands[6]");
-    ra01_conflict(ra01_projection("mine_projection") + "; " + command(verb), "catalog.commands[6]");
+    ra01_conflict(command(verb) + "; " + ra01_projection("mine_projection"), "catalog.commands[18]");
+    ra01_conflict(ra01_projection("mine_projection") + "; " + command(verb), "catalog.commands[18]");
   }
   for (const auto& handler : ra01_handlers) {
     auto source = command("mine");
     auto at     = source.find("custom.mine");
     REQUIRE(at != std::string::npos);
     source.replace(at, std::string("custom.mine").size(), handler);
-    ra01_conflict(source + "; " + ra01_projection("mine_projection"), "catalog.commands[6]");
+    ra01_conflict(source + "; " + ra01_projection("mine_projection"), "catalog.commands[18]");
   }
 }
 TEST_CASE("RA01-B1 non reserved near miss names stay registrable", "[external-registration][ra01-b1]") {
-  for (auto name : {"observer", "status", "orchestrate"}) {
+  for (auto name : {"observer", "statusx", "orchestrate"}) {
     INFO(name);
     REQUIRE(command_vm::create(profile({command(name)})));
   }
@@ -5439,7 +5443,7 @@ TEST_CASE("RA01-B1 reserved pre check continues past a malformed entry sorted be
   REQUIRE_FALSE(vm);
   CHECK(vm.error().detail.code == "reference");
   CHECK(vm.error().detail.message == "External registration identity conflict");
-  CHECK(vm.error().field == "catalog.commands[7]");
+  CHECK(vm.error().field == "catalog.commands[19]");
 }
 TEST_CASE("RA01-B1 a broken profile reports its own error before a reserved name collision", "[external-registration][ra01-b1]") {
   // The broken statement follows the reserved registration inside the same module, so module execution fails first.

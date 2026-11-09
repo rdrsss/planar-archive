@@ -1,0 +1,67 @@
+{
+  "source_files": 272,
+  "current_c14_overlay": {
+    "src/cmd/planar/bootstrap.t.cpp": {
+      "c13": "a3bcb964c33d144a70417a663985c97436cb1fbbc4d5cfa8a873ac012d65eecc",
+      "c14": "b594cc78b53a51892b70c9e0557ddde6c65c21ee615551d26c73b2156ff467b4",
+      "scope": "command test inventory outside measured engine dependencies"
+    }
+  },
+  "measurement_execution": "C13 actual runs carried after exact C14 component check; no new measurement execution",
+  "configurations": {
+    "debug": {
+      "counts": {
+        "cases": 509,
+        "assertions": 87118,
+        "budget_fixtures": 31,
+        "RUN": 569,
+        "PRE": 0
+      },
+      "maxima": {
+        "native": 39999031,
+        "lua": 16527445,
+        "instr": 21516200,
+        "reg": 5000,
+        "nodes": 27873
+      }
+    },
+    "release": {
+      "counts": {
+        "cases": 509,
+        "assertions": 87118,
+        "budget_fixtures": 31,
+        "RUN": 569,
+        "PRE": 0
+      },
+      "maxima": {
+        "native": 39999031,
+        "lua": 16527445,
+        "instr": 21516200,
+        "reg": 5000,
+        "nodes": 27873
+      }
+    }
+  },
+  "calibration_evidence_files": 44,
+  "calibration_raw_files": 2266,
+  "input_closures": {
+    "debug": {
+      "local": 1502,
+      "external": 2044,
+      "pcms": 101
+    },
+    "release": {
+      "local": 1502,
+      "external": 2043,
+      "pcms": 101
+    }
+  },
+  "raised_samples": 16,
+  "raised_tail_instructions": [
+    27719200,
+    28620200,
+    29521200
+  ],
+  "product_carry_files": 190,
+  "errors": []
+}

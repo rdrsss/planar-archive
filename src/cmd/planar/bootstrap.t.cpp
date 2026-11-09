@@ -303,7 +303,7 @@ TEST_CASE("invocation paths snapshot cwd and workspace environment only when nee
   CHECK(cwd_reads == 2);
   CHECK(env_reads == 1);
   for (command_options ledger : {command_options(command_init_options{"relative.db", "demo"}),
-                                 command_options(command_history_options{"relative.db", {}, {}, {}, {}, {}})}) {
+                                 command_options(command_history_options{"relative.db", {}, {}, {}, {}, {}, {}})}) {
     REQUIRE(planar::cmd::prepare_invocation_paths(ledger, cwd, env));
   }
   CHECK(cwd_reads == 4);
@@ -1366,10 +1366,25 @@ TEST_CASE("X07 root help bytes are unchanged and omit with-profile", "[bootstrap
         "Optional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\n"
         "planar init --ledger FILE --workspace-id ID\n"
         "planar history --ledger FILE [--after-event ID] [--limit N]\n"
-        "  or --revision ID | --request-id ID | --at-event ID\n"
+        "  or --revision ID | --request-id ID | --at-event ID | --event ID\n"
         "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
         "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
         "--actor TEXT\n"
+        "planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor "
+        "TEXT\n"
+        "planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE_OR_NAME --registry FILE]\n"
+        "planar preview --ledger PATH --role ID [--since RENDER_FP]\n"
+        "planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]\n"
+        "planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]\n"
+        "planar refresh --ledger PATH --run TOKEN --expect-fp WORK_FP --request-id ID --actor TEXT [--observations FILE]\n"
+        "planar checkpoint --ledger PATH --run TOKEN --observations FILE --request-id ID --actor TEXT\n"
+        "planar release --ledger PATH --run TOKEN --reason REASON --request-id ID --actor TEXT [--observations FILE] "
+        "[--provenance FILE]\n"
+        "planar recover --ledger PATH --role ID [--root ID=DIRECTORY --base-root ID=DIRECTORY]\n"
+        "planar check --ledger PATH --run TOKEN --root DIRECTORY --base-root DIRECTORY --scratch DIRECTORY --request-id ID "
+        "--actor TEXT [--provenance FILE]\n"
+        "planar check-recover --ledger PATH --run-id ID --reservation ID --confirm-stopped true --request-id ID --actor TEXT\n"
+        "planar verdict --ledger PATH --run TOKEN --verdict FILE --request-id ID --actor TEXT\n"
         "planar --help\n");
   CHECK_FALSE(x07::contains(result.output, "with-profile"));
 }
@@ -1488,7 +1503,7 @@ TEST_CASE("X07 profile invocation reads cwd and environment once", "[bootstrap][
   // History needs no environment: the cwd is still read once for the relative ledger and the relative selector.
   cwd_calls = env_calls = 0;
   command_options history =
-      command_history_options{"rel.db", std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+      command_history_options{"rel.db", std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
   planar::cmd::invocation_snapshot history_snapshot;
   REQUIRE(planar::cmd::prepare_profile_invocation("p.json", history, history_snapshot, cwd_reader, env_reader));
   CHECK(cwd_calls == 1);
@@ -1519,7 +1534,8 @@ TEST_CASE("X07 profile selector normalizes lexically without existence", "[boots
   const std::function<std::expected<std::string, diagnostic>()> env_reader = []() -> std::expected<std::string, diagnostic> {
     return std::unexpected(diagnostic{"internal", "unused"});
   };
-  command_options options = command_history_options{"l.db", std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+  command_options options =
+      command_history_options{"l.db", std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
   planar::cmd::invocation_snapshot snapshot;
   auto selector = planar::cmd::prepare_profile_invocation("../marker.json", options, snapshot, cwd_reader, env_reader);
   REQUIRE(selector);
@@ -2097,14 +2113,27 @@ TEST_CASE("X07 adapter redacts malformed trusted payloads as internal protocol",
 }
 TEST_CASE("X07 command sources add no diagnostic outside the closed table", "[bootstrap][x07]") {
   std::set<std::string_view> allowed(x07::closed_messages().begin(), x07::closed_messages().end());
-  const std::regex           pair(R"re(\{\s*"([a-z_]+)"\s*,\s*"((?:[^"\\]|\\.)*)")re");
-  const std::regex           field(R"re("message"\s*,\s*text\(\s*"((?:[^"\\]|\\.)*)")re");
-  const std::regex           assigned(R"re(\bmessage\s*=\s*"((?:[^"\\]|\\.)*)")re");
-  const auto                 sources = x07::command_sources();
+  // Execution/authoring diagnostic vocabulary, separate from the external registration table.
+  allowed.insert({"Invalid command syntax", "Activate may be complete; retry the same request ID or inspect request history",
+                  "Unknown check reservation", "Unknown selected role"});
+  const std::regex pair(R"re(\{\s*"([a-z_]+)"\s*,\s*"((?:[^"\\]|\\.)*)")re");
+  const std::regex field(R"re("message"\s*,\s*text\(\s*"((?:[^"\\]|\\.)*)")re");
+  const std::regex assigned(R"re(\bmessage\s*=\s*"((?:[^"\\]|\\.)*)")re");
+  const auto       sources = x07::command_sources();
   CHECK(sources.size() >= 18);
   std::size_t literals = 0;
   for (const auto& [name, text] : sources) {
     for (std::sregex_iterator it(text.begin(), text.end(), pair), end; it != end; ++it) {
+      const auto start  = text.rfind('\n', static_cast<std::size_t>(it->position()));
+      const auto prefix = text.substr(start == std::string::npos ? 0 : start + 1,
+                                      static_cast<std::size_t>(it->position()) - (start == std::string::npos ? 0 : start + 1));
+      // These arrays are option membership and record-key iteration, not diagnostic constructors.
+      if (name == "handlers/release/command.cpp" && prefix.contains("CLI::IsMember(") && (*it)[1].str() == "released" &&
+          (*it)[2].str() == "interrupted")
+        continue;
+      if (name == "invocation.cpp" && prefix.contains("for (const auto* key : ") && (*it)[1].str() == "toolchain" &&
+          (*it)[2].str() == "argv")
+        continue;
       CAPTURE(name, (*it)[1].str(), (*it)[2].str());
       ++literals;
       CHECK(x07::closed_codes().contains((*it)[1].str()));
@@ -3085,6 +3114,11 @@ std::map<std::string, std::size_t> platform_counts(std::size_t& scanned) {
 
 std::map<std::string, std::size_t> audited_platform_counts() {
   return {{"engine/capture/native.cpp", 1},
+          // R17 captures platform stat timestamps and uses platform spawn/pipe primitives.
+          {"engine/capture/tree_digest.cpp", 1},
+          {"engine/process/runner.cpp", 5},
+          // C13 separately guards subject creation and the immediate pre-spawn inheritable check.
+          {"engine/process/runner.t.cpp", 2},
           {"engine/capture/admission.cpp", 2},
           {"engine/runtime/runtime.t.cpp", 1},
           {"engine/acceptance/source_capture.t.cpp", 1},
@@ -3237,12 +3271,28 @@ std::string head_help() {
          "Optional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\n"
          "planar init --ledger FILE --workspace-id ID\n"
          "planar history --ledger FILE [--after-event ID] [--limit N]\n"
-         "  or --revision ID | --request-id ID | --at-event ID\n"
+         "  or --revision ID | --request-id ID | --at-event ID | --event ID\n"
          "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
          "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
          "--actor TEXT\n"
+         "planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor "
+         "TEXT\n"
+         "planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE_OR_NAME --registry FILE]\n"
+         "planar preview --ledger PATH --role ID [--since RENDER_FP]\n"
+         "planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]\n"
+         "planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]\n"
+         "planar refresh --ledger PATH --run TOKEN --expect-fp WORK_FP --request-id ID --actor TEXT [--observations FILE]\n"
+         "planar checkpoint --ledger PATH --run TOKEN --observations FILE --request-id ID --actor TEXT\n"
+         "planar release --ledger PATH --run TOKEN --reason REASON --request-id ID --actor TEXT [--observations FILE] "
+         "[--provenance FILE]\n"
+         "planar recover --ledger PATH --role ID [--root ID=DIRECTORY --base-root ID=DIRECTORY]\n"
+         "planar check --ledger PATH --run TOKEN --root DIRECTORY --base-root DIRECTORY --scratch DIRECTORY --request-id ID "
+         "--actor TEXT [--provenance FILE]\n"
+         "planar check-recover --ledger PATH --run-id ID --reservation ID --confirm-stopped true --request-id ID --actor TEXT\n"
+         "planar verdict --ledger PATH --run TOKEN --verdict FILE --request-id ID --actor TEXT\n"
          "planar --help\n";
 }
+
 std::string quoted(const std::string& text) {
   return "'" + text + "'";
 }
@@ -3298,7 +3348,7 @@ cmake_scan scan_cmake(const std::string& text, std::string_view token) {
 TEST_CASE("RA01-B1 default invoke and production binary refuse all six authoring verbs as usage", "[bootstrap][ra01]") {
   x07::tree t(x07::kind::valid);
   ra01::fixture(t.work);
-  // Root help is the five-command text, unchanged.
+  // Root help is the 17-command text, unchanged.
   const std::array<std::string_view, 1> help_args = {"--help"};
   const auto                            help      = planar::cmd::invoke(help_args);
   CHECK(help.status == 0);
@@ -3331,7 +3381,7 @@ TEST_CASE("RA01-B1 default invoke and production binary refuse all six authoring
     CHECK(x07::slurp(out_file).empty());
     CHECK(x07::slurp(err_file) == x07::usage_bytes().err);
   }
-  // The production binary help is the five-command text as well.
+  // The production binary help is the 17-command text as well.
   const auto help_out = t.root / "help-out.txt";
   const int  status   = std::system(
       (ra01::quoted(std::string(PLANAR_PRODUCTION_BINARY)) + " --help > " + ra01::quoted(help_out.string()) + " 2>&1").c_str());
@@ -3411,7 +3461,8 @@ TEST_CASE("RA01-B1 production targets never receive the authoring definition", "
   CHECK(creations >= 1);
 }
 
-TEST_CASE("RA01-B1 with-profile probe stays five and a malformed authoring tail reaches profile capture", "[bootstrap][ra01]") {
+TEST_CASE("RA01-B1 with-profile probe stays production-only and a malformed authoring tail reaches profile capture",
+          "[bootstrap][ra01]") {
   x07::oracle o;
   ra01::fixture(o.a.work);
   ra01::require_live_stack(o.a.work);
@@ -3465,7 +3516,7 @@ TEST_CASE("RA01-B1 with-profile outputs are identical under the authoring bundle
       const auto plain = x07::of(x07::run_in(t->work, args));
       x07::same(stack, plain);
     }
-  // Selected help lists the five shipped rows only, exactly as the default entry does.
+  // Selected help lists the 17 shipped rows only, exactly as the default entry does.
   x07::same(x07::of(ra01::run_stack(o.a.work, x07::with_profile({"--help"}))), o.help);
 }
 
@@ -3591,8 +3642,7 @@ TEST_CASE("R15-C init creates a verified format3 ledger with the unchanged respo
   CHECK(p4::str(p4::at(again.value, "error"), "message") == "Ledger target already exists");
 }
 
-TEST_CASE("R15-C format3 history page carries the typed reference keys after init load and activate",
-          "[bootstrap][format3]") {
+TEST_CASE("R15-C format3 history page carries the typed reference keys after init load and activate", "[bootstrap][format3]") {
   p4::scratch s;
   const auto  ledger    = p4::initialized_and_loaded(s);
   const auto  activated = p4::activate(ledger, "combined", "1", "NONE", "act");
@@ -3605,7 +3655,7 @@ TEST_CASE("R15-C format3 history page carries the typed reference keys after ini
   CHECK(p4::str(page.value, "last_event") == "3");
   const auto& events = p4::at(p4::at(page.value, "data"), "events");
   REQUIRE(events->items.size() == 3);
-  const std::set<std::string> summary_keys{"sequence", "type",    "version", "revision", "request_id", "actor",
+  const std::set<std::string> summary_keys{"sequence",    "type",    "version", "revision", "request_id",    "actor",
                                            "occurred_at", "payload", "job",     "role",     "generation_id", "run_id"};
   for (const auto& event : events->items)
     CHECK(p4::keys(event) == summary_keys);
@@ -3758,8 +3808,7 @@ TEST_CASE("R15-C export reads a format3 source tree after init and load", "[boot
   for (const auto& entry : p4::fs::recursive_directory_iterator(target))
     declaration = declaration || entry.path().filename() == "workspace.lua";
   CHECK(declaration);
-  const auto absent =
-      p4::run({"export", "--ledger", ledger.string(), "--revision", "2", "--target", (s.root / "none").string()});
+  const auto absent = p4::run({"export", "--ledger", ledger.string(), "--revision", "2", "--target", (s.root / "none").string()});
   CHECK(absent.status != 0);
   CHECK_FALSE(p4::fs::exists(s.root / "none"));
 }
@@ -3777,8 +3826,8 @@ TEST_CASE("R15-C explicit format1 and format2 ledgers still read through history
     const auto page = p4::history(ledger);
     REQUIRE(page.status == 0);
     for (const auto& event : p4::at(p4::at(page.value, "data"), "events")->items)
-      CHECK(p4::keys(event) == std::set<std::string>{"sequence", "type", "version", "revision", "request_id", "actor",
-                                                    "occurred_at", "payload"});
+      CHECK(p4::keys(event) ==
+            std::set<std::string>{"sequence", "type", "version", "revision", "request_id", "actor", "occurred_at", "payload"});
     const auto state = p4::history(ledger, {"--at-event", "2"});
     REQUIRE(state.status == 0);
     CHECK(p4::keys(p4::at(p4::at(state.value, "data"), "state")) == std::set<std::string>{"active_revision"});

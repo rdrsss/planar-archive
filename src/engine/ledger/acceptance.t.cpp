@@ -1198,7 +1198,9 @@ TEST_CASE("X06 D runtime public surface and resource messages stay closed", "[at
         "ledger_path);std::expected<value_ptr,diagnostic>run_known(command_optionsoptions,command_services&services)&&;"
         "value_ptrcatalog()const;std::string_vieweffective_"
         "catalog()const;std::expected<prepared_profile,profile_preparation_error>prepare_load(constacceptance::request_intent&"
-        "final_intent)&&;std::expected<extension_invocation,registration_error>into_extension()&&;profile_invocation_"
+        "final_intent)&&;std::expected<prepared_profile,profile_preparation_error>prepare_execution_load(constacceptance::"
+        "request_intent&final_intent,value_ptrexecution_snapshot)&&;std::expected<extension_invocation,registration_error>"
+        "into_extension()&&;profile_invocation_"
         "observationobserve()constnoexcept;profile_invocation(constprofile_invocation&)=delete;profile_invocation&operator=("
         "constprofile_invocation&)=delete;profile_invocation(profile_invocation&&other)noexcept;profile_invocation&operator=("
         "profile_invocation&&other)noexcept;~profile_invocation();");

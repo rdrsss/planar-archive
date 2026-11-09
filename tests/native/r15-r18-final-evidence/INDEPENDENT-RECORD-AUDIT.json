@@ -1,0 +1,49 @@
+{
+  "source_files": 272,
+  "configurations": {
+    "debug": {
+      "counts": {
+        "cases": 509,
+        "assertions": 87118,
+        "budget_fixtures": 31,
+        "RUN": 569,
+        "PRE": 0
+      },
+      "maxima": {
+        "native": 39999031,
+        "lua": 16527445,
+        "instr": 21516200,
+        "reg": 5000,
+        "nodes": 27873
+      }
+    },
+    "release": {
+      "counts": {
+        "cases": 509,
+        "assertions": 87118,
+        "budget_fixtures": 31,
+        "RUN": 569,
+        "PRE": 0
+      },
+      "maxima": {
+        "native": 39999031,
+        "lua": 16527445,
+        "instr": 21516200,
+        "reg": 5000,
+        "nodes": 27873
+      }
+    }
+  },
+  "host": {
+    "debug": {
+      "log_sha256": "f95a0f58a87434a095ee6bae6293b89735e54656f0ca8e2be3c0bc06e6940c99",
+      "passed": 1844
+    },
+    "release": {
+      "log_sha256": "d7a2ab828c593c7ab27c048b1164efd7a3b928f527cd752831d5054306233f74",
+      "passed": 1844
+    }
+  },
+  "product_carry_files": 190,
+  "errors": []
+}

@@ -21,10 +21,10 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # JOBS is the parallelism of the gate builds.
 ARG JOBS=4
 # Exact apt version of the LLVM 23 packages, read from the apt.llvm.org noble
-# arm64 Packages index (llvm-toolchain-noble-23, main) on 2026-11-07. apt.llvm.org drops superseded builds, so refresh this pin from the
+# arm64 Packages index (llvm-toolchain-noble-23, main) on 2026-11-08. apt.llvm.org drops superseded builds, so refresh this pin from the
 # index when the build reports the version as not found (first pin 2026-10-28 was dropped on 2026-10-29; the 23.1.5 pin of 2026-10-29 was dropped by 2026-11-07). It must match
 # ^(1:)?23\.\d+\.\d+ and be >= 23.1.0 (docs/toolchain-parity.md).
-ARG LLVM_APT_VERSION=1:23.1.6~++20261103094202+2875c6073a7e-1~exp1~20261103214217.95
+ARG LLVM_APT_VERSION=1:23.1.6~++20261108033755+c47d7823685a-1~exp1~20261108153854.96
 # CMake 4.4.x (>= 4.3; the import-std UUID table covers 4.3.x and 4.4.x only).
 # CMAKE_SHA256 is the linux-aarch64 tarball line of the published
 # https://cmake.org/files/v4.4/cmake-4.4.5-SHA-256.txt.

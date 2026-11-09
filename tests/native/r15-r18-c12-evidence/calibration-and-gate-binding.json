@@ -1,0 +1,18 @@
+{
+  "debug": {
+    "post_c11_source_manifest": "tests/native/r15-r18-c11-evidence/calibration/post-debug-source-hashes.json",
+    "source_matches": 272,
+    "no_build_inputs_newer_than_gate_completion": true,
+    "gate_completion_mtime_ns": 1794226599111927335,
+    "newer_inputs": [],
+    "binary_mtime_ns": 1794219301463323442
+  },
+  "release": {
+    "post_c11_source_manifest": "tests/native/r15-r18-c11-evidence/calibration/post-release-source-hashes.json",
+    "source_matches": 272,
+    "no_build_inputs_newer_than_gate_completion": true,
+    "gate_completion_mtime_ns": 1794227648787849885,
+    "newer_inputs": [],
+    "binary_mtime_ns": 1794220662654230693
+  }
+}

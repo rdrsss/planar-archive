@@ -5,8 +5,8 @@ import std;
 import planar.engine.execution.drafts;
 
 namespace {
-using planar::engine::history::tree_file;
 using planar::engine::execution::changed_paths;
+using planar::engine::history::tree_file;
 } // namespace
 
 TEST_CASE("R15-D drafts identical trees have no changed paths", "[drafts]") {
@@ -25,14 +25,14 @@ TEST_CASE("R15-D drafts report differing, absent and added paths sorted", "[draf
 }
 
 TEST_CASE("R15-D drafts order paths by unsigned bytes", "[drafts]") {
-  const std::vector<tree_file> recorded{};
-  const std::vector<tree_file> captured{{"\xc3\xa9.md", "e", 420}, {"Z.md", "z", 420}, {"a.md", "a", 420}};
+  const std::vector<tree_file>   recorded{};
+  const std::vector<tree_file>   captured{{"\xc3\xa9.md", "e", 420}, {"Z.md", "z", 420}, {"a.md", "a", 420}};
   const std::vector<std::string> expected{"Z.md", "a.md", "\xc3\xa9.md"};
   CHECK(changed_paths(captured, recorded) == expected);
 }
 
 TEST_CASE("R15-D drafts empty capture lists every recorded path once", "[drafts]") {
-  const std::vector<tree_file> recorded{{"b", "1", 420}, {"a", "2", 420}};
+  const std::vector<tree_file>   recorded{{"b", "1", 420}, {"a", "2", 420}};
   const std::vector<std::string> expected{"a", "b"};
   CHECK(changed_paths({}, recorded) == expected);
 }

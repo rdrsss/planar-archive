@@ -6,11 +6,21 @@ import cli11;
 export import planar.cmd.response;
 export import planar.engine.runtime;
 export namespace planar::cmd::handlers {
-using refresh_options=engine::command_recovery_options;
+/// Invocation-local native intent; retained through parsing and dispatch.
+using refresh_options = engine::command_recovery_options;
 /// Attach this family to an invocation-local parser.
-CLI::App& attach_refresh(CLI::App&, refresh_options&);
+/// @param root Invocation-local CLI11 parser.
+/// @param options Storage that outlives parsing and dispatch.
+/// @return Attached command with the exact option grammar.
+CLI::App& attach_refresh(CLI::App& root, refresh_options& options);
 /// Execute the embedded family.
-response refresh_command(const refresh_options&,engine::command_vm* = nullptr);
+/// @param options Parsed command intent.
+/// @param vm Optional registered VM; null creates a fresh embedded invocation.
+/// @return Buffered success or typed failure response.
+response refresh_command(const refresh_options& options, engine::command_vm* vm = nullptr);
 /// Execute the selected profile family.
-response refresh_with_profile(const refresh_options&,std::string_view);
-}
+/// @param options Parsed command intent.
+/// @param selector External profile selector.
+/// @return Buffered success or typed failure response; no direct process output.
+response refresh_with_profile(const refresh_options& options, std::string_view selector);
+} // namespace planar::cmd::handlers

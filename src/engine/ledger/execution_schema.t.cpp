@@ -1094,9 +1094,9 @@ TEST_CASE("storage exported orphan sidecar check keeps the liveness rule", "[led
   }
 }
 
-TEST_CASE("storage header check refuses user version 3 on its own", "[ledger][storage][guard]") {
-  // The raw header check is the first refusal an older opener applies; a later PRAGMA check would mask a header that
-  // accepted version 3, so the header function is called directly on a format2 file marked as version 3.
+TEST_CASE("storage header accepts supported version 3 and refuses unsupported version 4", "[ledger][storage][guard]") {
+  // The raw header boundary supports versions 1, 2 and 3. Schema verification is separate: relabelling this
+  // format2 fixture does not make it a complete format3 ledger. Unsupported version 4 must fail at the header itself.
   scratch    f;
   const auto path = f.root / "ledger";
   REQUIRE(initialize_new_v2(path, workspace_id));
@@ -1108,6 +1108,15 @@ TEST_CASE("storage header check refuses user version 3 on its own", "[ledger][st
   {
     auto db = raw_connection(path, open_mode::read_write);
     REQUIRE(exec_sql(db, "PRAGMA user_version=3"));
+  }
+  {
+    native::descriptor held(::open(path.c_str(), O_RDONLY | O_NOFOLLOW | O_CLOEXEC));
+    REQUIRE(held.fd >= 0);
+    REQUIRE(native::header(held.fd).has_value());
+  }
+  {
+    auto db = raw_connection(path, open_mode::read_write);
+    REQUIRE(exec_sql(db, "PRAGMA user_version=4"));
   }
   native::descriptor held(::open(path.c_str(), O_RDONLY | O_NOFOLLOW | O_CLOEXEC));
   REQUIRE(held.fd >= 0);

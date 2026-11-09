@@ -17,8 +17,8 @@ export namespace planar::engine::process {
 enum class process_error_code { spawn_io, pipe_io, wait_io, resource_limit };
 /// A run failure: invalid spec, or a system call failure that is not a recorded outcome.
 struct process_error {
-  process_error_code code;
-  int                sys_errno = 0;
+  process_error_code code;          ///< Process failure category.
+  int                sys_errno = 0; ///< Captured system error number; zero when not applicable.
 };
 
 /// Everything run needs to start one check process.
@@ -38,7 +38,7 @@ enum class termination { exited, signaled, timed_out, output_limit, not_spawned 
 
 /// Recorded outcome of one run.
 struct run_result {
-  termination   how;
+  termination   how;                  ///< Leader termination category.
   int           exit_code   = 0;      ///< exited only.
   int           signal      = 0;      ///< signaled, timed_out, output_limit: the signal that ended the leader.
   int           spawn_errno = 0;      ///< not_spawned only.

@@ -91,19 +91,32 @@ struct command_preview_options {
 };
 /// Native token-scoped recovery mutation. Secrets stay in this native intent.
 struct command_recovery_options {
-  std::string                operation, ledger, run, request_id, actor, expect_fp, reason;
-  std::optional<std::string> observations, provenance;
+  std::string                operation;    ///< Selected execution operation.
+  std::string                ledger;       ///< Explicit normalized ledger path.
+  std::string                run;          ///< Native run token; never exposed to Lua.
+  std::string                request_id;   ///< Driver supplied idempotency key.
+  std::string                actor;        ///< Recorded actor text.
+  std::string                expect_fp;    ///< Expected work fingerprint for refresh.
+  std::string                reason;       ///< Release reason: released or interrupted.
+  std::optional<std::string> observations; ///< Optional observation document path.
+  std::optional<std::string> provenance;   ///< Optional provenance document path.
 };
 /// Bound retained recovery read.
 struct command_recover_options {
-  std::string                ledger, role;
-  std::optional<std::string> root, base_root;
+  std::string                ledger;    ///< Explicit normalized ledger path.
+  std::string                role;      ///< Selected role identifier.
+  std::optional<std::string> root;      ///< Current output root path.
+  std::optional<std::string> base_root; ///< Baseline output root path.
 };
 /// Native run acquisition intent; takeover is selected by a supplied run identifier.
 struct command_run_options {
-  std::string                ledger, job, role, request_id, actor;
-  std::optional<std::string> run_id;
-  std::optional<std::string> provenance;
+  std::string                ledger;     ///< Explicit normalized ledger path.
+  std::string                job;        ///< Selected job identifier.
+  std::string                role;       ///< Selected role identifier.
+  std::string                request_id; ///< Driver supplied idempotency key.
+  std::string                actor;      ///< Recorded actor text.
+  std::optional<std::string> run_id;     ///< Decimal run identifier for takeover or recovery.
+  std::optional<std::string> provenance; ///< Optional provenance document path.
 };
 #ifdef PLANAR_AUTHORING_BUNDLE
 /// The six embedded-only authoring verbs; exists only in the authoring stack and its variants.
@@ -122,9 +135,22 @@ struct command_authoring_options {
 #endif
 /// R17/R18 invocation-local execution intent; secrets stay out of request framing.
 struct command_check_options {
-  std::string operation, ledger, run, run_id, reservation, confirm_stopped, root, base_root, scratch, verdict, request_id, actor;
-  std::optional<std::string> provenance;
-  bool                       operator==(const command_check_options&) const = default;
+  std::string                operation;       ///< Selected execution operation.
+  std::string                ledger;          ///< Explicit normalized ledger path.
+  std::string                run;             ///< Native run token; never exposed to Lua.
+  std::string                run_id;          ///< Decimal run identifier for takeover or recovery.
+  std::string                reservation;     ///< Decimal reservation identifier for recovery.
+  std::string                confirm_stopped; ///< Explicit stopped-process confirmation.
+  std::string                root;            ///< Current output root path.
+  std::string                base_root;       ///< Baseline output root path.
+  std::string                scratch;         ///< Private check scratch directory.
+  std::string                verdict;         ///< Verdict document path.
+  std::string                request_id;      ///< Driver supplied idempotency key.
+  std::string                actor;           ///< Recorded actor text.
+  std::optional<std::string> provenance;      ///< Optional provenance document path.
+  /// Compare all retained intent fields.
+  /// @return True exactly when all intent fields are equal.
+  bool operator==(const command_check_options&) const = default;
 };
 /// Exactly one compiled family intent, copied into the invocation owner.
 using command_options =
@@ -148,9 +174,15 @@ struct command_service_result {
 class command_services {
 public:
   /// Finite R17/R18 service boundary; native adapters retain captured facts across calls.
-  virtual command_service_result check_step(const command_check_options&, std::string_view, const value_ptr&);
+  /// @param options Retained check or verdict intent.
+  /// @param operation Finite service operation name.
+  /// @param arguments Validated operation arguments.
+  /// @return Captured or committed facts, or a typed native refusal.
+  virtual command_service_result check_step(const command_check_options& options, std::string_view operation,
+                                            const value_ptr& arguments);
   virtual ~command_services() = default;
   /// Bind the verified effective stdlib identity before executing a selected profile family.
+  /// @param digest Verified effective stdlib fingerprint.
   virtual void bind_execution_profile(std::string_view digest);
   /// @brief Capture the declaration at the private workspace option.
   /// @param options Retained parsed native intent.
@@ -227,17 +259,51 @@ public:
   /// @param options Retained native status intent.
   /// @return Exact `{version:1,ledger,last_seq,snapshot}` or typed failure. Default refuses.
   virtual command_service_result read_execution(const command_recovery_options& options);
+  /// @brief Read the verified execution snapshot and apply operation binding.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_execution(const command_recover_options& options);
+  /// @brief Capture and decode the optional observation document.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_observations(const command_recovery_options& options);
+  /// @brief Capture and validate optional run provenance.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_provenance(const command_recovery_options& options);
+  /// @brief Validate and commit the execution change against the captured snapshot.
+  /// @param options Retained parsed native intent.
+  /// @param change Validated execution change to commit.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result commit_execution(const command_recovery_options& options, const value_ptr& change);
+  /// @brief Read retained dispatch, checkpoint, evidence and carried findings.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_recovery(const command_recover_options& options);
-  /// Capture current/base outputs under accepted recovery role boundaries, without writes.
+  /// @brief Capture current and baseline outputs within accepted role boundaries.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result capture_outputs(const command_recover_options& options);
+  /// @brief Read the retained dispatch named by the preview digest.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_dispatch(const command_preview_options& options);
+  /// @brief Read the verified execution snapshot and apply operation binding.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_execution(const command_run_options& options);
+  /// @brief Capture and validate optional run provenance.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_provenance(const command_run_options& options);
+  /// @brief Validate and commit the execution change against the captured snapshot.
+  /// @param options Retained parsed native intent.
+  /// @param change Validated execution change to commit.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result commit_execution(const command_run_options& options, const value_ptr& change);
+  /// @brief Read the verified execution snapshot and apply operation binding.
+  /// @param options Retained parsed native intent.
+  /// @return Bounded native facts or a typed refusal; the default implementation refuses.
   virtual command_service_result read_execution(const command_status_options& options);
   /// @brief Read the verified format3 execution snapshot for preview, after the EX-6 binding and the active-job check.
   /// @param options Retained native preview intent.
@@ -245,7 +311,8 @@ public:
   virtual command_service_result read_execution(const command_preview_options& options);
   /// @brief Look up one saved execution request for `status --request-id`.
   /// @param options Retained native status intent; `request_id` is present.
-  /// @return `{request_id,operation,outcome,result,disposition?}` or `request_not_found`. Default refuses.
+  /// @return Saved request result, or an open check reservation with run id/generation and no result;
+  /// unknown keys return `request_not_found`. Default refuses.
   virtual command_service_result read_request(const command_status_options& options);
   /// @brief Open the private draft workspace of `status --workspace --registry`, synchronously and once.
   /// @param options Retained native status intent; `workspace` and `registry` are present.
@@ -677,6 +744,15 @@ public:
   /// or a typed error whose `semantic` is non-null only for an ordinary trusted semantic refusal (never for a native failure).
   /// @note Thread-confined. Opaque, consumed, failed and moved-from owners refuse with a protocol error at field profile.
   std::expected<prepared_profile, profile_preparation_error> prepare_load(const acceptance::request_intent& final_intent) &&;
+  /// @brief Consume a known-load owner and prepare format3 reconciliation in the original cumulative frame.
+  /// Uses the same intent, receipt and consumption invariants as prepare_load. Validates and deep-copies the snapshot before
+  /// reconciliation; the frozen input and change remain bound to acceptance. Null input refuses and consumes the owner.
+  /// @param final_intent Final parsed load intent, equal to the originally bound intent.
+  /// @param execution_snapshot Required format3 snapshot; caller aliases cannot mutate the prepared input.
+  /// @return Opaque prepared profile, or a typed native/semantic refusal with no published preparation.
+  /// @note Thread-confined. Reconciliation finishes before cleanup; the prepared VM is never reentered.
+  std::expected<prepared_profile, profile_preparation_error>
+  prepare_execution_load(const acceptance::request_intent& final_intent, value_ptr execution_snapshot) &&;
   /// @brief Transfer the original capture and VM into an extension owner without recapture or re-registration.
   /// Known-load owners are refused (adoption cannot change mode; known load goes through prepare_load and X07 extension
   /// dispatch uses opaque owners only); the refusal consumes nothing and leaves the owner usable.
@@ -698,6 +774,8 @@ public:
   ~profile_invocation();
 
 private:
+  std::expected<prepared_profile, profile_preparation_error> _prepare_load(const acceptance::request_intent& final_intent,
+                                                                           value_ptr execution_snapshot, bool execution) &&;
   struct implementation;
   friend class profile_load_stage;
   friend class prepared_profile;
@@ -747,6 +825,8 @@ struct profile_acceptance_data {
   history::recorded_interpretation_v2 interpretation; ///< Encoded and versions bytes with decoded values (each at most 16 MiB).
   std::string                         workspace_id;   ///< Workspace identity from the derived interpretation structure.
   std::shared_ptr<const acceptance::request_data> bound_intent; ///< Exact intent bound when the owner was opened.
+  value_ptr execution_snapshot;                                 ///< Owned format3 input snapshot; absent for format2 preparation.
+  value_ptr execution_change; ///< Owned reconciled format3 change, derived before the VM becomes dormant.
 };
 /// Opaque published product of prepare_load: the consumed owner (original receipts, dormant VM and counters), the sealed
 /// source capture and immutable derived acceptance data.

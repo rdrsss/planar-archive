@@ -1,0 +1,32 @@
+{
+  "scope": "Stopped C13 independent integrated audit; request-changes GA-C13-1. No final platform/publication acceptance.",
+  "disposition": "request-changes",
+  "source_freeze": "runner.t.cpp sha256 70ea1208b8a70020523a94e1e94a1c6d52b2aee23cbe67263f6c96bdf804c65f",
+  "files": {
+    "audit_calibration.py": {
+      "sha256": "5c9f3433fa0b66c4782c0fe1fad60f752fc0683715a78878b3e690be6015b9bb",
+      "bytes": 10653
+    },
+    "host-gate-failure.json": {
+      "sha256": "1eb82ec43a3759c2dd1cd71c98be20bb34ec98db764285b29f88fedb8af25576",
+      "bytes": 530
+    },
+    "independent-c13-calibration-audit.json": {
+      "sha256": "5dcf3b3073d354d6b086698673bd09ab049fd3089d933f2a0d601b2fd6e78b0a",
+      "bytes": 1105
+    },
+    "platform-branch-failure.json": {
+      "sha256": "97184e3f3d79f881975ae59d4803824688351038d7b09c422630de15b3a79c9f",
+      "bytes": 1328
+    },
+    "review-probe-bindings.json": {
+      "sha256": "b9e4b97e77c6c11228b2c79064a7874c42ef020bb720103e6ddce03926c0d94c",
+      "bytes": 308
+    }
+  },
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-FINAL-ACCEPTANCE-C13.md",
+    "sha256": "dd3e0bd72811c1653cdc9c7ec6ea84db2ed8d99d23f43ca210474fdf159110fb",
+    "bytes": 9702
+  }
+}

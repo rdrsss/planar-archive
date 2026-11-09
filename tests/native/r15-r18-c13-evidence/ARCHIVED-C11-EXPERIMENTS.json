@@ -1,0 +1,13 @@
+{
+  "purpose": "Reversible retention of owned C11 experiment scratch inputs/artifacts; original repository evidence logs and manifests unchanged.",
+  "archive": "tests/native/r15-r18-c13-evidence/retained-experiments/c11-experiments.tar.gz",
+  "archive_sha256": "396c609d35f22140138bf8dc0242c92a8fcf98817cf43e7961e1245a6da5bf1e",
+  "archive_bytes": 1481478840,
+  "original_bytes": 6563129472,
+  "files": 12534,
+  "symlinks": 0,
+  "inventory": "tests/native/r15-r18-c13-evidence/retained-experiments/inventory.json",
+  "inventory_sha256": "9af260fcc3dff4b410a61a202a7defa3e2ace7cdfd1804d8c45f934d5b8d6980",
+  "verification": "All regular-file and hardlink content hashes and symlink targets verified before removing only the owned scratch tree.",
+  "restore": "Extract archive under OS temporary directory to restore original root basename; hash-bound paths can be verified directly by streaming members."
+}

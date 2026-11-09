@@ -226,11 +226,28 @@ ledger::execution_error execution_failure(ledger::execution_error_code code) {
 /// The fixed EX-7 code messages that native execution sites of activate raise before the commit.
 value_ptr execution_code(std::string_view code) {
   std::string message = code == "history_unavailable"       ? "History needed for this request is unavailable"
+                        : code == "check_in_progress"       ? "A check is already in progress for this role"
                         : code == "drifted"                 ? "Role work changed since it was acknowledged"
                         : code == "no_active_job"           ? "No active job matches the request"
                         : code == "interpretation_mismatch" ? "Interpretation does not match the active revision"
                                                             : "Execution state changed since the request was prepared";
   return object({{"code", text(std::string(code))}, {"message", text(std::move(message))}, {"field", text("")}});
+}
+/// Preserve execution-owned diagnostic fields without changing the generic error boundary.
+value_ptr check_error_value(const execution::check_error& error, std::uint64_t revision) {
+  auto fields     = native_error(error)->fields;
+  fields["field"] = text(error.field);
+  if (error.contract_delivery)
+    fields["details"] = object({{"expected", text(std::to_string(revision))}, {"actual", text("working_bytes")}});
+  else if (!error.work.empty())
+    fields["details"] = object({{"work", text(error.work)}});
+  return object(std::move(fields));
+}
+/// Preserve the native parser/normalizer's verdict field path.
+value_ptr verdict_error_value(const execution::verdict_error& error) {
+  auto fields     = native_error({error.code, error.message, error.limit, error.maximum})->fields;
+  fields["field"] = text(error.field);
+  return object(std::move(fields));
 }
 std::string digest_hex(const history::record_digest& digest) {
   std::string out;
@@ -704,7 +721,7 @@ public:
           return internal();
         auto prepared = execution::prepare_check(plan, options.root, options.base_root, options.scratch);
         if (!prepared)
-          return {{}, native_error(prepared.error())};
+          return {{}, check_error_value(prepared.error(), execution_state->revision->id)};
         check_prepared = std::move(*prepared);
         return {execution::check_observation(*check_prepared), {}};
       }
@@ -728,7 +745,7 @@ public:
           return internal();
         auto run = execution::run_checks(*check_prepared, check_reservation->id);
         if (!run)
-          return {{}, native_error(run.error())};
+          return {{}, check_error_value(run.error(), execution_state->revision->id)};
         ledger::execution_check_result result;
         result.observation       = run->observation;
         result.recapture_matches = run->recapture_matches;
@@ -817,12 +834,10 @@ public:
       if (service == "read_verdict") {
         auto input = execution::read_verdict_file(options.verdict);
         if (!input)
-          return {{}, native_error({input.error().code, input.error().message, input.error().limit, input.error().maximum})};
+          return {{}, verdict_error_value(input.error())};
         auto normalized = execution::normalize_verdict(*input);
         if (!normalized)
-          return {{},
-                  native_error({normalized.error().code, normalized.error().message, normalized.error().limit,
-                                normalized.error().maximum})};
+          return {{}, verdict_error_value(normalized.error())};
         auto value = history::verdict_value(*normalized);
         if (!value)
           return internal();
@@ -1132,9 +1147,12 @@ public:
                               {"event", text(std::to_string(c.seq))},
                               {"value", c.value}});
     }
-    return {
-        object({{"run", run}, {"acknowledged", ack}, {"checkpoint", checkpoint}, {"evidence", array()}, {"findings", array()}}),
-        {}};
+    return {object({{"run", run},
+                    {"acknowledged", ack},
+                    {"checkpoint", checkpoint},
+                    {"evidence", array(std::move(records->evidence))},
+                    {"findings", array(std::move(records->findings))}}),
+            {}};
   }
   value_ptr              run_provenance;
   command_service_result read_execution(const engine::command_run_options& options) override {
@@ -1215,14 +1233,39 @@ public:
     if (!opened)
       return {{}, execution_error_value(opened.error())};
     const auto failure = execution_error_value(execution_failure(ledger::execution_error_code::io));
-    auto       query   = opened->sql().prepare("SELECT operation,outcome,result FROM requests WHERE request_id=?1");
+    // Keep the completed-request and open-reservation branches in one read snapshot.
+    auto transaction = opened->sql().begin(false);
+    if (!transaction)
+      return {{}, failure};
+    auto query = opened->sql().prepare("SELECT operation,outcome,result FROM requests WHERE request_id=?1");
     if (!query || !query->bind_text(1, *options.request_id))
       return {{}, failure};
     auto step = query->step();
     if (!step)
       return {{}, failure};
-    if (*step == ledger::step_result::done)
-      return {{}, native_error({"request_not_found", "Recorded history view is unavailable"})};
+    if (*step == ledger::step_result::done) {
+      auto reservation = opened->sql().prepare("SELECT r.id,r.run_id,g.ordinal FROM reservations r "
+                                               "JOIN reservation_state s ON s.reservation_id=r.id "
+                                               "JOIN runs u ON u.id=r.run_id JOIN generations g ON g.id=u.generation_id "
+                                               "WHERE r.request_id=?1 AND s.state='open'");
+      if (!reservation || !reservation->bind_text(1, *options.request_id))
+        return {{}, failure};
+      auto found = reservation->step();
+      if (!found)
+        return {{}, failure};
+      if (*found == ledger::step_result::done)
+        return {{}, native_error({"request_not_found", "Recorded history view is unavailable"})};
+      auto id = reservation->integer(0), run = reservation->integer(1), generation = reservation->integer(2);
+      if (!id || !*id || **id <= 0 || !run || !*run || **run <= 0 || !generation || !*generation || **generation <= 0)
+        return {{}, execution_error_value(execution_failure(ledger::execution_error_code::ledger_corrupt))};
+      return {
+          object({{"request_id", text(*options.request_id)},
+                  {"operation", text("check")},
+                  {"outcome", text("in_progress")},
+                  {"reservation", text(std::to_string(**id))},
+                  {"run", object({{"id", text(std::to_string(**run))}, {"generation", text(std::to_string(**generation))}})}}),
+          {}};
+    }
     auto operation = query->text(0), outcome = query->text(1);
     auto saved = column_bytes(*query, 2);
     if (!operation || !*operation || !outcome || !*outcome || !saved)
@@ -1402,6 +1445,10 @@ public:
   }
   command_service_result initialize_ledger(const command_init_options& options) override {
     try {
+      // Preserve the existing syntax/schema boundary before any filesystem traversal.
+      const auto filename = std::filesystem::path(options.ledger).filename().string();
+      if (filename.empty() || filename == "." || filename == "..")
+        return {{}, ledger_error({engine::ledger::types::format_error_code::invalid_argument, ""})};
       // Init cutover (EX-1, Q13 A, XD5): a new ledger is format3; the CLI signature and response bytes are unchanged.
       auto metadata = engine::ledger::initialize_format3(options.ledger, options.workspace_id);
       if (!metadata)
@@ -1427,8 +1474,11 @@ public:
         q.selector = history_selector::request;
       else if (selector.selector == "state")
         q.selector = history_selector::state;
+      else if (selector.selector == "event")
+        q.selector = history_selector::event;
       // The retained VM has already checked exact agreement with this typed intent.
-      q.id = static_cast<std::uint64_t>(options.revision.value_or(options.at_event.value_or(options.after_event.value_or(0))));
+      q.id = static_cast<std::uint64_t>(
+          options.event.value_or(options.revision.value_or(options.at_event.value_or(options.after_event.value_or(0)))));
       q.request_id = selector.request_id;
       q.limit      = selector.limit;
       auto file    = engine::ledger::open_existing(options.ledger);
@@ -1808,6 +1858,71 @@ namespace rt_api = ::planar::engine;
 // X07-ANCHOR:response-ceiling
 constexpr std::size_t response_ceiling = 16777215;
 } // namespace
+namespace {
+// Commit only immutable profile preparation; the retained VM is dormant and no Lua runs under the write lock.
+value_ptr complete_profile_format3_load(std::string_view path, const rt_api::prepared_profile& candidate,
+                                        const engine::ledger::execution_snapshot& snapshot, std::string_view workspace,
+                                        engine::ledger::completion_receipt& completion) {
+  auto data = candidate.data();
+  if (!data || !(*data)->bound_intent || !(*data)->bound_intent->version2 || !(*data)->execution_change)
+    return native_error({"internal", "Invalid native load preparation"});
+  const auto& input          = **data;
+  auto        bound_snapshot = execution::snapshot_value(snapshot);
+  if (!bound_snapshot || canonical_text(*bound_snapshot) != canonical_text(input.execution_snapshot))
+    return native_error({"internal", "Invalid native load preparation"});
+  if (input.workspace_id != workspace)
+    return ledger_error({ledger::format_error_code::invalid_argument, ""});
+  ledger::execution_prepared_revision records{{input.source, history::tree_profile::source},
+                                              {input.registry.files, history::tree_profile::provenance},
+                                              {input.effective.files, history::tree_profile::effective_provenance},
+                                              input.interpretation.encoded,
+                                              input.interpretation.versions_encoded};
+  ledger::execution_revision_input    revision{};
+  bool                                noop = false;
+  if (const auto& active = snapshot.revision) {
+    const auto registry_digest = active->registry_value && active->registry_value->fields.contains("digest") &&
+                                         active->registry_value->fields.at("digest")->kind == value_kind::string
+                                     ? std::optional<std::string>(active->registry_value->fields.at("digest")->string)
+                                     : std::nullopt;
+    noop = tree_digest(records.source.files, records.source.profile) == std::optional<std::string>(active->source_digest) &&
+           tree_digest(records.stdlib.files, records.stdlib.profile) == std::optional<std::string>(active->stdlib_digest) &&
+           registry_digest && tree_digest(records.registry.files, records.registry.profile) == registry_digest &&
+           canonical_text(active->interpretation_value) == std::optional<std::string>(records.interpretation) &&
+           canonical_text(active->versions_value) == std::optional<std::string>(records.versions);
+    if (noop)
+      revision = {active->source, active->registry, active->stdlib, active->interpretation, active->versions, true};
+  }
+  execution::load_options typed{*input.bound_intent->version2, revision, std::nullopt};
+  if (!noop)
+    typed.prepared = std::move(records);
+  execution::change_request request{input.bound_intent->request_id, input.bound_intent->fields.actor, std::nullopt,
+                                    std::move(typed), nullptr};
+  auto                      change = execution::decode_execution_change(input.execution_change, snapshot, request);
+  if (!change)
+    return native_error({"internal", "Invalid embedded command protocol"});
+  auto staged = ledger::stage_execution(std::filesystem::path(path), snapshot, *change);
+  if (!staged)
+    return execution_error_value(staged.error());
+  if (staged->result().replayed) {
+    completion.saved_result = staged->result().saved_result;
+    completion.phase        = ledger::completion_phase::replayed;
+    return {};
+  }
+  if (auto verified = candidate.verify_native_receipts(); !verified) {
+    staged->abort();
+    return native_error(verified.error());
+  }
+  completion.saved_result = staged->result().saved_result;
+  completion.phase        = ledger::completion_phase::commit_uncertain;
+  if (auto committed = staged->commit(); !committed) {
+    completion.phase = ledger::completion_phase::not_completed;
+    completion.saved_result.clear();
+    return execution_error_value(committed.error());
+  }
+  completion.phase = ledger::completion_phase::committed;
+  return {};
+}
+} // namespace
 response execute_profile_load(const engine::acceptance::request_intent& intent, std::string_view ledger_path) {
   using namespace detail;
   response                           fallback{4, "", ""};
@@ -1822,37 +1937,62 @@ response execute_profile_load(const engine::acceptance::request_intent& intent, 
     auto data = intent.data();
     if (!data)
       return failed(native_error({"internal", "Missing native load intent"}));
-    const auto& request = **data;
-    std::string ledger_identity;
+    const auto&                                       request = **data;
+    std::string                                       ledger_identity, workspace_identity;
+    bool                                              format3 = false;
+    std::optional<engine::ledger::execution_snapshot> execution_snapshot;
+    value_ptr                                         encoded_snapshot;
     {
       auto ledger = engine::ledger::open_existing(std::filesystem::path(std::string(ledger_path)),
                                                   engine::ledger::ledger_access::read_only);
       if (!ledger)
         return failed(ledger_error(ledger.error()));
-      ledger_identity = ledger->metadata().identity;
-      // A format3 ledger opens read-only through storage since the cutover (DD35); the profile load path stays refused
-      // there exactly as before, ahead of any request lookup.
-      if (ledger->metadata().format == engine::ledger::ledger_format::v3)
-        return failed(ledger_error({engine::ledger::format_error_code::unsupported_version, ""}));
-      auto saved = ledger->read_request(request.request_id);
-      if (!saved)
-        return failed(ledger_error(saved.error()));
-      if (*saved) {
-        if ((*saved)->body_encoded != request.encoded)
-          return failed(ledger_error({engine::ledger::format_error_code::request_conflict, ""}));
-        return {0, (*saved)->result + "\n", "", std::move(stdout_error)};
+      ledger_identity    = ledger->metadata().identity;
+      workspace_identity = ledger->metadata().workspace_id;
+      format3            = ledger->metadata().format == engine::ledger::ledger_format::v3;
+      if (!format3) {
+        auto saved = ledger->read_request(request.request_id);
+        if (!saved)
+          return failed(ledger_error(saved.error()));
+        if (*saved) {
+          if ((*saved)->body_encoded != request.encoded)
+            return failed(ledger_error({engine::ledger::format_error_code::request_conflict, ""}));
+          return {0, (*saved)->result + "\n", "", std::move(stdout_error)};
+        }
+        if (ledger->metadata().format != engine::ledger::ledger_format::v2)
+          return failed(ledger_error({engine::ledger::format_error_code::unsupported_version, ""}));
       }
-      // Only a format2 ledger can record a profile request; this is decided before the profile is read.
-      if (ledger->metadata().format != engine::ledger::ledger_format::v2)
-        return failed(ledger_error({engine::ledger::format_error_code::unsupported_version, ""}));
-    } // The verified read transaction is released before any profile capture or writable acceptance.
+    } // Release the read transaction before capture or writable acceptance.
+    if (format3) {
+      if (!request.version2)
+        return failed(native_error({"internal", "Missing native load intent"}));
+      auto saved = engine::ledger::lookup_execution_request(std::filesystem::path(ledger_path), request.request_id,
+                                                            engine::ledger::execution_framing{*request.version2});
+      if (!saved)
+        return failed(execution_error_value(saved.error()));
+      if (saved->state == engine::ledger::request_state::conflict)
+        return failed(ledger_error({engine::ledger::format_error_code::request_conflict, ""}));
+      if (saved->state == engine::ledger::request_state::replay)
+        return {0, saved->result + "\n", "", std::move(stdout_error)};
+      auto snapshot = engine::ledger::read_execution_snapshot(std::filesystem::path(ledger_path));
+      if (!snapshot)
+        return failed(execution_error_value(snapshot.error()));
+      if (snapshot->identity != ledger_identity)
+        return failed(execution_error_value(execution_failure(engine::ledger::execution_error_code::path_denied)));
+      auto encoded = engine::execution::snapshot_value(*snapshot);
+      if (!encoded)
+        return failed(native_error({"internal", "Invalid embedded command protocol"}));
+      encoded_snapshot   = *encoded;
+      execution_snapshot = std::move(*snapshot);
+    }
     // X07-ANCHOR:after-early-miss
     auto opened = rt_api::profile_invocation::open_with_profile(intent, ledger_path);
     if (!opened)
       return registration_failed(opened.error().detail);
     // X07-ANCHOR:after-factory-open
     // The step-4 intent object is passed unchanged: preparation refuses any other intent.
-    auto prepared = std::move(*opened).prepare_load(intent);
+    auto prepared =
+        format3 ? std::move(*opened).prepare_execution_load(intent, encoded_snapshot) : std::move(*opened).prepare_load(intent);
     if (!prepared) {
       if (prepared.error().semantic)
         return semantic_failed(prepared.error().semantic);
@@ -1860,14 +2000,20 @@ response execute_profile_load(const engine::acceptance::request_intent& intent, 
     }
     // X07-ANCHOR:after-prepare-load
     // Exact relookup under the lock, the stale-head check and the final receipt verification run inside the commit.
-    auto sealed = engine::ledger::complete_acceptance(std::filesystem::path(std::string(ledger_path)), intent, *prepared,
-                                                      ledger_identity, completion);
-    // X07-ANCHOR:after-commit
-    if (!sealed) {
-      if (committed())
-        return fallback;
-      return failed(ledger_error(sealed.error()));
+    if (format3) {
+      if (auto refused =
+              complete_profile_format3_load(ledger_path, *prepared, *execution_snapshot, workspace_identity, completion))
+        return committed() ? std::move(fallback) : failed(refused);
+    } else {
+      auto sealed = engine::ledger::complete_acceptance(std::filesystem::path(std::string(ledger_path)), intent, *prepared,
+                                                        ledger_identity, completion);
+      if (!sealed) {
+        if (committed())
+          return fallback;
+        return failed(ledger_error(sealed.error()));
+      }
     }
+    // X07-ANCHOR:after-commit
     if (completion.phase != engine::ledger::completion_phase::committed &&
         completion.phase != engine::ledger::completion_phase::replayed)
       return committed() ? std::move(fallback) : failed(native_error({"internal", "Missing load completion"}));
@@ -2204,13 +2350,13 @@ response execute(engine::command_options options, engine::command_vm* registered
       if (auto refusal = run_prelude(*run, early_completion))
         return failed(refusal);
       if (early_completion.phase == ledger::completion_phase::replayed)
-        return {0, early_completion.saved_result + "\n", ""};
+        return {0, early_completion.saved_result + "\n", "", stdout_error};
     }
     if (const auto* recovery = std::get_if<engine::command_recovery_options>(&options)) {
       if (auto refusal = recovery_prelude(*recovery, early_completion))
         return failed(refusal);
       if (early_completion.phase == ledger::completion_phase::replayed)
-        return {0, early_completion.saved_result + "\n", ""};
+        return {0, early_completion.saved_result + "\n", "", stdout_error};
     }
     const bool activating = std::holds_alternative<engine::command_activate_options>(options);
     if (activating) {
@@ -2378,14 +2524,14 @@ response execute_with_profile(engine::command_options options, std::string_view 
       if (auto refusal = run_prelude(*run, replay, services->execution_profile))
         return failed(refusal);
       if (replay.phase == ledger::completion_phase::replayed)
-        return {0, replay.saved_result + "\n", ""};
+        return {0, replay.saved_result + "\n", "", stdout_error};
     }
     if (const auto* recovery = std::get_if<engine::command_recovery_options>(&options)) {
       ledger::completion_receipt replay;
       if (auto refusal = recovery_prelude(*recovery, replay, services->execution_profile))
         return failed(refusal);
       if (replay.phase == ledger::completion_phase::replayed)
-        return {0, replay.saved_result + "\n", ""};
+        return {0, replay.saved_result + "\n", "", stdout_error};
     }
     auto opened = engine::profile_invocation::open_with_profile(*selector, options);
     if (!opened)

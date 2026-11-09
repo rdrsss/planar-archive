@@ -1779,8 +1779,8 @@ clone that tracks only committed files lacks that schema, so the replacement
 ledger format tests cannot run there until the file is relocated to a tracked
 fixture path.
 
-Platform branches. Apart from the eight source branches below, the Linux-only
-CMake branches in `cmake/llvm-toolchain.cmake` also belong to the audit: the
+Platform branches. The eight source rows below record the original X08 coverage.
+The Linux-only CMake branches in `cmake/llvm-toolchain.cmake` also belong to that audit: the
 `UNIX AND NOT APPLE` flag at line 235 and the one at line 283, and the
 `_planar_runtime_system STREQUAL "Linux"` branch at line 252. The line-252 branch
 is inside `if(PLANAR_PORTABLE)`, which is off by default, so the default
@@ -1796,6 +1796,13 @@ configuration does not execute it.
 | `src/engine/runtime/runtime.t.cpp:2839` | `st_mtimespec` | `#else`: `st_mtim` |
 | `src/engine/acceptance/source_capture.t.cpp:626` | `O_EVTONLY` admission refuses with `EACCES` | `#else`: `O_PATH` admits, and the failure belongs to the later content read |
 | `src/engine/runtime/external_registration.t.cpp:4557` (test only) | `c02_outputs_gap` 4742 and `c02_off_boundary` 228586 | `#else`: 4737 and 228612 (libc++ container and string sizing differ by a few native bytes); audited in `audited_platform_counts()` with count 1 and recorded as validator row G06i |
+
+The current exact per-file token inventory is `x08::audited_platform_counts()` in
+[bootstrap.t.cpp](../src/cmd/planar/bootstrap.t.cpp). Later reviewed branches are
+recorded there. The R17/C13 runner test has two macOS-only guards: one creates
+the intentionally inheritable subject, and the other checks its flags immediately
+before spawning. Its common descriptor probe and descriptor-9 control also run
+on Linux. These additions retain the original X08 row values and validator IDs.
 
 The `geteuid() == 0` branch in `source_capture.t.cpp` is the reason for the
 non-root container user described above.

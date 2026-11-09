@@ -99,14 +99,14 @@ struct quota {
     std::vector<value_ptr> files;
     for (const auto& f : **snapshot)
       files.push_back(rec({{"path", str(f.path)}, {"bytes", str(f.bytes)}}));
-    auto bundle = rec(
-        {{"workspace", rec({{"file", str("workspace.lua")}, {"value", workspace->root}})},
-         {"spec", rec({{"file", route->fields.at("spec")}, {"value", spec->root}})},
-         {"jobs", arr(jobs)},
-         {"registry",
-          rec({{"file", str("input.json")},
-               {"bytes", str(read_bytes(std::filesystem::path(PLANAR_SCHEMA_FIXTURE) / "registry/quota-tools.json"))}})},
-         {"files", arr(files)}});
+    auto bundle =
+        rec({{"workspace", rec({{"file", str("workspace.lua")}, {"value", workspace->root}})},
+             {"spec", rec({{"file", route->fields.at("spec")}, {"value", spec->root}})},
+             {"jobs", arr(jobs)},
+             {"registry",
+              rec({{"file", str("input.json")},
+                   {"bytes", str(read_bytes(std::filesystem::path(PLANAR_SCHEMA_FIXTURE) / "registry/quota-tools.json"))}})},
+             {"files", arr(files)}});
     interpretation = success("interpret_bundle", bundle);
   }
   ~quota() {
@@ -157,6 +157,33 @@ struct quota {
                                   {"roles", arr(std::move(rows))},
                                   {"publications", arr()}})}});
   }
+  // Completion-backed policy fixture: each finished worker has exact recorded W and observed own outputs.
+  value_ptr completed(value_ptr outer) const {
+    auto                   state = at(outer, "snapshot");
+    std::vector<value_ptr> completions, observed;
+    for (const auto& role : at(state, "roles")->items) {
+      if (text(role, "kind") != "worker")
+        continue;
+      const auto             material = work(text(role, "job"), text(role, "role"));
+      std::vector<value_ptr> units;
+      for (const auto& unit : at(at(material, "structure"), "work")->items) {
+        const auto output = hash_value("test_output", unit);
+        REQUIRE(output);
+        units.push_back(rec({{"work", unit}, {"output", str(*output)}}));
+        observed.push_back(rec({{"work", unit}, {"output", str(*output)}, {"seq", str("5")}}));
+      }
+      completions.push_back(rec({{"id", str(std::to_string(completions.size() + 1))},
+                                 {"job", at(role, "job")},
+                                 {"role", at(role, "role")},
+                                 {"generation", at(at(role, "generation"), "id")},
+                                 {"seq", str("5")},
+                                 {"work_fp", at(material, "digest")},
+                                 {"units", arr(std::move(units))},
+                                 {"vectors", arr()}}));
+    }
+    state = with(with(state, "completions", arr(std::move(completions))), "observed", arr(std::move(observed)));
+    return with(outer, "snapshot", state);
+  }
   value_ptr activate(value_ptr snapshot, const std::string& job) const {
     return success("reconcile_execution", rec({{"operation", str("activate")},
                                                {"snapshot", std::move(snapshot)},
@@ -185,10 +212,10 @@ std::vector<transition_view> transitions(const value_ptr& change) {
   std::vector<transition_view> out;
   for (const auto& t : at(change, "transitions")->items) {
     transition_view v;
-    v.job    = text(t, "job");
-    v.role   = text(t, "role");
-    v.after  = text(t, "after_state");
-    v.reason = text(t, "reason");
+    v.job           = text(t, "job");
+    v.role          = text(t, "role");
+    v.after         = text(t, "after_state");
+    v.reason        = text(t, "reason");
     v.after_drifted = at(t, "after_drifted")->boolean;
     if (t->fields.contains("before_state")) {
       v.before         = text(t, "before_state");
@@ -257,10 +284,10 @@ TEST_CASE("reconcile activate first time opens activated generations with NULL b
 
 TEST_CASE("reconcile activate another job retires the previous job and fences its runs", "[reconcile]") {
   quota q;
-  auto  snapshot = q.snapshot("combined", {q.row("combined", "builder", "running", false, "4"),
-                                          q.row("combined", "reviewer", "blocked")});
-  auto  change   = q.activate(snapshot, "split");
-  auto  t        = transitions(change);
+  auto  snapshot =
+      q.snapshot("combined", {q.row("combined", "builder", "running", false, "4"), q.row("combined", "reviewer", "blocked")});
+  auto change = q.activate(snapshot, "split");
+  auto t      = transitions(change);
   REQUIRE(t.size() == 5);
   CHECK(t[0].job == "combined");
   CHECK(t[0].role == "builder");
@@ -280,8 +307,8 @@ TEST_CASE("reconcile activate another job retires the previous job and fences it
   for (const auto& v : at(change, "vector")->items)
     CHECK(text(v, "job") == "split");
   // fact_version and role_state for both rows of the active job; the split roles have no rows and assert nothing (DD29).
-  CHECK(kinds(change) == std::vector<std::string>{"request_unused", "active_revision", "active_job", "fact_version",
-                                                  "role_state", "fact_version", "role_state"});
+  CHECK(kinds(change) == std::vector<std::string>{"request_unused", "active_revision", "active_job", "fact_version", "role_state",
+                                                  "fact_version", "role_state"});
   auto expected = at(change, "expected")->items;
   CHECK(text(expected[2], "job") == "combined");
   CHECK(text(expected[3], "fact_version") == "3");
@@ -292,10 +319,10 @@ TEST_CASE("reconcile activate another job retires the previous job and fences it
 
 TEST_CASE("reconcile re-activation fences every run and reopens every role without retiring", "[reconcile]") {
   quota q;
-  auto  snapshot = q.snapshot("combined", {q.row("combined", "builder", "running", true, "9"),
-                                          q.row("combined", "reviewer", "blocked")});
-  auto  change   = q.activate(snapshot, "combined");
-  auto  t        = transitions(change);
+  auto  snapshot =
+      q.snapshot("combined", {q.row("combined", "builder", "running", true, "9"), q.row("combined", "reviewer", "blocked")});
+  auto change = q.activate(snapshot, "combined");
+  auto t      = transitions(change);
   REQUIRE(t.size() == 2);
   CHECK(t[0].before == "running");
   CHECK(t[0].before_drifted);
@@ -385,9 +412,9 @@ TEST_CASE("reconcile load retires a removed role and recreates a re-added one", 
   quota q;
   auto  old_worker = q.row("split", "library_worker", "running", false, "8");
   old_worker       = with(old_worker, "role", str("old_worker"));
-  auto change      = q.load(q.snapshot("split", {q.row("split", "cli_worker", "retired"), q.row("split", "library_worker", "ready"),
-                                                 old_worker, q.row("split", "reviewer", "blocked")}));
-  auto t           = transitions(change);
+  auto change = q.load(q.snapshot("split", {q.row("split", "cli_worker", "retired"), q.row("split", "library_worker", "ready"),
+                                            old_worker, q.row("split", "reviewer", "blocked")}));
+  auto t      = transitions(change);
   REQUIRE(t.size() == 2);
   CHECK(t[0].role == "cli_worker");
   CHECK(t[0].before == "retired");
@@ -448,20 +475,31 @@ TEST_CASE("reconcile precedence orders retired, running, blocked, done, stale an
                                                q.row("split", "reviewer", "running", false, "2")}));
     CHECK(transitions(running).empty());
   }
-  SECTION("done becomes stale when W moves and blocked becomes ready when prerequisites return") {
-    auto candidate = moved_goal(q.interpretation);
-    auto change    = q.load(q.snapshot("split", {q.row("split", "cli_worker", "done"), q.row("split", "library_worker", "done"),
-                                                 q.row("split", "reviewer", "blocked")}),
-                            candidate);
-    auto t         = transitions(change);
-    REQUIRE(t.size() == 3);
+  SECTION("material load stales completed workers while reviewer remains blocked") {
+    const auto candidate = moved_goal(q.interpretation);
+    const auto initial =
+        q.completed(q.snapshot("split", {q.row("split", "cli_worker", "done"), q.row("split", "library_worker", "done"),
+                                         q.row("split", "reviewer", "blocked")}));
+    auto t = transitions(q.load(initial, candidate));
+    REQUIRE(t.size() == 2);
     CHECK(t[0].role == "cli_worker");
     CHECK(t[0].after == "stale");
-    CHECK(t[0].reason == "work_changed"); // M24
+    CHECK(t[0].reason == "work_changed");
+    CHECK(t[1].role == "library_worker");
     CHECK(t[1].after == "stale");
+    CHECK(t[1].reason == "work_changed");
+    // Restoring the recorded material reuses the inactive completions and releases review in the same load.
+    auto restored = q.completed(q.snapshot(
+        "split",
+        {q.row("split", "cli_worker", "stale"), q.row("split", "library_worker", "stale"), q.row("split", "reviewer", "blocked")},
+        candidate));
+    t             = transitions(q.load(restored));
+    REQUIRE(t.size() == 3);
+    CHECK(t[0].after == "done");
+    CHECK(t[1].after == "done");
     CHECK(t[2].role == "reviewer");
     CHECK(t[2].after == "ready");
-    CHECK(t[2].reason == "prerequisite_available"); // M20
+    CHECK(t[2].reason == "prerequisite_available");
   }
   SECTION("done stays done when W does not move") {
     auto change = q.load(q.snapshot("split", {q.row("split", "cli_worker", "done"), q.row("split", "library_worker", "done"),
@@ -473,20 +511,21 @@ TEST_CASE("reconcile precedence orders retired, running, blocked, done, stale an
 TEST_CASE("reconcile W is stable under takeover-only generation changes", "[reconcile]") {
   quota q;
   // A takeover opens a generation with the same structure: an acknowledged W from the earlier generation stays current.
-  auto row     = q.row("split", "cli_worker", "running", false, "5");
-  auto run     = with(at(row, "run"), "generation", str("2"));
-  row          = with(row, "run", run);
-  row          = with(row, "generation", with(at(row, "generation"), "ordinal", str("2")));
-  auto change  = q.load(q.snapshot("split", {row, q.row("split", "library_worker", "ready"), q.row("split", "reviewer", "blocked")}));
+  auto row = q.row("split", "cli_worker", "running", false, "5");
+  auto run = with(at(row, "run"), "generation", str("2"));
+  row      = with(row, "run", run);
+  row      = with(row, "generation", with(at(row, "generation"), "ordinal", str("2")));
+  auto change =
+      q.load(q.snapshot("split", {row, q.row("split", "library_worker", "ready"), q.row("split", "reviewer", "blocked")}));
   CHECK(transitions(change).empty());
 }
 
 TEST_CASE("reconcile is byte-identical across fresh VMs", "[reconcile]") {
   quota q;
-  auto  snapshot = q.snapshot("combined", {q.row("combined", "builder", "running", false, "4"),
-                                          q.row("combined", "reviewer", "blocked")});
-  auto  first    = q.activate(snapshot, "split");
-  auto  second   = q.activate(snapshot, "split");
+  auto  snapshot =
+      q.snapshot("combined", {q.row("combined", "builder", "running", false, "4"), q.row("combined", "reviewer", "blocked")});
+  auto first  = q.activate(snapshot, "split");
+  auto second = q.activate(snapshot, "split");
   CHECK(digest(first) == digest(second));
   auto encoded_first  = codec_encode(first);
   auto encoded_second = codec_encode(second);

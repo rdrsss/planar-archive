@@ -1,0 +1,48 @@
+{
+  "scope": "C13 independent bounded source/fault review; no integrated acceptance.",
+  "disposition": "approve",
+  "source_sha256": "70ea1208b8a70020523a94e1e94a1c6d52b2aee23cbe67263f6c96bdf804c65f",
+  "files": {
+    "SETUP-EXCLUSIONS.md": {
+      "sha256": "791acc2de6e6b93bded16c0e74fffa37d181b6a2fa07e6ad037043d11d5b8b9a",
+      "bytes": 760
+    },
+    "audit_c13_linux_probes.py": {
+      "sha256": "9750386657b44bbd6bd9239c2260bdaa2c7ec64ac8685d43d4a3295e1d50dda4",
+      "bytes": 3348
+    },
+    "audit_c13_mac_probes.py": {
+      "sha256": "b6d7378212d08bfc76060cb34c953bbe2408a0fd478cdd3031ea744b64b85551",
+      "bytes": 3234
+    },
+    "audit_c13_probe_manifest.py": {
+      "sha256": "210f029f017f492ef6ebaafc24adc07b4ed2ec6fa8fc3776cc16cc17f825f01c",
+      "bytes": 1311
+    },
+    "audit_c13_records.py": {
+      "sha256": "fd41bfb1ab5d4a5170fa47da61fe7412a49e99f5987c1ece5a35b1ddbcb36c9e",
+      "bytes": 4080
+    },
+    "independent-c13-linux-probes.json": {
+      "sha256": "0a8a95c22914bb365be9f8c6f7f1e3b1c652581ea34ab9e55cd24f2c27750731",
+      "bytes": 1276
+    },
+    "independent-c13-mac-probes.json": {
+      "sha256": "546a3c359ed4a68571f6b4bf5684d544e8d2044449263529549221db2e4531f1",
+      "bytes": 1099
+    },
+    "independent-c13-probe-manifest.json": {
+      "sha256": "9420ef79d6cdd9329431984396cbdc6e2d40fbe69e3d4e85d5b7b2055b52355a",
+      "bytes": 552
+    },
+    "independent-c13-record-audit.json": {
+      "sha256": "1891eb01dee712141a44ca4f0be6069437dd888bc8facc24c2033cd8d5b30030",
+      "bytes": 1431
+    }
+  },
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-C13-code-review.md",
+    "sha256": "08aa949396e95998f301051cc1ab05e9752fc942ec730b59f44e0be2c27d4ebe",
+    "bytes": 6343
+  }
+}

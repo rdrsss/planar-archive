@@ -68,7 +68,7 @@ with tempfile.TemporaryDirectory(prefix='planar-load-') as temp:
   responses.append(raw);revisions.append(historical('--revision',revision)['data'])
   packet=rendered();works.append(packet['manifest']['work']['digest']);packets.append(packet)
   event=historical('--at-event',str(index+2))['data']
-  assert event['state']=={'active_revision':revision} and event['revision']['id']==revision
+  assert event['state']=={'active_revision':revision,'active_job':'','activation':'none','roles':[],'runs':[]} and event['revision']['id']==revision
   assert history(ledger,'chronology-'+label)['data']['result']==result
  assert rows(ledger)==(5,6,7)
  assert len(set(works[:4]))==1 and works[4]!=works[0] and works[5]==works[0]
@@ -79,9 +79,9 @@ with tempfile.TemporaryDirectory(prefix='planar-load-') as temp:
  assert len({r['registry'] for r in refs})==1 and len({r['stdlib'] for r in refs})==1
  original_revision=historical('--revision','1')['data'];original_event=historical('--at-event','2')['data']
  original_request=history(ledger,'chronology-initial')['data']
- # D7-11 (clause 25): ledgers made by public init are format2, so an embedded load stores request_v2 with the embedded selector tag.
+ # D7-11 (clause 25): ledgers made by public init are format3, so an embedded load stores request_v2 with the embedded selector tag.
  with sqlite3.connect(ledger) as db:
-  assert db.execute('PRAGMA user_version').fetchone()==(2,)
+  assert db.execute('PRAGMA user_version').fetchone()==(3,)
   assert db.execute("SELECT codec,substr(encoded,1,15),substr(encoded,-1) FROM records JOIN requests ON requests.body_id=records.id WHERE request_id='chronology-initial'").fetchone()==(2,b'PLANAR-REQUEST\x02',b'\x00')
  shutil.rmtree(workspace)
  for executable in [binary,probe]:

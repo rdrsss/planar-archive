@@ -320,7 +320,7 @@ do
       render=engine.object({digest=engine.fragment_digest(markdown),bytes=#markdown,budget_bytes=budget}),
       sections=assembled.sections,omitted=assembled.omitted,prerequisites=material.prerequisites,registry=registry,
       inputs=engine.object({source=decimal(context.revision.source),interpretation=decimal(context.revision.interpretation),
-        publications=sort_copy(publications,function(p)return p.work.."\0"..p.facet end),repair=decimal(context.repair or "0")}),
+        publications=sort_copy(publications,function(p)return p.work.."\0"..p.facet end),repair=material.work.repair}),
     })
     return ctx.finish(engine.object({version=1,kind="dispatch",packet=packet,manifest=manifest,work=material.work}))
   end

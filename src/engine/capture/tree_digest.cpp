@@ -74,9 +74,12 @@ struct walker {
     std::ranges::sort(names);
     for (const auto& name : names) {
       auto path = prefix + name;
-      if (name == ".git")
-        continue;
       if (std::ranges::any_of(spec.excluded, [&](const auto& x) { return inside(path, x) || x == path + "/"; }))
+        continue;
+      struct stat before{};
+      if (::fstatat(parent, name.c_str(), &before, AT_SYMLINK_NOFOLLOW))
+        return fail("io", "Cannot read captured file");
+      if (name == ".git" && S_ISDIR(before.st_mode))
         continue;
       if (!valid_path(path))
         return fail("path_denied", "Invalid captured path");
@@ -87,9 +90,6 @@ struct walker {
       auto [it, added] = spellings.emplace(lower, path);
       if (!added && it->second != path)
         return fail("path_denied", "Portable retained path alias");
-      struct stat before{};
-      if (::fstatat(parent, name.c_str(), &before, AT_SYMLINK_NOFOLLOW))
-        return fail("io", "Cannot read captured file");
       if (S_ISLNK(before.st_mode) || (!S_ISREG(before.st_mode) && !S_ISDIR(before.st_mode)))
         return fail("path_denied", "Unsupported captured file type");
       fd_owner fd{

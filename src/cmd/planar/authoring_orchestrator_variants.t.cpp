@@ -218,16 +218,13 @@ std::vector<std::string> names_with(const std::vector<std::pair<std::string, std
   return out;
 }
 
-const std::vector<std::string> catalog_eleven = {"critique", "explain-rejection", "export",       "history", "ingest",     "init",
-                                                 "load",     "observe",           "orchestrator", "render",  "spec-prompt"};
-/// The twelve future names of RA-7, sorted.
-const std::vector<std::string> future_twelve = {"activate", "check",   "check-recover", "checkpoint", "claim",    "preview",
-                                                "recover",  "refresh", "release",       "status",     "takeover", "verdict"};
-std::vector<std::string>       without(std::vector<std::string> names, std::string_view removed) {
-  std::erase(names, std::string(removed));
-  return names;
-}
-std::vector<std::string> sorted_union(std::vector<std::string> a, const std::vector<std::string>& b) {
+const std::vector<std::string> catalog_current = {
+    "activate", "check",   "check-recover", "checkpoint", "claim",  "critique",    "explain-rejection",
+    "export",   "history", "ingest",        "init",       "load",   "observe",     "orchestrator",
+    "preview",  "recover", "refresh",       "release",    "render", "spec-prompt", "status",
+    "takeover", "verdict"};
+const std::vector<std::string> future_current = {};
+std::vector<std::string>       sorted_union(std::vector<std::string> a, const std::vector<std::string>& b) {
   a.insert(a.end(), b.begin(), b.end());
   std::ranges::sort(a);
   a.erase(std::unique(a.begin(), a.end()), a.end());
@@ -235,9 +232,9 @@ std::vector<std::string> sorted_union(std::vector<std::string> a, const std::vec
 }
 } // namespace
 
-// W2-70. Mutants killed: orchestrator.lua labels availability from a literal eleven-name list instead of the commands
-// names (status stays future in variant 20), or the runtime appends a literal eleven-name list. The provider returns only the
-// four provider keys, so the names can only come from the native derivation.
+// W2-70. Mutants killed: orchestrator.lua labels availability from a literal production-only list instead of the commands
+// names (catalogprobe is omitted in variant 20), or the runtime appends a literal production-only list. The provider returns only
+// the four provider keys, so the names can only come from the native derivation.
 TEST_CASE("RA01-B2 orchestrator label flips to available for a catalog stub verb", "[authoring-catalog]") {
   const auto workspace = quota_workspace_file();
   REQUIRE_FALSE(workspace.empty());
@@ -251,38 +248,38 @@ TEST_CASE("RA01-B2 orchestrator label flips to available for a catalog stub verb
   CHECK(control.document->fields.at("prompt")->fields.at("kind")->string == "orchestrator");
   const auto base = actions_of(control.markdown);
   CHECK(base.size() == 23);
-  CHECK(names_with(base, "available") == catalog_eleven);
-  CHECK(names_with(base, "future") == future_twelve);
+  CHECK(names_with(base, "available") == catalog_current);
+  CHECK(names_with(base, "future") == future_current);
 
   const auto flipped = RA01_DRIVE_ORCHESTRATOR(authoring_variant_20, workspace, "combined");
   INFO(flipped.code << ": " << flipped.message);
   REQUIRE(flipped.status == 0);
   CHECK(flipped.jobs == std::vector<std::string>{"combined"});
   const auto labels = actions_of(flipped.markdown);
-  CHECK(labels.size() == 23);
-  // status is a sealed catalog name in variant 20, so it is available and the other eleven future labels do not change.
-  CHECK(names_with(labels, "available") == sorted_union(catalog_eleven, {"status"}));
-  CHECK(names_with(labels, "future") == without(future_twelve, "status"));
+  CHECK(labels.size() == 24);
+  // catalogprobe is a sealed catalog name in variant 20, so it is available and the existing labels do not change.
+  CHECK(names_with(labels, "available") == sorted_union(catalog_current, {"catalogprobe"}));
+  CHECK(names_with(labels, "future") == future_current);
 }
 
-// W2-77. Mutants killed: call_service_native (a) appends a literal eleven-name list (variant 20 would not list status),
+// W2-77. Mutants killed: call_service_native (a) appends a literal production-only list (variant 20 would not list catalogprobe),
 // (b) takes commands from the provider result (the decoy would be accepted), (c) appends in bundle_table order instead of
 // sorted (orchestrator.lua refuses an unsorted commands array internal, so the control run would fail).
 TEST_CASE("RA01-B2 native appends the sorted sealed command names to the orchestrator capture", "[authoring-catalog]") {
   const auto workspace = quota_workspace_file();
   REQUIRE_FALSE(workspace.empty());
 
-  // Lua sees the sealed catalog sorted: eleven names in variant 0 and twelve in variant 20, exactly the available labels.
+  // Lua sees the sealed catalog sorted: 23 names in variant 0 and 24 in variant 20, exactly the available labels.
   const auto v0 = RA01_DRIVE_ORCHESTRATOR(authoring_variant_0, workspace, "split");
   INFO(v0.code << ": " << v0.message);
   REQUIRE(v0.status == 0);
-  CHECK(names_with(actions_of(v0.markdown), "available") == catalog_eleven);
-  CHECK(names_with(actions_of(v0.markdown), "available").size() == 11);
+  CHECK(names_with(actions_of(v0.markdown), "available") == catalog_current);
+  CHECK(names_with(actions_of(v0.markdown), "available").size() == 23);
   const auto v20 = RA01_DRIVE_ORCHESTRATOR(authoring_variant_20, workspace, "split");
   INFO(v20.code << ": " << v20.message);
   REQUIRE(v20.status == 0);
-  CHECK(names_with(actions_of(v20.markdown), "available") == sorted_union(catalog_eleven, {"status"}));
-  CHECK(names_with(actions_of(v20.markdown), "available").size() == 12);
+  CHECK(names_with(actions_of(v20.markdown), "available") == sorted_union(catalog_current, {"catalogprobe"}));
+  CHECK(names_with(actions_of(v20.markdown), "available").size() == 24);
 
   // A provider result that already carries commands (decoy ["zzz"]) or any fifth key is refused internal exit 4 and the
   // decoy name never reaches the document.

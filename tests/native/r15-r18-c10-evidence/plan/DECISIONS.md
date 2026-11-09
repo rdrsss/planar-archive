@@ -1,0 +1,17 @@
+# C10 decisions
+
+| ID | Decision | Authority / status |
+|---|---|---|
+| D1 | Header accepts supported1/2/3, rejects unsupported4 at the header boundary. Keep the corruption/schema opener tests separate. | Contract-decided: EX-1 format3 cutover; storage.cpp header whitelist1/2/3. |
+| D2 | Current embedded provenance has exactly14 ordered authored originals. Assert exact names/order/bytes/separator/assembly and retained roundtrip; not merely count. | Contract-decided: source provenance; engine/CMakeLists.txt96–110 explicit ordered list. |
+| D3 | Keep r13c2 historical JSON/canonical goldens unchanged. Current interpretation differs only in versions.stdlib_digest; recompute current digest using14 originals and retain exact full JSON/canonical equality after this single known substitution. | Executed scratch CLI comparison in interpretation-diff.json; no product semantic change. max_rounds2 already exists in golden. |
+| D4 | Public init/load tests exercise format3. Exact no-job history state is active_revision plus active_job empty, activation none, roles/runs empty. Init user_version3; load request_v2 framing remains unchanged. | EX-1 init cutover/XD5 and P2-5 state schema; reader read.cpp386–441. |
+| D5 | X05 positive uses current shipped17-command bundle; preserve altered retained-writer refusal. Name/count must describe current shipped bundle. | R15–R18 catalog amendments and current effective catalog; no product change. |
+| D6 | Add attachment-only corruption negative with requests.result unchanged and None/other existing valid packet; reader status/replay/history refuse. | Existing C08 I8 original dispatch/attachment binding; independent prober baseline witness, mutant execution pending. |
+| D7 | Update current references/traceability to implemented/source-reviewed execution with final gates/probes pending. Preserve historic records, A24 conditional unsupported policy, deferred composition/measurement and unknown R19 project. Never mark fixture success as R19 acceptance. | Explicit operator execution approval, roadmap authority, v5 matrix. |
+| D8 | Do not edit AGENTS or its symlink for status. Its older product-boundary sentence is superseded by explicit operator continuation and roadmap status. | AGENTS authority order and explicit rounds-update-roadmap-never-this-file instruction. |
+| D9 | Generate compact31-row per-config margin/exclusion records from raw summaries; retain exact integer peaks/free/ceiling and reasons, plus raw hashes and coupled lower-candidate model provenance. | X06-D-C04 D9/D14; independent audit records finding. No remeasurement for record extraction alone. |
+| D10 | D15 says any src/engine edit invalidates table. C10 must either rerun final measurement after last test edit, OR obtain an explicit scoped reviewed amendment supported by exact changed-file/dependency proof excluding all changed non-measured test sources. | Verification authority, NOT automatic carry approval. Plan reviewer/coordinator must select and record; no claim whole-src manifest still current after edits. |
+| D11 | D28 old41943040/18M quarter-free red remains an actual pending obligation. If unit survives, record actual outcome and explicit reviewed amendment/limit separately from a full-margin-checker kill. Never silently count a different failure as prescribed red. | X06-D-C04 D28 exact command/expected derivation CHECK. Budget prober owns execution. |
+
+No new product behavior decision identified. D10/D11 are explicit verification-closure gates; this search does not approve exceptions.

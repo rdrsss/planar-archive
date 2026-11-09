@@ -61,6 +61,45 @@ value_ptr field(const value_ptr& node, std::string_view key) {
   return found->second;
 }
 
+// Project the public snapshot to the D24 accounting shape: supplemental lineage/recovery metadata is
+// transported separately, and R17/R18 empty extensions are omitted from the measured state value.
+value_ptr measured_state(const value_ptr& encoded) {
+  auto inner                = std::make_shared<value>(*field(encoded, "snapshot"));
+  inner->fields["revision"] = vrec({{"id", vstr("10")}});
+  inner->fields.erase("next_checkpoint_id");
+  for (auto key : {"completions", "evidence", "observed", "reservations"})
+    if (inner->fields.at(key)->items.empty())
+      inner->fields.erase(key);
+  const auto review = inner->fields.at("review");
+  if (review->fields.at("count")->string == "0" && review->fields.at("verdicts")->items.empty() &&
+      review->fields.at("blockers")->items.empty() && review->fields.at("repairs")->items.empty())
+    inner->fields.erase("review");
+  auto roles = std::make_shared<value>(*inner->fields.at("roles"));
+  for (auto& item : roles->items) {
+    auto role = std::make_shared<value>(*item);
+    role->fields.erase("checkpoint");
+    auto generation = std::make_shared<value>(*role->fields.at("generation"));
+    generation->fields.erase("lineage");
+    generation->fields.erase("lineage_opened");
+    role->fields["generation"] = generation;
+    if (role->fields.at("run")->kind == value_kind::record) {
+      auto run = std::make_shared<value>(*role->fields.at("run"));
+      run->fields.erase("request_id");
+      auto dispatch = std::make_shared<value>(*run->fields.at("dispatch"));
+      for (auto key : {"work_fp", "render_fp"}) {
+        const auto digest = dispatch->fields.at(key)->string;
+        REQUIRE(digest.starts_with("xxh3_128:"));
+        dispatch->fields[key] = vstr(digest.substr(9));
+      }
+      run->fields["dispatch"] = dispatch;
+      role->fields["run"]     = run;
+    }
+    item = role;
+  }
+  inner->fields["roles"] = roles;
+  return inner;
+}
+
 std::set<std::string> keys_of(const value_ptr& node) {
   std::set<std::string> out;
   for (const auto& [key, unused] : node->fields)
@@ -160,8 +199,9 @@ TEST_CASE("execution snapshot value of a fresh format3 ledger") {
   REQUIRE(at(*result, "ledger").string == snapshot->identity);
   REQUIRE(at(*result, "last_seq").string == "1");
   const auto inner = field(*result, "snapshot");
-  REQUIRE(keys_of(inner) ==
-          std::set<std::string>{"active_revision", "active_job", "activation", "revision", "roles", "publications"});
+  REQUIRE(keys_of(inner) == std::set<std::string>{"active_revision", "active_job", "activation", "revision", "roles",
+                                                  "publications", "next_checkpoint_id", "completions", "evidence", "observed",
+                                                  "reservations", "review"});
   REQUIRE(at(inner, "active_revision").string == "none");
   REQUIRE(at(inner, "active_job").string.empty());
   REQUIRE(at(inner, "activation").string == "none");
@@ -185,14 +225,14 @@ TEST_CASE("execution snapshot value spells roles, runs and dispatches with the L
 
   const auto& ready = roles[0];
   REQUIRE(keys_of(ready) ==
-          std::set<std::string>{"job", "role", "kind", "generation", "state", "drifted", "fact_version", "run"});
+          std::set<std::string>{"job", "role", "kind", "generation", "state", "drifted", "fact_version", "run", "checkpoint"});
   REQUIRE(at(ready, "role").string == "builder");
   REQUIRE(at(ready, "kind").string == "worker");
   REQUIRE(at(ready, "run").string == "none");
   REQUIRE(at(ready, "fact_version").string == "2");
   REQUIRE(at(ready, "drifted").kind == value_kind::boolean);
   const auto generation = field(ready, "generation");
-  REQUIRE(keys_of(generation) == std::set<std::string>{"id", "ordinal", "structure"});
+  REQUIRE(keys_of(generation) == std::set<std::string>{"id", "ordinal", "structure", "lineage", "lineage_opened"});
   REQUIRE(at(generation, "id").string == "5");
   REQUIRE(at(generation, "ordinal").string == "1");
   auto structure_bytes = canonical_encode(field(generation, "structure"));
@@ -205,7 +245,7 @@ TEST_CASE("execution snapshot value spells roles, runs and dispatches with the L
   REQUIRE(at(running, "state").string == "running");
   REQUIRE(at(running, "drifted").boolean);
   const auto run = field(running, "run");
-  REQUIRE(keys_of(run) == std::set<std::string>{"id", "generation", "dispatch"});
+  REQUIRE(keys_of(run) == std::set<std::string>{"id", "request_id", "generation", "dispatch"});
   REQUIRE(at(run, "id").string == "21");
   // L18: run.generation is the generation ordinal (3), never the generation identifier (7).
   REQUIRE(at(run, "generation").string == "3");
@@ -214,7 +254,7 @@ TEST_CASE("execution snapshot value spells roles, runs and dispatches with the L
   REQUIRE(at(dispatch, "id").string == "30");
   // A1: the dispatch names its own revision (9), not the active revision (10).
   REQUIRE(at(dispatch, "revision").string == "9");
-  REQUIRE(at(dispatch, "work_fp").string == std::string(32, 'e'));
+  REQUIRE(at(dispatch, "work_fp").string == "xxh3_128:" + std::string(32, 'e'));
   REQUIRE(field(dispatch, "work") == snapshot.roles[1].dispatch->work);
 }
 
@@ -223,7 +263,8 @@ TEST_CASE("execution snapshot value carries the decoded recorded revision values
   auto       result   = snapshot_value(snapshot);
   REQUIRE(result.has_value());
   const auto revision = field(field(*result, "snapshot"), "revision");
-  REQUIRE(keys_of(revision) == std::set<std::string>{"id", "interpretation", "versions", "stdlib_digest", "registry", "source"});
+  REQUIRE(keys_of(revision) ==
+          std::set<std::string>{"id", "interpretation", "versions", "stdlib_digest", "registry", "source", "interpretation_id"});
   REQUIRE(at(revision, "id").string == "10");
   REQUIRE(field(revision, "interpretation") == snapshot.revision->interpretation_value);
   REQUIRE(field(revision, "versions") == snapshot.revision->versions_value);
@@ -242,10 +283,9 @@ TEST_CASE("execution snapshot value never carries a secret or token and agrees w
   collect_keys(*result, keys);
   REQUIRE_FALSE(keys.contains("secret"));
   REQUIRE_FALSE(keys.contains("token"));
-  // The D24 value S is this snapshot value with the revision reduced to {id}; its byte length is the native measure.
-  auto inner                = std::make_shared<value>(*field(*result, "snapshot"));
-  inner->fields["revision"] = vrec({{"id", vstr("10")}});
-  auto bytes                = canonical_encode(inner);
+  // Compare the exact D24 projection, including omission of empty extensions.
+  auto inner = measured_state(*result);
+  auto bytes = canonical_encode(inner);
   REQUIRE(bytes.has_value());
   REQUIRE(bytes->size() == ledger::execution_state_bytes(snapshot));
 }
@@ -257,4 +297,37 @@ TEST_CASE("execution snapshot value is byte stable across builds") {
   REQUIRE(first.has_value());
   REQUIRE(second.has_value());
   REQUIRE(canonical_encode(*first).value() == canonical_encode(*second).value());
+}
+
+TEST_CASE("C01 verdict snapshot preserves reviewer lineage and activation context") {
+  auto                      snapshot = running_snapshot();
+  ledger::execution_verdict verdict;
+  verdict.id             = 4;
+  verdict.generation     = 7;
+  verdict.activation     = 2;
+  verdict.run            = 21;
+  verdict.seq            = 43;
+  verdict.request_id     = "verdict-context";
+  verdict.applicability  = "current";
+  verdict.decision       = "approve";
+  verdict.body.targets   = {{"unit_one", "xxh3_128:" + std::string(32, 'a'), "xxh3_128:" + std::string(32, 'b')}};
+  verdict.body.policy    = "xxh3_128:" + std::string(32, 'c');
+  verdict.body.decision  = "approve";
+  verdict.body.authority = "reviewer_role_v1";
+  snapshot.review.verdicts.push_back(verdict);
+  auto result = snapshot_value(snapshot);
+  REQUIRE(result);
+  const auto values = field(field(field(*result, "snapshot"), "review"), "verdicts");
+  REQUIRE(values->items.size() == 1);
+  CHECK(values->items[0]->fields.contains("generation"));
+  CHECK(values->items[0]->fields.contains("activation"));
+  CHECK(at(values->items[0], "generation").string == "7");
+  CHECK(at(values->items[0], "activation").string == "2");
+  auto inner = measured_state(*result);
+  REQUIRE(canonical_encode(inner).value().size() == ledger::execution_state_bytes(snapshot));
+  snapshot.review.verdicts[0].activation.reset();
+  result = snapshot_value(snapshot);
+  REQUIRE(result);
+  const auto unactivated = field(field(field(*result, "snapshot"), "review"), "verdicts");
+  CHECK(at(unactivated->items[0], "activation").string == "none");
 }

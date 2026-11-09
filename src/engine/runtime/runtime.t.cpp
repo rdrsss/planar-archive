@@ -3417,7 +3417,11 @@ TEST_CASE("X06 D conversion node ceiling refuses with nodes at a small ceiling",
     const auto r = make(entries);
     return r.prepared || (r.semantic && r.code.empty());
   };
-  const auto boundary = last_passing(0, budget_node_max, passes);
+  // Measured adjacent refusing entry count for this fixture and the small test variant (C07 calibration).
+  // A broad upper probe wastes native headroom while testing nodes. The upper-refuses prerequisite also directly kills
+  // a doubled-node ceiling; the adjacent boundary, typed refusal and cleanup assertions below remain unchanged.
+  constexpr std::size_t refusing_entries = 5481;
+  const auto            boundary         = last_passing(0, refusing_entries, passes);
   INFO("last passing entries " << boundary);
   CHECK(boundary > 0);
   CHECK(boundary < budget_node_max);
@@ -3648,13 +3652,13 @@ std::vector<std::string> add_extra_jobs(const b3b_fixture& f, std::size_t count)
 void prefix_file(const std::filesystem::path& p, std::string_view head) {
   put(p, std::string(head) + read_file_bytes(p));
 }
-// Extra-job counts of the instruction-ceiling families, sized for the 19,900,000 composed instruction ceiling (D14): each
-// declaration chunk is capped at 1,000,000 instructions, so reaching the ceiling takes about twice the chunks the former
-// 8,000,000 ceiling needed (clause C3-4d).
+// Extra-job counts and chunk/shape spins follow the measured 29,000,000-instruction ceiling. Each declaration stays below
+// its inherited 1,000,000 bound; source costs, formulas and adjacent controls are recorded in
+// docs/vernacular/rounds/V5-02-R15-R18-C07-calibration.md.
 constexpr std::size_t c01_extra_jobs_stages = 10;
-constexpr std::size_t c01_extra_jobs_sink   = 16;
-constexpr std::size_t c01_extra_jobs_first  = 15;
-constexpr std::size_t c01_extra_jobs_native = 17;
+constexpr std::size_t c01_extra_jobs_sink   = 25;
+constexpr std::size_t c01_extra_jobs_first  = 24;
+constexpr std::size_t c01_extra_jobs_native = 25;
 // One empty counting loop: about one VM instruction per iteration.
 std::string spin(std::size_t iterations) {
   return "for i=1," + std::to_string(iterations) + " do end\n";
@@ -3701,7 +3705,7 @@ TEST_CASE("X06 D C01 declaration chunks exhaust the composed invocation instruct
   // the inherited 1,000,000 chunk maximum. Four chunks of 900,000 stay below the per-chunk limit and only together
   // (with the custom shape loop) approach the 4,000,000 composed ceiling.
   const auto make = [](std::size_t last) {
-    b3b_fixture f("local n=0; for i=1,3670000 do n=n+1 end; " + b3b_fixture::default_body(), false, true);
+    b3b_fixture f("local n=0; for i=1,8170000 do n=n+1 end; " + b3b_fixture::default_body(), false, true);
     const auto  extras = add_extra_jobs(f, c01_extra_jobs_stages);
     for (const char* name : {"workspace.lua", "spec.lua", "combined.lua"})
       prefix_file(f.workspace_dir / name, spin(900000));
@@ -3832,15 +3836,10 @@ TEST_CASE("X06 D C01 a caught Lua error still leaves the budget counters monoton
     CHECK(r.imarks[3] - r.imarks[2] > base.imarks[3] - base.imarks[2]);
   }
 }
-// Observable half of the 25 percent margin rule (rule and bracketing classes: the Margin record section of
-// docs/vernacular/rounds/V5-02-X06-D-C04.md). The ceiling-independent peaks of the ordinary control padded_probe(0, 0) in
-// the first measurement pass are 24,503,619 native bytes, 131,200 instructions, 17,802,201 open native bytes and 2,000
-// open instructions. Live Lua, nodes and
-// role-flow native have no observer here and no field was added for them: those columns are covered by the measurement
-// record only (a limit of this test). Mutants it must kill: the C03 ceilings restored (native 41943040 with instructions
-// 18000000), the instruction ceiling set strictly between the extrapolated sweep-boundary cost E and 4/3 of E, the
-// registration ceiling lowered toward the ordinary open use, or the native ceiling set strictly between the control peak
-// P and 4/3 of P.
+// Observable half of the 25 percent margin rule: docs/vernacular/rounds/V5-02-R15-R18-C07-calibration.md, under X06-D-C04
+// D9-D11. The ordinary control costs 31,121,964 native bytes, 131,200 instructions, 22,643,664 open native bytes and 5,000
+// open instructions. Live Lua, nodes and role-flow native are measured in scratch copies without adding public fields.
+// These checks also reject a ceiling between the measured usage and its required four-thirds margin.
 TEST_CASE("X06 D C03 ordinary fixtures keep a quarter of every observable ceiling free", "[runtime][x06d][c03]") {
   const auto p = padded_probe(0, 0);
   INFO(brief(p));
@@ -3860,6 +3859,11 @@ TEST_CASE("X06 D C03 ordinary fixtures keep a quarter of every observable ceilin
   REQUIRE(q.prepared);
   REQUIRE(q.native_bytes > p.native_bytes);
   REQUIRE(q.instructions > p.instructions);
+  // q is an ordinary sample too: its larger native charge must retain the same headroom as p.
+  CHECK(q.native_bytes * 4 <= budget_native_max * 3);
+  CHECK(q.instructions * 4 <= budget_instruction_max * 3);
+  CHECK(q.open_native * 4 <= budget_native_max * 3);
+  CHECK(q.open_instructions * 4 <= budget_registration_instruction_max * 3);
   const auto native_slope      = (q.native_bytes - p.native_bytes) / probe_pad;
   const auto instruction_slope = (q.instructions - p.instructions) / probe_pad;
   REQUIRE(native_slope > 0);
@@ -3868,7 +3872,7 @@ TEST_CASE("X06 D C03 ordinary fixtures keep a quarter of every observable ceilin
   const auto extrapolated = p.instructions + instruction_slope * boundary_pad;
   INFO("extrapolated boundary instructions " << extrapolated);
   CHECK(budget_instruction_max * 3 >= 4 * extrapolated);
-  // Registration: the heaviest must-succeed registration run is the ordinary open (2,000 instructions); the registration
+  // Registration: the heaviest must-succeed registration run is the ordinary open (5,000 instructions); the registration
   // bisect fixture is a bracketing fixture and has no derived bound here, so the ceiling stays pinned at the final value
   // (mutant: REGISTRATION_INSTRUCTION_MAX lowered toward the ordinary open use, which the margin check alone passes).
   CHECK(budget_registration_instruction_max == 1000000);
@@ -3998,7 +4002,9 @@ void add_alpha_job(const b3b_fixture& f) {
 // control's public stage marks instead of on its own refusal point.
 TEST_CASE("X06 D C02 the composed sink refusal is the first failure on a declaration chunk that crosses the invocation ceiling",
           "[runtime][x06d][c02]") {
-  constexpr std::size_t prefix = 995000;
+  // Raised controls put equality at 992,700 in the last chunk for the measured 29,000,000 ceiling;
+  // smaller prefixes can let the inherited chunk limit mask the composed refusal (C07 calibration, Dependent controls).
+  constexpr std::size_t prefix = 999000;
   const auto            make   = [&](std::size_t last, bool erroring) {
     b3b_fixture f(b3b_fixture::default_body(), false, false);
     add_alpha_job(f);
@@ -4106,7 +4112,7 @@ TEST_CASE("X06 D C01 route stage exhaustion refuses before any declaration is ca
     std::string       list = "jobs = L { ";
     for (std::size_t i = 0; i < jobs; ++i) {
       // One-byte segments cost the most route instructions per byte (clause C3-4g): the boundary then falls well under the
-      // 1 MiB text quota even at twice the boundary job count.
+      // 1 MiB text quota; the larger control below uses one-and-a-quarter times the boundary.
       std::string path;
       for (int k = 0; k < 480; ++k)
         path += segment + "/";
@@ -4117,6 +4123,7 @@ TEST_CASE("X06 D C01 route stage exhaustion refuses before any declaration is ca
     replace_in_file(f.workspace_dir / "workspace.lua",
                     "jobs = L { { id = \"combined\", file = \"combined.lua\" }, { id = \"split\", file = \"split.lua\" } },",
                     list);
+    REQUIRE(read_file_bytes(f.workspace_dir / "workspace.lua").size() < 1048576);
     return run_probe<budget_invocation>(f);
   };
   const auto reached_capture = [&](std::size_t jobs) {
@@ -4146,7 +4153,7 @@ TEST_CASE("X06 D C01 route stage exhaustion refuses before any declaration is ca
   CHECK_FALSE(fail.owner_live_after);
   CHECK(fail.retry_protocol);
   // Far past the boundary the refusal is the same (the route is stopped, nothing later runs).
-  const auto far = make(boundary * 2);
+  const auto far = make(boundary + boundary / 4);
   CHECK(far.code == "resource_limit");
   CHECK(far.maximum == budget_instruction_max);
   CHECK(far.cleanup_ran);
@@ -4294,13 +4301,14 @@ std::size_t ra01_count(const std::string& hay, const std::string& needle) {
   return n;
 }
 } // namespace
-TEST_CASE("RA01-B1 default embedded catalog stays the five HEAD rows", "[runtime][ra01-b1]") {
+TEST_CASE("RA01-B1 default embedded catalog preserves foundational schemas among seventeen rows", "[runtime][ra01-b1]") {
   const std::vector<ra01_row> expected{
       {"export", "export_source_v1", {{"--ledger", "text", true}, {"--revision", "decimal", true}, {"--target", "text", true}}},
       {"history",
        "read_history_v1",
        {{"--after-event", "decimal", false},
         {"--at-event", "decimal", false},
+        {"--event", "decimal", false},
         {"--ledger", "text", true},
         {"--limit", "decimal", false},
         {"--request-id", "text", false},
@@ -4330,18 +4338,26 @@ TEST_CASE("RA01-B1 default embedded catalog stays the five HEAD rows", "[runtime
   auto catalog = vm->catalog();
   REQUIRE(catalog);
   const auto& rows = catalog->fields.at("commands")->items;
-  REQUIRE(rows.size() == 5);
-  for (std::size_t i = 0; i < rows.size(); ++i) {
-    const auto& want = expected[i];
+  REQUIRE(rows.size() == 17);
+  std::vector<std::string> names;
+  for (const auto& row : rows)
+    names.push_back(ra01_text(row, "name"));
+  CHECK(names == std::vector<std::string>{"activate", "check", "check-recover", "checkpoint", "claim", "export", "history",
+                                          "init", "load", "preview", "recover", "refresh", "release", "render", "status",
+                                          "takeover", "verdict"});
+  for (const auto& want : expected) {
+    const auto found = std::ranges::find_if(rows, [&](const auto& row) { return ra01_text(row, "name") == want.name; });
+    REQUIRE(found != rows.end());
+    const auto& row = *found;
     INFO(want.name);
-    CHECK(ra01_text(rows[i], "name") == want.name);
-    CHECK(ra01_text(rows[i], "family") == want.name);
-    CHECK(ra01_text(rows[i], "handler_id") == "shipped." + want.name + ".v1");
-    CHECK(ra01_text(rows[i], "response_kind") == want.name + "_v1");
-    const auto& caps = rows[i]->fields.at("capabilities")->items;
+    CHECK(ra01_text(row, "name") == want.name);
+    CHECK(ra01_text(row, "family") == want.name);
+    CHECK(ra01_text(row, "handler_id") == "shipped." + want.name + ".v1");
+    CHECK(ra01_text(row, "response_kind") == want.name + "_v1");
+    const auto& caps = row->fields.at("capabilities")->items;
     REQUIRE(caps.size() == 1);
     CHECK(caps[0]->string == want.capability);
-    const auto&              opts = rows[i]->fields.at("options")->items;
+    const auto&              opts = row->fields.at("options")->items;
     std::vector<ra01_option> actual;
     for (const auto& o : opts)
       actual.push_back({ra01_text(o, "name"), ra01_text(o, "type"), o->fields.at("required")->boolean});
@@ -4354,8 +4370,12 @@ TEST_CASE("RA01-B1 default embedded catalog stays the five HEAD rows", "[runtime
     }
   }
 }
-TEST_CASE("RA01-B1 command options variant stays closed at five members", "[runtime][ra01-b1]") {
-  CHECK(std::variant_size_v<planar::engine::command_options> == 5);
+TEST_CASE("RA01-B1 command options variant stays closed at twelve members", "[runtime][ra01-b1]") {
+  CHECK(
+      std::same_as<planar::engine::command_options,
+                   std::variant<command_render_options, command_init_options, command_history_options, command_export_options,
+                                command_load_options, command_activate_options, command_status_options, command_preview_options,
+                                command_run_options, command_recovery_options, command_recover_options, command_check_options>>);
 }
 TEST_CASE("RA01-B1 commands.lua keeps one handler function and one registration line per authoring verb", "[runtime][ra01-b1]") {
   const auto source = ra01_read_file(std::filesystem::path(__FILE__).parent_path() / "../../stdlib/planar/commands.lua");

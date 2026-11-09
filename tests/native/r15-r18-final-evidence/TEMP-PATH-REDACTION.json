@@ -1,0 +1,95 @@
+{
+  "scope": "Publication records only; product/test source and literal fixture paths are excluded.",
+  "order": "Temporary prefixes first, then repository/home redactor. Inverse: standard repo/home restoration, then the temporary rules below.",
+  "rules": {
+    "<private-temp-root>": "Resolved OS temporary directory on evidence host, without trailing slash",
+    "<temp-root>": "Same OS temporary directory with macOS /private alias removed",
+    "<scratch-root>": "Literal /tmp scratch directory"
+  },
+  "files": {
+    "docs/vernacular/rounds/V5-02-R15-R18-C01-policy.md": {
+      "original_sha256": "512486c62c8f7c153682143c1df5860a59a00cfdc5c09114f904cad8c311df97",
+      "redacted_sha256_before_standard": "cd50999429b37cad4b62f6bea2465c9713004a2a301d8c3b3c7365e9b5ac1c37",
+      "bytes_before": 4502,
+      "bytes_after": 4512
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C01-review-policy-runtime.md": {
+      "original_sha256": "cccab530b090410d304dfc7ed7ea65a570631e37fa21468284960eba2321885d",
+      "redacted_sha256_before_standard": "6e7be48061968540d70c28db979403fdc97f2f6a9e5e8095dcfa8d25cc1c8207",
+      "bytes_before": 8567,
+      "bytes_after": 8607
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C01-runtime.md": {
+      "original_sha256": "23c0c7fd7801e2cec95ec8a00759c86045d4e65f57f113ceb186a9e0f5610f6f",
+      "redacted_sha256_before_standard": "d77dc398845819600fbc9324654c958090a0bf32f449dd36a57e79493d11b47f",
+      "bytes_before": 4912,
+      "bytes_after": 4922
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C05-calibration.md": {
+      "original_sha256": "0f98ff3f88a10aa7918d9e12a5a88762c3765cb400fe3da7ce44223731aa1d67",
+      "redacted_sha256_before_standard": "f6d771a3339fc56731e5b6cb4398496cf3246bbaa1486b184f1559d3f1dc5944",
+      "bytes_before": 9478,
+      "bytes_after": 9488
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C05-fixtures.md": {
+      "original_sha256": "cdf8261a4c61449f278d0fed3bc4b40b1c48a3b36ad5c3c5063103ce5d13815d",
+      "redacted_sha256_before_standard": "3120c88c65f8bf25f17a485a1abae2dfef05a6440a677102de2b53a745271cb5",
+      "bytes_before": 2723,
+      "bytes_after": 2733
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C07-calibration.md": {
+      "original_sha256": "a9ebc87318b163487a0ca0b88d37bd7d9eec9b82efc6ec36623ebe25f0eff7f7",
+      "redacted_sha256_before_standard": "3afb7633b8cafe8837b4262f57b816a45bd6775c13769f6ff8cde147a200a13e",
+      "bytes_before": 12255,
+      "bytes_after": 12275
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C11-calibration.md": {
+      "original_sha256": "9bf1acf38e1b9477ce83fbd5eb1bd77e08291da7de11610eda13e37464a83f3c",
+      "redacted_sha256_before_standard": "6b56dfa06cd64a23846ccf5531f6e3432ce0d2fb7e2234d76812996702761687",
+      "bytes_before": 10138,
+      "bytes_after": 10101
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-FINAL-PROBES-C07.md": {
+      "original_sha256": "c5499da7ace224dc422c6e105fd6c2edfd50ddc73d7f3f493b6a4628bd537a02",
+      "redacted_sha256_before_standard": "29196623784bcb4dbd9f3b2a54e7da44b9cff373a7db50e4894011892679d209",
+      "bytes_before": 9015,
+      "bytes_after": 8978
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-FINAL-PROBES-C09.md": {
+      "original_sha256": "d6dd478177cd378e59ac49e0557ed671192e273f186299ac96862f3dad7e8abb",
+      "redacted_sha256_before_standard": "6c009445f71d1b6f2eb6f52151544f240b9786be0bcd37c1bdcd4992f8aea9cc",
+      "bytes_before": 13680,
+      "bytes_after": 13643
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-review-ledger.md": {
+      "original_sha256": "0945b4724144238c2c2a9e2c63365e4f1083b882f96c42d41894b4702a970ee2",
+      "redacted_sha256_before_standard": "42e9d410046841f4273c516bb8b223257fd4876e359249d967399ae229e1fa27",
+      "bytes_before": 4901,
+      "bytes_after": 4827
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-review-policy.md": {
+      "original_sha256": "d9591c22dcb9d64e7a475b520247bbc6dd029d77ebaf0a269e4f2139f7c05ca2",
+      "redacted_sha256_before_standard": "7eded743810b2c8f1c3226de0ca3afabd510af4914fc5ffe81f8bc948a20e56f",
+      "bytes_before": 8516,
+      "bytes_after": 8526
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-review-runtime.md": {
+      "original_sha256": "8a3d324fe18c52de87b1ab91400c26229330babdf2b0486635d550667c857ce3",
+      "redacted_sha256_before_standard": "e8e2e0d0bb8b9649223e86d4babe03eed7447346b81c48a5f8e3081ddb82e8c7",
+      "bytes_before": 6711,
+      "bytes_after": 6674
+    },
+    "tests/native/r15-r18-final-evidence/C13-PROBES-MANIFEST.json": {
+      "original_sha256": "4c369923ae3a6904e9db0195336b370c402090900877603cfe3311d49defdac5",
+      "redacted_sha256_before_standard": "b54ad271d25380d4b9a02c6460852b99dae49f4e50ca07fce44abd6fd217cddc",
+      "bytes_before": 9281,
+      "bytes_after": 9244
+    },
+    "tests/native/r15-r18-final-evidence/PROBES-ATTEMPT-SUMMARY.json": {
+      "original_sha256": "992a841103e9ead6d2bbc4d5915127ef5b6b070a42012be1f857cd8f6c57d944",
+      "redacted_sha256_before_standard": "5cf281aea74e8e0697c273420c15a58e4b054f4ca02327f18bd8096a700ed23b",
+      "bytes_before": 21962,
+      "bytes_after": 21185
+    }
+  }
+}

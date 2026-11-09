@@ -18,8 +18,13 @@ struct state {
   std::set<std::string>             references;
   const value*                      pending = nullptr;
   std::shared_ptr<budget_sink>      budget;
-  std::optional<diagnostic>         composed;
 };
+// Every protected stage shares one terminal diagnostic. Lua may retry a failed
+// allocation after GC, but that retry cannot restore the declaration authority.
+void remember_failure(state& s, diagnostic error) {
+  if (s.error.code.empty())
+    s.error = std::move(error);
+}
 void* allocate(void* ud, void* p, std::size_t old, std::size_t size) {
   auto& s = *static_cast<state*>(ud);
   if (!p)
@@ -39,8 +44,8 @@ void* allocate(void* ud, void* p, std::size_t old, std::size_t size) {
     {
       auto r = s.budget->acquire_lua(delta);
       if (!r) {
-        s.composed = std::move(r.error());
-        refused    = true;
+        remember_failure(s, std::move(r.error()));
+        refused = true;
       }
     }
     if (refused)
@@ -70,7 +75,7 @@ void hook(lua_State* l, lua_Debug*) {
     if (!r) {
       refused = true;
       if (s.instructions < 1000000)
-        s.error = std::move(r.error());
+        remember_failure(s, std::move(r.error()));
     }
   }
   if (s.instructions >= 1000000 || refused)
@@ -150,12 +155,8 @@ value_ptr convert(lua_State* l, int index, std::size_t depth, bool list = false)
     lua_pushcfunction(l, anchor_table);
     lua_pushvalue(l, index);
     auto anchored = lua_pcall(l, 1, 0, 0);
-    if (anchored) {
-      if (s.composed)
-        throw *s.composed;
-      if (!s.error.code.empty())
-        throw s.error;
-    }
+    if (!s.error.code.empty())
+      throw s.error;
     if (anchored)
       throw diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max};
     v->kind = list ? value_kind::list : value_kind::record;
@@ -234,11 +235,11 @@ int construct(lua_State* l) {
   try {
     construct_native(l);
   } catch (diagnostic& e) {
-    context(l).error = std::move(e);
-    failed           = true;
+    remember_failure(context(l), std::move(e));
+    failed = true;
   } catch (...) {
-    context(l).error = {"internal", "Native conversion failed"};
-    failed           = true;
+    remember_failure(context(l), {"internal", "Native conversion failed"});
+    failed = true;
   }
   // All native temporaries have unwound before any allocating Lua operation.
   if (failed)
@@ -355,15 +356,22 @@ std::expected<declaration, diagnostic> load_declaration(std::string_view source,
   s.budget = std::move(budget);
   auto l   = lua_newstate(allocate, &s, 0);
   if (!l)
-    return s.composed ? std::unexpected(*s.composed)
-                      : std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max});
+    return !s.error.code.empty()
+               ? std::unexpected(std::move(s.error))
+               : std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max});
   *static_cast<state**>(lua_getextraspace(l)) = &s;
   auto close                                  = std::unique_ptr<lua_State, decltype(&lua_close)>(l, lua_close);
+  if (!s.error.code.empty())
+    return std::unexpected(std::move(s.error));
   lua_sethook(l, hook, LUA_MASKCOUNT, 100);
   lua_pushcfunction(l, setup);
   int status = lua_pcall(l, 0, 1, 0);
+  if (!s.error.code.empty())
+    return std::unexpected(std::move(s.error));
   if (!status) {
     status = luaL_loadbufferx(l, source.data(), source.size(), "declaration", "t");
+    if (!s.error.code.empty())
+      return std::unexpected(std::move(s.error));
     if (!status) {
       lua_pushvalue(l, -2);
       lua_setupvalue(l, -2, 1);
@@ -371,11 +379,9 @@ std::expected<declaration, diagnostic> load_declaration(std::string_view source,
     } else if (status != LUA_ERRMEM)
       return std::unexpected(diagnostic{"lua_syntax", "Invalid Lua text chunk"});
   }
+  if (!s.error.code.empty())
+    return std::unexpected(std::move(s.error));
   if (status) {
-    if (!s.error.code.empty())
-      return std::unexpected(std::move(s.error));
-    if (status == LUA_ERRMEM && s.composed)
-      return std::unexpected(*s.composed);
     if (status == LUA_ERRMEM)
       return std::unexpected(diagnostic{"resource_limit", "Lua allocation exceeded", "lua_bytes", memory_max});
     if (s.instructions >= 1000000)

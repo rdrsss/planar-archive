@@ -23,49 +23,74 @@ export namespace planar::engine::ledger {
 
 /// @brief Retained session note; immutable and safe to share with a snapshot.
 struct retained_checkpoint {
-  std::uint64_t id = 0, run_id = 0, seq = 0;
-  value_ptr     value;
+  std::uint64_t id     = 0; ///< Checkpoint row identifier.
+  std::uint64_t run_id = 0; ///< Run that recorded the note.
+  std::uint64_t seq    = 0; ///< Checkpoint event sequence.
+  value_ptr     value;      ///< Decoded immutable session note.
 };
 /// @brief A retained dispatch with exact packet bytes and decoded manifest and work.
 struct retained_dispatch {
-  std::uint64_t id = 0, run_id = 0, seq = 0, revision_id = 0;
-  std::string   kind, request_id, run_state, work_fp, render_fp, role_kind;
-  std::string   markdown;
-  value_ptr     manifest;
-  value_ptr     work;
+  std::uint64_t id          = 0; ///< Dispatch row identifier.
+  std::uint64_t run_id      = 0; ///< Run receiving this dispatch.
+  std::uint64_t seq         = 0; ///< Dispatch event sequence.
+  std::uint64_t revision_id = 0; ///< Revision captured by this dispatch.
+  std::string   kind;            ///< Claim, takeover or refresh dispatch kind.
+  std::string   request_id;      ///< Request that created the dispatch.
+  std::string   run_state;       ///< Current state of the dispatch run.
+  std::string   work_fp;         ///< Retained work fingerprint in hexadecimal.
+  std::string   render_fp;       ///< Retained render fingerprint in hexadecimal.
+  std::string   role_kind;       ///< Worker or reviewer role kind.
+  std::string   markdown;        ///< Exact dispatched Markdown bytes.
+  value_ptr     manifest;        ///< Decoded captured input manifest.
+  value_ptr     work;            ///< Decoded retained work identity.
 };
 /// @brief Public run identity without its secret.
 struct recovery_run {
-  std::uint64_t id = 0, generation_ordinal = 0;
-  std::string   request_id, state;
+  std::uint64_t id                 = 0; ///< Run row identifier.
+  std::uint64_t generation_ordinal = 0; ///< Ordinal of the run generation.
+  std::string   request_id;             ///< Request that opened the run.
+  std::string   state;                  ///< Current persisted run state.
 };
 /// @brief Retained records of a role's current structural lineage.
 struct recovery_records {
-  std::optional<recovery_run>        run;
-  std::optional<retained_dispatch>   acknowledged;
-  std::optional<retained_checkpoint> checkpoint;
-  std::vector<value_ptr>             evidence; ///< Latest evidence per work/check in the structural lineage.
-  std::vector<value_ptr>             findings; ///< Carried findings from the current activation latest rejection.
+  std::optional<recovery_run>        run;          ///< Latest run of the current structural lineage, if present.
+  std::optional<retained_dispatch>   acknowledged; ///< Latest dispatch of the current structural lineage.
+  std::optional<retained_checkpoint> checkpoint;   ///< Latest session note of the current structural lineage.
+  std::vector<value_ptr>             evidence;     ///< Latest evidence per work/check in the structural lineage.
+  std::vector<value_ptr>             findings;     ///< Carried findings from the current activation latest rejection.
 };
 /// @brief Read one retained dispatch by id in a verified read transaction.
+/// @param ledger Explicit ledger database path.
+/// @param dispatch Retained dispatch identifier.
 /// @return Exact retained dispatch, or a typed ledger failure.
 std::expected<retained_dispatch, execution_error> read_retained_dispatch(const std::filesystem::path& ledger,
                                                                          std::uint64_t                dispatch);
 /// @brief Look up the newest matching dispatch without modifying or acknowledging it.
+/// @param ledger Explicit ledger database path.
+/// @param job Owning job identifier.
+/// @param role Owning role identifier.
+/// @param render_fp_hex Render fingerprint as lowercase hexadecimal.
 /// @return Retained dispatch, no match, or a typed ledger failure.
 std::expected<std::optional<retained_dispatch>, execution_error> find_dispatch_by_render(const std::filesystem::path& ledger,
                                                                                          std::string_view             job,
                                                                                          std::string_view             role,
                                                                                          std::string_view render_fp_hex);
 /// @brief Read exact retained recovery records in one read transaction, without secrets.
+/// @param ledger Explicit ledger database path.
+/// @param job Owning job identifier.
+/// @param role Role whose current structural lineage is read.
 /// @return Lineage records or a typed ledger failure.
 std::expected<recovery_records, execution_error> read_recovery_records(const std::filesystem::path& ledger, std::string_view job,
                                                                        std::string_view role);
 /// @brief Named run identity for snapshot-time takeover refusal mapping.
 struct named_run {
-  std::string job, role, state;
+  std::string job;   ///< Job owning the named run.
+  std::string role;  ///< Role owning the named run.
+  std::string state; ///< Current persisted run state.
 };
 /// @brief Read a named run without selecting its secret.
+/// @param ledger Explicit ledger database path.
+/// @param run Named run identifier.
 /// @return Named identity, no match, or a typed ledger failure.
 std::expected<std::optional<named_run>, execution_error> lookup_named_run(const std::filesystem::path& ledger, std::uint64_t run);
 
@@ -138,13 +163,15 @@ struct execution_completion {
 
 /// @brief One stored verdict with its decoded normalized document (R18-T, DR18-8).
 struct execution_verdict {
-  std::uint64_t       id = 0;        ///< verdicts.id.
-  std::string         request_id;    ///< Verdict request identifier.
-  std::uint64_t       run = 0;       ///< Reviewer run identifier.
-  std::uint64_t       seq = 0;       ///< verdict_recorded event sequence.
-  std::string         applicability; ///< current or historical.
-  std::string         decision;      ///< approve or reject.
-  history::verdict_v1 body;          ///< Decoded normalized verdict_v1 document.
+  std::uint64_t                id = 0;         ///< verdicts.id.
+  std::string                  request_id;     ///< Verdict request identifier.
+  std::uint64_t                run = 0;        ///< Reviewer run identifier.
+  std::uint64_t                seq = 0;        ///< verdict_recorded event sequence.
+  std::string                  applicability;  ///< current or historical.
+  std::string                  decision;       ///< approve or reject.
+  history::verdict_v1          body;           ///< Decoded normalized verdict_v1 document.
+  std::uint64_t                generation = 0; ///< Generation identifier of the reviewer run, retained for lineage checks.
+  std::optional<std::uint64_t> activation;     ///< Job activation preceding the verdict, if any.
 };
 
 /// @brief One blocker row (R18-T); the snapshot lists open blockers only.
@@ -174,52 +201,75 @@ struct execution_review {
 
 /// @brief Open check reservation associated with one run.
 struct execution_reservation {
-  std::uint64_t id = 0, run = 0, opened_seq = 0;
-  std::string   request_id;
+  std::uint64_t id         = 0; ///< Check reservation identifier.
+  std::uint64_t run        = 0; ///< Run holding the reservation.
+  std::uint64_t opened_seq = 0; ///< Event sequence opening the reservation.
+  std::string   request_id;     ///< Check request identifier.
 };
 /// @brief Native observed evidence and its retained definition and target vector.
 struct execution_check_evidence {
-  std::string                  work, check, outcome, reason;
-  std::optional<std::uint64_t> matched;
-  std::optional<int>           exit_status;
-  std::uint64_t                duration_ms = 0, output_bytes = 0;
-  bool                         output_truncated = false;
-  std::string                  output;
-  value_ptr                    definition, vector;
+  std::string                  work;                     ///< Checked work identifier.
+  std::string                  check;                    ///< Check definition identifier.
+  std::string                  outcome;                  ///< Pass, fail or inconclusive outcome.
+  std::string                  reason;                   ///< Native outcome reason.
+  std::optional<std::uint64_t> matched;                  ///< Selected test count, when reported.
+  std::optional<int>           exit_status;              ///< Process exit status, when available.
+  std::uint64_t                duration_ms      = 0;     ///< Elapsed process duration in milliseconds.
+  std::uint64_t                output_bytes     = 0;     ///< Observed process output byte count.
+  bool                         output_truncated = false; ///< Whether the retained output was truncated.
+  std::string                  output;                   ///< Retained process output bytes.
+  value_ptr                    definition;               ///< Captured check definition.
+  value_ptr                    vector;                   ///< Captured producer target vector.
 };
 /// @brief One mode-normalized facet file to retain atomically with completion.
 struct execution_publication_file {
-  std::string   path, bytes;
-  std::uint32_t mode = 420;
+  std::string   path;       ///< Facet-relative normalized file path.
+  std::string   bytes;      ///< Captured file bytes.
+  std::uint32_t mode = 420; ///< Normalized file mode; defaults to 0644.
 };
 /// @brief Facet output established by the native verified observation.
 struct execution_check_publication {
-  std::string                             work, facet, semantic;
-  std::vector<execution_publication_file> files;
+  std::string                             work;     ///< Publishing work identifier.
+  std::string                             facet;    ///< Published facet identifier.
+  std::string                             semantic; ///< Facet semantic identity.
+  std::vector<execution_publication_file> files;    ///< Captured files establishing the facet output.
 };
 /// @brief Immutable native result supplied to the complete transaction.
 struct execution_check_result {
-  std::vector<execution_check_evidence>    evidence;
-  value_ptr                                observation;
-  std::vector<execution_check_publication> publications;
-  bool                                     recapture_matches = false;
+  std::vector<execution_check_evidence>    evidence;                  ///< Native outcomes for the reserved checks.
+  value_ptr                                observation;               ///< Captured output observation.
+  std::vector<execution_check_publication> publications;              ///< Facet outputs retained when completion is recorded.
+  bool                                     recapture_matches = false; ///< Whether post-run inputs match the original capture.
 };
 /// @brief Snapshot check evidence in a current role lineage.
 struct execution_evidence {
-  std::uint64_t                id = 0, reservation = 0, seq = 0;
-  std::string                  job, role, work, check, outcome, reason;
-  std::optional<std::uint64_t> matched;
-  value_ptr                    vector;
+  std::uint64_t                id          = 0; ///< Evidence row identifier.
+  std::uint64_t                reservation = 0; ///< Reservation recording the evidence.
+  std::uint64_t                seq         = 0; ///< Evidence event sequence.
+  std::string                  job;             ///< Owning job identifier.
+  std::string                  role;            ///< Checking role identifier.
+  std::string                  work;            ///< Checked work identifier.
+  std::string                  check;           ///< Check definition identifier.
+  std::string                  outcome;         ///< Pass, fail or inconclusive outcome.
+  std::string                  reason;          ///< Native outcome reason.
+  std::optional<std::uint64_t> matched;         ///< Selected test count, when reported.
+  value_ptr                    vector;          ///< Captured producer target vector.
 };
 /// @brief Current published facet identity.
 struct execution_publication {
-  std::uint64_t publication = 0, completion = 0;
-  std::string   job, role, work, facet, semantic;
+  std::uint64_t publication = 0; ///< Publication row identifier.
+  std::uint64_t completion  = 0; ///< Completion establishing the publication.
+  std::string   job;             ///< Owning job identifier.
+  std::string   role;            ///< Publishing worker role identifier.
+  std::string   work;            ///< Publishing work identifier.
+  std::string   facet;           ///< Published facet identifier.
+  std::string   semantic;        ///< Facet semantic identity.
 };
 /// @brief Latest observed output of a unit.
 struct execution_observed {
-  std::string   work, output;
-  std::uint64_t seq = 0;
+  std::string   work;    ///< Observed work identifier.
+  std::string   output;  ///< Latest observed output identity.
+  std::uint64_t seq = 0; ///< Observation event sequence.
 };
 
 /// @brief Verified execution snapshot read in one read transaction at one last_seq.
@@ -228,15 +278,15 @@ struct execution_snapshot {
   std::uint64_t last_seq = 0; ///< Last committed event sequence at the read.
   std::uint64_t next_checkpoint_id =
       1; ///< Next checkpoint identifier predicted by this snapshot; rechecked under the write lock.
-  std::optional<execution_revision>  revision;    ///< Active revision, absent when none.
-  std::string                        active_job;  ///< Active job identifier, or the empty string.
-  std::optional<std::uint64_t>       activation;  ///< Latest activation identifier, absent when none.
-  std::vector<execution_role>        roles;       ///< Every role_state row, sorted by job then role.
-  std::vector<execution_completion>  completions; ///< Current-lineage completions of the active job.
-  std::vector<execution_reservation> reservations;
-  std::vector<execution_evidence>    evidence;
-  std::vector<execution_publication> publications;
-  std::vector<execution_observed>    observed;
+  std::optional<execution_revision>  revision;        ///< Active revision, absent when none.
+  std::string                        active_job;      ///< Active job identifier, or the empty string.
+  std::optional<std::uint64_t>       activation;      ///< Latest activation identifier, absent when none.
+  std::vector<execution_role>        roles;           ///< Every role_state row, sorted by job then role.
+  std::vector<execution_completion>  completions;     ///< Current-lineage completions of the active job.
+  std::vector<execution_reservation> reservations;    ///< Open check reservations in the snapshot.
+  std::vector<execution_evidence>    evidence;        ///< Latest check evidence in current role lineages.
+  std::vector<execution_publication> publications;    ///< Current published facet identities.
+  std::vector<execution_observed>    observed;        ///< Latest observed work outputs.
   execution_review                   review;          ///< R18: the DR18-8 review value.
   std::uint64_t                      state_bytes = 0; ///< Canonical byte length of the D24 snapshot value S.
 };
@@ -449,6 +499,13 @@ struct execution_commit_result {
 };
 
 /// @brief Reserve a check under the snapshot and current token before spawning commands.
+/// @param path Explicit ledger database path.
+/// @param snapshot Verified facts to fence under the write lock.
+/// @param request_id Unique check request identifier.
+/// @param actor Actor recorded in the event.
+/// @param request Canonical request identity used for replay.
+/// @param token Secret-bearing run token authorizing the check.
+/// @param provenance Optional provenance document retained with the reservation.
 /// @return Durable reservation or a typed refusal; no process is started here.
 std::expected<execution_reservation, execution_error> reserve_check(const std::filesystem::path& path,
                                                                     const execution_snapshot&    snapshot,
@@ -456,6 +513,15 @@ std::expected<execution_reservation, execution_error> reserve_check(const std::f
                                                                     const history::request_v3& request, std::string_view token,
                                                                     const value_ptr& provenance = {});
 /// @brief Atomically retain check evidence and optional completion after native observation.
+/// @param path Explicit ledger database path.
+/// @param snapshot Verified post-run facts to fence under the write lock.
+/// @param reservation Open reservation to complete.
+/// @param token Run token authorizing completion.
+/// @param result Native captured observations and process outcomes.
+/// @param completion Whether policy admits a worker completion.
+/// @param transitions Policy-derived role state transitions.
+/// @param blockers_cleared Open blockers made obsolete by this commit.
+/// @param withheld Policy reasons for withholding completion.
 /// @return Saved result or a typed refusal leaving the reservation open.
 std::expected<execution_commit_result, execution_error>
 complete_check(const std::filesystem::path& path, const execution_snapshot& snapshot, std::uint64_t reservation,
@@ -463,6 +529,12 @@ complete_check(const std::filesystem::path& path, const execution_snapshot& snap
                const std::vector<execution_transition_input>& transitions,
                const std::vector<std::uint64_t>& blockers_cleared = {}, const std::vector<std::string>& withheld = {});
 /// @brief Interrupt a confirmed-stopped reservation, recording both request outcomes atomically.
+/// @param path Explicit ledger database path.
+/// @param request_id Unique recovery request identifier.
+/// @param actor Actor recorded in the event.
+/// @param request Canonical recovery request identity.
+/// @param run Run whose stopped check is being recovered.
+/// @param reservation Open reservation to interrupt.
 /// @return Saved interruption result or a typed refusal.
 std::expected<execution_commit_result, execution_error> recover_check(const std::filesystem::path& path,
                                                                       std::string_view request_id, std::string_view actor,

@@ -23,6 +23,14 @@ write('commands.lua',commands,[('    return context.accept_load({bundle=normaliz
     if mode=="postchanged" then accepted.value.event="99" end
     if mode=="postfalse" then return failed({code="schema",message="after completion",field=""}) end
     if mode=="postmalformed" then return nil end
+    return accepted'''),('    return context.accept_load({bundle=candidate.bundle,semantic=candidate.semantic,execution=change.value})','''    local accepted=context.accept_load({bundle=candidate.bundle,semantic=candidate.semantic,execution=change.value})
+    local mode=accepted.ok and accepted.value.request_id or ""
+    if mode=="posterror" then error("after completion") end
+    if mode=="postmemory" then pcall(function() local s="x";while true do s=s..s end end) end
+    if mode=="postinstructions" then pcall(function() while true do end end) end
+    if mode=="postchanged" then accepted.value.event="99" end
+    if mode=="postfalse" then return failed({code="schema",message="after completion",field=""}) end
+    if mode=="postmalformed" then return nil end
     return accepted''')])
 for name in ['runtime.cpp','runtime.cppm']:
  original=(root/'src/engine/runtime'/name).read_text()
@@ -63,6 +71,17 @@ void probe_barrier(const std::string& ledger, std::string_view stage) {
 }'''))
   changes.append(('    auto accepted = ledger::complete_acceptance', '''    if (options.request_id == "capture-race") probe_barrier(options.ledger,"prepared");
     auto accepted = ledger::complete_acceptance'''))
+  # Format3 stages the prepared records through the execution transaction instead of complete_acceptance.
+  changes.append(('    auto staged = ledger::stage_execution(options.ledger, *execution_state, *change);', '''    if (options.request_id == "capture-race") probe_barrier(options.ledger,"prepared");
+    auto staged = ledger::stage_execution(options.ledger, *execution_state, *change);'''))
+  changes.append(('    auto saved_value = engine::codec_decode(completion.saved_result);\n    if (!saved_value)\n      return {{}, native_error({"internal", "Invalid saved load response"})};', '''    if (options.request_id == "postalloc") throw std::bad_alloc(); // synthetic exception, not allocator exhaustion
+    auto saved_value = engine::codec_decode(completion.saved_result);
+    if (!saved_value)
+      return {{}, native_error({"internal", "Invalid saved load response"})};'''))
+  changes.append(('    receipt.phase        = engine::ledger::completion_phase::replayed;\n  }\n  services.load_ledger_identity', '''    receipt.phase        = engine::ledger::completion_phase::replayed;
+    if (load.request_id == "earlytransport") throw std::bad_alloc();
+  }
+  services.load_ledger_identity'''))
   changes.append(('    auto decoded = codec_decode(completion.saved_result);', '''    if (options.request_id == "postalloc") throw std::bad_alloc(); // synthetic exception, not allocator exhaustion
     auto decoded = codec_decode(completion.saved_result);'''))
   changes.append(('          early_completion.phase        = engine::ledger::completion_phase::replayed;', '''          early_completion.phase        = engine::ledger::completion_phase::replayed;

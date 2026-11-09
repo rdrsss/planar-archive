@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "scope": "Independent C14 source/component carry and same-preserved-binary proof; not source/platform/integrated approval.",
+  "evidence_base": "tests/native/r15-r18-c14-evidence/proof",
+  "files": {
+    "PREPARATION-IMMUTABLE-CHECK.json": {
+      "sha256": "da401fce99905449ae506527710c0dcb0b0c45ab9614f0de4ed482f7128101af",
+      "bytes": 524
+    },
+    "RUN-AUTHORIZED.json": {
+      "sha256": "52887ae6a7be8beef46a368df7a52f6f9dfddc917c879635c73acf083d9659d0",
+      "bytes": 332
+    },
+    "SUMMARY.json": {
+      "sha256": "67b2bdf6b1b23a547bbb28b0002329719417b415cba9115b061c0e7f774e2651",
+      "bytes": 595
+    },
+    "attempt-1.command.json": {
+      "sha256": "d8e789fda4cf3d41a734b28bf33e34088bb40ac6e4848eb4fc0dcd86b4e77922",
+      "bytes": 178
+    },
+    "attempt-1.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "attempt-1.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "attempt-1.stdout": {
+      "sha256": "85bfce75bd85f14b2c562c471de2bfe0cf50b023549418cc1b841e5fe0dab4ca",
+      "bytes": 51
+    },
+    "calibration-carry.json": {
+      "sha256": "2b69f52ce4602b0e23fabdcb70603a12d410be2815d7c266d0e82fcb85cfe13c",
+      "bytes": 2284
+    },
+    "checked-bindings.json": {
+      "sha256": "de78a3648117666d2a98bb747691168eef9dd72e715c8d46a58b690ec5a3b8ec",
+      "bytes": 2520017
+    },
+    "debug-corrected.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "debug-corrected.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "debug-corrected.xml": {
+      "sha256": "05992e5c600f610ff2481b1a1a33822cf906552b1ce2084449783b7537a1465c",
+      "bytes": 650
+    },
+    "debug-dry-run.command.json": {
+      "sha256": "d401378bce819d61202d6b44a1785ef1f2e09eb40a7e7fdf7e592fbb43aa2031",
+      "bytes": 196
+    },
+    "debug-dry-run.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "debug-dry-run.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "debug-dry-run.stdout": {
+      "sha256": "b8f345cb48a355eeb34af4f793568370be27497b2fb0b789d63649c9a65b383d",
+      "bytes": 115
+    },
+    "debug-saved-old.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "debug-saved-old.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "debug-saved-old.xml": {
+      "sha256": "cffe4c7ec64807dd38662974de4cc4baeed031c2272148f138318dab178b5dc5",
+      "bytes": 1045
+    },
+    "descriptor-carry.json": {
+      "sha256": "e28267004224aa5ace8a7d355f7ad6977444b12cc5fa0b150f7655cdf190121e",
+      "bytes": 733
+    },
+    "platform-inventory.json": {
+      "sha256": "71dc16c3df6ebad23ca238b6db1081a13aa9076300d9c4ed40efc42fee8877ef",
+      "bytes": 1466
+    },
+    "prepared-verify.py": {
+      "sha256": "d42b3c34989e7a6f89cf53c65fab74fe769b7d1445fc337a3070727212302368",
+      "bytes": 15162
+    },
+    "release-corrected.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "release-corrected.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "release-corrected.xml": {
+      "sha256": "1df539794590858e79c16fbf5218647eef53edcfe3c73d7ac5a0f4e0f1f6e2a4",
+      "bytes": 650
+    },
+    "release-dry-run.command.json": {
+      "sha256": "77a18567f9b868024b792ed2570b7da915d5f6e7415356fa80408e061dcde4a4",
+      "bytes": 198
+    },
+    "release-dry-run.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "release-dry-run.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "release-dry-run.stdout": {
+      "sha256": "63f66421aa4544cc9d73c167e32a092e6746a0dd7628dee83f1694e8a94967c6",
+      "bytes": 117
+    },
+    "release-saved-old.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "release-saved-old.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "release-saved-old.xml": {
+      "sha256": "41c2cf91da9e464b701b7747da5e018819559acad717e6cbfb720db7b32dfec9",
+      "bytes": 1045
+    },
+    "same-artifact-native-results.json": {
+      "sha256": "42f4df03ef6a8a77b3228180b0113e87febebe7c0049cd4001cecd46d820dfb6",
+      "bytes": 3405
+    },
+    "source-overlay.json": {
+      "sha256": "f823b022716170ca9a2b625467d4eab73be57b6bb2e0ea79e09cae89092585db",
+      "bytes": 31071
+    },
+    "verify.py": {
+      "sha256": "d42b3c34989e7a6f89cf53c65fab74fe769b7d1445fc337a3070727212302368",
+      "bytes": 15162
+    }
+  },
+  "result": {
+    "status": "pass",
+    "source_files": 272,
+    "unchanged_engine_files": 179,
+    "unchanged_product_inputs": 190,
+    "changed_file": "src/cmd/planar/bootstrap.t.cpp",
+    "calibration_and_descriptor_component_carry": true,
+    "same_saved_old_binaries": {
+      "configurations": 2,
+      "cases_per_run": 1,
+      "assertions_per_run": 2,
+      "intended_map_failures_per_old_run": 1,
+      "old_exit": 42,
+      "corrected_exit": 0
+    },
+    "checked_path_bindings": 9041,
+    "unique_canonical_hashes": 8322,
+    "limits": "No new calibration/fault compilation; no full platform-gate or integrated approval claim."
+  },
+  "dry_run_observation": {
+    "debug_exit": 0,
+    "release_exit": 0,
+    "steps": [
+      "forced glob recheck",
+      "simulated CMake regeneration"
+    ],
+    "actual_build_or_no_work_claim": false
+  },
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-C14-proof.md",
+    "sha256": "dd2c9af63c2641b1803f037adf621ba70a2f12d3280eec77e07160c06c7f23ee",
+    "bytes": 6716
+  },
+  "publication": "Raw bulky checked bindings and XML remain local; compact manifest records their hashes. Paths inside raw files retain their original bases."
+}

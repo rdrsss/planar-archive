@@ -191,6 +191,8 @@ std::expected<value_ptr, snapshot_value_error> snapshot_value(const ledger::exec
     verdicts.push_back(record({{"id", decimal(v.id)},
                                {"request_id", text(v.request_id)},
                                {"run", decimal(v.run)},
+                               {"generation", decimal(v.generation)},
+                               {"activation", v.activation ? decimal(*v.activation) : text("none")},
                                {"seq", decimal(v.seq)},
                                {"applicability", text(v.applicability)},
                                {"decision", text(v.decision)},

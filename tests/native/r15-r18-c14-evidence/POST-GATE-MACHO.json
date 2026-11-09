@@ -1,0 +1,1533 @@
+{
+  "scope": "Independent exact byte-range and derived code-signature proof; no product execution",
+  "artifacts": [
+    {
+      "configuration": "debug",
+      "old_sha256": "35c597c5aa147994208660e7d4f7b536c187f13ee347fc902298f37f5ce47d59",
+      "current_sha256": "3344b7caef32b7a0350617063f3a730b43bfb6096cefea6a6b9bc40e6cb27407",
+      "bytes": 129015368,
+      "sections": [
+        {
+          "name": "__TEXT,__text",
+          "raw_header_sha256": "c6a4d2abc89ac8a686534f1d868d20f843df93d9b76fbc437080b5cda083422c",
+          "offset": 5240,
+          "size": 30064344,
+          "flags": 2147484672,
+          "zerofill": false,
+          "payload_sha256": "903e8261776fb7ac96ca1457689a42491b3839d2b7a7e09e76520ac550922fdd"
+        },
+        {
+          "name": "__TEXT,__stubs",
+          "raw_header_sha256": "55d18ffc2ecd0bde39e38a9f849665d9e33c8601021211578dac8aee2142826d",
+          "offset": 30069584,
+          "size": 164328,
+          "flags": 2147484680,
+          "zerofill": false,
+          "payload_sha256": "254db94bfa00de67cdaffc27e822175619b0cee3558186b672f60856b80885c0"
+        },
+        {
+          "name": "__TEXT,__init_offsets",
+          "raw_header_sha256": "2970d7e68f3a6790c55a7c9a81bdc5b7e8eed6e060fb0305e36a70ea72db5a6c",
+          "offset": 30233912,
+          "size": 444,
+          "flags": 22,
+          "zerofill": false,
+          "payload_sha256": "15ff180b03ff9f09495f47bbaecc4aea17ec9dcd59597c1de59c83c0ed2f18d1"
+        },
+        {
+          "name": "__TEXT,__gcc_except_tab",
+          "raw_header_sha256": "278f3b1937352463d56eebab5b72d8659e811087f9db80199fd8377979f86c27",
+          "offset": 30234356,
+          "size": 1389620,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "7f20905775124b58cd69d3ad5b880f1f839da93cd153cf4cc4067f0291966cd3"
+        },
+        {
+          "name": "__TEXT,__const",
+          "raw_header_sha256": "97e893762ba7c410b921f1f35713284f0428894a57be61ca33ea9e83f205a5cc",
+          "offset": 31624000,
+          "size": 13880277,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "7e9b8f38b03a7b4fadd5dea9110ab8c6fd608cb7605632556b0afeed4ff3df25"
+        },
+        {
+          "name": "__TEXT,__cstring",
+          "raw_header_sha256": "fcd430abb3458201283bd2596f5b8f4859811207f6035dd91fca354bdaf36f40",
+          "offset": 45504277,
+          "size": 270344,
+          "flags": 2,
+          "zerofill": false,
+          "payload_sha256": "60b1e3c1d95ebc9f22abee125f2e961d1f90f966af62632296511581e511122c"
+        },
+        {
+          "name": "__TEXT,__unwind_info",
+          "raw_header_sha256": "0f06765cf45b995a0ad4433c4950706b6be7bfe21557703dd10fe385e30b9c29",
+          "offset": 45774624,
+          "size": 500920,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "ef4a2ba09b8888db128401609419bdb2edd021c76e38d295841587cd45742862"
+        },
+        {
+          "name": "__DATA_CONST,__got",
+          "raw_header_sha256": "cb194ec7e68085b0be859fe71effa37803acdd91d302a011a924dcadfef58856",
+          "offset": 46284800,
+          "size": 113200,
+          "flags": 6,
+          "zerofill": false,
+          "payload_sha256": "75efe1a424c63aaa6cc253eb10fa0aa103d6d1190e2f55b0d4835ba67b2ec5af"
+        },
+        {
+          "name": "__DATA_CONST,__const",
+          "raw_header_sha256": "6000665f91effa2af186e87b5ce464a3e93fdb242faec6b6f75ae37d9877e6e1",
+          "offset": 46398000,
+          "size": 511152,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "c760697939f2af30c483a7885647ca6063c257e15ed065fed8214cc21bebd726"
+        },
+        {
+          "name": "__DATA,__data",
+          "raw_header_sha256": "a1fd24c9feffe1d42c69175e80271567cd9bee8a85f250dcfa0e25dc6259bace",
+          "offset": 46923776,
+          "size": 14780,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "1a5e42153ffc461129e36b8cab6088e4701a16e9936d5e2e245db5a0b2f8892a"
+        },
+        {
+          "name": "__DATA,__thread_vars",
+          "raw_header_sha256": "ff93d17fc914242a96db5599a270f4d9a801c6c12110590b28a5956272851509",
+          "offset": 46938560,
+          "size": 24,
+          "flags": 19,
+          "zerofill": false,
+          "payload_sha256": "864ae34b3332c8804d7f7fe1fd45cc3a490c765001900e1014b85e3efbaf6609"
+        },
+        {
+          "name": "__DATA,__thread_bss",
+          "raw_header_sha256": "dc4dfcaaddd7acbc48ab21d01764087399f45480c8e6aa26e2eb7ff6eff67ab4",
+          "offset": 0,
+          "size": 80,
+          "flags": 18,
+          "zerofill": true,
+          "payload_sha256": null
+        },
+        {
+          "name": "__DATA,__bss",
+          "raw_header_sha256": "819f98fb41c95c5461195efeb0bc901aaa42b8e85845dee0893eb1a83f1632fc",
+          "offset": 0,
+          "size": 2144,
+          "flags": 1,
+          "zerofill": true,
+          "payload_sha256": null
+        },
+        {
+          "name": "__DATA,__common",
+          "raw_header_sha256": "9986a6b63e30551bcfca9a1f6779069101c72240ff4930df9d49cf63fe9c8ee4",
+          "offset": 0,
+          "size": 32,
+          "flags": 1,
+          "zerofill": true,
+          "payload_sha256": null
+        }
+      ],
+      "code_directory": {
+        "offset": 128015233,
+        "length": 1000128,
+        "code_slots": 31254,
+        "page_size": 4096,
+        "code_limit": 128015104,
+        "flags": 131074,
+        "version": 132096,
+        "hash_type": 2,
+        "special_slots": 0,
+        "policy_prefix_sha256": "821f43582f2fbc2eb1a83ff2284a00b6dd6a040387f9701722b45aa3b7150654",
+        "padding_sha256": "837885c8f8091aeaeb9ec3c3f85a6ff470a415e610b8ba3e49f9b33c9cf9d619",
+        "identifier": "planar_runtime_tests"
+      },
+      "n_oso_changed": [
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/CMakeFiles/planar_runtime_tests.dir/runtime/commands.t.cpp.o",
+          "offset": 57457352,
+          "old": 1794224352,
+          "current": 1794251634,
+          "origin": "identical direct commands.t.cpp.o body; object mtime only"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_0.a(runtime_0.cpp.o)",
+          "offset": 59219592,
+          "old": 1794224310,
+          "current": 1794251559,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_0.a(runtime_0.cppm.o)",
+          "offset": 59520072,
+          "old": 1794224306,
+          "current": 1794251554,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_1.a(runtime_1.cpp.o)",
+          "offset": 59520696,
+          "old": 1794224310,
+          "current": 1794251559,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_1.a(runtime_1.cppm.o)",
+          "offset": 59835256,
+          "old": 1794224306,
+          "current": 1794251554,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_2.a(runtime_2.cpp.o)",
+          "offset": 59835880,
+          "old": 1794224310,
+          "current": 1794251559,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_2.a(runtime_2.cppm.o)",
+          "offset": 60150440,
+          "old": 1794224306,
+          "current": 1794251554,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_3.a(runtime_3.cpp.o)",
+          "offset": 60151064,
+          "old": 1794224313,
+          "current": 1794251564,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_3.a(runtime_3.cppm.o)",
+          "offset": 60465624,
+          "old": 1794224310,
+          "current": 1794251559,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_4.a(runtime_4.cpp.o)",
+          "offset": 60466248,
+          "old": 1794224314,
+          "current": 1794251564,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_4.a(runtime_4.cppm.o)",
+          "offset": 60780808,
+          "old": 1794224310,
+          "current": 1794251560,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_5.a(runtime_5.cpp.o)",
+          "offset": 60781432,
+          "old": 1794224314,
+          "current": 1794251564,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_5.a(runtime_5.cppm.o)",
+          "offset": 61095992,
+          "old": 1794224310,
+          "current": 1794251560,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_6.a(runtime_6.cpp.o)",
+          "offset": 61096616,
+          "old": 1794224318,
+          "current": 1794251568,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_6.a(runtime_6.cppm.o)",
+          "offset": 61411176,
+          "old": 1794224314,
+          "current": 1794251564,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_7.a(runtime_7.cpp.o)",
+          "offset": 61411800,
+          "old": 1794224318,
+          "current": 1794251568,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_7.a(runtime_7.cppm.o)",
+          "offset": 61726360,
+          "old": 1794224314,
+          "current": 1794251564,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_8.a(runtime_8.cpp.o)",
+          "offset": 61726984,
+          "old": 1794224318,
+          "current": 1794251568,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_8.a(runtime_8.cppm.o)",
+          "offset": 62041544,
+          "old": 1794224314,
+          "current": 1794251564,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_9.a(runtime_9.cpp.o)",
+          "offset": 62042168,
+          "old": 1794224322,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_9.a(runtime_9.cppm.o)",
+          "offset": 62356728,
+          "old": 1794224318,
+          "current": 1794251568,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_10.a(runtime_10.cpp.o)",
+          "offset": 62357352,
+          "old": 1794224322,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_10.a(runtime_10.cppm.o)",
+          "offset": 62671912,
+          "old": 1794224318,
+          "current": 1794251568,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_11.a(runtime_11.cpp.o)",
+          "offset": 62672536,
+          "old": 1794224322,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_11.a(runtime_11.cppm.o)",
+          "offset": 62987096,
+          "old": 1794224318,
+          "current": 1794251569,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_12.a(runtime_12.cpp.o)",
+          "offset": 62987720,
+          "old": 1794224326,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_12.a(runtime_12.cppm.o)",
+          "offset": 63302280,
+          "old": 1794224322,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_13.a(runtime_13.cpp.o)",
+          "offset": 63302904,
+          "old": 1794224326,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_13.a(runtime_13.cppm.o)",
+          "offset": 63617464,
+          "old": 1794224322,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_14.a(runtime_14.cpp.o)",
+          "offset": 63618088,
+          "old": 1794224326,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_14.a(runtime_14.cppm.o)",
+          "offset": 63932648,
+          "old": 1794224322,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_15.a(runtime_15.cpp.o)",
+          "offset": 63933272,
+          "old": 1794224331,
+          "current": 1794251582,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_15.a(runtime_15.cppm.o)",
+          "offset": 64247832,
+          "old": 1794224326,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_16.a(runtime_16.cpp.o)",
+          "offset": 64248456,
+          "old": 1794224331,
+          "current": 1794251582,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_16.a(runtime_16.cppm.o)",
+          "offset": 64563016,
+          "old": 1794224326,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_17.a(runtime_17.cpp.o)",
+          "offset": 64563640,
+          "old": 1794224331,
+          "current": 1794251582,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_17.a(runtime_17.cppm.o)",
+          "offset": 64865144,
+          "old": 1794224326,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_18.a(runtime_18.cpp.o)",
+          "offset": 64865768,
+          "old": 1794224336,
+          "current": 1794251586,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_18.a(runtime_18.cppm.o)",
+          "offset": 65167272,
+          "old": 1794224331,
+          "current": 1794251582,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_19.a(runtime_19.cpp.o)",
+          "offset": 65167896,
+          "old": 1794224336,
+          "current": 1794251586,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_19.a(runtime_19.cppm.o)",
+          "offset": 65482456,
+          "old": 1794224332,
+          "current": 1794251582,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_20.a(runtime_20.cpp.o)",
+          "offset": 65483080,
+          "old": 1794224336,
+          "current": 1794251587,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_variant_20.a(runtime_20.cppm.o)",
+          "offset": 65797640,
+          "old": 1794224332,
+          "current": 1794251582,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_0.a(runtime_0.cpp.o)",
+          "offset": 65798264,
+          "old": 1794224340,
+          "current": 1794251591,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_0.a(runtime_0.cppm.o)",
+          "offset": 66099256,
+          "old": 1794224336,
+          "current": 1794251587,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_1.a(runtime_1.cpp.o)",
+          "offset": 66099880,
+          "old": 1794224340,
+          "current": 1794251591,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_1.a(runtime_1.cppm.o)",
+          "offset": 66401000,
+          "old": 1794224336,
+          "current": 1794251587,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_2.a(runtime_2.cpp.o)",
+          "offset": 66401624,
+          "old": 1794224341,
+          "current": 1794251591,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_2.a(runtime_2.cppm.o)",
+          "offset": 66716184,
+          "old": 1794224336,
+          "current": 1794251587,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_3.a(runtime_3.cpp.o)",
+          "offset": 66716808,
+          "old": 1794224345,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_3.a(runtime_3.cppm.o)",
+          "offset": 67031368,
+          "old": 1794224340,
+          "current": 1794251591,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_4.a(runtime_4.cpp.o)",
+          "offset": 67031992,
+          "old": 1794224345,
+          "current": 1794251596,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_4.a(runtime_4.cppm.o)",
+          "offset": 67346552,
+          "old": 1794224341,
+          "current": 1794251591,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_5.a(runtime_5.cpp.o)",
+          "offset": 67347176,
+          "old": 1794224345,
+          "current": 1794251596,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_variant_5.a(runtime_5.cppm.o)",
+          "offset": 67661736,
+          "old": 1794224341,
+          "current": 1794251592,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_c01_variant.a(runtime_0.cpp.o)",
+          "offset": 67675688,
+          "old": 1794224349,
+          "current": 1794251600,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_c01_variant.a(runtime_0.cppm.o)",
+          "offset": 67976296,
+          "old": 1794224345,
+          "current": 1794251596,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_0.a(planar_command_source_0.cppm.o)",
+          "offset": 69139416,
+          "old": 1794224301,
+          "current": 1794251544,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_1.a(planar_command_source_1.cppm.o)",
+          "offset": 69139976,
+          "old": 1794224301,
+          "current": 1794251544,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_2.a(planar_command_source_2.cppm.o)",
+          "offset": 69140536,
+          "old": 1794224301,
+          "current": 1794251544,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_3.a(planar_command_source_3.cppm.o)",
+          "offset": 69141096,
+          "old": 1794224302,
+          "current": 1794251544,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_4.a(planar_command_source_4.cppm.o)",
+          "offset": 69141656,
+          "old": 1794224302,
+          "current": 1794251544,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_5.a(planar_command_source_5.cppm.o)",
+          "offset": 69142216,
+          "old": 1794224302,
+          "current": 1794251544,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_6.a(planar_command_source_6.cppm.o)",
+          "offset": 69142776,
+          "old": 1794224302,
+          "current": 1794251545,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_7.a(planar_command_source_7.cppm.o)",
+          "offset": 69143336,
+          "old": 1794224302,
+          "current": 1794251545,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_8.a(planar_command_source_8.cppm.o)",
+          "offset": 69143896,
+          "old": 1794224302,
+          "current": 1794251545,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_9.a(planar_command_source_9.cppm.o)",
+          "offset": 69144456,
+          "old": 1794224303,
+          "current": 1794251545,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_10.a(planar_command_source_10.cppm.o)",
+          "offset": 69145016,
+          "old": 1794224303,
+          "current": 1794251545,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_11.a(planar_command_source_11.cppm.o)",
+          "offset": 69145576,
+          "old": 1794224303,
+          "current": 1794251545,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_12.a(planar_command_source_12.cppm.o)",
+          "offset": 69146136,
+          "old": 1794224303,
+          "current": 1794251546,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_13.a(planar_command_source_13.cppm.o)",
+          "offset": 69146696,
+          "old": 1794224303,
+          "current": 1794251546,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_14.a(planar_command_source_14.cppm.o)",
+          "offset": 69147256,
+          "old": 1794224303,
+          "current": 1794251546,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_15.a(planar_command_source_15.cppm.o)",
+          "offset": 69147816,
+          "old": 1794224304,
+          "current": 1794251547,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_16.a(planar_command_source_16.cppm.o)",
+          "offset": 69148376,
+          "old": 1794224304,
+          "current": 1794251547,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_17.a(planar_command_source_17.cppm.o)",
+          "offset": 69148936,
+          "old": 1794224304,
+          "current": 1794251547,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_18.a(planar_command_source_18.cppm.o)",
+          "offset": 69149496,
+          "old": 1794224304,
+          "current": 1794251547,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_19.a(planar_command_source_19.cppm.o)",
+          "offset": 69150056,
+          "old": 1794224304,
+          "current": 1794251547,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_command_source_20.a(planar_command_source_20.cppm.o)",
+          "offset": 69150616,
+          "old": 1794224304,
+          "current": 1794251547,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_source_0.a(planar_load_source_0.cppm.o)",
+          "offset": 69151176,
+          "old": 1794224305,
+          "current": 1794251548,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_source_1.a(planar_load_source_1.cppm.o)",
+          "offset": 69151736,
+          "old": 1794224305,
+          "current": 1794251548,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_source_2.a(planar_load_source_2.cppm.o)",
+          "offset": 69152296,
+          "old": 1794224305,
+          "current": 1794251548,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_source_3.a(planar_load_source_3.cppm.o)",
+          "offset": 69152856,
+          "old": 1794224305,
+          "current": 1794251548,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_source_4.a(planar_load_source_4.cppm.o)",
+          "offset": 69153416,
+          "old": 1794224305,
+          "current": 1794251548,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_source_5.a(planar_load_source_5.cppm.o)",
+          "offset": 69153976,
+          "old": 1794224305,
+          "current": 1794251548,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-debug/src/engine/libplanar_load_c01_source.a(planar_load_c01_source.cppm.o)",
+          "offset": 69165976,
+          "old": 1794224306,
+          "current": 1794251549,
+          "origin": "identical ar member body; only ar header mtime differs"
+        }
+      ],
+      "masked_sha256": "d6f33cfc57ee13c33d590848b05fe431fd5d947f69d74253e1c330d6128503f8",
+      "strict_codesign_verification": [
+        {
+          "mode": "old",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "mode": "current",
+          "exit": 0,
+          "stderr": ""
+        }
+      ],
+      "classification": "All section/header/layout bytes and all file bytes outside LC_UUID, N_OSO ar member times and SHA256 code-directory page slots are identical; every slot independently recomputed."
+    },
+    {
+      "configuration": "release",
+      "old_sha256": "543894bf9dad43e94a40639d654598d9673cdce21db06313935f461988ba29c9",
+      "current_sha256": "e5d5f8a450d9b7cb6e09185a287d90143e3f745b0ec8360569828760a17a6143",
+      "bytes": 47017960,
+      "sections": [
+        {
+          "name": "__TEXT,__text",
+          "raw_header_sha256": "c67bc426096d47daf78d538360443cf90b8e02807164110db7ad8ed9e25763e2",
+          "offset": 5376,
+          "size": 19561008,
+          "flags": 2147484672,
+          "zerofill": false,
+          "payload_sha256": "f29901d4dbfb78a67e7a882c735174ce7b7c1521d8acd27d40736b4b05f9f9bb"
+        },
+        {
+          "name": "__TEXT,__stubs",
+          "raw_header_sha256": "dc669f7e61299bba5515e5902baff2ed407abf0afe1cc1cb3fb05f5084b02a2b",
+          "offset": 19566384,
+          "size": 3804,
+          "flags": 2147484680,
+          "zerofill": false,
+          "payload_sha256": "7376b907ddd4cf848066f407be4f7abe0bbb787b08373aca50d06a039aea1137"
+        },
+        {
+          "name": "__TEXT,__init_offsets",
+          "raw_header_sha256": "d0622956560cee871880181289888c8941a42cd85d9a12d98b6f34e8a07634d4",
+          "offset": 19570188,
+          "size": 172,
+          "flags": 22,
+          "zerofill": false,
+          "payload_sha256": "5166b669c9b6314222f6d3fe9a2bff55021078b16bc04bc3961b8be7fedef647"
+        },
+        {
+          "name": "__TEXT,__gcc_except_tab",
+          "raw_header_sha256": "c849d34e9203dec403c1779ae6ca3904ab3fd82cc3538b3501546c9923900c1a",
+          "offset": 19570360,
+          "size": 1333732,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "1f4b93057a28abe25634d0f8707738923f72a6ffac8286b068c8b7cef23a7f33"
+        },
+        {
+          "name": "__TEXT,__const",
+          "raw_header_sha256": "82cc14215f1f238259498f0d31e7c31f58cb7a0e29a036104f1b6966ff579695",
+          "offset": 20904128,
+          "size": 13850397,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "4e5522d2ea7e218a76aad79b4d412928f68fb4fa973c520dc026ca01b90c02cd"
+        },
+        {
+          "name": "__TEXT,__cstring",
+          "raw_header_sha256": "a67ff4b6cfb1d494a9874c0ecbf96d1b89dd5b0c5e25d6439654b1346b8d7055",
+          "offset": 34754525,
+          "size": 262645,
+          "flags": 2,
+          "zerofill": false,
+          "payload_sha256": "6196d39762a7d29c70d5c6ecf30a303df7ba33b895342459cb30d51e4f20d0c3"
+        },
+        {
+          "name": "__TEXT,__unwind_info",
+          "raw_header_sha256": "fb4c534d6aeadc9d2a2ac6a5c7328a6100359cfdaf107b1a69b9d9c51dcc99b0",
+          "offset": 35017172,
+          "size": 181568,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "a4a785c0779a8f64d4fcd18cc8ac96ab6d78fdc1cc2835026609e4f36b14aade"
+        },
+        {
+          "name": "__TEXT,__eh_frame",
+          "raw_header_sha256": "5a06e8a8912e83f24bbd2913f7508517d34dcd6f510128b2cea2674e6890658d",
+          "offset": 35198744,
+          "size": 128,
+          "flags": 1744830475,
+          "zerofill": false,
+          "payload_sha256": "49e3d8ea2acc42ccdd46c739e21ddabce1f14930ecbe7f29d88ff27372a3dcd5"
+        },
+        {
+          "name": "__DATA_CONST,__got",
+          "raw_header_sha256": "886ede92100ac356a7690d8992313a74fa4735b11386a354a0676c4f7b869c24",
+          "offset": 35209216,
+          "size": 4984,
+          "flags": 6,
+          "zerofill": false,
+          "payload_sha256": "5b49655ea021aa74c4efcc7f859907a47f0f871a861886f5edd70095bee55d1e"
+        },
+        {
+          "name": "__DATA_CONST,__const",
+          "raw_header_sha256": "ba6f5c2661c325d520916b4acc5476617ae4a38428dd465f3d2b6266aceb5390",
+          "offset": 35214200,
+          "size": 471696,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "25eb700c5f01ef3581e4602a54845b53e6c3ac37c631921a437737fa9da4b839"
+        },
+        {
+          "name": "__DATA,__data",
+          "raw_header_sha256": "337d7fe438d5af49038fdd9b94661bc1689c855bf7b1ef7f2548c2b64bf13f6b",
+          "offset": 35700736,
+          "size": 14324,
+          "flags": 0,
+          "zerofill": false,
+          "payload_sha256": "c0079d1a0449bf26feac7861d824598b32690fc3090c88e936750e54ceeb64d4"
+        },
+        {
+          "name": "__DATA,__thread_vars",
+          "raw_header_sha256": "7cb9a51382e55ffe141c0cccc54ee84a91092cbc47d1c4ff5b7d6813f6b7ab11",
+          "offset": 35715064,
+          "size": 24,
+          "flags": 19,
+          "zerofill": false,
+          "payload_sha256": "d3aed65aa53fe7a64c5a72e9ba1202f6dac60d4d38212b065a077bdf313b047c"
+        },
+        {
+          "name": "__DATA,__thread_bss",
+          "raw_header_sha256": "c9169dcd4236874172fc7d1bd34ab7fc7a8f8106ac9ea42bec5c1468a91aa410",
+          "offset": 0,
+          "size": 80,
+          "flags": 18,
+          "zerofill": true,
+          "payload_sha256": null
+        },
+        {
+          "name": "__DATA,__bss",
+          "raw_header_sha256": "a71b7c79283105f61511e3d04908a3a0cc98e93d2a6e0f06619c58a34f8e3758",
+          "offset": 0,
+          "size": 2144,
+          "flags": 1,
+          "zerofill": true,
+          "payload_sha256": null
+        },
+        {
+          "name": "__DATA,__common",
+          "raw_header_sha256": "6fe36e23f20ec058d9a2a45dd6618aaef8c0288612b90f3c0a46e5ec52ffbd61",
+          "offset": 0,
+          "size": 32,
+          "flags": 1,
+          "zerofill": true,
+          "payload_sha256": null
+        }
+      ],
+      "code_directory": {
+        "offset": 46653473,
+        "length": 364480,
+        "code_slots": 11390,
+        "page_size": 4096,
+        "code_limit": 46653344,
+        "flags": 131074,
+        "version": 132096,
+        "hash_type": 2,
+        "special_slots": 0,
+        "policy_prefix_sha256": "d74800581a6bfab6df221f2e28d6cbe57e8ed091d6ae49450c972473f4c183c9",
+        "padding_sha256": "837885c8f8091aeaeb9ec3c3f85a6ff470a415e610b8ba3e49f9b33c9cf9d619",
+        "identifier": "planar_runtime_tests"
+      },
+      "n_oso_changed": [
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/CMakeFiles/planar_runtime_tests.dir/runtime/commands.t.cpp.o",
+          "offset": 37029712,
+          "old": 1794226456,
+          "current": 1794251764,
+          "origin": "identical direct commands.t.cpp.o body; object mtime only"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_0.a(runtime_0.cpp.o)",
+          "offset": 37285312,
+          "old": 1794226272,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_0.a(runtime_0.cppm.o)",
+          "offset": 37327856,
+          "old": 1794226258,
+          "current": 1794251584,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_1.a(runtime_1.cpp.o)",
+          "offset": 37328480,
+          "old": 1794226272,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_1.a(runtime_1.cppm.o)",
+          "offset": 37371408,
+          "old": 1794226258,
+          "current": 1794251584,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_2.a(runtime_2.cpp.o)",
+          "offset": 37372032,
+          "old": 1794226272,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_2.a(runtime_2.cppm.o)",
+          "offset": 37414960,
+          "old": 1794226259,
+          "current": 1794251584,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_3.a(runtime_3.cpp.o)",
+          "offset": 37415584,
+          "old": 1794226283,
+          "current": 1794251605,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_3.a(runtime_3.cppm.o)",
+          "offset": 37458512,
+          "old": 1794226272,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_4.a(runtime_4.cpp.o)",
+          "offset": 37459136,
+          "old": 1794226283,
+          "current": 1794251605,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_4.a(runtime_4.cppm.o)",
+          "offset": 37502064,
+          "old": 1794226272,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_5.a(runtime_5.cpp.o)",
+          "offset": 37502688,
+          "old": 1794226283,
+          "current": 1794251606,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_5.a(runtime_5.cppm.o)",
+          "offset": 37545616,
+          "old": 1794226272,
+          "current": 1794251595,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_6.a(runtime_6.cpp.o)",
+          "offset": 37546240,
+          "old": 1794226293,
+          "current": 1794251616,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_6.a(runtime_6.cppm.o)",
+          "offset": 37589168,
+          "old": 1794226283,
+          "current": 1794251606,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_7.a(runtime_7.cpp.o)",
+          "offset": 37589792,
+          "old": 1794226293,
+          "current": 1794251616,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_7.a(runtime_7.cppm.o)",
+          "offset": 37632720,
+          "old": 1794226283,
+          "current": 1794251606,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_8.a(runtime_8.cpp.o)",
+          "offset": 37633344,
+          "old": 1794226293,
+          "current": 1794251616,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_8.a(runtime_8.cppm.o)",
+          "offset": 37676272,
+          "old": 1794226283,
+          "current": 1794251606,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_9.a(runtime_9.cpp.o)",
+          "offset": 37676896,
+          "old": 1794226304,
+          "current": 1794251627,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_9.a(runtime_9.cppm.o)",
+          "offset": 37719824,
+          "old": 1794226293,
+          "current": 1794251616,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_10.a(runtime_10.cpp.o)",
+          "offset": 37720448,
+          "old": 1794226304,
+          "current": 1794251627,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_10.a(runtime_10.cppm.o)",
+          "offset": 37763376,
+          "old": 1794226293,
+          "current": 1794251617,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_11.a(runtime_11.cpp.o)",
+          "offset": 37764000,
+          "old": 1794226304,
+          "current": 1794251627,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_11.a(runtime_11.cppm.o)",
+          "offset": 37806928,
+          "old": 1794226293,
+          "current": 1794251617,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_12.a(runtime_12.cpp.o)",
+          "offset": 37807552,
+          "old": 1794226315,
+          "current": 1794251638,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_12.a(runtime_12.cppm.o)",
+          "offset": 37850480,
+          "old": 1794226304,
+          "current": 1794251627,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_13.a(runtime_13.cpp.o)",
+          "offset": 37851104,
+          "old": 1794226314,
+          "current": 1794251639,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_13.a(runtime_13.cppm.o)",
+          "offset": 37894032,
+          "old": 1794226304,
+          "current": 1794251627,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_14.a(runtime_14.cpp.o)",
+          "offset": 37894656,
+          "old": 1794226315,
+          "current": 1794251639,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_14.a(runtime_14.cppm.o)",
+          "offset": 37937584,
+          "old": 1794226304,
+          "current": 1794251628,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_15.a(runtime_15.cpp.o)",
+          "offset": 37938208,
+          "old": 1794226324,
+          "current": 1794251647,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_15.a(runtime_15.cppm.o)",
+          "offset": 37981136,
+          "old": 1794226315,
+          "current": 1794251639,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_16.a(runtime_16.cpp.o)",
+          "offset": 37981760,
+          "old": 1794226324,
+          "current": 1794251648,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_16.a(runtime_16.cppm.o)",
+          "offset": 38024688,
+          "old": 1794226315,
+          "current": 1794251639,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_17.a(runtime_17.cpp.o)",
+          "offset": 38025312,
+          "old": 1794226325,
+          "current": 1794251648,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_17.a(runtime_17.cppm.o)",
+          "offset": 38067856,
+          "old": 1794226315,
+          "current": 1794251639,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_18.a(runtime_18.cpp.o)",
+          "offset": 38068480,
+          "old": 1794226336,
+          "current": 1794251656,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_18.a(runtime_18.cppm.o)",
+          "offset": 38111024,
+          "old": 1794226325,
+          "current": 1794251648,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_19.a(runtime_19.cpp.o)",
+          "offset": 38111648,
+          "old": 1794226336,
+          "current": 1794251656,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_19.a(runtime_19.cppm.o)",
+          "offset": 38154576,
+          "old": 1794226325,
+          "current": 1794251648,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_20.a(runtime_20.cpp.o)",
+          "offset": 38155200,
+          "old": 1794226336,
+          "current": 1794251657,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_variant_20.a(runtime_20.cppm.o)",
+          "offset": 38198128,
+          "old": 1794226325,
+          "current": 1794251648,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_0.a(runtime_0.cpp.o)",
+          "offset": 38198752,
+          "old": 1794226349,
+          "current": 1794251665,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_0.a(runtime_0.cppm.o)",
+          "offset": 38241296,
+          "old": 1794226336,
+          "current": 1794251657,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_1.a(runtime_1.cpp.o)",
+          "offset": 38241920,
+          "old": 1794226349,
+          "current": 1794251665,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_1.a(runtime_1.cppm.o)",
+          "offset": 38284464,
+          "old": 1794226336,
+          "current": 1794251657,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_2.a(runtime_2.cpp.o)",
+          "offset": 38285088,
+          "old": 1794226349,
+          "current": 1794251665,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_2.a(runtime_2.cppm.o)",
+          "offset": 38328016,
+          "old": 1794226336,
+          "current": 1794251657,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_3.a(runtime_3.cpp.o)",
+          "offset": 38328640,
+          "old": 1794226360,
+          "current": 1794251675,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_3.a(runtime_3.cppm.o)",
+          "offset": 38371568,
+          "old": 1794226349,
+          "current": 1794251665,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_4.a(runtime_4.cpp.o)",
+          "offset": 38372192,
+          "old": 1794226360,
+          "current": 1794251675,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_4.a(runtime_4.cppm.o)",
+          "offset": 38415120,
+          "old": 1794226349,
+          "current": 1794251665,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_5.a(runtime_5.cpp.o)",
+          "offset": 38415744,
+          "old": 1794226360,
+          "current": 1794251675,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_variant_5.a(runtime_5.cppm.o)",
+          "offset": 38458672,
+          "old": 1794226349,
+          "current": 1794251666,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_c01_variant.a(runtime_0.cpp.o)",
+          "offset": 38460864,
+          "old": 1794226370,
+          "current": 1794251684,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_c01_variant.a(runtime_0.cppm.o)",
+          "offset": 38503408,
+          "old": 1794226360,
+          "current": 1794251675,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_0.a(planar_command_source_0.cppm.o)",
+          "offset": 38680896,
+          "old": 1794226245,
+          "current": 1794251572,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_1.a(planar_command_source_1.cppm.o)",
+          "offset": 38681456,
+          "old": 1794226245,
+          "current": 1794251572,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_2.a(planar_command_source_2.cppm.o)",
+          "offset": 38682016,
+          "old": 1794226246,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_3.a(planar_command_source_3.cppm.o)",
+          "offset": 38682576,
+          "old": 1794226246,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_4.a(planar_command_source_4.cppm.o)",
+          "offset": 38683136,
+          "old": 1794226247,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_5.a(planar_command_source_5.cppm.o)",
+          "offset": 38683696,
+          "old": 1794226248,
+          "current": 1794251573,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_6.a(planar_command_source_6.cppm.o)",
+          "offset": 38684256,
+          "old": 1794226248,
+          "current": 1794251574,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_7.a(planar_command_source_7.cppm.o)",
+          "offset": 38684816,
+          "old": 1794226248,
+          "current": 1794251574,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_8.a(planar_command_source_8.cppm.o)",
+          "offset": 38685376,
+          "old": 1794226249,
+          "current": 1794251574,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_9.a(planar_command_source_9.cppm.o)",
+          "offset": 38685936,
+          "old": 1794226249,
+          "current": 1794251574,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_10.a(planar_command_source_10.cppm.o)",
+          "offset": 38686496,
+          "old": 1794226249,
+          "current": 1794251575,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_11.a(planar_command_source_11.cppm.o)",
+          "offset": 38687056,
+          "old": 1794226249,
+          "current": 1794251575,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_12.a(planar_command_source_12.cppm.o)",
+          "offset": 38687616,
+          "old": 1794226250,
+          "current": 1794251575,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_13.a(planar_command_source_13.cppm.o)",
+          "offset": 38688176,
+          "old": 1794226250,
+          "current": 1794251575,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_14.a(planar_command_source_14.cppm.o)",
+          "offset": 38688736,
+          "old": 1794226250,
+          "current": 1794251576,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_15.a(planar_command_source_15.cppm.o)",
+          "offset": 38689296,
+          "old": 1794226250,
+          "current": 1794251576,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_16.a(planar_command_source_16.cppm.o)",
+          "offset": 38689856,
+          "old": 1794226250,
+          "current": 1794251576,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_17.a(planar_command_source_17.cppm.o)",
+          "offset": 38690416,
+          "old": 1794226251,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_18.a(planar_command_source_18.cppm.o)",
+          "offset": 38690976,
+          "old": 1794226251,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_19.a(planar_command_source_19.cppm.o)",
+          "offset": 38691536,
+          "old": 1794226251,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_command_source_20.a(planar_command_source_20.cppm.o)",
+          "offset": 38692096,
+          "old": 1794226251,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_source_0.a(planar_load_source_0.cppm.o)",
+          "offset": 38692656,
+          "old": 1794226252,
+          "current": 1794251577,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_source_1.a(planar_load_source_1.cppm.o)",
+          "offset": 38693216,
+          "old": 1794226252,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_source_2.a(planar_load_source_2.cppm.o)",
+          "offset": 38693776,
+          "old": 1794226252,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_source_3.a(planar_load_source_3.cppm.o)",
+          "offset": 38694336,
+          "old": 1794226252,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_source_4.a(planar_load_source_4.cppm.o)",
+          "offset": 38694896,
+          "old": 1794226252,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_source_5.a(planar_load_source_5.cppm.o)",
+          "offset": 38695456,
+          "old": 1794226253,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        },
+        {
+          "name": "<repo>/build/rewrite-release/src/engine/libplanar_load_c01_source.a(planar_load_c01_source.cppm.o)",
+          "offset": 38698048,
+          "old": 1794226253,
+          "current": 1794251578,
+          "origin": "identical ar member body; only ar header mtime differs"
+        }
+      ],
+      "masked_sha256": "ed002fdfa18baa625a389494781045175003aff65619f2316a57c7f830885e44",
+      "strict_codesign_verification": [
+        {
+          "mode": "old",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "mode": "current",
+          "exit": 0,
+          "stderr": ""
+        }
+      ],
+      "classification": "All section/header/layout bytes and all file bytes outside LC_UUID, N_OSO ar member times and SHA256 code-directory page slots are identical; every slot independently recomputed."
+    }
+  ],
+  "errors": []
+}

@@ -220,47 +220,66 @@ std::expected<std::string, execution_codec_error> encode_verdict_v1(const verdic
 std::expected<verdict_v1, execution_codec_error> decode_verdict_v1(std::string_view bytes);
 /// @brief Encode a normalized checkpoint with its exact shape and 8 KiB bound.
 /// @return Canonical bytes or a typed codec failure.
+/// @param checkpoint Normalized checkpoint value.
 std::expected<std::string, execution_codec_error> encode_checkpoint_v1(const value_ptr& checkpoint);
 /// @brief Decode a retained checkpoint with the same validation as the encoder.
 /// @return Normalized value or a typed codec failure.
+/// @param bytes Exact canonical checkpoint bytes.
 std::expected<value_ptr, execution_codec_error> decode_checkpoint_v1(std::string_view bytes);
 /// @brief Common saved recovery result identity; no run token is retained.
 struct recovery_result_identity {
-  std::string ledger, request_id, job, role, run_id, generation;
+  std::string ledger;     ///< Ledger identity.
+  std::string request_id; ///< Idempotency key of the recorded request.
+  std::string job;        ///< Active job identifier.
+  std::string role;       ///< Target role identifier.
+  std::string run_id;     ///< Canonical decimal run identifier, without a secret.
+  std::string generation; ///< Canonical decimal generation ordinal.
 };
 /// @brief Saved refresh result, without assembled packet and manifest.
 struct refresh_result_v1 : recovery_result_identity {
-  std::string                revision, dispatch_id, work_fp, render_digest;
-  std::uint64_t              bytes = 0;
-  std::optional<std::string> checkpoint;
-  bool                       drift_cleared = false;
+  std::string                revision;              ///< Accepted revision acknowledged by this refresh.
+  std::string                dispatch_id;           ///< Retained dispatch identifier.
+  std::string                work_fp;               ///< Acknowledged work_exec_v1 digest.
+  std::string                render_digest;         ///< Retained packet Markdown digest.
+  std::uint64_t              bytes = 0;             ///< Retained Markdown byte length.
+  std::optional<std::string> checkpoint;            ///< Checkpoint identifier when a note was retained.
+  bool                       drift_cleared = false; ///< Whether refresh cleared the run drift flag.
 };
 /// @brief Saved checkpoint result.
 struct checkpoint_result_v1 : recovery_result_identity {
-  std::string checkpoint, event;
+  std::string checkpoint; ///< Newly retained checkpoint identifier.
+  std::string event;      ///< Commit event sequence.
 };
 /// @brief Saved release result.
 struct release_result_v1 : recovery_result_identity {
-  std::string                state, role_state, event;
-  std::optional<std::string> checkpoint;
+  std::string                state;      ///< Terminal run state after release.
+  std::string                role_state; ///< Derived role state after release.
+  std::string                event;      ///< Commit event sequence.
+  std::optional<std::string> checkpoint; ///< Checkpoint identifier when a note was retained.
 };
 /// @brief Encode the closed saved refresh shape with native grammar validation.
 /// @return Canonical JSON or a typed refusal.
+/// @param result Typed saved result.
 std::expected<std::string, execution_codec_error> encode_refresh_result_v1(const refresh_result_v1& result);
 /// @brief Decode a closed saved refresh value.
 /// @return Typed fields or a codec refusal.
+/// @param bytes Exact saved JSON result bytes.
 std::expected<refresh_result_v1, execution_codec_error> decode_refresh_result_v1(std::string_view bytes);
 /// @brief Encode the closed saved checkpoint shape.
 /// @return Canonical JSON or a typed refusal.
+/// @param result Typed saved result.
 std::expected<std::string, execution_codec_error> encode_checkpoint_result_v1(const checkpoint_result_v1& result);
 /// @brief Decode a closed saved checkpoint value.
 /// @return Typed fields or a codec refusal.
+/// @param bytes Exact saved JSON result bytes.
 std::expected<checkpoint_result_v1, execution_codec_error> decode_checkpoint_result_v1(std::string_view bytes);
 /// @brief Encode the closed saved release shape.
 /// @return Canonical JSON or a typed refusal.
+/// @param result Typed saved result.
 std::expected<std::string, execution_codec_error> encode_release_result_v1(const release_result_v1& result);
 /// @brief Decode a closed saved release value.
 /// @return Typed fields or a codec refusal.
+/// @param bytes Exact saved JSON result bytes.
 std::expected<release_result_v1, execution_codec_error> decode_release_result_v1(std::string_view bytes);
 // Saved results (D25): Glaze JSON via planar.engine.json_codec, sorted keys, no terminal LF.
 /// Saved result of a claim or takeover request, without the packet and manifest.
@@ -276,7 +295,7 @@ struct claim_result_v1 {
   std::string                dispatch_id;   ///< Dispatch decimal.
   std::string                work_fp;       ///< Work fingerprint digest text.
   std::string                render_digest; ///< Render digest text.
-  std::uint64_t              bytes = 0;     ///< Packet Markdown byte length.
+  std::uint64_t              bytes = 0;     ///< Retained Markdown byte length.     ///< Packet Markdown byte length.
   std::optional<std::string> previous_run;  ///< Present only for takeover.
 };
 /// One role entry of an activation result.

@@ -47,12 +47,14 @@ struct takeover_options {
 
 /// @brief Typed recovery mutation input; the token remains native and is never framed.
 struct recovery_options {
-  std::string                operation;                          ///< refresh, checkpoint or release.
-  std::string                job, role;                          ///< Authorized run's target.
-  std::string                run_token;                          ///< Ephemeral run authorization.
-  std::string                expect_fp;                          ///< Refresh acknowledged work digest.
-  std::string                reason;                             ///< Release reason.
-  std::optional<std::string> observations_path, provenance_path; ///< Opaque native file slots.
+  std::string                operation;         ///< refresh, checkpoint or release.
+  std::string                job;               ///< Authorized run job identifier.
+  std::string                role;              ///< Authorized run role identifier.
+  std::string                run_token;         ///< Ephemeral run authorization.
+  std::string                expect_fp;         ///< Refresh acknowledged work digest.
+  std::string                reason;            ///< Release reason.
+  std::optional<std::string> observations_path; ///< Native checkpoint observation file slot.
+  std::optional<std::string> provenance_path;   ///< Native driver provenance file slot.
 };
 /// @brief Options of one execution operation; the alternative selects the operation.
 using operation_options = std::variant<load_options, activate_options, claim_options, takeover_options, recovery_options>;

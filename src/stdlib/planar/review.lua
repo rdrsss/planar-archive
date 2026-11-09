@@ -179,9 +179,8 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
     return snapshot.review or {count="0",verdicts={},blockers={},repairs={}}
   end
   -- A verdict lies in the reviewer's current lineage: its run generation (draft P4-D2) is in the lineage, or its run is
-  -- the reviewer's active run; a verdict without a generation is trusted to the native snapshot filter.
+  -- the reviewer's active run. Missing lineage provenance otherwise fails closed.
   local function in_reviewer_lineage(v,reviewer)
-    if v.generation==nil then return true end
     if has_run(reviewer) and same_id(reviewer.run.id,v.run) then return true end
     return lineage_set(reviewer)[dec(v.generation)]==true
   end
@@ -278,6 +277,19 @@ local function scalar_text(v)if type(v)=="string"or type(v)=="number"then return
   local function identity_matches(body,vector,policy)
     return vector.complete and policy~=nil and targets_equal(body.targets or {},vector.targets)
       and body.policy==policy.digest
+  end
+
+  function M.applicable_completion(snapshot,role,any)
+    local reviewer=reviewer_of(snapshot,snapshot.active_job)
+    if not reviewer or reviewer.role~=role then return nil end
+    local vector=M.target_vector(snapshot,snapshot.active_job)
+    local policy=current_work(snapshot,reviewer)
+    local latest
+    for _,v in ipairs(review_part(snapshot).verdicts or {})do
+      if in_reviewer_lineage(v,reviewer) and (any or identity_matches(v.body or v,vector,policy))
+        and (not latest or num(v.seq)>num(latest.seq))then latest=v end
+    end
+    return latest
   end
 
   -- R18-2 steps 5 to 7 --------------------------------------------------------------------------------------------
@@ -753,6 +765,7 @@ end)()
 
 -- Bind the shipped review policy to check completion policy after both modules exist.
 if checks then
+ checks.hooks.reviewer_completion=review.applicable_completion
  checks.hooks.acceptance=review.acceptance
  checks.hooks.blockers_to_clear=review.blockers_to_clear
 end
@@ -776,10 +789,8 @@ if dispatch_internal then
 end
 
 if dispatch_internal then
- dispatch_internal.applicable=checks.applicable_completion
- dispatch_internal.clear_blockers=function(S,input,job)
-  local view={};for k,v in pairs(S)do view[k]=v end
-  if input.operation=="load"then view.revision={interpretation=input.candidate}end
+ dispatch_internal.applicable=checks.role_completion
+ dispatch_internal.clear_blockers=function(S,input,job,view)
   view.active_job=job
   local location=view.revision and dispatch_internal.locate(view.revision.interpretation,job)
   return engine.array(review.blockers_to_clear(S,{operation=input.operation,job=job,snapshot=view,max_rounds=location and location.job.max_rounds}))

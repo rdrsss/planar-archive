@@ -810,6 +810,8 @@ TEST_CASE("R18-B a consistent approve verdict verifies and reads into the review
   REQUIRE(reviewer != nullptr);
   CHECK(reviewer->state == "done");
   CHECK_FALSE(reviewer->run_id.has_value());
+  CHECK(verdict.generation == reviewer->generation_id);
+  CHECK(verdict.activation == snapshot.activation);
   // The review value counts toward the D24 measure in its one shared definition.
   CHECK(snapshot.state_bytes == execution_state_bytes(snapshot));
   auto without   = snapshot;
@@ -1040,7 +1042,7 @@ std::string claim_with(const std::filesystem::path& path, std::string_view reque
 }
 
 /// Take over the running role of alpha; the new generation has reason takeover and the same structure (EX-5).
-void takeover_role(const std::filesystem::path& path, std::string_view request_id, std::string_view role) {
+std::string takeover_role(const std::filesystem::path& path, std::string_view request_id, std::string_view role) {
   const auto  snapshot = snapshot_of(path);
   const auto* row      = find_role(snapshot, "alpha", role);
   REQUIRE(row != nullptr);
@@ -1075,7 +1077,10 @@ void takeover_role(const std::filesystem::path& path, std::string_view request_i
           execution_vector_entry{.job = entry.job, .role = entry.role, .state = "running", .drifted = false, .run = std::nullopt};
   change.packet   = packet_with(snapshot, *row, request_id, row->dispatch->work);
   change.expected = targeted_expected(snapshot, *row);
-  commit_or_fail(path, snapshot, change);
+  auto result     = commit_execution(path, snapshot, change);
+  REQUIRE(result);
+  REQUIRE(result->token);
+  return *result->token;
 }
 
 /// A load of a fresh revision whose change carries the given transitions of alpha and the blockers it clears.
@@ -1126,32 +1131,6 @@ execution_transition_input step_to(const execution_role& row, std::string after,
                                     .reason         = std::move(reason)};
 }
 
-/// DRAFT-STUB R17-C: the running builder completes. A real load moves it running -> done (its run fenced) and a
-/// blocked or stale reviewer -> ready; then the completions row and its observation record are written by SQL.
-void complete_builder(const std::filesystem::path& path, std::string_view request_id, std::string_view output) {
-  const auto  snapshot = snapshot_of(path);
-  const auto* builder  = find_role(snapshot, "alpha", "builder");
-  REQUIRE(builder != nullptr);
-  REQUIRE(builder->state == "running");
-  REQUIRE(builder->dispatch.has_value());
-  const auto                              run      = *builder->run_id;
-  const auto                              dispatch = builder->dispatch->id;
-  std::vector<execution_transition_input> transitions{step_to(*builder, "done", "completed")};
-  const auto*                             reviewer = find_role(snapshot, "alpha", "reviewer");
-  if (reviewer && (reviewer->state == "blocked"))
-    transitions.push_back(step_to(*reviewer, "ready", "prerequisite_available"));
-  commit_or_fail(path, snapshot, load_with(snapshot, request_id, seed_revision(path, request_id), transitions));
-  const auto after = snapshot_of(path);
-  auto       db    = open_raw(path);
-  const auto observation =
-      store_value(db, vrec({{"units", vlist({vrec({{"work", vstr("unit_one")}, {"output", vstr(std::string(output))}})})}}));
-  exec(db,
-       "INSERT INTO completions(id,run_id,seq,dispatch_id,work_fp,observation_id) "
-       "SELECT COALESCE((SELECT MAX(id) FROM completions),0)+1,?1,?2,?3,work_fp,?4 FROM dispatches WHERE id=?3",
-       {static_cast<std::int64_t>(run), static_cast<std::int64_t>(after.last_seq), static_cast<std::int64_t>(dispatch),
-        static_cast<std::int64_t>(observation.id)});
-}
-
 /// Complete the history fixture through the integrated R17 reservation and evidence transaction.
 void complete_builder_native(const std::filesystem::path& path, std::string_view request_id, std::string_view output,
                              std::string_view token) {
@@ -1185,15 +1164,19 @@ void complete_builder_native(const std::filesystem::path& path, std::string_view
                               {"work", vstr("unit_one")},
                               {"check", vstr("planar.boundary_v1")},
                               {"gate", vstr("boundary_v1")},
+                              {"cwd", vrec({{"root", vstr("root")}})},
                               {"inputs", vstrs({"own_output", "output_vector"})},
                               {"owned", vstrs({"src/"})},
                               {"frozen", vlist({})},
                               {"excluded", vlist({})},
                               {"producers", vlist({})}});
   result.evidence.push_back(evidence);
-  snapshot       = snapshot_of(path);
-  auto completed = complete_check(path, snapshot, reservation->id, token, result, true,
-                                  {step_to(*find_role(snapshot, "alpha", "builder"), "done", "completed")});
+  snapshot = snapshot_of(path);
+  std::vector<execution_transition_input> transitions{step_to(*find_role(snapshot, "alpha", "builder"), "done", "completed")};
+  const auto*                             reviewer = find_role(snapshot, "alpha", "reviewer");
+  if (reviewer && reviewer->state == "blocked")
+    transitions.push_back(step_to(*reviewer, "ready", "prerequisite_available"));
+  auto completed = complete_check(path, snapshot, reservation->id, token, result, true, transitions);
   REQUIRE(completed);
 }
 
@@ -1392,8 +1375,8 @@ std::int64_t count_rows(const std::filesystem::path& path, std::string_view sql)
 /// One repair round after an admitted rejection: the builder is claimed with the new revision, completes with the
 /// output, and the reviewer (blocked -> ready) is claimed again.
 void repair_round(const std::filesystem::path& path, std::string_view tag, std::string_view repair, std::string_view output) {
-  claim_with(path, std::format("claim-builder-{}", tag), "builder", 2, repair);
-  complete_builder(path, std::format("complete-{}", tag), output);
+  const auto token = claim_with(path, std::format("claim-builder-{}", tag), "builder", 2, repair);
+  complete_builder_native(path, std::format("complete-{}", tag), output, token);
   claim_with(path, std::format("claim-reviewer-{}", tag), "reviewer", 2, "0");
 }
 
@@ -1434,7 +1417,7 @@ TEST_CASE("R18-B verdict approve of the current vector completes the reviewer", 
   CHECK(after.review.count == 0);
   CHECK(after.review.repairs.empty());
   CHECK(after.review.blockers.empty());
-  CHECK(count_rows(path, "SELECT COUNT(*) FROM run_state WHERE state='completed'") == 1);
+  CHECK(count_rows(path, "SELECT COUNT(*) FROM run_state WHERE state='completed'") == 2);
   // The completed reviewer run no longer authorizes its token (fenced with run_state completed).
   auto authorized = authorize_run_token(path, token);
   REQUIRE_FALSE(authorized.has_value());
@@ -1647,8 +1630,8 @@ TEST_CASE("R18-B verdict count is per activation after a re-activation", "[r18][
   auto after = snapshot_of(path);
   CHECK(after.review.count == 0);
   CHECK(after.review.repairs.empty()); // a new activated generation starts a new lineage
-  claim_with(path, "claim-builder-2", "builder", 2, "0");
-  complete_builder(path, "complete-2", output_two);
+  const auto builder_token = claim_with(path, "claim-builder-2", "builder", 2, "0");
+  complete_builder_native(path, "complete-2", output_two, builder_token);
   claim_with(path, "claim-reviewer-2", "reviewer", 2, "0");
   const auto saved = saved_of(commit_verdict(path, reject("verdict-2")));
   CHECK(saved.admitted);
@@ -1693,6 +1676,13 @@ TEST_CASE("R18-B verdict same request id replays the saved bytes and an unequal 
   auto in         = reject("verdict-1");
   in.verdict_path = "/private/other.json";
   require_code(commit_execution(path, snapshot, verdict_change(snapshot, in)), execution_error_code::request_conflict);
+  repair_round(path, "2", "1", output_two);
+  auto revised = snapshot_of(path);
+  commit_or_fail(path, revised, load_with(revised, "later-load", seed_revision(path, "later"), {}));
+  auto old = commit_execution(path, snapshot_of(path), change);
+  REQUIRE(old);
+  CHECK(old->replayed);
+  CHECK(old->saved_result == first->saved_result);
 }
 
 TEST_CASE("R18-B verdict of a taken-over reviewer run is fenced", "[r18][verdict_commit]") {
@@ -1769,12 +1759,12 @@ TEST_CASE("R18-B verdict repair revision survives a takeover in the lineage", "[
   reviewing_ledger(path);
   commit_verdict(path, reject("verdict-1"));
   claim_with(path, "claim-builder-2", "builder", 2, "1");
-  takeover_role(path, "takeover-builder", "builder");
-  auto snapshot = snapshot_of(path);
+  const auto builder_token = takeover_role(path, "takeover-builder", "builder");
+  auto       snapshot      = snapshot_of(path);
   REQUIRE(snapshot.review.repairs.size() == 1);
   CHECK(snapshot.review.repairs[0].revision == 1);
   CHECK(find_role(snapshot, "alpha", "builder")->generation_ordinal == 2);
-  complete_builder(path, "complete-2", output_two);
+  complete_builder_native(path, "complete-2", output_two, builder_token);
   claim_with(path, "claim-reviewer-2", "reviewer", 2, "0");
   const auto saved = saved_of(commit_verdict(path, reject("verdict-2")));
   REQUIRE(saved.repairs.size() == 1);
@@ -1841,4 +1831,121 @@ TEST_CASE("R18-B history expansion of verdict_recorded and the saved response", 
   auto claim = read_verdict_expansion(path, 4);
   REQUIRE(claim.has_value());
   CHECK_FALSE(claim->has_value());
+}
+
+TEST_CASE("C01 verdict snapshot retains original lineage when reviewer structure returns") {
+  scratch    dir;
+  const auto path = dir.ledger();
+  reviewing_ledger(path);
+  commit_verdict(path, verdict_input{});
+  const auto original = snapshot_of(path);
+  REQUIRE(original.review.verdicts.size() == 1);
+  const auto verdict_generation = original.review.verdicts.front().generation;
+  const auto structure          = find_role(original, "alpha", "reviewer")->structure;
+  for (bool restore : {false, true}) {
+    const auto  snapshot   = snapshot_of(path);
+    const auto* reviewer   = find_role(snapshot, "alpha", "reviewer");
+    const auto  request_id = restore ? "restore-reviewer" : "change-reviewer";
+    auto        change =
+        load_with(snapshot, request_id, seed_revision(path, request_id), {step_to(*reviewer, "ready", "structural_change")});
+    auto replacement = structure;
+    if (!restore)
+      replacement.shape = "changed_shape";
+    change.generations.push_back({.job = "alpha", .role = "reviewer", .reason = "structural_change", .structure = replacement});
+    commit_or_fail(path, snapshot, change);
+  }
+  const auto after = snapshot_of(path);
+  REQUIRE(after.review.verdicts.size() == 1);
+  CHECK(after.activation == original.activation);
+  CHECK(after.review.verdicts.front().generation == verdict_generation);
+  CHECK(after.review.verdicts.front().activation == original.activation);
+  CHECK(after.review.verdicts.front().generation != find_role(after, "alpha", "reviewer")->generation_id);
+  require_verifies(path);
+}
+
+TEST_CASE("C07 saved verdict results match every retained event field", "[r18][ledger_review][c07]") {
+  for (int branch = 0; branch != 5; ++branch) {
+    for (int field = 0; field != 11; ++field) {
+      if (field >= 5 && field <= 7 && branch != 1)
+        continue;
+      if ((field == 8 || field == 10) && branch != 2 && branch != 4)
+        continue;
+      CAPTURE(branch, field);
+      scratch dir;
+      auto    plan = branch == 1 ? admitted_plan() : branch == 2 ? unowned_plan() : approve_plan();
+      if (branch == 3) {
+        plan.applicability = "historical";
+        plan.after         = "stale";
+      }
+      if (branch == 4) {
+        plan.decision   = "reject";
+        plan.repair     = {"builder"};
+        plan.blocker    = "max_rounds";
+        plan.max_rounds = 0;
+      }
+      auto path = claimed_ledger(dir, "reviewer", branch == 4 ? 0 : 2);
+      record_verdict(path, plan);
+      require_verifies(path);
+      {
+        auto        db = open_raw(path);
+        std::string bytes;
+        {
+          auto query = db.prepare("SELECT result FROM requests WHERE operation='verdict'");
+          REQUIRE(query);
+          REQUIRE(query->step() == step_result::row);
+          auto data = query->blob(0);
+          REQUIRE(data);
+          REQUIRE(*data);
+          bytes = **data;
+        }
+        auto value = hist::decode_verdict_result_v1(bytes);
+        REQUIRE(value);
+        switch (field) {
+        case 0:
+          value->count = "999";
+          break;
+        case 1:
+          value->max_rounds = "999";
+          break;
+        case 2:
+          value->roles[0].state = "ready";
+          break;
+        case 3:
+          value->cleared = {"999"};
+          break;
+        case 4:
+          value->roles[0].role = "alien";
+          break;
+        case 5:
+          value->repairs[0].role = "alien";
+          break;
+        case 6:
+          value->repairs[0].generation = "999";
+          break;
+        case 7:
+          value->repairs[0].revision = "999";
+          break;
+        case 8:
+          value->opened[0].id = "999";
+          break;
+        case 9:
+          value->roles[0].state   = "running";
+          value->roles[0].drifted = true;
+          break;
+        case 10:
+          value->opened[0].kind = branch == 2 ? "max_rounds" : "unowned_rejection";
+          break;
+        }
+        auto changed = hist::encode_verdict_result_v1(*value);
+        REQUIRE(changed);
+        auto triggers = trigger_texts(db);
+        for (const auto& [name, sql] : triggers)
+          exec(db, std::format("DROP TRIGGER \"{}\"", name));
+        exec(db, "UPDATE requests SET result=?1 WHERE operation='verdict'", {blob{*changed}});
+        for (const auto& [name, sql] : triggers)
+          exec(db, sql);
+      }
+      expect_corrupt(path);
+    }
+  }
 }

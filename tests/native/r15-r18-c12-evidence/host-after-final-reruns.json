@@ -1,0 +1,26 @@
+{
+  "source_sha256": "3b5e3ec80a8861b44838a975d8a0713022ea6dbb607831cb27822973205b6fb0",
+  "changed_inputs": [
+    "tests/native/r15-r18-c08-saved-response-cli.py"
+  ],
+  "builds": {
+    "debug": {
+      "build_input_count": 1628,
+      "build_inputs_unchanged": true,
+      "inventory_count": 1844,
+      "inventory_unchanged": true,
+      "binary_sha256": "b214db8c3831e5acb62ac1797eb35e964992f552b2618ba30b621ef7dc469190",
+      "registered_binaries_count": 76,
+      "registered_binaries_unchanged": true
+    },
+    "release": {
+      "build_input_count": 1628,
+      "build_inputs_unchanged": true,
+      "inventory_count": 1844,
+      "inventory_unchanged": true,
+      "binary_sha256": "2d93c41104f558dd66c29378e85cd0c91dfaad09afe195d41521a6acea07ef48",
+      "registered_binaries_count": 76,
+      "registered_binaries_unchanged": true
+    }
+  }
+}

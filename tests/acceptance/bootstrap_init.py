@@ -109,9 +109,9 @@ with tempfile.TemporaryDirectory(prefix="planar-init-private-") as temporary:
             assert db.execute("SELECT seq,type,version,revision_id,request_id,actor FROM events").fetchone() == (1, "ledger_initialized", 1, None, None, "planar:init")
             for table in ["revisions", "records", "requests"]:
                 assert db.execute(f"SELECT count(*) FROM {table}").fetchone() == (0,)
-            # D7-11 (clause 24): public init creates a format2 ledger; the event, table and response shapes are unchanged.
-            assert db.execute("PRAGMA user_version").fetchone() == (2,)
-            assert db.execute("SELECT format FROM ledger_meta").fetchone() == (2,)
+            # EX-1 cutover: public init creates format3; initialization response/event shapes remain unchanged.
+            assert db.execute("PRAGMA user_version").fetchone() == (3,)
+            assert db.execute("SELECT format FROM ledger_meta").fetchone() == (3,)
             meta = db.execute("SELECT * FROM ledger_meta").fetchone()
             assert value["ledger"] in meta and "sample" in meta
         run(invocation, "ledger_exists")

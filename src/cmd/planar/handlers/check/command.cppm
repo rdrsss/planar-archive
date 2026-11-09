@@ -8,14 +8,14 @@ export import planar.engine.runtime;
 export namespace planar::cmd::handlers {
 /// Private native host paths and scalar options for one invocation.
 struct check_options {
-  std::string                ledger;
-  std::string                run;
-  std::string                root;
-  std::string                base_root;
-  std::string                scratch;
-  std::string                request_id;
-  std::string                actor;
-  std::optional<std::string> provenance;
+  std::string                ledger;     ///< Explicit ledger path; never inferred from home configuration.
+  std::string                run;        ///< Secret run token supplied by the driver.
+  std::string                root;       ///< Working checkout directory supplied for this invocation.
+  std::string                base_root;  ///< Immutable comparison checkout directory.
+  std::string                scratch;    ///< Existing disjoint directory for bounded check execution.
+  std::string                request_id; ///< Caller-provided idempotency key.
+  std::string                actor;      ///< Driver actor recorded with the event.
+  std::optional<std::string> provenance; ///< Optional driver provenance file.
 };
 /// @brief Attach the command and its exact required/optional options.
 /// @param root Parent CLI11 parser.

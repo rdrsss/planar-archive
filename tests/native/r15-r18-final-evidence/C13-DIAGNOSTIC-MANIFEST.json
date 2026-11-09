@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "scope": "C13 pre-fix exact-pinned Linux ownership diagnostic. Not a complete correctness gate. No candidate product/test/CMake edits.",
+  "source_files": 272,
+  "source_before_after_and_original_full_gate_match": true,
+  "build_configuration_files_equal_original_full_gate": 149,
+  "binary_sha256": "f0bf04531033738df1813d236719afd5e0572f73d5f5415dfba1b1e54873b940",
+  "recipe_identity": {
+    "original_dockerfile_sha256": "d35317e610072886f36cd7596e74e94c315536b3765fb019ebbe0c3dd6a5dc20",
+    "recipe_sha256": "79c38bb8b6c7d46bfebf55dc98c7a2bc4f5b7ec74bbca0c0a491345650883e31",
+    "dockerignore_sha256": "283ec349dde17ec41a834f432c4e7b6f142ac5daa0f04c46179f9e0dbdde9c20",
+    "driver_sha256": "4426bcfa11cc3d3a6988cd06e1a33d248a60c34c5e586fc3038e7d6f81ab06e4",
+    "changed_region": "Only original combined full-gate RUN region replaced; exact base/toolchain/source-copy/non-root/footer/export preserved."
+  },
+  "toolchain_exact_original_full_gate": true,
+  "dpkg_exact_original_full_gate": true,
+  "configure_exit": 0,
+  "build_exit": 0,
+  "build_steps": 234,
+  "driver_exit": 0,
+  "no_work_exit": 0,
+  "direct_clean_cases": 2,
+  "direct_clean_assertions": 10,
+  "direct_clean_failures": 0,
+  "ctest_diagnostic_cases": 2,
+  "ctest_diagnostic_assertions": 10,
+  "ctest_diagnostic_failures": 2,
+  "ctest_diagnostic_exit": 8,
+  "marker_cases": 4,
+  "marker_assertions": 20,
+  "marker_assertion_failures": 3,
+  "marker_23_positive_control_detection_credit": false,
+  "observer_attempts": 1,
+  "observer_cases": 1,
+  "observer_assertions": 6,
+  "observer_failures": 0,
+  "observer_exit": 0,
+  "provenance_complete": true,
+  "external_owner": "CTest temporary LastTest.log file",
+  "fd": 3,
+  "matching_inode": "102684",
+  "matching_mount": "143",
+  "flags_octal": "0400001",
+  "cloexec": false,
+  "native_owned_cwd_and_read_pipe_cloexec": true,
+  "original_devnull_lifetime": "Source resets immediately after spawn; child standard input is /dev/null. No unsupported live-parent claim.",
+  "observation_timing": "Passive during existing timeout testcase, not before-call instrumentation.",
+  "source_edit_precondition_satisfied": true,
+  "lane_1_released": true,
+  "builder_prune_run": false,
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-C13-diagnostic.md",
+    "sha256": "d4123d7a4b9b222f9283b696e9748f8072ad2e0f0bc775ee4797ea0948673aea",
+    "bytes": 7190
+  },
+  "files": {
+    "build.command.json": {
+      "sha256": "be93a16e8d457f3065b305aa1f58737c2e70cc084aeb5897a8a4fbbe0d2ca636",
+      "bytes": 412
+    },
+    "build.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "build.log": {
+      "sha256": "0c877935c4f401a56f265b056d7716133d3d28b76a515d7aad917bd1a701f233",
+      "bytes": 17044
+    },
+    "container/context-manifest.txt": {
+      "sha256": "c846ea1cc445fe6b7e89f43e709c65f584597a1805a7a69c17ff795aa09e6549",
+      "bytes": 354617
+    },
+    "container/ctest-original-two.command.json": {
+      "sha256": "a4cc996f82492afc4318c03676696b23d5754c623ab0e0b2417f20a888b97a6c",
+      "bytes": 323
+    },
+    "container/ctest-original-two.exit": {
+      "sha256": "aa67a169b0bba217aa0aa88a65346920c84c42447c36ba5f7ea65f422c1fe5d8",
+      "bytes": 2
+    },
+    "container/ctest-original-two.log": {
+      "sha256": "409773a324b7629bc18922d007a970d98f2d77dd6d1892a749cab551a81caf09",
+      "bytes": 3761
+    },
+    "container/diagnostic-driver.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/diagnostic-driver.log": {
+      "sha256": "de04c85acad99db2db361080364c4958571927b8dd76ddc3aaf520898b9f200c",
+      "bytes": 268
+    },
+    "container/diagnostic-summary.json": {
+      "sha256": "32c129b7e70e6d1bf90608c1607fe9daef73dd029bbe4b976e4e67990b7ccb2f",
+      "bytes": 10554
+    },
+    "container/direct-clean-0.command.json": {
+      "sha256": "64bc61206794040f3f4aa8298ec5c34cb1c22801ffd24e04b71ef28f232824a6",
+      "bytes": 241
+    },
+    "container/direct-clean-0.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/direct-clean-0.log": {
+      "sha256": "8d2c685e861c45dab7ba1a780ef0ab9e410666232b289d899ce7d7d74fe1ffa7",
+      "bytes": 1665
+    },
+    "container/direct-clean-1.command.json": {
+      "sha256": "16287fbc2d002ebb32f8c84c39f7b95089258c76771c7304d2a144f5ac792c4d",
+      "bytes": 245
+    },
+    "container/direct-clean-1.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/direct-clean-1.log": {
+      "sha256": "36ef4272e14542a760726edff7baaec3baf9b936f866b52f37ba4dddf8dc4ac0",
+      "bytes": 1101
+    },
+    "container/direct-marker-23-0.command.json": {
+      "sha256": "4c1b82f0d4ef80accf962e051533e9122db26d265eae45a25cb8130c73c45d1a",
+      "bytes": 251
+    },
+    "container/direct-marker-23-0.exit": {
+      "sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "bytes": 3
+    },
+    "container/direct-marker-23-0.log": {
+      "sha256": "af6267a68b1fb6b8f377206f2babb65f4f2ddcf94572172acccb87cde3e57d7c",
+      "bytes": 1686
+    },
+    "container/direct-marker-23-1.command.json": {
+      "sha256": "5b2ca1613431aa17f0a47306b757dab5c960b3581a8b9015cac5bc3656d9de37",
+      "bytes": 255
+    },
+    "container/direct-marker-23-1.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/direct-marker-23-1.log": {
+      "sha256": "67be20c085e9adf5a27789a11622b813165b9664146184688f0989389596bc28",
+      "bytes": 1101
+    },
+    "container/direct-marker-3-0.command.json": {
+      "sha256": "a317ba1e872ec3097a0ee0aa8edc1e386749b9e7f06d5990641a2546c649bf5c",
+      "bytes": 250
+    },
+    "container/direct-marker-3-0.exit": {
+      "sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "bytes": 3
+    },
+    "container/direct-marker-3-0.log": {
+      "sha256": "2d01a24e93ea80aa05f35c123fd583f5b7ab5800b6b24c450d488fc152b48bea",
+      "bytes": 1684
+    },
+    "container/direct-marker-3-1.command.json": {
+      "sha256": "2fc3e5df9eef3471bd1f01e53a0d21712985f6f2b8df95f602ed3f641a030835",
+      "bytes": 254
+    },
+    "container/direct-marker-3-1.exit": {
+      "sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "bytes": 3
+    },
+    "container/direct-marker-3-1.log": {
+      "sha256": "c7d7a185dd5b9dec803983560bae81e5ae8c05bb1262a84d851dfaf3733d8d0c",
+      "bytes": 1119
+    },
+    "container/dpkg-list.txt": {
+      "sha256": "b2b92a50347bca4f8b8ccc7b1979de0689300d8887b7af17b55163fc4cec5099",
+      "bytes": 31040
+    },
+    "container/focused-build.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/focused-build.log": {
+      "sha256": "3568ce71a2599566d03481e8543313212463c834ef1d04ca3ba137c119dc1448",
+      "bytes": 55301
+    },
+    "container/focused-configure.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/focused-configure.log": {
+      "sha256": "7b822f626ec5737c678a677990eec92b33c7a0d83f14b07b431c4bc7919759f9",
+      "bytes": 2149
+    },
+    "container/focused-no-work.command.json": {
+      "sha256": "de62a8cbca15a6fd8e383fd632471d2a151a50a38752543ca6a06c941074dbdd",
+      "bytes": 221
+    },
+    "container/focused-no-work.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/focused-no-work.log": {
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "bytes": 63
+    },
+    "container/observer-timeout-1.command.json": {
+      "sha256": "2175f8edb951e5c5d883a3021879581d8a68fe51393dea04339c1d4341c9c14e",
+      "bytes": 290
+    },
+    "container/observer-timeout-1.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "container/observer-timeout-1.log": {
+      "sha256": "403284db1db396f03254af34a5b122b2aaf093aae5601f2930becfe1054208cc",
+      "bytes": 1273
+    },
+    "container/observer-timeout-1.proc.json": {
+      "sha256": "c332a60e94d8478c01f6446b53196ae9dfa4437ae93f918cfbe94d8afa8aefe4",
+      "bytes": 11820
+    },
+    "container/source-after.json": {
+      "sha256": "095b3b665d2ba1e037e3f64c65dac56d79652cf9ab9c4ed052ce2cfa6caa7644",
+      "bytes": 29920
+    },
+    "container/source-before.json": {
+      "sha256": "095b3b665d2ba1e037e3f64c65dac56d79652cf9ab9c4ed052ce2cfa6caa7644",
+      "bytes": 29920
+    },
+    "container/toolchain.txt": {
+      "sha256": "a2995babdcc0cfc9c39bbb61e034fb4542bf1c1f42773c9ba8bd0232005a0b94",
+      "bytes": 1503
+    },
+    "context-comparison.json": {
+      "sha256": "628956450d5dd20da1cde24cd3d8b87d1c6604057037eb3ed920127d9bb2c292",
+      "bytes": 779
+    },
+    "driver.py": {
+      "sha256": "4426bcfa11cc3d3a6988cd06e1a33d248a60c34c5e586fc3038e7d6f81ab06e4",
+      "bytes": 9287
+    },
+    "host-source-after.json": {
+      "sha256": "095b3b665d2ba1e037e3f64c65dac56d79652cf9ab9c4ed052ce2cfa6caa7644",
+      "bytes": 29920
+    },
+    "host-source-before.json": {
+      "sha256": "095b3b665d2ba1e037e3f64c65dac56d79652cf9ab9c4ed052ce2cfa6caa7644",
+      "bytes": 29920
+    },
+    "recipe-identity.json": {
+      "sha256": "98f33b7141f6142d698e27fffb3a666978439b00cbeaae604d56da5d0eefdbac",
+      "bytes": 514
+    },
+    "recipe.Dockerfile": {
+      "sha256": "79c38bb8b6c7d46bfebf55dc98c7a2bc4f5b7ec74bbca0c0a491345650883e31",
+      "bytes": 18961
+    },
+    "recipe.dockerignore": {
+      "sha256": "283ec349dde17ec41a834f432c4e7b6f142ac5daa0f04c46179f9e0dbdde9c20",
+      "bytes": 1256
+    },
+    "scratch.json": {
+      "sha256": "c671c68ca3c85ae44d0eebb7abb363ce46a36cc511eedf4bc79e7e772b2f44d1",
+      "bytes": 105
+    }
+  }
+}

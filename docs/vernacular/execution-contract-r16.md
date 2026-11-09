@@ -188,8 +188,16 @@ Effects in one EX-3 commit:
 - one event `run_released` or `run_interrupted` and one request row (`operation` `release`, outcome `released` or
   `interrupted`, `attachment_id` NULL).
 
-Derived transitions of other roles: none. A release changes no fact that another role's state depends on (no
-completion, publication or verdict), so it carries exactly one `transitions` row.
+Derived transitions of other roles: after projecting the target's inactive after-state, rederive
+readiness. R18's reviewer prerequisite depends on actual worker state, so a restored worker becoming
+done can unblock review. The target transition is first. Additional transitions are sorted by role,
+remain in the active job, and are only M20–M22 (`blocked` to `ready`, `done` or `stale`,
+`prerequisite_available`, drift false). Active runs of other roles are preserved. No role's
+`fact_version` is bumped and no completion, publication or verdict is created.
+
+This C03 correction extends EX-4's carrying-event list and the M20–M22 event columns to include
+`run_released` and `run_interrupted`. It supersedes the earlier no-dependent-facts assumption; the
+state/reason grammar and all release preconditions remain unchanged.
 
 Preconditions: `request_unused(id)`, `active_revision == R`, `active_job == J`, `fact_version(job, role) == v` for
 every role of the active job, `role_state(target) == (running, drifted, run)`, `generation_current(target, G)`,
@@ -326,7 +334,8 @@ claim and takeover). `history --at-event` state is unchanged in shape: checkpoin
 Cross-row invariants added (native writer and reader): a `refresh` dispatch's run is `active` at its `seq`
 (existing bullet 4); a `checkpoints` row's run is `active` at its `seq`; `dispatches.checkpoint_id`, when not NULL,
 is the `body_id` of a `checkpoints` row of the same run with `seq` at most the dispatch's `seq`; every
-`run_released`/`run_interrupted` event has exactly one `transitions` row, for its role, with the matching reason;
+`run_released`/`run_interrupted` event has its target transition first with the matching reason,
+followed only by the ordered derived transitions specified in R16-4;
 `run_state` replay includes N8 and N9.
 
 ## Refusal order (token verbs)
@@ -368,7 +377,7 @@ is the `body_id` of a `checkpoints` row of the same run with `seq` at most the d
 - `execution_role` gains `std::optional<retained_checkpoint> checkpoint` (latest checkpoint of the active run);
   the Lua snapshot `roles[].run` gains `checkpoint: "none" | {id,seq,value}`.
 - `stage_execution`/`commit_execution` validate per operation (exact precondition sets above; refresh: packet
-  digests recomputed, dispatch `kind` `refresh`; release: one transition, valid after-state, `run_state` change;
+  digests recomputed, dispatch `kind` `refresh`; release: target transition first, valid after-state, optional R16-4 derived transitions, `run_state` change;
   checkpoint: no transitions) and refuse a mismatched change with `invalid_change` (surfaced as `internal`).
 - Lock-time release and refresh guard: no open reservation for the run, else
   `execution_error_code::check_in_progress` (new enumerator added by R16 and shared with R17 reserve; maps to

@@ -1,0 +1,30 @@
+{
+  "scope": "Independent C15 exact-pair source/evidence review; C14 tested-original full gates plus explicit interpreted-code identity supplement only. Final staged/publication approval remains separate.",
+  "disposition": "approve",
+  "files": {
+    "docs/vernacular/rounds/V5-02-R15-R18-C15-code-review.md": {
+      "sha256": "6783cf31f46c419c095abbe7fe4716295eb230657859f97fa3cdcbf955cc1c96",
+      "bytes": 6623
+    },
+    "tests/native/r15-r18-c15-evidence/review/RESULT.json": {
+      "sha256": "a3e93fd9adeb3aad650afd644eb1396c92b8cc8f6c624dbba0adb33b8e423b7e",
+      "bytes": 8762
+    },
+    "tests/native/r15-r18-c15-evidence/review/consumer-references.txt": {
+      "sha256": "b7ef76b14699da3a27c00e03b00d581a902b72c3865139a762d9aca0fb14d7b6",
+      "bytes": 313
+    },
+    "tests/native/r15-r18-c15-evidence/review/verify.py": {
+      "sha256": "72556a8792d84038deb58f2412275b5c628253ea8b04605b48b6db97a287066b",
+      "bytes": 7694
+    },
+    "tests/native/r15-r18-c15-evidence/review/verify.stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r15-r18-c15-evidence/review/verify.stdout.log": {
+      "sha256": "c4404dd51ca76d40744412fb73198b1149523c370900489ab6af1fb3ae497f78",
+      "bytes": 208
+    }
+  }
+}

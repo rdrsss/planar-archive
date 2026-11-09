@@ -83,11 +83,15 @@ Records (new value-record codec IDs in `planar.engine.history.execution_codec`, 
   `coverage` absent; `inputs` is `["own_output","output_vector"]`; plus `owned`, `frozen`, `excluded` (sorted
   boundaries) and `producers` (sorted work IDs).
 - `output_vector_v1`: `{version:1,targets:[{work,output}]}` sorted by work; `output` is the `xxh3_128:` unit-output
-  text. Without `output_vector` input it holds exactly the own target; with it, own plus every complete/facet
-  dependency producer unit (`declarations.md` registry paragraph).
+  text. Without `output_vector` input it holds exactly the own target; with it, own plus every producer
+  of a dependency whose `consumer` is this evidence row's work and whose `phase` is `complete`.
+  Grouped internal producers remain included; dependencies of other consumers and start-only dependencies
+  are excluded. This makes explicit the approved per-work semantics in `declarations.md` and
+  `render-contract.md`; a boundary row remains the R17-5 own-target exception.
 - `check_observation_v1`: `{version:1,root,base,observation,units,contracts}`: `root` source ID; `base` the base
   identity text; `observation` the observation identity text (`render-contract.md`); `units` sorted
-  `[{work,output}]` for the role's own units and every vector producer unit; `contracts` sorted
+  `[{work,output}]` for all the role's own units and the union of producers actually selected by its
+  effective `output_vector` checks; dependencies without such a check add no producer unit; `contracts` sorted
   `[{id,path,digest}]` of delivered contracts (R17-4). No tree entries are retained (E15 A).
 - `boundary_diff_v1`: `{version:1,changes:[{path,change,class}]}` sorted by path; `change` ∈ `added`, `deleted`,
   `modified`, `mode`; `class` ∈ `own`, `producer`, `frozen`, `outside`. Retained as the `output_id` of each gate row

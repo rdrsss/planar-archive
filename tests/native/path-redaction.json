@@ -577,6 +577,30 @@
    "original_sha256": "7e86c304149cdeabdbe8d682d2632571a2e3f0f361a869352da42e73adb9a1fc",
    "redacted_sha256": "531d3765772cc36f9f4b046fdd37cb206f6f68acfaaed9c606410de71539147c"
   },
+  "tests/native/r15-r18-c14-evidence/POST-GATE-MACHO.json": {
+   "original_sha256": "5c54184bd4bc871f00c9fdc88f78f11f8e817f9fcb878c194ab08b9f2a52fb2b",
+   "redacted_sha256": "5c560dc81a9c9c3192250de82962077c4a528eeee8f40736466de0f425c873dd"
+  },
+  "tests/native/r15-r18-final-evidence/C13-PROBES-MANIFEST.json": {
+   "original_sha256": "b54ad271d25380d4b9a02c6460852b99dae49f4e50ca07fce44abd6fd217cddc",
+   "redacted_sha256": "0320235a0f4e17390a08a5b23bdf853621e8d86895789620bcf998bc3c1f53be"
+  },
+  "tests/native/r15-r18-final-evidence/C15-FOCUSED-RESULTS.json": {
+   "original_sha256": "2076fc308508fdc22779ce6579dd23a0dfb9d710aae13b378941dd846f562df9",
+   "redacted_sha256": "c47b77b98e22c93e144063530791c484fcff607ede597c75120f19ae9f799e61"
+  },
+  "tests/native/r15-r18-final-evidence/C15-INDEPENDENT-REVIEW.json": {
+   "original_sha256": "a3e93fd9adeb3aad650afd644eb1396c92b8cc8f6c624dbba0adb33b8e423b7e",
+   "redacted_sha256": "024f2e9730a3fb0d4dc1336b7027a08ce9e3575c94cf7826deed41aaff7d43c3"
+  },
+  "tests/native/r15-r18-final-evidence/C15-SOURCE-EQUIVALENCE.json": {
+   "original_sha256": "4a14f102d218614d013f3aab78f4eb94178bec3016791e3192936cf334e17906",
+   "redacted_sha256": "5850117e560111dc2e379b709a3ffb1eeb534b95ecaa21e9220fb31aa9e429f4"
+  },
+  "tests/native/r15-r18-final-evidence/PROBES-ATTEMPT-SUMMARY.json": {
+   "original_sha256": "5cf281aea74e8e0697c273420c15a58e4b054f4ca02327f18bd8096a700ed23b",
+   "redacted_sha256": "6d897767c4655a69f818abf21cc9d5aa69bab4d8acd5bc9781e6e247513e3d6c"
+  },
   "tests/native/v5-02-b2-review-evidence/debug-inventory.json": {
    "original_sha256": "ba02a0bab3acf1d27db2b533522bc08b56599e92e0c119d69d82c9b82c7c52ef",
    "redacted_sha256": "e0a211f1960bf6d123bb5ac792807fdf1582a3b754132d38919544945d114d0d"

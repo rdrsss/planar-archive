@@ -156,11 +156,15 @@ std::vector<signature> history_signature(std::string_view id) {
   return {{"--ledger", "text", true}, {"--request-id", "text", false}, {"--revision", id, false},
           {"--at-event", id, false},  {"--after-event", id, false},    {"--limit", "decimal", false}};
 }
-std::vector<signature> shipped_signature(std::string_view name) {
+std::vector<signature> shipped_signature(std::string_view name, std::size_t epoch) {
   if (name == "render")
     return role_signature();
-  if (name == "history")
-    return history_signature("decimal");
+  if (name == "history") {
+    auto options = history_signature("decimal");
+    if (epoch >= 10)
+      options.push_back({"--event", "decimal", false});
+    return options;
+  }
   if (name == "init")
     return {{"--ledger", "text", true}, {"--workspace-id", "text", true}};
   if (name == "export")
@@ -171,17 +175,27 @@ std::vector<signature> shipped_signature(std::string_view name) {
   if (name == "activate")
     return {{"--ledger", "text", true},     {"--job", "text", true},        {"--expect-revision", "text", true},
             {"--expect-job", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
-  if (name=="recover") return {{"--ledger","text",true},{"--role","text",true},{"--root","text",false},{"--base-root","text",false}};
-  if (name=="refresh" || name=="checkpoint" || name=="release") {
-    std::vector<signature> o{{"--ledger","text",true},{"--run","text",true},{"--request-id","text",true},{"--actor","text",true},{"--observations","text",name=="checkpoint"}};
-    if (name=="refresh") o.push_back({"--expect-fp","text",true});
-    if (name=="release") {o.push_back({"--reason","text",true});o.push_back({"--provenance","text",false});}
+  if (name == "recover")
+    return {{"--ledger", "text", true}, {"--role", "text", true}, {"--root", "text", false}, {"--base-root", "text", false}};
+  if (name == "refresh" || name == "checkpoint" || name == "release") {
+    std::vector<signature> o{{"--ledger", "text", true},
+                             {"--run", "text", true},
+                             {"--request-id", "text", true},
+                             {"--actor", "text", true},
+                             {"--observations", "text", name == "checkpoint"}};
+    if (name == "refresh")
+      o.push_back({"--expect-fp", "text", true});
+    if (name == "release") {
+      o.push_back({"--reason", "text", true});
+      o.push_back({"--provenance", "text", false});
+    }
     return o;
   }
   if (name == "claim" || name == "takeover") {
-    std::vector<signature> options{{"--ledger","text",true},{"--job","text",true},{"--role","text",true},
-      {"--request-id","text",true},{"--actor","text",true},{"--provenance","text",false}};
-    if (name=="takeover") options.push_back({"--run-id","text",true});
+    std::vector<signature> options{{"--ledger", "text", true},     {"--job", "text", true},   {"--role", "text", true},
+                                   {"--request-id", "text", true}, {"--actor", "text", true}, {"--provenance", "text", false}};
+    if (name == "takeover")
+      options.push_back({"--run-id", "text", true});
     return options;
   }
   if (name == "status")
@@ -190,11 +204,56 @@ std::vector<signature> shipped_signature(std::string_view name) {
             {"--request-id", "text", false},
             {"--workspace", "text", false},
             {"--registry", "text", false}};
-  if (name == "preview")
-    return {{"--ledger", "text", true}, {"--role", "text", true},{"--since","text",false}};
+  if (name == "preview") {
+    std::vector<signature> options{{"--ledger", "text", true}, {"--role", "text", true}};
+    if (epoch >= 14)
+      options.push_back({"--since", "text", false});
+    return options;
+  }
+  if (name == "check")
+    return {{"--ledger", "text", true},    {"--run", "text", true},        {"--root", "text", true},
+            {"--base-root", "text", true}, {"--scratch", "text", true},    {"--request-id", "text", true},
+            {"--actor", "text", true},     {"--provenance", "text", false}};
+  if (name == "check-recover")
+    return {{"--ledger", "text", true},          {"--run-id", "text", true},     {"--reservation", "text", true},
+            {"--confirm-stopped", "text", true}, {"--request-id", "text", true}, {"--actor", "text", true}};
+  if (name == "verdict")
+    return {{"--ledger", "text", true},
+            {"--run", "text", true},
+            {"--verdict", "text", true},
+            {"--request-id", "text", true},
+            {"--actor", "text", true}};
   return {};
 }
-void validate(const value_ptr& root, std::span<const std::string_view> shipped, std::span<const std::string_view> external) {
+// Catalog version2 spans documented feature cuts; historical records select one complete
+// shipped schema, never an arbitrary subset or a per-descriptor union of signatures.
+enum class validation_policy { current, historical };
+constexpr std::array<std::string_view, 17> introduced_commands{
+    "render",   "init",    "history",    "export",  "load",    "activate", "status",        "preview", "claim",
+    "takeover", "refresh", "checkpoint", "release", "recover", "check",    "check-recover", "verdict"};
+std::size_t select_epoch(checker& c, const value_ptr& root, std::span<const std::string_view> shipped,
+                         std::span<const std::string_view> external) {
+  std::set<std::string_view> names;
+  std::size_t                index = 0;
+  for (const auto& entry : c.list(c.get(root, "commands"), 64)) {
+    c.field = std::format("catalog.commands[{}]", ++index);
+    c.exact(entry, {"descriptor", "owner"});
+    const bool is_shipped = c.owner(entry, shipped, external, true);
+    auto       d          = c.get(entry, "descriptor");
+    c.exact(d, {"name", "family", "handler_id", "options", "help", "response_kind", "capabilities"});
+    if (is_shipped && !names.insert(c.text(d, "name")).second)
+      c.fail(catalog_error_code::identity_conflict);
+  }
+  c.field = "catalog";
+  for (std::size_t epoch : {5u, 10u, 14u, 16u, 17u}) {
+    const std::set<std::string_view> expected(introduced_commands.begin(), introduced_commands.begin() + epoch);
+    if (names == expected)
+      return epoch;
+  }
+  c.fail();
+}
+void validate(const value_ptr& root, std::span<const std::string_view> shipped, std::span<const std::string_view> external,
+              validation_policy policy) {
   checker c;
   c.paths(shipped, false);
   c.paths(external, true);
@@ -202,17 +261,36 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
   auto version = c.get(root, "version");
   if (version->kind != value_kind::integer || version->integer != 2)
     c.fail();
-  std::set<std::string_view>                         handlers, mandatory;
-  const std::map<std::string_view, std::string_view> native{{"render", "render_capture_v1"},
-                                                            {"init", "initialize_ledger_v1"},
-                                                            {"history", "read_history_v1"},
-                                                            {"export", "export_source_v1"},
-                                                            {"load", "accept_load_v1"},
-                                                            {"activate", "execution_commit_v1"},
-                                                            {"status", "execution_read_v1"},
-                                                            {"preview", "execution_read_v1"}, {"claim","execution_commit_v1"}, {"takeover","execution_commit_v1"},{"refresh","execution_commit_v1"},{"checkpoint","execution_commit_v1"},{"release","execution_commit_v1"},{"recover","execution_read_v1"}};
-  // Draft (R15-D P1, DD-D1): additional capabilities of the shipped rows that carry a capability list.
-  const std::map<std::string_view, std::string_view> native_more{{"status", "draft_capture_v1"},{"claim","provenance_read_v1"},{"takeover","provenance_read_v1"}};
+  std::set<std::string_view>                             handlers, mandatory;
+  std::map<std::string_view, std::set<std::string_view>> native{
+      {"render", {"render_capture_v1"}},
+      {"init", {"initialize_ledger_v1"}},
+      {"history", {"read_history_v1"}},
+      {"export", {"export_source_v1"}},
+      {"load", {"accept_load_v1"}},
+      {"activate", {"execution_commit_v1"}},
+      {"status", {"draft_capture_v1", "execution_read_v1"}},
+      {"preview", {"execution_read_v1"}},
+      {"claim", {"execution_commit_v1", "provenance_read_v1"}},
+      {"takeover", {"execution_commit_v1", "provenance_read_v1"}},
+      {"refresh", {"execution_commit_v1"}},
+      {"checkpoint", {"execution_commit_v1"}},
+      {"release", {"execution_commit_v1"}},
+      {"recover", {"execution_read_v1"}},
+      {"check", {"check_run_v1", "execution_commit_v1", "provenance_read_v1"}},
+      {"check-recover", {"execution_commit_v1"}},
+      {"verdict", {"execution_commit_v1", "verdict_read_v1"}}};
+  const auto epoch = policy == validation_policy::current ? introduced_commands.size() : select_epoch(c, root, shipped, external);
+  for (std::size_t i = epoch; i < introduced_commands.size(); ++i)
+    native.erase(introduced_commands[i]);
+  auto shipped_handler = [](std::string_view name) {
+    return std::string("shipped.") + std::string(name == "check-recover" ? "check_recover" : name) + ".v1";
+  };
+  auto shipped_response = [](std::string_view name) {
+    if (name == "verdict")
+      return std::string("verdict_response_v1");
+    return std::string(name == "takeover" ? "claim" : name == "check-recover" ? "check" : name) + "_v1";
+  };
   for (auto kind : {"commands", "shapes", "projections"}) {
     std::string_view previous;
     bool             first = true;
@@ -262,16 +340,14 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
       }
       std::vector<signature> expected;
       if (is_shipped) {
-        if (!native.contains(name) || family != name || handler != std::string("shipped.") + std::string(name) + ".v1" ||
-            response != std::string(name=="takeover" ? "claim" : name) + "_v1" || caps.size() != (native_more.contains(name) ? 2u : 1u) ||
-            !caps.contains(native.at(name)) || (native_more.contains(name) && !caps.contains(native_more.at(name))))
+        if (!native.contains(name) || family != name || handler != shipped_handler(name) || response != shipped_response(name) ||
+            caps != native.at(name))
           c.fail();
         mandatory.insert(name);
-        expected = shipped_signature(name);
+        expected = shipped_signature(name, epoch);
       } else {
         if (name == "with-profile" || native.contains(name) || native.contains(family) ||
-            std::ranges::any_of(
-                native, [&](const auto& pair) { return handler == std::string("shipped.") + std::string(pair.first) + ".v1"; }))
+            std::ranges::any_of(native, [&](const auto& pair) { return handler == shipped_handler(pair.first); }))
           c.fail(catalog_error_code::identity_conflict);
         if (family != "extension_read_v1" || response != "extension_v1")
           c.fail();
@@ -329,6 +405,20 @@ void validate(const value_ptr& root, std::span<const std::string_view> shipped, 
 catalog_error codec_error(const diagnostic& error) {
   return {error.code == "resource_limit" ? catalog_error_code::resource_limit : catalog_error_code::invalid_catalog, "catalog"};
 }
+std::expected<value_ptr, catalog_error> decode_value(std::string_view bytes, std::span<const std::string_view> shipped,
+                                                     std::span<const std::string_view> external, validation_policy policy) {
+  if (bytes.size() > limits.bytes)
+    return std::unexpected(catalog_error{catalog_error_code::resource_limit, "catalog"});
+  auto decoded = canonical_decode(bytes, limits);
+  if (!decoded)
+    return std::unexpected(codec_error(decoded.error()));
+  try {
+    validate(*decoded, shipped, external, policy);
+  } catch (const catalog_error& error) {
+    return std::unexpected(error);
+  }
+  return *decoded;
+}
 } // namespace
 validated_catalog::validated_catalog(value_ptr value, std::string bytes) : _value(std::move(value)), _bytes(std::move(bytes)) {
 }
@@ -340,16 +430,9 @@ std::string_view validated_catalog::bytes() const {
 }
 std::expected<validated_catalog, catalog_error> decode_catalog(std::string_view bytes, std::span<const std::string_view> shipped,
                                                                std::span<const std::string_view> external) {
-  if (bytes.size() > limits.bytes)
-    return std::unexpected(catalog_error{catalog_error_code::resource_limit, "catalog"});
-  auto decoded = canonical_decode(bytes, limits);
+  auto decoded = decode_value(bytes, shipped, external, validation_policy::historical);
   if (!decoded)
-    return std::unexpected(codec_error(decoded.error()));
-  try {
-    validate(*decoded, shipped, external);
-  } catch (const catalog_error& error) {
-    return std::unexpected(error);
-  }
+    return std::unexpected(decoded.error());
   return validated_catalog(std::move(*decoded), std::string(bytes));
 }
 std::expected<validated_catalog, catalog_error>
@@ -358,6 +441,9 @@ validate_catalog(const value_ptr& input, std::span<const std::string_view> shipp
   auto bytes = canonical_encode(input, limits);
   if (!bytes)
     return std::unexpected(codec_error(bytes.error()));
-  return decode_catalog(*bytes, shipped, external);
+  auto decoded = decode_value(*bytes, shipped, external, validation_policy::current);
+  if (!decoded)
+    return std::unexpected(decoded.error());
+  return validated_catalog(std::move(*decoded), std::move(*bytes));
 }
 } // namespace planar::engine::history

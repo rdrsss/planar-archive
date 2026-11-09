@@ -1,0 +1,205 @@
+{
+  "version": 1,
+  "scope": "Actual post-C11 final-source macOS calibration. Normal Debug and RelWithDebInfo complete inventories plus fresh raised Debug scaling; no integrated acceptance claim.",
+  "source_files": 272,
+  "engine_source_files": 179,
+  "all_source_manifests_equal": true,
+  "configurations": {
+    "debug": {
+      "ordinary_runtime_cases": 484,
+      "instrumentation_only_cases": 3,
+      "instrumented_runtime_cases": 487,
+      "runtime_assertions": 86924,
+      "loader_cases": 22,
+      "loader_assertions": 194,
+      "cases": 509,
+      "assertions": 87118,
+      "failures": 0,
+      "expected_failures": 0,
+      "skips": 0,
+      "budget_rows": 31,
+      "margin_problems": 0
+    },
+    "release": {
+      "ordinary_runtime_cases": 484,
+      "instrumentation_only_cases": 3,
+      "instrumented_runtime_cases": 487,
+      "runtime_assertions": 86924,
+      "loader_cases": 22,
+      "loader_assertions": 194,
+      "cases": 509,
+      "assertions": 87118,
+      "failures": 0,
+      "expected_failures": 0,
+      "skips": 0,
+      "budget_rows": 31,
+      "margin_problems": 0
+    }
+  },
+  "raised_debug": {
+    "probe_count": 16,
+    "normal_refusal_assertion_expected_failure": 1,
+    "tail_instructions": [
+      27719200,
+      28620200,
+      29521200
+    ],
+    "not_margin_or_acceptance_rows": true
+  },
+  "evidence": {
+    "tests/native/r15-r18-c11-evidence/calibration/source-before.json": {
+      "sha256": "4f011338b4d92780fa6872a4cfc90fdca70dd35fca94dd467aa0db4d70488bf9",
+      "bytes": 29648
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/source-after-measurement.json": {
+      "sha256": "4f011338b4d92780fa6872a4cfc90fdca70dd35fca94dd467aa0db4d70488bf9",
+      "bytes": 29648
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/source-after-raised.json": {
+      "sha256": "095b3b665d2ba1e037e3f64c65dac56d79652cf9ab9c4ed052ce2cfa6caa7644",
+      "bytes": 29920
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/snapshot.json": {
+      "sha256": "7cec9ed8a411fff56994d683e1c3865e295b98f0b8b871ebf79e6c8894a7a8aa",
+      "bytes": 1235
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/input-debug-artifacts.json": {
+      "sha256": "606d921db95d1293d8850b20298a0a2e207e01623e38f82c605ac4cde30d5e02",
+      "bytes": 472981
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/input-release-artifacts.json": {
+      "sha256": "2ec8141c5426c81fe72da1ead0778c8778859da18a594bac965feaa3871051ab",
+      "bytes": 472770
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-debug-identity.json": {
+      "sha256": "0770fd687f4cb8a404a5287b27b83973155a93d885d7687893ad96b7d7ebc81d",
+      "bytes": 4558
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-release-identity.json": {
+      "sha256": "115e27890a9f12cac65c687f602d39d0a83144cd955e13193aa372aaf02fc22d",
+      "bytes": 4573
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-raised-identity.json": {
+      "sha256": "3b0f64ce3f89c13a51bb1983ee0284185a56dd0a54407b00229fb6f81b9f8d15",
+      "bytes": 1408
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-debug-source-hashes.json": {
+      "sha256": "891c69ec3b198291f4b7c673c89173be483a92ea7e0796b786a71ec4d18dc68c",
+      "bytes": 29647
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-release-source-hashes.json": {
+      "sha256": "891c69ec3b198291f4b7c673c89173be483a92ea7e0796b786a71ec4d18dc68c",
+      "bytes": 29647
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-raised-source-hashes.json": {
+      "sha256": "891c69ec3b198291f4b7c673c89173be483a92ea7e0796b786a71ec4d18dc68c",
+      "bytes": 29647
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-debug-commands.txt": {
+      "sha256": "9cbb5f314fa467b669b802ad66d2956ef7b2168a1c2ec0276409b11e4ee5b3c5",
+      "bytes": 9305
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-release-commands.txt": {
+      "sha256": "d8eacd695143c8035e1183bf6eaacfca91e0471906d032da1ecd65f074b2e858",
+      "bytes": 9397
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-raised-commands.txt": {
+      "sha256": "afe096bf14dea11bd56da6338a0a08523f06bf3f0de45431bb3f9d3e01bfc9b9",
+      "bytes": 9387
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/dynamic-and-tool-identities.json": {
+      "sha256": "1d15fcd0ae867f966f675d942e8921432698e7e1e9033a6401de8fe7d45cc956",
+      "bytes": 1476
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-statistics.json": {
+      "sha256": "118102e3df1c098174f937425597379114aa75db0a34c3796b3271e2aedacebd",
+      "bytes": 3255
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/actual-measurement-results.json": {
+      "sha256": "b76efa3a31916fb7d74f213cac4aad280263e3eea2a89d2762259afde4f00342",
+      "bytes": 4203
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/inventory-differences.json": {
+      "sha256": "25ee7eae74b3b4fda80e2912896b37410edb4b55d83e4682721946c29fc34bef",
+      "bytes": 515
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/measurement-delta-vs-c07.json": {
+      "sha256": "12bccbfefc7042c3c7403168d9f54c91823c44219af704ea427934169c5928a9",
+      "bytes": 2099
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/configuration-differences.json": {
+      "sha256": "ffc59491a8c11a0e78eeb235e3e4456ca6474e3d01d8e13fd7dc01861dfdf6ec",
+      "bytes": 352
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-raised-summary.json": {
+      "sha256": "caf49c0e91a155da92367d8c1c634ecf9a58608785f4fc8e544e163060cdef7c",
+      "bytes": 16204
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/raised-role-results.json": {
+      "sha256": "cfc86cef8dc77ff2dea18bb033218e475fc6d98f24720d047aef6e7f5d7d47f3",
+      "bytes": 970
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/coupled-model-confirmed.json": {
+      "sha256": "fd591dacd7f36f1960f107043d6ba3cbd72baed62d5f3ed02d8097d577b9fedc",
+      "bytes": 4999
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-debug/summary.json": {
+      "sha256": "7b6e2d2131ce55fd8c797a390f5163bc586c5bc5f2262e1321239f2342e5f3b7",
+      "bytes": 292496
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/post-release/summary.json": {
+      "sha256": "d1daf67e6a5dea0d92d2ac18d39706a04d86f6fd671fe2d77ee780a14a4d2f65",
+      "bytes": 292498
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/build_measure.py": {
+      "sha256": "bd72dfa359a2f26cb3b704dd6834cf55a6f5c0b970e5a465ec6a12e5720dce85",
+      "bytes": 4032
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/run_all.py": {
+      "sha256": "c4e769b6f44fe87966c509787946751eb6c69e8ac4b6a187ee00ed22a3a0eb5b",
+      "bytes": 2910
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/probe_measure.py": {
+      "sha256": "e56347d8543990e06712a1ea7caf8db041fabf0329a6ecde7ca188327831a355",
+      "bytes": 927
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/aggregate.py": {
+      "sha256": "608553a6fbfe4076b8063d11f59e4f247212f986962f18724cde6c955a4ecd91",
+      "bytes": 5862
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/run_post.py": {
+      "sha256": "93b6345a33de6b5a5032a32ebdfeedb14cf026bd98d55e7dc9a37bf8114d5000",
+      "bytes": 2248
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/verify_raised.py": {
+      "sha256": "996ec7be603ae00aa034d0feeb5c52153e90eb5b18ab41a6f2287acbb831d380",
+      "bytes": 3378
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/finalize.py": {
+      "sha256": "3cd2f362f2dcde8f1630fbdc2d509268105a623b9346734300e46c933ef4ba5c",
+      "bytes": 3616
+    },
+    "tests/native/r15-r18-c11-evidence/calibration/make_manifest.py": {
+      "sha256": "d22a6c6fb9e777caba24cba0a709365839d296a889964fea009eaa3c7bc274d0",
+      "bytes": 2846
+    },
+    "docs/vernacular/rounds/V5-02-R15-R18-C11-calibration.md": {
+      "sha256": "9bf1acf38e1b9477ce83fbd5eb1bd77e08291da7de11610eda13e37464a83f3c",
+      "bytes": 10138
+    },
+    "tests/native/r15-r18-c11-evidence/CALIBRATION-PEAKS.json": {
+      "sha256": "0eae45bb0dffaf3ce01a6bc56488ca9dd139c0697d1cf9c34fece08c2dca81e0",
+      "bytes": 45917
+    },
+    "tests/native/r15-r18-c10-evidence/test/generate_compact_margins.py": {
+      "sha256": "f698731563910809c649a7fa745b234baae85f7f7eba7c486df4efbdbb615589",
+      "bytes": 3396
+    }
+  },
+  "raw_tree": {
+    "inventory": "tests/native/r15-r18-c11-evidence/calibration/raw-files.json",
+    "sha256": "e5a05630429f83b86083c61523fcb035559f4dd0aa2c7f7c05977a632ee442f2",
+    "bytes": 3435999,
+    "files": 2228
+  }
+}

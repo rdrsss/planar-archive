@@ -1,0 +1,205 @@
+{
+  "unchanged_product_source_count": 190,
+  "same_compiler_and_archive_tool": true,
+  "unaffected_rows": [
+    {
+      "id": "B01",
+      "selected_cases": [
+        "X08 C01 role preparation outputs-off boundary pins the request-record conversion charge"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "c07e5af8a4a879f9d676cc56f7d0eded4d20e9adc0aef09be7133b0286790f84",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B02",
+      "selected_cases": [
+        "X06 D C02 role preparation charges enumeration and registry reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "ba5e84f7b5e4d2d636f1e8236028ee0f45fb0b3e4bcb3625deb26de9309fefa0",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B03",
+      "selected_cases": [
+        "X06 D C02 role preparation charges enumeration and registry reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "3c5e5e5293087831b4759ce8a28064aae854e7c3d3505d86a1426577b6e55f78",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B04",
+      "selected_cases": [
+        "X06 D C02 role preparation charges enumeration and registry reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "27674047e6bc504198d867695637d3af5af9320ac4bc30361e333e0199956de6",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B05",
+      "selected_cases": [
+        "X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "a2b4cce013f82648f19045817788f5013182d920b2c13518eb17006e1b784014",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B06",
+      "selected_cases": [
+        "X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "1782a1ac762994500b166c1a20c6a257663f904d0bbc7beedc5400f245440bf9",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B07",
+      "selected_cases": [
+        "X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "e1dce81ad10c8d5f2a74375c4ef2fa968efa0ab629c685b3f22fea2273adb82b",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B08",
+      "selected_cases": [
+        "X06 D C03 role preparation charges tree enumeration and registry and observation reads to the factory budget"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "f85e2b815acc9e7499a7ef41915e704cfad6fe9934f11537df91ee2af99efd67",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B09",
+      "selected_cases": [
+        "X07 N30 projection transport charges the factory budget owner"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "2e44692f792b272456cad6d0ab6eaefaa068f8ca6c5a09f77e2e4e0236e34b7e",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B11",
+      "selected_cases": [
+        "X06 D conversion node ceiling refuses with nodes at a small ceiling"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "2ed36b0113e102d2e33d7ffb03f6a7327d40cd8d23a6a1bb6296526a82f0996c",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B12",
+      "selected_cases": [
+        "X06 D conversion node ceiling refuses with nodes at a small ceiling"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "68941f9c3675b1ce857e76146f87b4e996cd49e16ba06b1c52e0fe2b0aa0635f",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B18",
+      "selected_cases": [
+        "X06 D C01 declaration Lua memory counts against the composed live Lua ceiling"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "632062d42829b3b54f39154b43b6b7e4c23cd081db999f1aa67acbd08b2f29df",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B19",
+      "selected_cases": [
+        "X06 D native exhaustion is resource_limit terminal and cleans nested roots"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "40884d7f432884fd9a2b94fb8a12c126f0116f809d193840329e5b57b560a59d",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B20",
+      "selected_cases": [
+        "X06 D C01 the composed sink alone enforces the invocation instruction ceiling on declaration chunks"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "0d5ec3cef1c803f18b302161f53e7d0eafa407ee92187d86792d74fd6b373cc0",
+      "prior_status": "SURVIVED"
+    },
+    {
+      "id": "B22",
+      "selected_cases": [
+        "X06 D C01 declaration chunks exhaust the composed invocation instruction ceiling across stages"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "88193c49f353ec31e577d458204c92c0bd03a976fec504182bd30cffe6a5ddaa",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B23",
+      "selected_cases": [
+        "X06 D C01 the composed sink alone enforces the invocation instruction ceiling on declaration chunks"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "06a1fba9983d2b971c44c7e77f40c767ea1ab1bed2f4a84101e188946ae285a2",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B24",
+      "selected_cases": [
+        "X06 D C02 the composed sink refusal is the first failure on a declaration chunk that crosses the invocation ceiling"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "7c5d1dd1d9216d0548ce9be822bd2595053a9df1030d4ea6079e055cc0aa94d3",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B25",
+      "selected_cases": [
+        "X06 D C01 native exhaustion after all-job validation refuses in preparation and cleans nested roots"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "d4825886063ade77d2a89f983ad9d24534d88da66f902d2d99c6658192cdb3c8",
+      "prior_status": "KILLED"
+    },
+    {
+      "id": "B26",
+      "selected_cases": [
+        "X06 D C01 route stage exhaustion refuses before any declaration is captured"
+      ],
+      "case_chunks_exact_equal": true,
+      "prior_record_sha256": "a3472080d7ccbc30381328ccddc828a0a5ff9f6d93e9c89664bab3274a6252c0",
+      "prior_status": "KILLED"
+    }
+  ],
+  "affected_rerun_ids": [
+    "B10",
+    "B13",
+    "B14",
+    "B15",
+    "B16",
+    "B17",
+    "B21"
+  ],
+  "supplement_note": "B20 primary survivor is preserved; unchanged first-failure supplementary case from unit-summary independently kills same artifact. B17 old tuple superseded by prescribed C11 named red.",
+  "B20_supplementary": {
+    "all_selected_case_chunks_equal": true,
+    "cases": [
+      "X06 D C02 the composed sink refusal is the first failure on a declaration chunk that crosses the invocation ceiling",
+      "X06 D C02 the composed sink refuses a pre-frame declaration chunk at the carried ceiling"
+    ],
+    "source_record_sha256": "e31f9fc3a7dbc6b2053138e29d7a35f67d0e265cfa8775fc7e7df0c45a3fb603",
+    "scope": "first-failure case kills, pre-frame survives; preserve exact distinction"
+  },
+  "private_checker_carry": {
+    "selected_cases": [
+      "X06 D C01 the composed sink alone enforces the invocation instruction ceiling on declaration chunks",
+      "X06 D conversion node ceiling refuses with nodes at a small ceiling"
+    ],
+    "case_chunks_exact_equal": true,
+    "reason": "C11 ordinary-q checks and external c02_tail are outside both function/dependency scopes. All190 product source files and compiler/archiver unchanged; no node or native limit change. Retain KILLED_CHECKER distinction, functional cases pass.",
+    "checker_sha256": "511a2cc2f880230b9ebf914571fa67b9d3462e6fc02c5ae6f2f37e044d08bcbf"
+  }
+}

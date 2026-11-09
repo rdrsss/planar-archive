@@ -106,8 +106,8 @@ TEST_CASE("history reads a fresh format3 ledger with the format3 event summary a
   const auto& events = (*page)->fields.at("data")->fields.at("events");
   REQUIRE(events->items.size() == 1);
   const auto& event = events->items.front();
-  CHECK(key_set(event) == std::set<std::string>{"sequence", "type", "version", "revision", "request_id", "actor",
-                                                "occurred_at", "payload", "job", "role", "generation_id", "run_id"});
+  CHECK(key_set(event) == std::set<std::string>{"sequence", "type", "version", "revision", "request_id", "actor", "occurred_at",
+                                                "payload", "job", "role", "generation_id", "run_id"});
   CHECK(event->fields.at("job")->string.empty());
   CHECK(event->fields.at("generation_id")->string == "none");
   auto state = read_history(*file, {history_selector::state, 1, 50, {}});
@@ -144,8 +144,7 @@ TEST_CASE("storage read variant refuses writable format3 access and forged forma
   REQUIRE_FALSE(opened);
   CHECK(opened.error().code == format_error_code::unsupported_version);
 }
-TEST_CASE("format3 at-event replay takes the last transition per role and the run of a running role",
-          "[history_read][format3]") {
+TEST_CASE("format3 at-event replay takes the last transition per role and the run of a running role", "[history_read][format3]") {
   format3_root s;
   const auto   path = s.root / "ledger";
   REQUIRE(initialize_format3(path, "quota"));

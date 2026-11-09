@@ -1,0 +1,13 @@
+{
+  "purpose": "Reversible retention of owned C11 copied build inputs to recover gate disk space. Original raw logs/manifests remain unchanged.",
+  "archive": "tests/native/r15-r18-c13-evidence/retained-inputs/c11-measure-inputs.tar.gz",
+  "archive_sha256": "f5d986a2100a2db70d96c3e153135be6b932cdc41e177267584fabecaa8bb1a4",
+  "archive_bytes": 2551229235,
+  "original_bytes": 9661968199,
+  "files": 12885,
+  "symlinks": 0,
+  "inventory": "tests/native/r15-r18-c13-evidence/retained-inputs/inventory.json",
+  "inventory_sha256": "96f7703c64ee1770568e4d4892165a57ee29363b9c9eec4b9d92c360d3fe784e",
+  "verification": "Every archived regular-file byte hash and symlink target matched inventory before removing only the owned scratch copy.",
+  "restore": "Extract archive under OS temporary directory to restore the original root basename. Hash-bound original paths can also be checked by streaming archive members."
+}

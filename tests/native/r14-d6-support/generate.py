@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Private five-entry VM; native changes are reversible identities and fixed admission only."""
+"""Private load-handler VM; native changes are reversible identities and fixed admission only."""
 from pathlib import Path
 import sys
 root,out=map(Path,sys.argv[1:]);out.mkdir(parents=True,exist_ok=True)
@@ -12,7 +12,8 @@ registration='''  registration.add(descriptor("load","accept_load_v1",{
   }),load_command)
 '''
 start=commands.index('  local function load_command')
-end=commands.index('  local function init_command',start)
+end=commands.index('  local function activate_command',start)
+assert commands[start:end].count('local function ') == 1, 'load replacement must preserve every other handler'
 commands=commands[:start]+handler+commands[end:]
 for i in range(6):
  lua=commands
@@ -30,4 +31,4 @@ for i in range(6):
  restored=a.replace(f'module planar.engine.load_test_{i};','module planar.engine.runtime;').replace(f'import planar.engine.load_source_{i};','import planar.engine.runtime_source;').replace(f'namespace planar::engine::load_test_{i} {{','namespace planar::engine {')
  assert restored==impl
  assert b.replace(f'module planar.engine.load_test_{i};','module planar.engine.runtime;').replace(f'namespace planar::engine::load_test_{i} {{','namespace planar::engine {')==interface
-print('audited six private exact five-entry runtime/interface variants')
+print('audited six private exact load-handler runtime/interface variants')

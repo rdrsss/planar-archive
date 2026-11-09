@@ -156,7 +156,8 @@ TEST_CASE("interpretation complete quota outputs match reviewed JSON and canonic
   const auto root   = std::filesystem::path(PLANAR_INTERPRETATION_GOLDENS);
   // Only the exact embedded provenance changes; historical golden bytes remain immutable.
   const std::array originals{"planar/json.lua",         "planar/schema.lua",       "planar/semantic.lua", "planar/selection.lua",
-                             "planar/presentation.lua", "planar/observations.lua", "planar/render.lua",   "planar/acceptance.lua",
+                             "planar/presentation.lua", "planar/observations.lua", "planar/render.lua",   "planar/dispatch.lua",
+                             "planar/reconcile.lua",    "planar/checks.lua",       "planar/review.lua",   "planar/acceptance.lua",
                              "planar/commands.lua",     "planar/bootstrap.lua"};
   std::vector<tree_file> authored;
   std::vector<value_ptr> names;

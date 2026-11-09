@@ -1190,7 +1190,7 @@ struct command_state {
   std::optional<diagnostic>         bridge_error;
   std::optional<registration_error> shape_failure;
   std::size_t                       shape_dispatch_count = 0; ///< Successful retained shape F dispatches in profile frames.
-  std::array<int, 10>               shape_phases{LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF,
+  std::array<int, 11>               shape_phases{LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF,
                                                  LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF, LUA_NOREF};
   int                               shape_function     = LUA_NOREF;
   bool                              invocation_started = false, shape_baseline_ready = false, extension_execution = false;
@@ -2450,7 +2450,8 @@ int setup_commands(lua_State* l) {
                                      "assemble_projection_material",
                                      "role_profile_material",
                                      "route_workspace",
-                                     "role_projection_base_material"};
+                                     "role_projection_base_material",
+                                     "reconcile_execution"};
     for (std::size_t i = 0; i < commands(l).shape_phases.size(); ++i) {
       lua_getfield(l, -1, names[i]);
       if (!lua_isfunction(l, -1) || lua_iscfunction(l, -1))
@@ -3715,7 +3716,15 @@ void call_service_native(lua_State* l, int operation) {
     }
     if (operation == 13) {
       const bool execution_run = copied->fields.contains("disposition");
-      if (execution_run)
+      const bool in_progress   = text_field(copied, "outcome") == "in_progress";
+      if (in_progress) {
+        exact(copied, {"request_id", "operation", "outcome", "reservation", "run"});
+        auto run = copied->fields.at("run");
+        exact(run, {"id", "generation"});
+        if (text_field(copied, "operation") != "check" || !decimal_id(text_field(copied, "reservation")) ||
+            !decimal_id(text_field(run, "id")) || !decimal_id(text_field(run, "generation")))
+          command_refuse();
+      } else if (execution_run)
         exact(copied, {"request_id", "operation", "outcome", "result", "disposition"});
       else
         exact(copied, {"request_id", "operation", "outcome", "result"});
@@ -6855,6 +6864,15 @@ registration_error from_source_error(acceptance::source_error error) {
 } // namespace
 std::expected<prepared_profile, profile_preparation_error>
 profile_invocation::prepare_load(const acceptance::request_intent& final_intent) && {
+  return std::move(*this)._prepare_load(final_intent, {}, false);
+}
+std::expected<prepared_profile, profile_preparation_error>
+profile_invocation::prepare_execution_load(const acceptance::request_intent& final_intent, value_ptr execution_snapshot) && {
+  return std::move(*this)._prepare_load(final_intent, std::move(execution_snapshot), true);
+}
+std::expected<prepared_profile, profile_preparation_error>
+profile_invocation::_prepare_load(const acceptance::request_intent& final_intent, value_ptr execution_snapshot,
+                                  bool execution) && {
   cleanup_report report;
   auto           run = [&]() -> std::expected<prepared_profile, profile_preparation_error> {
     try {
@@ -6870,6 +6888,8 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
       auto semantic = [&](value_ptr inner) -> std::unexpected<profile_preparation_error> {
         return std::unexpected(profile_preparation_error{registration_error{}, std::move(inner)});
       };
+      if (execution && !execution_snapshot)
+        return refuse(profile_owner_protocol_error());
       auto final_data = final_intent.data();
       if (!final_data || !*final_data)
         return refuse(profile_owner_protocol_error());
@@ -7001,6 +7021,31 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
       if (!model || model->kind != value_kind::record || !model->fields.contains("bundle") || !model->fields.contains("jobs") ||
           !model->fields.at("bundle") || !model->fields.at("jobs") || model->fields.at("jobs")->kind != value_kind::list)
         return refuse(profile_owner_protocol_error());
+      value_ptr frozen_snapshot, frozen_change;
+      if (execution_snapshot) {
+        // Validate/charge before alias-severing; the snapshot and result share the original cumulative frame.
+        validate(s, execution_snapshot, 1);
+        frozen_snapshot = copy_value(execution_snapshot);
+        if (!model->fields.contains("dependencies"))
+          return refuse(profile_owner_protocol_error());
+        auto semantic_model = record({{"dependencies", model->fields.at("dependencies")}, {"jobs", model->fields.at("jobs")}});
+        auto candidate      = record({{"bundle", model->fields.at("bundle")}, {"semantic", semantic_model}});
+        auto reconciled =
+            call_retained_value(vm.lua, c.shape_phases[10],
+                                record({{"operation", text("load")}, {"snapshot", frozen_snapshot}, {"candidate", candidate}}));
+        if (c.bridge_error)
+          return refuse(registration_error{*c.bridge_error, "profile"});
+        if (exhausted(s))
+          return refuse(registration_error{command_resource(s), "profile"});
+        if (!reconciled)
+          return refuse(registration_error{
+              reconciled.error().code == "resource_limit" ? std::move(reconciled.error()) : external_protocol(), "profile"});
+        if (!envelope_ok(*reconciled))
+          return refuse(profile_owner_protocol_error());
+        if ((*reconciled)->fields.contains("error"))
+          return semantic((*reconciled)->fields.at("error"));
+        frozen_change = (*reconciled)->fields.at("value");
+      }
       auto retained_bundle = model->fields.at("bundle");
       charge(s, sizeof(profile_load_stage::implementation) + 64);
       auto staged = std::make_unique<profile_load_stage::implementation>(std::move(impl), std::move(*source),
@@ -7172,14 +7217,16 @@ profile_invocation::prepare_load(const acceptance::request_intent& final_intent)
                    : protocol();
       // The shared immutable data is built privately; no pointer into the VM, B, S or capture survives in it.
       charge(st, sizeof(profile_acceptance_data) + 64);
-      auto data            = std::make_shared<profile_acceptance_data>();
-      data->source         = std::move(source_files);
-      data->source_digest  = *source_digest;
-      data->registry       = std::move(*registry);
-      data->effective      = std::move(*verified_tree);
-      data->interpretation = std::move(*interpretation);
-      data->workspace_id   = std::move(workspace_id);
-      data->bound_intent   = owner_state.bound_intent;
+      auto data                = std::make_shared<profile_acceptance_data>();
+      data->source             = std::move(source_files);
+      data->source_digest      = *source_digest;
+      data->registry           = std::move(*registry);
+      data->effective          = std::move(*verified_tree);
+      data->interpretation     = std::move(*interpretation);
+      data->workspace_id       = std::move(workspace_id);
+      data->bound_intent       = owner_state.bound_intent;
+      data->execution_snapshot = std::move(frozen_snapshot);
+      data->execution_change   = std::move(frozen_change);
       // Phase 6: reverify every original receipt after derivation, before anything is published.
       if (auto verified = staged->source.verify(); !verified) {
         (void)fail(owner_state, from_source_error(std::move(verified.error())));

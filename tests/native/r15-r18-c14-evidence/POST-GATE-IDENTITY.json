@@ -1,0 +1,19 @@
+{
+  "scope": "Explicit post-build metadata identity supplement; original pre-gate proof remains unchanged.",
+  "files": {
+    "tests/native/r15-r18-c14-evidence/POST-GATE-ARCHIVES.json": {
+      "sha256": "02c284f5136e355bf1f14c37ec570fe952d5686c59dd441c828db0985bb26239",
+      "bytes": 93337
+    },
+    "tests/native/r15-r18-c14-evidence/POST-GATE-MACHO.json": {
+      "sha256": "5c54184bd4bc871f00c9fdc88f78f11f8e817f9fcb878c194ab08b9f2a52fb2b",
+      "bytes": 69875
+    }
+  },
+  "raw_bases": {
+    "POST-GATE-ARCHIVES.json": "tests/native/r15-r18-final-evidence/final-review-c14",
+    "POST-GATE-MACHO.json": "tests/native/r15-r18-final-evidence/final-review-c14"
+  },
+  "classification": "Only ar mtime, LC_UUID, N_OSO times and correctly derived CodeDirectory page hashes differ; all code/data/section payloads and signature policy remain identical.",
+  "independently_classified": true
+}

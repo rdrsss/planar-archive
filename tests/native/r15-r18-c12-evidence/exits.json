@@ -1,0 +1,10 @@
+{
+  "private_mutant_link": 0,
+  "superseded_overstrict_mutant_harness": 1,
+  "final_selected_composition_mutant_harness": 0,
+  "actual_final_script_mutant": 1,
+  "full_frozen_c10_mutant": 0,
+  "draft_debug_ctest": 0,
+  "final_debug_ctest": 0,
+  "final_release_ctest": 0
+}

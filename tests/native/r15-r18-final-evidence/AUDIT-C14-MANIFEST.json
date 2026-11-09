@@ -1,0 +1,184 @@
+{
+  "scope": "Independent final C01-C15 integrated review. Exact initially inspected staged snapshot retained; coordinator closing-record restage/final Git-index recheck is separate to avoid recursive manifest/index binding. No product/build/test execution by this auditor.",
+  "disposition": "approve bounded integrated candidate; exact closing-record restage and final index recheck required before authorized signed-off local commit",
+  "original_relative_base": "tests/native/r15-r18-final-evidence/final-review-c14",
+  "base_head": "ae02a12bf77c6b72d3060253dd47800c645796a7",
+  "branch": "dev/planar-v2-vernacular",
+  "report": {
+    "path": "docs/vernacular/rounds/V5-02-R15-R18-FINAL-ACCEPTANCE-C14.md",
+    "sha256": "a6500c71e4de99117473af2068599d82994b5962d10db11de9f5941e467e2814",
+    "bytes": 15265
+  },
+  "summary": {
+    "full_platform_configurations": 4,
+    "registered_passed_each": 1844,
+    "skips_each": 0,
+    "host_format_doxygen_files": 250,
+    "frozen_src_files": 272,
+    "engine_files": 179,
+    "product_inputs": 190,
+    "current_raw_artifact_matches": 8927,
+    "exact_metadata_only_artifact_changes": 114,
+    "unexplained_artifact_changes": 0,
+    "c13_normal_cases_each": 509,
+    "c13_normal_assertions_each": 87118,
+    "c13_measurement_rows": 31,
+    "c15_registered_focus_executions": 4,
+    "c15_harness_scenarios": 10,
+    "reviewed_staged_paths": 300,
+    "reviewed_compact_paths": 77,
+    "reviewed_compact_original_copies": 27,
+    "original_backup_files": 285,
+    "original_inverse_or_explicit_revision_files": 284,
+    "temp_inverse_records": 14
+  },
+  "qualification": "C13 actual post-engine-edit normal/raised measurements carry only within exact measured-component scope and C14 explicit metadata normalization. C14 complete platform gates retain tested-original raw source; only two exact C15 Python whitespace pairs have independent AST/token/compiled-code identity and focused-host qualification. No fresh C15 full gate, Linux execution, raw current/Linux context equality or measurement execution is claimed.",
+  "limits": [
+    "R19 real previously used project/spec remains unselected; fixtures do not certify it.",
+    "Linux aarch64 only; x86_64 not covered.",
+    "Conditional human policy and deferred composition/model-grouping experiments remain unaccepted.",
+    "No exhaustive absence-of-bugs guarantee or installation/publication/push/merge authority."
+  ],
+  "files": {
+    "audit_calibration.py": {
+      "sha256": "7501670f879cf51c0d8a98d4062141a6ab2901ab89dac3619ca6d2fc587d55ed",
+      "bytes": 11228
+    },
+    "calibration-checker-provenance.json": {
+      "sha256": "22b1252254866afe7267b6cbc44b36bcb59c06c7577a599f262b814adbc77ec5",
+      "bytes": 449
+    },
+    "independent-c14-calibration-audit.json": {
+      "sha256": "661efc3e466dbba9cec10915476d810243046bc1e9882758fb60969adc0c9bf0",
+      "bytes": 1538
+    },
+    "audit_current.py": {
+      "sha256": "2ce113f1eb348c3af599b63131991ef7c1f7290800d6e4a34523ee7273e7723d",
+      "bytes": 7173
+    },
+    "independent-c14-current-audit.json": {
+      "sha256": "bdc540557dbc674b6a588a7f9bb4741524953be7332b03248164434e55209cd7",
+      "bytes": 19766
+    },
+    "audit_archive_overlay.py": {
+      "sha256": "33cc5a418bbdb1e2bf536c4d9c741550b2a9100d93047bfe03cfb583ae6abc37",
+      "bytes": 2784
+    },
+    "post-gate-archive-overlay.json": {
+      "sha256": "df6a92c5f4370cb8222d445e745f7db43da08315d14cbb77df89446f3dea595b",
+      "bytes": 234063
+    },
+    "audit_macho_overlay.py": {
+      "sha256": "2de9f28d721bb0934123ef71842084c162869fe657101bfe99e9e63da1d9cd83",
+      "bytes": 6211
+    },
+    "post-gate-runtime-macho-overlay.json": {
+      "sha256": "5c54184bd4bc871f00c9fdc88f78f11f8e817f9fcb878c194ab08b9f2a52fb2b",
+      "bytes": 69875
+    },
+    "audit_normalized_current.py": {
+      "sha256": "0fd9a684adcdf4d763ebda4822aba40d71a82ada800970b70a63a57ab812a393",
+      "bytes": 3057
+    },
+    "post-gate-normalized-current-audit.json": {
+      "sha256": "3971e54050b1953ad66933d8ec4df9663a483b81e5124ec3ac3b42b120c67396",
+      "bytes": 1026
+    },
+    "audit_retention.py": {
+      "sha256": "a01e7e5089bca19c857c2fcee18275b25beae37d5593899a4bf81f8ce1bf398d",
+      "bytes": 2665
+    },
+    "independent-retention-audit.json": {
+      "sha256": "bd6cc646517620818ca814e9205940c21e86145ab53455b23e6c58204601af0d",
+      "bytes": 1384
+    },
+    "audit_historical_bindings.py": {
+      "sha256": "1ebaece54ec223a6d720e39d0b8bb9e6c3b596808d2e27916ac32f369fde34be",
+      "bytes": 3214
+    },
+    "independent-historical-binding-audit.json": {
+      "sha256": "d93bef9559fecfc67edeeb652acb403073c41934b620961f9118f3b669586629",
+      "bytes": 506
+    },
+    "audit_gates.py": {
+      "sha256": "14ff6fe7d508e2dfe7b43505abeaa564048d8f9279c5536e0f0fc444c55df662",
+      "bytes": 4690
+    },
+    "host-record-audit.json": {
+      "sha256": "eec2c8a7c5557b5ee7bbf54a465720d204c9038c6800775572809d7e559e4cef",
+      "bytes": 338854
+    },
+    "linux-record-audit.json": {
+      "sha256": "c188c0d7ee8ac335bb7bdd0de7e9f1a687aa8cda89f50e1a0786e8a290bd0d19",
+      "bytes": 339382
+    },
+    "audit_c15.py": {
+      "sha256": "8b69b930474743275f655337bc7c709017ed892e0d033ba8b0c18191705515b2",
+      "bytes": 4864
+    },
+    "c15-integrated-audit.json": {
+      "sha256": "c35f42fd544a7c377193591c1f496165350b160bf5e7c0deda5dc4c1212c0ad4",
+      "bytes": 2784
+    },
+    "audit_publication.py": {
+      "sha256": "038957a4eca52c0372faad6cfc57aeed7cae65c37c5e45776edd96119ba94e8c",
+      "bytes": 10925
+    },
+    "final-compact-binding-audit.json": {
+      "sha256": "2f8706637fceb538b406b38ea273ea76ac1a22d7d5a940c0071a2ef22e571d90",
+      "bytes": 242
+    },
+    "source-frozen-current.json": {
+      "sha256": "3090e32ac5a676a55bdd01c34070e6279e0908728ff7fe3e125532db3e7b926d",
+      "bytes": 29920
+    },
+    "accepted-stage/CLOSING-REVISIONS.json": {
+      "sha256": "ab0c33f75c541f8d04365d5a3850d3aa82ccf39244b8dd7fc5dcb510c108da1a",
+      "bytes": 4592
+    },
+    "accepted-stage/COMPACT-COPIES.json": {
+      "sha256": "15182e3943bd9b462198d1060e962ac044cac24c975febfd38fa51dcaa9d197d",
+      "bytes": 10879
+    },
+    "accepted-stage/RECORD-SNAPSHOTS.json": {
+      "sha256": "72f27a55d8de25594094b81983871f66ff8055f7bea3a155932cf063e42dcb22",
+      "bytes": 2177
+    },
+    "accepted-stage/ROOT-MANIFEST.json": {
+      "sha256": "5a1b25a7982a08c2c008ddb964d19b105e9ffe3c5535798d018a7abdc84afb24",
+      "bytes": 27121
+    },
+    "accepted-stage/SELECTION.json": {
+      "sha256": "d7aee8d8faf933cb8086eefeda09a33162c6d9a3303640f545912f5fec6594f3",
+      "bytes": 21853
+    },
+    "accepted-stage/current-records/docs/vernacular/implementation.md": {
+      "sha256": "f09e1676a6eeb185a7d1ca2203065a1b8c32ccc1bf3c06b8edbdeaad703ac460",
+      "bytes": 57822
+    },
+    "accepted-stage/current-records/docs/vernacular/roadmap.md": {
+      "sha256": "fe7a90370702185d9d9e8fc128f9cf8928738a6d1251c84fc21ccf8c5e18ae17",
+      "bytes": 39803
+    },
+    "accepted-stage/current-records/docs/vernacular/rounds/V5-02-R15-R18-FINAL-ACCEPTANCE-C14.md": {
+      "sha256": "6f1f6610e4cbc4f847c521a1c3ec652a37b22eb8ecbb141c99eaee2375174143",
+      "bytes": 13070
+    },
+    "accepted-stage/current-records/docs/vernacular/rounds/V5-02-R15-R18-FINAL-GATES.md": {
+      "sha256": "32ba170761774b3e088e2330a9f5e5a3fea9b28d713546e28c6fe43dd22112ed",
+      "bytes": 7967
+    },
+    "accepted-stage/current-records/tests/native/r15-r18-final-evidence/COMPACT-COPIES.json": {
+      "sha256": "15182e3943bd9b462198d1060e962ac044cac24c975febfd38fa51dcaa9d197d",
+      "bytes": 10879
+    },
+    "accepted-stage/current-records/tests/native/r15-r18-final-evidence/README.md": {
+      "sha256": "45bca958fa12997e3a1c688f7f8f275d6490166001aa4061bb1bfa86ed1a9362",
+      "bytes": 3420
+    },
+    "accepted-stage/publication-audit.json": {
+      "sha256": "7856e080341299360f27fcd781c85e54ccd53f97bfb3c73ed9f48031c2a77226",
+      "bytes": 70215
+    }
+  }
+}

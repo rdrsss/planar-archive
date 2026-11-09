@@ -12,7 +12,7 @@ manifest = {}
 # Relocated declarations live in the real storage_types and history_codec modules; the cloned namespace re-exports them by name,
 # and aliases the real types namespace used by the cloned storage declarations.
 INJECTED = ('read_guard', 'read_gate_status', 'ledger_format', 'ledger_metadata', 'ledger_access', 'history_head',
-            'revision_row', 'event_row', 'request_row', 'event_page', 'format_error_code', 'format_error',
+            'revision_row', 'event_row', 'request_row', 'event_page', 'execution_event_detail', 'format_error_code', 'format_error',
             'record_reference', 'stored_record', 'event_references', 'connection')
 USING = ''.join(f'\nusing ::planar::engine::ledger::{n};' for n in INJECTED) + '\nnamespace types = ::planar::engine::ledger::types;'
 # The seam interface imports storage_types only, so it cannot name the storage-only declarations.

@@ -848,7 +848,8 @@ TEST_CASE("X07 C02 post-preparation input change plus winner commit still refuse
 }
 TEST_CASE("X07 C02 history family ledger receipt stays strict at the built-in admission site", "[x07c02][profile_acceptance]") {
   profile_fixture         f;
-  command_history_options options{f.ledger_path.string(), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+  command_history_options options{f.ledger_path.string(), std::nullopt, std::nullopt, std::nullopt,
+                                  std::nullopt,           std::nullopt, std::nullopt};
   auto                    owner = profile_invocation::open_with_profile(f.profile.string(), options);
   REQUIRE(owner);
   append_to(f.ledger_path, "x");

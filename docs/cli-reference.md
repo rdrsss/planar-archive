@@ -47,7 +47,8 @@ recorded result; reusing the ID with a different request refuses.
 `--run` takes the claim token; `--run-id` takes its numeric run identifier.
 `--expect-fp` and `--since` take `xxh3_128:` digests. `release --reason` is
 `released` or `interrupted`. Check roots are directory paths; recovery roots use
-`logical_id=directory`. Check scratch must be outside both checked roots.
+`logical_id=directory`. The current, base and scratch directories must be physically disjoint; aliases and
+ancestor overlap are refused.
 
 Checkpoints are unverified session notes and do not complete work. `refresh`
 acknowledges current work for the same run; `recover` reads retained context
@@ -61,7 +62,10 @@ the response distinguishes recorded evidence from a completed role. A stopped
 check leaves a durable reservation: once the driver confirms the process stopped,
 `check-recover` interrupts it without completing the role. A reviewer submits a
 JSON verdict against exact output and policy identities; current rejections can
-admit repairs or open a blocker at the job's review limit.
+admit repairs or open a blocker at the job's review limit. Review readiness requires
+every targeted worker to be done; retained completion evidence alone does not
+make an active worker run reviewable. Recreated reviewer roles cannot inherit
+approval from an earlier generation.
 
 Checks run trusted registry commands with bounded time, output, cwd and environment
 and no OS sandbox; escaping descendants are not tracked.
@@ -130,12 +134,14 @@ HOME fallback. Invalid bare names or environment give usage (exit 2).
 After catalog validation and before command services, native preparation validates
 selected private paths and snapshots cwd once if any is relative. All-absolute
 invocations need no cwd lookup. Paths retain their spelling for physical render
-traversal; a separate lexical absolute target is available for future load intent.
+traversal; load uses the separate lexical absolute target in its retained request intent.
 Invalid path text gives `path_denied` (exit 3); 64 MiB input/join/normalized limits
 give `resource_limit` (exit 3). Cwd lookup failure gives redacted `io` (exit 4).
-These C behaviors are an implementation candidate pending independent review.
-Workspace names are currently supported by render only. Init syntax remains
-explicit ledger creation; future load intent tests do not deliver load/replay.
+Workspace naming applies to commands accepting a workspace selector, including
+render, load and status's working-declaration options. Init creates an explicit
+ledger. See the [workspace contract](vernacular/command-contract.md) and
+[load contract](vernacular/load-command-contract.md) for selection, replay and
+per-command option boundaries.
 
 Without capture, source/base files are not scanned and no output identity is
 emitted. The source directory must still exist and satisfy root confinement.
@@ -354,8 +360,11 @@ profile is not accessed.
   public usage bytes; preparation semantic errors exit by code; malformed
   trusted payloads are redacted to internal protocol.
 
-Public `init` creates a format2 ledger. The design record is
-[x07-addendum](vernacular/x07-addendum.md).
+Public `init` creates a format3 ledger under the
+[execution contract](vernacular/execution-contract.md#ex-1-format3).
+The [X07 addendum](vernacular/x07-addendum.md) records the earlier format2
+profile cutover; supported recorded-format readers remain separate from the
+current creation format.
 
 `with-profile` is the only profile selector. No environment variable selects a
 profile, and Planar does not discover a `stdlib.d` directory in the working

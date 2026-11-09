@@ -20,16 +20,31 @@ namespace {
 namespace fs        = std::filesystem;
 namespace authoring = planar::cmd::authoring;
 
-/// Five-command HEAD root help, typed independently of the product.
+/// Current production root help, typed independently of the product.
 std::string ra01_head_help() {
   return "Usage: planar render --workspace FILE --registry FILE --root ID=DIRECTORY --job ID --role ID\n"
          "Optional: --capture-outputs --base-root ID=DIRECTORY --observations FILE --budget-bytes N\n"
          "planar init --ledger FILE --workspace-id ID\n"
          "planar history --ledger FILE [--after-event ID] [--limit N]\n"
-         "  or --revision ID | --request-id ID | --at-event ID\n"
+         "  or --revision ID | --request-id ID | --at-event ID | --event ID\n"
          "planar export --ledger PATH --revision ID --target NEW_DIRECTORY\n"
          "planar load --ledger PATH --workspace FILE_OR_NAME --registry FILE --expect-revision ID_OR_NONE --request-id ID "
          "--actor TEXT\n"
+         "planar activate --ledger PATH --job ID --expect-revision ID_OR_NONE --expect-job JOB_OR_NONE --request-id ID --actor "
+         "TEXT\n"
+         "planar status --ledger PATH [--role ID | --request-id ID] [--workspace FILE_OR_NAME --registry FILE]\n"
+         "planar preview --ledger PATH --role ID [--since RENDER_FP]\n"
+         "planar claim --ledger PATH --job ID --role ID --request-id ID --actor TEXT [--provenance FILE]\n"
+         "planar takeover --ledger PATH --job ID --role ID --run-id ID --request-id ID --actor TEXT [--provenance FILE]\n"
+         "planar refresh --ledger PATH --run TOKEN --expect-fp WORK_FP --request-id ID --actor TEXT [--observations FILE]\n"
+         "planar checkpoint --ledger PATH --run TOKEN --observations FILE --request-id ID --actor TEXT\n"
+         "planar release --ledger PATH --run TOKEN --reason REASON --request-id ID --actor TEXT [--observations FILE] "
+         "[--provenance FILE]\n"
+         "planar recover --ledger PATH --role ID [--root ID=DIRECTORY --base-root ID=DIRECTORY]\n"
+         "planar check --ledger PATH --run TOKEN --root DIRECTORY --base-root DIRECTORY --scratch DIRECTORY --request-id ID "
+         "--actor TEXT [--provenance FILE]\n"
+         "planar check-recover --ledger PATH --run-id ID --reservation ID --confirm-stopped true --request-id ID --actor TEXT\n"
+         "planar verdict --ledger PATH --run TOKEN --verdict FILE --request-id ID --actor TEXT\n"
          "planar --help\n";
 }
 /// The six RA-1 lines in contract order.
@@ -39,7 +54,8 @@ std::string ra01_six_lines() {
          "planar ingest --workspace FILE_OR_NAME --registry FILE\n"
          "planar explain-rejection --diagnostic FILE\n"
          "planar observe --from DIRECTORY\n"
-         "planar orchestrator --workspace FILE_OR_NAME --registry FILE --job ID\n";
+         "planar orchestrator --workspace FILE_OR_NAME --registry FILE --job ID\n"
+         "  or --ledger PATH\n";
 }
 std::string ra01_final_line() {
   return "planar --help\n";
@@ -421,6 +437,8 @@ TEST_CASE("RA01-B1 each authoring family binds exactly its RA-1 option names", "
   for (const auto& family : ra01_families()) {
     CAPTURE(family.name);
     auto expected = family.options;
+    if (family.name == "orchestrator")
+      expected.push_back("--ledger");
     std::ranges::sort(expected);
     CHECK(family.bound() == expected);
     CHECK(family.parse(ra01_unit_args(family)) == ra01_unit_expected(family));
@@ -790,6 +808,7 @@ TEST_CASE("RA01-B1 only workspace verbs read the workspace environment", "[autho
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), directory, counts);
     authoring::inputs values;
+    values.job        = "combined";
     values.workspace  = "ws";
     values.registry   = s.registry.string();
     const auto result = authoring::prepare_inputs(which, values, io);
@@ -800,6 +819,7 @@ TEST_CASE("RA01-B1 only workspace verbs read the workspace environment", "[autho
     ra01_counts       file_counts;
     auto              file_io = ra01_readers(s.root.string(), directory, file_counts);
     authoring::inputs file_values;
+    file_values.job       = "combined";
     file_values.workspace = s.workspace.string();
     file_values.registry  = s.registry.string();
     CHECK(authoring::prepare_inputs(which, file_values, file_io).has_value());
@@ -809,6 +829,7 @@ TEST_CASE("RA01-B1 only workspace verbs read the workspace environment", "[autho
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), directory, counts);
     authoring::inputs values;
+    values.job        = "combined";
     values.workspace  = "ws";
     values.diagnostic = s.diagnostic.string();
     CHECK(authoring::prepare_inputs(authoring::verb::explain_rejection, values, io).has_value());
@@ -820,6 +841,7 @@ TEST_CASE("RA01-B1 only workspace verbs read the workspace environment", "[autho
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), directory, counts);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = "ws";
     values.from      = s.observations.string();
     CHECK(authoring::prepare_inputs(authoring::verb::observe, values, io).has_value());
@@ -835,6 +857,7 @@ TEST_CASE("RA01-B1 stages read the cwd at most once and only for relative paths"
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = s.workspace.string();
     values.registry  = s.registry.string();
     CHECK(authoring::prepare_inputs(authoring::verb::spec_prompt, values, io).has_value());
@@ -845,6 +868,7 @@ TEST_CASE("RA01-B1 stages read the cwd at most once and only for relative paths"
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job        = "combined";
     values.workspace  = "ws/workspace.lua";
     values.registry   = "registry.json";
     const auto result = authoring::prepare_inputs(which, values, io);
@@ -857,6 +881,7 @@ TEST_CASE("RA01-B1 stages read the cwd at most once and only for relative paths"
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = s.workspace.string();
     values.registry  = "registry.json";
     CHECK(authoring::prepare_inputs(authoring::verb::critique, values, io).has_value());
@@ -867,6 +892,7 @@ TEST_CASE("RA01-B1 stages read the cwd at most once and only for relative paths"
     ra01_counts       counts;
     auto              io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job  = "combined";
     values.from = "obs";
     CHECK(authoring::prepare_inputs(authoring::verb::observe, values, io).has_value());
     CHECK(counts.cwd == 1);
@@ -932,6 +958,7 @@ TEST_CASE("RA01-B1 explicit path stage keeps the existing messages", "[authoring
   for (const auto& r : rows) {
     CAPTURE(r.field, r.value);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = s.workspace.string();
     values.registry  = s.registry.string();
     if (r.field == "diagnostic")
@@ -1001,6 +1028,7 @@ TEST_CASE("RA01-B1 missing leaf remap applies only to diagnostic and from", "[au
   for (const auto& r : rows) {
     CAPTURE(r.field);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = s.workspace.string();
     values.registry  = s.registry.string();
     if (r.field == "diagnostic")
@@ -1021,6 +1049,7 @@ TEST_CASE("RA01-B1 missing leaf remap applies only to diagnostic and from", "[au
   // A leaf below a regular file fails symlink_status with an error code; it is still an absent leaf.
   {
     authoring::inputs values;
+    values.job        = "combined";
     values.diagnostic = (s.registry / "leaf").string();
     const auto result = authoring::prepare_inputs(authoring::verb::explain_rejection, values, io);
     REQUIRE_FALSE(result.has_value());
@@ -1030,6 +1059,7 @@ TEST_CASE("RA01-B1 missing leaf remap applies only to diagnostic and from", "[au
   fs::create_directories(s.root / "dir.json");
   {
     authoring::inputs values;
+    values.job        = "combined";
     values.diagnostic = (s.root / "dir.json").string();
     const auto result = authoring::prepare_inputs(authoring::verb::explain_rejection, values, io);
     REQUIRE_FALSE(result.has_value());
@@ -1037,6 +1067,7 @@ TEST_CASE("RA01-B1 missing leaf remap applies only to diagnostic and from", "[au
   }
   {
     authoring::inputs values;
+    values.job        = "combined";
     values.from       = s.registry.string();
     const auto result = authoring::prepare_inputs(authoring::verb::observe, values, io);
     REQUIRE_FALSE(result.has_value());
@@ -1056,6 +1087,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
       ra01_counts       counts;
       const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
       authoring::inputs values;
+      values.job        = "combined";
       values.workspace  = s.workspace.string();
       values.registry   = bad;
       const auto result = authoring::prepare_inputs(which, values, io);
@@ -1069,6 +1101,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
       ra01_counts       counts;
       const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
       authoring::inputs values;
+      values.job        = "combined";
       values.workspace  = bad;
       values.registry   = s.registry.string();
       const auto result = authoring::prepare_inputs(which, values, io);
@@ -1082,6 +1115,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
       ra01_counts       counts;
       const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
       authoring::inputs values;
+      values.job        = "combined";
       values.workspace  = "ws/workspace.lua";
       values.registry   = "registry.json";
       const auto result = authoring::prepare_inputs(which, values, io);
@@ -1093,6 +1127,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job        = "combined";
     values.diagnostic = bad;
     const auto result = authoring::prepare_inputs(authoring::verb::explain_rejection, values, io);
     REQUIRE_FALSE(result.has_value());
@@ -1105,6 +1140,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job        = "combined";
     values.from       = bad;
     const auto result = authoring::prepare_inputs(authoring::verb::observe, values, io);
     REQUIRE_FALSE(result.has_value());
@@ -1116,6 +1152,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job  = "combined";
     values.from = "from-dir";
     (void)authoring::prepare_inputs(authoring::verb::observe, values, io);
     CHECK(counts.cwd == 1);
@@ -1124,6 +1161,7 @@ TEST_CASE("RA01-B1 path text validation precedes the cwd read", "[authoring][ra0
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), (s.root / "wsdir").string(), counts);
     authoring::inputs values;
+    values.job        = "combined";
     values.diagnostic = "diag.json";
     CHECK(authoring::prepare_inputs(authoring::verb::explain_rejection, values, io).has_value());
     CHECK(counts.cwd == 1);
@@ -1138,6 +1176,7 @@ TEST_CASE("RA01-B1 workspace selector stage expands names and keeps files lexica
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), directory.string(), counts);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = "ws";
     values.registry  = s.registry.string();
     REQUIRE(authoring::prepare_inputs(authoring::verb::spec_prompt, values, io).has_value());
@@ -1150,6 +1189,7 @@ TEST_CASE("RA01-B1 workspace selector stage expands names and keeps files lexica
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), directory.string(), counts);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = "sub/ws.lua";
     values.registry  = s.registry.string();
     REQUIRE(authoring::prepare_inputs(authoring::verb::ingest, values, io).has_value());
@@ -1163,9 +1203,37 @@ TEST_CASE("RA01-B1 workspace selector stage expands names and keeps files lexica
     ra01_counts       counts;
     const auto        io = ra01_readers(s.root.string(), directory.string(), counts);
     authoring::inputs values;
+    values.job       = "combined";
     values.workspace = (s.root / "nope" / "workspace.lua").string();
     values.registry  = s.registry.string();
     REQUIRE(authoring::prepare_inputs(authoring::verb::orchestrator, values, io).has_value());
     CHECK(values.workspace == (s.root / "nope" / "workspace.lua").string());
   }
+}
+
+TEST_CASE("C03 orchestrator accepts exactly ledger or complete workspace group", "[authoring][ra01]") {
+  auto parse = [](std::vector<std::string> args) {
+    CLI::App root{"", "planar"};
+    root.set_help_flag();
+    authoring::orchestrator_options options;
+    authoring::attach_orchestrator(root, options);
+    args.insert(args.begin(), "orchestrator");
+    std::ranges::reverse(args);
+    root.parse(args);
+    return options;
+  };
+  auto ledger = parse({"--ledger", "ledger.db"});
+  CHECK(ledger.ledger == "ledger.db");
+  CHECK(ledger.workspace.empty());
+  auto workspace = parse({"--workspace", "workspace.lua", "--registry", "registry.json", "--job", "job"});
+  CHECK(workspace.workspace == "workspace.lua");
+  CHECK(workspace.registry == "registry.json");
+  CHECK(workspace.job == "job");
+  CHECK(workspace.ledger.empty());
+  for (auto args : {std::vector<std::string>{}, std::vector<std::string>{"--workspace", "workspace.lua"},
+                    std::vector<std::string>{"--workspace", "workspace.lua", "--registry", "registry.json"},
+                    std::vector<std::string>{"--ledger", "ledger.db", "--job", "job"},
+                    std::vector<std::string>{"--ledger", "ledger.db", "--workspace", "workspace.lua", "--registry",
+                                             "registry.json", "--job", "job"}})
+    CHECK_THROWS_AS(parse(args), CLI::ParseError);
 }

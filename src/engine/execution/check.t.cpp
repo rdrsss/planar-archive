@@ -97,3 +97,79 @@ TEST_CASE("R17-C scratch overlap refused before any child or reservation") {
   REQUIRE_FALSE(prepared);
   REQUIRE(prepared.error().code == "path_denied");
 }
+TEST_CASE("C02 checked roots refuse identity ancestry and path aliases") {
+  temporary t;
+  std::filesystem::create_directory(t.path / "root" / "nested");
+  std::filesystem::create_directory_symlink(t.path / "root", t.path / "alias");
+  for (const auto& [root, base] :
+       std::vector<std::pair<std::filesystem::path, std::filesystem::path>>{{t.path / "root", t.path / "root"},
+                                                                            {t.path / "root", t.path / "root" / "nested"},
+                                                                            {t.path / "root" / "nested", t.path / "root"},
+                                                                            {t.path / "root", t.path / "alias" / "nested"}}) {
+    auto prepared = prepare_check(plan(), root, base, t.path / "scratch");
+    CHECK_FALSE(prepared);
+    if (!prepared)
+      CHECK(prepared.error().code == "path_denied");
+  }
+}
+TEST_CASE("C02 stopped children retain normal TERM handler exit status") {
+  for (const bool overflow : {false, true}) {
+    temporary t;
+    auto      p =
+        plan(overflow ? "trap 'exit 7' TERM; while :; do printf '0123456789'; done" : "trap 'exit 7' TERM; while :; do :; done");
+    auto prepared = prepare_check(p, t.path / "root", t.path / "base", t.path / "scratch");
+    REQUIRE(prepared);
+    auto result = run_checks(*prepared, 1);
+    REQUIRE(result);
+    REQUIRE(result->evidence.size() == 2);
+    const auto& child = result->evidence.back();
+    REQUIRE(child.reason == (overflow ? "output_limit" : "timeout"));
+    CHECK(child.exit_status == 7);
+  }
+}
+TEST_CASE("C06 check refusals preserve typed context and sorted producer order") {
+  temporary t;
+  auto      change = [](const value_ptr& source, std::string key, std::string_view json) -> value_ptr {
+    auto decoded = codec_decode(json);
+    REQUIRE(decoded);
+    auto copy                    = std::make_shared<value>(*source);
+    copy->fields[std::move(key)] = *decoded;
+    return copy;
+  };
+  auto overlap = prepare_check(plan(), t.path / "root", t.path / "base", t.path / "root");
+  REQUIRE_FALSE(overlap);
+  CHECK(overlap.error().field == "scratch");
+  auto checks                = std::make_shared<value>(*plan()->fields.at("checks"));
+  checks->items[0]           = change(checks->items[0], "environment", R"({"PLANAR_FORBIDDEN":"x"})");
+  auto reserved              = std::make_shared<value>(*plan());
+  reserved->fields["checks"] = checks;
+  auto registry              = prepare_check(reserved, t.path / "root", t.path / "base", t.path / "scratch");
+  REQUIRE_FALSE(registry);
+  CHECK(registry.error().field == "registry");
+  for (const auto path : {"", "missing", "a"}) {
+    std::ofstream(t.path / "root" / "a") << "different";
+    auto contract = change(plan(), "contracts", std::format(R"([{{"id":"contract","path":"{}","bytes":"accepted"}}])", path));
+    auto refused  = prepare_check(contract, t.path / "root", t.path / "base", t.path / "scratch");
+    REQUIRE_FALSE(refused);
+    CHECK(refused.error().code == "revision_conflict");
+    CHECK(refused.error().contract_delivery);
+  }
+  auto producers = change(
+      plan(), "producers",
+      R"([{"work":"z","paths":["z"],"completion_output":"wrong-z"},{"work":"b","paths":["b"],"completion_output":"wrong-b"}])");
+  auto mismatch = prepare_check(producers, t.path / "root", t.path / "base", t.path / "scratch");
+  REQUIRE_FALSE(mismatch);
+  CHECK(mismatch.error().work == "b");
+  producers =
+      change(plan(), "producers", R"([{"work":"z","paths":["z"],"completion_output":"none"},{"work":"b","paths":["b"]}])");
+  REQUIRE(prepare_check(producers, t.path / "root", t.path / "base", t.path / "scratch"));
+  auto ready = prepare_check(plan(), t.path / "root", t.path / "base", t.path / "scratch");
+  REQUIRE(ready);
+  std::ofstream(t.path / "scratch" / "planar-check.91.1") << "preexisting";
+  auto failed = run_checks(*ready, 91);
+  REQUIRE_FALSE(failed);
+  CHECK(failed.error().code == "io");
+  CHECK(failed.error().field == "scratch");
+  CHECK(failed.error().message == "Cannot create check scratch directory");
+  CHECK(std::filesystem::is_regular_file(t.path / "scratch" / "planar-check.91.1"));
+}

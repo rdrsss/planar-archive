@@ -85,20 +85,71 @@ std::vector<value_ptr> history_options(std::string id = "decimal") {
           opt("--at-event", id),         opt("--after-event", id), opt("--limit", "decimal")};
 }
 mutable_value catalog() {
-  return obj(
-      {{"version", num(2)},
-       {"commands",
-        arr({command("export", {opt("--ledger", "text", true), opt("--target", "text", true), opt("--revision", "decimal", true)},
-                     "export_source_v1"),
-             command("history", history_options(), "read_history_v1"),
-             command("init", {opt("--ledger", "text", true), opt("--workspace-id", "text", true)}, "initialize_ledger_v1"),
-             command("load",
-                     {opt("--ledger", "text", true), opt("--workspace", "text", true), opt("--registry", "text", true),
-                      opt("--expect-revision", "text", true), opt("--request-id", "text", true), opt("--actor", "text", true)},
-                     "accept_load_v1"),
-             command("render", role(), "render_capture_v1")})},
-       {"shapes", arr()},
-       {"projections", arr()}});
+  std::vector<value_ptr> commands;
+  auto add = [&](std::string name, std::vector<value_ptr> options, std::vector<std::string> caps, std::string response = "",
+                 std::string handler = "") {
+    auto                   e = command(name, std::move(options), "");
+    auto                   d = descriptor(e);
+    std::vector<value_ptr> values;
+    std::ranges::sort(caps);
+    for (auto& cap : caps)
+      values.push_back(str(cap));
+    d->fields["capabilities"] = arr(std::move(values));
+    if (!response.empty())
+      d->fields["response_kind"] = str(response);
+    if (!handler.empty())
+      d->fields["handler_id"] = str(handler);
+    commands.push_back(e);
+  };
+  auto required = [](std::initializer_list<std::string_view> names) {
+    std::vector<value_ptr> out;
+    for (auto name : names)
+      out.push_back(opt(std::string(name), "text", true));
+    return out;
+  };
+  add("render", role(), {"render_capture_v1"});
+  auto history = history_options();
+  history.push_back(opt("--event", "decimal"));
+  add("history", history, {"read_history_v1"});
+  add("init", required({"--ledger", "--workspace-id"}), {"initialize_ledger_v1"});
+  add("export", {opt("--ledger", "text", true), opt("--target", "text", true), opt("--revision", "decimal", true)},
+      {"export_source_v1"});
+  add("load", required({"--ledger", "--workspace", "--registry", "--expect-revision", "--request-id", "--actor"}),
+      {"accept_load_v1"});
+  add("activate", required({"--ledger", "--job", "--expect-revision", "--expect-job", "--request-id", "--actor"}),
+      {"execution_commit_v1"});
+  add("status", {opt("--ledger", "text", true), opt("--role"), opt("--request-id"), opt("--workspace"), opt("--registry")},
+      {"draft_capture_v1", "execution_read_v1"});
+  add("preview", {opt("--ledger", "text", true), opt("--role", "text", true), opt("--since")}, {"execution_read_v1"});
+  for (auto name : {"claim", "takeover"}) {
+    auto o = required({"--ledger", "--job", "--role", "--request-id", "--actor"});
+    o.push_back(opt("--provenance"));
+    if (std::string_view(name) == "takeover")
+      o.push_back(opt("--run-id", "text", true));
+    add(name, o, {"execution_commit_v1", "provenance_read_v1"}, "claim_v1");
+  }
+  for (auto name : {"refresh", "checkpoint", "release"}) {
+    auto o = required({"--ledger", "--run", "--request-id", "--actor"});
+    o.push_back(opt("--observations", "text", std::string_view(name) == "checkpoint"));
+    if (std::string_view(name) == "refresh")
+      o.push_back(opt("--expect-fp", "text", true));
+    if (std::string_view(name) == "release") {
+      o.push_back(opt("--reason", "text", true));
+      o.push_back(opt("--provenance"));
+    }
+    add(name, o, {"execution_commit_v1"});
+  }
+  add("recover", {opt("--ledger", "text", true), opt("--role", "text", true), opt("--root"), opt("--base-root")},
+      {"execution_read_v1"});
+  auto checks = required({"--ledger", "--run", "--root", "--base-root", "--scratch", "--request-id", "--actor"});
+  checks.push_back(opt("--provenance"));
+  add("check", checks, {"check_run_v1", "execution_commit_v1", "provenance_read_v1"});
+  add("check-recover", required({"--ledger", "--run-id", "--reservation", "--confirm-stopped", "--request-id", "--actor"}),
+      {"execution_commit_v1"}, "check_v1", "shipped.check_recover.v1");
+  add("verdict", required({"--ledger", "--run", "--verdict", "--request-id", "--actor"}),
+      {"execution_commit_v1", "verdict_read_v1"}, "verdict_response_v1");
+  std::ranges::sort(commands, {}, [](const auto& e) { return descriptor(e)->fields.at("name")->string; });
+  return obj({{"version", num(2)}, {"commands", arr(commands)}, {"shapes", arr()}, {"projections", arr()}});
 }
 constexpr std::array<std::string_view, 2> shipped{"planar/json.lua", "planar/commands.lua"};
 constexpr std::array<std::string_view, 1> external{"ext/a.lua"};
@@ -153,7 +204,7 @@ TEST_CASE("replacement.effective catalog roundtrip and immutable aliases") {
   REQUIRE(decoded->bytes() == bytes);
 }
 TEST_CASE("replacement.effective catalog mandatory shipped signatures") {
-  for (std::size_t i = 0; i < 5; ++i) {
+  for (std::size_t i = 0; i < 17; ++i) {
     auto v = catalog();
     at(v, "commands")->items.erase(at(v, "commands")->items.begin() + i);
     refused(v);
@@ -165,6 +216,22 @@ TEST_CASE("replacement.effective catalog mandatory shipped signatures") {
     v                                                                  = catalog();
     at(descriptor(at(v, "commands")->items[i]), "capabilities")->items = {str("history_read_v1")};
     refused(v);
+    for (bool extra : {false, true}) {
+      v         = catalog();
+      auto caps = at(descriptor(at(v, "commands")->items[i]), "capabilities");
+      if (extra)
+        caps->items.push_back(str("zzz_extra_v1"));
+      else
+        caps->items.pop_back();
+      refused(v);
+      v            = catalog();
+      auto options = at(descriptor(at(v, "commands")->items[i]), "options");
+      if (extra)
+        options->items.push_back(opt("--zzz-extra"));
+      else
+        options->items.pop_back();
+      refused(v);
+    }
     auto count = at(descriptor(at(catalog(), "commands")->items[i]), "options")->items.size();
     for (std::size_t j = 0; j < count; ++j) {
       v                     = catalog();
@@ -407,7 +474,7 @@ TEST_CASE("replacement.effective catalog ordering and identity conflicts") {
   auto duplicate              = check(v);
   REQUIRE_FALSE(duplicate);
   REQUIRE(duplicate.error().code == catalog_error_code::identity_conflict);
-  for (auto name : {"with-profile", "history"}) {
+  for (auto name : {"with-profile", "history", "check", "check-recover", "verdict"}) {
     v                     = catalog();
     d                     = custom(v);
     at(d, "name")->string = name;
@@ -473,9 +540,9 @@ TEST_CASE("replacement.effective catalog count and canonical byte ceilings") {
   refused(v);
   // Populate enough individually valid help fields to reach exactly the aggregate byte boundary.
   v = catalog();
-  for (int i = 0; i < 59; ++i) {
+  for (int i = 0; i < 47; ++i) {
     auto e = command(std::format("z{:02}", i), {}, "", false);
-    for (int j = 0; j < 4; ++j)
+    for (int j = 0; j < 6; ++j)
       at(descriptor(e), "options")->items.push_back(opt(std::format("--x{}", j)));
     add_command(v, e);
   }
@@ -506,7 +573,7 @@ TEST_CASE("replacement.effective catalog count and canonical byte ceilings") {
   REQUIRE(r.error().code == catalog_error_code::resource_limit);
   // Exercise the full schema-node shape with tiny help, so bytes do not mask nodes.
   v = catalog();
-  for (int i = 0; i < 59; ++i) {
+  for (int i = 0; i < 47; ++i) {
     std::vector<value_ptr> options;
     for (int j = 0; j < 32; ++j)
       options.push_back(opt(std::format("--x{:02}", j)));
@@ -556,4 +623,110 @@ TEST_CASE("replacement.effective catalog malformed canonical and bounded trees")
   v->fields["shapes"] = v;
   refused(v);
   v->fields.erase("shapes");
+}
+
+namespace {
+// Independent documented feature cuts; never inferred from product implementation.
+mutable_value epoch_catalog(int epoch) {
+  const std::vector<std::string> order{"render",  "init",    "history", "export",        "load",    "activate",
+                                       "status",  "preview", "claim",   "takeover",      "refresh", "checkpoint",
+                                       "release", "recover", "check",   "check-recover", "verdict"};
+  auto                           v    = catalog();
+  auto                           rows = at(v, "commands");
+  std::erase_if(rows->items, [&](const auto& e) {
+    const auto name = at(descriptor(e), "name")->string;
+    return std::ranges::find(std::span(order.data(), static_cast<std::size_t>(epoch)), name) ==
+           std::span(order.data(), static_cast<std::size_t>(epoch)).end();
+  });
+  for (auto& e : rows->items) {
+    auto       d    = descriptor(e);
+    const auto name = at(d, "name")->string;
+    std::erase_if(at(d, "options")->items, [&](const auto& o) {
+      const auto option = at(o, "name")->string;
+      return (epoch == 5 && name == "history" && option == "--event") ||
+             (epoch == 10 && name == "preview" && option == "--since");
+    });
+  }
+  return v;
+}
+auto historical(const value_ptr& v) {
+  auto bytes = canonical_encode(v);
+  REQUIRE(bytes);
+  return decode_catalog(*bytes, shipped, external);
+}
+} // namespace
+TEST_CASE("C05 historical catalog feature cuts retain exact schemas") {
+  for (int epoch : {5, 10, 14, 16, 17}) {
+    INFO(epoch);
+    auto v = epoch_catalog(epoch);
+    REQUIRE(historical(v));
+    CHECK(static_cast<bool>(check(v)) == (epoch == 17));
+    for (std::size_t i = 0; i < at(v, "commands")->items.size(); ++i) {
+      for (auto field : {"family", "handler_id", "response_kind"}) {
+        auto malformed                                                     = epoch_catalog(epoch);
+        at(descriptor(at(malformed, "commands")->items[i]), field)->string = "wrong_v1";
+        CHECK_FALSE(historical(malformed));
+      }
+      auto malformed                                                             = epoch_catalog(epoch);
+      at(descriptor(at(malformed, "commands")->items[i]), "capabilities")->items = {str("history_read_v1")};
+      CHECK_FALSE(historical(malformed));
+      malformed                                                                = epoch_catalog(epoch);
+      at(at(at(malformed, "commands")->items[i], "owner"), "ordinal")->integer = 99;
+      CHECK_FALSE(historical(malformed));
+    }
+    auto malformed = epoch_catalog(epoch);
+    at(malformed, "commands")->items.push_back(at(malformed, "commands")->items.back());
+    CHECK_FALSE(historical(malformed));
+    malformed = epoch_catalog(epoch);
+    std::ranges::reverse(at(malformed, "commands")->items);
+    CHECK_FALSE(historical(malformed));
+    malformed = epoch_catalog(epoch);
+    add_command(malformed, command("unknown", {}, "render_capture_v1"));
+    CHECK_FALSE(historical(malformed));
+  }
+  for (int partial : {6, 9, 11, 15})
+    CHECK_FALSE(historical(epoch_catalog(partial)));
+  for (auto [epoch, name, option] : std::vector<std::tuple<int, std::string, std::string>>{
+           {5, "history", "--event"}, {10, "history", "--event"}, {10, "preview", "--since"}, {14, "preview", "--since"}}) {
+    auto v = epoch_catalog(epoch);
+    for (auto& e : at(v, "commands")->items)
+      if (at(descriptor(e), "name")->string == name) {
+        auto       options = at(descriptor(e), "options");
+        const auto removed = std::erase_if(options->items, [&](const auto& o) { return at(o, "name")->string == option; });
+        if (!removed)
+          options->items.push_back(opt(option, option == "--event" ? "decimal" : "text"));
+        std::ranges::sort(options->items, {}, [](const auto& o) { return at(o, "name")->string; });
+      }
+    CHECK_FALSE(historical(v));
+  }
+}
+TEST_CASE("C05 historical external namespaces do not inherit later reservations") {
+  for (auto [epoch, name] :
+       std::vector<std::pair<int, std::string>>{{5, "status"}, {5, "check"}, {10, "refresh"}, {14, "check"}, {16, "verdict"}}) {
+    INFO(epoch);
+    INFO(name);
+    auto v = epoch_catalog(epoch);
+    add_command(v, command(name, {}, "", false));
+    REQUIRE(historical(v));
+    CHECK_FALSE(check(v));
+    auto current = catalog();
+    // Name, family and handler collisions are independently closed in current admission.
+    auto d                  = custom(current);
+    at(d, "family")->string = name;
+    CHECK_FALSE(check(current));
+    current                     = catalog();
+    d                           = custom(current);
+    at(d, "handler_id")->string = "shipped." + name + ".v1";
+    CHECK_FALSE(check(current));
+  }
+}
+
+TEST_CASE("C08 historical handler pairing is independent of handler grammar") {
+  for (int epoch : {5, 10, 14, 16, 17}) {
+    INFO(epoch);
+    auto valid = epoch_catalog(epoch);
+    REQUIRE(historical(valid));
+    at(descriptor(at(valid, "commands")->items.front()), "handler_id")->string = "shipped.unbound_probe.v1";
+    CHECK_FALSE(historical(valid));
+  }
 }

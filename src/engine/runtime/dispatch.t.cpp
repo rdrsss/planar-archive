@@ -110,14 +110,14 @@ struct quota {
     std::vector<value_ptr> files;
     for (const auto& f : **snapshot)
       files.push_back(rec({{"path", str(f.path)}, {"bytes", str(f.bytes)}}));
-    auto bundle = rec(
-        {{"workspace", rec({{"file", str("workspace.lua")}, {"value", workspace->root}})},
-         {"spec", rec({{"file", route->fields.at("spec")}, {"value", spec->root}})},
-         {"jobs", arr(jobs)},
-         {"registry",
-          rec({{"file", str("input.json")},
-               {"bytes", str(read_bytes(std::filesystem::path(PLANAR_SCHEMA_FIXTURE) / "registry/quota-tools.json"))}})},
-         {"files", arr(files)}});
+    auto bundle =
+        rec({{"workspace", rec({{"file", str("workspace.lua")}, {"value", workspace->root}})},
+             {"spec", rec({{"file", route->fields.at("spec")}, {"value", spec->root}})},
+             {"jobs", arr(jobs)},
+             {"registry",
+              rec({{"file", str("input.json")},
+                   {"bytes", str(read_bytes(std::filesystem::path(PLANAR_SCHEMA_FIXTURE) / "registry/quota-tools.json"))}})},
+             {"files", arr(files)}});
     interpretation = success("interpret_bundle", bundle);
   }
   ~quota() {
@@ -175,24 +175,42 @@ std::vector<std::string> section_ids(const value_ptr& manifest) {
     out.push_back(text(s, "id"));
   return out;
 }
-const std::string worker_run =
-    "## run\n\n"
-    "run request: req-1\n"
-    "- refresh: Re-render this work and acknowledge the current packet.\n"
-    "- checkpoint: Record observations of progress on this run.\n"
-    "- check: Run the checks of the job against the output of this role.\n"
-    "- release: End this run as released or interrupted.\n"
-    "Actions not shipped in this build are unavailable.\n";
+const std::string worker_run = "## run\n\n"
+                               "run request: req-1\n"
+                               "- refresh: Re-render this work and acknowledge the current packet.\n"
+                               "- checkpoint: Record observations of progress on this run.\n"
+                               "- check: Run the checks of the job against the output of this role.\n"
+                               "- release: End this run as released or interrupted.\n"
+                               "Actions not shipped in this build are unavailable.\n";
 } // namespace
 
 TEST_CASE("dispatch work_exec_v1 has the 24 fields, the declared base and repair 0", "[dispatch]") {
   quota q;
   auto  result = q.work("split", "cli_worker");
   auto  W      = at(result, "work");
-  CHECK(keys(W) == std::set<std::string>{"versions", "workspace", "spec", "job", "role", "root", "base", "goal",
-                                         "units", "milestones", "constraints", "prescriptions", "contracts",
-                                         "dependencies", "facets", "pipeline_predecessors", "questions", "ownership",
-                                         "effective_checks", "checks", "toolchains", "shape", "start_facets",
+  CHECK(keys(W) == std::set<std::string>{"versions",
+                                         "workspace",
+                                         "spec",
+                                         "job",
+                                         "role",
+                                         "root",
+                                         "base",
+                                         "goal",
+                                         "units",
+                                         "milestones",
+                                         "constraints",
+                                         "prescriptions",
+                                         "contracts",
+                                         "dependencies",
+                                         "facets",
+                                         "pipeline_predecessors",
+                                         "questions",
+                                         "ownership",
+                                         "effective_checks",
+                                         "checks",
+                                         "toolchains",
+                                         "shape",
+                                         "start_facets",
                                          "repair"});
   std::vector<std::string> versions;
   for (const auto& v : at(W, "versions")->items)
@@ -230,9 +248,10 @@ TEST_CASE("dispatch work_exec_v1 start facets are unavailable without a publicat
   CHECK(keys(facet) == std::set<std::string>{"dependency", "unavailable"});
   CHECK(text(facet, "dependency") == "early");
   CHECK(at(facet, "unavailable")->boolean);
-  auto published =
-      arr({rec({{"work", str("library")}, {"facet", str("library_files")}, {"publication", str("5")},
-                {"semantic", str("xxh3_128:00112233445566778899aabbccddeeff")}})});
+  auto published        = arr({rec({{"work", str("library")},
+                                    {"facet", str("library_files")},
+                                    {"publication", str("5")},
+                                    {"semantic", str("xxh3_128:00112233445566778899aabbccddeeff")}})});
   auto with_publication = at(q.work("split", "cli_worker", interp, published), "work");
   auto entry            = at(with_publication, "start_facets")->items[0];
   CHECK(text(entry, "semantic") == "xxh3_128:00112233445566778899aabbccddeeff");
@@ -243,9 +262,9 @@ TEST_CASE("dispatch work_exec_v1 start facets are unavailable without a publicat
 
 TEST_CASE("dispatch work_exec_v1 moves only for applicable inputs", "[dispatch]") {
   quota q;
-  auto  changed     = with_prescription_text(q.interpretation, "command_rule", "A different command rule.");
-  auto  library     = text(q.work("split", "library_worker"), "digest");
-  auto  command     = text(q.work("split", "cli_worker"), "digest");
+  auto  changed = with_prescription_text(q.interpretation, "command_rule", "A different command rule.");
+  auto  library = text(q.work("split", "library_worker"), "digest");
+  auto  command = text(q.work("split", "cli_worker"), "digest");
   CHECK(text(q.work("split", "library_worker", changed), "digest") == library);
   CHECK(text(q.work("split", "cli_worker", changed), "digest") != command);
 }
@@ -257,9 +276,8 @@ TEST_CASE("dispatch packet has mode dispatch, the authority template and the run
   auto  manifest = at(result, "manifest");
   CHECK(text(result, "kind") == "dispatch");
   CHECK(text(packet, "mode") == "dispatch");
-  CHECK(keys(packet) == std::set<std::string>{"version", "mode", "workspace", "spec", "job", "role", "kind", "work",
-                                              "markdown"});
-  auto markdown = text(packet, "markdown");
+  CHECK(keys(packet) == std::set<std::string>{"version", "mode", "workspace", "spec", "job", "role", "kind", "work", "markdown"});
+  auto              markdown = text(packet, "markdown");
   const std::string authority =
       "## authority\n\nThis packet was dispatched by Planar for run request req-1, generation 2 of role cli_worker, "
       "under revision 3 of job split. Checks have not run in this dispatch. Upstream facet content comes from recorded "
@@ -280,8 +298,8 @@ TEST_CASE("dispatch packet has mode dispatch, the authority template and the run
 }
 
 TEST_CASE("dispatch reviewer run section lists verdict in E1 order", "[dispatch]") {
-  quota q;
-  auto  markdown = text(at(success("render_dispatch", q.context("split", "reviewer")), "packet"), "markdown");
+  quota             q;
+  auto              markdown     = text(at(success("render_dispatch", q.context("split", "reviewer")), "packet"), "markdown");
   const std::string reviewer_run = "## run\n\n"
                                    "run request: req-1\n"
                                    "- refresh: Re-render this work and acknowledge the current packet.\n"
@@ -294,11 +312,10 @@ TEST_CASE("dispatch reviewer run section lists verdict in E1 order", "[dispatch]
 
 TEST_CASE("dispatch manifest has exactly the fourteen keys for dispatch, takeover and preview", "[dispatch]") {
   quota                       q;
-  const std::set<std::string> fourteen{"version",  "revision", "job",      "role",     "generation",
-                                       "run",      "versions", "work",     "render",   "sections",
-                                       "omitted",  "prerequisites", "registry", "inputs"};
-  auto claim = success("render_dispatch", q.context("split", "cli_worker"));
-  auto M     = at(claim, "manifest");
+  const std::set<std::string> fourteen{"version", "revision", "job",      "role",    "generation",    "run",      "versions",
+                                       "work",    "render",   "sections", "omitted", "prerequisites", "registry", "inputs"};
+  auto                        claim = success("render_dispatch", q.context("split", "cli_worker"));
+  auto                        M     = at(claim, "manifest");
   CHECK(keys(M) == fourteen);
   CHECK(at(M, "version")->integer == 1);
   CHECK(text(M, "revision") == "3");
@@ -335,10 +352,10 @@ TEST_CASE("dispatch manifest has exactly the fourteen keys for dispatch, takeove
     CHECK(text(p, "status") != "not_captured");
   }
 
-  auto takeover = success("render_dispatch",
-                          q.context("split", "cli_worker",
-                                    rec({{"request", str("req-2")}, {"kind", str("takeover")}, {"previous", str("4")}})));
-  auto T        = at(takeover, "manifest");
+  auto takeover =
+      success("render_dispatch", q.context("split", "cli_worker",
+                                           rec({{"request", str("req-2")}, {"kind", str("takeover")}, {"previous", str("4")}})));
+  auto T = at(takeover, "manifest");
   CHECK(keys(T) == fourteen);
   CHECK(keys(at(T, "run")) == std::set<std::string>{"request", "kind", "previous"});
   CHECK(text(at(T, "run"), "previous") == "4");
@@ -361,9 +378,9 @@ TEST_CASE("dispatch manifest has exactly the fourteen keys for dispatch, takeove
 TEST_CASE("dispatch W is stable across generations while the packet changes", "[dispatch]") {
   quota q;
   auto  first  = success("render_dispatch", q.context("split", "cli_worker", nullptr, "1"));
-  auto  second = success("render_dispatch",
-                         q.context("split", "cli_worker",
-                                   rec({{"request", str("req-1")}, {"kind", str("takeover")}, {"previous", str("7")}}), "2"));
+  auto  second = success(
+      "render_dispatch",
+      q.context("split", "cli_worker", rec({{"request", str("req-1")}, {"kind", str("takeover")}, {"previous", str("7")}}), "2"));
   CHECK(text(at(at(first, "manifest"), "work"), "digest") == text(at(at(second, "manifest"), "work"), "digest"));
   CHECK(text(at(at(first, "manifest"), "render"), "digest") != text(at(at(second, "manifest"), "render"), "digest"));
 }

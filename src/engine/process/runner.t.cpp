@@ -1,9 +1,11 @@
 // R17-B runner: R17-2 rules 2 to 8 plus spec validation (DB-1) of the native process runner.
 #include <catch2/catch_test_macros.hpp>
+#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
 import std;
 import planar.engine.process.runner;
@@ -35,6 +37,100 @@ struct test_fd {
   test_fd(const test_fd&)            = delete;
   test_fd& operator=(const test_fd&) = delete;
 };
+// Isolates the single-threaded descriptor probes from handles inherited from their test launcher. Pre-existing handles
+// stay open until restoration; the probe's own subjects are created after capture. The enumeration handle is excluded,
+// and cleanup rejects a changed file identity instead of changing a later subject that reused a descriptor number.
+class inherited_descriptor_isolation {
+  struct saved_descriptor {
+    int           fd;
+    int           flags;
+    struct ::stat identity;
+  };
+  std::vector<saved_descriptor> _saved;
+
+  std::expected<void, int> rollback(int error) {
+    const auto restored = restore();
+    return std::unexpected(restored ? error : restored.error());
+  }
+
+public:
+  inherited_descriptor_isolation() = default;
+  ~inherited_descriptor_isolation() {
+    (void)restore();
+  }
+  inherited_descriptor_isolation(const inherited_descriptor_isolation&)            = delete;
+  inherited_descriptor_isolation& operator=(const inherited_descriptor_isolation&) = delete;
+
+  std::expected<void, int> isolate(std::span<const int> descriptors) {
+    if (!_saved.empty())
+      return std::unexpected(EALREADY);
+    for (const int fd : descriptors) {
+      const int flags = ::fcntl(fd, F_GETFD);
+      if (flags < 0)
+        return rollback(errno);
+      struct ::stat identity{};
+      if (::fstat(fd, &identity) != 0)
+        return rollback(errno);
+      _saved.push_back({fd, flags, identity});
+      if (::fcntl(fd, F_SETFD, flags | FD_CLOEXEC) != 0)
+        return rollback(errno);
+    }
+    return {};
+  }
+
+  std::expected<void, int> capture() {
+    std::vector<int> descriptors;
+    {
+      std::unique_ptr<DIR, decltype(&::closedir)> observer(::opendir("/dev/fd"), &::closedir);
+      if (!observer)
+        return std::unexpected(errno);
+      const int observer_fd = ::dirfd(observer.get());
+      if (observer_fd < 0)
+        return std::unexpected(errno);
+      while (true) {
+        errno             = 0;
+        const auto* entry = ::readdir(observer.get());
+        if (!entry) {
+          if (errno != 0)
+            return std::unexpected(errno);
+          break;
+        }
+        const std::string_view name(entry->d_name);
+        int                    fd     = -1;
+        const auto             parsed = std::from_chars(name.data(), name.data() + name.size(), fd);
+        if (parsed.ec == std::errc{} && parsed.ptr == name.data() + name.size() && fd >= 3 && fd != observer_fd)
+          descriptors.push_back(fd);
+      }
+    }
+    return isolate(descriptors);
+  }
+
+  std::expected<void, int> restore() noexcept {
+    int error = 0;
+    for (const auto& saved : std::views::reverse(_saved)) {
+      struct ::stat current{};
+      if (::fstat(saved.fd, &current) != 0) {
+        if (error == 0)
+          error = errno;
+      } else if (current.st_dev != saved.identity.st_dev || current.st_ino != saved.identity.st_ino ||
+                 current.st_mode != saved.identity.st_mode || current.st_rdev != saved.identity.st_rdev) {
+        if (error == 0)
+          error = ESTALE;
+      } else if (::fcntl(saved.fd, F_SETFD, saved.flags) != 0 && error == 0) {
+        error = errno;
+      }
+    }
+    _saved.clear();
+    if (error != 0)
+      return std::unexpected(error);
+    return {};
+  }
+};
+// A deliberate ambient descriptor, dynamically allocated inside the child probe's 3..63 observation range.
+int open_inheritable_marker() {
+  test_fd source(::open("/dev/null", O_RDONLY | O_CLOEXEC));
+  return ::fcntl(source.fd, F_DUPFD, 4);
+}
 int open_directory(const std::filesystem::path& path) {
   return ::open(path.c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
 }
@@ -211,6 +307,35 @@ TEST_CASE("R17-B runner stdin is empty", "[process]") {
 }
 
 TEST_CASE("R17-B runner leaks no descriptors to the child", "[process]") {
+  test_fd ambient(open_inheritable_marker());
+  REQUIRE(ambient.fd > 3);
+  REQUIRE(ambient.fd <= 63);
+  const int original_flags = ::fcntl(ambient.fd, F_GETFD);
+  REQUIRE(original_flags >= 0);
+  REQUIRE((original_flags & FD_CLOEXEC) == 0);
+  {
+    // A failure after the first flag change must roll that change back immediately.
+    inherited_descriptor_isolation partial;
+    const std::array               descriptors{ambient.fd, -1};
+    const auto                     isolated = partial.isolate(descriptors);
+    REQUIRE_FALSE(isolated.has_value());
+    CHECK(isolated.error() == EBADF);
+    CHECK(::fcntl(ambient.fd, F_GETFD) == original_flags);
+  }
+  CHECK_THROWS_AS(
+      [&] {
+        inherited_descriptor_isolation unwinding;
+        const std::array               descriptors{ambient.fd};
+        REQUIRE(unwinding.isolate(descriptors).has_value());
+        throw std::runtime_error("descriptor fixture unwinding");
+      }(),
+      std::runtime_error);
+  CHECK(::fcntl(ambient.fd, F_GETFD) == original_flags);
+  inherited_descriptor_isolation isolation;
+  const auto                     isolated = isolation.capture();
+  INFO("descriptor isolation errno " << (isolated ? 0 : isolated.error()));
+  REQUIRE(isolated.has_value());
+  CHECK(::fcntl(ambient.fd, F_GETFD) == (original_flags | FD_CLOEXEC));
   temporary  root;
   test_fd    cwd(open_directory(root.path));
   const auto file = root.path / "held";
@@ -226,20 +351,40 @@ TEST_CASE("R17-B runner leaks no descriptors to the child", "[process]") {
   for (int fd = 3; fd <= 63; ++fd)
     probe += std::format(" {}", fd);
   probe += "; do [ -e /dev/fd/$n ] && echo $n; done; exit 0";
+#if defined(__APPLE__)
+  const int inheritable_flags = ::fcntl(inheritable.fd, F_GETFD);
+  REQUIRE(inheritable_flags >= 0);
+  CHECK((inheritable_flags & FD_CLOEXEC) == 0);
+#endif
   const auto result = must_run(shell(probe, cwd.fd));
   INFO("leaked descriptors: " << result.output);
   CHECK(result.how == termination::exited);
   CHECK(result.exit_code == 0);
   CHECK(result.output.empty());
+  REQUIRE(isolation.restore().has_value());
+  CHECK(::fcntl(ambient.fd, F_GETFD) == original_flags);
 }
 
 TEST_CASE("R17-B runner probe detects an inherited descriptor", "[process]") {
   // Positive control for the leak probe: a descriptor opened onto fd 9 inside the shell is reported. The probe uses
   // `[ -e /dev/fd/N ]` rather than `(: <&N)`, which bash (macOS /bin/sh) answers with its own saved fd 10 (DB-13).
+  test_fd ambient(open_inheritable_marker());
+  REQUIRE(ambient.fd > 3);
+  REQUIRE(ambient.fd <= 63);
+  const int original_flags = ::fcntl(ambient.fd, F_GETFD);
+  REQUIRE(original_flags >= 0);
+  REQUIRE((original_flags & FD_CLOEXEC) == 0);
+  inherited_descriptor_isolation isolation;
+  const auto                     isolated = isolation.capture();
+  INFO("descriptor isolation errno " << (isolated ? 0 : isolated.error()));
+  REQUIRE(isolated.has_value());
+  CHECK(::fcntl(ambient.fd, F_GETFD) == (original_flags | FD_CLOEXEC));
   temporary  root;
   test_fd    cwd(open_directory(root.path));
   const auto result = must_run(shell("exec 9</dev/null; for n in 3 9; do [ -e /dev/fd/$n ] && echo $n; done", cwd.fd));
   CHECK(result.output == "9\n");
+  REQUIRE(isolation.restore().has_value());
+  CHECK(::fcntl(ambient.fd, F_GETFD) == original_flags);
 }
 
 TEST_CASE("R17-B runner retains a prefix and marks truncated", "[process]") {

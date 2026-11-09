@@ -22,7 +22,7 @@ CLI::App& attach_orchestrator(CLI::App& root, orchestrator_options& options) {
   workspace->needs(registry)->needs(job)->excludes(ledger);
   registry->needs(workspace)->needs(job)->excludes(ledger);
   job->needs(workspace)->needs(registry)->excludes(ledger);
-  command.require_option(1);
+  command.require_option(1, 3);
   return command;
 }
 response orchestrator_command(const orchestrator_options& options, const readers& io, const executor& execute) {

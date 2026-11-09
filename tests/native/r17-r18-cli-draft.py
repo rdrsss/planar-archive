@@ -1,6 +1,6 @@
 # Draft R17/R18 CLI integration exercise. Run from the repository root after building planar.
-import json,pathlib,subprocess,tempfile
-repo=pathlib.Path.cwd();binary=repo/'build/rewrite-debug/bin/planar'
+import json,pathlib,subprocess,tempfile,sys
+repo=pathlib.Path.cwd();binary=pathlib.Path(sys.argv[1]).resolve() if len(sys.argv)>1 else repo/'build/rewrite-debug/bin/planar'
 scratch=tempfile.TemporaryDirectory(prefix='planar-r17-smoke-');root=pathlib.Path(scratch.name).resolve();ledger=root/'ledger.db'
 for n in ['workspace','current','base','scratch']:(root/n).mkdir()
 w=root/'workspace'

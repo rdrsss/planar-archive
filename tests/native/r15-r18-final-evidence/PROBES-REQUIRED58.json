@@ -1,0 +1,297 @@
+{
+  "prepared_rows": 58,
+  "duplicates": 1,
+  "single_site_masked_with_paired_logical_kills": 2,
+  "rows": [
+    {
+      "required_id": "K6",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:K6"
+    },
+    {
+      "required_id": "L1",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:L1"
+    },
+    {
+      "required_id": "N1",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:N1"
+    },
+    {
+      "required_id": "N4",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:N4"
+    },
+    {
+      "required_id": "RT1-evidence",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:RT1-evidence"
+    },
+    {
+      "required_id": "RT1-findings",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:RT1-findings"
+    },
+    {
+      "required_id": "RT2",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:RT2"
+    },
+    {
+      "required_id": "N2",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:N2"
+    },
+    {
+      "required_id": "N3-membership",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:N3-membership"
+    },
+    {
+      "required_id": "PR1-load-order",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:PR1-load-order"
+    },
+    {
+      "required_id": "takeover-target-run",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:takeover-target-run"
+    },
+    {
+      "required_id": "PR2-recovery",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:PR2-recovery"
+    },
+    {
+      "required_id": "PR2-manifest",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:PR2-manifest"
+    },
+    {
+      "required_id": "N5-observation",
+      "disposition": "REGISTERED_DEFAULT_KILL",
+      "evidence": "C11-default-retarget.json"
+    },
+    {
+      "required_id": "N5-membership",
+      "disposition": "REGISTERED_CLI_KILL",
+      "evidence": "N5-retargeted-cli.json"
+    },
+    {
+      "required_id": "N5-output",
+      "disposition": "REGISTERED_DEFAULT_KILL",
+      "evidence": "C11-default-retarget.json"
+    },
+    {
+      "required_id": "N6-identity",
+      "disposition": "REGISTERED_DEFAULT_KILL",
+      "evidence": "C11-default-retarget.json"
+    },
+    {
+      "required_id": "N7-tree-edges",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:N7-tree-edges"
+    },
+    {
+      "required_id": "N8-paths",
+      "disposition": "REGISTERED_KILL",
+      "evidence": "N8-C09-authorized.json"
+    },
+    {
+      "required_id": "N8-semantic",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:N8-semantic"
+    },
+    {
+      "required_id": "PR3-facts",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:PR3-facts"
+    },
+    {
+      "required_id": "PR3-rederive",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:PR3-rederive"
+    },
+    {
+      "required_id": "N3-paired-reason",
+      "disposition": "REGISTERED_DEFAULT_KILL",
+      "evidence": "C11-default-retarget.json"
+    },
+    {
+      "required_id": "C04-snapshot-alias",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C04-snapshot-alias"
+    },
+    {
+      "required_id": "C05-null-named-api",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C05-null-named-api"
+    },
+    {
+      "required_id": "C04-early-replay",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C04-early-replay"
+    },
+    {
+      "required_id": "C04-history-selector",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C04-history-selector"
+    },
+    {
+      "required_id": "C04-no-reconcile",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C04-no-reconcile"
+    },
+    {
+      "required_id": "PR3-target-reason",
+      "disposition": "MASKED_SINGLE_SITE_PAIRED_LOGICAL_KILL",
+      "evidence": "native-results.json:PR3-target-logical"
+    },
+    {
+      "required_id": "PR3-dependent",
+      "disposition": "MASKED_SINGLE_SITE_PAIRED_LOGICAL_KILL",
+      "evidence": "native-results.json:PR3-dependent-logical"
+    },
+    {
+      "required_id": "C04-late-replay-order",
+      "disposition": "CURRENT_COHERENT_RACE_KILL",
+      "evidence": "race-results.json"
+    },
+    {
+      "required_id": "C04-receipts",
+      "disposition": "CURRENT_COHERENT_RACE_KILL",
+      "evidence": "race-results.json"
+    },
+    {
+      "required_id": "DIAG-check-only",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:DIAG-check-only"
+    },
+    {
+      "required_id": "DIAG-progress",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:DIAG-progress"
+    },
+    {
+      "required_id": "DIAG-order",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:DIAG-order"
+    },
+    {
+      "required_id": "DIAG-no-completion",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:DIAG-no-completion"
+    },
+    {
+      "required_id": "DIAG-scratch",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:DIAG-scratch"
+    },
+    {
+      "required_id": "STDOUT-run-embedded",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:STDOUT-run-embedded"
+    },
+    {
+      "required_id": "STDOUT-recovery-embedded",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:STDOUT-recovery-embedded"
+    },
+    {
+      "required_id": "STDOUT-run-profile",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:STDOUT-run-profile"
+    },
+    {
+      "required_id": "STDOUT-recovery-profile",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:STDOUT-recovery-profile"
+    },
+    {
+      "required_id": "VERDICT-count",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:VERDICT-count"
+    },
+    {
+      "required_id": "VERDICT-cap",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:VERDICT-cap"
+    },
+    {
+      "required_id": "VERDICT-repairs",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:VERDICT-repairs"
+    },
+    {
+      "required_id": "VERDICT-opened",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:VERDICT-opened"
+    },
+    {
+      "required_id": "VERDICT-cleared",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:VERDICT-cleared"
+    },
+    {
+      "required_id": "VERDICT-roles",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:VERDICT-roles"
+    },
+    {
+      "required_id": "VERDICT-ordinal",
+      "disposition": "REGISTERED_REAL_WORKFLOW_KILL",
+      "evidence": "VERDICT-ordinal-retarget.json"
+    },
+    {
+      "required_id": "LINEAGE-activation",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:LINEAGE-activation"
+    },
+    {
+      "required_id": "LINEAGE-postview",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:LINEAGE-postview"
+    },
+    {
+      "required_id": "N8-path-witness",
+      "disposition": "DUPLICATE_SUPERSEDED",
+      "evidence": "N8-C09-authorized.json"
+    },
+    {
+      "required_id": "C08-refresh",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-refresh"
+    },
+    {
+      "required_id": "C08-checkpoint",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-checkpoint"
+    },
+    {
+      "required_id": "C08-release",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-release"
+    },
+    {
+      "required_id": "C08-packet-bytes",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-packet-bytes"
+    },
+    {
+      "required_id": "C08-activation-ordinal",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-activation-ordinal"
+    },
+    {
+      "required_id": "C08-activation-other-job",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-activation-other-job"
+    },
+    {
+      "required_id": "C08-refresh-drift",
+      "disposition": "KILLED",
+      "evidence": "native-results.json:C08-refresh-drift"
+    }
+  ]
+}

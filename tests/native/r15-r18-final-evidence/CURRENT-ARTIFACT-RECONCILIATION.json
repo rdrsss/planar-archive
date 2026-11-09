@@ -1,0 +1,18 @@
+{
+  "scope": "Post-gate exact compiled-component identity supplement. Pre-gate proof remains unchanged; raw artifact hashes are NOT represented as equal after regeneration.",
+  "recorded_bindings": 9041,
+  "exact_raw_hash_matches": 8927,
+  "exact_range_classified_metadata_bindings": 114,
+  "unexplained_bindings": [],
+  "unique_canonical_hashes": 8314,
+  "source_overlay": {
+    "src/cmd/planar/bootstrap.t.cpp": {
+      "c13": "a3bcb964c33d144a70417a663985c97436cb1fbbc4d5cfa8a873ac012d65eecc",
+      "c14": "b594cc78b53a51892b70c9e0557ddde6c65c21ee615551d26c73b2156ff467b4"
+    }
+  },
+  "engine_source_files_equal_c13": 179,
+  "archive_overlay_sha256": "df6a92c5f4370cb8222d445e745f7db43da08315d14cbb77df89446f3dea595b",
+  "runtime_overlay_sha256": "5c54184bd4bc871f00c9fdc88f78f11f8e817f9fcb878c194ab08b9f2a52fb2b",
+  "disposition": "Scoped C13 calibration/descriptor evidence remains applicable to unchanged compiled payload/private artifacts, qualified by the explicit metadata overlay; no new measurement execution."
+}

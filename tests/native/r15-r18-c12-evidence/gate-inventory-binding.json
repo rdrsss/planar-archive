@@ -1,0 +1,12 @@
+{
+  "debug": {
+    "gate_log_sha256": "1c405f7ef3ed008123b4bf358d55fd3798d377ec22b1643cc4e6b0262955907f",
+    "inventory_commands_exact": true,
+    "count": 1844
+  },
+  "release": {
+    "gate_log_sha256": "5837161a9917192fb94631e2a86b3ffa243987723dc60ffc963d5f199512023b",
+    "inventory_commands_exact": true,
+    "count": 1844
+  }
+}

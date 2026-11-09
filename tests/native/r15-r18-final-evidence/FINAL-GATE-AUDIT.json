@@ -1,0 +1,59 @@
+{
+  "host": {
+    "scope": "Independent complete exported gate audit; no build/test execution",
+    "mode": "host",
+    "source_files": 272,
+    "errors": [],
+    "raw_audit_path": "tests/native/r15-r18-final-evidence/final-review-c14/host-record-audit.json",
+    "raw_audit_sha256": "eec2c8a7c5557b5ee7bbf54a465720d204c9038c6800775572809d7e559e4cef",
+    "configurations": {
+      "debug": {
+        "tests": 1844,
+        "passed": 1844,
+        "zero_skips": true,
+        "lint_files": 250,
+        "log_sha256": "82262567d4bdf1986d08d0e66248bcd2999ad5ef8035ced3378e41aa393f1680",
+        "ordered_names_sha256": "78885255920205ef567cc7c933e8955e40cc7a3dfe39f180f9157d6dda4be1ef"
+      },
+      "release": {
+        "tests": 1844,
+        "passed": 1844,
+        "zero_skips": true,
+        "lint_files": 250,
+        "log_sha256": "f3f0f440a435c618b2d95ac32e40f43a983360edff0052a54d4556b63a98a5ea",
+        "ordered_names_sha256": "78885255920205ef567cc7c933e8955e40cc7a3dfe39f180f9157d6dda4be1ef"
+      }
+    }
+  },
+  "linux": {
+    "scope": "Independent complete exported gate audit; no build/test execution",
+    "mode": "linux",
+    "source_files": 272,
+    "errors": [],
+    "context_files": 3109,
+    "context_sha256": "53971e73148bfe7c1e2ff2af9e82815de3ad3a7daae223e35ca5b313b1b6fee6",
+    "toolchain_sha256": "a2995babdcc0cfc9c39bbb61e034fb4542bf1c1f42773c9ba8bd0232005a0b94",
+    "raw_audit_path": "tests/native/r15-r18-final-evidence/final-review-c14/linux-record-audit.json",
+    "raw_audit_sha256": "c188c0d7ee8ac335bb7bdd0de7e9f1a687aa8cda89f50e1a0786e8a290bd0d19",
+    "configurations": {
+      "debug": {
+        "tests": 1844,
+        "passed": 1844,
+        "zero_skips": true,
+        "ctest_sha256": "11fa368b13074abe5d8ef1d0ec4b07180a7af203c7dd795e9960f5fe91a8784b",
+        "inventory_sha256": "eba90dfe28fd1b3e601a037dce42cce0394f7f3d38f45cb99b822e401891a559",
+        "nowork_sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+        "ordered_names_sha256": "78885255920205ef567cc7c933e8955e40cc7a3dfe39f180f9157d6dda4be1ef"
+      },
+      "release": {
+        "tests": 1844,
+        "passed": 1844,
+        "zero_skips": true,
+        "ctest_sha256": "d3e8f5c71087e06f2e4c61190662719b70a54a668e7cff758bcc2af2c90f6d06",
+        "inventory_sha256": "eba90dfe28fd1b3e601a037dce42cce0394f7f3d38f45cb99b822e401891a559",
+        "nowork_sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+        "ordered_names_sha256": "78885255920205ef567cc7c933e8955e40cc7a3dfe39f180f9157d6dda4be1ef"
+      }
+    }
+  }
+}

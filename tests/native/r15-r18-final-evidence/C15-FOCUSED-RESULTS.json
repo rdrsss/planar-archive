@@ -1,0 +1,102 @@
+[
+  {
+    "configuration": "debug",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-debug",
+      "-R",
+      "^replacement\\.execution_(policy_c02|release_c03)_regressions$",
+      "--output-on-failure",
+      "--no-tests=error",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r15-r18-c15-evidence/coder/debug.xml"
+    ],
+    "ctest": "/opt/homebrew/bin/ctest",
+    "exit": 0,
+    "elapsed_seconds": 6.545801877975464,
+    "selected": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "replacement.execution_policy_c02_regressions",
+      "replacement.execution_release_c03_regressions"
+    ],
+    "harness_scenarios": {
+      "c02": 3,
+      "c03": 2,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    "binary_before_after": {
+      "path": "<repo>/build/rewrite-debug/bin/planar",
+      "sha256": "b214db8c3831e5acb62ac1797eb35e964992f552b2618ba30b621ef7dc469190",
+      "bytes": 28499512
+    },
+    "junit_attributes": {
+      "name": "(empty)",
+      "tests": "2",
+      "failures": "0",
+      "disabled": "0",
+      "skipped": "0",
+      "hostname": "",
+      "time": "6",
+      "timestamp": "2026-11-09T15:46:49"
+    },
+    "raw_stdout_sha256": "efa67fe023227052c5b94ed3ef25902c08b2cef28b9045d918fd52ade84c6f98",
+    "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "configuration": "release",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build/rewrite-release",
+      "-R",
+      "^replacement\\.execution_(policy_c02|release_c03)_regressions$",
+      "--output-on-failure",
+      "--no-tests=error",
+      "-V",
+      "--output-junit",
+      "<repo>/tests/native/r15-r18-c15-evidence/coder/release.xml"
+    ],
+    "ctest": "/opt/homebrew/bin/ctest",
+    "exit": 0,
+    "elapsed_seconds": 2.3855907917022705,
+    "selected": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "replacement.execution_policy_c02_regressions",
+      "replacement.execution_release_c03_regressions"
+    ],
+    "harness_scenarios": {
+      "c02": 3,
+      "c03": 2,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    "binary_before_after": {
+      "path": "<repo>/build/rewrite-release/bin/planar",
+      "sha256": "2d93c41104f558dd66c29378e85cd0c91dfaad09afe195d41521a6acea07ef48",
+      "bytes": 8217400
+    },
+    "junit_attributes": {
+      "name": "(empty)",
+      "tests": "2",
+      "failures": "0",
+      "disabled": "0",
+      "skipped": "0",
+      "hostname": "",
+      "time": "2",
+      "timestamp": "2026-11-09T15:46:56"
+    },
+    "raw_stdout_sha256": "08cdfe243224ea1d92bef9696055a395bfe7453d687cacc82be2f0c4576d5387",
+    "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

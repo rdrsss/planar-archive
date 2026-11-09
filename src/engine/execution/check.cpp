@@ -71,6 +71,54 @@ bool covered(const value_ptr& p, std::string_view k, std::string_view path) {
 auto fail(std::string code, std::string message) {
   return std::unexpected(diagnostic{std::move(code), std::move(message)});
 }
+auto contextual_fail(std::string code, std::string message, std::string field = {}, std::string work = {},
+                     bool delivery = false) {
+  check_error error(diagnostic{std::move(code), std::move(message)});
+  error.field             = std::move(field);
+  error.work              = std::move(work);
+  error.contract_delivery = delivery;
+  return std::unexpected(std::move(error));
+}
+// Compare descriptor identities while walking physical parents, including aliased path spellings.
+std::expected<bool, diagnostic> ancestor(int target, int descendant) {
+  struct stat wanted{};
+  if (::fstat(target, &wanted))
+    return fail("path_denied", "Cannot open explicit directory");
+  int current = ::fcntl(descendant, F_DUPFD_CLOEXEC, 0);
+  if (current < 0)
+    return fail("path_denied", "Cannot open explicit directory");
+  for (;;) {
+    struct stat here{};
+    if (::fstat(current, &here)) {
+      ::close(current);
+      return fail("path_denied", "Cannot open explicit directory");
+    }
+    if (here.st_dev == wanted.st_dev && here.st_ino == wanted.st_ino) {
+      ::close(current);
+      return true;
+    }
+    int parent = ::openat(current, "..", O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+    ::close(current);
+    if (parent < 0)
+      return fail("path_denied", "Cannot open explicit directory");
+    struct stat above{};
+    if (::fstat(parent, &above)) {
+      ::close(parent);
+      return fail("path_denied", "Cannot open explicit directory");
+    }
+    if (here.st_dev == above.st_dev && here.st_ino == above.st_ino) {
+      ::close(parent);
+      return false;
+    }
+    current = parent;
+  }
+}
+std::expected<bool, diagnostic> roots_overlap(int a, int b) {
+  auto first = ancestor(a, b);
+  if (!first || *first)
+    return first;
+  return ancestor(b, a);
+}
 std::string hashed(std::string_view domain, const value_ptr& v) {
   auto h = hash_value(domain, v);
   if (!h)
@@ -137,13 +185,18 @@ std::optional<std::uint64_t> result_count(std::string_view bytes, bool successfu
   return m["matched"];
 }
 } // namespace
+/// Invocation-local owned descriptors and immutable captured inputs; never shared across threads.
 struct prepared_check::impl {
-  int                                root = -1, base = -1, scratch = -1;
-  std::filesystem::path              scratch_path;
-  value_ptr                          plan, observation;
-  capture::tree_digest               original, current;
-  capture::tree_digest_spec          spec;
-  std::map<std::string, std::string> outputs;
+  int                                root    = -1; ///< Working checkout descriptor.
+  int                                base    = -1; ///< Comparison checkout descriptor.
+  int                                scratch = -1; ///< Disjoint scratch directory descriptor.
+  std::filesystem::path              scratch_path; ///< Original validated scratch spelling for child setup.
+  value_ptr                          plan;         ///< Accepted trusted check plan.
+  value_ptr                          observation;  ///< Pre-execution observation.
+  capture::tree_digest               original;     ///< Comparison tree digest.
+  capture::tree_digest               current;      ///< Captured working tree digest.
+  capture::tree_digest_spec          spec;         ///< Shared capture exclusions and bounds.
+  std::map<std::string, std::string> outputs;      ///< Unit identifiers mapped to captured output digests.
   ~impl() {
     if (root >= 0)
       ::close(root);
@@ -164,10 +217,8 @@ check_evidence  classify(const process::run_result& r, std::string_view selectio
   e.output_bytes     = r.output_bytes;
   e.output_truncated = r.truncated;
   e.duration_ms      = r.duration_ms;
-  if (r.how == process::termination::exited)
-    e.exit_status = r.exit_code;
-  else if (r.how != process::termination::not_spawned)
-    e.exit_status = -r.signal;
+  if (r.how != process::termination::not_spawned)
+    e.exit_status = r.signal != 0 ? -r.signal : r.exit_code;
   if (selection == "nonempty" && json)
     e.matched = result_count(*json, r.how == process::termination::exited && r.exit_code == 0);
   switch (r.how) {
@@ -225,8 +276,9 @@ std::pair<bool, value_ptr> boundary_gate(const value_ptr& plan, const capture::t
   }
   return {pass, object({{"version", integer(1)}, {"changes", array(std::move(changes))}})};
 }
-std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, const std::filesystem::path& root,
-                                                        const std::filesystem::path& base, const std::filesystem::path& scratch) {
+std::expected<prepared_check, check_error> prepare_check(const value_ptr& plan, const std::filesystem::path& root,
+                                                         const std::filesystem::path& base,
+                                                         const std::filesystem::path& scratch) {
   try {
     if (!plan || plan->kind != value_kind::record)
       return fail("internal", "Invalid embedded command protocol");
@@ -238,7 +290,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
       if (env)
         for (const auto& [k, v] : env->fields)
           if (k.starts_with("PLANAR_"))
-            return fail("reference", "Registry environment uses a reserved name");
+            return contextual_fail("reference", "Registry environment uses a reserved name", "registry");
       if (strings(c, "command").empty() || number(c, "timeout_ms") == 0 || number(c, "timeout_ms") > 3600000 ||
           number(c, "max_output_bytes") == 0 || number(c, "max_output_bytes") > 16777216)
         return fail("internal", "Invalid embedded command protocol");
@@ -258,7 +310,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
       return x == y || x.starts_with(y + "/") || y.starts_with(x + "/");
     };
     if (overlap(r, s) || overlap(b, s))
-      return fail("path_denied", "Scratch directory overlaps a checked root");
+      return contextual_fail("path_denied", "Scratch directory overlaps a checked root", "scratch");
     prepared_check p;
     p.state        = std::make_unique<prepared_check::impl>();
     auto& x        = *p.state;
@@ -269,6 +321,18 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
     x.scratch      = ::open(scratch.c_str(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
     if (x.root < 0 || x.base < 0 || x.scratch < 0)
       return fail("path_denied", "Cannot open explicit directory");
+    auto checked_overlap = roots_overlap(x.root, x.base);
+    if (!checked_overlap)
+      return std::unexpected(checked_overlap.error());
+    if (*checked_overlap)
+      return fail("path_denied", "Capture roots overlap");
+    for (int checked : {x.root, x.base}) {
+      auto scratch_overlap = roots_overlap(checked, x.scratch);
+      if (!scratch_overlap)
+        return std::unexpected(scratch_overlap.error());
+      if (*scratch_overlap)
+        return contextual_fail("path_denied", "Scratch directory overlaps a checked root", "scratch");
+    }
     x.spec.excluded = strings(plan, "excluded");
     for (const auto& f : list(plan, "facets"))
       for (const auto& path : strings(f, "paths"))
@@ -276,7 +340,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
     for (const auto& c : list(plan, "contracts")) {
       auto path = string(c, "path");
       if (path.empty())
-        return fail("revision_conflict", "Ledger revision does not match the expected revision");
+        return contextual_fail("revision_conflict", "Ledger revision does not match the expected revision", {}, {}, true);
       x.spec.retain_paths.push_back(path);
     }
     auto bs = x.spec;
@@ -302,7 +366,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
       auto i        = x.current.retained.find(string(c, "path"));
       auto expected = get(c, "bytes");
       if (i == x.current.retained.end() || !expected || i->second != expected->string)
-        return fail("revision_conflict", "Ledger revision does not match the expected revision");
+        return contextual_fail("revision_conflict", "Ledger revision does not match the expected revision", {}, {}, true);
     }
     auto root_id  = string(plan, "root");
     auto excluded = get(plan, "excluded");
@@ -318,6 +382,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
             {{"root", str(root_id)}, {"base", str(base_id)}, {"entries", entries(x.current, root_id)}, {"excluded", excluded}}));
     auto all_units = units;
     auto producers = list(plan, "producers");
+    std::ranges::sort(producers, [](const auto& a, const auto& b) { return string(a, "work") < string(b, "work"); });
     all_units.insert(all_units.end(), producers.begin(), producers.end());
     std::map<std::string, value_ptr> unit_map;
     for (const auto& u : all_units) {
@@ -336,7 +401,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
     for (const auto& u : producers) {
       auto expected = string(u, "completion_output");
       if (!expected.empty() && expected != "none" && x.outputs[string(u, "work")] != expected)
-        return fail("observation_target_mismatch", "Wrong output vector");
+        return contextual_fail("observation_target_mismatch", "Wrong output vector", {}, string(u, "work"));
     }
     std::vector<value_ptr> uv, cv;
     for (const auto& [_, u] : unit_map)
@@ -359,7 +424,7 @@ std::expected<prepared_check, diagnostic> prepare_check(const value_ptr& plan, c
 value_ptr check_observation(const prepared_check& p) {
   return p.state ? p.state->observation : value_ptr{};
 }
-std::expected<check_run_result, diagnostic> run_checks(prepared_check& p, std::uint64_t reservation) {
+std::expected<check_run_result, check_error> run_checks(prepared_check& p, std::uint64_t reservation) {
   if (!p.state || reservation == 0)
     return fail("internal", "Invalid embedded command protocol");
   try {
@@ -370,10 +435,10 @@ std::expected<check_run_result, diagnostic> run_checks(prepared_check& p, std::u
     for (const auto& c : list(x.plan, "checks")) {
       auto name = std::format("planar-check.{}.{}", reservation, ++ordinal);
       if (::mkdirat(x.scratch, name.c_str(), 0700))
-        return fail("io", "Cannot create check scratch directory");
+        return contextual_fail("io", "Cannot create check scratch directory", "scratch");
       int dir = ::openat(x.scratch, name.c_str(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
       if (dir < 0)
-        return fail("io", "Cannot create check scratch directory");
+        return contextual_fail("io", "Cannot create check scratch directory", "scratch");
       process::spawn_spec spec;
       spec.cwd_fd = x.root;
       spec.argv   = strings(c, "command");

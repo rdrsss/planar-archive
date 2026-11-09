@@ -8,12 +8,12 @@ export import planar.engine.runtime;
 export namespace planar::cmd::handlers {
 /// Private native host paths and scalar options for one invocation.
 struct check_recover_options {
-  std::string ledger;
-  std::string run_id;
-  std::string reservation;
-  std::string confirm_stopped;
-  std::string request_id;
-  std::string actor;
+  std::string ledger;          ///< Explicit ledger path; never inferred from home configuration.
+  std::string run_id;          ///< Canonical positive run identifier; contains no secret.
+  std::string reservation;     ///< Canonical positive check reservation identifier.
+  std::string confirm_stopped; ///< Explicit true acknowledgement that the prior check process stopped.
+  std::string request_id;      ///< Caller-provided idempotency key.
+  std::string actor;           ///< Driver actor recorded with the event.
 };
 /// @brief Attach the command and its exact required/optional options.
 /// @param root Parent CLI11 parser.
