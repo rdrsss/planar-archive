@@ -1,0 +1,74 @@
+{
+  "scope": "Bounded implementation handoff; static checks only, actual configured verification pending",
+  "files": {
+    "src/engine/CMakeLists.txt": {
+      "sha256": "0e4646ad4ceba2f713d6fa0e4c08c3b63dff5e8b71732c9ec0d3359c83a2b5d7",
+      "bytes": 713
+    },
+    "src/engine/acceptance/CMakeLists.txt": {
+      "sha256": "a0776d71a4acf9eb56a19111a73396eddcc2063074a091a90f1275a89df5f0ec",
+      "bytes": 1838
+    },
+    "src/engine/budget/CMakeLists.txt": {
+      "sha256": "188fb9f991e746ac307aa2a7c2c3f28602bf0467b95f6932dbe80945a3097f4a",
+      "bytes": 84
+    },
+    "src/engine/canonical/CMakeLists.txt": {
+      "sha256": "3be53577fa976c17ea4e7f51e67060c32cd7322e04f10cf8393d32a04014497a",
+      "bytes": 134
+    },
+    "src/engine/capture/CMakeLists.txt": {
+      "sha256": "12d261cbaf69c253bba24b4aa29d55429ae1c361c7b23f7c614bd86307ee28ae",
+      "bytes": 1768
+    },
+    "src/engine/execution/CMakeLists.txt": {
+      "sha256": "3990bee40943d1fad8e0f1da5ec91d3d5347defeb71d567cb28cbdfcc00d86c2",
+      "bytes": 1932
+    },
+    "src/engine/export/CMakeLists.txt": {
+      "sha256": "99e657be63bc6c7f86083ea490ddf0f2abaf76acd6928a7ad97ce662ef7f039d",
+      "bytes": 2101
+    },
+    "src/engine/hash/CMakeLists.txt": {
+      "sha256": "af09d0c89131e1efc1d9c81f28f54413c14ecd90f08a284921dc0d4a11fb3ef3",
+      "bytes": 308
+    },
+    "src/engine/history/CMakeLists.txt": {
+      "sha256": "9aba3021b58ed4e350425fd507ddd13fc9d54aeb7b4659c30438a06d97ea5f2f",
+      "bytes": 5617
+    },
+    "src/engine/json_codec/CMakeLists.txt": {
+      "sha256": "1595069dfe60bcc93891c0aef5ecc7848f041cb3adf2e65e5420eac7af828b31",
+      "bytes": 136
+    },
+    "src/engine/ledger/CMakeLists.txt": {
+      "sha256": "fceb4d13ba6a6047b7b74826a28c4e63bf75127d5c6e81ae0ab6bc00dc90e140",
+      "bytes": 14431
+    },
+    "src/engine/lua/CMakeLists.txt": {
+      "sha256": "a9acc667855c746a4509eb4af020c003ddfd3cd6ca76650f1cebef82c7cf393d",
+      "bytes": 761
+    },
+    "src/engine/process/CMakeLists.txt": {
+      "sha256": "30180ae34efffef9cbc533badd95d802ac57985eff86e3fe598af0794661cdf6",
+      "bytes": 235
+    },
+    "src/engine/runtime/CMakeLists.txt": {
+      "sha256": "a53a0d8e11fff9850b1079e32e830b76b20e058d46d84aa8907e8f9fc11de3dc",
+      "bytes": 22867
+    },
+    "src/engine/runtime/closure_guard/CMakeLists.txt": {
+      "sha256": "dacf4a0b99cbd674ca4d2103d79da91e6ecee1f542bf1aa8482ac518a03294aa",
+      "bytes": 161
+    },
+    "src/engine/value/CMakeLists.txt": {
+      "sha256": "60cfd9bbf9f86578c7126f2a230bcc222ef298f4a931ba27b2a5d1e9f34ce1bc",
+      "bytes": 77
+    }
+  },
+  "evidence": {
+    "tests/native/r19-cmake-evidence/coder/EXTRACTION.json": "4eccc3f9564634b73542bb0a4734eabf2ea113411b0568d3e772c181529ad4ec",
+    "tests/native/r19-cmake-evidence/coder/STATIC-CHECKS.json": "d6d68e9125749bfd5a9c540c2dbda327deb252a2bfd8100423537187502a045f"
+  },
+  "report_sha256": "d9e51508d0a46ede062fdde5a9d0286079a98c4bce3efe2df174c1c4b7c7710d"
+}

@@ -1,0 +1,258 @@
+{
+  "version": 1,
+  "scope": "Bounded real CMake task, corrected actual native gates and recorded Planar acceptance. No complete R19 or new-layout Linux approval is claimed.",
+  "base_head": "5812823430ea24804519f02620f05ed546386607",
+  "source": {
+    "manifest": "SOURCE-CANDIDATE.json",
+    "files": 287,
+    "engine_cmake_files": 16,
+    "unchanged_non_cmake_files": 268
+  },
+  "corrected_gates": {
+    "configurations": [
+      "macOS Debug",
+      "macOS RelWithDebInfo"
+    ],
+    "matched_each": 1844,
+    "passed_each": 1844,
+    "skips_each": 0,
+    "lint_files_each": 250,
+    "native_repeat_target_work": false,
+    "known_cmake_glob_probe": true,
+    "graph_targets": 442,
+    "engine_targets": 200,
+    "raw_identical_generated_files_each": 155,
+    "audit": "GATE-AUDIT.json"
+  },
+  "recorded_planar_task": {
+    "ledger": "5968c1ffbaab75856d958b310f6f565b",
+    "work": "engine_build",
+    "check_request": "cmake.check.2",
+    "check_outcome": "completed",
+    "output": "xxh3_128:176ae741c86f44769c6dc3cd00ddc2c7",
+    "worker_work_fp": "xxh3_128:4c256e6a7040d9204041e743230c222e",
+    "reviewer_policy_work_fp": "xxh3_128:3c04adbe49c2331d3d7f7bd5744cd822",
+    "accepted": true,
+    "last_event": "11",
+    "check_replay_byte_identical": true,
+    "check_replay_unchanged_artifact_files": 84,
+    "verdict_replay_byte_identical": true
+  },
+  "probe_qualification": {
+    "calls": 14,
+    "faults_rejected": 12,
+    "healthy": 2,
+    "inputs_unchanged_during_probing": 1550,
+    "subsequent_replaced_file_api_paths": 339,
+    "subsequent_intentional_helper_repair": 1,
+    "raw_bindings_matching_at_review_audit": 1210,
+    "carry": "Unchanged verifier predicates/source/generated scopes, not all original raw reply paths; current graph is established separately."
+  },
+  "wrapper_repair": {
+    "protocol_tests": 3,
+    "protocol_vectors": 19,
+    "failures": 0,
+    "skips": 0,
+    "current_adapter_sha256": "25bc157ea72efda26810869200e7d9d60b006dffb88163f2938f6dfcf6446ddb",
+    "unchanged_verifier_sha256": "f989b6a1f083857856be43f7303453b328ff7b54bbb831916f479881a8ff144a",
+    "first_false_failures_preserved": true
+  },
+  "raw_driver_index": {
+    "path": "tests/native/r19-cmake-evidence/driver/ALL-FILES.json",
+    "sha256": "a4e855069284712671ba1f4e7256e8996d0120ad2171375b1985118794baf020",
+    "files": 319
+  },
+  "limits": [
+    "Full R19 quota both-groupings and remaining matrix obligations remain.",
+    "New-layout Linux gates were not executed.",
+    "Authoring-loaded activation interpretation mismatch and captured-preview instruction refusal are retained; production workflow/ordinary render/separate live guidance succeeded.",
+    "Reviewer packet receipt wording is a nonblocking existing presentation follow-up.",
+    "No install, push, external publication or merge."
+  ],
+  "published_files": {
+    "docs/architecture.md": {
+      "sha256": "d382db8e8db9b9b873e4a1bae33bade4290730b0f61ede6ad50ba042f2007822",
+      "bytes": 123193
+    },
+    "docs/testing.md": {
+      "sha256": "e2d7604cb21c918ce8268678e6971c9d8c3f5412974cb591cc59c7a926891a4a",
+      "bytes": 130607
+    },
+    "docs/vernacular/history.md": {
+      "sha256": "73e07697b9fa6c1c4f0c5000b89d23abf0ae2601bbf8f48076e3e453345101f0",
+      "bytes": 168601
+    },
+    "docs/vernacular/roadmap.md": {
+      "sha256": "a61e01a307e84006e8e9512a51778a0fa19de462da7d43a6a308ddb8410f002d",
+      "bytes": 39668
+    },
+    "docs/vernacular/rounds/R19-CMAKE-coder.md": {
+      "sha256": "d9e51508d0a46ede062fdde5a9d0286079a98c4bce3efe2df174c1c4b7c7710d",
+      "bytes": 4805
+    },
+    "docs/vernacular/rounds/R19-CMAKE-driver-map.md": {
+      "sha256": "d06a0c595fc63c2eb93242f89ff251e33b6d4b6d6e17db9f92ff3a82b9a0a13e",
+      "bytes": 16451
+    },
+    "docs/vernacular/rounds/R19-CMAKE-map.md": {
+      "sha256": "0f739e6024bc65e380728b5da5d11d535ef06422f169ace8ba02960af2f8274a",
+      "bytes": 12610
+    },
+    "docs/vernacular/rounds/R19-CMAKE-no-work-repair.md": {
+      "sha256": "b1480a542e11e654d9a3e260c7f112c3cca20ac31899c19b25e5d30757fa5b94",
+      "bytes": 5210
+    },
+    "docs/vernacular/rounds/R19-CMAKE-plan-review.md": {
+      "sha256": "c7b6b067e04dae0af1d2dda569db9c9253b4aba894e5f221cd6ffe8d201612d0",
+      "bytes": 6326
+    },
+    "docs/vernacular/rounds/R19-CMAKE-probes.md": {
+      "sha256": "b37e16e6ecc48a8c02d11ea76896ff91547260b57ad4bb988dcd4169e2861fdc",
+      "bytes": 5339
+    },
+    "docs/vernacular/rounds/R19-CMAKE-review.md": {
+      "sha256": "5e10e2ca0687fab45c1e6897c36ed2b36ca7a14712c12a1ddd3a24685071e0ec",
+      "bytes": 10647
+    },
+    "docs/vernacular/rounds/R19-CMAKE-verification.md": {
+      "sha256": "abc3ff10b13b3ec97119ab69a2dca9a74e1e0c7202792784a0940fbaf05358e8",
+      "bytes": 5460
+    },
+    "docs/vernacular/rounds/R19-CMAKE.md": {
+      "sha256": "cb7a85f80e7b015e98f2a55b1ac51d3c6b476625c48b4d5e64bf3acdae32dbed",
+      "bytes": 13533
+    },
+    "src/engine/CMakeLists.txt": {
+      "sha256": "0e4646ad4ceba2f713d6fa0e4c08c3b63dff5e8b71732c9ec0d3359c83a2b5d7",
+      "bytes": 713
+    },
+    "src/engine/acceptance/CMakeLists.txt": {
+      "sha256": "a0776d71a4acf9eb56a19111a73396eddcc2063074a091a90f1275a89df5f0ec",
+      "bytes": 1838
+    },
+    "src/engine/budget/CMakeLists.txt": {
+      "sha256": "188fb9f991e746ac307aa2a7c2c3f28602bf0467b95f6932dbe80945a3097f4a",
+      "bytes": 84
+    },
+    "src/engine/canonical/CMakeLists.txt": {
+      "sha256": "3be53577fa976c17ea4e7f51e67060c32cd7322e04f10cf8393d32a04014497a",
+      "bytes": 134
+    },
+    "src/engine/capture/CMakeLists.txt": {
+      "sha256": "12d261cbaf69c253bba24b4aa29d55429ae1c361c7b23f7c614bd86307ee28ae",
+      "bytes": 1768
+    },
+    "src/engine/execution/CMakeLists.txt": {
+      "sha256": "3990bee40943d1fad8e0f1da5ec91d3d5347defeb71d567cb28cbdfcc00d86c2",
+      "bytes": 1932
+    },
+    "src/engine/export/CMakeLists.txt": {
+      "sha256": "99e657be63bc6c7f86083ea490ddf0f2abaf76acd6928a7ad97ce662ef7f039d",
+      "bytes": 2101
+    },
+    "src/engine/hash/CMakeLists.txt": {
+      "sha256": "af09d0c89131e1efc1d9c81f28f54413c14ecd90f08a284921dc0d4a11fb3ef3",
+      "bytes": 308
+    },
+    "src/engine/history/CMakeLists.txt": {
+      "sha256": "9aba3021b58ed4e350425fd507ddd13fc9d54aeb7b4659c30438a06d97ea5f2f",
+      "bytes": 5617
+    },
+    "src/engine/json_codec/CMakeLists.txt": {
+      "sha256": "1595069dfe60bcc93891c0aef5ecc7848f041cb3adf2e65e5420eac7af828b31",
+      "bytes": 136
+    },
+    "src/engine/ledger/CMakeLists.txt": {
+      "sha256": "fceb4d13ba6a6047b7b74826a28c4e63bf75127d5c6e81ae0ab6bc00dc90e140",
+      "bytes": 14431
+    },
+    "src/engine/lua/CMakeLists.txt": {
+      "sha256": "a9acc667855c746a4509eb4af020c003ddfd3cd6ca76650f1cebef82c7cf393d",
+      "bytes": 761
+    },
+    "src/engine/process/CMakeLists.txt": {
+      "sha256": "30180ae34efffef9cbc533badd95d802ac57985eff86e3fe598af0794661cdf6",
+      "bytes": 235
+    },
+    "src/engine/runtime/CMakeLists.txt": {
+      "sha256": "a53a0d8e11fff9850b1079e32e830b76b20e058d46d84aa8907e8f9fc11de3dc",
+      "bytes": 22867
+    },
+    "src/engine/runtime/closure_guard/CMakeLists.txt": {
+      "sha256": "dacf4a0b99cbd674ca4d2103d79da91e6ecee1f542bf1aa8482ac518a03294aa",
+      "bytes": 161
+    },
+    "src/engine/value/CMakeLists.txt": {
+      "sha256": "60cfd9bbf9f86578c7126f2a230bcc222ef298f4a931ba27b2a5d1e9f34ce1bc",
+      "bytes": 77
+    },
+    "tests/native/r19-cmake-evidence/CODER-MANIFEST.json": {
+      "sha256": "344fe54822a47fe25b249790b9230670ba50fd70c349c0d270f72913d11d9b0e",
+      "bytes": 2952
+    },
+    "tests/native/r19-cmake-evidence/GATE-AUDIT.json": {
+      "sha256": "b51816ae52e6c8e4c7c09fe6baef869138edeb355eaaa6f3081883c1e7a86b12",
+      "bytes": 23589
+    },
+    "tests/native/r19-cmake-evidence/NO-WORK-REPAIR.json": {
+      "sha256": "437a566f0384076d2d8b4af19480e37af1fe32797e1c80dcf2653de607f0be92",
+      "bytes": 4205
+    },
+    "tests/native/r19-cmake-evidence/PLAN-REVIEW.json": {
+      "sha256": "06bad20d4a17959fdce37e2bfdcb279ff399db6b1e350c903c6fca17a347bb74",
+      "bytes": 2375
+    },
+    "tests/native/r19-cmake-evidence/PROBES-MANIFEST.json": {
+      "sha256": "58c485a0f3134d8d95b6af48bc58b036b0f7241e210ae2188800539d1bd067c3",
+      "bytes": 11302
+    },
+    "tests/native/r19-cmake-evidence/README.md": {
+      "sha256": "377de00159a0700f1bceaaee3c38a0f0ea384a7f9dc08b6d824a8b3ef98ff93c",
+      "bytes": 3393
+    },
+    "tests/native/r19-cmake-evidence/REVIEW-MANIFEST.json": {
+      "sha256": "b7ee9947ac59bcf3fac0fb49512afadc14d1b3be17c3cfe6b9c2822c3573bbc3",
+      "bytes": 6352
+    },
+    "tests/native/r19-cmake-evidence/SOURCE-CANDIDATE.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/plan/DECISIONS.md": {
+      "sha256": "42f6fd801bab37bbcc59c95c1d7f7c637f85ed1973dea75c4e6cdecc6446bbac",
+      "bytes": 3995
+    },
+    "tests/native/r19-cmake-evidence/plan/INVARIANTS.md": {
+      "sha256": "c4b3268237a0d8fa17b2eb2da3f8d6e6ec4db9239907558a8bbea5b73d9b6361",
+      "bytes": 3847
+    },
+    "tests/native/r19-cmake-support/check.py": {
+      "sha256": "25bc157ea72efda26810869200e7d9d60b006dffb88163f2938f6dfcf6446ddb",
+      "bytes": 6053
+    },
+    "tests/native/r19-cmake-support/check_test.py": {
+      "sha256": "304a44b9edefed2fcc2b9e507c9c98037b8bb609cfb98a0e17c321dd94a81a28",
+      "bytes": 2337
+    },
+    "tests/native/r19-cmake-support/driver.py": {
+      "sha256": "eeda1bdf12214f194c7312bf263c660e8fa3d031056b9124c03b1074225e465b",
+      "bytes": 6517
+    },
+    "tests/native/r19-cmake-support/verify.py": {
+      "sha256": "f989b6a1f083857856be43f7303453b328ff7b54bbb831916f479881a8ff144a",
+      "bytes": 17262
+    },
+    "tests/native/r19-cmake-support/workspace/combined.lua": {
+      "sha256": "87a8b7cbabfe854eaaaf9082b39a8a0ff60ebc96b79426716a6e051de3bdb3a3",
+      "bytes": 294
+    },
+    "tests/native/r19-cmake-support/workspace/spec.lua": {
+      "sha256": "4e5018d4acd4e1d14a12b99b160411dd0278ce574100b8890e5002ba31e2c4cb",
+      "bytes": 1734
+    },
+    "tests/native/r19-cmake-support/workspace/workspace.lua": {
+      "sha256": "716db6ca062c98a7725f255761f9fba34a4d95e901ba1b15d90b55d519cfa08f",
+      "bytes": 384
+    }
+  }
+}

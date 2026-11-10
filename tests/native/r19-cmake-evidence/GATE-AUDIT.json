@@ -1,0 +1,569 @@
+{
+  "scope": "Coordinator parse of actual four native executions and raw JUnit/graph/source/no-work evidence. First two wrapper failures are retained; only the corrected generation is an accepted recorded gate.",
+  "base_head": "5812823430ea24804519f02620f05ed546386607",
+  "source_manifest_sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+  "attempts": [
+    {
+      "preset": "debug",
+      "generation": "initial_wrapper_false_failure",
+      "directory": "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896",
+      "adapter_exit": 1,
+      "matched": 1844,
+      "passed": 1844,
+      "skips": 0,
+      "commands": [
+        {
+          "name": "configure",
+          "exit": 0,
+          "duration_ns": 30861001000
+        },
+        {
+          "name": "build",
+          "exit": 0,
+          "duration_ns": 180775864000
+        },
+        {
+          "name": "equivalence",
+          "exit": 0,
+          "duration_ns": 66777934000
+        },
+        {
+          "name": "inventory",
+          "exit": 0,
+          "duration_ns": 147449000
+        },
+        {
+          "name": "ctest",
+          "exit": 0,
+          "duration_ns": 1173879556000
+        },
+        {
+          "name": "lint",
+          "exit": 0,
+          "duration_ns": 5417231000
+        },
+        {
+          "name": "repeat-build",
+          "exit": 0,
+          "duration_ns": 521742000
+        }
+      ],
+      "graph_targets": 442,
+      "engine_targets": 200,
+      "raw_identical_generated_payloads": 155,
+      "lint_files": 250,
+      "repeat_native_exit": 0,
+      "repeat_builds_targets": false,
+      "known_cmake_glob_probe": true,
+      "source_files_unchanged": 287
+    },
+    {
+      "preset": "debug",
+      "generation": "corrected_complete_gate",
+      "directory": "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411",
+      "adapter_exit": 0,
+      "matched": 1844,
+      "passed": 1844,
+      "skips": 0,
+      "commands": [
+        {
+          "name": "configure",
+          "exit": 0,
+          "duration_ns": 29257347000
+        },
+        {
+          "name": "build",
+          "exit": 0,
+          "duration_ns": 75083713000
+        },
+        {
+          "name": "equivalence",
+          "exit": 0,
+          "duration_ns": 65911749000
+        },
+        {
+          "name": "inventory",
+          "exit": 0,
+          "duration_ns": 149358000
+        },
+        {
+          "name": "ctest",
+          "exit": 0,
+          "duration_ns": 1139283974000
+        },
+        {
+          "name": "lint",
+          "exit": 0,
+          "duration_ns": 5249943000
+        },
+        {
+          "name": "repeat-build",
+          "exit": 0,
+          "duration_ns": 551211000
+        }
+      ],
+      "graph_targets": 442,
+      "engine_targets": 200,
+      "raw_identical_generated_payloads": 155,
+      "lint_files": 250,
+      "repeat_native_exit": 0,
+      "repeat_builds_targets": false,
+      "known_cmake_glob_probe": true,
+      "source_files_unchanged": 287
+    },
+    {
+      "preset": "release",
+      "generation": "initial_wrapper_false_failure",
+      "directory": "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938",
+      "adapter_exit": 1,
+      "matched": 1844,
+      "passed": 1844,
+      "skips": 0,
+      "commands": [
+        {
+          "name": "configure",
+          "exit": 0,
+          "duration_ns": 29061368000
+        },
+        {
+          "name": "build",
+          "exit": 0,
+          "duration_ns": 313060566000
+        },
+        {
+          "name": "equivalence",
+          "exit": 0,
+          "duration_ns": 66034069000
+        },
+        {
+          "name": "inventory",
+          "exit": 0,
+          "duration_ns": 148508000
+        },
+        {
+          "name": "ctest",
+          "exit": 0,
+          "duration_ns": 405216179000
+        },
+        {
+          "name": "lint",
+          "exit": 0,
+          "duration_ns": 5394551000
+        },
+        {
+          "name": "repeat-build",
+          "exit": 0,
+          "duration_ns": 488367000
+        }
+      ],
+      "graph_targets": 442,
+      "engine_targets": 200,
+      "raw_identical_generated_payloads": 155,
+      "lint_files": 250,
+      "repeat_native_exit": 0,
+      "repeat_builds_targets": false,
+      "known_cmake_glob_probe": true,
+      "source_files_unchanged": 287
+    },
+    {
+      "preset": "release",
+      "generation": "corrected_complete_gate",
+      "directory": "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444",
+      "adapter_exit": 0,
+      "matched": 1844,
+      "passed": 1844,
+      "skips": 0,
+      "commands": [
+        {
+          "name": "configure",
+          "exit": 0,
+          "duration_ns": 28733714000
+        },
+        {
+          "name": "build",
+          "exit": 0,
+          "duration_ns": 160679756000
+        },
+        {
+          "name": "equivalence",
+          "exit": 0,
+          "duration_ns": 65580607000
+        },
+        {
+          "name": "inventory",
+          "exit": 0,
+          "duration_ns": 146998000
+        },
+        {
+          "name": "ctest",
+          "exit": 0,
+          "duration_ns": 402434378000
+        },
+        {
+          "name": "lint",
+          "exit": 0,
+          "duration_ns": 5549695000
+        },
+        {
+          "name": "repeat-build",
+          "exit": 0,
+          "duration_ns": 507734000
+        }
+      ],
+      "graph_targets": 442,
+      "engine_targets": 200,
+      "raw_identical_generated_payloads": 155,
+      "lint_files": 250,
+      "repeat_native_exit": 0,
+      "repeat_builds_targets": false,
+      "known_cmake_glob_probe": true,
+      "source_files_unchanged": 287
+    }
+  ],
+  "raw_files": {
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/configure.stdout": {
+      "sha256": "60655c0ec7bc7fa5ce601005b58d7356f1056e9eb6958ad837734790fe76eaab",
+      "bytes": 712
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/ctest.xml": {
+      "sha256": "1dee762fb95359806d9d38458a99fbbf1641dab3ff409fbafba09366ea897086",
+      "bytes": 1082584
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/repeat-build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/build.stdout": {
+      "sha256": "e5643da50816a4f5b20a9dec1c556c8898408f5829dc71df0d581a1a80ae446f",
+      "bytes": 220245
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/inventory.stdout": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/equivalence.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/source-before.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/source-after.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/equivalence.stdout": {
+      "sha256": "30b4c32a2ea7e0cc678d386bf22fc88d042485ceb59dc75737276b954c0433ba",
+      "bytes": 241
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/inventory.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/repeat-build.stdout": {
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "bytes": 63
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/EQUIVALENCE.json": {
+      "sha256": "1aa061e8cc6e1864d09c34e9a6e29f6d1b9e4e24d1da323b8887bc9422064dda",
+      "bytes": 169698
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/configure.stderr": {
+      "sha256": "d7bb044a06fcde89f815b7f3fc3d9c9d1773ec01a647c2f15fd112d17029721a",
+      "bytes": 289
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/ctest.stdout": {
+      "sha256": "094b11737ad152f9c2ff3b309354cf7d86887d84f2ab4bba8b19bc2a9cf97a61",
+      "bytes": 532672
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/MANIFEST.json": {
+      "sha256": "7309a4ecb5aff6d53564f54d9c8b996502fcb5d7db9f32bee75c070b50ec2e38",
+      "bytes": 2805
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/lint.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/lint.stdout": {
+      "sha256": "f0b3aa64b479fe79e1ccd22e47d232c79ece8e0a43bda597e18cdbad52319a2b",
+      "bytes": 19634
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794266799601479000-58896/ctest.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/configure.stdout": {
+      "sha256": "f929819e92e29bbfdafca7e210cb476dda8662677d6c021e822ae1c2095b7776",
+      "bytes": 712
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/ctest.xml": {
+      "sha256": "173a5d379832724c0780bfd6571177689b9c3bba1dd4fcec42c096627cf5e630",
+      "bytes": 1082530
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/repeat-build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/build.stdout": {
+      "sha256": "cb5c9519a9c01a2ca6a061e1e7a7f526fa176da9ccfe55243094fd54800a17aa",
+      "bytes": 94750
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/inventory.stdout": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/equivalence.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/source-before.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/source-after.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/equivalence.stdout": {
+      "sha256": "30b4c32a2ea7e0cc678d386bf22fc88d042485ceb59dc75737276b954c0433ba",
+      "bytes": 241
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/inventory.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/repeat-build.stdout": {
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "bytes": 63
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/EQUIVALENCE.json": {
+      "sha256": "1aa061e8cc6e1864d09c34e9a6e29f6d1b9e4e24d1da323b8887bc9422064dda",
+      "bytes": 169698
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/configure.stderr": {
+      "sha256": "d7bb044a06fcde89f815b7f3fc3d9c9d1773ec01a647c2f15fd112d17029721a",
+      "bytes": 289
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/ctest.stdout": {
+      "sha256": "685e6aa957aab81c7fa709bdbbab23e496369b1b21484bf7ea625439514afe77",
+      "bytes": 532672
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/MANIFEST.json": {
+      "sha256": "25f95b4703128fb80892cf6530ad2a7083711016592469f879a28ccbe972909c",
+      "bytes": 2733
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/lint.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/lint.stdout": {
+      "sha256": "e3f767c7f8584056bea34165824ba645cf8d8a75386d5ca66114746b4a0d8f32",
+      "bytes": 19634
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/checks/debug/1794269186626485000-60411/ctest.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/configure.stdout": {
+      "sha256": "95a35d13e27b36fe70fbe8c650e02484389943b4655ca781fbc1be9ad748b545",
+      "bytes": 714
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/ctest.xml": {
+      "sha256": "78610409f2026f9778b97a161911d114e0f33bee3fe2100b10e7318099cfffc1",
+      "bytes": 1083336
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/repeat-build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/build.stdout": {
+      "sha256": "646226c966fe562fbcf9ce6b0261004ee6ebbf3d644adbb4befacf79a49c014e",
+      "bytes": 220565
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/inventory.stdout": {
+      "sha256": "27bb358ba10c592b4c800a832a2f151aac72a73a45011bf3f3aa7081b922c41c",
+      "bytes": 1535658
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/equivalence.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/source-before.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/source-after.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/equivalence.stdout": {
+      "sha256": "2296a39dca43da7c65a6c46e37c3a93d58a52c3463296f4a8079af7ae8996b92",
+      "bytes": 243
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/inventory.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/repeat-build.stdout": {
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "bytes": 63
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/EQUIVALENCE.json": {
+      "sha256": "6162639585d017f2b2771ae69950458703b3e3e29f114585e1906368b05ee632",
+      "bytes": 172624
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/configure.stderr": {
+      "sha256": "d7bb044a06fcde89f815b7f3fc3d9c9d1773ec01a647c2f15fd112d17029721a",
+      "bytes": 289
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/ctest-inventory.json": {
+      "sha256": "27bb358ba10c592b4c800a832a2f151aac72a73a45011bf3f3aa7081b922c41c",
+      "bytes": 1535658
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/ctest.stdout": {
+      "sha256": "ee738830bdeda35c38fd4e3e0306dfbf4e382d634735705577aef55be720bd69",
+      "bytes": 532673
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/MANIFEST.json": {
+      "sha256": "557411e075d34f839da32b8edde3485ed1f09e6ff14358d29a0ba0c0069aa6bc",
+      "bytes": 2824
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/lint.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/lint.stdout": {
+      "sha256": "c53397ed65b96c1c07d64509b5621be4e722d296e3adf6102b1ae0bcec62e613",
+      "bytes": 19634
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/equivalence-details.json": {
+      "sha256": "39aa106d2ce8ff70f4ef161b7f6a91ee75a19f16e919de50191dadf2d3f449f6",
+      "bytes": 144602
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794268258145247000-18938/ctest.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/configure.stdout": {
+      "sha256": "77f31611f8ac1d6d92d7aad0028c7fc4d4c8d2d7d8e76c3e156a9b71b71e26c4",
+      "bytes": 714
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/ctest.xml": {
+      "sha256": "911c03a77b43033109b88171fe7331192fe95dfe2e5e9de3a2d717a81dcfee3f",
+      "bytes": 1083451
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/repeat-build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/build.stdout": {
+      "sha256": "decfddb23291550a247386c90724a5f4799d58582da1b0bfe1e019d3a0ded86b",
+      "bytes": 94998
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/inventory.stdout": {
+      "sha256": "27bb358ba10c592b4c800a832a2f151aac72a73a45011bf3f3aa7081b922c41c",
+      "bytes": 1535658
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/equivalence.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/source-before.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/source-after.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/equivalence.stdout": {
+      "sha256": "2296a39dca43da7c65a6c46e37c3a93d58a52c3463296f4a8079af7ae8996b92",
+      "bytes": 243
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/inventory.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/repeat-build.stdout": {
+      "sha256": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "bytes": 63
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/build.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/EQUIVALENCE.json": {
+      "sha256": "6162639585d017f2b2771ae69950458703b3e3e29f114585e1906368b05ee632",
+      "bytes": 172624
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/configure.stderr": {
+      "sha256": "d7bb044a06fcde89f815b7f3fc3d9c9d1773ec01a647c2f15fd112d17029721a",
+      "bytes": 289
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/ctest-inventory.json": {
+      "sha256": "27bb358ba10c592b4c800a832a2f151aac72a73a45011bf3f3aa7081b922c41c",
+      "bytes": 1535658
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/ctest.stdout": {
+      "sha256": "dbb353bb85eef8ea21110dc385388db34f04bbf7ae7ee15fe18b3552740e88f3",
+      "bytes": 532673
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/MANIFEST.json": {
+      "sha256": "42246beba99ea9271ea58d638947a71a89b69b78a6a7e7f6bcef955c993424a6",
+      "bytes": 2753
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/lint.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/lint.stdout": {
+      "sha256": "4c026e7efb7b24a62420f6cfff458ab6356e62f60f552f9d4538b752c7e210e1",
+      "bytes": 19634
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/equivalence-details.json": {
+      "sha256": "39aa106d2ce8ff70f4ef161b7f6a91ee75a19f16e919de50191dadf2d3f449f6",
+      "bytes": 144602
+    },
+    "tests/native/r19-cmake-evidence/checks/release/1794270502285091000-12444/ctest.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "actual_check_replay": {
+    "original_response": "tests/native/r19-cmake-evidence/driver/production/015-check.stdout",
+    "response_sha256": "02811890283c8f5bdd1763744286527da168aa292a14335517ed0f55845a45f8",
+    "response_byte_identical": true,
+    "unchanged_check_artifact_files": 84,
+    "no_new_adapter_attempt": true,
+    "outcome": "completed"
+  }
+}

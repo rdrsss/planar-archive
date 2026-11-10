@@ -1,0 +1,206 @@
+{
+  "scope": "Read-only full-verifier input sensitivities, not native compiled faults or code approval. Every listed path is relative to the repository root.",
+  "attempt": "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000",
+  "full_verifier_calls": 14,
+  "fault_controls": 12,
+  "healthy_controls": 2,
+  "unchanged_input_bindings": 1550,
+  "files": {
+    "tests/native/r19-cmake-evidence/probes/run.py": {
+      "sha256": "fc433527d8d5f079e7cf24f556a285e605d583e1c267b5380ee61fe38a15aafd",
+      "bytes": 11845
+    },
+    "docs/vernacular/rounds/R19-CMAKE-probes.md": {
+      "sha256": "b37e16e6ecc48a8c02d11ea76896ff91547260b57ad4bb988dcd4169e2861fdc",
+      "bytes": 5339
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/EXECUTION.json": {
+      "sha256": "ed487c3da228218c0f4e450e7ea8e16895dcba01e4372992334eccc7a3f5f3e3",
+      "bytes": 683
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I1-unreachable-child/RESULT.json": {
+      "sha256": "9326346666d9c00d783cd67b77534bb65f5ac716e4d699fd6ad456730b403291",
+      "bytes": 169753
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I1-unreachable-child/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I1-unreachable-child/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I10-source-byte/RESULT.json": {
+      "sha256": "432fc8320f8b89aa9b1902f9d9bc43f2a528fb71aabc560bd152333b7bd030c2",
+      "bytes": 169759
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I10-source-byte/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I10-source-byte/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I2-dropped-target/RESULT.json": {
+      "sha256": "6861fb2004ea0728b96915b4afeefcf3f808c385e171b77912c660ed1d09b3e4",
+      "bytes": 169810
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I2-dropped-target/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I2-dropped-target/equivalence-details.json": {
+      "sha256": "3cb40736b062a9d63b276fa63251e9a32659e38d9c7d1e2196f76dedfa7b4668",
+      "bytes": 144522
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I3-dropped-source/RESULT.json": {
+      "sha256": "f0db137af36a4706a7606a5e6a68e1ef32b61f0ded2b43747a31deaa8b21a3c5",
+      "bytes": 169756
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I3-dropped-source/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I3-dropped-source/equivalence-details.json": {
+      "sha256": "c09bffc3e26157cd40dbaca95fc89416fff3e0f652a808fd6ed7185f65309bc1",
+      "bytes": 155528
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I4-dropped-direct-edge/RESULT.json": {
+      "sha256": "f72bd5df8eb87566599ce642ca89b1b198760b1273655c4a6365266140b262c7",
+      "bytes": 169747
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I4-dropped-direct-edge/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I4-dropped-direct-edge/equivalence-details.json": {
+      "sha256": "0364e794445dc4c74dfbc3983c28a075bc5af85ff36fd23e99bd9ba6d22797c3",
+      "bytes": 155995
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I5-changed-ceiling/RESULT.json": {
+      "sha256": "ade96d734aaec3e85ad7ed8472c959a05a246713886cdf22757ebab5d740788c",
+      "bytes": 169753
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I5-changed-ceiling/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I5-changed-ceiling/equivalence-details.json": {
+      "sha256": "cf215741e971b5763f5f1499189fa42771bea59163d583cc92205eab0f1338e3",
+      "bytes": 227147
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I6-configure-dependency/RESULT.json": {
+      "sha256": "45eeca8e2ff2ed9258f927928df73a7014b87911a870d60c688ca04942a08f98",
+      "bytes": 169780
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I6-configure-dependency/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I6-configure-dependency/equivalence-details.json": {
+      "sha256": "ae49e76d96bb9acc6781ba20c84cfd7563163d35d29eb7d78ff74583b50a1101",
+      "bytes": 144514
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I6-generated-payload/RESULT.json": {
+      "sha256": "6084cd0a883ddf7931c9cb69f039ab771a699070009d0e1534c4c4162d97b721",
+      "bytes": 169770
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I6-generated-payload/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I6-generated-payload/equivalence-details.json": {
+      "sha256": "bce811031fa4793b37571bfee9f9858c8b8c5d7ca66d7fdf881ab9f192c505a9",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I7-changed-timeout/RESULT.json": {
+      "sha256": "78617133d59c2ab6db4b0f940bd8d83eb7cf46a8e1a2668d897f547290e2bd26",
+      "bytes": 169749
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I7-changed-timeout/ctest-inventory.json": {
+      "sha256": "0a9d81858cf609a134cfc22dc86226330b0a821d877b24149ffadd0b7accf42a",
+      "bytes": 1018863
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I7-changed-timeout/equivalence-details.json": {
+      "sha256": "44a9cb0eff7bb3fe29ff40226371d5f695b344a3e53649e77230fc7164f4e966",
+      "bytes": 146186
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I7-dropped-test/RESULT.json": {
+      "sha256": "10c588b52cd486d636db5ef1850aa7867949fd498029d47dee873579c97a9b78",
+      "bytes": 169740
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I7-dropped-test/ctest-inventory.json": {
+      "sha256": "98cf25c636c5963874fa64f449fc0ceca814b5e8e4d135dd086e0a7d035c96f2",
+      "bytes": 1018346
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I7-dropped-test/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I8-dropped-required-test/RESULT.json": {
+      "sha256": "c0e914af6a655f7d7b7cf5970c9a066a964817f4d1e7e77b692098b01faa3fe5",
+      "bytes": 169744
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I8-dropped-required-test/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I8-dropped-required-test/equivalence-details.json": {
+      "sha256": "0014f7007cc6b3b12f165ae4487e383c0b368b51edb168758d1f769b57202310",
+      "bytes": 144551
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I8-test-in-default-all/RESULT.json": {
+      "sha256": "c20979345cea64e2fa46b0b74a5f258a6bad49364a92beab36066335664d9d22",
+      "bytes": 169735
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I8-test-in-default-all/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/I8-test-in-default-all/equivalence-details.json": {
+      "sha256": "aac464f3e5dc553d6b6c92c25887166eac4434664d54b41242f30475b0bafc55",
+      "bytes": 144637
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/INPUTS-AFTER.json": {
+      "sha256": "9ddd628bcaa393e6c88a98e78603470a295dd22ad5059f01fd70a0d6e038d918",
+      "bytes": 250280
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/INPUTS-BEFORE.json": {
+      "sha256": "9ddd628bcaa393e6c88a98e78603470a295dd22ad5059f01fd70a0d6e038d918",
+      "bytes": 250280
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/PROGRESS.json": {
+      "sha256": "e43130e52f8e9d7c60dc55455d2cd54c0513a4605f1544f51866c53f950cac19",
+      "bytes": 5923
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/SUMMARY.json": {
+      "sha256": "0fcdb8527f77e41dda81da401de9ffd457671ce24e9527c02004aa65f7a4706d",
+      "bytes": 7443
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/healthy-after/RESULT.json": {
+      "sha256": "1aa061e8cc6e1864d09c34e9a6e29f6d1b9e4e24d1da323b8887bc9422064dda",
+      "bytes": 169698
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/healthy-after/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/healthy-after/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/healthy-before/RESULT.json": {
+      "sha256": "1aa061e8cc6e1864d09c34e9a6e29f6d1b9e4e24d1da323b8887bc9422064dda",
+      "bytes": 169698
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/healthy-before/ctest-inventory.json": {
+      "sha256": "d6632efb5eced665f97173cc51b42636c1abebc40c1aa6beb95b588fe52c3a3b",
+      "bytes": 1528180
+    },
+    "tests/native/r19-cmake-evidence/probes/attempt-1794267151560956000/healthy-before/equivalence-details.json": {
+      "sha256": "2c93f9ac4faec7ee3d2f4b3f2269b924a9b4f1da0646c729c7d76de5464c88cb",
+      "bytes": 144594
+    }
+  }
+}

@@ -34,6 +34,18 @@ cmake --preset debug
 python3 scripts/rewrite-check.py gate --build-dir build/rewrite-debug
 ```
 
+Engine targets and colocated tests are declared in each component's
+`src/engine/<component>/CMakeLists.txt`, composed by the engine coordinator.
+Their generated sources, libraries and native test executables live under the
+matching component directory in the build tree; `runtime/closure_guard` is nested.
+Use CTest or CMake target names to select tests instead of assuming the former
+flat engine binary directory. Current ledger-format wiring is in
+`src/engine/ledger/CMakeLists.txt`; runtime test timeouts are in
+`src/engine/runtime/CMakeLists.txt`. Round-specific flat-layout references below
+retain their historical meaning. An idle Ninja invocation may first print
+`[0/2] Re-checking globbed directories...`; the final `ninja: no work to do.`
+confirms no compilation or linking was needed.
+
 `cmake/rewrite.cmake` explicitly registers colocated Catch2 `*.t.cpp` sources.
 The Python acceptance suites invoke the source-built binary in temporary roots;
 they never substitute an installed command. The gate derives active C++ files

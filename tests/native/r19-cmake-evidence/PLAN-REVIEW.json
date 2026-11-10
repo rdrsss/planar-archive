@@ -1,0 +1,58 @@
+{
+  "disposition": "approve",
+  "scope": "Bounded CMake refactor and actual driver preflight plan only, not code or complete R19 approval",
+  "base_head": "5812823430ea24804519f02620f05ed546386607",
+  "files": {
+    "docs/vernacular/rounds/R19-CMAKE.md": {
+      "sha256": "9292cadc5d4b633676c25ad450bec4a5004961644861ecb040f48ca414bcee1d",
+      "bytes": 4136
+    },
+    "docs/vernacular/rounds/R19-CMAKE-map.md": {
+      "sha256": "0f739e6024bc65e380728b5da5d11d535ef06422f169ace8ba02960af2f8274a",
+      "bytes": 12610
+    },
+    "docs/vernacular/rounds/R19-CMAKE-driver-map.md": {
+      "sha256": "d06a0c595fc63c2eb93242f89ff251e33b6d4b6d6e17db9f92ff3a82b9a0a13e",
+      "bytes": 16451
+    },
+    "tests/native/r19-cmake-evidence/plan/DECISIONS.md": {
+      "sha256": "42f6fd801bab37bbcc59c95c1d7f7c637f85ed1973dea75c4e6cdecc6446bbac",
+      "bytes": 3995
+    },
+    "tests/native/r19-cmake-evidence/plan/INVARIANTS.md": {
+      "sha256": "c4b3268237a0d8fa17b2eb2da3f8d6e6ec4db9239907558a8bbea5b73d9b6361",
+      "bytes": 3847
+    },
+    "cmake/rewrite.cmake": {
+      "sha256": "1da0b8f958d5171cfee4891a7cdda9fbdbe1b4b55585a8e62f8d4dcc02c68ca4",
+      "bytes": 1639
+    },
+    "cmake/embed_lua.cmake": {
+      "sha256": "5e69fa83b390f17a02088a862504b08e1f53b6bcf0fb58e6f64e4dca6226478b",
+      "bytes": 1642
+    },
+    "src/engine/CMakeLists.txt": {
+      "sha256": "73fdcf22a96f00707099c184f1c116589538d5dcfa578f779a0f482e77d93d8e",
+      "bytes": 54228
+    },
+    "src/cmd/planar/bootstrap.cpp": {
+      "sha256": "826a906a264d32e85a83e51621e2e8d4a1158b7e41aaa1e6c8022900a2d2309b",
+      "bytes": 30673
+    },
+    "src/cmd/planar/handlers/claim/command.cpp": {
+      "sha256": "489f557e0b952942ce9fa3465b494b43ae11cd0c39f82520381682e15023b100",
+      "bytes": 3285
+    },
+    "src/cmd/planar/CMakeLists.txt": {
+      "sha256": "36be1153bc717dfc8770d441861ffc05da7de4b5baff80e6052dd34794325aed",
+      "bytes": 48428
+    }
+  },
+  "review_report": {
+    "path": "docs/vernacular/rounds/R19-CMAKE-plan-review.md",
+    "sha256": "c7b6b067e04dae0af1d2dda569db9c9253b4aba894e5f221cd6ffe8d201612d0"
+  },
+  "required_pre_implementation": "Execute actual authoring-ledger init/load/activate/claim/orchestrator/recovery compatibility pilot; retain outcomes, separate production fallback if necessary",
+  "builds_or_product_commands_executed": false,
+  "blocking_findings": []
+}

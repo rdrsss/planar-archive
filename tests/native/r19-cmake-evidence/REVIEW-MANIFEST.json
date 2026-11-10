@@ -1,0 +1,148 @@
+{
+  "disposition": "approve",
+  "scope": "Bounded CMake extraction, verification tooling, current references and actual real-task check/reviewer-target evidence; full R19 remains open",
+  "source_files": 287,
+  "engine_cmake_files": 16,
+  "corrected_host_gates": {
+    "debug": {
+      "passed": 1844,
+      "skips": 0
+    },
+    "release": {
+      "passed": 1844,
+      "skips": 0
+    }
+  },
+  "unit_methods": 3,
+  "unit_protocol_vectors": 19,
+  "checker_input_faults": 12,
+  "healthy_controls": 2,
+  "limits": [
+    "No fresh Linux gate",
+    "Historical1550 probe identity is in-run only; later generated File API replacement and adapter repair qualified separately",
+    "Authoring-loaded mutation interpretation mismatch, captured-render instruction limit and reviewer checks-prose follow-up remain R19 observations",
+    "No complete R19, authenticated human, controlled model/grouping, install, publish, push or merge approval"
+  ],
+  "files": {
+    "tests/native/r19-cmake-evidence/review/APPROVED-CANDIDATE.json": {
+      "sha256": "b6c941c7c4702a126353da2f2dadfa9383bc8c09f0121b6920c5961d6f442f5d",
+      "bytes": 2023
+    },
+    "tests/native/r19-cmake-evidence/review/CMAKE-LEXICAL-AUDIT.json": {
+      "sha256": "82f47d2254e73400250e2c1f2e077ad9dfda5b96d15b90dc99d3788bad59a86a",
+      "bytes": 3700
+    },
+    "tests/native/r19-cmake-evidence/review/FINAL-DEBUG-AUDIT.json": {
+      "sha256": "f5464a597512025ada60bb51edcbd860579468d3401068628d6e5a05a542749b",
+      "bytes": 4825
+    },
+    "tests/native/r19-cmake-evidence/review/FINAL-GATE-INDEX-AUDIT.json": {
+      "sha256": "ebdfebefb4a8b186c4d87b2424912b34964401c20cfae9f66da82c824ca7e17a",
+      "bytes": 523
+    },
+    "tests/native/r19-cmake-evidence/review/FINAL-PACKET-AUDIT.json": {
+      "sha256": "520f670bc53e85f8d2ca70dacdde606f0529e29ed771f4d38b2c110d6d404c84",
+      "bytes": 965
+    },
+    "tests/native/r19-cmake-evidence/review/FINAL-RELEASE-AUDIT.json": {
+      "sha256": "923d57e551dd93f840fc7c9c402e92d0ebe204ce195ef207d99fe060fe881ac4",
+      "bytes": 4800
+    },
+    "tests/native/r19-cmake-evidence/review/GRAPH-INITIAL.json": {
+      "sha256": "7fd9a4a6d9d186d209ccb534206a6fd3f0ae7e5a449399e2e26ad38fce40d9cf",
+      "bytes": 1138
+    },
+    "tests/native/r19-cmake-evidence/review/GRAPH-RECONCILIATION.json": {
+      "sha256": "e5c08f64595b1d426ce1702d6a52425d6a6a97dcd99d505e7b6b9b96109e33a5",
+      "bytes": 1138
+    },
+    "tests/native/r19-cmake-evidence/review/INITIAL-AUDIT.json": {
+      "sha256": "d0b5d837d180c8772a1a24f920e619e6ec37ae2948b8d7a309002d1839138a58",
+      "bytes": 4032
+    },
+    "tests/native/r19-cmake-evidence/review/PROBE-CARRY-AUDIT.json": {
+      "sha256": "077fc525c95994e8ba7c6c38a6ef950c6c60c53feb5790deabb57167863b7773",
+      "bytes": 107811
+    },
+    "tests/native/r19-cmake-evidence/review/RELOCATION-USE-AUDIT.json": {
+      "sha256": "d7c1fa8b34b93191228c7bb8bae72ab116b470ae664ab351bfb309c12067d1ba",
+      "bytes": 676
+    },
+    "tests/native/r19-cmake-evidence/review/REPORT-PENDING.md": {
+      "sha256": "bc44948ad825dc13bb6045265b1474de371567435266d60e1a406654633e65e4",
+      "bytes": 8064
+    },
+    "tests/native/r19-cmake-evidence/review/SOURCE-MODE-AUDIT.json": {
+      "sha256": "bab2b2525adc091f4be33efabdd6ac0e9fff3a184d1ff485f96349d852251449",
+      "bytes": 105
+    },
+    "tests/native/r19-cmake-evidence/review/STATIC-BINDING-AUDIT.json": {
+      "sha256": "77f42fb9905fc84c29a4c99d5e1a6c1ac49c3caab5d4939cd1ba2ee3fde393b5",
+      "bytes": 117
+    },
+    "tests/native/r19-cmake-evidence/review/audit_cmake.py": {
+      "sha256": "85455c027f3f2f3b3b37f351dec348134972a530e79189dfa32f042b0a3ff22b",
+      "bytes": 3474
+    },
+    "tests/native/r19-cmake-evidence/review/audit_graph.py": {
+      "sha256": "e554c2a10280d83c55b33afcabf0d8c0966eba9155062210c435dc57150894bf",
+      "bytes": 4652
+    },
+    "tests/native/r19-cmake-evidence/review/wrapper-tests.command.json": {
+      "sha256": "54915ed7283364abe9f9631be8f9dff1392097f36167ac55d6afa74c7d9bb0ee",
+      "bytes": 66
+    },
+    "tests/native/r19-cmake-evidence/review/wrapper-tests.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "tests/native/r19-cmake-evidence/review/wrapper-tests.stderr": {
+      "sha256": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4",
+      "bytes": 101
+    },
+    "tests/native/r19-cmake-evidence/review/wrapper-tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "docs/vernacular/rounds/R19-CMAKE-review.md": {
+      "sha256": "5e10e2ca0687fab45c1e6897c36ed2b36ca7a14712c12a1ddd3a24685071e0ec",
+      "bytes": 10647
+    },
+    "tests/native/r19-cmake-evidence/GATE-AUDIT.json": {
+      "sha256": "b51816ae52e6c8e4c7c09fe6baef869138edeb355eaaa6f3081883c1e7a86b12",
+      "bytes": 23589
+    },
+    "tests/native/r19-cmake-evidence/SOURCE-CANDIDATE.json": {
+      "sha256": "e9d6dc74b1d22f9a80887f0819cb72a69b71a2b60e9e1cf1d8c73c4fff58acc6",
+      "bytes": 31537
+    },
+    "tests/native/r19-cmake-evidence/driver/cmake.check.2.result.json": {
+      "sha256": "e25af6d1a5917c6468a213abe30d77af39b55fd42457f217566a25ccb90acb01",
+      "bytes": 1581
+    },
+    "tests/native/r19-cmake-evidence/driver/reviewer-claim.json": {
+      "sha256": "a6d19ae7e2d24438e74ef0ea7aebf2e50f23c2ba2700b2bbf38c911032ca12b4",
+      "bytes": 8911
+    },
+    "tests/native/r19-cmake-evidence/driver/reviewer-packet.md": {
+      "sha256": "5155719e84c6fe5fc5072f8d5ae7b7699cac6045095196cb6769553c68205a84",
+      "bytes": 5765
+    },
+    "tests/native/r19-cmake-evidence/driver/CHECK-REPLAY.json": {
+      "sha256": "5bf6ebc01f4f2f38c6642dc4962c1660577f5972a20a4208ad9dd469bb321e1b",
+      "bytes": 320
+    },
+    "tests/native/r19-cmake-evidence/probes/MANIFEST.json": {
+      "sha256": "58c485a0f3134d8d95b6af48bc58b036b0f7241e210ae2188800539d1bd067c3",
+      "bytes": 11302
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/APPLIED-MANIFEST.json": {
+      "sha256": "437a566f0384076d2d8b4af19480e37af1fe32797e1c80dcf2653de607f0be92",
+      "bytes": 4205
+    },
+    "tests/native/r19-cmake-evidence/review/FILE-API-SNAPSHOT-INDEX.json": {
+      "sha256": "55316f04479adf528db78026e208813d7548196319651aac2561666cf790970e",
+      "bytes": 245676
+    }
+  }
+}

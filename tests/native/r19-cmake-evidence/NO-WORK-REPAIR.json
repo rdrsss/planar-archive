@@ -1,0 +1,94 @@
+{
+  "scope": "Applied exact no-work repair after explicit coordinator release; source/gate history unchanged.",
+  "historical_report_binding": {
+    "old_path": "docs/vernacular/rounds/R19-CMAKE-no-work-repair.md",
+    "old_sha256": "6b7f13057706d2a467607c5b6c11da822c5a075b0ba3810ba57ca99da7d293e0",
+    "retained_backup": "tests/native/r19-cmake-evidence/no-work-repair/REPORT-DRAFT.md"
+  },
+  "files": {
+    "tests/native/r19-cmake-evidence/no-work-repair/APPLIED-PROOF.json": {
+      "sha256": "dc5e4d486f2adaf8b31925267384aa61ecd66a45662b4ef3ec86788fd2b2f6cd",
+      "bytes": 1874
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/BASELINE-CORROBORATION.json": {
+      "sha256": "092a7c8eb01adb320401c5dce93941023abae93da0fc27acd201b153c3a3a91d",
+      "bytes": 494
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/LIVE-TEST-COMMAND.json": {
+      "sha256": "b694d8424a81e3682f2a73cfddbef12bc4c1ca314815bc6c20e38780fb934952",
+      "bytes": 86
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/LIVE-UNCHANGED.json": {
+      "sha256": "020f76f80865cc085cb512ba321cfbf1a9033c47e537c87c1f5f289ce6f8bbbc",
+      "bytes": 2221
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/MANIFEST.json": {
+      "sha256": "52576ad223a8b8cbec428315b209a05658187abb11902393eede37884d81af38",
+      "bytes": 2512
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/RED-EVIDENCE.json": {
+      "sha256": "51372e4dff2f4d1770f610b33adfe93e7828708c567ee36a121eeea8efc92102",
+      "bytes": 1267
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/REPORT-DRAFT.md": {
+      "sha256": "6b7f13057706d2a467607c5b6c11da822c5a075b0ba3810ba57ca99da7d293e0",
+      "bytes": 3583
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/TEST-COMMAND.json": {
+      "sha256": "d9002b1c7910fa1143b2a610ef17e22855cf486dc7d9f4cb549ad39f0e5ab620",
+      "bytes": 287
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/candidate-check.py": {
+      "sha256": "25bc157ea72efda26810869200e7d9d60b006dffb88163f2938f6dfcf6446ddb",
+      "bytes": 6053
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/candidate.patch": {
+      "sha256": "1f960401efcd5daf0934266eefda3ffc339bc0a127176e462196bfd987f0e4b0",
+      "bytes": 993
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/check-before.py": {
+      "sha256": "cd0eed5fb1ab9003c176ef8df269dfe0ecd73affc8b63111b45f6df10a774364",
+      "bytes": 5792
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/check_test.py": {
+      "sha256": "304a44b9edefed2fcc2b9e507c9c98037b8bb609cfb98a0e17c321dd94a81a28",
+      "bytes": 2337
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/live-tests.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/live-tests.stderr": {
+      "sha256": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4",
+      "bytes": 101
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/live-tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/tests.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/tests.stderr": {
+      "sha256": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4",
+      "bytes": 101
+    },
+    "tests/native/r19-cmake-evidence/no-work-repair/tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/native/r19-cmake-support/check.py": {
+      "sha256": "25bc157ea72efda26810869200e7d9d60b006dffb88163f2938f6dfcf6446ddb",
+      "bytes": 6053
+    },
+    "tests/native/r19-cmake-support/check_test.py": {
+      "sha256": "304a44b9edefed2fcc2b9e507c9c98037b8bb609cfb98a0e17c321dd94a81a28",
+      "bytes": 2337
+    },
+    "docs/vernacular/rounds/R19-CMAKE-no-work-repair.md": {
+      "sha256": "b1480a542e11e654d9a3e260c7f112c3cca20ac31899c19b25e5d30757fa5b94",
+      "bytes": 5210
+    }
+  }
+}

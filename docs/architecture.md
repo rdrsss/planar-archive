@@ -112,8 +112,12 @@ reviewer packets carry exact captured target vectors. Optional context is
 omitted deterministically under budget; mandatory overflow refuses explicitly.
 No hash substitutes for exact comparison at a boundary that requires it.
 
-The C++26 module graph is declared by `src/engine/CMakeLists.txt` and
-`src/cmd/planar/CMakeLists.txt`, using `cmake/rewrite.cmake`. Dependencies point
+The C++26 module graph uses `cmake/rewrite.cmake`. Each directory under
+`src/engine/` owns its targets and colocated tests in a `CMakeLists.txt`; the
+engine's top-level file discovers shared build helpers and adds its component
+subdirectories, and `runtime/` adds `closure_guard/`. Generated verification
+sources and build artifacts live in their owning component's binary directory.
+Command targets remain in `src/cmd/planar/CMakeLists.txt`. Dependencies point
 downward. Only pinned committed CLI11, Lua, Glaze, xxHash, SQLite and test-only Catch2 are retained.
 Configuration performs no dependency download. Test executables remain outside
 `all`; there are no product install rules or live Git version metadata inputs.
