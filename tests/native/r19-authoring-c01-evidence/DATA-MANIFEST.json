@@ -1,0 +1,17 @@
+{
+  "indexes": {
+    "r19-authoring-evidence": {
+      "path": "tests/native/r19-authoring-evidence/local-index/RAW-MANIFEST.json",
+      "sha256": "e2475a9ea583441da2114ea106236066e6f663edcb26eb3a46577e2051db5253",
+      "files": 4763,
+      "bytes": 237370827
+    },
+    "r19-authoring-c01-evidence": {
+      "path": "tests/native/r19-authoring-c01-evidence/local-index/RAW-MANIFEST.json",
+      "sha256": "8420a7b58313f1b99bf6118e7e620ef949ee39dfdd0d60374805dca86da70adf",
+      "files": 2800,
+      "bytes": 198887591
+    }
+  },
+  "scope": "Raw artifacts remain local; this compact manifest is publishable; raw index content is not staged."
+}

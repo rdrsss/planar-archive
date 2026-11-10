@@ -32,7 +32,9 @@ EXPECTED_POISON = ['route_workspace', 'normalize_bundle', 'validate_bundle', 'pr
                    'interpret_bundle', 'select_role', 'select_profile_material', 'render', 'assemble_projection_material',
                    'prepare_profile_render', 'render_profile_material', 'role_profile_material', 'role_projection_base_material']
 EXPECTED_CPP = ['bootstrap.cpp', 'bootstrap.cppm', 'invocation.cpp', 'invocation.cppm', 'main.cpp', 'runtime.cpp', 'runtime.cppm'] + [
-    f'handlers/{family}/command.{ext}' for family in ('export', 'extension', 'history', 'init', 'load', 'render')
+    f'handlers/{family}/command.{ext}' for family in ('export', 'extension', 'history', 'init', 'load', 'render',
+        'activate', 'status', 'preview', 'claim', 'takeover', 'refresh', 'checkpoint', 'release', 'recover', 'check',
+        'check-recover', 'verdict')
     for ext in ('cpp', 'cppm')]
 JSON_COMMENT = '-- X08 variant: embedded stdlib bytes differ\n'
 PARSE_ERROR = '  error("X08 poisoned stdlib export: parse_json",0)\n'

@@ -4,10 +4,11 @@ export module planar.cmd.execution.claim;
 import std;
 import cli11;
 export import planar.cmd.response;
+export import planar.cmd.execution_options;
 export import planar.engine.runtime;
 export namespace planar::cmd::handlers {
-/// Invocation-local native intent; retained through parsing and dispatch.
-using claim_options = engine::command_run_options;
+/// Invocation-local CLI state shared by embedded and closed-profile dispatch.
+using ::planar::cmd::execution_options::claim_options;
 /// Attach required run acquisition options.
 /// @param root Invocation-local CLI11 parser.
 /// @param options Storage that outlives parsing and dispatch.

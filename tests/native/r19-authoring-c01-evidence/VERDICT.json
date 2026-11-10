@@ -1,0 +1,50 @@
+{
+  "disposition": "approve",
+  "report": "docs/vernacular/rounds/R19-AUTHORING-C01-review.md",
+  "report_sha256": "bb4f898804bf403d7934213472694b5a06027d46b16296ae8b8a620ba539eb57",
+  "review_manifest_sha256": "a84ec0519b2f34e29db2826da12e66723df4f1e1b5e25571dcc35232dadbf6f0",
+  "target": {
+    "work": "retained_vm",
+    "output": "xxh3_128:8955bb1ccbf3d51499caca0bcafacb43",
+    "worker_work_fp": "xxh3_128:45b6e58e37fd6a82ec8c0bdc953df7e1",
+    "reviewer_policy": "xxh3_128:4476fe78ae35cdd44e23bf52e4fe12eb"
+  },
+  "verdict": {
+    "admitted": false,
+    "applicability": "current",
+    "decision": "approve",
+    "id": "2"
+  },
+  "event": "20",
+  "status": {
+    "active_revision": "5",
+    "active_job": "repair",
+    "acceptance": [
+      {
+        "accepted": true,
+        "role": "builder",
+        "why": [],
+        "work": "retained_vm"
+      }
+    ],
+    "roles": [
+      {
+        "drifted": false,
+        "generation": "3",
+        "kind": "worker",
+        "role": "builder",
+        "run": "none",
+        "state": "done"
+      },
+      {
+        "drifted": false,
+        "generation": "3",
+        "kind": "reviewer",
+        "role": "reviewer",
+        "run": "none",
+        "state": "done"
+      }
+    ]
+  },
+  "limits": "Host macOS only; no installation/push/merge/full R19/global accounting claim."
+}

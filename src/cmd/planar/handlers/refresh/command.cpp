@@ -4,6 +4,11 @@ import cli11;
 import planar.cmd.invocation;
 import planar.engine.ledger.execution;
 namespace planar::cmd::handlers {
+namespace {
+engine::command_recovery_options refresh_intent(const refresh_options& o) {
+  return {o.operation, o.ledger, o.run, o.request_id, o.actor, o.expect_fp, o.reason, o.observations, o.provenance};
+}
+} // namespace
 CLI::App& attach_refresh(CLI::App& root, refresh_options& o) {
   o.operation   = "refresh";
   auto& command = *root.add_subcommand("refresh");
@@ -75,9 +80,9 @@ CLI::App& attach_refresh(CLI::App& root, refresh_options& o) {
   return command;
 }
 response refresh_command(const refresh_options& o, engine::command_vm* vm) {
-  return execute(o, vm);
+  return execute(refresh_intent(o), vm);
 }
 response refresh_with_profile(const refresh_options& o, std::string_view selector) {
-  return execute_with_profile(o, selector);
+  return execute_with_profile(refresh_intent(o), selector);
 }
 } // namespace planar::cmd::handlers

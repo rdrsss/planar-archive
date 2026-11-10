@@ -1,0 +1,20 @@
+{
+  "disposition": "request-changes",
+  "report": "docs/vernacular/rounds/R19-AUTHORING-review.md",
+  "source_finding": "R1 cumulative native accounting quantity",
+  "verdict": {
+    "admitted": true,
+    "applicability": "current",
+    "decision": "reject",
+    "id": "1"
+  },
+  "repairs": [
+    {
+      "generation": "2",
+      "revision": "1",
+      "role": "builder"
+    }
+  ],
+  "next_round": "R19-AUTHORING-C01",
+  "commit_authorized": false
+}

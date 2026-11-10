@@ -38,12 +38,12 @@ for name in ['runtime.cpp','runtime.cppm']:
  if name=='runtime.cpp':changes.append(('planar.engine.runtime_source;','planar.engine.load_cli_probe_source;'))
  if name=='runtime.cpp':changes.append(('      auto encoded = codec_encode(copied);', '      auto encoded = codec_encode(copied, {std::get<command_load_options>(c.options).request_id == \"postencode\" ? 1u : 16777216u, 256, 4000000});'))
  write(name,original,changes)
-paths=['bootstrap.cpp','bootstrap.cppm','invocation.cpp','invocation.cppm']+[f'handlers/{f}/command.{ext}' for f in ['render','init','history','export','load','extension'] for ext in ['cpp','cppm']]
+paths=['bootstrap.cpp','bootstrap.cppm','invocation.cpp','invocation.cppm']+[f'handlers/{f}/command.{ext}' for f in ['render', 'init', 'history', 'export', 'load', 'extension', 'activate', 'status', 'preview', 'claim', 'takeover', 'refresh', 'checkpoint', 'release', 'recover', 'check', 'check-recover', 'verdict'] for ext in ['cpp','cppm']]
 for name in paths:
  original=(root/'src/cmd/planar'/name).read_text()
  # Module names may occur many times; audit each exact transformation as one replacement block.
  changes=[]
- replacements=[('import planar.engine.runtime; // X07-REAL-RUNTIME','import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME'),('planar.cmd.bootstrap','planar.cmd.load_cli_probe.bootstrap'),('planar.cmd.invocation','planar.cmd.load_cli_probe.invocation'),('planar.cmd.planar.handlers.','planar.cmd.load_cli_probe.handlers.'),('namespace planar::cmd {','namespace planar::cmd::load_cli_probe {'),('namespace planar::cmd::handlers {','namespace planar::cmd::load_cli_probe::handlers {'),('planar.engine.runtime;','planar.engine.load_cli_probe;'),('engine::command_','engine::load_cli_probe::command_'),('engine::profile_invocation','engine::load_cli_probe::profile_invocation'),('engine::registration_error','engine::load_cli_probe::registration_error'),('engine::extension_','engine::load_cli_probe::extension_'),('engine::prepared_profile','engine::load_cli_probe::prepared_profile'),('import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME','import planar.engine.runtime; // X07-REAL-RUNTIME')]
+ replacements=[('import planar.engine.runtime; // X07-REAL-RUNTIME','import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME'),('planar.cmd.bootstrap','planar.cmd.load_cli_probe.bootstrap'),('planar.cmd.invocation','planar.cmd.load_cli_probe.invocation'),('planar.cmd.planar.handlers.','planar.cmd.load_cli_probe.handlers.'),('planar.cmd.execution.','planar.cmd.load_cli_probe.execution.'),('::planar::cmd::handlers::','::planar::cmd::load_cli_probe::handlers::'),('namespace planar::cmd {','namespace planar::cmd::load_cli_probe {'),('namespace planar::cmd::handlers {','namespace planar::cmd::load_cli_probe::handlers {'),('planar.engine.runtime;','planar.engine.load_cli_probe;'),('engine::command_','engine::load_cli_probe::command_'),('engine::profile_invocation','engine::load_cli_probe::profile_invocation'),('engine::registration_error','engine::load_cli_probe::registration_error'),('engine::extension_','engine::load_cli_probe::extension_'),('engine::prepared_profile','engine::load_cli_probe::prepared_profile'),('import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME','import planar.engine.runtime; // X07-REAL-RUNTIME')]
  data=original
  for a,b in replacements:data=data.replace(a,b)
  restored=data
@@ -60,6 +60,13 @@ using engine::load_cli_probe::command_history_options;
 using engine::load_cli_probe::command_history_selector;
 using engine::load_cli_probe::command_export_options;
 using engine::load_cli_probe::command_load_options;
+using engine::load_cli_probe::command_activate_options;
+using engine::load_cli_probe::command_status_options;
+using engine::load_cli_probe::command_preview_options;
+using engine::load_cli_probe::command_run_options;
+using engine::load_cli_probe::command_recovery_options;
+using engine::load_cli_probe::command_recover_options;
+using engine::load_cli_probe::command_check_options;
 void probe_barrier(const std::string& ledger, std::string_view stage) {
   const auto marker=ledger+"."+std::string(stage);
   {std::ofstream file(marker);file<<"ready";}

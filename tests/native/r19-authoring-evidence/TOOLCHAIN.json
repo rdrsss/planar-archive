@@ -1,0 +1,56 @@
+{
+  "cmake": {
+    "argv": [
+      "cmake",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "cmake version 4.4.5\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+    "stderr": ""
+  },
+  "ninja": {
+    "argv": [
+      "ninja",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "1.13.2\n",
+    "stderr": ""
+  },
+  "clang": {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang++",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Homebrew clang version 23.1.5\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /opt/homebrew/Cellar/llvm/23.1.5/bin\nConfiguration file: /opt/homebrew/Cellar/llvm/23.1.5/etc/clang/arm64-apple-darwin25.cfg\n",
+    "stderr": ""
+  },
+  "clang_format": {
+    "argv": [
+      "/opt/homebrew/opt/llvm/bin/clang-format",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Homebrew clang-format version 23.1.5\n",
+    "stderr": ""
+  },
+  "doxygen": {
+    "argv": [
+      "doxygen",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "1.18.0\n",
+    "stderr": ""
+  },
+  "host": {
+    "argv": [
+      "uname",
+      "-a"
+    ],
+    "exit": 0,
+    "stdout": "Darwin mbpa.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:18:58 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T6000 arm64\n",
+    "stderr": ""
+  }
+}

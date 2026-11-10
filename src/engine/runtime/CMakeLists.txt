@@ -46,6 +46,20 @@ target_link_libraries(planar_runtime_tests PRIVATE planar_runtime_test_harness p
 
 target_link_libraries(planar_runtime_tests PRIVATE planar_capture planar_admission_syscalls)
 
+# R19-AUTHORING-C01 private budget fixture. The exact runtime is renamed and receives one audited test-only
+# preconsumption insertion immediately before the real binder; production code and its public interface gain no hook.
+set(binding_budget_support "${PROJECT_SOURCE_DIR}/tests/native/r19-authoring-c01-support")
+set(binding_budget_generated "${CMAKE_CURRENT_BINARY_DIR}/r19-binding-budget-generated")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+  "${planar_runtime_unit}" "${planar_runtime_interface_unit}" "${binding_budget_support}/generate.py")
+execute_process(COMMAND "${Python3_EXECUTABLE}" "${binding_budget_support}/generate.py"
+  "${PROJECT_SOURCE_DIR}" "${binding_budget_generated}" COMMAND_ERROR_IS_FATAL ANY)
+planar_rewrite_module(planar_binding_budget_test_harness
+  INTERFACE "${binding_budget_generated}/runtime.cppm" SOURCES "${binding_budget_generated}/runtime.cpp"
+  DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source)
+set_target_properties(planar_binding_budget_test_harness PROPERTIES EXCLUDE_FROM_ALL TRUE)
+target_link_libraries(planar_runtime_tests PRIVATE planar_binding_budget_test_harness)
+
 # Small-ceiling variant: the exact runtime compiled with injected composed ceilings, so budget tests stay fast. Tests and
 # variant read the same numbers through PLANAR_BUDGET_* definitions. Rule: every non-bracketing fixture keeps at least 25
 # percent of each ceiling free (native bytes, live Lua, invocation instructions, registration instructions, nodes).

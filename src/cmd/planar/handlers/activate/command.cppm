@@ -2,26 +2,18 @@
 /// @brief CLI11 bindings and dispatch of `planar activate` (execution-contract P2-1, P2-7).
 ///
 /// Entry points are `attach_activate` (six required separate-token text options; `--expect-job` uses the metavariable
-/// `JOB_OR_NONE`), `activate_intent`, `activate_command` (embedded factory) and `activate_with_profile`. The module name
-/// sits outside the `planar.cmd.planar.handlers.` prefix on purpose (draft decision DD27): the audited composition
-/// generators rewrite that prefix in the bootstrap copies they build, and this family has no generated copy, so every
-/// composition dispatches activate through this real module and its own fresh VM. Errors are buffered responses; no
-/// shared state.
+/// `JOB_OR_NONE`), `activate_command` (retained embedded VM) and `activate_with_profile` (closed profile owner).
+/// Generated command compositions rename this module and its runtime types together, preserving the registered callable
+/// and interpretation through dispatch. Errors are buffered responses; no shared state.
 export module planar.cmd.execution.activate;
 import std;
 import cli11;
 export import planar.cmd.response;
+export import planar.cmd.execution_options;
 import planar.engine.runtime;
 export namespace planar::cmd::handlers {
 /// Invocation-owned activate bindings; no private spelling enters Lua.
-struct activate_options {
-  std::string ledger;          ///< Explicit ledger path.
-  std::string job;             ///< Job ID to activate.
-  std::string expect_revision; ///< Canonical positive decimal or none.
-  std::string expect_job;      ///< Uppercase NONE or the expected active job ID.
-  std::string request_id;      ///< ASCII idempotency key.
-  std::string actor;           ///< UTF-8 driver assertion.
-};
+using ::planar::cmd::execution_options::activate_options;
 /// Attach the required activate syntax without filesystem access.
 /// @param root Invocation-local parser.
 /// @param options State retained through parsing and dispatch.

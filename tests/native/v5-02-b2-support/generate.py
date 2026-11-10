@@ -11,6 +11,10 @@ variants=[
  commands.replace('    if not exported.ok then return exported end','    if not exported.ok then return exported end\n    pcall(function() while true do end end)'),
  commands,
 ]
+# Replace an execution/read callable without changing its CLI11 tokens or catalog row.
+status_anchor='  local function status_command(invocation,context)\n'
+assert commands.count(status_anchor)==1
+variants[0]=variants[0].replace(status_anchor,status_anchor+'    do return failed({code="schema",message="B2 retained execution callable executed",field=""}) end\n')
 manifest={}
 def write(path,data,original=None,substitutions=()):
  if not path.exists() or path.read_text()!=data:path.write_text(data)
@@ -30,13 +34,13 @@ for i,bundle in enumerate(variants):
   data=original
   for a,b in changes:data=data.replace(a,b)
   write(d/name,data,original,changes)
- paths=['bootstrap.cpp','bootstrap.cppm','invocation.cpp','invocation.cppm']+[f'handlers/{f}/command.{ext}' for f in ['render','init','history','export','load','extension'] for ext in ['cpp','cppm']]
+ paths=['bootstrap.cpp','bootstrap.cppm','invocation.cpp','invocation.cppm']+[f'handlers/{f}/command.{ext}' for f in ['render', 'init', 'history', 'export', 'load', 'extension', 'activate', 'status', 'preview', 'claim', 'takeover', 'refresh', 'checkpoint', 'release', 'recover', 'check', 'check-recover', 'verdict'] for ext in ['cpp','cppm']]
  for name in paths:
   original=(root/'src/cmd/planar'/name).read_text()
-  changes=[('import planar.engine.runtime; // X07-REAL-RUNTIME','import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME'),('planar.cmd.bootstrap',f'planar.cmd.cli_{i}.bootstrap'),('planar.cmd.invocation',f'planar.cmd.cli_{i}.invocation'),('planar.cmd.planar.handlers.',f'planar.cmd.cli_{i}.handlers.'),('namespace planar::cmd {',f'namespace planar::cmd::cli_{i} {{'),('namespace planar::cmd::handlers {',f'namespace planar::cmd::cli_{i}::handlers {{'),('planar.engine.runtime;',f'planar.engine.cli_bundle_{i};'),('engine::command_',f'engine::cli_bundle_{i}::command_'),('engine::profile_invocation',f'engine::cli_bundle_{i}::profile_invocation'),('engine::registration_error',f'engine::cli_bundle_{i}::registration_error'),('engine::extension_',f'engine::cli_bundle_{i}::extension_'),('engine::prepared_profile',f'engine::cli_bundle_{i}::prepared_profile'),('import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME','import planar.engine.runtime; // X07-REAL-RUNTIME')]
+  changes=[('import planar.engine.runtime; // X07-REAL-RUNTIME','import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME'),('planar.cmd.bootstrap',f'planar.cmd.cli_{i}.bootstrap'),('planar.cmd.invocation',f'planar.cmd.cli_{i}.invocation'),('planar.cmd.planar.handlers.',f'planar.cmd.cli_{i}.handlers.'),('planar.cmd.execution.',f'planar.cmd.cli_{i}.execution.'),('::planar::cmd::handlers::',f'::planar::cmd::cli_{i}::handlers::'),('namespace planar::cmd {',f'namespace planar::cmd::cli_{i} {{'),('namespace planar::cmd::handlers {',f'namespace planar::cmd::cli_{i}::handlers {{'),('planar.engine.runtime;',f'planar.engine.cli_bundle_{i};'),('engine::command_',f'engine::cli_bundle_{i}::command_'),('engine::profile_invocation',f'engine::cli_bundle_{i}::profile_invocation'),('engine::registration_error',f'engine::cli_bundle_{i}::registration_error'),('engine::extension_',f'engine::cli_bundle_{i}::extension_'),('engine::prepared_profile',f'engine::cli_bundle_{i}::prepared_profile'),('import planar.engine.x07_real_runtime; // X07-REAL-RUNTIME','import planar.engine.runtime; // X07-REAL-RUNTIME')]
   if name=='invocation.cpp':
    # Bind finite service vocabulary to this exact runtime type owner.
-   changes.append(('using namespace engine;',f'using namespace engine;\nusing engine::cli_bundle_{i}::command_services;\nusing engine::cli_bundle_{i}::command_service_result;\nusing engine::cli_bundle_{i}::command_render_options;\nusing engine::cli_bundle_{i}::command_init_options;\nusing engine::cli_bundle_{i}::command_history_options;\nusing engine::cli_bundle_{i}::command_history_selector;\nusing engine::cli_bundle_{i}::command_export_options;\nusing engine::cli_bundle_{i}::command_load_options;'))
+   changes.append(('using namespace engine;',f'using namespace engine;\nusing engine::cli_bundle_{i}::command_services;\nusing engine::cli_bundle_{i}::command_service_result;\nusing engine::cli_bundle_{i}::command_render_options;\nusing engine::cli_bundle_{i}::command_init_options;\nusing engine::cli_bundle_{i}::command_history_options;\nusing engine::cli_bundle_{i}::command_history_selector;\nusing engine::cli_bundle_{i}::command_export_options;\nusing engine::cli_bundle_{i}::command_load_options;\nusing engine::cli_bundle_{i}::command_activate_options;\nusing engine::cli_bundle_{i}::command_status_options;\nusing engine::cli_bundle_{i}::command_preview_options;\nusing engine::cli_bundle_{i}::command_run_options;\nusing engine::cli_bundle_{i}::command_recovery_options;\nusing engine::cli_bundle_{i}::command_recover_options;\nusing engine::cli_bundle_{i}::command_check_options;'))
   if i==5 and name=='handlers/init/command.cpp':
    changes.append(('->required()', '->required(false)'))
   data=original

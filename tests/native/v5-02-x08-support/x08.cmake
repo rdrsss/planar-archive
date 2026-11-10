@@ -62,16 +62,18 @@ planar_rewrite_module(planar_x08_invocation_0
   INTERFACE "${x08_variant}/invocation.cppm" SOURCES "${x08_variant}/invocation.cpp"
   DEPENDS planar_command_response planar_x08_runtime_0 planar_capture planar_capture_host_path planar_ledger_format
     planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
-foreach(x08_family render init history export load extension)
+set(x08_family_targets)
+foreach(x08_family render init history export load extension
+    activate status preview claim takeover refresh checkpoint release recover check check-recover verdict)
   planar_rewrite_module(planar_x08_${x08_family}_0
     INTERFACE "${x08_variant}/handlers/${x08_family}/command.cppm" SOURCES "${x08_variant}/handlers/${x08_family}/command.cpp"
-    DEPENDS planar_x08_invocation_0 CLI11::CLI11_Module)
+    DEPENDS planar_x08_invocation_0 planar_execution_options CLI11::CLI11_Module)
   set_target_properties(planar_x08_${x08_family}_0 PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  list(APPEND x08_family_targets planar_x08_${x08_family}_0)
 endforeach()
 planar_rewrite_module(planar_x08_bootstrap_0
   INTERFACE "${x08_variant}/bootstrap.cppm" SOURCES "${x08_variant}/bootstrap.cpp"
-  DEPENDS planar_command_envelope planar_x08_render_0 planar_x08_init_0 planar_x08_history_0 planar_x08_export_0
-    planar_x08_load_0 planar_x08_extension_0)
+  DEPENDS planar_command_envelope ${x08_family_targets})
 add_executable(planar_x08_variant_0 EXCLUDE_FROM_ALL "${x08_variant}/main.cpp")
 planar_native_target(planar_x08_variant_0)
 target_link_libraries(planar_x08_variant_0 PRIVATE planar_x08_bootstrap_0)

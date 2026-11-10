@@ -4,10 +4,11 @@ export module planar.cmd.execution.release;
 import std;
 import cli11;
 export import planar.cmd.response;
+export import planar.cmd.execution_options;
 export import planar.engine.runtime;
 export namespace planar::cmd::handlers {
-/// Invocation-local native intent; retained through parsing and dispatch.
-using release_options = engine::command_recovery_options;
+/// Invocation-local CLI state shared by embedded and closed-profile dispatch.
+using ::planar::cmd::execution_options::release_options;
 /// Attach this family to an invocation-local parser.
 /// @param root Invocation-local CLI11 parser.
 /// @param options Storage that outlives parsing and dispatch.

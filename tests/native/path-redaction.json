@@ -601,6 +601,14 @@
    "original_sha256": "5cf281aea74e8e0697c273420c15a58e4b054f4ca02327f18bd8096a700ed23b",
    "redacted_sha256": "6d897767c4655a69f818abf21cc9d5aa69bab4d8acd5bc9781e6e247513e3d6c"
   },
+  "tests/native/r19-authoring-c01-evidence/GATE-AUDIT.json": {
+   "original_sha256": "ab88f8c4ddf408966881ed06333ee67bcd077a5e5962c1ee1b9c203645bac298",
+   "redacted_sha256": "2dc2c329daee085cbfb83637a6defaa740a9494df3e92827d1ce244e6987f4cc"
+  },
+  "tests/native/r19-authoring-evidence/GATE-AUDIT.json": {
+   "original_sha256": "b6176505f070e3ec8911d103c978e057dadca0f57eb2b8801ab97a9ec1012bd2",
+   "redacted_sha256": "79e0c20acdd8cf81b823bcb3752047223c5c6df82ae764f52d74ea5e95fd57e8"
+  },
   "tests/native/v5-02-b2-review-evidence/debug-inventory.json": {
    "original_sha256": "ba02a0bab3acf1d27db2b533522bc08b56599e92e0c119d69d82c9b82c7c52ef",
    "redacted_sha256": "e0a211f1960bf6d123bb5ac792807fdf1582a3b754132d38919544945d114d0d"

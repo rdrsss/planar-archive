@@ -1,3 +1,5 @@
+planar_rewrite_module(planar_execution_options
+  INTERFACE execution_options.cppm)
 planar_rewrite_module(planar_command_response
   INTERFACE response.cppm
   SOURCES response.cpp
@@ -22,7 +24,7 @@ planar_rewrite_module(planar_export_command
 planar_rewrite_module(planar_load_command
   INTERFACE handlers/load/command.cppm SOURCES handlers/load/command.cpp
   DEPENDS planar_command_invocation CLI11::CLI11_Module)
-# R15-C activate (DD27): one real handler module, outside the generated handler prefix, shared by every composition.
+# Execution handlers retain the admitted VM; generated stacks copy their modules with the owning runtime types.
 planar_rewrite_module(planar_activate_command
   INTERFACE handlers/activate/command.cppm SOURCES handlers/activate/command.cpp
   DEPENDS planar_command_invocation CLI11::CLI11_Module)
@@ -83,20 +85,26 @@ foreach(pair IN LISTS planar_authoring_families)
     DEPENDS planar_command_authoring CLI11::CLI11_Module)
   list(APPEND planar_authoring_family_targets planar_authoring_${family_module})
 endforeach()
+set(planar_execution_command_targets planar_activate_command planar_status_command planar_preview_command
+  planar_claim_command planar_takeover_command planar_refresh_command planar_checkpoint_command planar_release_command
+  planar_recover_command planar_check_command planar_check_recover_command planar_verdict_command)
+foreach(target IN LISTS planar_execution_command_targets)
+  target_link_libraries(${target} PUBLIC planar_execution_options)
+endforeach()
+set(planar_embedded_families render init history export load extension
+  activate status preview claim takeover refresh checkpoint release recover check check-recover verdict)
 planar_rewrite_module(planar_command
   INTERFACE bootstrap.cppm
   SOURCES bootstrap.cpp
-  DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command planar_activate_command CLI11::CLI11_Module
+  DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command ${planar_execution_command_targets} CLI11::CLI11_Module
     planar_command_authoring ${planar_authoring_family_targets}
   TESTS bootstrap.t.cpp authoring.t.cpp authoring_prompts.t.cpp authoring_observe.t.cpp authoring_orchestrator.t.cpp
     activate.t.cpp load_format3.t.cpp profile_format3.t.cpp execution_check_cli.t.cpp orchestrator_live_cli.t.cpp)
-# Draft (R15-C P3): the format3 execution modules reach every invocation copy through the shared response target, and the
-# real activate handler reaches every bootstrap copy through the shared envelope target; the audited generators keep
-# their fixed dependency lists (DD27).
+# Shared native execution services sit below every invocation copy. Each bootstrap links its own typed command families;
+# the envelope only owns common parsing support and never selects a runtime or handler implementation.
 target_link_libraries(planar_command_response PUBLIC planar_ledger_execution planar_execution_snapshot_value
   planar_execution_drafts planar_execution_change_value planar_execution_provenance_input planar_history_provenance planar_canonical)
 target_link_libraries(planar_command_response PUBLIC planar_execution_check planar_execution_verdict planar_execution_recovery_capture)
-target_link_libraries(planar_command_envelope PUBLIC planar_check_command planar_check_recover_command planar_verdict_command planar_activate_command planar_status_command planar_preview_command planar_claim_command planar_takeover_command planar_refresh_command planar_checkpoint_command planar_release_command planar_recover_command)
 target_compile_definitions(planar_command_tests PRIVATE
   PLANAR_B2_WORKSPACE_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota/workspace/workspace.lua")
 add_executable(planar main.cpp)
@@ -157,15 +165,17 @@ foreach(variant RANGE 0 5)
   planar_rewrite_module(planar_cli_invocation_${variant}
     INTERFACE "${generated}/invocation.cppm" SOURCES "${generated}/invocation.cpp"
     DEPENDS planar_command_response planar_cli_runtime_${variant} planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
-  foreach(family render init history export load extension)
+  set(local_family_targets)
+  foreach(family IN LISTS planar_embedded_families)
     planar_rewrite_module(planar_cli_${family}_${variant}
       INTERFACE "${generated}/handlers/${family}/command.cppm" SOURCES "${generated}/handlers/${family}/command.cpp"
-      DEPENDS planar_cli_invocation_${variant} CLI11::CLI11_Module)
+      DEPENDS planar_cli_invocation_${variant} planar_execution_options CLI11::CLI11_Module)
     set_target_properties(planar_cli_${family}_${variant} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    list(APPEND local_family_targets planar_cli_${family}_${variant})
   endforeach()
   planar_rewrite_module(planar_cli_bootstrap_${variant}
     INTERFACE "${generated}/bootstrap.cppm" SOURCES "${generated}/bootstrap.cpp"
-    DEPENDS planar_command_envelope planar_cli_render_${variant} planar_cli_init_${variant} planar_cli_history_${variant} planar_cli_export_${variant} planar_cli_load_${variant} planar_cli_extension_${variant})
+    DEPENDS planar_command_envelope ${local_family_targets})
   add_executable(planar_cli_variant_${variant} EXCLUDE_FROM_ALL "${generated}/main.cpp")
   planar_native_target(planar_cli_variant_${variant})
   target_link_libraries(planar_cli_variant_${variant} PRIVATE planar_cli_bootstrap_${variant})
@@ -217,15 +227,17 @@ planar_rewrite_module(planar_load_cli_probe_runtime
 planar_rewrite_module(planar_load_cli_probe_invocation
   INTERFACE "${d7b_generated}/invocation.cppm" SOURCES "${d7b_generated}/invocation.cpp"
   DEPENDS planar_command_response planar_load_cli_probe_runtime planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
-foreach(family render init history export load extension)
+set(local_family_targets)
+foreach(family IN LISTS planar_embedded_families)
   planar_rewrite_module(planar_load_cli_probe_${family}
     INTERFACE "${d7b_generated}/handlers/${family}/command.cppm" SOURCES "${d7b_generated}/handlers/${family}/command.cpp"
-    DEPENDS planar_load_cli_probe_invocation CLI11::CLI11_Module)
+    DEPENDS planar_load_cli_probe_invocation planar_execution_options CLI11::CLI11_Module)
   set_target_properties(planar_load_cli_probe_${family} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  list(APPEND local_family_targets planar_load_cli_probe_${family})
 endforeach()
 planar_rewrite_module(planar_load_cli_probe_bootstrap
   INTERFACE "${d7b_generated}/bootstrap.cppm" SOURCES "${d7b_generated}/bootstrap.cpp"
-  DEPENDS planar_command_envelope planar_load_cli_probe_render planar_load_cli_probe_init planar_load_cli_probe_history planar_load_cli_probe_export planar_load_cli_probe_load planar_load_cli_probe_extension)
+  DEPENDS planar_command_envelope ${local_family_targets})
 add_executable(planar_load_cli_probe EXCLUDE_FROM_ALL "${d7b_generated}/main.cpp")
 planar_native_target(planar_load_cli_probe)
 target_link_libraries(planar_load_cli_probe PRIVATE planar_load_cli_probe_bootstrap)
@@ -273,15 +285,17 @@ foreach(variant RANGE 0 4)
   planar_rewrite_module(planar_x07_invocation_${variant}
     INTERFACE "${generated}/invocation.cppm" SOURCES "${generated}/invocation.cpp"
     DEPENDS planar_command_response planar_x07_runtime_${variant} planar_capture planar_capture_host_path planar_ledger_format planar_ledger_acceptance planar_history_read planar_source_export planar_acceptance_load)
-  foreach(family render init history export load extension)
+  set(local_family_targets)
+  foreach(family IN LISTS planar_embedded_families)
     planar_rewrite_module(planar_x07_${family}_${variant}
       INTERFACE "${generated}/handlers/${family}/command.cppm" SOURCES "${generated}/handlers/${family}/command.cpp"
-      DEPENDS planar_x07_invocation_${variant} CLI11::CLI11_Module)
+      DEPENDS planar_x07_invocation_${variant} planar_execution_options CLI11::CLI11_Module)
     set_target_properties(planar_x07_${family}_${variant} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    list(APPEND local_family_targets planar_x07_${family}_${variant})
   endforeach()
   planar_rewrite_module(planar_x07_bootstrap_${variant}
     INTERFACE "${generated}/bootstrap.cppm" SOURCES "${generated}/bootstrap.cpp"
-    DEPENDS planar_command_envelope planar_x07_render_${variant} planar_x07_init_${variant} planar_x07_history_${variant} planar_x07_export_${variant} planar_x07_load_${variant} planar_x07_extension_${variant})
+    DEPENDS planar_command_envelope ${local_family_targets})
   add_executable(planar_x07_variant_${variant} EXCLUDE_FROM_ALL "${generated}/main.cpp")
   planar_native_target(planar_x07_variant_${variant})
   target_link_libraries(planar_x07_variant_${variant} PRIVATE planar_x07_bootstrap_${variant})
@@ -338,30 +352,56 @@ function(planar_authoring_emit path text)
   file(REMOVE "${path}.tmp")
 endfunction()
 
+# Record the ordered rename operations for an exact inverse check inside planar_authoring_stack_file.
+macro(planar_authoring_stack_replace before after)
+  math(EXPR substitution_count "${substitution_count} + 1")
+  set(substitution_before_${substitution_count} "${before}")
+  set(substitution_after_${substitution_count} "${after}")
+  string(REPLACE "${before}" "${after}" text "${text}")
+endmacro()
+
 # Apply the D10 rename table to one source. kind is cmd, invocation, main or runtime; the order is part of the contract.
 function(planar_authoring_stack_file source destination kind)
   file(READ "${source}" text)
+  set(original "${text}")
+  set(substitution_count 0)
   if(kind STREQUAL "main")
-    string(REPLACE "planar.cmd.bootstrap" "planar.cmd.authoring_stack.bootstrap" text "${text}")
-    string(REPLACE "planar::cmd::invoke" "planar::cmd::authoring_stack::invoke" text "${text}")
+    planar_authoring_stack_replace("planar.cmd.bootstrap" "planar.cmd.authoring_stack.bootstrap")
+    planar_authoring_stack_replace("planar::cmd::invoke" "planar::cmd::authoring_stack::invoke")
   elseif(kind STREQUAL "runtime")
-    string(REPLACE "planar.engine.runtime;" "planar.engine.authoring_stack;" text "${text}")
-    string(REPLACE "planar.engine.runtime_source;" "planar.engine.authoring_stack_source;" text "${text}")
-    string(REPLACE "namespace planar::engine {" "namespace planar::engine::authoring_stack {" text "${text}")
+    planar_authoring_stack_replace("planar.engine.runtime;" "planar.engine.authoring_stack;")
+    planar_authoring_stack_replace("planar.engine.runtime_source;" "planar.engine.authoring_stack_source;")
+    planar_authoring_stack_replace("namespace planar::engine {" "namespace planar::engine::authoring_stack {")
   else()
-    string(REPLACE "import planar.engine.runtime; // X07-REAL-RUNTIME" "import planar.engine.authoring_real_runtime; // X07-REAL-RUNTIME" text "${text}")
-    string(REPLACE "planar.cmd.bootstrap" "planar.cmd.authoring_stack.bootstrap" text "${text}")
-    string(REPLACE "planar.cmd.invocation" "planar.cmd.authoring_stack.invocation" text "${text}")
-    string(REPLACE "planar.cmd.planar.handlers." "planar.cmd.authoring_stack.handlers." text "${text}")
-    string(REPLACE "namespace planar::cmd {" "namespace planar::cmd::authoring_stack {" text "${text}")
-    string(REPLACE "namespace planar::cmd::handlers {" "namespace planar::cmd::authoring_stack::handlers {" text "${text}")
-    string(REPLACE "planar.engine.runtime;" "planar.engine.authoring_stack;" text "${text}")
-    string(REPLACE "engine::command_" "engine::authoring_stack::command_" text "${text}")
-    string(REPLACE "engine::profile_invocation" "engine::authoring_stack::profile_invocation" text "${text}")
-    string(REPLACE "engine::registration_error" "engine::authoring_stack::registration_error" text "${text}")
-    string(REPLACE "engine::extension_" "engine::authoring_stack::extension_" text "${text}")
-    string(REPLACE "engine::prepared_profile" "engine::authoring_stack::prepared_profile" text "${text}")
-    string(REPLACE "import planar.engine.authoring_real_runtime; // X07-REAL-RUNTIME" "import planar.engine.runtime; // X07-REAL-RUNTIME" text "${text}")
+    if(source STREQUAL "${authoring_src_cmd}/bootstrap.cpp")
+      foreach(family activate status preview claim takeover refresh checkpoint release recover check check_recover verdict)
+        planar_authoring_stack_replace("::planar::cmd::handlers::${family}_with_profile"
+          "::planar::cmd::authoring_original_profile::${family}_with_profile")
+      endforeach()
+    endif()
+    planar_authoring_stack_replace("import planar.engine.runtime; // X07-REAL-RUNTIME" "import planar.engine.authoring_real_runtime; // X07-REAL-RUNTIME")
+    planar_authoring_stack_replace("planar.cmd.bootstrap" "planar.cmd.authoring_stack.bootstrap")
+    planar_authoring_stack_replace("planar.cmd.invocation" "planar.cmd.authoring_stack.invocation")
+    planar_authoring_stack_replace("planar.cmd.planar.handlers." "planar.cmd.authoring_stack.handlers.")
+    planar_authoring_stack_replace("planar.cmd.execution." "planar.cmd.authoring_stack.execution.")
+    planar_authoring_stack_replace("::planar::cmd::handlers::" "::planar::cmd::authoring_stack::handlers::")
+    planar_authoring_stack_replace("namespace planar::cmd {" "namespace planar::cmd::authoring_stack {")
+    planar_authoring_stack_replace("namespace planar::cmd::handlers {" "namespace planar::cmd::authoring_stack::handlers {")
+    planar_authoring_stack_replace("planar.engine.runtime;" "planar.engine.authoring_stack;")
+    planar_authoring_stack_replace("engine::command_" "engine::authoring_stack::command_")
+    planar_authoring_stack_replace("engine::profile_invocation" "engine::authoring_stack::profile_invocation")
+    planar_authoring_stack_replace("engine::registration_error" "engine::authoring_stack::registration_error")
+    planar_authoring_stack_replace("engine::extension_" "engine::authoring_stack::extension_")
+    planar_authoring_stack_replace("engine::prepared_profile" "engine::authoring_stack::prepared_profile")
+    planar_authoring_stack_replace("import planar.engine.authoring_real_runtime; // X07-REAL-RUNTIME" "import planar.engine.runtime; // X07-REAL-RUNTIME")
+    if(source STREQUAL "${authoring_src_cmd}/bootstrap.cpp")
+      foreach(family activate status preview claim takeover refresh checkpoint release recover check check_recover verdict)
+        planar_authoring_stack_replace("::planar::cmd::authoring_original_profile::${family}_with_profile"
+          "::planar::cmd::handlers::${family}_with_profile")
+        planar_authoring_stack_replace("import planar.cmd.authoring_stack.execution.${family};"
+          "import planar.cmd.authoring_stack.execution.${family};\nimport planar.cmd.execution.${family};")
+      endforeach()
+    endif()
     if(kind STREQUAL "invocation")
       string(CONCAT bound "using namespace engine;\n"
         "using engine::authoring_stack::command_services;\n"
@@ -372,10 +412,26 @@ function(planar_authoring_stack_file source destination kind)
         "using engine::authoring_stack::command_history_selector;\n"
         "using engine::authoring_stack::command_export_options;\n"
         "using engine::authoring_stack::command_load_options;\n"
+        "using engine::authoring_stack::command_activate_options;\n"
+        "using engine::authoring_stack::command_status_options;\n"
+        "using engine::authoring_stack::command_preview_options;\n"
+        "using engine::authoring_stack::command_run_options;\n"
+        "using engine::authoring_stack::command_recovery_options;\n"
+        "using engine::authoring_stack::command_recover_options;\n"
+        "using engine::authoring_stack::command_check_options;\n"
         "using engine::authoring_stack::command_authoring_options;\n"
         "using engine::authoring_stack::command_authoring_verb;")
-      string(REPLACE "using namespace engine;" "${bound}" text "${text}")
+      planar_authoring_stack_replace("using namespace engine;" "${bound}")
     endif()
+  endif()
+  set(restored "${text}")
+  while(substitution_count GREATER 0)
+    string(REPLACE "${substitution_after_${substitution_count}}" "${substitution_before_${substitution_count}}"
+      restored "${restored}")
+    math(EXPR substitution_count "${substitution_count} - 1")
+  endwhile()
+  if(NOT restored STREQUAL original)
+    message(FATAL_ERROR "authoring stack substitutions do not restore exact source: ${source}")
   endif()
   planar_authoring_emit("${destination}" "${text}")
 endfunction()
@@ -385,6 +441,9 @@ set(authoring_stack_sources
   handlers/render/command.cpp handlers/render/command.cppm handlers/init/command.cpp handlers/init/command.cppm
   handlers/history/command.cpp handlers/history/command.cppm handlers/export/command.cpp handlers/export/command.cppm
   handlers/load/command.cpp handlers/load/command.cppm handlers/extension/command.cpp handlers/extension/command.cppm)
+foreach(family activate status preview claim takeover refresh checkpoint release recover check check-recover verdict)
+  list(APPEND authoring_stack_sources "handlers/${family}/command.cpp" "handlers/${family}/command.cppm")
+endforeach()
 set(authoring_stack_inputs "${authoring_src_cmd}/main.cpp" "${authoring_src_cmd}/invocation.cpp"
   "${authoring_src_runtime}/runtime.cpp" "${authoring_src_runtime}/runtime.cppm")
 foreach(file IN LISTS authoring_stack_sources)
@@ -433,21 +492,30 @@ planar_rewrite_module(planar_authoring_stack_invocation
   INTERFACE "${authoring_stack_generated}/invocation.cppm" SOURCES "${authoring_stack_generated}/invocation.cpp"
   DEPENDS ${authoring_invocation_depends} planar_authoring_stack_runtime)
 set(authoring_stack_family_targets)
-foreach(family render init history export load extension)
+foreach(family IN LISTS planar_embedded_families)
   planar_rewrite_module(planar_authoring_stack_${family}
     INTERFACE "${authoring_stack_generated}/handlers/${family}/command.cppm"
     SOURCES "${authoring_stack_generated}/handlers/${family}/command.cpp"
-    DEPENDS planar_authoring_stack_invocation CLI11::CLI11_Module)
+    DEPENDS planar_authoring_stack_invocation planar_execution_options CLI11::CLI11_Module)
   set_target_properties(planar_authoring_stack_${family} PROPERTIES EXCLUDE_FROM_ALL TRUE)
   list(APPEND authoring_stack_family_targets planar_authoring_stack_${family})
 endforeach()
 planar_rewrite_module(planar_authoring_stack_bootstrap
   INTERFACE "${authoring_stack_generated}/bootstrap.cppm" SOURCES "${authoring_stack_generated}/bootstrap.cpp"
-  DEPENDS planar_command_envelope ${authoring_stack_family_targets} planar_command_authoring ${planar_authoring_family_targets})
+  DEPENDS planar_command_envelope ${authoring_stack_family_targets} ${planar_execution_command_targets} planar_command_authoring ${planar_authoring_family_targets})
 add_executable(planar_authoring_stack EXCLUDE_FROM_ALL "${authoring_stack_generated}/main.cpp")
 planar_native_target(planar_authoring_stack)
 target_link_libraries(planar_authoring_stack PRIVATE planar_authoring_stack_bootstrap)
 add_dependencies(planar_tests planar_authoring_stack)
+add_test(NAME replacement.authoring_execution_lifecycle
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r19-authoring-support/lifecycle.py"
+    --authoring "$<TARGET_FILE:planar_authoring_stack>" --production "$<TARGET_FILE:planar>")
+set_tests_properties(replacement.authoring_execution_lifecycle PROPERTIES
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" LABELS integration TIMEOUT 240)
+add_test(NAME replacement.authoring_execution_wiring
+  COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/native/r19-authoring-support/wiring.py"
+    --source "${PROJECT_SOURCE_DIR}/src/cmd/planar/bootstrap.cpp" --build "${CMAKE_BINARY_DIR}")
+set_tests_properties(replacement.authoring_execution_wiring PROPERTIES LABELS integration TIMEOUT 60)
 set_target_properties(planar_authoring_stack_runtime planar_authoring_stack_source planar_authoring_stack_invocation
   planar_authoring_stack_bootstrap PROPERTIES EXCLUDE_FROM_ALL TRUE)
 target_compile_definitions(planar_authoring_stack_runtime PRIVATE PLANAR_AUTHORING_BUNDLE=1)

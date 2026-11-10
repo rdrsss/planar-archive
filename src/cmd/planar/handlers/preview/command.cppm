@@ -4,14 +4,11 @@ export module planar.cmd.execution.preview;
 import std;
 import cli11;
 export import planar.cmd.response;
+export import planar.cmd.execution_options;
 import planar.engine.runtime;
 export namespace planar::cmd::handlers {
 /// Invocation-local option state, retained through dispatch.
-struct preview_options {
-  std::string                ledger; ///< Explicit ledger path; never inferred from home configuration.
-  std::string                role;   ///< Selected role identifier.
-  std::optional<std::string> since;  ///< Optional retained render digest for packet comparison.
-};
+using ::planar::cmd::execution_options::preview_options;
 /// Attach the command to an invocation-local parser.
 /// @param root Invocation-local CLI11 parser.
 /// @param options Storage that outlives parsing and dispatch.

@@ -4,6 +4,11 @@ import cli11;
 import planar.cmd.invocation;
 import planar.engine.ledger.execution;
 namespace planar::cmd::handlers {
+namespace {
+engine::command_recover_options recover_intent(const recover_options& o) {
+  return {o.ledger, o.role, o.root, o.base_root};
+}
+} // namespace
 CLI::App& attach_recover(CLI::App& root, recover_options& o) {
 
   auto& command = *root.add_subcommand("recover");
@@ -43,9 +48,9 @@ CLI::App& attach_recover(CLI::App& root, recover_options& o) {
   return command;
 }
 response recover_command(const recover_options& o, engine::command_vm* vm) {
-  return execute(o, vm);
+  return execute(recover_intent(o), vm);
 }
 response recover_with_profile(const recover_options& o, std::string_view selector) {
-  return execute_with_profile(o, selector);
+  return execute_with_profile(recover_intent(o), selector);
 }
 } // namespace planar::cmd::handlers

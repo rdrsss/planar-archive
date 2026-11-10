@@ -1,0 +1,276 @@
+{
+  "scope": "C01 bounded independent source model plus host macOS Debug probes; not implementation approval/full host gates/Linux/full R19/global native accounting",
+  "model_note": "ordinary available model substitutes for unavailable prescribed Claude prober",
+  "candidate": {
+    "coordinator_identity_file": "../CODE-IDENTITY.json",
+    "coordinator_identity_file_sha256": "8b64fce65c9079257172acde4700324d07662e7f884ba6e881c4a145fafee8b7",
+    "aggregate_sha256": "847e5e23858170174a6e7c4a3d846f7ca016886ff4885f25aec7505f60524945",
+    "file_count": 306,
+    "main_and_scratch_match_frozen_inventory": true,
+    "mismatches": []
+  },
+  "model_audit": "MODEL-AUDIT.json",
+  "fresh_canonical_mutants": 17,
+  "assertion_kills": 15,
+  "configured_graph_observations": 1,
+  "mutant_crash_kills": 1,
+  "canonical_survivors": [],
+  "healthy_instrumentation_controls": 1,
+  "exploratory_mutation_edits": 1,
+  "exploratory_observations": [
+    "CLI lifecycle selected path masked late duplicate-commit-check removal",
+    "Existing direct-commit unit kills that same edit"
+  ],
+  "compile_setup_failures_not_kills": 1,
+  "carried_structural_groups": 19,
+  "reexecuted_parent_native_groups": 10,
+  "superseded_parent_accounting_source_groups": 2,
+  "fresh_rows": [
+    {
+      "id": "initial-one-pass",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "two-payload-passes",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "missing-reservation-v2",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "late-reservation-poison",
+      "result": "KILLED",
+      "kind": "scratch-only preparation-entry instrumentation"
+    },
+    {
+      "id": "skip-embedded-binding",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "wrong-embedded-digest",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "bind-exempt-status",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "bind-exempt-check-recover",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "consume-owner-twice",
+      "result": "KILLED_CRASH",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "no-preconsumption",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "original-handler-fallback",
+      "result": "KILLED",
+      "kind": "native process assertion"
+    },
+    {
+      "id": "authoring-profile-local-owner",
+      "result": "KILLED",
+      "kind": "native process assertion"
+    },
+    {
+      "id": "exempt-bound-preview",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "skip-early-activation-replay",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "skip-saved-body-compare-lookup",
+      "result": "KILLED",
+      "kind": "same-module implementation copy compiled with exact pinned command and stable imports"
+    },
+    {
+      "id": "private-default-all-inclusion",
+      "result": "KILLED",
+      "kind": "actual configured graph violates absent-private-harness assertion"
+    },
+    {
+      "id": "private-unconditional-generated-write",
+      "result": "KILLED",
+      "kind": "generator output timestamp assertion"
+    }
+  ],
+  "healthy_junit": [
+    {
+      "label": "healthy-budget",
+      "nodes": 2,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command embedded binding native budget refuses insufficient room before callbacks and stays terminal",
+        "command embedded binding native budget accounts for cumulative payload transfers"
+      ]
+    },
+    {
+      "label": "restored-budget",
+      "nodes": 2,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command embedded binding native budget refuses insufficient room before callbacks and stays terminal",
+        "command embedded binding native budget accounts for cumulative payload transfers"
+      ]
+    },
+    {
+      "label": "post-poison-healthy-budget",
+      "nodes": 2,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command embedded binding native budget accounts for cumulative payload transfers",
+        "command embedded binding native budget refuses insufficient room before callbacks and stays terminal"
+      ]
+    },
+    {
+      "label": "healthy-execution-binding",
+      "nodes": 6,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command execution binds its own accepted stdlib identity before native reads",
+        "command execution refuses moved and consumed owners before binding",
+        "command execution leaves interpretation-exempt reads unbound",
+        "command execution leaves interpretation-exempt reads unbound/bare status and request lookup intent",
+        "command execution leaves interpretation-exempt reads unbound/bound role status still binds",
+        "command execution leaves interpretation-exempt reads unbound/stopped-check recovery intent"
+      ]
+    },
+    {
+      "label": "restored-execution-binding",
+      "nodes": 6,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command execution refuses moved and consumed owners before binding",
+        "command execution binds its own accepted stdlib identity before native reads",
+        "command execution leaves interpretation-exempt reads unbound",
+        "command execution leaves interpretation-exempt reads unbound/bare status and request lookup intent",
+        "command execution leaves interpretation-exempt reads unbound/bound role status still binds",
+        "command execution leaves interpretation-exempt reads unbound/stopped-check recovery intent"
+      ]
+    },
+    {
+      "label": "final-healthy-runtime",
+      "nodes": 9,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command embedded binding native budget accounts for cumulative payload transfers",
+        "command execution binds its own accepted stdlib identity before native reads",
+        "command execution caught live allocation exhaustion stays terminal",
+        "command embedded binding native budget refuses insufficient room before callbacks and stays terminal",
+        "command execution leaves interpretation-exempt reads unbound",
+        "command execution leaves interpretation-exempt reads unbound/bare status and request lookup intent",
+        "command execution leaves interpretation-exempt reads unbound/bound role status still binds",
+        "command execution leaves interpretation-exempt reads unbound/stopped-check recovery intent",
+        "command execution refuses moved and consumed owners before binding"
+      ]
+    },
+    {
+      "label": "final-budget-after-configure",
+      "nodes": 2,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "command embedded binding native budget refuses insufficient room before callbacks and stays terminal",
+        "command embedded binding native budget accounts for cumulative payload transfers"
+      ]
+    },
+    {
+      "label": "healthy-source-guards",
+      "nodes": 2,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "RA01-B1 production targets never receive the authoring definition",
+        "X07 envelope and bootstrap source has no manual argv scan"
+      ]
+    },
+    {
+      "label": "healthy-direct-commit",
+      "nodes": 1,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "execution same request id with changed content conflicts"
+      ]
+    },
+    {
+      "label": "restored-direct-commit",
+      "nodes": 1,
+      "failed_nodes": 0,
+      "error_nodes": 0,
+      "skipped_nodes": 0,
+      "names": [
+        "execution same request id with changed content conflicts"
+      ]
+    }
+  ],
+  "lifecycle": {
+    "scenarios": 5,
+    "processes": 68,
+    "failures": 0,
+    "skips": 0,
+    "final": "raw/final-restored-lifecycle.stdout"
+  },
+  "quantity": {
+    "P": 463972,
+    "exempt_min": 10640,
+    "healthy_bound_min": 1638863,
+    "healthy_gap": 1628223,
+    "three_P": 1391916,
+    "initial_one_pass_gap": 533176,
+    "two_payload_passes_gap": 1164251,
+    "two_P_room": 927944,
+    "interpretation": "execution budget gap includes bound/exempt validation side cost; independent source trace and actual mutants are separate required evidence"
+  },
+  "strict_idle": "raw/ultimate-idle-confirmation.stdout",
+  "fixture": "FIXTURE.json",
+  "composition": "COMPOSITIONS.json",
+  "carry": "CARRY-FORWARD.json",
+  "retained_attempts": "ATTEMPTS.json",
+  "default_graph": "DEFAULT-ALL.json",
+  "callback": "CALLBACK-CONTROL.json",
+  "source_restoration": "all306 main and scratch files match frozen CODE-IDENTITY.json; main source/build never mutated by prober",
+  "limits": [
+    "Logical cumulative backing/object model is not allocator/RSS guarantee.",
+    "Size overflow is a source-bound proof/equivalent obligation; no unsafe huge-view overflow injection.",
+    "Older acceptance/profile reservations remain excluded known separate audit follow-ups.",
+    "Graph warnings for3 unrelated unbuilt dyndep files affect no membership conclusion; graph audit is not full compilation proof.",
+    "One consumed-owner mutant crashes; candidate/healthy restored owners pass.",
+    "Vendor symlink used without edits; no OS read-only enforcement asserted."
+  ],
+  "report": "PROBES.md",
+  "raw_files": 2183
+}

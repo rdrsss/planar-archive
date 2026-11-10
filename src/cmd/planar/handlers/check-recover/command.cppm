@@ -4,17 +4,11 @@ export module planar.cmd.execution.check_recover;
 import std;
 import cli11;
 export import planar.cmd.response;
+export import planar.cmd.execution_options;
 export import planar.engine.runtime;
 export namespace planar::cmd::handlers {
 /// Private native host paths and scalar options for one invocation.
-struct check_recover_options {
-  std::string ledger;          ///< Explicit ledger path; never inferred from home configuration.
-  std::string run_id;          ///< Canonical positive run identifier; contains no secret.
-  std::string reservation;     ///< Canonical positive check reservation identifier.
-  std::string confirm_stopped; ///< Explicit true acknowledgement that the prior check process stopped.
-  std::string request_id;      ///< Caller-provided idempotency key.
-  std::string actor;           ///< Driver actor recorded with the event.
-};
+using ::planar::cmd::execution_options::check_recover_options;
 /// @brief Attach the command and its exact required/optional options.
 /// @param root Parent CLI11 parser.
 /// @param options Storage retained until parse and dispatch finish.

@@ -987,3 +987,298 @@ TEST_CASE("command load defers provenance refusal until fresh acceptance", "[com
     CHECK(vm->load_completion()->phase == ledger::completion_phase::not_completed);
   }
 }
+
+namespace {
+struct binding_load_types : real_types {
+  using load = command_load_options;
+  using vm   = command_vm;
+};
+template <class Base, class Activate, class Status, class Check> struct binding_types : Base {
+  using activate = Activate;
+  using status   = Status;
+  using check    = Check;
+};
+using original_binding_types =
+    binding_types<binding_load_types, command_activate_options, command_status_options, command_check_options>;
+using changed_binding_types = binding_types<changed_load_types, load_test_1::command_activate_options,
+                                            load_test_1::command_status_options, load_test_1::command_check_options>;
+// The load provider receives verified accepted provenance through a separate service boundary.
+// It is the oracle for execution identity, rather than a copy of the invocation's digest implementation.
+template <class Types> std::string accepted_binding_digest() {
+  load_fixture         fixture;
+  load_services<Types> provider;
+  auto                 vm = Types::vm::create();
+  REQUIRE(vm);
+  auto result = vm->invoke(fixture.options<Types>(), provider);
+  REQUIRE(result);
+  REQUIRE((*result)->fields.at("ok")->boolean);
+  REQUIRE(provider.prepared);
+  std::string digest;
+  for (auto byte : provider.digest)
+    digest += std::format("{:02x}", byte);
+  return digest;
+}
+template <class Types> struct binding_services : fake_services<Types> {
+  using result = typename Types::result;
+  using fake_services<Types>::read_execution;
+  std::vector<std::string> order;
+  std::string              digest;
+  void                     bind_execution_stdlib(std::string_view value) override {
+    order.push_back("bind");
+    digest = value;
+  }
+  result read_execution(const typename Types::activate&) override {
+    order.push_back("read");
+    return {{}, error_value()};
+  }
+  result read_execution(const typename Types::status&) override {
+    order.push_back("read");
+    return {{}, error_value()};
+  }
+  result check_step(const typename Types::check&, std::string_view operation, const value_ptr&) override {
+    CHECK(operation == "read_execution");
+    order.push_back("read");
+    return {{}, error_value()};
+  }
+};
+template <class Types> void check_bound_digest(std::string_view expected) {
+  auto vm = Types::vm::create();
+  REQUIRE(vm);
+  binding_services<Types>  provider;
+  typename Types::activate options{"private-ledger.db", "job", "1", "NONE", "activate", "driver"};
+  auto                     result = vm->invoke(options, provider);
+  REQUIRE(result);
+  REQUIRE_FALSE((*result)->fields.at("ok")->boolean);
+  CHECK((*result)->fields.at("error")->fields.at("code")->string == "ledger_busy");
+  CHECK(provider.order == std::vector<std::string>{"bind", "read"});
+  CHECK(provider.digest == expected);
+}
+} // namespace
+
+TEST_CASE("command execution binds its own accepted stdlib identity before native reads", "[commands][execution_binding]") {
+  const auto original = accepted_binding_digest<original_binding_types>();
+  const auto changed  = accepted_binding_digest<changed_binding_types>();
+  REQUIRE(original != changed);
+  check_bound_digest<original_binding_types>(original);
+  check_bound_digest<changed_binding_types>(changed);
+}
+
+TEST_CASE("command execution leaves interpretation-exempt reads unbound", "[commands][execution_binding]") {
+  SECTION("bare status and request lookup intent") {
+    for (const auto request : {false, true}) {
+      auto vm = command_vm::create();
+      REQUIRE(vm);
+      binding_services<original_binding_types> provider;
+      command_status_options                   options;
+      options.ledger = "private-ledger.db";
+      if (request)
+        options.request_id = "saved-request";
+      auto result = vm->invoke(options, provider);
+      REQUIRE(result);
+      REQUIRE_FALSE((*result)->fields.at("ok")->boolean);
+      CHECK(provider.order == std::vector<std::string>{"read"});
+      CHECK(provider.digest.empty());
+    }
+  }
+  SECTION("bound role status still binds") {
+    auto vm = command_vm::create();
+    REQUIRE(vm);
+    binding_services<original_binding_types> provider;
+    command_status_options                   options;
+    options.ledger = "private-ledger.db";
+    options.role   = "worker";
+    auto result    = vm->invoke(options, provider);
+    REQUIRE(result);
+    REQUIRE_FALSE((*result)->fields.at("ok")->boolean);
+    CHECK(provider.order == std::vector<std::string>{"bind", "read"});
+    CHECK(provider.digest == accepted_binding_digest<original_binding_types>());
+  }
+  SECTION("stopped-check recovery intent") {
+    auto vm = command_vm::create();
+    REQUIRE(vm);
+    binding_services<original_binding_types> provider;
+    command_check_options                    options;
+    options.operation       = "check-recover";
+    options.ledger          = "private-ledger.db";
+    options.run_id          = "1";
+    options.reservation     = "1";
+    options.confirm_stopped = "true";
+    options.request_id      = "recover-check";
+    options.actor           = "driver";
+    auto result             = vm->invoke(options, provider);
+    REQUIRE(result);
+    REQUIRE_FALSE((*result)->fields.at("ok")->boolean);
+    CHECK(provider.order == std::vector<std::string>{"read"});
+    CHECK(provider.digest.empty());
+  }
+}
+
+TEST_CASE("command execution refuses moved and consumed owners before binding", "[commands][execution_binding]") {
+  auto created = command_vm::create();
+  REQUIRE(created);
+  command_vm                               owner = std::move(*created);
+  binding_services<original_binding_types> provider;
+  command_activate_options                 options{"private-ledger.db", "job", "1", "NONE", "activate", "driver"};
+  auto                                     moved_result = created->invoke(options, provider);
+  REQUIRE_FALSE(moved_result);
+  CHECK(provider.order.empty());
+  auto first = owner.invoke(options, provider);
+  REQUIRE(first);
+  REQUIRE_FALSE((*first)->fields.at("ok")->boolean);
+  REQUIRE(provider.order == std::vector<std::string>{"bind", "read"});
+  auto consumed_result = owner.invoke(options, provider);
+  REQUIRE_FALSE(consumed_result);
+  CHECK(provider.order == std::vector<std::string>{"bind", "read"});
+}
+
+import planar.engine.binding_budget_test;
+namespace {
+struct binding_budget_types {
+  using services = binding_budget_test::command_services;
+  using render   = binding_budget_test::command_render_options;
+  using init     = binding_budget_test::command_init_options;
+  using history  = binding_budget_test::command_history_options;
+  using source   = binding_budget_test::command_export_options;
+  using selector = binding_budget_test::command_history_selector;
+  using result   = binding_budget_test::command_service_result;
+  using load     = binding_budget_test::command_load_options;
+  using vm       = binding_budget_test::command_vm;
+  using activate = binding_budget_test::command_activate_options;
+  using status   = binding_budget_test::command_status_options;
+  using check    = binding_budget_test::command_check_options;
+};
+constexpr std::size_t binding_budget_ceiling = 512 * 1024 * 1024;
+constexpr std::size_t binding_budget_upper   = 64 * 1024 * 1024;
+struct binding_budget_corpus {
+  std::size_t payload = 0;
+  std::string digest;
+};
+binding_budget_corpus accepted_budget_corpus() {
+  load_fixture                        fixture;
+  load_services<binding_budget_types> provider;
+  auto                                vm = binding_budget_types::vm::create();
+  REQUIRE(vm);
+  auto loaded = vm->invoke(fixture.options<binding_budget_types>(), provider);
+  REQUIRE(loaded);
+  REQUIRE((*loaded)->fields.at("ok")->boolean);
+  REQUIRE(provider.prepared);
+  binding_budget_corpus result;
+  bool                  assembly = false, manifest = false;
+  for (const auto& file : provider.prepared->stdlib.files) {
+    if (file.path == "__planar__/assembly.canonical") {
+      manifest = true;
+      continue;
+    }
+    assembly |= file.path == "__planar__/assembly.lua";
+    result.payload += file.payload.size();
+  }
+  REQUIRE(assembly);
+  REQUIRE(manifest);
+  // P is independently observed accepted original+assembly payload, not a copy of the binder's reservation expression.
+  REQUIRE(result.payload > 65536);
+  REQUIRE(result.payload < binding_budget_upper / 3);
+  for (auto byte : provider.digest)
+    result.digest += std::format("{:02x}", byte);
+  return result;
+}
+std::string binding_budget_id(std::size_t remaining) {
+  auto id = std::format("{:012}", remaining);
+  REQUIRE(id.size() == 12);
+  return id;
+}
+struct binding_budget_observation {
+  bool                      native_failure = false;
+  std::optional<diagnostic> refusal;
+  std::vector<std::string>  order;
+  std::string               digest;
+};
+void require_native_budget_refusal(const diagnostic& error) {
+  CHECK(error.code == "resource_limit");
+  CHECK(error.limit == "native_bytes");
+  CHECK(error.maximum == binding_budget_ceiling);
+}
+binding_budget_observation observe_binding_room(bool bound, std::size_t remaining) {
+  auto vm = binding_budget_types::vm::create();
+  REQUIRE(vm);
+  binding_services<binding_budget_types> provider;
+  binding_budget_types::activate activate{"private-ledger.db", "job", "1", "NONE", binding_budget_id(remaining), "driver"};
+  binding_budget_types::status   status;
+  status.ledger                     = "private-ledger.db";
+  status.request_id                 = binding_budget_id(remaining);
+  auto                       result = bound ? vm->invoke(activate, provider) : vm->invoke(status, provider);
+  binding_budget_observation observation;
+  observation.order  = provider.order;
+  observation.digest = provider.digest;
+  if (!result) {
+    require_native_budget_refusal(result.error());
+    observation.refusal = result.error();
+    return observation;
+  }
+  REQUIRE_FALSE((*result)->fields.at("ok")->boolean);
+  REQUIRE((*result)->fields.at("error")->fields.at("code")->string == "ledger_busy");
+  REQUIRE(provider.order == (bound ? std::vector<std::string>{"bind", "read"} : std::vector<std::string>{"read"}));
+  if (!bound)
+    REQUIRE(provider.digest.empty());
+  observation.native_failure = true;
+  return observation;
+}
+std::size_t minimum_binding_room(bool bound, const binding_budget_corpus& corpus) {
+  const auto zero = observe_binding_room(bound, 0);
+  REQUIRE_FALSE(zero.native_failure);
+  REQUIRE(zero.refusal);
+  REQUIRE(zero.order.empty());
+  const auto generous = observe_binding_room(bound, binding_budget_upper);
+  REQUIRE(generous.native_failure);
+  if (bound)
+    REQUIRE(generous.digest == corpus.digest);
+  std::size_t rejected = 0, accepted = binding_budget_upper;
+  while (accepted - rejected > 1) {
+    const auto middle = rejected + (accepted - rejected) / 2;
+    if (observe_binding_room(bound, middle).native_failure)
+      accepted = middle;
+    else
+      rejected = middle;
+  }
+  REQUIRE_FALSE(observe_binding_room(bound, accepted - 1).native_failure);
+  REQUIRE(observe_binding_room(bound, accepted).native_failure);
+  return accepted;
+}
+} // namespace
+
+TEST_CASE("command embedded binding native budget accounts for cumulative payload transfers",
+          "[commands][binding_native_budget]") {
+  const auto corpus = accepted_budget_corpus();
+  // Both shipped handlers first read execution and receive the same native error. After the fixture insertion,
+  // activation validates additional nonempty options, so its non-binder side cost cannot be less than bare status's.
+  // Fixed-width request IDs keep validation sizes unchanged while room varies; preparation/registration precede it.
+  const auto exempt = minimum_binding_room(false, corpus);
+  const auto bound  = minimum_binding_room(true, corpus);
+  std::println("R19 binding budget P={} exempt_min={} bound_min={} gap={} minimum_payload_transfers={}", corpus.payload, exempt,
+               bound, bound >= exempt ? bound - exempt : 0, 3 * corpus.payload);
+  REQUIRE(bound >= exempt);
+  CHECK(bound - exempt >= 3 * corpus.payload);
+}
+
+TEST_CASE("command embedded binding native budget refuses insufficient room before callbacks and stays terminal",
+          "[commands][binding_native_budget]") {
+  const auto corpus   = accepted_budget_corpus();
+  const auto generous = observe_binding_room(true, binding_budget_upper);
+  REQUIRE(generous.native_failure);
+  REQUIRE(generous.digest == corpus.digest);
+  auto vm = binding_budget_types::vm::create();
+  REQUIRE(vm);
+  binding_services<binding_budget_types> provider;
+  binding_budget_types::activate         options{
+      "private-ledger.db", "job", "1", "NONE", binding_budget_id(2 * corpus.payload), "driver"};
+  auto result = vm->invoke(options, provider);
+  INFO(std::format("P={} room={} callback_count={}", corpus.payload, 2 * corpus.payload, provider.order.size()));
+  REQUIRE_FALSE(result);
+  require_native_budget_refusal(result.error());
+  CHECK(provider.order.empty());
+  CHECK(provider.digest.empty());
+  auto repeated = vm->invoke(options, provider);
+  REQUIRE_FALSE(repeated);
+  CHECK(repeated.error().code == "internal");
+  CHECK(repeated.error().message == "Command invocation already consumed");
+  CHECK(provider.order.empty());
+}

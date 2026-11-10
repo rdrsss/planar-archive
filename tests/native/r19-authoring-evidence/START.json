@@ -1,0 +1,6 @@
+{
+  "head": "d6c989ed9e196bf9b357019ea946e6ff18c47f18",
+  "branch": "dev/planar-v2-vernacular",
+  "scope": "Restore same registered VM authoring/execution dispatch; preserve EX-6, production catalog and profiles",
+  "clean_start": true
+}

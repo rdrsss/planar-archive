@@ -3,6 +3,11 @@ import std;
 import cli11;
 import planar.cmd.invocation;
 namespace planar::cmd::handlers {
+namespace {
+engine::command_run_options claim_intent(const claim_options& o) {
+  return {o.ledger, o.job, o.role, o.request_id, o.actor, o.run_id, o.provenance};
+}
+} // namespace
 CLI::App& attach_claim(CLI::App& root, claim_options& o) {
   auto& command = *root.add_subcommand("claim");
   command.set_help_flag();
@@ -63,9 +68,9 @@ CLI::App& attach_claim(CLI::App& root, claim_options& o) {
   return command;
 }
 response claim_command(const claim_options& o, engine::command_vm* vm) {
-  return execute(o, vm);
+  return execute(claim_intent(o), vm);
 }
 response claim_with_profile(const claim_options& o, std::string_view selector) {
-  return execute_with_profile(o, selector);
+  return execute_with_profile(claim_intent(o), selector);
 }
 } // namespace planar::cmd::handlers

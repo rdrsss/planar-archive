@@ -1,0 +1,365 @@
+{
+  "scope": "R19-AUTHORING bounded independent host Debug probes; no implementation approval",
+  "candidate_aggregate_sha256": "161c575fc532e61ef6debd2183e019bd6d9357b17e98f255c8fce57a52d29b3b",
+  "candidate_files": 305,
+  "model_note": "ordinary available model substitutes for unavailable prescribed Claude prober",
+  "scratch": "<scratch>/source and <scratch>/source/build/rewrite-debug; vendor is a read-only source symlink",
+  "current_mutants": 31,
+  "killed_by_assertion_or_structural_observation": 30,
+  "mutant_crash_kills": 1,
+  "survivors": [],
+  "historical_omission_generation": 12,
+  "exploratory_mutants_outside_table": 0,
+  "rows": [
+    {
+      "id": "original-handler-fallback",
+      "invariants": [
+        "I1",
+        "I2",
+        "I5",
+        "I13"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "skip-embedded-binding-v4",
+      "invariants": [
+        "I13"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "wrong-embedded-digest",
+      "invariants": [
+        "I13"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "bind-exempt-status",
+      "invariants": [
+        "I14"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "bind-exempt-check-recover",
+      "invariants": [
+        "I14"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "consume-owner-twice-v2",
+      "invariants": [
+        "I15"
+      ],
+      "result": "KILLED_CRASH",
+      "observation": "native crash",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "exempt-bound-preview",
+      "invariants": [
+        "I3"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "skip-early-activation-replay",
+      "invariants": [
+        "I4"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "skip-saved-body-compare",
+      "invariants": [
+        "I4"
+      ],
+      "result": "KILLED",
+      "observation": "native assertion",
+      "raw_manifest": "probes/NATIVE.json"
+    },
+    {
+      "id": "final-omit-vm-activate",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-check",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-check_recover",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-checkpoint",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-claim",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-preview",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-recover",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-refresh",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-release",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-status",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-takeover",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "final-omit-vm-verdict",
+      "invariants": [
+        "I2"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "accounting-omit-scratch-charge",
+      "invariants": [
+        "I15"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FINAL-STRUCTURAL.json"
+    },
+    {
+      "id": "field-drop-checkpoint-provenance",
+      "invariants": [
+        "I16"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FIELD-MUTANTS.json"
+    },
+    {
+      "id": "field-change-status-default",
+      "invariants": [
+        "I16"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/FIELD-MUTANTS.json"
+    },
+    {
+      "id": "production-authoring-definition",
+      "invariants": [
+        "I7",
+        "I10"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/SOURCE-MUTANTS.json"
+    },
+    {
+      "id": "manual-argv-scan",
+      "invariants": [
+        "I10"
+      ],
+      "result": "KILLED",
+      "observation": "source guard",
+      "raw_manifest": "probes/SOURCE-MUTANTS.json"
+    },
+    {
+      "id": "omit-execution-module-rename",
+      "invariants": [
+        "I9"
+      ],
+      "result": "KILLED",
+      "observation": "generated source guard",
+      "raw_manifest": "probes/GENERATOR-MUTANT.json"
+    },
+    {
+      "id": "default-all-inclusion",
+      "invariants": [
+        "I11"
+      ],
+      "result": "KILLED",
+      "observation": "configured graph/native work",
+      "raw_manifest": "probes/GRAPH-MUTANT.json"
+    },
+    {
+      "id": "unconditional-generated-write",
+      "invariants": [
+        "I11"
+      ],
+      "result": "KILLED",
+      "observation": "configured graph/native work",
+      "raw_manifest": "probes/UNCONDITIONAL-WRITE-MUTANT.json"
+    },
+    {
+      "id": "authoring-profile-local-owner",
+      "invariants": [
+        "I8"
+      ],
+      "result": "KILLED",
+      "observation": "native profile parity and source owner guard",
+      "raw_manifest": "probes/PROFILE-OWNER-MUTANT.json"
+    },
+    {
+      "id": "charge-after-preparation",
+      "invariants": [
+        "I15"
+      ],
+      "result": "KILLED",
+      "observation": "source accounting order",
+      "raw_manifest": "probes/raw/charge-after-preparation.json"
+    }
+  ],
+  "healthy_coverage": {
+    "all_processes": 68,
+    "successful_authoring_calls": {
+      "activate": 5,
+      "status": 9,
+      "check": 2,
+      "load": 5,
+      "claim": 5,
+      "init": 5,
+      "recover": 2,
+      "preview": 2,
+      "orchestrator": 2,
+      "verdict": 1,
+      "checkpoint": 1,
+      "release": 2,
+      "refresh": 1,
+      "check-recover": 1,
+      "takeover": 1
+    },
+    "twelve_execution_families_successfully_observed": [
+      "activate",
+      "status",
+      "preview",
+      "claim",
+      "takeover",
+      "refresh",
+      "checkpoint",
+      "release",
+      "recover",
+      "check",
+      "check-recover",
+      "verdict"
+    ],
+    "lifecycle_script_sha256": "7ed5c052906f4111fae20be2a8f7ed096740c9fde31b3d604eadd298aaf2b29a",
+    "binder_test_source_sha256": "1a905cfeea53757aad23211f17e009335bf89c585e9ae7ed6b28d3257ad64e78",
+    "source_guard_cases": 2,
+    "binder_selected_source_cases": 4,
+    "binder_new_source_cases": 3,
+    "binder_new_JUnit_nodes": 6,
+    "binder_existing_additional_case": "command execution caught live allocation exhaustion stays terminal",
+    "binder_JUnit_nodes": 7,
+    "binder_JUnit_names": [
+      "command execution leaves interpretation-exempt reads unbound",
+      "command execution leaves interpretation-exempt reads unbound/bare status and request lookup intent",
+      "command execution leaves interpretation-exempt reads unbound/bound role status still binds",
+      "command execution leaves interpretation-exempt reads unbound/stopped-check recovery intent",
+      "command execution caught live allocation exhaustion stays terminal",
+      "command execution refuses moved and consumed owners before binding",
+      "command execution binds its own accepted stdlib identity before native reads"
+    ]
+  },
+  "limits": [
+    "Twelve exact VM argument omissions are enforced structurally; a fresh same-bundle VM may be semantically indistinguishable.",
+    "No direct binder-specific native-exhaustion boundary; charge ordering is source-audited, while existing allocation/budget controls remain separate.",
+    "Default graph audit emitted warnings for three unrelated unbuilt dyndep files; used for configured target membership only.",
+    "The consumed-owner guard-removal mutant crashes; candidate/restored owner tests pass.",
+    "Host Debug probe evidence does not establish Linux or the remaining R19 matrix."
+  ],
+  "carried_audit_controls": {
+    "manifest": "audit-repair/NEGATIVES.json",
+    "source_sha256": "2cc2549cad0dab0a1b07d98d396c4308a5710ff857ff04554e5a4aa8fc1c0cf8",
+    "controls": "fresh repair healthy plus missing/extra/altered generated-file controls inspected and source-hash-bound; not rerun as new independent probes"
+  },
+  "report": "probes/PROBES.md",
+  "callback_control": "probes/CALLBACK-CONTROL.json",
+  "restored_final_lifecycle": "probes/raw/post-configure-restored-lifecycle.json",
+  "candidate_inputs_restored": true
+}

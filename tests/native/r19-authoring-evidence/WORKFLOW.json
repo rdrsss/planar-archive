@@ -1,0 +1,41 @@
+{
+  "scope": "actual authoring-only repair workflow, independent verdict pending",
+  "accepted_revision": "4",
+  "candidate_files": 38,
+  "base_files": 34,
+  "initial_bootstrap_preceded_successful_claim": true,
+  "production_fallback_used": false,
+  "interrupted_request": "authoring.check.1",
+  "interrupted_reservation_recovered": true,
+  "builder_run": "2",
+  "builder_generation": "2",
+  "check_request": "authoring.check.2",
+  "check_outcome": "completed",
+  "worker_work_fp": "xxh3_128:6e5ad347ad1ac281b62a9fbd6b82c812",
+  "targets": [
+    {
+      "output": "xxh3_128:6cec859929e48c6048a9c613a863d6c5",
+      "work": "retained_vm"
+    }
+  ],
+  "passing_evidence": [
+    {
+      "work": "retained_vm",
+      "check": "host_debug",
+      "outcome": "pass"
+    },
+    {
+      "work": "retained_vm",
+      "check": "host_release",
+      "outcome": "pass"
+    },
+    {
+      "work": "retained_vm",
+      "check": "planar.boundary_v1",
+      "outcome": "pass"
+    }
+  ],
+  "reviewer_run": "3",
+  "reviewer_policy": "xxh3_128:2de11651fcbaab87ac9982b6e196ef5c",
+  "candidate_binary_sha256": "1c8e390bc90c87ed3ce8f71a71e03621c08143d15e6ab5b28083343bd6c37719"
+}

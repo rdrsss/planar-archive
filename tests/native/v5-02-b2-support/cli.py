@@ -46,6 +46,14 @@ with tempfile.TemporaryDirectory(prefix='planar-b2-cli-') as temporary:
  assert not target.exists()
  run(product,['init','--ledger',target,'--workspace-id','projection'],0)
  assert target.is_file()
+ # A selected execution callable must come from the same admitted VM, even for an exempt read.
+ before_status=target.read_bytes()
+ p=run(variants[0],['status','--ledger',target],3,'schema')
+ assert json.loads(p.stderr)['error']['message']=='B2 retained execution callable executed'
+ assert target.read_bytes()==before_status
+ ordinary=run(product,['status','--ledger',target],0)
+ assert json.loads(ordinary.stdout)['kind']=='status'
+ assert target.read_bytes()==before_status
  # A forged response cannot replace a native failure.
  run(variants[0],['export','--ledger',root/'missing','--revision','1','--target',root/'not-published'],3,'ledger_not_found')
  assert not (root/'not-published').exists()

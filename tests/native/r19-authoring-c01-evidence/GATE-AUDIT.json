@@ -1,0 +1,249 @@
+{
+  "scope": "Actual C01 authoring job host gates; independently reparsed by coordinator; final review pending",
+  "code_aggregate_sha256": "847e5e23858170174a6e7c4a3d846f7ca016886ff4885f25aec7505f60524945",
+  "debug": {
+    "matched": 1851,
+    "passed": 1851,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "inventory_names_equal": true,
+    "source_freeze_equal": true,
+    "source_freeze_files": 802,
+    "all306_code_support_hashes_in_freeze": true,
+    "active_lint_sources": 251,
+    "strict_idle": true,
+    "commands": [
+      {
+        "name": "idle-classifier-tests",
+        "argv": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "<repo>/tests/native/r19-cmake-support/check_test.py"
+        ],
+        "exit": 0,
+        "duration_ns": 83333000
+      },
+      {
+        "name": "configure",
+        "argv": [
+          "cmake",
+          "--preset",
+          "debug"
+        ],
+        "exit": 0,
+        "duration_ns": 30528977000
+      },
+      {
+        "name": "build",
+        "argv": [
+          "cmake",
+          "--build",
+          "<repo>/build/rewrite-debug",
+          "--parallel",
+          "4",
+          "--target",
+          "all",
+          "planar_tests"
+        ],
+        "exit": 0,
+        "duration_ns": 91550036000
+      },
+      {
+        "name": "inventory",
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-debug",
+          "--show-only=json-v1"
+        ],
+        "exit": 0,
+        "duration_ns": 173153000
+      },
+      {
+        "name": "ctest",
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-debug",
+          "--output-on-failure",
+          "--output-junit",
+          "<repo>/tests/native/r19-authoring-c01-evidence/checks/debug/1794319652660197000/ctest.xml"
+        ],
+        "exit": 0,
+        "duration_ns": 1330472312000
+      },
+      {
+        "name": "lint",
+        "argv": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "<repo>/scripts/rewrite-check.py",
+          "lint",
+          "--build-dir",
+          "<repo>/build/rewrite-debug"
+        ],
+        "exit": 0,
+        "duration_ns": 7446781000
+      },
+      {
+        "name": "repeat-build",
+        "argv": [
+          "cmake",
+          "--build",
+          "<repo>/build/rewrite-debug",
+          "--parallel",
+          "4",
+          "--target",
+          "all",
+          "planar_tests"
+        ],
+        "exit": 0,
+        "duration_ns": 698843000
+      }
+    ],
+    "artifacts": {
+      "checks/debug/1794319652660197000/MANIFEST.json": "61f24db24936df5f13b74d3b3c613544a78a594bb26e039275bf885eb45d28be",
+      "checks/debug/1794319652660197000/build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/debug/1794319652660197000/build.stdout": "aaea426cd165bcf4053160aaf8819244434de92bd11acf11ad2b497655a7f5ee",
+      "checks/debug/1794319652660197000/checked-projection.json": "a25d61f5981a559c4b56ec5c05020150e3ed6ff54d1152481c0a0fbd07592c1e",
+      "checks/debug/1794319652660197000/configure.stderr": "d7bb044a06fcde89f815b7f3fc3d9c9d1773ec01a647c2f15fd112d17029721a",
+      "checks/debug/1794319652660197000/configure.stdout": "9448859ca28d21ca32797f3c237c2694263b2fa57769a41bedfc4cda5ac704af",
+      "checks/debug/1794319652660197000/ctest.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/debug/1794319652660197000/ctest.stdout": "55bfe282e3628bc2565ea9333177411334b7d9a40b0ad562871f5e7444fb8616",
+      "checks/debug/1794319652660197000/ctest.xml": "30069045edf6d26bd9d17eef0a9735fb4ede19518ab5aec18584fa655c4d421f",
+      "checks/debug/1794319652660197000/idle-classifier-tests.stderr": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4",
+      "checks/debug/1794319652660197000/idle-classifier-tests.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/debug/1794319652660197000/inventory.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/debug/1794319652660197000/inventory.stdout": "dd95cb75d0f73fdecf5ab06d5e9d27544cc4c91a94cfa0bc03420e89444bc955",
+      "checks/debug/1794319652660197000/lint.stderr": "98a533b711f60dbd841d784f487ee8f830734acf91a183ef8b53518c5562d23e",
+      "checks/debug/1794319652660197000/lint.stdout": "57ffa9934b24421b6926eb9e081c32ca6a609aec7f64d2508a1887a63894e1d0",
+      "checks/debug/1794319652660197000/repeat-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/debug/1794319652660197000/repeat-build.stdout": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "checks/debug/1794319652660197000/source-after.json": "3cf271ad8aee6fac3ae5b03e89da878f79b31406e393bff993af9da50764f6e4",
+      "checks/debug/1794319652660197000/source-before.json": "3cf271ad8aee6fac3ae5b03e89da878f79b31406e393bff993af9da50764f6e4"
+    }
+  },
+  "release": {
+    "matched": 1851,
+    "passed": 1851,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "inventory_names_equal": true,
+    "source_freeze_equal": true,
+    "source_freeze_files": 802,
+    "all306_code_support_hashes_in_freeze": true,
+    "active_lint_sources": 251,
+    "strict_idle": true,
+    "commands": [
+      {
+        "name": "idle-classifier-tests",
+        "argv": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "<repo>/tests/native/r19-cmake-support/check_test.py"
+        ],
+        "exit": 0,
+        "duration_ns": 103544000
+      },
+      {
+        "name": "configure",
+        "argv": [
+          "cmake",
+          "--preset",
+          "release"
+        ],
+        "exit": 0,
+        "duration_ns": 33989951000
+      },
+      {
+        "name": "build",
+        "argv": [
+          "cmake",
+          "--build",
+          "<repo>/build/rewrite-release",
+          "--parallel",
+          "4",
+          "--target",
+          "all",
+          "planar_tests"
+        ],
+        "exit": 0,
+        "duration_ns": 287798768000
+      },
+      {
+        "name": "inventory",
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-release",
+          "--show-only=json-v1"
+        ],
+        "exit": 0,
+        "duration_ns": 168490000
+      },
+      {
+        "name": "ctest",
+        "argv": [
+          "ctest",
+          "--test-dir",
+          "<repo>/build/rewrite-release",
+          "--output-on-failure",
+          "--output-junit",
+          "<repo>/tests/native/r19-authoring-c01-evidence/checks/release/1794321125268953000/ctest.xml"
+        ],
+        "exit": 0,
+        "duration_ns": 473436469000
+      },
+      {
+        "name": "lint",
+        "argv": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "<repo>/scripts/rewrite-check.py",
+          "lint",
+          "--build-dir",
+          "<repo>/build/rewrite-release"
+        ],
+        "exit": 0,
+        "duration_ns": 6273573000
+      },
+      {
+        "name": "repeat-build",
+        "argv": [
+          "cmake",
+          "--build",
+          "<repo>/build/rewrite-release",
+          "--parallel",
+          "4",
+          "--target",
+          "all",
+          "planar_tests"
+        ],
+        "exit": 0,
+        "duration_ns": 726183000
+      }
+    ],
+    "artifacts": {
+      "checks/release/1794321125268953000/MANIFEST.json": "1c59bdcad3b1a53839e699bf876e2efaf2587f134c1890bb814e824b028d4e77",
+      "checks/release/1794321125268953000/build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/release/1794321125268953000/build.stdout": "1138c8e632516ba31acea3b202eabab18c8101e4d591535060acb627bb7b0bbe",
+      "checks/release/1794321125268953000/checked-projection.json": "a25d61f5981a559c4b56ec5c05020150e3ed6ff54d1152481c0a0fbd07592c1e",
+      "checks/release/1794321125268953000/configure.stderr": "d7bb044a06fcde89f815b7f3fc3d9c9d1773ec01a647c2f15fd112d17029721a",
+      "checks/release/1794321125268953000/configure.stdout": "673d1fb65637342f10763fe37dfb0abb4ddb2354da7e2d76db16dd9cd2abe920",
+      "checks/release/1794321125268953000/ctest.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/release/1794321125268953000/ctest.stdout": "c9851fdbad09361c767dc35e5b984dce8f72a41f30098938861e4834bf9b78dd",
+      "checks/release/1794321125268953000/ctest.xml": "28aac20cdecc6b34bb7b3d2d98ed61e94ac7febac4d44f2d9c9a4dde5ccfc860",
+      "checks/release/1794321125268953000/idle-classifier-tests.stderr": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4",
+      "checks/release/1794321125268953000/idle-classifier-tests.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/release/1794321125268953000/inventory.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/release/1794321125268953000/inventory.stdout": "8c6e0f41299a81a0fb0f850d42c645cc85c14a3aa6be8fdd802108edce4d55eb",
+      "checks/release/1794321125268953000/lint.stderr": "cad1e672df13482f001f03bae09cff728be6388dfdeb93361b130363d124d24b",
+      "checks/release/1794321125268953000/lint.stdout": "a9599cded5895933cc74c251c51e2ebacd1b13c773c11e94e7cf5b2e1b6b1922",
+      "checks/release/1794321125268953000/repeat-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "checks/release/1794321125268953000/repeat-build.stdout": "c2ed93ffd93c840755c0e91392ae593b1b52de9b7aaf6c208123feaceb1dde2e",
+      "checks/release/1794321125268953000/source-after.json": "3cf271ad8aee6fac3ae5b03e89da878f79b31406e393bff993af9da50764f6e4",
+      "checks/release/1794321125268953000/source-before.json": "3cf271ad8aee6fac3ae5b03e89da878f79b31406e393bff993af9da50764f6e4"
+    }
+  },
+  "limitation": "Host macOS only; bounded new-binder correction; no Linux/full R19/global-accounting claim."
+}

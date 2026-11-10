@@ -3,6 +3,11 @@ import std;
 import cli11;
 import planar.cmd.invocation;
 namespace planar::cmd::handlers {
+namespace {
+engine::command_run_options takeover_intent(const takeover_options& o) {
+  return {o.ledger, o.job, o.role, o.request_id, o.actor, o.run_id, o.provenance};
+}
+} // namespace
 CLI::App& attach_takeover(CLI::App& root, takeover_options& o) {
   auto& command = *root.add_subcommand("takeover");
   command.set_help_flag();
@@ -78,9 +83,9 @@ CLI::App& attach_takeover(CLI::App& root, takeover_options& o) {
   return command;
 }
 response takeover_command(const takeover_options& o, engine::command_vm* vm) {
-  return execute(o, vm);
+  return execute(takeover_intent(o), vm);
 }
 response takeover_with_profile(const takeover_options& o, std::string_view selector) {
-  return execute_with_profile(o, selector);
+  return execute_with_profile(takeover_intent(o), selector);
 }
 } // namespace planar::cmd::handlers

@@ -140,6 +140,22 @@ Cumulative native bridge conversion retains its 512 MiB accounting ceiling.
 
 `main.cpp` performs checked process writes. `bootstrap` creates the CLI11 root,
 attaches the shipped command families and dispatches exactly one selected command.
+Embedded dispatch passes the VM whose catalog was validated to every command
+family, including execution and recovery. The separate authoring build and
+test compositions generate typed copies of the thin execution handlers alongside
+their local invocation/runtime modules. They execute the retained callable in
+that selected VM. `execution_options.cppm` holds runtime-independent CLI state;
+each handler constructs its owning runtime's intent from those retained values.
+Before bound embedded execution, the VM supplies native services with the
+provenance-tree digest of its own retained standard-library bytes. This binding
+reserves cumulative payload, metadata, tree and encoding scratch before provenance
+preparation, using checked native-budget charges without raising the ceiling.
+The reservation is a logical allocation bound rather than a resident-memory
+guarantee. Missing identity fails closed; a genuinely different bundle still fails the accepted
+revision's interpretation check. External-profile dispatch continues through
+its closed profile factory, which supplies the verified effective digest and
+does not admit authoring commands. The authoring bootstrap preserves the
+production execution profile handlers while using its local handlers for embedded commands.
 Rendering, ledger operations, authoring and execution handlers retain their own
 CLI11 option state through parsing. The draft execution surface adds run lifecycle,
 recovery, finite check execution and reviewer verdicts through bounded runtime

@@ -266,13 +266,6 @@ std::optional<std::string> tree_digest(const std::vector<history::tree_file>& fi
     return std::nullopt;
   return digest_hex(*digest);
 }
-/// The stdlib digest of this binary's embedded standard library (EX-6 binding for the embedded factory).
-std::optional<std::string> embedded_stdlib_digest() {
-  auto prepared = history::prepare_embedded_stdlib();
-  if (!prepared)
-    return std::nullopt;
-  return tree_digest(prepared->files, history::tree_profile::provenance);
-}
 std::optional<std::string> canonical_text(const value_ptr& node) {
   if (!node)
     return std::nullopt;
@@ -501,11 +494,11 @@ public:
   value_ptr                                     check_provenance, check_document, check_result_value;
   std::optional<std::string>                    execution_profile;
   std::optional<std::string>                    execution_stdlib;
-  void                                          bind_execution_profile(std::string_view digest) override {
+  void                                          bind_execution_stdlib(std::string_view digest) override {
     execution_stdlib = std::string(digest);
   }
   std::optional<std::string> execution_binding() const {
-    return execution_stdlib ? execution_stdlib : embedded_stdlib_digest();
+    return execution_stdlib;
   }
   bool                   check_committed = false;
   command_service_result check_step(const engine::command_check_options& options, std::string_view service,

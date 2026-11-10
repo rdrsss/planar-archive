@@ -46,6 +46,27 @@ retain their historical meaning. An idle Ninja invocation may first print
 `[0/2] Re-checking globbed directories...`; the final `ninja: no work to do.`
 confirms no compilation or linking was needed.
 
+`replacement.authoring_execution_lifecycle` runs the source-built production
+and separate authoring executables in isolated roots. Its five scenarios cover
+same-bundle activation, complete worker/check/reviewer acceptance, recovery with
+a genuinely stopped check, cross-bundle refusal and saved-response replay, and
+actual external-profile parity. Build `planar_tests` before selecting it with
+CTest. `replacement.retained_cli` also changes an execution callable in a compiled
+test bundle to detect dispatch that silently creates a different VM. The four
+generated command compositions and the authoring stack audit reversible source
+renames during configuration.
+`replacement.authoring_execution_wiring` checks all twelve retained-VM arguments
+and typed handler imports in production and fourteen generated bootstraps. This
+structural guard covers VM lifetime even when constructing a second identical
+VM would give the same process result.
+The two `command embedded binding native budget` cases use a separate compiled
+runtime fixture with checked budget preconsumption immediately before binding.
+They compare bound/exempt execution thresholds and require insufficient room to
+refuse before service callbacks, leaving the owner consumed. The fixture is
+excluded from default `all` and included by `planar_tests`; it adds no product
+option or runtime hook. The threshold gap includes execution side costs, so it
+is paired with source allocation analysis and one/two-pass mutation controls.
+
 `cmake/rewrite.cmake` explicitly registers colocated Catch2 `*.t.cpp` sources.
 The Python acceptance suites invoke the source-built binary in temporary roots;
 they never substitute an installed command. The gate derives active C++ files

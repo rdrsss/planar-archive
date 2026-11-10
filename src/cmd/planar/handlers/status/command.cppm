@@ -4,16 +4,11 @@ export module planar.cmd.execution.status;
 import std;
 import cli11;
 export import planar.cmd.response;
+export import planar.cmd.execution_options;
 import planar.engine.runtime;
 export namespace planar::cmd::handlers {
 /// Invocation-local option state, retained through dispatch.
-struct status_options {
-  std::string                ledger;     ///< Explicit ledger path; never inferred from home configuration.
-  std::optional<std::string> role;       ///< Selected role identifier.
-  std::optional<std::string> request_id; ///< Caller-provided idempotency key.
-  std::optional<std::string> workspace;  ///< Optional declaration workspace for a draft report.
-  std::optional<std::string> registry;   ///< Trusted registry file paired with the workspace.
-};
+using ::planar::cmd::execution_options::status_options;
 /// Attach the command to an invocation-local parser.
 /// @param root Invocation-local CLI11 parser.
 /// @param options Storage that outlives parsing and dispatch.

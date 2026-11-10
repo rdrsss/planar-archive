@@ -1,0 +1,89 @@
+{
+  "scope": "Actual C01 corrected authoring workflow independently approved and accepted",
+  "accepted_revision": "5",
+  "candidate_files": 40,
+  "base_files": 35,
+  "builder_run": "4",
+  "builder_generation": "3",
+  "claim_preceded_coding": true,
+  "production_fallback_used": false,
+  "check_request": "authoring.c01.check.1",
+  "check_outcome": "completed",
+  "target": {
+    "work": "retained_vm",
+    "output": "xxh3_128:8955bb1ccbf3d51499caca0bcafacb43",
+    "worker_work_fp": "xxh3_128:45b6e58e37fd6a82ec8c0bdc953df7e1",
+    "reviewer_policy": "xxh3_128:4476fe78ae35cdd44e23bf52e4fe12eb"
+  },
+  "passing_evidence": [
+    {
+      "work": "retained_vm",
+      "check": "host_debug",
+      "outcome": "pass"
+    },
+    {
+      "work": "retained_vm",
+      "check": "host_release",
+      "outcome": "pass"
+    },
+    {
+      "work": "retained_vm",
+      "check": "planar.boundary_v1",
+      "outcome": "pass"
+    }
+  ],
+  "reviewer_run": "5",
+  "candidate_binary_sha256": "223667762aca93431260241d2906977fb4ec7efa2eb651261f9cdcc9cbb9786e",
+  "historical_parent_reject_verdict": "1",
+  "semantic_reload_carried_findings": 0,
+  "R1_handed_explicitly_in_correction_briefs": true,
+  "independent_review": "docs/vernacular/rounds/R19-AUTHORING-C01-review.md",
+  "verdict": {
+    "admitted": false,
+    "applicability": "current",
+    "decision": "approve",
+    "id": "2"
+  },
+  "accepted": true,
+  "event": "20",
+  "ledger_sha256": "e882587613eece4e51d36f2af020734407200df578ff0a8c5196ba5036c3e527",
+  "check_replay": {
+    "request_id": "authoring.c01.check.1",
+    "exit": 0,
+    "stdout_byte_identical": true,
+    "stdout_sha256": "b603ba8f2ac05cf4435f3561c272b66978e0beb1b18cf9ba168326ef76d1d69d",
+    "ledger_before_sha256": "111d12931477e01b783a54bd5932f8dc3d640bba3ef6be0834a6810f0c67e2f6",
+    "ledger_after_sha256": "111d12931477e01b783a54bd5932f8dc3d640bba3ef6be0834a6810f0c67e2f6",
+    "ledger_unchanged": true,
+    "check_attempt_directories_before": [
+      "checks/debug/1794319652660197000",
+      "checks/release/1794321125268953000"
+    ],
+    "check_attempt_directories_after": [
+      "checks/debug/1794319652660197000",
+      "checks/release/1794321125268953000"
+    ],
+    "no_checks_reexecuted": true,
+    "original_command_file": "driver/run/006-check.command.json"
+  },
+  "verdict_replay": {
+    "request_id": "authoring.c01.verdict.approve.1",
+    "exit": 0,
+    "stdout_byte_identical": true,
+    "stdout_sha256": "035ca77c22b26b83f059bacf22fe916256186deeb5c66c381995008f1a2dd801",
+    "ledger_before_sha256": "e882587613eece4e51d36f2af020734407200df578ff0a8c5196ba5036c3e527",
+    "ledger_after_sha256": "e882587613eece4e51d36f2af020734407200df578ff0a8c5196ba5036c3e527",
+    "ledger_unchanged": true,
+    "check_attempt_directories_before": [
+      "checks/debug/1794319652660197000",
+      "checks/release/1794321125268953000"
+    ],
+    "check_attempt_directories_after": [
+      "checks/debug/1794319652660197000",
+      "checks/release/1794321125268953000"
+    ],
+    "no_checks_reexecuted": true,
+    "original_command_file": "driver/run/012-verdict.command.json"
+  },
+  "orchestrator_final": "builder done/next none; reviewer done/next none"
+}

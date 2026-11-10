@@ -4744,7 +4744,7 @@ command_service_result command_services::read_execution(const command_activate_o
 command_service_result command_services::commit_execution(const command_activate_options&, const value_ptr&) {
   command_refuse();
 }
-void command_services::bind_execution_profile(std::string_view) {
+void command_services::bind_execution_stdlib(std::string_view) {
 }
 command_service_result command_services::read_execution(const command_recovery_options&) {
   command_refuse();
@@ -6016,6 +6016,100 @@ struct command_terminal_release {
     owner.runtime.pending.clear();
   }
 };
+/// Bind execution to the immutable embedded bytes retained by this exact registered VM, never another compiled bundle.
+void bind_embedded_execution(state& s, command_state& c, command_services& services) {
+  if (c.profile ||
+      !(std::holds_alternative<command_activate_options>(c.options) ||
+        std::holds_alternative<command_status_options>(c.options) || std::holds_alternative<command_preview_options>(c.options) ||
+        std::holds_alternative<command_run_options>(c.options) || std::holds_alternative<command_recovery_options>(c.options) ||
+        std::holds_alternative<command_recover_options>(c.options) || std::holds_alternative<command_check_options>(c.options)))
+    return;
+  if (const auto* status = std::get_if<command_status_options>(&c.options); status && !status->role)
+    return;
+  if (const auto* check = std::get_if<command_check_options>(&c.options); check && check->operation == "check-recover")
+    return;
+  try {
+    constexpr std::size_t provenance_maximum = 16 * 1048576;
+    if (c.originals.size() > 4094 || c.separator.size() > provenance_maximum || c.assembly.size() > provenance_maximum)
+      throw external_resource();
+    auto add_provenance = [&](std::size_t& total, std::size_t bytes) {
+      if (bytes > provenance_maximum - total)
+        throw external_resource();
+      total += bytes;
+    };
+    std::size_t payload = c.assembly.size();
+    // canonical_v1's four-field manifest: record/list/string headers, encoded
+    // keys, version integer, scheme and separator. Each original adds a string.
+    std::size_t metadata = 9 + (9 + 7) + 9 + (9 + 6) + (9 + 17) + (9 + 5) + 9 + (9 + 9) + 9;
+    add_provenance(metadata, c.separator.size());
+    for (const auto& file : c.originals) {
+      if (file.path.size() > 1024 || std::ranges::count(file.path, '/') >= 64 || file.bytes.size() > provenance_maximum)
+        throw external_resource();
+      add_provenance(payload, file.bytes.size());
+      add_provenance(metadata, 9 + file.path.size());
+    }
+    if (metadata > provenance_maximum - payload)
+      throw external_resource();
+    // Numerical reservation failures use charge's native-byte category and
+    // terminal marker. The one-over-ceiling request itself cannot overflow.
+    static_assert(memory_max < std::numeric_limits<std::size_t>::max());
+    auto reserve = [&](std::size_t bytes, std::size_t passes) {
+      if (passes != 0 && bytes > memory_max / passes)
+        charge(s, memory_max + 1);
+      else
+        charge(s, bytes * passes);
+    };
+    // prepare_stdlib -> own -> digest_tree copies each payload into a file
+    // record and its encoded hash buffer, then separately owns the final tree.
+    // The manifest also has its initial encode and a separate separator graph
+    // string. Destroying intermediate buffers never refunds cumulative work.
+    reserve(payload, 3);
+    reserve(metadata, 4);
+    // The canonical writer appends successive fields. Its pinned geometric
+    // buffer growth uses less than four encoded lengths cumulatively; three
+    // extra lengths supplement the initial encode already paid above.
+    reserve(metadata, 3);
+    reserve(c.separator.size(), 1);
+    // Per input, cover its metadata value/path/list slot and codec traversal;
+    // sixteen additional slots cover the fixed root/map/key/scheme graph. Path
+    // strings are bounded to 1024 bytes, so 4096 covers these logical objects
+    // and their bounded vector growth; this is not an allocator/RSS guarantee.
+    reserve(c.originals.size() + 16, 4096);
+    constexpr auto file_framing = std::string_view("PLANAR-RECORD\x01").size() + 1 + 4 + 8;
+    reserve(file_framing, c.originals.size() + 2);
+    reserve(sizeof(history::tree_file) + sizeof(history::tree_file_view), c.originals.size() + 2);
+    auto reserve_tree = [&](std::string_view path) {
+      const auto components = static_cast<std::size_t>(std::ranges::count(path, '/')) + 2;
+      // One digest: node/vector/child-map objects, directory children/sort and
+      // encoded child records. Eight path-sized transfers cover folded/name,
+      // directory/validation/encoding strings and the final owned tree path.
+      reserve(components, 2048);
+      reserve(path.size() + 32, 8);
+    };
+    for (const auto& file : c.originals)
+      reserve_tree(file.path);
+    reserve_tree("__planar__/assembly.lua");
+    reserve_tree("__planar__/assembly.canonical");
+    // Hex output, append/format temporaries and the provider's owned identity
+    // are bounded small transfers (32 output bytes, no variable caller data).
+    reserve(256, 1);
+    auto prepared = history::prepare_stdlib(c.originals, c.separator, c.assembly);
+    if (!prepared) {
+      if (prepared.error().code == history::provenance_error_code::resource_limit)
+        throw external_resource();
+      command_refuse();
+    }
+    // prepare_stdlib verifies assembly and computes digest_tree(files, provenance) through the shared codec.
+    std::string bound;
+    for (auto byte : prepared->digest)
+      bound += std::format("{:02x}", byte);
+    services.bind_execution_stdlib(bound);
+  } catch (const std::bad_alloc&) {
+    throw external_resource();
+  } catch (const std::length_error&) {
+    throw external_resource();
+  }
+}
 /// The shared command invocation body: one retained handler call over the supplied native services.
 /// The caller decides whether a profile VM may enter; this body only refuses a consumed or failed VM.
 template <class Prepare>
@@ -6031,6 +6125,7 @@ std::expected<value_ptr, diagnostic> run_command_body(command_vm::implementation
   try {
     prepare(c);
     begin_invocation(s, c);
+    bind_embedded_execution(s, c, services);
     // Conversion charges include registration transfers; only Lua instructions restart.
     s.active.clear();
     c.services = &services;
@@ -6680,7 +6775,7 @@ std::expected<value_ptr, diagnostic> profile_invocation::run_known(command_optio
     auto* vm = _owner->vm._owner.get();
     if (!vm)
       return std::unexpected(profile_owner_protocol_error().detail);
-    services.bind_execution_profile(vm->command.effective_digest_bytes);
+    services.bind_execution_stdlib(vm->command.effective_digest_bytes);
     return invoke_known(_owner->vm, *vm, std::move(options), services);
   } catch (const diagnostic& error) {
     return std::unexpected(error);

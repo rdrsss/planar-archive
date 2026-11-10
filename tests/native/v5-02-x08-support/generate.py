@@ -26,7 +26,7 @@ POISONED = ['route_workspace', 'normalize_bundle', 'validate_bundle', 'prepare_s
             'prepare_profile_render', 'render_profile_material', 'role_profile_material', 'role_projection_base_material']
 JSON_COMMENT = '-- X08 variant: embedded stdlib bytes differ\n'
 PARSE_BODY = 'local function parse_json(input)\n  error("X08 poisoned stdlib export: parse_json",0)\nend\n'
-FAMILIES = ['render', 'init', 'history', 'export', 'load', 'extension']
+FAMILIES = ['render', 'init', 'history', 'export', 'load', 'extension', 'activate', 'status', 'preview', 'claim', 'takeover', 'refresh', 'checkpoint', 'release', 'recover', 'check', 'check-recover', 'verdict']
 RUNTIME_FILES = ['runtime.cpp', 'runtime.cppm']
 PRODUCT_FILES = ['bootstrap.cpp', 'bootstrap.cppm', 'invocation.cpp', 'invocation.cppm'] + [
     f'handlers/{family}/command.{ext}' for family in FAMILIES for ext in ('cpp', 'cppm')]
@@ -75,6 +75,8 @@ COMMAND_CHANGES = [
     ('planar.cmd.bootstrap', 'planar.cmd.x08_0.bootstrap'),
     ('planar.cmd.invocation', 'planar.cmd.x08_0.invocation'),
     ('planar.cmd.planar.handlers.', 'planar.cmd.x08_0.handlers.'),
+    ('planar.cmd.execution.', 'planar.cmd.x08_0.execution.'),
+    ('::planar::cmd::handlers::', '::planar::cmd::x08_0::handlers::'),
     ('namespace planar::cmd {', 'namespace planar::cmd::x08_0 {'),
     ('namespace planar::cmd::handlers {', 'namespace planar::cmd::x08_0::handlers {'),
     ('planar.engine.runtime;', 'planar.engine.x08_bundle_0;'),
@@ -89,7 +91,10 @@ INVOCATION_EXTRA = [('using namespace engine;', 'using namespace engine;\n' + '\
     f'using engine::x08_bundle_0::{name};' for name in ['command_services', 'command_service_result', 'command_render_options',
                                                        'command_init_options', 'command_history_options',
                                                        'command_history_selector', 'command_export_options',
-                                                       'command_load_options']))]
+                                                       'command_load_options', 'command_activate_options', 'command_status_options',
+                                                       'command_preview_options', 'command_run_options',
+                                                       'command_recovery_options', 'command_recover_options',
+                                                       'command_check_options']))]
 MAIN_CHANGES = [('planar.cmd.bootstrap', 'planar.cmd.x08_0.bootstrap'), ('planar::cmd::invoke', 'planar::cmd::x08_0::invoke')]
 
 manifest_cpp = {}

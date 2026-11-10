@@ -565,29 +565,29 @@ response invoke(std::span<const std::string_view> arguments) {
       return std::move(*answered);
 #endif
     if (families.activate_command->count() == 1)
-      return ::planar::cmd::handlers::activate_command(families.activate);
+      return ::planar::cmd::handlers::activate_command(families.activate, &*vm);
     if (families.status_command->count() == 1)
-      return ::planar::cmd::handlers::status_command(families.status);
+      return ::planar::cmd::handlers::status_command(families.status, &*vm);
     if (families.preview_command->count() == 1)
-      return ::planar::cmd::handlers::preview_command(families.preview);
+      return ::planar::cmd::handlers::preview_command(families.preview, &*vm);
     if (families.takeover_command->count() == 1)
-      return ::planar::cmd::handlers::takeover_command(families.takeover);
+      return ::planar::cmd::handlers::takeover_command(families.takeover, &*vm);
     if (families.check_command->count() == 1)
-      return ::planar::cmd::handlers::check_command(families.check);
+      return ::planar::cmd::handlers::check_command(families.check, &*vm);
     if (families.check_recover_command->count() == 1)
-      return ::planar::cmd::handlers::check_recover_command(families.check_recover);
+      return ::planar::cmd::handlers::check_recover_command(families.check_recover, &*vm);
     if (families.verdict_command->count() == 1)
-      return ::planar::cmd::handlers::verdict_command(families.verdict);
+      return ::planar::cmd::handlers::verdict_command(families.verdict, &*vm);
     if (families.recover_command->count() == 1)
-      return ::planar::cmd::handlers::recover_command(families.recover);
+      return ::planar::cmd::handlers::recover_command(families.recover, &*vm);
     if (families.release_command->count() == 1)
-      return ::planar::cmd::handlers::release_command(families.release);
+      return ::planar::cmd::handlers::release_command(families.release, &*vm);
     if (families.checkpoint_command->count() == 1)
-      return ::planar::cmd::handlers::checkpoint_command(families.checkpoint);
+      return ::planar::cmd::handlers::checkpoint_command(families.checkpoint, &*vm);
     if (families.refresh_command->count() == 1)
-      return ::planar::cmd::handlers::refresh_command(families.refresh);
+      return ::planar::cmd::handlers::refresh_command(families.refresh, &*vm);
     if (families.claim_command->count() == 1)
-      return ::planar::cmd::handlers::claim_command(families.claim);
+      return ::planar::cmd::handlers::claim_command(families.claim, &*vm);
     if (families.load_command->count() == 1)
       return handlers::load_command(families.load, &*vm);
     if (families.export_command->count() == 1)

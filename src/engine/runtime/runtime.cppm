@@ -181,9 +181,9 @@ public:
   virtual command_service_result check_step(const command_check_options& options, std::string_view operation,
                                             const value_ptr& arguments);
   virtual ~command_services() = default;
-  /// Bind the verified effective stdlib identity before executing a selected profile family.
-  /// @param digest Verified effective stdlib fingerprint.
-  virtual void bind_execution_profile(std::string_view digest);
+  /// Bind this VM's verified stdlib identity before executing an embedded or selected-profile execution family.
+  /// @param digest Verified portable provenance or effective provenance fingerprint.
+  virtual void bind_execution_stdlib(std::string_view digest);
   /// @brief Capture the declaration at the private workspace option.
   /// @param options Retained parsed native intent.
   /// @return Captured portable filename/declaration or typed native error.

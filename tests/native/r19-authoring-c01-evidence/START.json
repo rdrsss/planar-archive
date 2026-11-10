@@ -1,0 +1,16 @@
+{
+  "HEAD": "d6c989ed9e196bf9b357019ea946e6ff18c47f18",
+  "parent_candidate_aggregate_sha256": "161c575fc532e61ef6debd2183e019bd6d9357b17e98f255c8fce57a52d29b3b",
+  "preexisting_dirty_candidate": true,
+  "source_hashes": {
+    "src/engine/runtime/runtime.cpp": "af1fef0305d4054401fa1c66b2de8e5ccf57f55981cdc03a90230452eeed408a",
+    "src/engine/runtime/runtime.cppm": "918e14b6478d2bc5a0adbab5f1587b4078d0d47c334370c6e9d6df98c3858212",
+    "src/engine/runtime/commands.t.cpp": "1a905cfeea53757aad23211f17e009335bf89c585e9ae7ed6b28d3257ad64e78",
+    "src/engine/runtime/CMakeLists.txt": "a53a0d8e11fff9850b1079e32e830b76b20e058d46d84aa8907e8f9fc11de3dc"
+  },
+  "binary_hashes": {
+    "authoring-candidate": "1c8e390bc90c87ed3ce8f71a71e03621c08143d15e6ab5b28083343bd6c37719",
+    "production-candidate": "8edcd101a86f6c70417da46e12934148d4ec9ea45b431c106837910db286c836"
+  },
+  "authority": "formal R19-AUTHORING-review R1 request-changes; no source fix applied yet"
+}
