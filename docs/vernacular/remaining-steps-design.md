@@ -758,5 +758,5 @@ reviewed amendment changes them.
 | Q14 | A: separate `claim`, `status` and `release` verbs; render stays database-free |
 | Q15 | A: the v5 minimum check isolation, no OS sandbox, limit recorded |
 | Q16 | A: explicit unsupported-policy refusal first |
-| Q17 | A: the quota fixture in both groupings plus one real spec; the operator names the spec before R19 |
+| Q17 | A: the quota fixture in both groupings plus one real spec; the operator names the spec before R19 — **named 2026-11-11 (operator, live): the R19-CMAKE task**; v5's "previously run on old Planar" deviation accepted |
 | Q18 | A: binding. Every dispatch cites this document; search outputs a decisions table marking each choice contract-decided (with citation), decided here, or new; any new product or authority choice halts before coding |
