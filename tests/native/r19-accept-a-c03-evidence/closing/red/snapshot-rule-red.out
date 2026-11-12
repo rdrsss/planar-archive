@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_commit_list_check_applies_the_snapshot_rule_to_directories_only (acceptance_cli_test.AcceptanceCliTest.test_commit_list_check_applies_the_snapshot_rule_to_directories_only)
+Kills the closing narrowing: a file whose own name starts with snapshot (an index of
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/acceptance_cli_test.py", line 900, in test_commit_list_check_applies_the_snapshot_rule_to_directories_only
+    self.assertEqual(proc.returncode, 0, "a file named snapshot_* outside a snapshot directory passes: " + proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : a file named snapshot_* outside a snapshot directory passes: commit-list: tests/native/r19-accept-evidence/index/run-a/base-engine/execution/snapshot_value.cpp.index: snapshot
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.073s
+
+FAILED (failures=1)

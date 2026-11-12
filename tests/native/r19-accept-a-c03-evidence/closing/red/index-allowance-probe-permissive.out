@@ -1,0 +1,38 @@
+FFF
+======================================================================
+FAIL: test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only (acceptance_cli_test.AcceptanceCliTest.test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only) (rule='not-index')
+Kills the closing allowance (C02-D28, L21): an index digest of a file under a raw run directory is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/acceptance_cli_test.py", line 891, in test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only
+    self.assertEqual(proc.returncode, 1, "must be refused: " + proc.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : must be refused: commit-list: 1 entries
+
+
+======================================================================
+FAIL: test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only (acceptance_cli_test.AcceptanceCliTest.test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only) (rule='other-tree')
+Kills the closing allowance (C02-D28, L21): an index digest of a file under a raw run directory is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/acceptance_cli_test.py", line 891, in test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only
+    self.assertEqual(proc.returncode, 1, "must be refused: " + proc.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : must be refused: commit-list: 1 entries
+
+
+======================================================================
+FAIL: test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only (acceptance_cli_test.AcceptanceCliTest.test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only) (rule='raw-log-tree')
+Kills the closing allowance (C02-D28, L21): an index digest of a file under a raw run directory is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/acceptance_cli_test.py", line 891, in test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only
+    self.assertEqual(proc.returncode, 1, "must be refused: " + proc.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : must be refused: commit-list: 1 entries
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.304s
+
+FAILED (failures=3)

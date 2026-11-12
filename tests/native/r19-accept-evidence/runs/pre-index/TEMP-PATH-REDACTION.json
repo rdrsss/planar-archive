@@ -1,0 +1,6 @@
+{
+ "scope": "Round-local temporary, scratch, export and private-temp prefixes of the R19-ACCEPT-A indexes; rules name tokens and descriptions only, never the real prefixes.",
+ "order": "Temporary prefixes first, then repository/home redactor (scripts/redact-local-paths.py). Inverse: standard repo/home restoration, then the temporary rules below.",
+ "rules": {},
+ "files": {}
+}

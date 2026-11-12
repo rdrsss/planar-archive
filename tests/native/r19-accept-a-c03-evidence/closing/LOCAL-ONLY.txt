@@ -1,0 +1,40 @@
+# Evidence kept local, not committed (operator decision, 2026-11-12; docs/vernacular/orchestration.md evidence rule).
+# The files stay on disk under the gitignored evidence folders. 4480 files in all.
+#
+# Section 1: index trees. Columns: files, tree sha256, directory.
+# tree sha256 = sha256 of the output of: cd <directory> && find . -type f | LC_ALL=C sort | xargs shasum -a 256
+#
+905 3e9e4e697ddcba79db76c00459fc83da19fb82f939d311d821d151d62760b17a tests/native/r19-accept-evidence/index/cmake-rerun-heavy
+911 3f96d9af9ebc0c6a6cc9d9a13a61dbec7d5cfa50e271a4906b9ced518b20a791 tests/native/r19-accept-evidence/index/cmake-rerun-heavy-close
+23 77bcbe62f677d3d00955620475a69d4419ad5fb1d52378af1cd66bcaf2ac501f tests/native/r19-accept-evidence/index/limits-close
+623 1c6fb7a5932d55086ccb294777a104023f112cab92b5ec1245d4040f1acab56e tests/native/r19-accept-evidence/index/mini-fault-c02
+556 97c120d72d9a57be827fef098484bdf3b62849fa6c17373e3d235dd42d47ae4c tests/native/r19-accept-evidence/index/quota-combined-c01
+357 39e594c4e3b6f413ddaf9e904624aed8759fbda49959e93724507d14ef614f05 tests/native/r19-accept-evidence/index/quota-combined-defect1
+593 c908e9f21c14d67b1cb44a9b7e7f42c756d0f1dee094ea6037b669a72fd7e2ab tests/native/r19-accept-evidence/index/quota-regroup-c01
+485 7dbcedec4dd3a564ecee3cc41f1568795376b0f6da779326e7924792756f7322 tests/native/r19-accept-evidence/index/quota-split-c01
+4 eb56cf9dbb4de25fc2f46789ef5d3045e68eb1dd36e74749a5e742224f11be3d tests/native/r19-accept-evidence/index/unittest
+#
+# Section 2: single files (top-level index files, and files over 100 KB). Columns: bytes, sha256, path.
+#
+497 154aa6367cfe515199ec4e65512cd4888cb19d0477ac2a38f5d2a9ffd0ca970d tests/native/r19-accept-evidence/index/candidate-located.txt.index
+155 7db9bca94badb0e43aee914ce0a3e7ddf7fa158d4747575d90ba6bbbc4942891 tests/native/r19-accept-evidence/index/quota-combined-c01.run-acceptance.stderr.index
+223 cbac4f5e734948b13b16845c45d642ed439512225114cbc3d11b74b92d7317a7 tests/native/r19-accept-evidence/index/quota-combined-c01.run-acceptance.stdout.index
+993 31fce66f442693ce4251a65773be06f26886c5f3dc0c56c63d1db170ea335b97 tests/native/r19-accept-evidence/index/quota-combined-defect1.run-acceptance.stderr.index
+159 317940158afffed47c5810af7b7c1683a72598223a85354857f0ab01790774d8 tests/native/r19-accept-evidence/index/quota-combined-defect1.run-acceptance.stdout.index
+154 dcadb26abab3750f6a9634b70b6ed81fea2a46efaa86e7121a345066670e00fb tests/native/r19-accept-evidence/index/quota-regroup-c01.run-acceptance.stderr.index
+221 321fb0ca12ef61c7bffe80d401370cbd5d21ce280a27099920d7500f9c51a9e2 tests/native/r19-accept-evidence/index/quota-regroup-c01.run-acceptance.stdout.index
+152 dfd070bd951f8a6eb4e18465bf9a3f000bcff3c7371744d909c71396e84c7fa5 tests/native/r19-accept-evidence/index/quota-split-c01.run-acceptance.stderr.index
+217 78c492c60aa980b9372d2ddec9bf73325bc9d7152f9c26975a32d89bc0ca8a9c tests/native/r19-accept-evidence/index/quota-split-c01.run-acceptance.stdout.index
+175718 38b77b33e886ec315f622e5c99f05d159f9f0726aafd30914a46e2cc3da3ebfa tests/native/r19-accept-a-c01-evidence/inventory.txt
+149703 5033e0bc67049d2c77e9e454f32f6ede9df0185c18d842d8ffb1b75e397e466f tests/native/r19-accept-a-c02-evidence/inventory.txt
+358279 68ff3c11b8755aa6792d2e980babed3f81e86396ef7c5ac80f36eba66eff4bf9 tests/native/r19-accept-a-c03-evidence/gate/linux/manifest.nul
+149672 3f34921c30d83ff0a321fb8b1ec36d494786edb6c9f2496e7d963091a43d470c tests/native/r19-accept-a-c03-evidence/gate/test-names/after/ctest-names-c03.txt
+149672 3f34921c30d83ff0a321fb8b1ec36d494786edb6c9f2496e7d963091a43d470c tests/native/r19-accept-a-c03-evidence/gate/test-names/before/ctest-names-c03.txt
+149703 5033e0bc67049d2c77e9e454f32f6ede9df0185c18d842d8ffb1b75e397e466f tests/native/r19-accept-a-c03-evidence/inventory.txt
+149351 0fca1236cbad2cb00b3cdb0f552882632d993e3bb252f3c3f49d9606a80d5916 tests/native/r19-accept-a-evidence/inventory.txt
+209042 ea0674822127fc7d9ac4f424f3f4bbbafe61ccbb57ef0831cd4a1e039a558995 tests/native/r19-accept-evidence/gate/test-names/after/cpp-worktree.txt
+208588 90acca9e56ce2e540d3c86a306d8d06d0e00a06d70c5b5a38016fd1e3b17ef3a tests/native/r19-accept-evidence/gate/test-names/before/cpp-head.txt
+209042 ea0674822127fc7d9ac4f424f3f4bbbafe61ccbb57ef0831cd4a1e039a558995 tests/native/r19-accept-evidence/gate/test-names/before/cpp-worktree.txt
+339926 1852d030e6b8cced14414f784dc2926c456d84a5e8263f5d6d855e622bf510fe tests/native/r19-accept-evidence/runs/post-index/scan-whole-tree.stdout
+1400619 6ed784f32251e75f307096e0ed61680a573c298c36233662a099769ea2789258 tests/native/r19-accept-evidence/TEMP-PATH-REDACTION.json
+163234 06e3a8dbbd581c13093c9765b4eacfa6b7865dd762981e27f44c781d44c1f686 tests/native/r19-accept-evidence/tests/native/path-redaction.json

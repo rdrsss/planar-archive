@@ -1,0 +1,5 @@
+accept_test ran=63 failures=0 errors=0 skipped=0 exit=0
+acceptance_cli_test ran=29 failures=0 errors=0 skipped=0 exit=0
+quota_live_test ran=28 failures=0 errors=0 skipped=0 exit=0
+fault_live_test ran=33 failures=0 errors=0 skipped=0 exit=0
+total ran=153 failures=0 errors=0 skipped=0

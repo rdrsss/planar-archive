@@ -1,0 +1,14 @@
+| identity | value |
+|---|---|
+| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |
+| sha256(git diff --binary HEAD -- tests/acceptance scripts fixtures docs/testing.md), tracked only | `57fc753051344ece2e0bc89f57b7b4b64c2e82ebf79bd5034032efa4b5940de7` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec tests/acceptance scripts fixtures docs/testing.md, evidence excluded | `0ea7afada4305cd743a9dfc83e32e95cab5068102af4cbbb2bec014b1f04f62e` |
+
+| file | state | sha256 |
+|---|---|---|
+| `docs/testing.md` | modified | `703735b636090c685d7ad09430c5c7d4714df6fbdb135ada276aec7f8956769c` |
+| `scripts/linux-gate.Dockerfile` | modified | `9c7b0eb08d883e997b67777647936589af180dada76d41c2798d3a7285d938d0` |
+| `scripts/linux-gate.Dockerfile.dockerignore` | modified | `45caa66afac655fbf7daeba3025bf1fa16be2ca1ac08c2875f002397464db407` |
+| `scripts/linux-gate.sh` | modified | `121d0df5998644b3b6ed2ebf2ef9eb4b807b77525b8f4c01855a1764fcd45cea` |
+| `tests/acceptance/x08_recipe.py` | modified | `cc04a0fbc557759a6e912596488969ce7308a507b8fde9b19f001a9c4be71014` |
+| `fixtures/ledger/expected-schema.sql` | untracked | `730e38be112f8024a8a8eea232a2c9728ea1f23aae0f5ea90e14e200347d5395` |

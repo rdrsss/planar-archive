@@ -1739,10 +1739,14 @@ std::expected<std::vector<value_ptr>, format_error> history_rows(connection& db,
           v = *decoded;
         } else if (c.kind == 'n' || c.kind == 'b') {
           value node{};
-          node.kind    = c.kind == 'n' ? value_kind::integer : value_kind::boolean;
-          node.integer = **raw;
-          node.boolean = **raw != 0;
-          v            = std::make_shared<const value>(std::move(node));
+          if (c.kind == 'n') {
+            node.kind    = value_kind::integer;
+            node.integer = **raw;
+          } else {
+            node.kind    = value_kind::boolean;
+            node.boolean = **raw != 0;
+          }
+          v = std::make_shared<const value>(std::move(node));
         } else
           v = history_scalar(std::to_string(**raw));
       }

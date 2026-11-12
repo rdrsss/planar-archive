@@ -1,0 +1,33 @@
+{
+  "round": "R19-ACCEPT-A",
+  "package": "P0",
+  "head": "91e0df24f2167471e49ec057c7159bce5dff3608",
+  "sha256": "98ec8419e7a32993de29019cc02f9a696895aff19316c9d842c41737eec0d706",
+  "size": 33979912,
+  "binary": "<scratch-root>/export/build/rewrite-debug/src/cmd/planar/planar_authoring_stack",
+  "binary_hash_tool": "shasum -a 256 (tool output; the binary was not executed)",
+  "identity_command": "python3 <workflows-scripts>/identity.py src (run from the repository root)",
+  "identity_src_output": "| identity | value |\n|---|---|\n| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |\n| sha256(git diff --binary HEAD -- src), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |\n| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src, evidence excluded | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |\n\n| file | state | sha256 |\n|---|---|---|\n",
+  "export": {
+    "command": "git archive 91e0df24 | tar -x -C <scratch-root>/export",
+    "exit_status": 0
+  },
+  "build": {
+    "configure_command": "cmake --preset debug (cwd <scratch-root>/export; uses the export's build/rewrite-debug)",
+    "configure_exit_status": 0,
+    "build_command": "cmake --build build/rewrite-debug --target planar_authoring_stack (cwd <scratch-root>/export)",
+    "build_exit_status": 0,
+    "target_scope": "only planar_authoring_stack; no production binary (D3); checkout build/rewrite-debug and build/rewrite-release untouched",
+    "build_log": "gate/candidate/build.log (raw log, local only, never committed)",
+    "toolchain_discovery": "cmake/llvm-toolchain.cmake (pinned LLVM 23+ prefix; no compiler launcher)",
+    "warnings": "2 toolchain warnings (reserved module identifier 'std') from libc++ std.cppm and std.compat.cppm; no product diagnostics"
+  },
+  "tree_proof": {
+    "method": "git ls-tree -r HEAD src versus the export's src regular files: mode, blob sha (git hash-object --no-filters), path; both sorted by path",
+    "entries": 288,
+    "export_src_files": 288,
+    "head_list_sha256": "b433e05ca246398921ef317659ace08add3201e1e3a38fc79ee1060d58b2e45e",
+    "export_list_sha256": "b433e05ca246398921ef317659ace08add3201e1e3a38fc79ee1060d58b2e45e",
+    "equal": true
+  }
+}

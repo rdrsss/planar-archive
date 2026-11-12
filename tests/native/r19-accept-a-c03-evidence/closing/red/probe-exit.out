@@ -1,0 +1,15 @@
+....F...
+======================================================================
+FAIL: test_run_heavy_exits_nonzero_when_a_completed_result_fails_rerun_validation (accept_test.HeavyDriverTest.test_run_heavy_exits_nonzero_when_a_completed_result_fails_rerun_validation)
+Kills R19-ACCEPT-A-C03-R1 (exit): a completed run whose result rerun-index refuses exited 0.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/accept_test.py", line 1150, in test_run_heavy_exits_nonzero_when_a_completed_result_fails_rerun_validation
+    self.assertEqual(rc, 4, "a result the rerun validator refuses must exit 4")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 4 : a result the rerun validator refuses must exit 4
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.440s
+
+FAILED (failures=1)

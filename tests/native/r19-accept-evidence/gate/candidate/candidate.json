@@ -1,0 +1,69 @@
+{
+  "round": "R19-ACCEPT-A-C01",
+  "package": "PKG-E",
+  "supersedes": "gate/candidate/superseded-1/ (old P0 record, pre-fix, kept)",
+  "head": "91e0df24f2167471e49ec057c7159bce5dff3608",
+  "sha256": "774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c",
+  "size": 33982376,
+  "binary": "<scratch-root>/export/build/rewrite-debug/src/cmd/planar/planar_authoring_stack",
+  "binary_hash_tool": "shasum -a 256 (tool output; the binary was not executed)",
+  "overlay_files": [
+    "src/engine/ledger/storage.cpp",
+    "src/engine/ledger/execution.t.cpp"
+  ],
+  "identity_command": "python3 <workflows-scripts>/identity.py src (run from the repository root)",
+  "identity_src_output": "| identity | value |\n|---|---|\n| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |\n| sha256(git diff --binary HEAD -- src), tracked only | `83a16fdee033fce5a1a792d8d65f4090fba8dacffc2d38013684cacb4daeba19` |\n| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src, evidence excluded | `83a16fdee033fce5a1a792d8d65f4090fba8dacffc2d38013684cacb4daeba19` |\n\n| file | state | sha256 |\n|---|---|---|\n| `src/engine/ledger/execution.t.cpp` | modified | `250867b8bd74b86d718cbe17e5fa9983fda6a60a2b5e7c127829a3fec6f98950` |\n| `src/engine/ledger/storage.cpp` | modified | `e4cf41dcb8cf44cc8004d4ba011543a557c742c623e20ede631eb975f237d822` |\n",
+  "export": {
+    "command": "git archive 91e0df24 | tar -x -C <scratch-root>/export, then the checkout bytes of both git diff HEAD --name-only -- src files are copied over the export",
+    "exit_status": 0
+  },
+  "build": {
+    "configure_command": "cmake --preset debug (cwd <scratch-root>/export; uses the export's build/rewrite-debug)",
+    "configure_exit_status": 0,
+    "build_command": "cmake --build build/rewrite-debug --target planar_authoring_stack (cwd <scratch-root>/export)",
+    "build_exit_status": 0,
+    "noop_recheck": "same build command again: 'ninja: no work to do', exit 0",
+    "target_scope": "only planar_authoring_stack; no production binary (D3); checkout build/rewrite-debug and build/rewrite-release untouched",
+    "build_log": "gate/candidate/build.log (raw log, local only, gitignored, never committed)",
+    "toolchain_discovery": "cmake/llvm-toolchain.cmake (pinned LLVM 23+ prefix; no compiler launcher)",
+    "warnings": "2 toolchain warnings (reserved module identifier 'std') from libc++ std.cppm and std.compat.cppm; no product diagnostics"
+  },
+  "tree_proof": {
+    "method": "git ls-tree -r HEAD src versus the export's src regular files (find src -type f), both sorted by path and hashed with shasum -a 256; per-file git hash-object --no-filters of the export files versus the HEAD blob ids",
+    "entries": 288,
+    "export_src_files": 288,
+    "head_list_sha256": "a20df3400b6d1f59cfb844ca7bba0d1a0c5cbbe539115813f1504e4013013291",
+    "export_list_sha256": "a20df3400b6d1f59cfb844ca7bba0d1a0c5cbbe539115813f1504e4013013291",
+    "equal": true,
+    "overlay_byte_equality": [
+      {
+        "path": "src/engine/ledger/storage.cpp",
+        "checkout_shasum_256": "e4cf41dcb8cf44cc8004d4ba011543a557c742c623e20ede631eb975f237d822",
+        "export_shasum_256": "e4cf41dcb8cf44cc8004d4ba011543a557c742c623e20ede631eb975f237d822",
+        "equal": true
+      },
+      {
+        "path": "src/engine/ledger/execution.t.cpp",
+        "checkout_shasum_256": "250867b8bd74b86d718cbe17e5fa9983fda6a60a2b5e7c127829a3fec6f98950",
+        "export_shasum_256": "250867b8bd74b86d718cbe17e5fa9983fda6a60a2b5e7c127829a3fec6f98950",
+        "equal": true
+      }
+    ],
+    "other_files_checked": 286,
+    "other_files_mismatched": 0,
+    "diff_files_hash_object": [
+      {
+        "path": "src/engine/ledger/execution.t.cpp",
+        "head_blob": "e2bf2186d77918b06acf9e589fb278faf891ce58",
+        "export_hash_object": "7ba96ea697e4c16d84ab980ca74601a71228ac42",
+        "differs_from_head": true
+      },
+      {
+        "path": "src/engine/ledger/storage.cpp",
+        "head_blob": "b8940afd297015d81b5fcab38c3e6541ad9a06ee",
+        "export_hash_object": "bbe62e4f21a55f753bd0e8cb634c71720e66b9f6",
+        "differs_from_head": true
+      }
+    ]
+  }
+}

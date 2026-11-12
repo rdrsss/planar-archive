@@ -1805,12 +1805,10 @@ full ctest with `--no-tests=error`, runs a no-work build and records a sorted
 inventory. Lint and Doxygen run only on macOS. x86_64 is not covered.
 
 `scripts/linux-gate.Dockerfile.dockerignore` excludes git metadata, build
-products, round evidence and local agent state. It has one exception: the
-gitignored `tests/native/r12b-evidence/expected-schema.sql` is re-included,
-because `src/engine/CMakeLists.txt` points the ledger format tests at it. A public
-clone that tracks only committed files lacks that schema, so the replacement
-ledger format tests cannot run there until the file is relocated to a tracked
-fixture path.
+products, round evidence and local agent state. It has no exceptions: the
+ledger format tests read the tracked `fixtures/ledger/expected-schema.sql`, so the
+image context holds only files a clean clone has and the Dockerfile asserts the
+fixture with `test -s`.
 
 Platform branches. The eight source rows below record the original X08 coverage.
 The Linux-only CMake branches in `cmake/llvm-toolchain.cmake` also belong to that audit: the
@@ -1893,8 +1891,7 @@ stale line fails; the rows are G06a to G06i.
 Known limits, restated and not repaired. There is no RSS (process memory)
 guarantee, and no defence against a hostile writer. CL-1 to CL-6 and the X07-C01
 limits remain as recorded in their contracts. A crash during the busy wait is
-accepted behaviour, per `docs/vernacular/ledger-contract.md` lines 493 to 497. `tests/native/r12b-evidence/expected-schema.sql` is gitignored,
-so a public clone cannot run the ledger format tests until it is relocated. Row 3's
+accepted behaviour, per `docs/vernacular/ledger-contract.md` lines 493 to 497. Row 3's
 opaque-to-load transition and row 6's leaf replacement between registration and
 first read are native-only: the binary cannot observe them. Linux on x86_64 is
 not covered.

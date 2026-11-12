@@ -1,0 +1,1 @@
+90:RUN test -s fixtures/ledger/expected-schema.sql \

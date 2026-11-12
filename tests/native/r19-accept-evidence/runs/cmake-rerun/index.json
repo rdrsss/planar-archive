@@ -1,0 +1,380 @@
+{
+ "counters": {
+  "counter_lines": 7,
+  "intended_executions": 7
+ },
+ "faults": {
+  "interrupt": {
+   "child_dead": true,
+   "child_pgid": 81547,
+   "cli_returncode": -9,
+   "rendezvous_seen": true,
+   "reservation_outcome": "in_progress"
+  },
+  "recover": {
+   "argv": [
+    "<path>/planar_authoring_stack",
+    "check-recover",
+    "--ledger",
+    "<path>/ledger.db",
+    "--run-id",
+    "1",
+    "--reservation",
+    "1",
+    "--confirm-stopped",
+    "true",
+    "--request-id",
+    "recover-1",
+    "--actor",
+    "driver"
+   ],
+   "exit": 0,
+   "outcome": "interrupted"
+  }
+ },
+ "fenced": {
+  "error_code": "fenced",
+  "exit": 3,
+  "ledger_after": "e0f5094e9647a0408a1f233e7838363d6dfc77c2580f3e53fcad7086a67dace2",
+  "ledger_before": "e0f5094e9647a0408a1f233e7838363d6dfc77c2580f3e53fcad7086a67dace2",
+  "token_role": "old"
+ },
+ "history": [
+  {
+   "event_id": "5",
+   "event_type": "check_reserved",
+   "label": "interrupt",
+   "matched": true
+  },
+  {
+   "event_id": "6",
+   "event_type": "check_interrupted",
+   "label": "recover",
+   "matched": true
+  },
+  {
+   "event_id": "7",
+   "event_type": "run_taken_over",
+   "label": "takeover",
+   "matched": true
+  },
+  {
+   "event_id": "11",
+   "event_type": "verdict_recorded",
+   "label": "reject",
+   "matched": true
+  },
+  {
+   "event_id": "16",
+   "event_type": "verdict_recorded",
+   "label": "capped",
+   "matched": true
+  },
+  {
+   "event_id": "17",
+   "event_type": "declaration_accepted",
+   "label": "load",
+   "matched": true
+  },
+  {
+   "event_id": "24",
+   "event_type": "verdict_recorded",
+   "label": "approve",
+   "matched": true
+  }
+ ],
+ "ledger": {
+  "after_replays": "68f1255997d21da2a602985681d22f139693ae8b7437066f8b5f2ed49b1619e7",
+  "before_replays": "68f1255997d21da2a602985681d22f139693ae8b7437066f8b5f2ed49b1619e7"
+ },
+ "load": {
+  "blockers_cleared": [
+   "max_rounds"
+  ],
+  "exit": 0,
+  "max_rounds_after": 2,
+  "max_rounds_before": 1,
+  "work_fp_rebound": true
+ },
+ "reads": {
+  "after_restart": {
+   "history": {
+    "executed": true,
+    "exit": 0,
+    "pid": 99464
+   },
+   "orchestrator": {
+    "executed": true,
+    "exit": 0,
+    "pid": 99468
+   },
+   "status": {
+    "activation": "1",
+    "active_job": "combined",
+    "executed": true,
+    "exit": 0,
+    "phase": "after",
+    "pid": 99461,
+    "revision": "1"
+   }
+  },
+  "before_kill": {
+   "history": {
+    "executed": true,
+    "exit": 0,
+    "pid": 99400
+   },
+   "orchestrator": {
+    "executed": true,
+    "exit": 0,
+    "pid": 99407
+   },
+   "status": {
+    "activation": "1",
+    "active_job": "combined",
+    "executed": true,
+    "exit": 0,
+    "phase": "before",
+    "pid": 99397,
+    "revision": "1"
+   }
+  }
+ },
+ "replays": [
+  {
+   "ledger_identical": true,
+   "request": "activate-1",
+   "response_identical": true,
+   "verb": "activate"
+  },
+  {
+   "ledger_identical": true,
+   "request": "claim-builder-1",
+   "response_identical": true,
+   "verb": "claim"
+  },
+  {
+   "ledger_identical": true,
+   "request": "check-2",
+   "response_identical": true,
+   "verb": "check"
+  },
+  {
+   "ledger_identical": true,
+   "request": "verdict-reject1",
+   "response_identical": true,
+   "verb": "verdict"
+  },
+  {
+   "ledger_identical": true,
+   "request": "check-4",
+   "response_identical": true,
+   "verb": "check"
+  },
+  {
+   "ledger_identical": true,
+   "request": "verdict-approve",
+   "response_identical": true,
+   "verb": "verdict"
+  }
+ ],
+ "status_review_blockers": [
+  {
+   "kind": "max_rounds"
+  }
+ ],
+ "takeover": {
+  "exit": 0,
+  "generation_after": 2,
+  "generation_before": 1
+ },
+ "trajectory": {
+  "events": [
+   {
+    "kind": "declaration_accepted",
+    "max_rounds": 1
+   },
+   {
+    "kind": "job_activated"
+   },
+   {
+    "kind": "run_claimed",
+    "role": "builder",
+    "run": "1"
+   },
+   {
+    "kind": "check_reserved",
+    "request": "check-1",
+    "reservation": "1",
+    "run": "1"
+   },
+   {
+    "kind": "check_interrupted",
+    "reservation": "1",
+    "via": "check-recover"
+   },
+   {
+    "kind": "run_taken_over",
+    "previous": "1",
+    "run": "2"
+   },
+   {
+    "kind": "fenced_refused",
+    "run": "1"
+   },
+   {
+    "kind": "check_reserved",
+    "request": "check-2",
+    "reservation": "2",
+    "run": "2"
+   },
+   {
+    "kind": "check_recorded",
+    "output": "xxh3_128:55e9674ec07cf83570d31e6085e2fb58",
+    "reservation": "2"
+   },
+   {
+    "acceptance": "open",
+    "blockers_cleared": [],
+    "blockers_opened": [],
+    "count": 0,
+    "decision": "reject",
+    "kind": "verdict_recorded",
+    "max_rounds": 1,
+    "policy": "xxh3_128:12d701bd7b9dbfbb7c56e9391c174990",
+    "repair": [
+     "builder"
+    ],
+    "repair_admitted": true,
+    "targets": [
+     {
+      "output": "xxh3_128:55e9674ec07cf83570d31e6085e2fb58",
+      "work": "engine_build",
+      "work_fp": "xxh3_128:35e9cb1192d7aaa86896dc77173631bd"
+     }
+    ]
+   },
+   {
+    "kind": "run_claimed",
+    "role": "builder",
+    "run": "4"
+   },
+   {
+    "kind": "check_reserved",
+    "request": "check-3",
+    "reservation": "3",
+    "run": "4"
+   },
+   {
+    "kind": "check_recorded",
+    "output": "xxh3_128:20dcb688c8de1de6c4b48cc84fb1765a",
+    "reservation": "3"
+   },
+   {
+    "acceptance": "open",
+    "blockers_cleared": [],
+    "blockers_opened": [
+     "max_rounds"
+    ],
+    "count": 1,
+    "decision": "reject",
+    "kind": "verdict_recorded",
+    "max_rounds": 1,
+    "policy": "xxh3_128:12d701bd7b9dbfbb7c56e9391c174990",
+    "repair": [],
+    "repair_admitted": false,
+    "targets": [
+     {
+      "output": "xxh3_128:20dcb688c8de1de6c4b48cc84fb1765a",
+      "work": "engine_build",
+      "work_fp": "xxh3_128:2b907ec3fff78a3e050ae625067561e3"
+     }
+    ]
+   },
+   {
+    "kind": "declaration_accepted",
+    "max_rounds": 2
+   },
+   {
+    "blockers": [
+     "max_rounds"
+    ],
+    "kind": "blockers_cleared"
+   },
+   {
+    "kind": "run_claimed",
+    "role": "builder",
+    "run": "6"
+   },
+   {
+    "kind": "check_reserved",
+    "request": "check-4",
+    "reservation": "4",
+    "run": "6"
+   },
+   {
+    "kind": "check_recorded",
+    "output": "xxh3_128:c069dd28e5eac47f348d019190d74346",
+    "reservation": "4"
+   },
+   {
+    "acceptance": "accepted",
+    "blockers_open": [],
+    "blockers_opened": [],
+    "count": 2,
+    "decision": "approve",
+    "kind": "verdict_recorded",
+    "max_rounds": 2,
+    "policy": "xxh3_128:4abe9c4aab361cae2224226356678fa6",
+    "repair": [],
+    "repair_admitted": false,
+    "targets": [
+     {
+      "output": "xxh3_128:c069dd28e5eac47f348d019190d74346",
+      "work": "engine_build",
+      "work_fp": "xxh3_128:5ddf29468d6a95e75cf5aba2cd14555e"
+     }
+    ]
+   }
+  ],
+  "reviewer_runs": [
+   "3",
+   "5",
+   "8"
+  ],
+  "valid": true
+ },
+ "verdicts": {
+  "final": {
+   "acceptance": "accepted",
+   "blockers_open": [],
+   "decision": "approve",
+   "exit": 0,
+   "targets_equal_latest_output": true
+  },
+  "reject1": {
+   "acceptance": null,
+   "blockers_open": [],
+   "capped": false,
+   "count_before": 0,
+   "decision": "reject",
+   "exit": 0,
+   "max_rounds": 1,
+   "repair_admitted": true,
+   "targets_equal_latest_output": true
+  },
+  "reject2": {
+   "acceptance": null,
+   "blockers_open": [
+    "max_rounds"
+   ],
+   "capped": true,
+   "count_before": 1,
+   "decision": "reject",
+   "exit": 0,
+   "max_rounds": 1,
+   "repair_admitted": false,
+   "targets_equal_latest_output": true
+  }
+ }
+}

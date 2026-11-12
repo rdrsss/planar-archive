@@ -1,0 +1,10 @@
+C3-D10 candidate re-check (tool output, binary not executed)
+git diff HEAD --name-only -- src:
+src/engine/ledger/CMakeLists.txt
+src/engine/ledger/execution.t.cpp
+src/engine/ledger/storage.cpp
+export overlay: all three files copied from checkout bytes (only src/engine/ledger/CMakeLists.txt differed from the previous export)
+rebuild: cmake --build build/rewrite-debug --target planar_authoring_stack in the scratch export, exit 0; no-op recheck and shasum:
+ninja: no work to do.
+774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c  build/rewrite-debug/src/cmd/planar/planar_authoring_stack
+recorded sha256: 774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c -> EQUAL; candidate.json kept, no candidate-c03.json (the only new src delta is the CMake schema path, which does not change planar_authoring_stack bytes)

@@ -1,0 +1,6 @@
+{
+ "closed": true,
+ "exit": 3,
+ "stderr": "{\"error\":{\"code\":\"resource_limit\",\"details\":{\"limit\":\"instructions\",\"maximum\":100000000},\"field\":\"\",\"message\":\"Lua instruction limit exceeded\"},\"kind\":\"error\",\"version\":1}\n",
+ "stdout": ""
+}

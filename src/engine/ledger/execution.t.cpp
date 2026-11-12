@@ -3987,6 +3987,183 @@ TEST_CASE("R17 ledger completion retains evidence and changes run to completed a
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+// R19-ACCEPT-A-C01 history regressions: history --event of a recorded check must expand evidence scalars with the
+// flag that matches their kind (storage.cpp history_rows). Each test records evidence-only boundary checks through the
+// commit path and reads the event back with the same selector the R17 completion test uses.
+namespace {
+
+// Walks one expansion tree and checks the two structural invariants runtime.cpp refuses: an integer node carries no
+// boolean flag and a boolean node carries no integer value. The walk visits every record field and list item.
+void check_scalar_flags(const value_ptr& node, const std::string& where) {
+  if (!node)
+    return;
+  INFO(where);
+  if (node->kind == value_kind::integer)
+    CHECK(!node->boolean);
+  if (node->kind == value_kind::boolean)
+    CHECK(node->integer == 0);
+  for (const auto& [key, child] : node->fields)
+    check_scalar_flags(child, where + "." + key);
+  for (std::size_t i = 0; i < node->items.size(); ++i)
+    check_scalar_flags(node->items[i], std::format("{}[{}]", where, i));
+}
+
+// Records one evidence-only boundary check of unit_one on a fresh reservation of the claimed run and returns the event
+// sequence of the recorded check. The setup copies the R17 completion test; completion stays false so the run stays
+// active for the next reservation. The retained output is empty, which satisfies output.size() <= output_bytes.
+std::uint64_t record_history_evidence(const std::filesystem::path& path, std::string_view claim_token, std::uint64_t run_id,
+                                      std::string_view request_id, std::uint64_t duration_ms, std::uint64_t output_bytes,
+                                      bool output_truncated) {
+  hist::request_v3 request{
+      .operation = "check",
+      .actor     = "tester",
+      .parameters =
+          params_bytes({{"base_root", "/base"}, {"root", "/root"}, {"run_id", std::to_string(run_id)}, {"scratch", "/scratch"}}),
+      .profile_argument = std::nullopt};
+  auto reserved = reserve_check(path, snapshot_of(path), request_id, "tester", request, claim_token);
+  REQUIRE(reserved);
+  auto                   output = "xxh3_128:" + std::string(32, 'a');
+  auto                   units  = vlist({vrec({{"work", vstr("unit_one")}, {"output", vstr(output)}})});
+  execution_check_result result;
+  result.recapture_matches = true;
+  result.observation       = vrec({{"version", vint(1)},
+                                   {"root", vstr("root")},
+                                   {"base", vstr(output)},
+                                   {"observation", vstr(output)},
+                                   {"units", units},
+                                   {"contracts", vlist({})}});
+  execution_check_evidence evidence;
+  evidence.work             = "unit_one";
+  evidence.check            = "planar.boundary_v1";
+  evidence.outcome          = "pass";
+  evidence.reason           = "passed";
+  evidence.duration_ms      = duration_ms;
+  evidence.output_bytes     = output_bytes;
+  evidence.output_truncated = output_truncated;
+  evidence.vector           = vrec({{"version", vint(1)}, {"targets", units}});
+  evidence.definition       = vrec({{"version", vint(1)},
+                                    {"work", vstr("unit_one")},
+                                    {"check", vstr("planar.boundary_v1")},
+                                    {"gate", vstr("boundary_v1")},
+                                    {"cwd", vrec({{"root", vstr("root")}})},
+                                    {"inputs", vstrs({"own_output", "output_vector"})},
+                                    {"owned", vstrs({"src/"})},
+                                    {"frozen", vlist({})},
+                                    {"excluded", vlist({})},
+                                    {"producers", vlist({})}});
+  result.evidence.push_back(evidence);
+  auto snapshot = read_execution_snapshot(path);
+  REQUIRE(snapshot);
+  auto recorded = complete_check(path, *snapshot, reserved->id, claim_token, result, false, {});
+  REQUIRE(recorded);
+  return recorded->event_seq;
+}
+
+// Reads the expansion of one event through the history reader, using the R17 completion test's selector.
+value_ptr read_history_event(const std::filesystem::path& path, std::uint64_t event) {
+  auto file = open_existing(path, ledger_access::read_only);
+  REQUIRE(file);
+  hist::history_query query;
+  query.selector = hist::history_selector::event;
+  query.id       = event;
+  auto expanded  = hist::read_history(*file, query);
+  REQUIRE(expanded);
+  return *expanded;
+}
+
+// Returns the single evidence row of a check_recorded event expansion.
+value_ptr sole_evidence_row(const value_ptr& expansion) {
+  const auto& items = expansion->fields.at("data")->fields.at("execution")->fields.at("evidence")->items;
+  REQUIRE(items.size() == 1);
+  return items[0];
+}
+
+} // namespace
+
+// Mutant: storage.cpp history_rows keeps node.boolean = **raw != 0 for the integer evidence columns (H1). The test
+// records one boundary check with duration_ms 42, output_bytes 7 and output_truncated true, then requires every integer
+// node of the event expansion to carry no boolean flag and the stored integers to be exact.
+TEST_CASE("R19-ACCEPT-A-C01 history event of a recorded check keeps evidence integer nodes free of the boolean flag") {
+  scratch dir;
+  auto    path  = activated_ledger(dir, true);
+  auto    claim = commit_claim(path, "claim-check", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto token = parse_run_token(*claim.token);
+  REQUIRE(token);
+  const auto event    = record_history_evidence(path, *claim.token, token->run_id, "check-1", 42, 7, true);
+  const auto expanded = read_history_event(path, event);
+  check_scalar_flags(expanded, "event");
+  const auto row = sole_evidence_row(expanded);
+  REQUIRE(row->fields.contains("duration_ms"));
+  REQUIRE(row->fields.contains("output_bytes"));
+  INFO("duration_ms is the integer evidence node");
+  CHECK(row->fields.at("duration_ms")->kind == value_kind::integer);
+  CHECK(row->fields.at("duration_ms")->boolean == false);
+  CHECK(row->fields.at("duration_ms")->integer == 42);
+  INFO("output_bytes is the integer evidence node");
+  CHECK(row->fields.at("output_bytes")->kind == value_kind::integer);
+  CHECK(row->fields.at("output_bytes")->boolean == false);
+  CHECK(row->fields.at("output_bytes")->integer == 7);
+}
+
+// Mutant: storage.cpp history_rows keeps node.integer = **raw for the boolean evidence column (H2). The test records a
+// boundary check with output_truncated true and requires the boolean node to be a boolean with no integer value.
+TEST_CASE("R19-ACCEPT-A-C01 history event of a recorded check keeps evidence boolean nodes free of the integer value") {
+  scratch dir;
+  auto    path  = activated_ledger(dir, true);
+  auto    claim = commit_claim(path, "claim-check", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto token = parse_run_token(*claim.token);
+  REQUIRE(token);
+  const auto event    = record_history_evidence(path, *claim.token, token->run_id, "check-1", 42, 7, true);
+  const auto expanded = read_history_event(path, event);
+  const auto row      = sole_evidence_row(expanded);
+  REQUIRE(row->fields.contains("output_truncated"));
+  INFO("output_truncated is the boolean evidence node");
+  CHECK(row->fields.at("output_truncated")->kind == value_kind::boolean);
+  CHECK(row->fields.at("output_truncated")->boolean == true);
+  CHECK(row->fields.at("output_truncated")->integer == 0);
+}
+
+// Mutant: storage.cpp history_rows clamps integer nodes to 0 or 1, or sets the boolean flag of every node to true (H3).
+// This guard passes on the unfixed source. It records two boundary checks: a truncated row with duration_ms 42 and
+// output_bytes 7, and a row without truncation with duration_ms 17 and output_bytes 3. The integers must be exact and the
+// stored zero flag must read as boolean false with integer 0.
+TEST_CASE("R19-ACCEPT-A-C01 history event of a recorded check preserves evidence integer and boolean values exactly") {
+  scratch dir;
+  auto    path  = activated_ledger(dir, true);
+  auto    claim = commit_claim(path, "claim-check", "alpha", "builder");
+  REQUIRE(claim.token);
+  auto token = parse_run_token(*claim.token);
+  REQUIRE(token);
+  const auto truncated_event = record_history_evidence(path, *claim.token, token->run_id, "check-1", 42, 7, true);
+  const auto whole_event     = record_history_evidence(path, *claim.token, token->run_id, "check-2", 17, 3, false);
+  {
+    INFO("truncated evidence row keeps exact integers and a true flag");
+    const auto row = sole_evidence_row(read_history_event(path, truncated_event));
+    REQUIRE(row->fields.contains("duration_ms"));
+    REQUIRE(row->fields.contains("output_bytes"));
+    REQUIRE(row->fields.contains("output_truncated"));
+    CHECK(row->fields.at("duration_ms")->integer == 42);
+    CHECK(row->fields.at("output_bytes")->integer == 7);
+    CHECK(row->fields.at("output_truncated")->kind == value_kind::boolean);
+    CHECK(row->fields.at("output_truncated")->boolean == true);
+  }
+  {
+    INFO("untruncated evidence row keeps exact integers and a stored zero flag");
+    const auto row = sole_evidence_row(read_history_event(path, whole_event));
+    REQUIRE(row->fields.contains("duration_ms"));
+    REQUIRE(row->fields.contains("output_bytes"));
+    REQUIRE(row->fields.contains("output_truncated"));
+    CHECK(row->fields.at("duration_ms")->integer == 17);
+    CHECK(row->fields.at("output_bytes")->integer == 3);
+    CHECK(row->fields.at("output_truncated")->kind == value_kind::boolean);
+    CHECK(row->fields.at("output_truncated")->boolean == false);
+    CHECK(row->fields.at("output_truncated")->integer == 0);
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // R15-C (draft) additions: the five L2 residual cross-row checks, advisory A1 and the G2 interning hook.
 
 namespace {

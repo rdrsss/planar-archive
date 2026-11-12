@@ -1,0 +1,11 @@
+| identity | value |
+|---|---|
+| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |
+| sha256(git diff --binary HEAD -- src), tracked only | `d9ca75a13fcf1c3aa11b79ee38fdb5d24d733501deb4caf24c42d1830a6726c0` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src, evidence excluded | `d9ca75a13fcf1c3aa11b79ee38fdb5d24d733501deb4caf24c42d1830a6726c0` |
+
+| file | state | sha256 |
+|---|---|---|
+| `src/engine/ledger/CMakeLists.txt` | modified | `8141a8d56f504208eafd8f4ae6145e49f3f71e34f1300970bf7b678056b7779d` |
+| `src/engine/ledger/execution.t.cpp` | modified | `250867b8bd74b86d718cbe17e5fa9983fda6a60a2b5e7c127829a3fec6f98950` |
+| `src/engine/ledger/storage.cpp` | modified | `e4cf41dcb8cf44cc8004d4ba011543a557c742c623e20ede631eb975f237d822` |

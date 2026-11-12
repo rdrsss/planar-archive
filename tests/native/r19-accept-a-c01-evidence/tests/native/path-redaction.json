@@ -1,0 +1,17 @@
+{
+ "description": "Machine-local paths redacted from committed files. original_sha256 is the hash before redaction; restore <repo>/<home> to the original absolute paths to verify.",
+ "files": {
+  "inventory.txt": {
+   "original_sha256": "c63b8c780cd50c377e38e37d06793b9317b3e1558fe5b14cd193bc969ee5dd48",
+   "redacted_sha256": "38b77b33e886ec315f622e5c99f05d159f9f0726aafd30914a46e2cc3da3ebfa"
+  },
+  "red/run_red.sh": {
+   "original_sha256": "192a32861ed7f1ddb7ff7a53a8809ac83c4111d89fe5eadae835f350d6d2b6bf",
+   "redacted_sha256": "84a5be108eb8ab44f216a15e3d1724f24416163a837a00c1d16df1202024f10b"
+  }
+ },
+ "tokens": {
+  "<home>": "home directory",
+  "<repo>": "repository root"
+ }
+}

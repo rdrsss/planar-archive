@@ -1,0 +1,9 @@
+Stage 0 (R19-ACCEPT-A-C02 wave 1) before-list generators, run from the repository root <repo> with LC_ALL=C and PYTHONDONTWRITEBYTECODE=1, HOME and PLANAR_DB set to a scratch root <scratch>.
+
+bash gate/test-names/before/generators/cpp_names.sh <repo>        > gate/test-names/before/cpp-worktree.txt
+bash gate/test-names/before/generators/cpp_head.sh <repo>         > gate/test-names/before/cpp-head.txt
+(cd tests/native/r19-accept-support && python3 -B - < <repo>/gate/test-names/before/generators/py_ids.py)  > gate/test-names/before/py-worktree.txt
+bash gate/test-names/before/generators/c01_snapshot.sh <repo>     > gate/test-names/before/py-c01-snapshot.txt
+
+py_ids.py is read from stdin so that sys.path[0] is the support directory (a script file run from elsewhere cannot import the support modules). It exits 4 when any loaded test is a failed import, so an import failure cannot pass as a list.
+The after lists (wave 9) use the same generators, written to gate/test-names/after/.

@@ -1,0 +1,3 @@
+src/engine/ledger/execution.t.cpp:TEST_CASE("R19-ACCEPT-A-C01 history event of a recorded check keeps evidence boolean nodes free of the integer value"
+src/engine/ledger/execution.t.cpp:TEST_CASE("R19-ACCEPT-A-C01 history event of a recorded check keeps evidence integer nodes free of the boolean flag"
+src/engine/ledger/execution.t.cpp:TEST_CASE("R19-ACCEPT-A-C01 history event of a recorded check preserves evidence integer and boolean values exactly"

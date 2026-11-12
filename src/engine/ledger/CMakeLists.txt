@@ -38,7 +38,7 @@ planar_rewrite_module(planar_ledger_format
 # Test-only: fixtures prepare and complete acceptances; the format library itself links none of it.
 target_link_libraries(planar_ledger_format_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared)
 target_compile_definitions(planar_ledger_format_tests PRIVATE
-  PLANAR_LEDGER_SCHEMA="${PROJECT_SOURCE_DIR}/tests/native/r12b-evidence/expected-schema.sql")
+  PLANAR_LEDGER_SCHEMA="${PROJECT_SOURCE_DIR}/fixtures/ledger/expected-schema.sql")
 
 planar_rewrite_module(planar_ledger_execution_schema
   INTERFACE execution_schema.cppm SOURCES execution_schema.cpp

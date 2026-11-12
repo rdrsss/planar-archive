@@ -1,0 +1,31 @@
+| identity | value |
+|---|---|
+| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |
+| sha256(git diff --binary HEAD -- src tests/native/r19-accept-support), tracked only | `83a16fdee033fce5a1a792d8d65f4090fba8dacffc2d38013684cacb4daeba19` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec src tests/native/r19-accept-support, evidence excluded | `47e385be68f83e4b0bb60c4ff62f3c73e3b40f40f311d4669e61bf5d76438fd8` |
+
+| file | state | sha256 |
+|---|---|---|
+| `src/engine/ledger/execution.t.cpp` | modified | `250867b8bd74b86d718cbe17e5fa9983fda6a60a2b5e7c127829a3fec6f98950` |
+| `src/engine/ledger/storage.cpp` | modified | `e4cf41dcb8cf44cc8004d4ba011543a557c742c623e20ede631eb975f237d822` |
+| `tests/native/r19-accept-support/accept_lib.py` | untracked | `6ef4e069c2da203d508f3695482b5ea9883b71fc47ee8519a6f910f99e223e68` |
+| `tests/native/r19-accept-support/accept_test.py` | untracked | `19678a328d2a0c2885b120f35f91db1564daddee487c4ecba3de6b7146d424db` |
+| `tests/native/r19-accept-support/acceptance_cli_test.py` | untracked | `1b71cf8cf9be5d2ba217120da0cab4b66fd1654a1919247643f9fb63cf58978a` |
+| `tests/native/r19-accept-support/check_runner.py` | untracked | `b71e939a226415c0aeb43083dffcf263618d2c88804500300e585bfafec1d5f1` |
+| `tests/native/r19-accept-support/cmake_check.py` | untracked | `ba8f20625bda0f3c8fc3c613529e16f6a1f8e0a38b0b261f8341b2fdcbb3f360` |
+| `tests/native/r19-accept-support/fault/cmake_rerun/run_heavy.py` | untracked | `316fa2abd3d86614a79f952d2eb4819c71c836d266e2124916b1bbb639e78b47` |
+| `tests/native/r19-accept-support/fault/delayed_marker_check.py` | untracked | `6ca4c0b4283083a8241a5edbe71c1912d0d8fa908ac6d602de29f453ed728141` |
+| `tests/native/r19-accept-support/fault/mini/base/src/unit.txt` | untracked | `d73d5ccc52b8747e2bc253b7267b6110d41021eacd54ff33695d96c0a47fe56a` |
+| `tests/native/r19-accept-support/fault/mini/jobs/combined-max1.lua` | untracked | `c7d8b3a33fd7940b6ef56e4ac4923836f527644d8b6952aaa8ae5d22f54e8e39` |
+| `tests/native/r19-accept-support/fault/mini/jobs/combined-max2.lua` | untracked | `6d0df6cf79f148664587dcf43e774243cad211e4d26420ce8fe4f955c1281e0e` |
+| `tests/native/r19-accept-support/fault/mini/registry.json` | untracked | `eca5ac671b6929f042a839591ff56da72d0afef8f4e9aca5433df7b1119490ca` |
+| `tests/native/r19-accept-support/fault/mini/source/src/unit.txt` | untracked | `753f8fe079abf1160eaa98cc40257a00da60a033b2d3730ab679fa0f62a0778c` |
+| `tests/native/r19-accept-support/fault/mini/workspace/spec.lua` | untracked | `d35b07e34032202e830cedb66b4d45b5774621f087acc9f8012b1d8edacf07da` |
+| `tests/native/r19-accept-support/fault/mini/workspace/workspace.lua` | untracked | `21ac5c6da0e2d27bb4911202d0a364acacc49d39b052fa71d8ca44b68e2d453d` |
+| `tests/native/r19-accept-support/fault/sleep_check.py` | untracked | `751414911570978faf4f82d0ee79631ceb41c76dfd2bc4e66d35c41faa51ce57` |
+| `tests/native/r19-accept-support/fault_driver.py` | untracked | `ced606f417f4a9098e362d3e49e65d383c08dcbd1e9b34826978f979f1f62197` |
+| `tests/native/r19-accept-support/fault_live_test.py` | untracked | `d675691ff97c30a1bdfe3763533c8d85fd4228750aac3ecbc9ee4e334908b44b` |
+| `tests/native/r19-accept-support/quota_driver.py` | untracked | `3c45a76571439a528e3cf1aee3803308964349da6edb247235cc656e8a4a3420` |
+| `tests/native/r19-accept-support/quota_live_test.py` | untracked | `bedad9a306b98b535c33f2a27ea4224575bc6f2a81120019815d3d119117f861` |
+| `tests/native/r19-accept-support/registry_gen.py` | untracked | `26752307e7257a99722b713342c790ae3eb146bd99c93ea410b6b4312109d172` |
+| `tests/native/r19-accept-support/run_acceptance.py` | untracked | `3c04f00ecf48c127e83b9f5c0a8436c0673c3ca178810b808bec3839dec40c94` |

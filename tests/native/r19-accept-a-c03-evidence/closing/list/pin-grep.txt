@@ -1,0 +1,3 @@
+docs/vernacular/rounds/R19-ACCEPT-A.md:983
+docs/vernacular/rounds/R19-ACCEPT-A.md:1441
+tests/native/r19-accept-a-c02-evidence/plan/INVARIANTS.md:177

@@ -1,0 +1,50 @@
+R19-ACCEPT-A-C02 PKG-RECORD (wave 10), pass 1: verifier commands, tokenized.
+Tokens: <repo> checkout root; <home> home directory; <scratch-root> session scratchpad; <temp-root> per-user temporary root;
+<private-temp-root> private-prefixed form of <temp-root>; <per-user-temp-id> last two components of <temp-root>;
+<export-root> candidate export root (the directory that holds build/); <workflows-scripts> the identity-tool directory.
+Real values were substituted only at run time by a session script; no real value is written in this file or in any output file here.
+Environment for the Python steps: PYTHONDONTWRITEBYTECODE=1 and python3 -B. Commands run from <repo>.
+Exit codes are in the .exit files and outputs in the .out and .err files beside this file (names begin pass1-).
+
+LIST. The verifier input is COMMIT-LIST.txt as it stands at this pass: 186 paths (the wave-5 list of 165 plus 21 paths
+  created or changed since wave 5, see the record). Set (7) redaction/final/** is NOT in the input of pass 1, because the
+  outputs of these verifiers cannot be inputs to themselves; the final pass (after waves 4 and 9) adds them to the list
+  and re-runs every command below on the final list. The two redaction/*-testf outputs are never listed (wave-5 rule).
+  evidence-and-record input = the list without src/ and tests/native/r19-accept-support/ (163 paths).
+
+(a) python3 -B scripts/redact-local-paths.py check --repo-path <repo> --home <home> <every path of the list (186)>
+    -> pass1-a-check.{out,err,exit}  (exit 0; empty output)
+(b) python3 -B tests/native/r19-accept-support/run_acceptance.py scan --root <path> ... (one --root per evidence and record path, 163)
+    --repo-path <repo> --home <home> --scratch <scratch-root> --temp-root <temp-root> --private-temp-root <private-temp-root> --export-root <export-root>
+    -> pass1-b-scan.{out,err,exit}  (exit 0; empty output)
+(c1) grep -nE '[/]var[/]folders[/][a-z0-9_]{2}[/]|[/]private[/]var[/]folders[/]|[/]private[/]tmp[/]claude|[/]tmp[/]claude' <the 163 paths>
+    -> pass1-c1-temp-root.{out,err,exit}  (exit 1, no match)
+(c2) grep -nE -- '-[U]sers-|claude-[5]01|aa194b3[a]-' <the 163 paths>
+    -> pass1-c2-slug.{out,err,exit}  (exit 1, no match)
+(c3) grep -nF -- <per-user-temp-id> <the 163 paths>
+    -> pass1-c3-tmpu-id.{out,err,exit}  (exit 1, no match)
+(d) python3 -B <scratch-root>/r2-prep/allowlist_check.py redaction/support-allowlist.txt   (six content-keyed sites, counts 2, 3, 1)
+    -> pass1-d-allowlist.{out,err,exit}  (exit 0; set equal, extra 0, missing 0)
+(e) shasum -a 256 tests/native/path-redaction.json  -> pass1-repo-manifest-sha.{out,err,exit}  (equal to runs/pre-index/manifest-before.txt)
+    shasum -a 256 tests/native/r19-accept-a-evidence/REPORT.md tests/native/r19-accept-a-c01-evidence/REPORT-run2.md
+    -> pass1-report-shas.{out,err,exit}  (equal to runs/pre-index/report-shas.txt)
+(f) D17 exclude expression on the list (run from <repo>; no output and exit 1 on the last stage):
+    grep -E '(/raw/|/raw2/|[.]raw/|/superseded-|/snapshot|/redaction/original/|[.]log$|[.]pyc$|__pycache__)' tests/native/r19-accept-a-c02-evidence/COMMIT-LIST.txt | grep -vE '^tests/native/r19-accept-evidence/(plan/superseded-[0-9]+/|gate/candidate/superseded-[0-9]+/candidate[.]json$)'
+    -> pass1-r2a-expression.{out,err,exit}  (exit 1, empty output)
+    while read f; do test -f "$f" || echo "missing $f"; done < tests/native/r19-accept-a-c02-evidence/COMMIT-LIST.txt
+    -> pass1-r2a-testf.{out,err,exit}  (exit 0, empty output)
+(g) sort -c on COMMIT-LIST.txt with LC_ALL=C -> sorted; line count 186 equals the number of non-empty lines.
+
+The C02 plan files (plan/DECISIONS.md, plan/INVARIANTS.md) are members of the list and are covered by (a), (b) and (c1) to (c3) (D34).
+Wave-1 tracked-src identity and the candidate hash are in gate/identity/ and are not part of these verifiers.
+Redaction edits: none were made in pass 1 (every verifier passed on the list as it stood); no file was hand-replaced and redaction/original/ was not touched.
+
+(h) A4, the final step of this pass, after the last Python invocation of the pass (the verifiers (a) to (d) above were the last Python runs):
+    find <repo>/tests/native/r19-accept-support -type f ! -name '*.pyc' under __pycache__  -> 0 files (only *.pyc were present), then
+    rm -rf <repo>/tests/native/r19-accept-support/__pycache__ (pre-existing, ignored, produced by an earlier round; no raw log)
+    find tests/native/r19-accept-support \( -name '*.pyc' -o -name __pycache__ \)  -> pass1-a4-find.{out,err,exit}  (exit 0; empty output)
+    A later Python run without -B would recreate bytecode; any such run must be followed by this step again (pass 2).
+(i) The identity tool (python3 -B <workflows-scripts>/identity.py src tests/native/r19-accept-support, run from <repo>) is not a redaction verifier;
+    its output is pasted verbatim into the C02 section of the round record.
+The verifier set (a) to (f) was run twice on the same list: the first run exposed nothing new and was superseded by the second, which ran after the
+round record and the README were edited (both are members of the list). The kept outputs are the second run's.

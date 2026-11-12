@@ -1,0 +1,9 @@
+| identity | value |
+|---|---|
+| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |
+| sha256(git diff --binary HEAD -- tests/acceptance), tracked only | `75cd175a7a6b21ee9a936a19a7cdb803d60960365f7679965635e24d75fa25f3` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec tests/acceptance, evidence excluded | `75cd175a7a6b21ee9a936a19a7cdb803d60960365f7679965635e24d75fa25f3` |
+
+| file | state | sha256 |
+|---|---|---|
+| `tests/acceptance/x08_recipe.py` | modified | `cc04a0fbc557759a6e912596488969ce7308a507b8fde9b19f001a9c4be71014` |

@@ -1,0 +1,11 @@
+R19-ACCEPT-A-C02 PKG-HEAVY (wave 4): heavy-run driver wait keys (D31 H5-H7, R1v).
+Command (cwd <repo>, tokens: <repo> checkout root, <scratch-root> session scratchpad, <exe> recorded candidate):
+  PYTHONDONTWRITEBYTECODE=1 python3 -B -c 'import run_heavy; cfg = run_heavy.build_config("<scratch-root>/c02-heavy-scratch", "<exe>"); ...' (sys.path = tests/native/r19-accept-support/fault/cmake_rerun)
+Output recorded from that call (exit 0; stderr empty):
+registry checks: cmake_debug timeout_ms 3600000; cmake_release timeout_ms 3600000
+check requests (run_heavy.CHECK_REQUESTS): 4
+registry timeout_ms sum: 7200000 ms = 7200 s; times 4 check requests = 28800 s
+marker_timeout_s: 28800.0
+check_timeout_s: 28800.0
+max_rounds: 1; kill_target: cli; base: composed; check_mode: real; mode: cmake
+Mini defaults (fault_driver MARKER_TIMEOUT_S 120, CHECK_TIMEOUT_S 900) are not used by the heavy run because build_config sets both keys.

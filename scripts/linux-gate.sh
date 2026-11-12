@@ -12,8 +12,8 @@
 #      falls back to /). Refuse below 15 GiB.
 #   2. Record docker usage and images in docker-before.txt.
 #   3. Write host-manifest.txt: sorted "sha256  path" of every file the image
-#      context will hold (git ls-files tracked plus untracked-unignored, plus the
-#      re-included R12B schema), minus the dockerignore exclusions.
+#      context will hold (git ls-files tracked plus untracked-unignored), minus the
+#      dockerignore exclusions.
 #   4. Run exactly one `docker build --target evidence --output type=local` from
 #      the repository root, with no image tag and no bind mount. Log and exit
 #      status go to docker-build.log and docker-build.exit.
@@ -99,9 +99,6 @@ fi
 is_excluded() {
   local rel="$1"
   local p="/$rel"
-  case "$rel" in
-    tests/native/r12b-evidence/expected-schema.sql) return 1 ;;
-  esac
   case "$p" in
     /.git|/.git/*|/build|/build/*|/bin|/bin/*|/dist|/dist/*) return 0 ;;
     /doxygen-lint-output|/doxygen-lint-output/*|/compile_commands.json) return 0 ;;
@@ -122,10 +119,7 @@ write_manifest() {
   local dest="$1"
   local list
   list="$(mktemp "${TMPDIR:-/tmp}/planar-gate-list.XXXXXX")" || return 1
-  {
-    git -C "$REPO" ls-files -z --cached --others --exclude-standard
-    printf '%s\0' tests/native/r12b-evidence/expected-schema.sql
-  } > "$list"
+  git -C "$REPO" ls-files -z --cached --others --exclude-standard > "$list"
   LC_ALL=C sort -z -u "$list" > "$list.sorted"
   : > "$dest"
   local p

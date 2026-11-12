@@ -1,0 +1,2 @@
+774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c  <exe>
+recorded candidate executable, located and hashed at stage 0 (path in raw/candidate-located.txt, never committed); equal to gate/candidate/candidate.json sha256

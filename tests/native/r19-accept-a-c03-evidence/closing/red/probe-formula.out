@@ -1,0 +1,15 @@
+..F.....
+======================================================================
+FAIL: test_intended_executions_counts_one_check_for_an_interrupted_round (accept_test.HeavyDriverTest.test_intended_executions_counts_one_check_for_an_interrupted_round)
+Kills the R19-ACCEPT-A-C03-R1 formula: every round, interrupted or not, counted all its checks.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/accept_test.py", line 1202, in test_intended_executions_counts_one_check_for_an_interrupted_round
+    self.assertEqual(scenario.intended_executions(), 7)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 8 != 7
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.451s
+
+FAILED (failures=1)

@@ -1,0 +1,15 @@
+R19-ACCEPT-A P6 prerequisite status at the stop point (compact; no host paths)
+
+P0 candidate (gate/candidate/candidate.json, owned by P0, not modified by P6)
+  candidate.json sha256 field: 98ec8419e7a32993de29019cc02f9a696895aff19316c9d842c41737eec0d706
+  shasum -a 256 of the recorded executable (tool output): 98ec8419e7a32993de29019cc02f9a696895aff19316c9d842c41737eec0d706
+  equal: yes. The quota live run passed accept_lib.require_recorded_candidate (run_live verifies before creating the run dir).
+  head: 91e0df24f2167471e49ec057c7159bce5dff3608 (equal to HEAD at the start of P6)
+
+P2-P5 support (test-wave classes, see unittest-run/summary.txt)
+  P5 run_acceptance.py, acceptance_cli_test.py (A1-A7): green on Python 3.15 (7 of 7).
+  P2/P3 pure helpers accept_test.py (I1-I35): 33 of 35 green; 2 failures are a test-layout defect (support_copy).
+  P2 quota live (quota_live_test.py, Q1-Q19): 1 of 19 green; 17 errors from the candidate history --event defect; 1 assertion.
+  P4 fault live (fault_live_test.py, F1-F25): 14 of 25 green; 11 failures, not diagnosed.
+
+RESULT: prerequisites P2-P5 are not green. A product defect is exposed (D17). The wave stops; no further live run is executed.

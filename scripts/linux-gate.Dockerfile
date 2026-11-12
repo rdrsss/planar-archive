@@ -10,7 +10,7 @@
 # Gate RUN steps never fail the layer on a test or build failure. Each gate
 # command writes its raw log and its exit status to /home/planar/out, and
 # tests/native/v5-02-x08-support/validate.py judges the raw logs. A missing
-# expected-schema.sql fails the build at the first RUN after COPY instead.
+# ledger schema fixture fails the build at the first RUN after COPY instead.
 
 # Base image pinned by the multi-architecture index digest (linux/arm64/v8 resolves
 # to sha256:19cad59657037cffa0ac9a48107019b768900ff1071140965827513ac866bd5e).
@@ -85,10 +85,9 @@ WORKDIR /home/planar/src
 # checkout is never bind-mounted and no VOLUME is declared (DECISIONS rows 4, 10c).
 COPY --chown=planar:planar . /home/planar/src
 
-# First RUN after COPY: the R12B ledger schema is required by
-# src/engine/CMakeLists.txt:254 and is gitignored, so it is re-included by the
-# dockerignore. Then record the image context as sorted "sha256  path" lines.
-RUN test -s tests/native/r12b-evidence/expected-schema.sql \
+# First RUN after COPY: the tracked ledger schema fixture is required by
+# src/engine/ledger/CMakeLists.txt. Then record the image context as sorted "sha256  path" lines.
+RUN test -s fixtures/ledger/expected-schema.sql \
  && find . \( -type f -o -type l \) -print | LC_ALL=C sort | sed 's#^\./##' \
       | xargs -d '\n' -r sha256sum > /home/planar/out/context-manifest.txt
 

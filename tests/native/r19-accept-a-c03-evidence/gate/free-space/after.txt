@@ -1,0 +1,4 @@
+after heavy run, scratch export build tree removed (10405964 KiB), 2026-11-12T10:05:53Z
+min available during run (poll): 26901352 KiB (stop threshold 12582912 KiB, not crossed)
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 399415728  37183144    92% 8980775 371831440    2%   /System/Volumes/Data

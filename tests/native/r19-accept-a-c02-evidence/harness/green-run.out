@@ -1,0 +1,222 @@
+# R19-ACCEPT-A-C02 PKG-HARNESS green run after the fixes (tokenized copy; raw logs kept outside the checkout)
+## Part 1: accept_test and acceptance_cli_test (final tree)
+test_at_event_state_refuses_missing_roles_and_extra_roles (accept_test.AcceptLibGapTest.test_at_event_state_refuses_missing_roles_and_extra_roles)
+Kills E17 (missing roles mapping accepted) and E18 (replayed role set with an extra role accepted). ... ok
+test_build_verdict_refuses_a_unit_named_twice (accept_test.AcceptLibGapTest.test_build_verdict_refuses_a_unit_named_twice)
+Kills E13: build_verdict accepts an observation that names a target unit twice. ... ok
+test_check_runner_passthrough_never_writes_a_result_document (accept_test.AcceptLibGapTest.test_check_runner_passthrough_never_writes_a_result_document)
+Kills I29b: passthrough mode also derives and writes PLANAR_CHECK_RESULT from unittest-looking output. ... ok
+test_child_env_sets_bytecode_flag_even_when_the_parent_lacks_it (accept_test.AcceptLibGapTest.test_child_env_sets_bytecode_flag_even_when_the_parent_lacks_it)
+Kills I35b: child_env no longer sets PYTHONDONTWRITEBYTECODE (the harness env already exports it). ... ok
+test_inventory_verdict_refuses_duplicate_inventory_names (accept_test.AcceptLibGapTest.test_inventory_verdict_refuses_duplicate_inventory_names)
+Kills I17c: cmake_check tolerates a duplicated name in the live inventory when the cases repeat it. ... ok
+test_red_record_each_marker_rule_stands_alone (accept_test.AcceptLibGapTest.test_red_record_each_marker_rule_stands_alone)
+Kills I24 (no assertion marker required) and I24b (compile or import error accepted). ... ok
+test_rendezvous_write_replaces_the_file_instead_of_rewriting_it_in_place (accept_test.AcceptLibGapTest.test_rendezvous_write_replaces_the_file_instead_of_rewriting_it_in_place)
+Kills I30c: write_rendezvous rewrites the existing file in place (a reader could see a partial document). ... ok
+test_scan_and_event_expansion_refuse_vacuous_inputs (accept_test.AcceptLibGapTest.test_scan_and_event_expansion_refuse_vacuous_inputs)
+Kills E15 (empty scan prefix accepted) and E14 (empty expected references accepted). ... ok
+test_scan_finds_prefix_only_present_as_decoded_json_value (accept_test.AcceptLibGapTest.test_scan_finds_prefix_only_present_as_decoded_json_value)
+Kills I3b: scan_host_paths skips the decoded JSON string search (raw bytes hold only an escape). ... ok
+test_suite_refusals_each_clause_stands_alone (accept_test.AcceptLibGapTest.test_suite_refusals_each_clause_stands_alone)
+Kills S2b (ran=0 accepted) and S2c (child exit ignored): each row trips only one clause. ... ok
+test_trajectory_capped_rejection_requires_repair_not_admitted (accept_test.AcceptLibGapTest.test_trajectory_capped_rejection_requires_repair_not_admitted)
+Kills I13b: the capped rejection is accepted with repair_admitted true and no repair roles. ... ok
+test_trajectory_interruption_must_close_by_check_recover (accept_test.AcceptLibGapTest.test_trajectory_interruption_must_close_by_check_recover)
+Kills I10 (drops the check-recover requirement) and I10c (a missing interrupted check is tolerated). ... ok
+test_trajectory_rejection_admission_predicate_is_exact (accept_test.AcceptLibGapTest.test_trajectory_rejection_admission_predicate_is_exact)
+Kills I12 (repair_admitted ignored), I12c (count < max_rounds ignored) and I12d (first approve admitted). ... ok
+test_at_event_state_checks_roles_and_runs (accept_test.AcceptLibTest.test_at_event_state_checks_roles_and_runs)
+Kills: verify_at_event_state compares only active_job. ... ok
+test_candidate_record_hashes_bytes_and_refuses_shared_build_dirs (accept_test.AcceptLibTest.test_candidate_record_hashes_bytes_and_refuses_shared_build_dirs)
+Kills: candidate_record drops the shared-build-dir refusal, or hashes a fixed string. ... ok
+test_capture_limit_accepts_exact_real_error_envelope_only (accept_test.AcceptLibTest.test_capture_limit_accepts_exact_real_error_envelope_only)
+Kills H2a: closed_capture_limit_ok accepts only the bare closed object, so the real envelope is refused; H2b: it accepts any envelope whatever its inner error, kind or version. ... ok
+test_carried_capture_limit_requires_exact_closed_diagnostic (accept_test.AcceptLibTest.test_carried_capture_limit_requires_exact_closed_diagnostic)
+Kills: closed_capture_limit_ok accepts any resource_limit or any maximum. ... ok
+test_check_runner_derives_honest_result_from_unittest_child (accept_test.AcceptLibTest.test_check_runner_derives_honest_result_from_unittest_child)
+Kills: check_runner writes passed=matched or constants regardless of the child, or counts skips as passed. ... ok
+test_check_runner_propagates_exit_counts_once_and_passthrough_keeps_result (accept_test.AcceptLibTest.test_check_runner_propagates_exit_counts_once_and_passthrough_keeps_result)
+Kills: check_runner exits 0 regardless, overwrites a child result in passthrough, or counts only successful runs. ... ok
+test_cmake_adapter_command_plan_drops_equivalence_keeps_gates (accept_test.AcceptLibTest.test_cmake_adapter_command_plan_drops_equivalence_keeps_gates)
+Kills: cmake_check command_plan drops lint, repeat-build or the rendezvous step, or re-adds the verify.py equivalence step. ... ok
+test_cmake_adapter_inventory_rejects_skips_missing_and_duplicates (accept_test.AcceptLibTest.test_cmake_adapter_inventory_rejects_skips_missing_and_duplicates)
+Kills: cmake_check inventory_verdict tolerates skipped or notrun cases, or missing names. ... ok
+test_cmake_adapter_never_writes_bytecode_into_support_tree (accept_test.AcceptLibTest.test_cmake_adapter_never_writes_bytecode_into_support_tree)
+Kills: cmake_check removes the sys.dont_write_bytecode setting (or the child env flag) before importing the support check module. ... ok
+test_cmake_adapter_post_kill_integrity_requires_noop_build (accept_test.AcceptLibTest.test_cmake_adapter_post_kill_integrity_requires_noop_build)
+Kills: cmake_check integrity_verdict returns True for any build output. ... ok
+test_cmake_adapter_rendezvous_after_inventory_before_ctest (accept_test.AcceptLibTest.test_cmake_adapter_rendezvous_after_inventory_before_ctest)
+Kills: cmake_check writes the marker before the build step, omits pid or pgid, or bypasses accept_lib.write_rendezvous. ... ok
+test_compose_base_diff_touches_only_owned_cmake_paths (accept_test.AcceptLibTest.test_compose_base_diff_touches_only_owned_cmake_paths)
+Kills: compose_base copies the old tree whole or keeps owned files absent there, or boundary_paths_ok accepts any path. ... ok
+test_event_expansion_binds_check_state_references (accept_test.AcceptLibTest.test_event_expansion_binds_check_state_references)
+Kills: verify_event_expansion ignores the reservation id and the interrupted outcome for check events. ... ok
+test_event_expansion_binds_declaration_and_dispatch_references (accept_test.AcceptLibTest.test_event_expansion_binds_declaration_and_dispatch_references)
+Kills: verify_event_expansion skips the dispatch/manifest id comparison or the no-token check. ... ok
+test_event_expansion_binds_verdict_targets_policy_blockers (accept_test.AcceptLibTest.test_event_expansion_binds_verdict_targets_policy_blockers)
+Kills: verify_event_expansion ignores targets, policy or blockers for verdict events. ... ok
+test_guidance_usable_predicate_rejects_empty_and_generic (accept_test.AcceptLibTest.test_guidance_usable_predicate_rejects_empty_and_generic)
+Kills: guidance_is_usable returns True for any nonempty text, or ignores next_verb. ... ok
+test_host_path_scan_finds_repo_home_scratch_in_nested_files (accept_test.AcceptLibTest.test_host_path_scan_finds_repo_home_scratch_in_nested_files)
+Kills: scan_host_paths skips subdirectories, or checks only the /Users prefix. ... ok
+test_ledger_digest_detects_single_byte_write_and_sidecars (accept_test.AcceptLibTest.test_ledger_digest_detects_single_byte_write_and_sidecars)
+Kills: ledger_digest hashes only the main db file, ignoring -wal/-shm siblings and tail bytes. ... ok
+test_pin_scope_admits_only_src_and_data (accept_test.AcceptLibTest.test_pin_scope_admits_only_src_and_data)
+Kills: pin_scope_allowed also admits docs/** or round records, or drops the quota and CMake lua admissions. ... ok
+test_product_change_guard_sees_tracked_and_untracked_src_edits (accept_test.AcceptLibTest.test_product_change_guard_sees_tracked_and_untracked_src_edits)
+Kills: product_changes ignores untracked files, or diffs only tracked paths. ... ok
+test_recorded_candidate_verification_rejects_mismatch (accept_test.AcceptLibTest.test_recorded_candidate_verification_rejects_mismatch)
+Kills: require_recorded_candidate compares only size, or returns without comparing sha256 or HEAD. ... ok
+test_red_record_must_be_behavioural_and_hashed (accept_test.AcceptLibTest.test_red_record_must_be_behavioural_and_hashed)
+Kills: validate_red_record accepts a nonzero exit without an assertion marker. ... ok
+test_redaction_round_trips_with_recorded_hash (accept_test.AcceptLibTest.test_redaction_round_trips_with_recorded_hash)
+Kills: redact_text omits the scratch-root substitution, substitutes without original_sha256, or writes a real prefix into the record. ... ok
+test_reexecution_counter_counts_all_attempt_folders (accept_test.AcceptLibTest.test_reexecution_counter_counts_all_attempt_folders)
+Kills: count_check_executions counts only the debug preset, only the newest attempt, or ignores the counter file. ... ok
+test_registry_gen_changes_only_toolchain_command_prefix (accept_test.AcceptLibTest.test_registry_gen_changes_only_toolchain_command_prefix)
+Kills: registry_gen also alters a check argv or timeout, or drops a toolchain environment. ... ok
+test_rendezvous_pair_round_trips_atomically_and_rejects_partial (accept_test.AcceptLibTest.test_rendezvous_pair_round_trips_atomically_and_rejects_partial)
+Kills: write_rendezvous stores pgid under another key or writes non-atomically; read_rendezvous accepts missing keys. ... ok
+test_repin_rule_flags_runtime_cpp_and_embedded_lua (accept_test.AcceptLibTest.test_repin_rule_flags_runtime_cpp_and_embedded_lua)
+Kills: repin_required omits the src/stdlib/** lua pattern. ... ok
+test_replay_requires_identical_bytes_and_unchanged_ledger (accept_test.AcceptLibTest.test_replay_requires_identical_bytes_and_unchanged_ledger)
+Kills: assert_replay_identical compares only len() of responses, or skips the ledger digest compare. ... ok
+test_require_legal_action_rejects_verb_absent_from_guidance (accept_test.AcceptLibTest.test_require_legal_action_rejects_verb_absent_from_guidance)
+Kills: require_legal_action returns without checking membership, or UNGUIDED_VERBS contains check. ... ok
+test_trajectory_requires_blocker_cleared_by_load (accept_test.AcceptLibTest.test_trajectory_requires_blocker_cleared_by_load)
+Kills: validate_trajectory accepts a missing blockers_cleared or a clear without a declaration_accepted raising max_rounds. ... ok
+test_trajectory_requires_capped_rejection_and_max_rounds_blocker (accept_test.AcceptLibTest.test_trajectory_requires_capped_rejection_and_max_rounds_blocker)
+Kills: validate_trajectory treats the capped rejection as admitted, or ignores blockers_opened. ... ok
+test_trajectory_requires_exact_target_final_approval (accept_test.AcceptLibTest.test_trajectory_requires_exact_target_final_approval)
+Kills: validate_trajectory accepts an approval of an older output, one with open blockers, or a later check. ... ok
+test_trajectory_requires_interrupted_check_recovery (accept_test.AcceptLibTest.test_trajectory_requires_interrupted_check_recovery)
+Kills: validate_trajectory drops the check_interrupted requirement. ... ok
+test_trajectory_requires_rejection_then_repair (accept_test.AcceptLibTest.test_trajectory_requires_rejection_then_repair)
+Kills: validate_trajectory accepts a first approve instead of reject, or skips repair_admitted or the worker return. ... ok
+test_trajectory_requires_takeover_and_fencing (accept_test.AcceptLibTest.test_trajectory_requires_takeover_and_fencing)
+Kills: validate_trajectory drops the run_taken_over or fenced refusal requirement. ... ok
+test_verdict_document_binds_exact_targets_and_reviewer_policy (accept_test.AcceptLibTest.test_verdict_document_binds_exact_targets_and_reviewer_policy)
+Kills: build_verdict takes policy from the worker claim, or targets from the claim instead of the observation. ... ok
+test_index_dry_run_refuses_unredactable_raw_file_and_writes_nothing (acceptance_cli_test.AcceptanceCliTest.test_index_dry_run_refuses_unredactable_raw_file_and_writes_nothing)
+Kills H9: cmd_index --dry-run skips the residual host-prefix scan or writes the index; the generic users prefix is built from parts so no source line holds it. ... ok
+test_index_dry_run_reports_expected_count_and_writes_nothing (acceptance_cli_test.AcceptanceCliTest.test_index_dry_run_reports_expected_count_and_writes_nothing)
+Kills H10: cmd_index --dry-run miscounts the expected index files or writes under the out directory. ... ok
+test_index_escapes_nul_next_to_host_path_in_binary_raw_file (acceptance_cli_test.AcceptanceCliTest.test_index_escapes_nul_next_to_host_path_in_binary_raw_file)
+Kills H8: compact_index copies host-bearing lines of a binary raw file verbatim, so a NUL byte keeps the standard tool from redacting the index and the residual scan refuses it. ... ok
+test_index_fails_when_a_host_prefix_survives_redaction (acceptance_cli_test.AcceptanceCliTest.test_index_fails_when_a_host_prefix_survives_redaction)
+Kills E6: cmd_index skips the residual host-prefix scan after the standard redaction. ... ok
+test_index_is_redacted_with_recorded_hashes_and_excludes_raw (acceptance_cli_test.AcceptanceCliTest.test_index_is_redacted_with_recorded_hashes_and_excludes_raw)
+Kills: cmd_index writes unredacted text, records scratch rules in tests/native/path-redaction.json, skips redact-local-paths.py, or copies raw logs. ... ok
+test_limits_command_accepts_real_error_envelope (acceptance_cli_test.AcceptanceCliTest.test_limits_command_accepts_real_error_envelope)
+Kills H4: cmd_limits compares the engine stderr with the bare closed object only, so the real error envelope is refused. ... ok
+test_limits_command_requires_exact_closed_diagnostic (acceptance_cli_test.AcceptanceCliTest.test_limits_command_requires_exact_closed_diagnostic)
+Kills: cmd_limits records any nonzero exit without calling accept_lib.closed_capture_limit_ok. ... ok
+test_live_commands_abort_before_first_action_on_candidate_mismatch (acceptance_cli_test.AcceptanceCliTest.test_live_commands_abort_before_first_action_on_candidate_mismatch)
+Kills: run_acceptance quota or mini-fault removes the require_recorded_candidate call before the first action. ... ok
+test_packet_command_records_literal_source_lines (acceptance_cli_test.AcceptanceCliTest.test_packet_command_records_literal_source_lines)
+Kills: cmd_packet records fixed strings instead of the literal lines of the source file. ... ok
+test_rerun_index_fails_when_any_required_field_is_missing (acceptance_cli_test.AcceptanceCliTest.test_rerun_index_fails_when_any_required_field_is_missing)
+Kills: cmd_rerun_index treats a missing field as success, skips one predicate or writes the index before validating. ... ok
+test_rerun_index_normalizes_real_shaped_absolute_argv (acceptance_cli_test.AcceptanceCliTest.test_rerun_index_normalizes_real_shaped_absolute_argv)
+Kills H1: build_rerun_index copies faults.recover.argv whole, so the absolute candidate and ledger paths of a real run are refused as host paths. ... ok
+test_rerun_index_records_every_required_fault_field (acceptance_cli_test.AcceptanceCliTest.test_rerun_index_records_every_required_fault_field)
+Kills: cmd_rerun_index omits a section (for example fenced, load or trajectory) or copies fields without reading them; each required value of the synthetic result must appear in the index. ... ok
+test_rerun_index_still_refuses_host_path_outside_argv (acceptance_cli_test.AcceptanceCliTest.test_rerun_index_still_refuses_host_path_outside_argv)
+Kills H3: cmd_rerun_index drops the HOST_PATH_MARKERS refusal for fields other than the normalized argv. Guard: passes on the unfixed tree. ... ok
+test_retained_dir_never_overwrites_existing_runs (acceptance_cli_test.AcceptanceCliTest.test_retained_dir_never_overwrites_existing_runs)
+Kills: retained_dir removes and recreates an existing directory, or creates runs under a temporary directory instead of --raw-root. ... ok
+test_scan_command_fails_on_host_path_in_committed_evidence (acceptance_cli_test.AcceptanceCliTest.test_scan_command_fails_on_host_path_in_committed_evidence)
+Kills: cmd_scan removes the accept_lib.scan_host_paths call, or scans only the top directory. ... ok
+test_suites_command_live_modules_require_the_recorded_candidate (acceptance_cli_test.AcceptanceCliTest.test_suites_command_live_modules_require_the_recorded_candidate)
+Kills: cmd_suites skips require_recorded_candidate for live modules (a live child that starts writes the marker). ... ok
+test_suites_command_refuses_skips_failures_and_zero_matched (acceptance_cli_test.AcceptanceCliTest.test_suites_command_refuses_skips_failures_and_zero_matched)
+Kills: cmd_suites ignores skipped, treats ran=0 as success, or ignores a nonzero child exit. ... ok
+test_suites_command_reports_per_module_and_total_counts (acceptance_cli_test.AcceptanceCliTest.test_suites_command_reports_per_module_and_total_counts)
+Kills: cmd_suites writes only the total, reports one count for every module, sums wrong, or starts children with a bare python3. ... ok
+test_verify_redaction_checks_original_hash_and_real_prefixes (acceptance_cli_test.AcceptanceCliTest.test_verify_redaction_checks_original_hash_and_real_prefixes)
+Kills E8 (original-hash check skipped), E10 (manifest real-prefix check removed) and E11 (TEMP record real-prefix check removed). ... ok
+test_verify_redaction_runs_standard_tool_and_rejects_scratch_tokens_in_manifest (acceptance_cli_test.AcceptanceCliTest.test_verify_redaction_runs_standard_tool_and_rejects_scratch_tokens_in_manifest)
+Kills: cmd_verify_redaction skips the redact-local-paths.py verify subprocess, or ignores its exit status. ... ok
+
+----------------------------------------------------------------------
+Ran 69 tests in 7.963s
+
+OK
+exit=0
+## Part 2: the three new live fault tests (final tree)
+test_run_heavy_config_wait_timeouts_cover_registry_budget (fault_live_test.FaultLiveTest.test_run_heavy_config_wait_timeouts_cover_registry_budget)
+Kills H5: run_heavy.build_config omits marker_timeout_s and check_timeout_s, or keeps the 120 s and 900 s constants. ... ok
+test_marker_wait_honors_configured_timeout (fault_live_test.FaultLiveTest.test_marker_wait_honors_configured_timeout)
+Kills H6: fault_driver.check_round hard-codes the 120 s marker wait and ignores marker_timeout_s. ... ok
+test_check_completion_timeout_aborts_with_accept_error_and_kills_cli (fault_live_test.FaultLiveTest.test_check_completion_timeout_aborts_with_accept_error_and_kills_cli)
+Kills H7: fault_driver lets subprocess.TimeoutExpired escape the completion wait (no AcceptError, no ABORTED.json), or converts it without killing the check CLI and its group. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 39.094s
+
+OK
+exit=0
+## Part 3: full fault_live_test regression (final tree)
+test_check_completion_timeout_aborts_with_accept_error_and_kills_cli (fault_live_test.FaultLiveTest.test_check_completion_timeout_aborts_with_accept_error_and_kills_cli)
+Kills H7: fault_driver lets subprocess.TimeoutExpired escape the completion wait (no AcceptError, no ABORTED.json), or converts it without killing the check CLI and its group. ... ok
+test_failed_and_interrupted_attempts_remain_retained (fault_live_test.FaultLiveTest.test_failed_and_interrupted_attempts_remain_retained)
+Kills: fault_driver rmtrees the interrupted attempt folder after recovery. ... ok
+test_fault_history_inspection_is_independent_of_scratch_files (fault_live_test.FaultLiveTest.test_fault_history_inspection_is_independent_of_scratch_files)
+Kills: fault_driver passes --workspace or --registry, or skips the scratch rename before inspection. ... ok
+test_final_approval_after_faults_is_exact_target (fault_live_test.FaultLiveTest.test_final_approval_after_faults_is_exact_target)
+Kills: fault_driver builds the final verdict from the first check output. ... ok
+test_first_completed_check_passes_boundary_rows (fault_live_test.FaultLiveTest.test_first_completed_check_passes_boundary_rows)
+Kills: the cmake configuration uses the plain 58128234:src/engine snapshot as its base. ... ok
+test_history_references_through_faults (fault_live_test.FaultLiveTest.test_history_references_through_faults)
+Kills: fault_driver restricts event inspection to the first and last event. ... ok
+test_interrupted_check_is_recovered_by_check_recover (fault_live_test.FaultLiveTest.test_interrupted_check_is_recovered_by_check_recover)
+Kills: kill_check kills only the check child group while the CLI survives, kills before the rendezvous exists, or leaves the child group alive. ... ok
+test_kill_check_consumes_marker_written_by_cmake_check (fault_live_test.FaultLiveTest.test_kill_check_consumes_marker_written_by_cmake_check)
+Kills: kill_check reads a different field or file name than cmake_check writes, or skips waiting for the marker. ... ok
+test_load_raising_max_rounds_clears_blocker (fault_live_test.FaultLiveTest.test_load_raising_max_rounds_clears_blocker)
+Kills: fault_driver loads the same job bytes, leaving max_rounds unchanged. ... ok
+test_marker_wait_honors_configured_timeout (fault_live_test.FaultLiveTest.test_marker_wait_honors_configured_timeout)
+Kills H6: fault_driver.check_round hard-codes the 120 s marker wait and ignores marker_timeout_s. ... ok
+test_orchestrator_guidance_usable_through_fault_phases (fault_live_test.FaultLiveTest.test_orchestrator_guidance_usable_through_fault_phases)
+Kills: fault_driver captures the orchestrator once or stores a canned string, or passes next_verb=None. ... ok
+test_rejecting_verdict_admits_repair_and_worker_returns (fault_live_test.FaultLiveTest.test_rejecting_verdict_admits_repair_and_worker_returns)
+Kills: fault_driver rejects with an empty repair list, which opens unowned_rejection instead. ... ok
+test_replays_and_inspections_do_not_reexecute_checks_or_write (fault_live_test.FaultLiveTest.test_replays_and_inspections_do_not_reexecute_checks_or_write)
+Kills: fault_driver replays a check with a fresh request id. ... ok
+test_run_heavy_aborts_on_unrecorded_candidate (fault_live_test.FaultLiveTest.test_run_heavy_aborts_on_unrecorded_candidate)
+Kills: run_heavy.main removes the require_recorded_candidate call before the first live action. ... ok
+test_run_heavy_config_is_composed_base_and_owned_repairs (fault_live_test.FaultLiveTest.test_run_heavy_config_is_composed_base_and_owned_repairs)
+Kills: run_heavy.build_config uses base plain_58128234, targets a non-owned path, or builds only one preset. ... ok
+test_run_heavy_config_wait_timeouts_cover_registry_budget (fault_live_test.FaultLiveTest.test_run_heavy_config_wait_timeouts_cover_registry_budget)
+Kills H5: run_heavy.build_config omits marker_timeout_s and check_timeout_s, or keeps the 120 s and 900 s constants. ... ok
+test_run_scenario_aborts_before_action_not_listed_as_legal (fault_live_test.FaultLiveTest.test_run_scenario_aborts_before_action_not_listed_as_legal)
+Kills: fault_driver.run_scenario removes the accept_lib.require_legal_action call before a live action. ... ok
+test_run_scenario_aborts_on_mismatched_at_event_state (fault_live_test.FaultLiveTest.test_run_scenario_aborts_on_mismatched_at_event_state)
+Kills: fault_driver removes the accept_lib.verify_at_event_state call. ... ok
+test_run_scenario_aborts_on_mismatched_event_expansion (fault_live_test.FaultLiveTest.test_run_scenario_aborts_on_mismatched_event_expansion)
+Kills: fault_driver removes the accept_lib.verify_event_expansion call. ... ok
+test_run_scenario_aborts_on_tampered_replay (fault_live_test.FaultLiveTest.test_run_scenario_aborts_on_tampered_replay)
+Kills: fault_driver removes the accept_lib.assert_replay_identical call. ... ok
+test_run_scenario_aborts_on_unusable_guidance (fault_live_test.FaultLiveTest.test_run_scenario_aborts_on_unusable_guidance)
+Kills: fault_driver removes the accept_lib.guidance_is_usable call at the fault points. ... ok
+test_run_scenario_aborts_when_counter_increases_on_replay (fault_live_test.FaultLiveTest.test_run_scenario_aborts_when_counter_increases_on_replay)
+Kills: fault_driver removes the accept_lib.count_check_executions comparison after replays and inspections. ... ok
+test_run_scenario_aborts_when_inspection_changes_ledger (fault_live_test.FaultLiveTest.test_run_scenario_aborts_when_inspection_changes_ledger)
+Kills: fault_driver removes the before/after ledger_digest comparison inside inspect(). ... ok
+test_run_scenario_aborts_when_trajectory_omits_rejection (fault_live_test.FaultLiveTest.test_run_scenario_aborts_when_trajectory_omits_rejection)
+Kills: fault_driver.run_scenario removes the accept_lib.validate_trajectory call. ... ok
+test_scenario_driver_is_config_parameterized (fault_live_test.FaultLiveTest.test_scenario_driver_is_config_parameterized)
+Kills: fault_driver.run_scenario forks a separate cmake-only path with a different verb order or an extra action. ... ok
+test_second_rejection_is_capped_and_opens_max_rounds_blocker (fault_live_test.FaultLiveTest.test_second_rejection_is_capped_and_opens_max_rounds_blocker)
+Kills: fault_driver writes the first-revision job file with max_rounds 2. ... ok
+test_state_survives_process_restart_between_phases (fault_live_test.FaultLiveTest.test_state_survives_process_restart_between_phases)
+Kills: fault_driver reuses a cached pre-kill status instead of re-reading after the kill. ... ok
+test_takeover_fences_old_run_token (fault_live_test.FaultLiveTest.test_takeover_fences_old_run_token)
+Kills: fault_driver presents the NEW token in the fenced probe. ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 320.622s
+
+OK
+exit=0

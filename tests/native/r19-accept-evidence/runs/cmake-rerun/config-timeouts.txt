@@ -1,0 +1,9 @@
+registry timeout sum s x4 = 28800.0
+marker_timeout_s: 28800.0
+check_timeout_s: 28800.0
+max_rounds: 1
+kill_target: cli
+base: composed
+check_mode: real
+mode: cmake
+overlay: ['src/engine/ledger/CMakeLists.txt', 'fixtures/ledger/expected-schema.sql']

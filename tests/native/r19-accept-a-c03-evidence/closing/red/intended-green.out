@@ -1,0 +1,8 @@
+test_intended_executions_counts_one_check_for_an_interrupted_round (accept_test.HeavyDriverTest.test_intended_executions_counts_one_check_for_an_interrupted_round)
+Kills the R19-ACCEPT-A-C03-R1 formula: every round, interrupted or not, counted all its checks. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.086s
+
+OK
+exit 0

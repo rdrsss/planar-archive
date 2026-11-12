@@ -1,0 +1,57 @@
+R19-ACCEPT-A P6 unittest summary (compact; full logs are retained under raw/unittest/, never committed)
+interpreter for the recorded runs: Homebrew Python 3.15.2 (/opt/homebrew/bin/python3.15), PYTHONDONTWRITEBYTECODE=1
+candidate for live classes: PLANAR_CANDIDATE = D28 candidate, sha256 98ec8419e7a32993de29019cc02f9a696895aff19316c9d842c41737eec0d706
+HOME for test processes: scratch home directory (not ~/.planar); PLANAR_DB: scratch unused path
+
+class: AcceptLibTest  (accept_test.py, pure helpers I1-I35)
+  command: python3.15 -m unittest -v accept_test
+  result: Ran 35, FAILED (failures=2), exit 1
+  failing: test_cmake_adapter_never_writes_bytecode_into_support_tree (I35)
+           test_cmake_adapter_rendezvous_after_inventory_before_ctest (I25)
+  reason: AcceptLibTest.support_copy() copies tests/native/r19-cmake-support, which has no cmake_check.py;
+          the adapter (D1: tests/native/r19-accept-support/cmake_check.py) is not in the copy, so the child
+          exits 2 ("can't open file"). Test-layout defect in a read-only test file; not edited (see README concerns).
+  note: an earlier run of this class under Xcode Python 3.9 had the same two failures; its log was overwritten by the
+        3.15 re-run (disclosed in README limitations).
+
+class: AcceptanceCliTest  (acceptance_cli_test.py, rows A1-A7)
+  command: python3.15 -m unittest -v acceptance_cli_test
+  result: Ran 7, OK, exit 0 (matched 7, skipped 0)
+  note: under Xcode Python 3.9 (sys.executable of /usr/bin/python3) two tests failed (index and verify-redaction)
+        because scripts/redact-local-paths.py argparse rejects file arguments after its options on Python 3.9;
+        the same command passes on Python 3.15. Recorded as an interpreter-version constraint of the standard tool.
+
+class: QuotaLiveTest  (quota_live_test.py, live rows Q1-Q19 against the D28 candidate)
+  command: python3.15 -m unittest -v quota_live_test  (PLANAR_CANDIDATE set)
+  result: Ran 19, failures=1, errors=17, exit 1 (1 passed)
+  17 errors: quota_driver.CandidateFault: inspection history exited 4 with
+             {"error":{"code":"internal","field":"","message":"Unsupported trusted structural value"},"kind":"error","version":1}
+             raised from the history --event replay of sequence 6 (check_recorded). See runs/quota-combined-defect1.txt.
+             Tests: test_combined_and_split_share_spec_bytes_and_load_accepted (combined and split),
+             test_combined_grouping_completes_with_exact_target_approval, test_contract_delivered_to_base_and_every_root,
+             test_every_action_retains_raw_argv_stdout_stderr_exit, test_fixture_copied_unmodified_and_counter_counts_checks,
+             test_history_event_and_at_event_reproduce_accepted_records,
+             test_history_inspection_is_independent_of_scratch_workspace_and_registry,
+             test_inspection_reads_do_not_write_ledger, test_orchestrator_guidance_is_usable_at_every_phase (combined and split),
+             test_quota_check_results_match_actual_unittest_counts, test_regroup_combined_to_split_fences_old_tokens,
+             test_restart_replay_is_byte_identical_without_reexecution (combined and split),
+             test_split_grouping_orders_dependency_and_completes, test_wrong_target_verdict_is_refused_and_ledger_unchanged
+  1 failure: test_run_grouping_aborts_before_action_not_listed_as_legal: AssertionError 'orchestrator' != 'check'
+             (the aborted verb recorded in ABORTED.json is the guidance capture, not the check the test names)
+
+class: FaultLiveTest  (fault_live_test.py, live rows F1-F25 with sleep check and fault driver)
+  command: python3.15 -m unittest -v fault_live_test  (PLANAR_CANDIDATE set)
+  result: Ran 25, failures=11, errors=0, exit 1 (14 passed)
+  failing (one-line reason from the assertion):
+    test_final_approval_after_faults_is_exact_target: 0 == 0 (an approval built from an earlier output is refused)
+    test_first_completed_check_passes_boundary_rows: 'recorded' != 'withheld'
+    test_orchestrator_guidance_usable_through_fault_phases (point max_rounds_blocker): False is not true
+    test_run_scenario_aborts_before_action_not_listed_as_legal (verb load): action list differs
+    test_run_scenario_aborts_on_mismatched_at_event_state: AcceptError not raised
+    test_run_scenario_aborts_on_mismatched_event_expansion: AcceptError not raised
+    test_run_scenario_aborts_on_tampered_replay: AcceptError not raised
+    test_run_scenario_aborts_when_counter_increases_on_replay: AcceptError not raised
+    test_run_scenario_aborts_when_inspection_changes_ledger: AcceptError not raised
+    test_run_scenario_aborts_when_trajectory_omits_rejection: AcceptError not raised
+    test_scenario_driver_is_config_parameterized: verb list differs (extra claim and verdict steps)
+  not diagnosed in P6; the mismatched-expansion row may share the history --event defect (not verified).

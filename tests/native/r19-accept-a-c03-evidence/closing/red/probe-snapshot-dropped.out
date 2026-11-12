@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_commit_list_check_applies_the_snapshot_rule_to_directories_only (acceptance_cli_test.AcceptanceCliTest.test_commit_list_check_applies_the_snapshot_rule_to_directories_only)
+Kills the closing narrowing: a file whose own name starts with snapshot (an index of
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/acceptance_cli_test.py", line 903, in test_commit_list_check_applies_the_snapshot_rule_to_directories_only
+    self.assertEqual(proc.returncode, 1, "a snapshot directory is refused: " + proc.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : a snapshot directory is refused: commit-list: 1 entries
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.137s
+
+FAILED (failures=1)

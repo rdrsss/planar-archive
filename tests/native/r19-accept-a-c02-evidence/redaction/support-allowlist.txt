@@ -1,0 +1,6 @@
+tests/native/r19-accept-support/run_acceptance.py|321b4cbdae0902f1a5a5dc80859737ab247bc23a4baf5b5824244d828b09e0ed|USERS_PREFIX = "<users-prefix>"
+tests/native/r19-accept-support/run_acceptance.py|33fdbc73b06cb85cc6e49fc200989d4b70b876a7e8dfc2084a8f2b596e8e714e|HOST_PATH_MARKERS = ("<users-prefix>", "/private/", "/home/")
+tests/native/r19-accept-support/accept_test.py|190e2c290421c46253a53fd8362656ac338286d891f51e1b2501c15249e9a2f9|self.write("tree/users/y.txt", "owner <users-prefix>fixture-owner/private\n")
+tests/native/r19-accept-support/accept_test.py|36573eff6b0d57ba21b9aa7eb20949a5d2e7dc799aabe552f8d6e9ea8f477b61|hits = lib.scan_host_paths(self.tmp / "tree", [repo_prefix, home_prefix, scratch_prefix, "<users-prefix>"])
+tests/native/r19-accept-support/accept_test.py|58ace72b2258ada48b5dacefeeb4adaddc6d94931314e4147be3955a9cbf814d|("users/y.txt", "<users-prefix>"),
+tests/native/r19-accept-support/acceptance_cli_test.py|6b750adbe34b4ae6ecf20b586ab9a2a0ce95605cf84142f42dda9da8e5d7f626|self.write(raw / "0001-note.stdout", "owner path <users-prefix>someone-else/private/file\n")

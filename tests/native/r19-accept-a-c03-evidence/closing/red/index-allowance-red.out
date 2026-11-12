@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only (acceptance_cli_test.AcceptanceCliTest.test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only)
+Kills the closing allowance (C02-D28, L21): an index digest of a file under a raw run directory is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tests/native/r19-accept-support/acceptance_cli_test.py", line 882, in test_commit_list_check_allows_redacted_index_mirrors_of_raw_directories_only
+    self.assertEqual(proc.returncode, 0, "a redacted index mirror of a raw directory passes: " + proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : a redacted index mirror of a raw directory passes: commit-list: tests/native/r19-accept-evidence/index/run-a/raw/001-claim.stdout.index: raw
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.071s
+
+FAILED (failures=1)

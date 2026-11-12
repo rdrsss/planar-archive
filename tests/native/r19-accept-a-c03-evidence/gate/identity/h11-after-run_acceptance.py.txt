@@ -1,0 +1,9 @@
+| identity | value |
+|---|---|
+| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |
+| sha256(git diff --binary HEAD -- tests/native/r19-accept-support/run_acceptance.py), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec tests/native/r19-accept-support/run_acceptance.py, evidence excluded | `36becafa7d1e72e715113a4c74dd549f60a39c776d6ceee73bf5b6e95c6e01c6` |
+
+| file | state | sha256 |
+|---|---|---|
+| `tests/native/r19-accept-support/run_acceptance.py` | untracked | `2ff48c14f2bb7daff546583f1e58888220378a3f26e70255201cf17ec038c1a8` |

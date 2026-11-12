@@ -1,0 +1,2 @@
+docs/vernacular/rounds/R19-ACCEPT-A-C02-review.md
+docs/vernacular/rounds/R19-ACCEPT-A.md

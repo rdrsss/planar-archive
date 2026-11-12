@@ -11,7 +11,9 @@ import sys
 DOCKERFILE = "scripts/linux-gate.Dockerfile"
 DOCKERIGNORE = "scripts/linux-gate.Dockerfile.dockerignore"
 RUNNER = "scripts/linux-gate.sh"
-SCHEMA = "tests/native/r12b-evidence/expected-schema.sql"
+SCHEMA = "fixtures/ledger/expected-schema.sql"
+OLD_SCHEMA_DIR = "r12b-evidence"
+STALE_CMAKE_REFERENCE = "src/engine/CMakeLists.txt:254"
 PINNED_PACKAGES = ("clang-23", "libc++-23-dev", "libc++abi-23-dev", "lld-23")
 
 
@@ -20,12 +22,17 @@ def fail(message):
     sys.exit(1)
 
 
-def read_active(root, rel):
-    """Return the file's text with comment lines removed."""
+def read_full(root, rel):
+    """Return the file's complete text, comments included."""
     try:
-        text = (root / rel).read_text(encoding="utf-8")
+        return (root / rel).read_text(encoding="utf-8")
     except OSError as error:
         fail(f"cannot read {rel}: {error}")
+
+
+def read_active(root, rel):
+    """Return the file's text with comment lines removed."""
+    text = read_full(root, rel)
     return "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("#"))
 
 
@@ -118,16 +125,19 @@ def check_user_before_build(lines):
         fail("USER planar does not precede the first RUN that calls cmake or ctest")
 
 
-def check_schema_assertion(lines, source_index):
+def check_schema_assertion(lines, source_index, full_text=""):
     assertion = f"test -s {SCHEMA}"
     indices = [i for i, line in enumerate(lines) if line.startswith("RUN") and assertion in line]
     if not indices:
         fail(f"no RUN asserts `{assertion}`")
     if indices[0] < source_index:
         fail("the schema assertion does not run after the source COPY")
+    for stale in (OLD_SCHEMA_DIR, STALE_CMAKE_REFERENCE):
+        if stale in full_text:
+            fail(f"{DOCKERFILE} still mentions {stale}")
 
 
-def check_dockerignore(text):
+def check_dockerignore(text, full_text=""):
     entries = [line.strip() for line in text.splitlines() if line.strip()]
     for required in ("build", ".git"):
         if required not in entries and "/" + required not in entries:
@@ -135,14 +145,23 @@ def check_dockerignore(text):
     evidence = "tests/native/*-evidence/**"
     if evidence not in entries:
         fail(f"{DOCKERIGNORE} does not exclude {evidence}")
-    exception = "!" + SCHEMA
-    if exception not in entries:
-        fail(f"{DOCKERIGNORE} lacks the exception line {exception}")
-    if entries.index(exception) < entries.index(evidence):
-        fail(f"the {exception} exception must come after the {evidence} exclusion")
+    reincluded = [entry for entry in entries if entry.startswith("!tests/native/")]
+    if reincluded:
+        fail(f"{DOCKERIGNORE} re-includes an evidence path: {reincluded[0]}")
+    if any(entry.lstrip("/").startswith("fixtures") for entry in entries if not entry.startswith("!")):
+        fail(f"{DOCKERIGNORE} excludes fixtures")
+    if OLD_SCHEMA_DIR in full_text:
+        fail(f"{DOCKERIGNORE} still mentions {OLD_SCHEMA_DIR}")
 
 
-def check_runner(text):
+def check_runner(text, full_text=""):
+    if "expected-schema" in text or OLD_SCHEMA_DIR in text:
+        fail(f"{RUNNER} special-cases the schema in active text")
+    for stale in (OLD_SCHEMA_DIR, "re-included"):
+        if stale in full_text:
+            fail(f"{RUNNER} still mentions {stale}")
+    if not re.search(r"/tests/native/\[!/\]\*-evidence/\*\)\s*return 0", text):
+        fail(f"{RUNNER} is_excluded no longer excludes the evidence trees")
     for needle in ("df -g", "docker builder prune -f", "--output type=local", "host-manifest"):
         if needle not in text:
             fail(f"{RUNNER} lacks `{needle}`")
@@ -162,6 +181,9 @@ def check_runner(text):
 
 
 def linux_recipe_pins(root):
+    dockerfile_full = read_full(root, DOCKERFILE)
+    runner_full = read_full(root, RUNNER)
+    ignore_full = read_full(root, DOCKERIGNORE)
     dockerfile = read_active(root, DOCKERFILE)
     lines = instructions(dockerfile)
     runner = read_active(root, RUNNER)
@@ -173,9 +195,9 @@ def linux_recipe_pins(root):
     source_index = check_single_source_copy(lines)
     check_no_mounts(dockerfile, runner)
     check_user_before_build(lines)
-    check_schema_assertion(lines, source_index)
-    check_dockerignore(ignore)
-    check_runner(runner)
+    check_schema_assertion(lines, source_index, dockerfile_full)
+    check_dockerignore(ignore, ignore_full)
+    check_runner(runner, runner_full)
 
 
 def main(argv):

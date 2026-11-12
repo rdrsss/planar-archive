@@ -1,0 +1,4 @@
+tests/native/r19-accept-support/__pycache__
+tests/native/r19-accept-support/__pycache__/fault_live_test.cpython-315.pyc
+tests/native/r19-accept-support/__pycache__/acceptance_cli_test.cpython-315.pyc
+tests/native/r19-accept-support/__pycache__/accept_test.cpython-315.pyc

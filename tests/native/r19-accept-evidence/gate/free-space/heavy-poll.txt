@@ -1,0 +1,122 @@
+heavy-poll.txt: df -k appended by the PKG-HEAVY watchdog every 60 s and at each wait-loop poll; stop threshold 12582912 KiB (12 GiB), start threshold 30 GiB (31457280 KiB).
+start (before the heavy run): available 41041924 KiB (about 39.1 GiB), at candidate re-check, Filesystem /dev/disk3s1, mounted on /System/Volumes/Data
+poll 2026-11-12T03:57:59Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 394508892  41041888    91% 9037173 410418880    2%   /System/Volumes/Data
+poll 2026-11-12T03:58:59Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 395266740  40284040    91% 9051373 402840400    2%   /System/Volumes/Data
+poll 2026-11-12T04:00:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 396151832  39398948    91% 9055133 393989480    2%   /System/Volumes/Data
+poll 2026-11-12T04:01:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 397522736  38028044    92% 9056873 380280440    2%   /System/Volumes/Data
+poll 2026-11-12T04:02:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 398533520  37017260    92% 9057466 370172600    2%   /System/Volumes/Data
+poll 2026-11-12T04:03:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400750656  34800124    93% 9057916 348001240    3%   /System/Volumes/Data
+poll 2026-11-12T04:04:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400819288  34731492    93% 9057927 347314920    3%   /System/Volumes/Data
+poll 2026-11-12T04:05:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400817704  34733076    93% 9058281 347330760    3%   /System/Volumes/Data
+poll 2026-11-12T04:06:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400858972  34691808    93% 9107073 346918080    3%   /System/Volumes/Data
+poll 2026-11-12T04:07:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400935412  34615368    93% 9057951 346153680    3%   /System/Volumes/Data
+poll 2026-11-12T04:08:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400936236  34614544    93% 9057959 346145440    3%   /System/Volumes/Data
+poll 2026-11-12T04:09:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400937188  34613592    93% 9057955 346135920    3%   /System/Volumes/Data
+poll 2026-11-12T04:10:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400989900  34560880    93% 9057978 345608800    3%   /System/Volumes/Data
+poll 2026-11-12T04:11:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400990712  34560068    93% 9057964 345600680    3%   /System/Volumes/Data
+poll 2026-11-12T04:12:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400991496  34559284    93% 9057983 345592840    3%   /System/Volumes/Data
+poll 2026-11-12T04:13:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 400993064  34557716    93% 9058011 345577160    3%   /System/Volumes/Data
+poll 2026-11-12T04:14:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401073336  34477444    93% 9058005 344774440    3%   /System/Volumes/Data
+poll 2026-11-12T04:15:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401079760  34471020    93% 9058001 344710200    3%   /System/Volumes/Data
+poll 2026-11-12T04:16:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401079316  34471464    93% 9058009 344714640    3%   /System/Volumes/Data
+poll 2026-11-12T04:17:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401156972  34393808    93% 9057996 343938080    3%   /System/Volumes/Data
+poll 2026-11-12T04:18:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401137168  34413612    93% 9058012 344136120    3%   /System/Volumes/Data
+poll 2026-11-12T04:19:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401160764  34390016    93% 9059016 343900160    3%   /System/Volumes/Data
+poll 2026-11-12T04:20:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401139544  34411236    93% 9058036 344112360    3%   /System/Volumes/Data
+poll 2026-11-12T04:21:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401154804  34395976    93% 9058045 343959760    3%   /System/Volumes/Data
+poll 2026-11-12T04:22:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401165392  34385388    93% 9058050 343853880    3%   /System/Volumes/Data
+poll 2026-11-12T04:23:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401167276  34383504    93% 9058056 343835040    3%   /System/Volumes/Data
+poll 2026-11-12T04:24:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401340044  34210736    93% 9059268 342107360    3%   /System/Volumes/Data
+poll 2026-11-12T04:25:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 401943556  33607224    93% 9064662 336072240    3%   /System/Volumes/Data
+poll 2026-11-12T04:26:00Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 402401336  33149444    93% 9067289 331494440    3%   /System/Volumes/Data
+poll 2026-11-12T04:27:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 403396428  32154352    93% 9068987 321543520    3%   /System/Volumes/Data
+poll 2026-11-12T04:28:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 403635568  31915212    93% 9069081 319152120    3%   /System/Volumes/Data
+poll 2026-11-12T04:29:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 404210908  31339872    93% 9069536 313398720    3%   /System/Volumes/Data
+poll 2026-11-12T04:30:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 404536816  31013964    93% 9069644 310139640    3%   /System/Volumes/Data
+poll 2026-11-12T04:31:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405686992  29863788    94% 9069912 298637880    3%   /System/Volumes/Data
+poll 2026-11-12T04:32:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405558456  29992324    94% 9069907 299923240    3%   /System/Volumes/Data
+poll 2026-11-12T04:33:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405611960  29938820    94% 9072701 299388200    3%   /System/Volumes/Data
+poll 2026-11-12T04:34:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405612884  29937896    94% 9069929 299378960    3%   /System/Volumes/Data
+poll 2026-11-12T04:35:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405612724  29938056    94% 9069939 299380560    3%   /System/Volumes/Data
+poll 2026-11-12T04:36:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405633324  29917456    94% 9069933 299174560    3%   /System/Volumes/Data
+poll 2026-11-12T04:37:01Z
+Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+/dev/disk3s1   482797652 405643520  29907260    94% 9069955 299072600    3%   /System/Volumes/Data

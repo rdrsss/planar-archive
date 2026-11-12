@@ -1,0 +1,3 @@
+recorded sites: 6 found sites: 6
+per-file counts: {'tests/native/r19-accept-support/accept_test.py': 3, 'tests/native/r19-accept-support/acceptance_cli_test.py': 1, 'tests/native/r19-accept-support/run_acceptance.py': 2}
+set equal: True extra: 0 missing: 0

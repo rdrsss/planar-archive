@@ -1,0 +1,9 @@
+| identity | value |
+|---|---|
+| HEAD | `91e0df24f2167471e49ec057c7159bce5dff3608` |
+| sha256(git diff --binary HEAD -- tests/native/r19-accept-support/fault_driver.py), tracked only | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| combined sha256 (diff bytes, then each untracked path NUL bytes, sorted), pathspec tests/native/r19-accept-support/fault_driver.py, evidence excluded | `d1bb63ff302c9011230765369cac1615214d3b81b14bcd38ce435577836d3be9` |
+
+| file | state | sha256 |
+|---|---|---|
+| `tests/native/r19-accept-support/fault_driver.py` | untracked | `be61aeb60fe5cbeb49ee2521ec95b2ce08c124441293fb20dc2aad1e0b7eebcf` |

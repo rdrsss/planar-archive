@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "id": "fault_tools",
+  "revision": "v1",
+  "toolchains": [
+    {
+      "id": "python",
+      "description": "Mini fault sleep check interpreter; the driver substitutes the absolute interpreter and paths",
+      "command": ["@PYTHON@"],
+      "environment": [
+        {"name": "PATH", "value": "@PATH@"},
+        {"name": "HOME", "value": "@HOME@"},
+        {"name": "PYTHONDONTWRITEBYTECODE", "value": "1"}
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "sleep",
+      "toolchain": "python",
+      "argv": ["@SLEEP_CHECK@", "--evidence", "@EVIDENCE@", "--hold", "@HOLD@"],
+      "coverage": "Mini fault check: writes the rendezvous, optionally holds it for a kill, and reports an honest self-check result",
+      "inputs": ["own_output"],
+      "timeout_ms": 60000,
+      "max_output_bytes": 65536,
+      "selection": "nonempty"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+R19-ACCEPT-A-C02 PKG-LIST (wave 5, R2): redaction and verifier commands, tokenized.
+Tokens: <repo> checkout root; <home> home directory; <scratch-root> session scratchpad; <temp-root> per-user temporary root;
+<temp-root-prefix> the leading part of <temp-root> as it appears in one text (a truncated prefix); <private-temp-root> private-prefixed form of <temp-root>;
+<export-root> candidate export root; <per-user-temp-id> last two components of <temp-root>; <workflows-scripts> the identity-tool directory.
+Environment for the Python steps: PYTHONDONTWRITEBYTECODE=1 and python3 -B. Commands run from <repo> unless a cd is shown.
+Exit codes and outputs are kept beside this file as w5-*.exit, w5-*.out and w5-*.err.
+
+G1 Original copies before any edit (repository-relative names, never committed; redaction/original is excluded by D17):
+  cp -p <file> redaction/original/<file>          (5 files: three C00 red-c01 RED.md files, C01 inventory.txt, C01 red/run_red.sh)
+  shell loop over the same list with mkdir -p; then shasum -a 256 of each file before editing (before hashes recorded in REPLACEMENTS.tsv)
+
+G2 Hand replacement (D26, D18 step 2), only for what the standard tool cannot express:
+  HOME_DIR=<home> TMPU_TRUNC=<temp-root-prefix> PYTHONDONTWRITEBYTECODE=1 python3 -B <scratch-root>/r2-prep/hand_replace.py <file>
+  identity-script path (home-rooted, under the workflows directory of the session) -> <workflows-scripts>/identity.py (whole path)
+  truncated temp-root prefix -> <temp-root> (driver RED.md only; the pytest elision that follows is kept)
+
+G3 Standard redaction per owned tree (D18 steps 3 to 5), cwd set to the tree, files relative to it:
+  cd <repo>/tests/native/r19-accept-a-evidence && PYTHONDONTWRITEBYTECODE=1 python3 -B <repo>/scripts/redact-local-paths.py redact --repo-path <repo> --home <home> red-c01/driver/FaultLiveTest.test_run_scenario_aborts_before_action_not_listed_as_legal/RED.md red-c01/history/RED.md red-c01/support/RED.md
+    -> output "redacted 0 files", exit 0 (the three files hold no repository or home string after G2, so the tool wrote no tree-local manifest; see the C00 manifest limit in the report)
+  cd <repo>/tests/native/r19-accept-a-evidence && ... redaction verify --repo-path <repo> --home <home>   -> w5-verify-c00-tree.* (exit 0, "verified 0 entries")
+  cd <repo>/tests/native/r19-accept-a-evidence && ... check --repo-path <repo> --home <home> (the three files) -> w5-check-c00-files.* (exit 0)
+  cd <repo>/tests/native/r19-accept-a-c01-evidence && PYTHONDONTWRITEBYTECODE=1 python3 -B <repo>/scripts/redact-local-paths.py redact --repo-path <repo> --home <home> inventory.txt red/run_red.sh
+    -> output "redacted 2 files", exit 0; writes tests/native/r19-accept-a-c01-evidence/tests/native/path-redaction.json (tree-local)
+  cd <repo>/tests/native/r19-accept-a-c01-evidence && ... verify --repo-path <repo> --home <home>   -> w5-verify-c01-tree.* (exit 0, "verified 2 entries")
+  cd <repo>/tests/native/r19-accept-a-c01-evidence && ... check --repo-path <repo> --home <home> inventory.txt red/run_red.sh -> w5-check-c01-files.* (exit 0)
+  The redact outputs w5-redact-c00-tree.* and w5-redact-c01-tree.* are copied verbatim from the single in-session run above (a repeat run would exit 2 by design, because the files already hold tokens).
+
+G4 Repository manifest (never a working directory target, never edited):
+  shasum -a 256 tests/native/path-redaction.json -> w5-repo-manifest-sha.out (equal to runs/pre-index/manifest-before.txt)
+  shasum -a 256 tests/native/r19-accept-a-evidence/REPORT.md tests/native/r19-accept-a-c01-evidence/REPORT-run2.md -> w5-report-shas-now.out (equal to runs/pre-index/report-shas.txt)
+
+G5 Verifiers over the wave-5 list (D26 a, b, c1 to c3, d), run from <repo> with the list read into arguments:
+  (a) python3 -B scripts/redact-local-paths.py check --repo-path <repo> --home <home> <every path of the list>  -> w5-a-check.*
+  (b) python3 -B tests/native/r19-accept-support/run_acceptance.py scan --root <path> ... --repo-path <repo> --home <home> --scratch <scratch-root> --temp-root <temp-root> --private-temp-root <private-temp-root> --export-root <export-root>
+      over every evidence and record path of the list (src and support excluded)  -> w5-b-scan.*
+  (c1) grep -nE '[/]var[/]folders[/][a-z0-9_]{2}[/]|[/]private[/]var[/]folders[/]|[/]private[/]tmp[/]claude|[/]tmp[/]claude' <same paths>  -> w5-c1-temp-root.*
+  (c2) grep -nE -- '-[U]sers-|claude-[5]01|aa194b3[a]-' <same paths>  -> w5-c2-slug.*
+  (c3) grep -nF -- <per-user-temp-id> <same paths>  -> w5-c3-tmpu-id.*
+  (d) python3 -B <scratch-root>/r2-prep/allowlist_check.py redaction/support-allowlist.txt (six content-keyed sites, counts 2, 3, 1)  -> w5-d-allowlist.*
+  verify-redaction --tree tests/native/r19-accept-evidence (canonical tree; no TEMP entries yet, index not yet written) -> w5-verify-redaction-canonical.*
+
+G6 Self-verification of the C02 plan files (R2i): the two files plan/DECISIONS.md and plan/INVARIANTS.md are members of the list and are covered by G5 (a), (b), (c1) to (c3).
+
+G7 D17 exclude expression on the list (run from <repo>; expected: no output, exit 1 on the last stage):
+  grep -E '(/raw/|/raw2/|[.]raw/|/superseded-|/snapshot|/redaction/original/|[.]log$|[.]pyc$|__pycache__)' tests/native/r19-accept-a-c02-evidence/COMMIT-LIST.txt | grep -vE '^tests/native/r19-accept-evidence/(plan/superseded-[0-9]+/|gate/candidate/superseded-[0-9]+/candidate[.]json$)'  -> w5-r2a-expression.*
+  while read f; do test -f "$f" || echo "missing $f"; done < tests/native/r19-accept-a-c02-evidence/COMMIT-LIST.txt  -> w5-r2a-testf.* (exit 0, no output)
+  The COMMIT-LIST line count is 165 after the two w5-r2a-testf names were removed: a file that records its own loop result cannot be in the list it tests.
+
+G8 Repository manifest and report hashes at the end of wave 5 are the same commands as G4 and equal the wave-1 values; the tree-local manifests are listed where they exist (C01 yes; C00 no, see the report).

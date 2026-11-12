@@ -1,0 +1,41 @@
+{
+ "description": "Machine-local paths redacted from committed files. original_sha256 is the hash before redaction; restore <repo>/<home> to the original absolute paths to verify.",
+ "files": {
+  "closing/red/exit-red.out": {
+   "original_sha256": "8f596be0f1b54f0d5833b29102d7cc9050b9c6a3186e0dfb91e0123e00d60c21",
+   "redacted_sha256": "00fb1f92d239801a3e8a71fc17508f9fe565ed9efdc81c30e77ae3cc1a1b8a93"
+  },
+  "closing/red/index-allowance-probe-permissive.out": {
+   "original_sha256": "52492c847fd51f7a78399e3dbda3b39143fc28e5235db6da5a63093c913aaed2",
+   "redacted_sha256": "b113b4a8399aebe05f97a9af098098225ac5aac6ef8e582978750ef34ef77075"
+  },
+  "closing/red/index-allowance-red.out": {
+   "original_sha256": "46a21c55c44a73463221287fe1086157c7d06246ff3fbd58fd52f3ab5f90965c",
+   "redacted_sha256": "d6b9aedd07442300370017497e89a30a2314ee0e529c946a9cb780ac0457b173"
+  },
+  "closing/red/intended-red.out": {
+   "original_sha256": "a526ee6c333d2fd382082d705611e30e7fa2e27a9368c39dd3e338b77d654e4b",
+   "redacted_sha256": "23304cb67ab78f1c8c3a17b1ea6b00d3a5578cd8d1ef508941a19e1f71ff4d2d"
+  },
+  "closing/red/probe-exit.out": {
+   "original_sha256": "69c93ac6d6fd1f50e16eafff16d7d92ccd82ac6ad954b99d5e8341890d062960",
+   "redacted_sha256": "4a50833d53f3fa88cf859d3697353d17b58909579c46fa7c1cfc2126395bf4f6"
+  },
+  "closing/red/probe-formula.out": {
+   "original_sha256": "435367b82069dcb83e50427de7ea287387e757feeb313b4a69a60c3ed1185e98",
+   "redacted_sha256": "2ce1c804da490c414ef61553a5f6e5b3f2528ff3dd64f03e640955152805eefd"
+  },
+  "closing/red/probe-snapshot-dropped.out": {
+   "original_sha256": "14781255b8a8510f0aeaec716b71ef13644b94d39f81ae0ee2ef557f4153c662",
+   "redacted_sha256": "a9496dfa70b65ae69c6d43d7ac8c9651158aa88f4503dc3f7248dcc1695e2c2d"
+  },
+  "closing/red/snapshot-rule-red.out": {
+   "original_sha256": "3c39342ea366cd84fa5c7b4b426e1e801ac556da3a1cf4728f107f6a00dbab50",
+   "redacted_sha256": "adb77d1cfde26e6c3f391a992f7899c3e50bef8fffa138bf4e76c5f3a81d938c"
+  }
+ },
+ "tokens": {
+  "<home>": "home directory",
+  "<repo>": "repository root"
+ }
+}
