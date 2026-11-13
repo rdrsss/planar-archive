@@ -37,6 +37,12 @@
 #        RAW/NAME (default quota-GROUPING or mini-fault) with a fresh scratch
 #        directory inside it, call quota_driver.run_grouping or
 #        fault_driver.run_scenario, and write result.json (bytes as base64).
+#   provenance --candidate EXE --record REC --repo-path P --raw-root RAW [--run-name NAME]
+#        runs the A34 provenance scenario, writes result.json and a34-readback.json
+#        (provenance_driver.readback_manifest) next to it; verification stays on.
+#   checkpoint --candidate EXE --record REC --repo-path P --raw-root RAW [--run-name NAME]
+#        runs the A03 checkpoint scenario, writes result.json and a03-readback.json
+#        (checkpoint_driver.checkpoint_manifest) next to it; verification stays on.
 #   verify-redaction --tree T --repo-path P --home H [temporary options]
 #        restores the TEMP-PATH-REDACTION.json entries of T (standard repo/home
 #        restoration, then the temporary prefixes given on the command line),
@@ -430,6 +436,47 @@ def cmd_mini_fault(args):
         config.update({"mode": "mini", "check_mode": "sleep", "base": "plain", "tamper": {}})
         return fault_driver.run_scenario(config)
     return run_live(args, "mini-fault", run)
+
+
+def _with_readback(run, name, readback):
+    """Return run wrapped so that its result also writes readback(result) as name next to result.json."""
+    def wrapped(config, parsed, scratch):
+        result = run(config, parsed, scratch)
+        write_new_json(Path(scratch).parent / name, readback(result))
+        return result
+    return wrapped
+
+
+def _provenance_readback(result):
+    """Return the path-free A34 manifest of a provenance result (provenance_driver.readback_manifest)."""
+    import provenance_driver  # noqa: PLC0415 - imported after the candidate check
+    return provenance_driver.readback_manifest(result)
+
+
+def _checkpoint_readback(result):
+    """Return the path-free A03 manifest of a checkpoint result (checkpoint_driver.checkpoint_manifest)."""
+    import checkpoint_driver  # noqa: PLC0415 - imported after the candidate check
+    return checkpoint_driver.checkpoint_manifest(result)
+
+
+def cmd_provenance(args):
+    """Run the minimal A34 provenance scenario through provenance_driver after the candidate check."""
+    def run(config, parsed, scratch):
+        import provenance_driver  # noqa: PLC0415 - imported after the candidate check
+        config.update({"mode": "cmake", "check_mode": "sleep", "base": "plain", "tamper": {}})
+        return provenance_driver.run_provenance(config)
+    run = _with_readback(run, "a34-readback.json", _provenance_readback)
+    return run_live(args, "a34-provenance", run)
+
+
+def cmd_checkpoint(args):
+    """Run the A03 checkpoint scenario through checkpoint_driver after the candidate check (A03)."""
+    def run(config, parsed, scratch):
+        import checkpoint_driver  # noqa: PLC0415 - imported after the candidate check
+        config.update({"mode": "cmake", "check_mode": "sleep", "base": "plain", "tamper": {}})
+        return checkpoint_driver.run_checkpoint(config)
+    run = _with_readback(run, "a03-readback.json", _checkpoint_readback)
+    return run_live(args, "a03-checkpoint", run)
 
 
 def cmd_verify_redaction(args):
@@ -943,6 +990,14 @@ def build_parser():
     mini = sub.add_parser("mini-fault", help="run the mini fault scenario")
     mini.set_defaults(handler=cmd_mini_fault)
     add_live_options(mini)
+
+    provenance = sub.add_parser("provenance", help="run the minimal A34 provenance scenario")
+    provenance.set_defaults(handler=cmd_provenance)
+    add_live_options(provenance)
+
+    checkpoint = sub.add_parser("checkpoint", help="run the minimal A03 checkpoint scenario")
+    checkpoint.set_defaults(handler=cmd_checkpoint)
+    add_live_options(checkpoint)
 
     verify = sub.add_parser("verify-redaction", help="verify the TEMP record and the standard manifest")
     verify.set_defaults(handler=cmd_verify_redaction)

@@ -1,0 +1,17 @@
+{
+  "binary": "<scratch-root>/export/build/rewrite-debug/src/cmd/planar/planar_authoring_stack",
+  "binary_hash_tool": "accept_lib.candidate_record (sha256 of the binary bytes; the binary was not executed to make this record)",
+  "built_from_head": "91e0df24f2167471e49ec057c7159bce5dff3608",
+  "deviation": "E3 (decided in dispatch R1): the recorded R19-ACCEPT-A C01 candidate is REUSED instead of a fresh export of HEAD. head is the checkout HEAD, as require_recorded_candidate requires; built_from_head is the commit the binary was exported from, with the checkout bytes of the two overlay files copied over the export.",
+  "equivalence": "git diff --stat 91e0df24 HEAD -- src lists three files: src/engine/ledger/CMakeLists.txt, src/engine/ledger/execution.t.cpp and src/engine/ledger/storage.cpp. The two overlay files were copied from the checkout into the export and their git blob ids equal HEAD (git hash-object equals git ls-tree HEAD for both), so they are byte-equal to HEAD. The CMakeLists.txt change alters only the PLANAR_LEDGER_SCHEMA compile definition of the test executable planar_ledger_format_tests; no target links a test executable, so planar_authoring_stack, built from the other src files and the overlay bytes, is unaffected. This is an argument from the byte comparison and the build graph, not a fresh rebuild from HEAD.",
+  "head": "080f1666ca5c095b7c02fb4526dca10e95937262",
+  "overlay_files": [
+    "src/engine/ledger/storage.cpp",
+    "src/engine/ledger/execution.t.cpp"
+  ],
+  "package": "RUN",
+  "round": "R19-ACCEPT-B-C01",
+  "sha256": "774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c",
+  "size": 33982376,
+  "source_record": "tests/native/r19-accept-evidence/gate/candidate/candidate.json"
+}

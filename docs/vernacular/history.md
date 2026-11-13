@@ -2402,3 +2402,279 @@ These paragraphs opened the roadmap's current status before R19-ACCEPT-A. They a
 **R19-CMAKE real task complete and independently approved (2026-11-09).** Every engine directory now owns a CMake file: the 20-line coordinator adds 14 immediate components and runtime adds closure_guard. Target/source/dependency/settings/test membership is preserved; all 155 generated payloads per configuration are byte-identical. Corrected host Debug and Release gates each passed 1,844/1,844 tests with zero skips, 250-file formatting/Doxygen and idle repeats. The genuine Planar job completed its checks, received independent exact-target approval and is recorded as accepted at event 11. Check/verdict replay is byte-identical without re-executing checks. The first two wrapper false failures are retained. See the [task record](rounds/R19-CMAKE.md) and [independent review](rounds/R19-CMAKE-review.md).
 
 This closes the selected CMake task, not full R19. Quota both-groupings and remaining applicable matrix obligations remain. The actual authoring-loaded activation mismatch, whole-engine captured-preview instruction limit and nonblocking reviewer-packet wording are recorded; production workflow, ordinary render and separately measured live guidance succeeded. New-layout Linux gates were not run. R15–R18's approved foundation remains recorded in [history](history.md#checkpoint-before-r19-cmake-58128234).
+
+## Former text of acceptance-matrix.md retired by R19-ACCEPT-B (2026-11-12)
+
+Retired by R19-ACCEPT-B from [acceptance-matrix.md](acceptance-matrix.md). Every quoted text below is verbatim from the matrix as it stood at revision 080f1666; nothing here is edited. The matrix intro keeps its pointer to the [former opening](#former-opening-of-acceptance-matrixmd) and links here. The historical checkpoints below the matrix table are unchanged.
+
+### Retired intro sentence (matrix line 16)
+
+> R19's real project remains unselected.
+
+### Retired last cells (remaining owner / gate), rows A01-A36
+
+Each entry gives the row id and the whole retired last cell. The A34 entry is the remaining-owner text saved for PKG-DOC2, which retires the pending A34 cell.
+
+**A01**
+
+> Preserve through RA01/execution; R19 integrated recheck.
+
+**A02**
+
+> Current gates preserve accepted-revision selection; R19 recheck.
+
+**A03**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A04**
+
+> Preserve through load/authoring; R19.
+
+**A05**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A06**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A07**
+
+> RA01/execution projections retain mandatory context; R19. RA01 orchestrator sections: finding RA01-C-F1 closed by round [V5-02-RA01-C-C01](rounds/V5-02-RA01-C-C01.md): orchestrator.lua project() returns {version=1,sections} with all five sections mandatory=true (authoring-contract.md:422; src/stdlib/planar/orchestrator.lua:112-140), observed behaviourally by test `RA01-C-C01 orchestrator projection wrapper is versioned and mandatory` (it loads the same orchestrator.lua bytes in a test-built Lua state and calls the real project() through the C API; limit: not through the embedded authoring stack, consumer wiring also pinned by source text); gate run 2 green on the frozen candidate (macOS Debug and RelWithDebInfo 1439 of 1439, Linux Debug and RelWithDebInfo 1439 of 1439) and the independent review [V5-02-RA01-C-C01-review](rounds/V5-02-RA01-C-C01-review.md), corrected by [V5-02-RA01-C-C02](rounds/V5-02-RA01-C-C02.md); execution projections and R19 unchanged.
+
+**A08**
+
+> [V5-02-A contract](command-contract.md) and B1/C01 approved; B2 CLI dispatch approved; C names/snapshots are independently approved; public load replay is independently approved in D7-B/D8. External X after R14 requires independent adversarial proof; no runtime evidence from prose. External portion: X08 with corrective C01 ([round record](rounds/V5-02-X08.md), evidence `tests/native/v5-02-x08-evidence/`) maps E01 to E14 and the twelve adversarial matrix rows to named tests and raw logs, with the Linux gate recorded. Limits restated, not repaired: no RSS guarantee; no hostile-writer guarantee ([ledger contract](ledger-contract.md) writer limits); the X-CAP last paragraph of the [external profile contract](external-profile-contract.md) applies; CL-1 to CL-6 and the X07-C01 limits (a writer killed during a busy wait is rolled back silently); x86_64 Linux is not covered.
+
+**A09**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A10**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. Driver must stop old writers.
+
+**A11**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A12**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A13**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. Do not infer power-loss guarantees beyond the storage contract.
+
+**A14**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A15**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. Cooperative stability only; no change-and-revert guarantee without an adapter.
+
+**A16**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A17**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A18**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. Trusted driver/check subprocesses retain OS permissions; no hostile-writer isolation is claimed.
+
+**A19**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A20**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A21**
+
+> Post-R19 composition and exact binding/output-vector tests.
+
+**A22**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A23**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. Conservative recovery limits remain; no universal cache or crash-recovery guarantee is inferred.
+
+**A24**
+
+> Conditional human policy remains unsupported/unverified; R19 must record applicability. Never label refusal as successful human approval.
+
+**A25**
+
+> D8 public chronology/retry portions independently approved; R19 preservation.
+
+**A26**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. Existing conservative storage-recovery limits remain.
+
+**A27**
+
+> D8 R14 portions independently approved; preserve in new execution record paths; R19. V5's “no matrix” decision does not erase row.
+
+**A28**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A29**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected. These focused fixtures do not certify the complete R19 trajectory.
+
+**A30**
+
+> R19 real workflows in both groupings; no execution inferred from goldens.
+
+**A31**
+
+> Public load/accepted mapping preserve these refusals; current platform gates pass; R19 recheck remains.
+
+**A32**
+
+> Implemented grouped completion vectors/prerequisites are exercised in C03/C07; current platform gates preserve the Render invariants; R19 remains.
+
+**A33**
+
+> Current platform gates pass; scoped corrective source/mutation evidence is recorded by the C14 final review. R19 real-project exercise remains unselected.
+
+**A34 (remaining-owner text saved for PKG-DOC2)**
+
+> R19 real-project baseline/trial provenance remains pending. Controlled grouping/model comparisons and metrics remain cut 3; no model settings/outcomes experiment is claimed.
+
+**A35**
+
+> RA01 deterministic spec/critique/job templates with schema/check/shape inputs and fresh-process tests.
+
+**A36**
+
+> RA01 wrapper preserves raw typed errors, field path and refusal; R14 load provides validated diagnostic boundary.
+
+
+## Status text retired from the roadmap by R19-ACCEPT-B (2026-11-12)
+
+Retired by R19-ACCEPT-B from [roadmap.md](roadmap.md#current-status). The texts below are quoted verbatim from the roadmap as it stood at revision 080f1666. Each was replaced in place by the current opening paragraph, latest-gates bullet or open-limits bullet.
+
+### Opening paragraph of Current status (roadmap line 12)
+
+> **R19-ACCEPT-A complete and independently approved (close review, 2026-11-12); R19-ACCEPT-B (A24 applicability and acceptance-matrix closure) is next.** The coordinator made the closing fix of C03 at the operator's request. The heavy-run counter formula now counts one check for an interrupted round, and `run_heavy` exits 4 when rerun validation refuses a completed result (both red-first). A new heavy faulted CMake run passed `rerun-index` (L20), and `limits`, `packet`, `index`, `scan` and `verify-redaction` ran (L21). The C03 `COMMIT-LIST.txt` passes `commit-list` and the redaction check. At commit the operator kept the bulky evidence (the `index/` trees and files over 100 KB) local, per the orchestration evidence rule; `closing/LOCAL-ONLY.txt` records their hashes. Product and build inputs are byte-identical to the C03 full gate (macOS Debug and Release and Linux arm64, 1,854/1,854 each), which is cited; Python suites 153/153 with zero skips. Committed locally; not pushed, merged or installed. Details: [R19-ACCEPT-A](rounds/R19-ACCEPT-A.md#closing-fix-of-r19-accept-a-c03-coordinator-2026-11-12).
+
+### Latest complete gates bullet (roadmap lines 24-25)
+
+> - **Latest complete gates:** R19-AUTHORING-C01 macOS Debug and Release 1,851/1,851 each, zero skips, 251-source
+>   lint, idle repeat builds. R19-ACCEPT-A-C03 final gate (uncommitted candidate): macOS Debug and Release 1,854/1,854 each and the first Linux gate on the R19-CMAKE per-directory layout, aarch64 Docker Debug and Release 1,854/1,854 each.
+
+### Open limits bullet (roadmap lines 26-28)
+
+> - **Open limits:** Linux x86_64 never run; no RSS
+>   guarantee. Full R19 acceptance is open: Q17 is answered (the R19-CMAKE task, 2026-11-11). R19-ACCEPT-A ran the quota
+>   fixture in both groupings and the fault/restart and rejected-review runs; the remaining applicable matrix rows are R19-ACCEPT-B.
+
+## Next work row retired from the roadmap by R19-ACCEPT-B (2026-11-12)
+
+Retired by R19-ACCEPT-B from the [roadmap Next work table](roadmap.md#next-work) (roadmap line 41). The row is verbatim from revision 080f1666; it was replaced in place by the R19 acceptance row and the two new carried rows.
+
+> | R19 acceptance | R19-ACCEPT-A (runs and evidence) is approved, closed by the coordinator's closing fix of C03 ([close review](rounds/R19-ACCEPT-A-close-review.md)); no C04 round was dispatched. R19-ACCEPT-B (A24 applicability and matrix closure) is next. Q17 answered (operator, live, 2026-11-11): the real spec is the [R19-CMAKE](rounds/R19-CMAKE.md) task (per-directory engine CMake files). Deviation from v5's "a spec previously run on old Planar", accepted by the operator: no old-Planar comparison run exists. Remaining: (1) the quota fixture in both groupings (multi-unit dependencies); (2) a fresh-ledger rerun of the CMake job with injected faults (interrupted check, restart, `check-recover`, takeover) and one rejecting verdict, so repair and `max_rounds`/blockers are exercised before approval; (3) A24 applicability recorded and the remaining applicable matrix rows closed against these runs; (4) a Linux gate on the per-directory build layout. |
+
+## Status text retired by the R19-ACCEPT-B outcome (2026-11-12)
+
+Verbatim:
+
+**R19-ACCEPT-A complete and independently approved (close review, 2026-11-12). R19-ACCEPT-B (A24 applicability and acceptance-matrix closure) is in progress, and R19 is not declared complete.** A24 is recorded not applicable on the reviewer-role policy: unsupported authority refuses and is never counted as human approval ([A24 applicability](rounds/R19-ACCEPT-B.md#a24-applicability)). Two matrix rows keep R19 open: A03 is `deferred` (no R19-ACCEPT-A or R19-ACCEPT-B id exercises its optional rationale or checkpoint path), and A34 minimal provenance reads `**pending the run**` because the driver-file provenance run is not yet recorded. A21 composition and controlled A34 remain deferred by design. The R19-ACCEPT-A closing fix of C03 is recorded in [R19-ACCEPT-A](rounds/R19-ACCEPT-A.md#closing-fix-of-r19-accept-a-c03-coordinator-2026-11-12). Committed locally (080f1666); not pushed, merged or installed. The text this section carried before R19-ACCEPT-B is preserved in [history](history.md#status-text-retired-from-the-roadmap-by-r19-accept-b-2026-11-12).
+
+## Matrix cells retired by R19-ACCEPT-B-C01 (2026-11-12)
+
+Retired by R19-ACCEPT-B-C01 from [acceptance-matrix.md](acceptance-matrix.md): the last cell (disposition and current evidence) of rows A15, A20, A28 and A32 as they stood before that edit. Each quoted text below is verbatim from the matrix as it stood before C01; nothing here is edited. The A04, A24, A27, A31, A35 and A36 cells keep their text and only gain the A4 proof note.
+
+### Row A15 before R19-ACCEPT-B-C01
+
+> **met** scope: the interrupted-check path. [L8](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) and [F1](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) show a SIGKILLed check reconciled by check-recover as interrupted; [F8](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows the check counter equal to the intended executions after replays. Race detection on changing inputs and the inconclusive outcome rest on the Current evidence column (C01, C03 and C06-native-review); cooperative stability only, with no change-and-revert guarantee without an adapter.
+
+### Row A20 before R19-ACCEPT-B-C01
+
+> **met** load then explicit activate: [Q10](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) loads the split spec and activates it explicitly, [Q1](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows the accepted load, and [F6](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows a load after faults. The invalid-draft refusal stays with the R14-D8 evidence in the Current evidence column.
+
+### Row A28 before R19-ACCEPT-B-C01
+
+> **met** scope: selective staleness through repairs. [F6](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows a load re-binding work fingerprints after a blocker repair; [F7](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) and [L13](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) show final approval against the exact latest output; [Q7](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows accepted references reproduced. Optional-byte, deletion, rename and mtime history is not re-exercised by an R19 id; it rests on the Current evidence column (R14 declaration history, C03, C06-lineage and C07-policy).
+
+### Row A32 before R19-ACCEPT-B-C01
+
+> **met** R19 recheck: grouped obligations without self-wait are preserved on the R19 candidate, shown by [Q3](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) (a cli_worker check withheld by complete_prerequisite with no completion), [L2](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) and [Q2](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section). Not a re-run of the R07/R09 goldens; cycle refusal stays with the R07/R09 evidence in the Current evidence column.
+
+## Status retired at R19-ACCEPT-B-C02 (2026-11-13)
+
+Retired by R19-ACCEPT-B-C02 from [roadmap.md](roadmap.md) and [acceptance-matrix.md](acceptance-matrix.md) as they stood before that edit. Each quoted text below is verbatim from the pre-edit snapshot; nothing here is edited.
+
+### Roadmap Current status opening paragraph
+
+> **R19-ACCEPT-A is complete and independently approved (close review, 2026-11-12). R19-ACCEPT-B-C01 (A03 checkpoint scenario with probes, A34 provenance tests, A15/A20/A32 case naming) received request-changes on 2026-11-12; R19-ACCEPT-B-C02 runs next and R19 is not declared complete.** The reviewed candidate (support tree over 080f1666, `src` unchanged) is still current. Open after C01 ([outcome](rounds/R19-ACCEPT-B.md#review-outcome-of-r19-accept-b-c01-request-changes-coordinator-2026-11-12)): A34 has no run on a fresh scratch ledger or readback; A03 has no recorded checkpoint run or readback; the B-round and C01 reports still pin record hashes; the committed evidence set is undecided; A28 is open with no deferring source and needs an operator decision before R19 can complete. A24 is recorded not applicable ([A24 applicability](rounds/R19-ACCEPT-B.md#a24-applicability)); A21 composition and controlled A34 remain deferred by design. Nothing from R19-ACCEPT-B is committed; the last commit is 080f1666, not pushed, merged or installed.
+
+### Roadmap Last approved line
+
+> Last approved: R19-AUTHORING + C01 and R19-CMAKE (both committed; see [C01](rounds/R19-AUTHORING-C01.md) and [R19-CMAKE](rounds/R19-CMAKE.md)). The status paragraphs that opened this section before R19-ACCEPT-A are in [history](history.md#status-paragraphs-retired-at-r19-accept-a-2026-11-12-after-91e0df24).
+
+### Roadmap Approved through bullet
+
+> - **Approved through:** R01–R14, V5-01, V5-02 A/B/C, X01–X08, RA01, R15-A1/A2 contracts, R15–R18
+>   implementation with correctives C01–C15 ([checkpoint](history.md#checkpoint-before-r19-cmake-58128234)),
+>   [R19-CMAKE](rounds/R19-CMAKE.md) and [R19-AUTHORING + C01](rounds/R19-AUTHORING-C01.md). All committed on
+>   `dev/planar-v2-vernacular`; not pushed, merged or installed.
+
+### Roadmap Open limits bullet
+
+> - **Open limits:** Linux x86_64 never run; no RSS
+>   guarantee. Full R19 acceptance is open: Q17 is answered (the R19-CMAKE task, 2026-11-11). R19-ACCEPT-A ran the quota
+>   fixture in both groupings and the fault/restart and rejected-review runs. The matrix rows still open are A03 and A34 (runs and readbacks) and A28 (operator decision); A15, A20 and A32 are named in C01; A21 is deferred (Later phases item 1). Accepted deviation, delegated: E13 A's live Claude Code run was not taken (scripted drivers used instead); the operator may overrule.
+
+### Roadmap R19 section
+
+> ### R19 — Single-root external-driver acceptance
+>
+> Depends on R18. Demonstrate a real single-root job, both groupings, with the
+> reference orchestrator rendering usable guidance against live APIs and real
+> checks. Inspect accepted declarations, dispatch, state/check/verdict references
+> through restart and faults without manual database edits or re-execution.
+> Close every applicable Render/Execution matrix portion, conditional A24 and minimal
+> A34 provenance using the [acceptance map](acceptance-matrix.md). A24 applicability
+> must be recorded. A21 composition and controlled A34 experiments are deferred.
+> A 24-hour experience run cannot replace the full gate. No scheduler/model calls
+> or Planar-managed checkout lifecycle.
+>
+> The native foundation alone does not establish cut 2. Every execution item starts
+> with independently reviewed exact schema/protocol; split into subrounds as needed.
+> Historical round IDs/evidence remain intact. V5's earlier cut-2 impact wording is
+> recorded as a conflict; its concrete post-R19 composition sequence governs here.
+
+### Roadmap Next work R19 acceptance row
+
+> | R19 acceptance | R19-ACCEPT-A (runs and evidence) is approved, closed by the coordinator's closing fix of C03 ([close review](rounds/R19-ACCEPT-A-close-review.md)); no C04 round was dispatched. R19-ACCEPT-B-C01 received request-changes on 2026-11-12 and R19-ACCEPT-B-C02 is next (A34 and A03 runs with readbacks, report hygiene, roadmap alignment, evidence commit set, A28 operator question): A24 is recorded not applicable ([round record](rounds/R19-ACCEPT-B.md#a24-applicability)), so R19 is not declared complete. Q17 answered (operator, live, 2026-11-11): the real spec is the [R19-CMAKE](rounds/R19-CMAKE.md) task (per-directory engine CMake files). Deviation from v5's "a spec previously run on old Planar", accepted by the operator: no old-Planar comparison run exists. Items (1) to (4) of the 2026-11-11 answer: (1) the quota fixture in both groupings (multi-unit dependencies) was run by R19-ACCEPT-A; (2) the fault/restart and rejecting-verdict CMake runs were run by R19-ACCEPT-A; (3) A24 applicability is recorded, and matrix closure is open (A03, A34, A28); (4) the Linux gate on the per-directory build layout is the C03 gate (aarch64 Docker, Debug and Release, 1,854 of 1,854 each); x86_64 Linux remains uncovered. |
+
+### Matrix row A03
+
+> | A03 | Optional rationale/checkpoint affects render only; Render | [R09](rounds/R09.md) preview identity; R16 retained checkpoint/refresh implementation and [C01 recovery regressions](rounds/V5-02-R15-R18-C01.md) preserve the material/immaterial distinction. | **deferred** No R19-ACCEPT-A id exercises the optional rationale or checkpoint path. [F6](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section), [F7](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) and [L13](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) cover fingerprint re-binding after a load and final approval, not render-only rationale or checkpoint text. Missing evidence: an R19 render recheck of that path. Governing source: [roadmap.md R19 section](roadmap.md#r19--single-root-external-driver-acceptance) (close every applicable Render matrix portion). R19 cannot be declared complete while this row is deferred; see the R19-ACCEPT-B acceptance-matrix dispositions. |
+
+### Matrix row A28
+
+> | A28 | Exact optional-byte/deletion/rename/mtime history, selective staleness; Execution | Exact declaration history remains approved through R14. Accepted input reconciliation and check applicability are implemented; [C03](rounds/V5-02-R15-R18-C03.md), [C06 lineage](rounds/V5-02-R15-R18-C06-lineage.md) and [C07 policy](rounds/V5-02-R15-R18-C07-policy.md) provide focused controls. | **open** (R19-ACCEPT-B-C01, E27): the cited ids cover selective staleness through repairs only. [F6](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows a load re-binding work fingerprints after a blocker repair; [F7](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) and [L13](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) show final approval against the exact latest output; [Q7](rounds/R19-ACCEPT-A.md#complete-invariant-table-c01-the-c02-table-is-in-the-c02-section) shows accepted references reproduced. No exact C03 TEST_CASE covers optional-byte, deletion, rename or mtime declaration history. The nearest capture-layer cases do not assert that history: `capture admission load ledger receipt refuses a replaced or removed file` (`src/engine/capture/admission.t.cpp:1039`; C03 inventory line 191) and `X06 B3 C verify_native_receipts fails with capture_changed after any captured input changes post publication` (`src/engine/runtime/runtime.t.cpp:2525`; line 1611). No existing pre-C01 source defers this obligation (the roadmap's Later phases defer A21 and controlled A34 only), so the row is open and R19 is not complete until the operator decides (E27). |
+
+### Matrix row A34
+
+> | A34 | Identical baseline/spec, isolated trials, model settings/outcomes; Measurement plus cut-2 provenance | Minimal declared revision, run/dispatch, request and event provenance is implemented. [C03](rounds/V5-02-R15-R18-C03.md) uses one spec across grouped/split fixture workflows; [C08](rounds/V5-02-R15-R18-C08-native.md) retains chronological replay. These are fixture controls, not model-comparison experiments. | **pending the run**, see [R19-ACCEPT-B](rounds/R19-ACCEPT-B.md) |
+
+### Matrix header sentences
+
+> are retained below the table. R19's real project is the approved R19-CMAKE task (operator answer Q17, live, 2026-11-11), not an unselected project. R19-ACCEPT-A ran it; the dispositions in this table are R19-ACCEPT-B's record of each row, and R19 is declared complete only in the roadmap, when every applicable row is met.
+
+> Cut 2 requires all applicable Render and Execution obligations, conditional A24
+> policy behavior and A34 minimal execution provenance. A21 composition and A34
+> controlled experiments remain deferred. A35/A36 are local IDs assigned by this

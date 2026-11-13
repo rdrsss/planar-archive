@@ -1,0 +1,100 @@
+{
+ "checkpoint1": {
+  "event_id": "5",
+  "exit": 0,
+  "request_id": "checkpoint-1",
+  "text": "checkpoint text one: parser progress recorded by the first checkpoint"
+ },
+ "checkpoint2": {
+  "event_id": "6",
+  "exit": 0,
+  "request_id": "checkpoint-2",
+  "text": "checkpoint text two: parser progress recorded by the second checkpoint"
+ },
+ "checks": {
+  "control_equal": true,
+  "render_moved_by_checkpoint1": true,
+  "render_moved_by_checkpoint2": true,
+  "since_has_checkpoint_added_section": true,
+  "since_matches_after2": true,
+  "since_material_empty": true,
+  "state_equal": true,
+  "token_absent": true,
+  "verified": true,
+  "work_fp_equal": true
+ },
+ "claim": {
+  "render_digest": "xxh3_128:d4bb0fb22ed4bf035cc278722aa7aed8",
+  "request_id": "claim-builder-1",
+  "run_id": "1",
+  "state": "running",
+  "work_fp": "xxh3_128:b913e4b55af2b453138d469916642b96"
+ },
+ "facts": {
+  "accepted_revision": "1",
+  "baseline_ref": "58128234:src/engine",
+  "baseline_sha256": "105968a31803ccb0b6f6f7351dff11f0afa861bc35e5170f465f960aca291b0e",
+  "candidate_sha256": "774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c",
+  "candidate_size": 33982376
+ },
+ "informational": {
+  "checkpoint_section_omitted_by_budget": false
+ },
+ "previews": {
+  "after1": {
+   "render_digest": "xxh3_128:40ede8a766c9950a5a2e5ce75e3f6027",
+   "state": "running",
+   "work_fp": "xxh3_128:b913e4b55af2b453138d469916642b96"
+  },
+  "after2": {
+   "render_digest": "xxh3_128:fafd735a4d3ef624237bc092cd703cda",
+   "state": "running",
+   "work_fp": "xxh3_128:b913e4b55af2b453138d469916642b96"
+  },
+  "before": {
+   "render_digest": "xxh3_128:427bf2e517bde9a4df84ebfa54ac8fc8",
+   "state": "running",
+   "work_fp": "xxh3_128:b913e4b55af2b453138d469916642b96"
+  },
+  "control": {
+   "render_digest": "xxh3_128:fafd735a4d3ef624237bc092cd703cda",
+   "state": "running",
+   "work_fp": "xxh3_128:b913e4b55af2b453138d469916642b96"
+  }
+ },
+ "since": {
+  "dispatch": {
+   "id": "1",
+   "kind": "claim",
+   "render_digest": "xxh3_128:d4bb0fb22ed4bf035cc278722aa7aed8",
+   "request_id": "claim-builder-1",
+   "revision": "1",
+   "run": "1",
+   "work_fp": "xxh3_128:b913e4b55af2b453138d469916642b96"
+  },
+  "material": [],
+  "render_changed": true,
+  "render_digest": "xxh3_128:fafd735a4d3ef624237bc092cd703cda",
+  "sections": [
+   {
+    "after_bytes": 330,
+    "before_bytes": 317,
+    "id": "authority",
+    "status": "changed"
+   },
+   {
+    "after_bytes": 329,
+    "before_bytes": 335,
+    "id": "run",
+    "status": "changed"
+   },
+   {
+    "after_bytes": 299,
+    "before_bytes": 0,
+    "id": "checkpoint",
+    "status": "added"
+   }
+  ]
+ },
+ "version": 1
+}

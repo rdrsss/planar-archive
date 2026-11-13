@@ -1,0 +1,276 @@
+{
+ "checks": {
+  "claim": {
+   "document_matches_supplied": true,
+   "generation_expected": true,
+   "native_ten_keys": true,
+   "preferences_unknown": true
+  },
+  "nofile": {
+   "generation_expected": true,
+   "native_ten_keys": true,
+   "preferences_unknown": true
+  },
+  "takeover": {
+   "document_matches_supplied": true,
+   "generation_expected": true,
+   "native_ten_keys": true,
+   "preferences_unknown": true
+  },
+  "token_absent_in_run_dir": true,
+  "verified": true
+ },
+ "claim": {
+  "event_id": "4",
+  "provenance": {
+   "driver": {
+    "authority": "driver_assertion_unverified",
+    "document": {
+     "driver": {
+      "name": "r19-accept-support/provenance_driver.py",
+      "version": "9470b069e548"
+     },
+     "model": {
+      "actual": {
+       "status": "unknown"
+      },
+      "requested": {
+       "status": "unknown"
+      }
+     },
+     "session": {
+      "actual": {
+       "status": "unknown"
+      },
+      "requested": {
+       "status": "unknown"
+      }
+     },
+     "settings": [
+      {
+       "name": "accepted_revision",
+       "value": "1"
+      },
+      {
+       "name": "baseline_ref",
+       "value": "58128234:src/engine"
+      },
+      {
+       "name": "baseline_sha256",
+       "value": "105968a31803ccb0b6f6f7351dff11f0afa861bc35e5170f465f960aca291b0e"
+      },
+      {
+       "name": "candidate_sha256",
+       "value": "774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c"
+      },
+      {
+       "name": "candidate_size",
+       "value": "33982376"
+      },
+      {
+       "name": "driver_phase",
+       "value": "claim"
+      }
+     ],
+     "trial": {
+      "id": "r19-accept-b-a34-minimal"
+     },
+     "version": 1,
+     "view": {
+      "id": "source"
+     }
+    },
+    "id": "39"
+   },
+   "native": {
+    "base_label": "baseline_head_cmake58128234",
+    "generation": "1",
+    "job": "combined",
+    "ledger": "c8eb387ec8421fe91aa2aee6b60010d0",
+    "preferences": {
+     "model": {
+      "status": "unknown"
+     },
+     "session": {
+      "status": "unknown"
+     }
+    },
+    "render_fp": "xxh3_128:fa0a81aad69d047351bb2b43ce7e6843",
+    "revision": "1",
+    "role": "builder",
+    "source": {
+     "digest": "xxh3_128:0dcec199523a0b8b224182c685057190",
+     "id": "4"
+    },
+    "work_fp": "xxh3_128:0f80133e59ce496f337327b114ad085d"
+   }
+  },
+  "run_id": "1"
+ },
+ "facts": {
+  "accepted_revision": "1",
+  "baseline_ref": "58128234:src/engine",
+  "baseline_sha256": "105968a31803ccb0b6f6f7351dff11f0afa861bc35e5170f465f960aca291b0e",
+  "candidate_sha256": "774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c",
+  "candidate_size": 33982376,
+  "driver_version": "9470b069e548"
+ },
+ "nofile": {
+  "event_id": "6",
+  "provenance": {
+   "driver": {
+    "authority": "none",
+    "document": {
+     "driver": {
+      "name": {
+       "status": "unknown"
+      },
+      "version": {
+       "status": "unknown"
+      }
+     },
+     "model": {
+      "actual": {
+       "status": "unknown"
+      },
+      "requested": {
+       "status": "unknown"
+      }
+     },
+     "session": {
+      "actual": {
+       "status": "unknown"
+      },
+      "requested": {
+       "status": "unknown"
+      }
+     },
+     "settings": [],
+     "trial": {
+      "id": {
+       "status": "unknown"
+      }
+     },
+     "version": 1,
+     "view": {
+      "id": {
+       "status": "unknown"
+      }
+     }
+    },
+    "id": "none"
+   },
+   "native": {
+    "base_label": "baseline_head_cmake58128234",
+    "generation": "3",
+    "job": "combined",
+    "ledger": "c8eb387ec8421fe91aa2aee6b60010d0",
+    "preferences": {
+     "model": {
+      "status": "unknown"
+     },
+     "session": {
+      "status": "unknown"
+     }
+    },
+    "render_fp": "xxh3_128:f4df5254acfd76f9f667120a497f5a9a",
+    "revision": "1",
+    "role": "builder",
+    "source": {
+     "digest": "xxh3_128:0dcec199523a0b8b224182c685057190",
+     "id": "4"
+    },
+    "work_fp": "xxh3_128:0f80133e59ce496f337327b114ad085d"
+   }
+  },
+  "run_id": "3"
+ },
+ "takeover": {
+  "event_id": "5",
+  "provenance": {
+   "driver": {
+    "authority": "driver_assertion_unverified",
+    "document": {
+     "driver": {
+      "name": "r19-accept-support/provenance_driver.py",
+      "version": "9470b069e548"
+     },
+     "model": {
+      "actual": {
+       "status": "unknown"
+      },
+      "requested": {
+       "status": "unknown"
+      }
+     },
+     "session": {
+      "actual": {
+       "status": "unknown"
+      },
+      "requested": {
+       "status": "unknown"
+      }
+     },
+     "settings": [
+      {
+       "name": "accepted_revision",
+       "value": "1"
+      },
+      {
+       "name": "baseline_ref",
+       "value": "58128234:src/engine"
+      },
+      {
+       "name": "baseline_sha256",
+       "value": "105968a31803ccb0b6f6f7351dff11f0afa861bc35e5170f465f960aca291b0e"
+      },
+      {
+       "name": "candidate_sha256",
+       "value": "774bcd69809ead9e4cd7b6e06c74aa045ea9272a2321cd36f91bc9c76a99ab0c"
+      },
+      {
+       "name": "candidate_size",
+       "value": "33982376"
+      },
+      {
+       "name": "driver_phase",
+       "value": "takeover"
+      }
+     ],
+     "trial": {
+      "id": "r19-accept-b-a34-minimal"
+     },
+     "version": 1,
+     "view": {
+      "id": "source"
+     }
+    },
+    "id": "43"
+   },
+   "native": {
+    "base_label": "baseline_head_cmake58128234",
+    "generation": "2",
+    "job": "combined",
+    "ledger": "c8eb387ec8421fe91aa2aee6b60010d0",
+    "preferences": {
+     "model": {
+      "status": "unknown"
+     },
+     "session": {
+      "status": "unknown"
+     }
+    },
+    "render_fp": "xxh3_128:ce1819368d000ab06c50cfa1116d1d81",
+    "revision": "1",
+    "role": "builder",
+    "source": {
+     "digest": "xxh3_128:0dcec199523a0b8b224182c685057190",
+     "id": "4"
+    },
+    "work_fp": "xxh3_128:0f80133e59ce496f337327b114ad085d"
+   }
+  },
+  "run_id": "2"
+ },
+ "version": 1
+}
