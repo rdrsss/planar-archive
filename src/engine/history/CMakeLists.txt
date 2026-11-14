@@ -77,10 +77,11 @@ planar_rewrite_module(planar_history_effective_provenance
 target_compile_definitions(planar_history_effective_provenance_tests PRIVATE
   PLANAR_EFFECTIVE_VECTORS="${PROJECT_SOURCE_DIR}/tests/vectors/effective-provenance")
 
+# Limit 1680 s is D32: max(120, ceil60(2 x 813 s loaded direct time)); its 16 v2 codec test cases share it, so a hung test is detected later.
 planar_rewrite_module(planar_history_interpretation_v2_codec
   INTERFACE interpretation_v2_codec.cppm SOURCES interpretation_v2_codec.cpp
   DEPENDS planar_history_effective_provenance planar_history_effective_catalog planar_hash
-  TESTS interpretation_v2_codec.t.cpp)
+  TESTS interpretation_v2_codec.t.cpp TEST_TIMEOUT 1680)
 target_compile_definitions(planar_history_interpretation_v2_codec_tests PRIVATE
   PLANAR_V2_VECTORS="${PROJECT_SOURCE_DIR}/tests/vectors/interpretation-v2"
   PLANAR_EFFECTIVE_VECTORS="${PROJECT_SOURCE_DIR}/tests/vectors/effective-provenance"

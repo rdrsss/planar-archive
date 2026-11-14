@@ -46,6 +46,57 @@ retain their historical meaning. An idle Ninja invocation may first print
 `[0/2] Re-checking globbed directories...`; the final `ninja: no work to do.`
 confirms no compilation or linking was needed.
 
+### R20-CARRY-A stability and timeout guards
+
+Eighteen CTest cases named `replacement.r20.*` guard the idle-build and timeout
+work. They are Python drivers run by CTest (label `acceptance`); they write only into
+scratch roots and set `sys.dont_write_bytecode`, so no bytecode is written beside them.
+They take tool paths from `CMAKE_CTEST_COMMAND`, `CMAKE_COMMAND` and `CMAKE_MAKE_PROGRAM`
+through argv. The embed cases need no C++ toolchain. Groups:
+
+- Timeout headroom (3): `timeout_headroom_v2_allocation`, `timeout_headroom_above4096`
+  and `timeout_names_registered` read the registered limit with
+  `ctest --show-only=json-v1` for `replacement.v2 every native allocation failure remains a
+  redacted typed resource refusal` and `replacement.recorded effective history selects
+  wider fixed tree profile for valid closure above4096 files`; each must be registered
+  once with TIMEOUT at least 120 s. They run no test.
+- Generator stability (8): `generator_unchanged_mtime_{b1,d6,d6_c01,x05_a0}` rerun the
+  generators over an unchanged scratch tree and require the exact output set to keep
+  its bytes and `st_mtime_ns`; `generator_content_change_rewrites_*` require stale or
+  input-changed outputs to be rewritten to exact bytes with a newer mtime.
+- Manifest stability (2): `manifest_unchanged_mtime` and `manifest_content_change_rewrites`
+  cover the six manifest generators (r12c2, r14f1, r14f2, v5-02-b2, r14-d7-b,
+  v5-02-x07) and their `generation.json`.
+- Configure and Ninja (2): `configure_zero_work` reconfigures a scratch project that runs
+  all four generators and requires `ninja: no work to do.`;
+  `configure_rebuilds_on_content_change` requires work after a content change and then
+  `ninja: no work to do.` again.
+- Embed helper (3): `embed_unchanged_mtime`, `embed_content_change_rewrites` and
+  `embed_callsite_audit`.
+
+All generators now write a file only when its bytes change. `planar_embed_lua(target module
+source parts... [REMAP <abs> <logical>...] [LITERAL <from> <to>...])` builds the module in
+memory and writes it once with `file(CONFIGURE)`, which leaves an identical file
+untouched. Parts end at the first `REMAP` or `LITERAL`; a bare `REMAP` is a no-op. Each
+REMAP pair names the embedded file by the helper's rule (relative to `src/stdlib`, else
+to the project root) and replaces that name with the logical name; each LITERAL pair then
+replaces its from-text verbatim. Order is REMAP pairs in call order, then LITERAL pairs in
+call order. No call site reads an embedded output back and rewrites it.
+
+The two named slow tests run under per-target `TEST_TIMEOUT` limits. The test
+`replacement.v2 every native allocation failure remains a redacted typed resource refusal`
+runs in `planar_history_interpretation_v2_codec` with a limit of 1680 s, and the test
+`replacement.recorded effective history selects wider fixed tree profile for valid closure
+above4096 files` runs in `planar_ledger_format` with a limit of 840 s. Each limit is
+chosen by the rule: the larger of 120 s and twice the loaded direct time, rounded up to a
+multiple of 60 s. The limit is set per target, so every test case in those targets shares
+it: 16 cases in the v2 codec target and 104 cases in the ledger format target, 120 cases
+in all. A hung test in either target is therefore detected later than it would be under
+the previous 120 s limit. The `timeout_headroom` cases fail if either limit is lowered;
+each minimum equals its shipped limit exactly. The measurements and the nearest-limit
+table are indexed in `tests/native/r20-carry-a-evidence/README.md`, which is the only
+citation for them.
+
 `replacement.authoring_execution_lifecycle` runs the source-built production
 and separate authoring executables in isolated roots. Its five scenarios cover
 same-bundle activation, complete worker/check/reviewer acceptance, recovery with

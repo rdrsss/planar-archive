@@ -15,6 +15,8 @@ start=commands.index('  local function load_command')
 end=commands.index('  local function activate_command',start)
 assert commands[start:end].count('local function ') == 1, 'load replacement must preserve every other handler'
 commands=commands[:start]+handler+commands[end:]
+def put(path,text):
+ if not path.exists() or path.read_text()!=text:path.write_text(text)
 for i in range(6):
  lua=commands
  if i==2: lua=commands.replace(registration,'')
@@ -24,10 +26,10 @@ for i in range(6):
  if i==1:
   # Change actual retained interpretation policy and original bytes together.
   lua=lua.replace('local normalized=interpreted.value','local normalized=interpreted.value\n    normalized.bundle.spec.goal.bytes="D6 altered retained policy"')
- (out/f'commands_{i}.lua').write_text(lua)
+ put(out/f'commands_{i}.lua',lua)
  a=impl.replace('module planar.engine.runtime;',f'module planar.engine.load_test_{i};').replace('import planar.engine.runtime_source;',f'import planar.engine.load_source_{i};').replace('namespace planar::engine {',f'namespace planar::engine::load_test_{i} {{')
  b=interface.replace('module planar.engine.runtime;',f'module planar.engine.load_test_{i};').replace('namespace planar::engine {',f'namespace planar::engine::load_test_{i} {{')
- (out/f'runtime_{i}.cpp').write_text(a);(out/f'runtime_{i}.cppm').write_text(b)
+ put(out/f'runtime_{i}.cpp',a);put(out/f'runtime_{i}.cppm',b)
  restored=a.replace(f'module planar.engine.load_test_{i};','module planar.engine.runtime;').replace(f'import planar.engine.load_source_{i};','import planar.engine.runtime_source;').replace(f'namespace planar::engine::load_test_{i} {{','namespace planar::engine {')
  assert restored==impl
  assert b.replace(f'module planar.engine.load_test_{i};','module planar.engine.runtime;').replace(f'namespace planar::engine::load_test_{i} {{','namespace planar::engine {')==interface

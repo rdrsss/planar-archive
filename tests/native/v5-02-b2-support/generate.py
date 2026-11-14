@@ -52,5 +52,6 @@ for i,bundle in enumerate(variants):
  data=original
  for a,b in changes:data=data.replace(a,b)
  write(d/'main.cpp',data,original,changes)
-(out/'generation.json').write_text(json.dumps(manifest,indent=2)+'\n')
+_t=json.dumps(manifest,indent=2)+'\n'
+if not (out/'generation.json').exists() or (out/'generation.json').read_text()!=_t:(out/'generation.json').write_text(_t)
 print(f'audited {len(variants)} real CLI compositions and {len(manifest)} generated inputs')

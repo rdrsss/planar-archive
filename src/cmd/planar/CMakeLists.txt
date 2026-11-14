@@ -153,12 +153,8 @@ foreach(variant RANGE 0 5)
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
-    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
-  set(source_module "${CMAKE_CURRENT_BINARY_DIR}/planar_cli_bundle_source_${variant}.cppm")
-  file(READ "${source_module}" source_text)
-  file(RELATIVE_PATH generated_logical "${PROJECT_SOURCE_DIR}" "${generated}/commands.lua")
-  string(REPLACE "${generated_logical}" "planar/commands.lua" source_text "${source_text}")
-  file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua"
+    REMAP "${generated}/commands.lua" planar/commands.lua)
   planar_rewrite_module(planar_cli_runtime_${variant}
     INTERFACE "${generated}/runtime.cppm" SOURCES "${generated}/runtime.cpp"
     DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_cli_bundle_source_${variant})
@@ -215,12 +211,8 @@ planar_embed_lua(planar_load_cli_probe_source planar.engine.load_cli_probe_sourc
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
   "${d7b_generated}/commands.lua"
-  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
-set(d7b_source_module "${CMAKE_CURRENT_BINARY_DIR}/planar_load_cli_probe_source.cppm")
-file(READ "${d7b_source_module}" d7b_source_text)
-file(RELATIVE_PATH d7b_logical "${PROJECT_SOURCE_DIR}" "${d7b_generated}/commands.lua")
-string(REPLACE "${d7b_logical}" "planar/commands.lua" d7b_source_text "${d7b_source_text}")
-file(CONFIGURE OUTPUT "${d7b_source_module}" CONTENT "${d7b_source_text}" @ONLY)
+  "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua"
+  REMAP "${d7b_generated}/commands.lua" planar/commands.lua)
 planar_rewrite_module(planar_load_cli_probe_runtime
   INTERFACE "${d7b_generated}/runtime.cppm" SOURCES "${d7b_generated}/runtime.cpp"
   DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_load_cli_probe_source)
@@ -273,12 +265,8 @@ foreach(variant RANGE 0 4)
   "${PROJECT_SOURCE_DIR}/src/stdlib/planar/review.lua"
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
-    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
-  set(source_module "${CMAKE_CURRENT_BINARY_DIR}/planar_x07_bundle_source_${variant}.cppm")
-  file(READ "${source_module}" source_text)
-  file(RELATIVE_PATH generated_logical "${PROJECT_SOURCE_DIR}" "${generated}/commands.lua")
-  string(REPLACE "${generated_logical}" "planar/commands.lua" source_text "${source_text}")
-  file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua"
+    REMAP "${generated}/commands.lua" planar/commands.lua)
   planar_rewrite_module(planar_x07_runtime_${variant}
     INTERFACE "${generated}/runtime.cppm" SOURCES "${generated}/runtime.cpp"
     DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_x07_bundle_source_${variant})
@@ -626,33 +614,28 @@ foreach(variant RANGE 0 21)
   endforeach()
   # Variant 21 swaps the spec-prompt include binding in a generated copy of prompts.lua, same technique as commands.lua.
   set(variant_lua_files)
-  set(prompts_logical)
   foreach(lua_file IN LISTS authoring_lua_files)
     if(variant EQUAL 21 AND lua_file STREQUAL "${PROJECT_SOURCE_DIR}/src/stdlib/planar/prompts.lua")
       file(READ "${lua_file}" prompts_text)
       planar_authoring_once(prompts_text [=[local prompts_spec_prompt_include="workspace"]=]
         [=[local prompts_spec_prompt_include="spec"]=])
       planar_authoring_emit("${generated}/prompts.lua" "${prompts_text}")
-      file(RELATIVE_PATH prompts_logical "${PROJECT_SOURCE_DIR}" "${generated}/prompts.lua")
       list(APPEND variant_lua_files "${generated}/prompts.lua")
     else()
       list(APPEND variant_lua_files "${lua_file}")
     endif()
   endforeach()
+  # The altered files still occupy the exact shipped logical module slots: commands for every variant, prompts for 21 only.
+  set(authoring_remap "${generated}/commands.lua;planar/commands.lua")
+  if(variant EQUAL 21)
+    list(APPEND authoring_remap "${generated}/prompts.lua" planar/prompts.lua)
+  endif()
   planar_embed_lua(planar_authoring_source_${variant} planar.engine.authoring_source_${variant}
     ${variant_lua_files}
     "${PROJECT_SOURCE_DIR}/src/stdlib/planar/acceptance.lua"
     "${generated}/commands.lua"
-    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua")
-  # The altered file still occupies the exact shipped logical module slot.
-  set(source_module "${CMAKE_CURRENT_BINARY_DIR}/planar_authoring_source_${variant}.cppm")
-  file(READ "${source_module}" source_text)
-  file(RELATIVE_PATH generated_logical "${PROJECT_SOURCE_DIR}" "${generated}/commands.lua")
-  string(REPLACE "${generated_logical}" "planar/commands.lua" source_text "${source_text}")
-  if(variant EQUAL 21)
-    string(REPLACE "${prompts_logical}" "planar/prompts.lua" source_text "${source_text}")
-  endif()
-  file(CONFIGURE OUTPUT "${source_module}" CONTENT "${source_text}" @ONLY)
+    "${PROJECT_SOURCE_DIR}/src/stdlib/planar/bootstrap.lua"
+    REMAP ${authoring_remap})
   planar_rewrite_module(planar_authoring_variant_${variant}
     INTERFACE "${generated}/runtime.cppm" SOURCES "${generated}/runtime.cpp"
     DEPENDS ${authoring_runtime_depends} planar_authoring_source_${variant})

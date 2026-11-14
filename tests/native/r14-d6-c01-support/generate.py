@@ -9,5 +9,5 @@ with tempfile.TemporaryDirectory(prefix="planar-c01-generate-") as d:
   data=original.replace('planar.engine.load_test_0','planar.engine.load_c01_test').replace('planar.engine.load_source_0','planar.engine.load_c01_source').replace('namespace planar::engine::load_test_0 {','namespace planar::engine::load_c01_test {')
   restored=data.replace('planar.engine.load_c01_test','planar.engine.load_test_0').replace('planar.engine.load_c01_source','planar.engine.load_source_0').replace('namespace planar::engine::load_c01_test {','namespace planar::engine::load_test_0 {')
   assert restored==original,name
-  (out/name).write_text(data)
+  if not (out/name).exists() or (out/name).read_text()!=data:(out/name).write_text(data)
 print('Generated exact C01 private runtime identities')

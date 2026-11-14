@@ -80,10 +80,12 @@ stateful=stateful[:stateful.index('    local id=invocation.options["workspace-id
 variants.append(stateful)
 for edges in [254,255]:
  variants.append(commands.replace('if registration then',f'if registration then\n  __c01_graph={{}};local t=__c01_graph;for i=1,{edges} do t.child={{}};t=t.child end'))
+def put(path,text):
+ if not path.exists() or path.read_text()!=text:path.write_text(text)
 for i,source in enumerate(variants):
- (out/f'commands_{i}.lua').write_text(source)
- (out/f'runtime_{i}.cpp').write_text(impl.replace('module planar.engine.runtime;','module planar.engine.command_test_'+str(i)+';').replace('import planar.engine.runtime_source;','import planar.engine.command_source_'+str(i)+';').replace('namespace planar::engine {','namespace planar::engine::command_test_'+str(i)+' {'))
- (out/f'runtime_{i}.cppm').write_text(interface.replace('module planar.engine.runtime;','module planar.engine.command_test_'+str(i)+';').replace('namespace planar::engine {','namespace planar::engine::command_test_'+str(i)+' {'))
+ put(out/f'commands_{i}.lua',source)
+ put(out/f'runtime_{i}.cpp',impl.replace('module planar.engine.runtime;','module planar.engine.command_test_'+str(i)+';').replace('import planar.engine.runtime_source;','import planar.engine.command_source_'+str(i)+';').replace('namespace planar::engine {','namespace planar::engine::command_test_'+str(i)+' {'))
+ put(out/f'runtime_{i}.cppm',interface.replace('module planar.engine.runtime;','module planar.engine.command_test_'+str(i)+';').replace('namespace planar::engine {','namespace planar::engine::command_test_'+str(i)+' {'))
 # Audit exact reversibility of generated native files: only module/source/namespace identities differ.
 for i in range(len(variants)):
  restored=(out/f'runtime_{i}.cpp').read_text().replace('module planar.engine.command_test_'+str(i)+';','module planar.engine.runtime;').replace('import planar.engine.command_source_'+str(i)+';','import planar.engine.runtime_source;').replace('namespace planar::engine::command_test_'+str(i)+' {','namespace planar::engine {')

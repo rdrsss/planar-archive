@@ -31,10 +31,11 @@ target_link_libraries(planar_ledger_acceptance_tests PRIVATE planar_ledger_forma
 target_compile_definitions(planar_ledger_acceptance_tests PRIVATE
   PLANAR_SCHEMA_FIXTURE="${PROJECT_SOURCE_DIR}/fixtures/render/quota")
 
+# Limit 840 s is D32: max(120, ceil60(2 x 406 s loaded direct time)); its 104 ledger format test cases share it, so a hung test is detected later.
 planar_rewrite_module(planar_ledger_format
   INTERFACE format.cppm SOURCES format.cpp
   DEPENDS planar_ledger_completion planar_ledger_sqlite planar_json_codec planar_ledger_types planar_ledger_history_codec
-    planar_ledger_storage planar_ledger_storage_types TESTS format.t.cpp snapshot.t.cpp history_verification.t.cpp acceptance.t.cpp)
+    planar_ledger_storage planar_ledger_storage_types TESTS format.t.cpp snapshot.t.cpp history_verification.t.cpp acceptance.t.cpp TEST_TIMEOUT 840)
 # Test-only: fixtures prepare and complete acceptances; the format library itself links none of it.
 target_link_libraries(planar_ledger_format_tests PRIVATE planar_ledger_acceptance planar_acceptance_prepared)
 target_compile_definitions(planar_ledger_format_tests PRIVATE

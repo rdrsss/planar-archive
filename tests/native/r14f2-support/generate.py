@@ -21,4 +21,5 @@ for name in ['invocation.cppm','invocation.cpp']:
  dest=output/name
  if not dest.exists() or dest.read_text()!=generated:dest.write_text(generated)
  manifest[name]=dict(source_sha256=hashlib.sha256(original.encode()).hexdigest(),generated_sha256=hashlib.sha256(generated.encode()).hexdigest(),reverse_identical=True,substitutions=[dict(before=b,after=a,count=c) for (b,a),c in zip(substitutions,counts)])
-(output/'generation.json').write_text(json.dumps(manifest,indent=2)+'\n')
+_t=json.dumps(manifest,indent=2)+'\n'
+if not (output/'generation.json').exists() or (output/'generation.json').read_text()!=_t:(output/'generation.json').write_text(_t)

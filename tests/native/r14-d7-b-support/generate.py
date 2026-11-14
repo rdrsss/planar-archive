@@ -99,5 +99,6 @@ void probe_barrier(const std::string& ledger, std::string_view stage) {
     if (probe_id == "posttransport" && published()) throw std::bad_alloc();'''))
  write(name,original,changes)
 original=(root/'src/cmd/planar/main.cpp').read_text();data=original.replace('planar.cmd.bootstrap','planar.cmd.load_cli_probe.bootstrap').replace('planar::cmd::invoke','planar::cmd::load_cli_probe::invoke');write('main.cpp',original,[(original,data)])
-(out/'generation.json').write_text(json.dumps(manifest,indent=2)+'\n')
+_t=json.dumps(manifest,indent=2)+'\n'
+if not (out/'generation.json').exists() or (out/'generation.json').read_text()!=_t:(out/'generation.json').write_text(_t)
 print('Audited exact reversible load CLI probe sources')

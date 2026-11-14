@@ -2,6 +2,8 @@
 """Reversible X05-A0 verification variants, never product hooks or source changes."""
 from pathlib import Path
 import hashlib,json,sys
+def put(path,text):
+ if not path.exists() or path.read_text()!=text:path.write_text(text)
 root,out=map(Path,sys.argv[1:]);out.mkdir(parents=True,exist_ok=True)
 support=root/'tests/native/v5-02-x05-a0-support'
 impl=(root/'src/engine/runtime/runtime.cpp').read_text()
@@ -58,14 +60,14 @@ for variant in range(2):
    assert reverse.count(after)==count,(filename,after)
    reverse=reverse.replace(after,before)
   assert reverse==source
-  target=out/f'{name}_{filename}';target.write_text(generated)
+  target=out/f'{name}_{filename}';put(target,generated)
   manifest[target.name]=dict(source_sha256=hashlib.sha256(source.encode()).hexdigest(),generated_sha256=hashlib.sha256(generated.encode()).hexdigest(),reverse_identical=True,substitutions=[dict(before=a,after=b,count=c) for a,b,c in subs])
  source=commands
  if variant:
   needle='  local function init_command(invocation,context)'
   assert source.count(needle)==1
   source=source.replace(needle,'  local x05_retained_scalar=0\n'+needle+'\n    x05_retained_scalar=x05_retained_scalar+1')
- (out/f'commands_{variant}.lua').write_text(source)
+ put(out/f'commands_{variant}.lua',source)
 needle='  local function init_command(invocation,context)'
 replacement='  local x05_retained_scalar=0\n'+needle+'\n    x05_retained_scalar=x05_retained_scalar+1'
 altered=(out/'commands_1.lua').read_text()
@@ -73,5 +75,5 @@ assert altered.count(replacement)==1 and altered.replace(replacement,needle)==co
 manifest['lua']={'variant0_exact_shipped_commands':(out/'commands_0.lua').read_text()==commands,
  'variant1_retained_scalar_write_only':True,'source_sha256':hashlib.sha256(commands.encode()).hexdigest(),
  'altered_sha256':hashlib.sha256(altered.encode()).hexdigest(),'before':needle,'after':replacement,'count':1,'reverse_identical':True}
-(out/'generation.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
+put(out/'generation.json',json.dumps(manifest,indent=2,sort_keys=True)+'\n')
 print('X05-A0: 2 runtime/interface variants forward/reverse exact; variant0 shipped commands exact')

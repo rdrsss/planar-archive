@@ -35,22 +35,16 @@ foreach(x08_index RANGE ${x08_last})
 endforeach()
 set(x08_all_paths "${x08_paths}")
 list(POP_FRONT x08_paths x08_first)
-planar_embed_lua(planar_x08_bundle_source_0 planar.engine.x08_bundle_source_0 "${x08_first}" ${x08_paths})
-
-# Logical-path fix: planar_embed_lua names each file by its path relative to the source tree, which for generated files is a
-# build path. Rewrite that name to the shipped logical name (planar/json.lua, ...) in the generated module, exactly as X07 does.
-set(x08_module "${CMAKE_BINARY_DIR}/planar_x08_bundle_source_0.cppm")
-file(READ "${x08_module}" x08_module_text)
+# Each embedded file is named by its shipped logical name (planar/json.lua, ...) instead of its generated build path, in
+# generation.json index order, exactly as X07 does.
+set(x08_remap)
 foreach(x08_index RANGE ${x08_last})
   list(GET x08_all_paths ${x08_index} x08_path)
   list(GET x08_logicals ${x08_index} x08_logical)
-  file(RELATIVE_PATH x08_portable "${PROJECT_SOURCE_DIR}/src/stdlib" "${x08_path}")
-  if(x08_portable MATCHES "^\\.\\.")
-    file(RELATIVE_PATH x08_portable "${PROJECT_SOURCE_DIR}" "${x08_path}")
-  endif()
-  string(REPLACE "${x08_portable}" "${x08_logical}" x08_module_text "${x08_module_text}")
+  list(APPEND x08_remap "${x08_path}" "${x08_logical}")
 endforeach()
-file(CONFIGURE OUTPUT "${x08_module}" CONTENT "${x08_module_text}" @ONLY)
+planar_embed_lua(planar_x08_bundle_source_0 planar.engine.x08_bundle_source_0 "${x08_first}" ${x08_paths}
+  REMAP ${x08_remap})
 
 planar_rewrite_module(planar_x08_runtime_0
   INTERFACE "${x08_variant}/runtime.cppm" SOURCES "${x08_variant}/runtime.cpp"

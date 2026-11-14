@@ -48,4 +48,5 @@ for name in ('format.cppm', 'format.cpp'):
         'substitutions': [{'before': b, 'after': a, 'count': n} for (b, a), n in zip(substitutions, counts)],
         'reverse_identical': True,
     }
-(output / 'generation.json').write_text(json.dumps(manifest, indent=2) + '\n')
+_t=json.dumps(manifest, indent=2) + '\n'
+if not (output / 'generation.json').exists() or (output / 'generation.json').read_text()!=_t:(output / 'generation.json').write_text(_t)
