@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+import os
 import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
@@ -46,7 +47,9 @@ def test(build):
         raise RuntimeError("Zero registered tests")
     with tempfile.TemporaryDirectory(prefix="planar-ctest-") as scratch:
         report = Path(scratch) / "tests.xml"
-        run(["ctest", "--test-dir", build, "--output-on-failure", "--output-junit", report])
+        # Each case owns a temporary root, so cases run in parallel; PLANAR_TEST_JOBS=1 restores serial runs.
+        jobs = os.environ.get("PLANAR_TEST_JOBS") or str(os.cpu_count() or 1)
+        run(["ctest", "--test-dir", build, "--parallel", jobs, "--output-on-failure", "--output-junit", report])
         cases = ET.parse(report).findall(".//testcase")
         if len(cases) != count or any(case.find("skipped") is not None or
                                     case.get("status") in {"notrun", "disabled"} for case in cases):

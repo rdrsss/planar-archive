@@ -27,7 +27,7 @@ planar_rewrite_module(planar_history_tree_core
 
 planar_rewrite_module(planar_history_tree
   INTERFACE tree.cppm SOURCES tree.cpp
-  DEPENDS planar_ledger_format planar_history_tree_core TESTS tree.t.cpp)
+  DEPENDS planar_ledger_format planar_history_tree_core TESTS tree.t.cpp TEST_TIMEOUT 120)
 
 planar_rewrite_module(planar_history_provenance_codec
   INTERFACE provenance_codec.cppm SOURCES provenance_codec.cpp

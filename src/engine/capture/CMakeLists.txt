@@ -21,7 +21,7 @@ target_link_libraries(planar_capture_profile_tests PRIVATE planar_admission_sysc
 planar_rewrite_module(planar_capture
   INTERFACE capture.cppm SOURCES capture.cpp
   DEPENDS planar_capture_native planar_value planar_lua_loader planar_hash TESTS capture.t.cpp
-  TEST_TIMEOUT 120)
+  TEST_TIMEOUT 300)
 
 planar_rewrite_module(planar_capture_directory
   INTERFACE directory.cppm directory_recheck.cppm SOURCES directory.cpp
