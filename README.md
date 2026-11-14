@@ -217,6 +217,12 @@ Planar is under active development, and its interfaces, including the command
 line and the schema, may still change. It is maintained as a personal project
 without roadmap commitments (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
+## Acknowledgements
+
+Thanks to Akahi Troske, Planar's only other contributor, its main user and
+its most important feedback loop. Much of what worked in Planar, and much of
+what changed, came from that feedback.
+
 ## License
 
 MIT. See [LICENSE](LICENSE). Third-party notices are in
