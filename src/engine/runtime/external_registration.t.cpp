@@ -4809,6 +4809,47 @@ TEST_CASE("X06 D C03 a recovered allocation refusal followed by an illegal regis
   CHECK(retry.error().detail.limit == "lua_bytes");
 }
 
+// CL-2: a malformed registration caught by the profile module chunk is the first terminal failure; a later exhaustion in the
+// same chunk must not replace it with resource_limit.
+TEST_CASE("CL-2 profile module chunk keeps a caught malformed registration over later exhaustion",
+          "[external-registration][cl2]") {
+  auto baseline = command_vm::create(profile({"pcall(registration.shape,{},1)"}));
+  REQUIRE_FALSE(baseline);
+  REQUIRE(baseline.error().detail.code == "internal");
+  for (std::string tail : {"while true do end", "local t={} while true do t[#t+1]={} end"}) {
+    INFO(tail);
+    auto vm = command_vm::create(profile({"pcall(registration.shape,{},1); " + tail}));
+    REQUIRE_FALSE(vm);
+    INFO(vm.error().detail.code << " " << vm.error().detail.message << " " << vm.error().detail.limit);
+    CHECK(vm.error().detail.code == baseline.error().detail.code);
+    CHECK(vm.error().detail.message == baseline.error().detail.message);
+    CHECK(vm.error().detail.limit == baseline.error().detail.limit);
+    CHECK(vm.error().field == baseline.error().field);
+  }
+}
+
+// CL-4 context: public validate_profile dispatches the shape from native code between trusted phases, so a caught illegal
+// registration followed by exhaustion inside the shape is recorded first by the shape call, not by the non-nested phase pcall.
+TEST_CASE("CL-4 public validate_profile keeps a caught illegal registration in a shape over later exhaustion",
+          "[external-registration][profile-semantic][cl4]") {
+  semantic_fixture f;
+  for (std::string tail : {"return {}", "while true do end", "local t={} while true do t[#t+1]={} end"}) {
+    INFO(tail);
+    auto vm = command_vm::create(profile({c03_illegal_shape("", tail)}));
+    REQUIRE(vm);
+    auto result = vm->validate_profile(semantic_validation(f.bundle));
+    REQUIRE_FALSE(result);
+    INFO(result.error().detail.code << " " << result.error().detail.message << " " << result.error().detail.limit);
+    CHECK(result.error().detail.code == "internal");
+    CHECK(result.error().detail.message == "Invalid external profile protocol");
+    CHECK(result.error().field == "catalog.shapes[1]");
+    auto retry = vm->validate_profile({});
+    REQUIRE_FALSE(retry);
+    CHECK(retry.error().detail.code == "internal");
+    CHECK(retry.error().field == "catalog.shapes[1]");
+  }
+}
+
 // X07 closed factory (wave A): admission, the single dispatch and the module-private invoke path. These tests drive only the
 // exported surface; the factory returns an owner that retains the exact admitted options.
 namespace {

@@ -24,6 +24,19 @@
     local interpreted=interpret_bundle(captured.value.bundle)
     if interpreted.error then return failed(interpreted.error) end
     local normalized=interpreted.value
+    -- Verification-only native room: padbase-N/padaccept-N charge N string bytes through json_encode's input conversion
+    -- and again through its result (two native bytes per pad byte), then send malformed or exact acceptance arguments.
+    local pad_kind=string.sub(mode,1,8)=="padbase-" and "base" or string.sub(mode,1,10)=="padaccept-" and "accept" or nil
+    if pad_kind then
+      local n=0
+      for i=#pad_kind+5,#mode do n=n*10+string.byte(mode,i)-48 end
+      local chunk="x";for i=1,20 do chunk=chunk..chunk end
+      while n>=#chunk do engine.json_encode({x=chunk});n=n-#chunk end
+      local rest,piece="","x"
+      while n>0 do if n%2==1 then rest=rest..piece end;piece=piece..piece;n=n//2 end
+      engine.json_encode({x=rest})
+      if pad_kind=="base" then return context.accept_load({bundle=normalized.bundle,semantic=normalized.semantic,extra=true}) end
+    end
     if mode=="badbundle" then normalized.bundle={} end
     if mode=="badsemantic" then normalized.semantic={} end
     if mode=="badargs" then return context.accept_load({bundle=normalized.bundle,semantic=normalized.semantic,extra=true}) end

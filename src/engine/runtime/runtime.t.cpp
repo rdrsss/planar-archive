@@ -801,6 +801,30 @@ end))"});
     CHECK(shared->fields.at("text")->string == "retained");
   }
 }
+// CL-1: a caught illegal registration is the first terminal failure; a later exhaustion inside the same retained projection
+// call must not replace it with resource_limit.
+TEST_CASE("CL-1 retained projection keeps a caught illegal registration over later exhaustion",
+          "[runtime][projection-frame][cl1]") {
+  for (std::string tail : {"", "while true do end", "local t={} while true do t[#t+1]={} end"}) {
+    INFO(tail);
+    auto profile     = std::make_shared<profile_closure>();
+    profile->profile = {"profile", "profile.json", "0644", R"({"version":1,"modules":["projection.lua"]})"};
+    profile->modules.push_back(
+        {"modules", "projection.lua", "0644",
+         "local saved=registration.projection; "
+         "local P={id='frame',abi='projection_v1',revision='r1',input='history_snapshot_v1',help='frame'}; "
+         "registration.projection(P,function(input) assert(not pcall(saved,P,function()end)); " +
+             tail + " return {version=1,sections=engine.array{}} end)"});
+    auto vm = command_vm::create(profile);
+    REQUIRE(vm);
+    auto result = vm->invoke_projection("frame", projection_input_kind::history_snapshot_v1, object());
+    REQUIRE_FALSE(result);
+    INFO(result.error().detail.code << " " << result.error().detail.message << " " << result.error().detail.limit);
+    CHECK(result.error().detail.code == "internal");
+    CHECK(result.error().detail.message == "Invalid external profile protocol");
+    CHECK(result.error().detail.limit.empty());
+  }
+}
 
 namespace {
 void projection_diagnostic(const std::expected<value_ptr, extension_execution_error>& r) {
@@ -1006,6 +1030,28 @@ TEST_CASE("C4 C2 first service protocol refusal survives later instruction exhau
   auto owner = f.owner();
   f.admit(owner);
   history_protocol(owner.execute());
+}
+// CL-1 through the extension projection callback: the projection catches its own illegal registration and then exhausts; the
+// retained projection call must report the caught registration failure, not resource_limit.
+TEST_CASE("CL-1 extension projection callback keeps a caught illegal registration over later exhaustion",
+          "[runtime][c4c2][cl1]") {
+  for (std::string tail : {"", "while true do end", "local t={} while true do t[#t+1]={} end"}) {
+    INFO(tail);
+    native_history_fixture f;
+    history_projection(f, "local h=ctx.read_history({}); local p=ctx.project({id='custom'}); " + std::string(projection_success),
+                       "assert(not pcall(registration.projection,{},function()end)); " + tail +
+                           " return {version=1,sections=engine.array{}}");
+    auto owner = f.owner();
+    f.admit(owner);
+    auto result = owner.execute();
+    projection_diagnostic(result);
+    REQUIRE_FALSE(result);
+    REQUIRE(std::holds_alternative<registration_error>(result.error()));
+    const auto& error = std::get<registration_error>(result.error());
+    CHECK(error.detail.code == "internal");
+    CHECK(error.detail.message == "Invalid external profile protocol");
+    CHECK(error.detail.limit.empty());
+  }
 }
 
 extern "C" void          planar_admission_watch(std::uint64_t device, std::uint64_t inode);

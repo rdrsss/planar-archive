@@ -21,7 +21,8 @@ planar_rewrite_module(planar_runtime
   DEPENDS planar_history_read planar_acceptance_source_capture planar_acceptance_intent planar_capture planar_capture_profile planar_history_effective_catalog planar_history_effective_provenance planar_history_interpretation_v2_codec planar_closure_guard planar_ledger_completion planar_history_provenance_codec planar_hash planar_json_codec planar_lua_trusted_libs planar_runtime_source
   TESTS runtime.t.cpp schema.t.cpp commands.t.cpp external_registration.t.cpp
     reconcile.t.cpp dispatch.t.cpp
-  TEST_TIMEOUT 120)
+  # 300 s: the X06 D C03 bisection tests take about 70 s alone and exceed 120 s under ctest -j8.
+  TEST_TIMEOUT 300)
 planar_embed_lua(planar_runtime_test_source planar.engine.runtime_test_source
   "${PROJECT_SOURCE_DIR}/tests/stdlib/bridge.lua")
 # Compile the exact bridge against test-only embedded exports, in its own module.

@@ -894,6 +894,88 @@ TEST_CASE("command load caught resource exhaustion is terminal before and after 
     CHECK(vm->load_may_be_complete() == std::string_view(mode).starts_with("post"));
   }
 }
+namespace {
+// Records the provenance the acceptance receives: the one-pass acceptance charge it used to reserve and the stdlib payload
+// P (originals plus assembly) that prepare_stdlib copies at least three times.
+struct sized_load_services : load_services<load_types> {
+  std::size_t one_pass = 0, payload = 0;
+  result      accept_load(const load& o, const value_ptr& b, const value_ptr& m, std::span<const history::tree_file> provenance,
+                          ledger::completion_receipt& completion) override {
+    one_pass = 65536;
+    payload  = 0;
+    for (const auto& f : provenance) {
+      if (f.path == "__planar__/assembly.canonical")
+        continue;
+      payload += f.payload.size();
+      one_pass += f.payload.size() + (f.path == "__planar__/assembly.lua" ? 0 : f.path.size() + sizeof(history::tree_file));
+    }
+    return load_services<load_types>::accept_load(o, b, m, provenance, completion);
+  }
+};
+struct load_pad_outcome {
+  bool                     exhausted = false, accepted = false;
+  std::vector<std::string> order;
+};
+load_pad_outcome load_with_pad(load_fixture& f, std::string_view kind, std::size_t bytes) {
+  auto vm = load_types::vm::create();
+  REQUIRE(vm);
+  sized_load_services p;
+  auto                r = vm->invoke(f.options<load_types>(std::format("pad{}-{}", kind, bytes)), p);
+  load_pad_outcome    out;
+  out.exhausted = !r && r.error().code == "resource_limit" && r.error().limit == "native_bytes";
+  out.accepted  = std::ranges::find(p.order, "accept") != p.order.end();
+  out.order     = p.order;
+  return out;
+}
+} // namespace
+// Acceptance runs the binder's prepare_stdlib call over the registered stdlib, which copies each payload into a file record,
+// its encoded hash buffer and the owned tree: at least 3P. The old one-pass reservation charged about P plus 64 KiB, so a
+// room just above it reached the codec and the provider. The malformed-argument twin measures the room left after the exact
+// same pad and argument conversion; each pad byte is charged twice (json_encode input and result).
+TEST_CASE("command load acceptance reserves the full stdlib preparation before the codec", "[commands][load][load-accounting]") {
+  load_fixture        f;
+  sized_load_services control;
+  {
+    auto vm = load_types::vm::create();
+    REQUIRE(vm);
+    auto r = vm->invoke(f.options<load_types>(), control);
+    REQUIRE(r);
+    REQUIRE((*r)->fields.at("ok")->boolean);
+  }
+  REQUIRE(control.payload > 0);
+  REQUIRE(control.one_pass > control.payload);
+  REQUIRE(control.one_pass < 3 * control.payload);
+  // Bracket the largest pad whose malformed acceptance still converts its arguments to 32 KiB of pad (64 KiB of room); the
+  // production load VM has the 512 MiB native ceiling, so half of it plus one always exhausts.
+  constexpr std::size_t native_max = 512 * 1048576, resolution = 32768;
+  std::size_t           lo = native_max / 2 - 16 * 1048576, hi = native_max / 2 + 1;
+  REQUIRE_FALSE(load_with_pad(f, "base", lo).exhausted);
+  REQUIRE(load_with_pad(f, "base", hi).exhausted);
+  while (hi - lo > resolution) {
+    const auto mid = lo + (hi - lo) / 2;
+    if (load_with_pad(f, "base", mid).exhausted)
+      hi = mid;
+    else
+      lo = mid;
+  }
+  INFO("base pad " << lo << " payload " << control.payload << " one-pass charge " << control.one_pass);
+  // The acceptance room at a pad is at least twice the difference from lo and at most 2 * resolution plus the malformed
+  // field's conversion above it.
+  const auto pad_for_room = [&](std::size_t room) {
+    REQUIRE(room / 2 < lo);
+    return lo - room / 2;
+  };
+  auto above_one_pass = load_with_pad(f, "accept", pad_for_room(control.one_pass + 65536));
+  CHECK(above_one_pass.exhausted);
+  CHECK_FALSE(above_one_pass.accepted);
+  CHECK(above_one_pass.order == std::vector<std::string>{"open", "capture"});
+  auto below_three = load_with_pad(f, "accept", pad_for_room(3 * control.payload - 2 * 65536));
+  CHECK(below_three.exhausted);
+  CHECK_FALSE(below_three.accepted);
+  auto generous = load_with_pad(f, "accept", pad_for_room(4 * control.payload + 4 * 1048576));
+  CHECK_FALSE(generous.exhausted);
+  CHECK(generous.accepted);
+}
 TEST_CASE("command load validates retained token head request and actor before services", "[commands][load]") {
   load_fixture f;
   for (int i = 0; i < 7; ++i) {

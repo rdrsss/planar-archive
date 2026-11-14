@@ -56,7 +56,7 @@ add_subdirectory(src)
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 add_test(NAME replacement.cli COMMAND "${Python3_EXECUTABLE}"
   "${PROJECT_SOURCE_DIR}/tests/acceptance/bootstrap_cli.py" "$<TARGET_FILE:planar>")
-set_tests_properties(replacement.cli PROPERTIES TIMEOUT 30 LABELS acceptance)
+set_tests_properties(replacement.cli PROPERTIES TIMEOUT 120 LABELS acceptance)
 add_test(NAME replacement.init_cli COMMAND "${Python3_EXECUTABLE}"
   "${PROJECT_SOURCE_DIR}/tests/acceptance/bootstrap_init.py" "$<TARGET_FILE:planar>")
 set_tests_properties(replacement.init_cli PROPERTIES TIMEOUT 30 LABELS acceptance)

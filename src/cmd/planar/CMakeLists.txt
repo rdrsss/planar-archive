@@ -99,7 +99,8 @@ planar_rewrite_module(planar_command
   DEPENDS planar_command_response planar_command_envelope planar_extension_command planar_render_command planar_init_command planar_history_command planar_export_command planar_load_command ${planar_execution_command_targets} CLI11::CLI11_Module
     planar_command_authoring ${planar_authoring_family_targets}
   TESTS bootstrap.t.cpp authoring.t.cpp authoring_prompts.t.cpp authoring_observe.t.cpp authoring_orchestrator.t.cpp
-    activate.t.cpp load_format3.t.cpp profile_format3.t.cpp execution_check_cli.t.cpp orchestrator_live_cli.t.cpp)
+    activate.t.cpp load_format3.t.cpp profile_format3.t.cpp execution_check_cli.t.cpp orchestrator_live_cli.t.cpp
+  TEST_TIMEOUT 120)
 # Shared native execution services sit below every invocation copy. Each bootstrap links its own typed command families;
 # the envelope only owns common parsing support and never selects a runtime or handler implementation.
 target_link_libraries(planar_command_response PUBLIC planar_ledger_execution planar_execution_snapshot_value

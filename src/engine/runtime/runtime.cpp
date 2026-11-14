@@ -2182,10 +2182,11 @@ std::expected<value_ptr, diagnostic> call_retained_projection(lua_State* l, int 
   auto status = lua_pcall(l, 0, LUA_MULTRET, 0);
   if (status == LUA_ERRMEM)
     s.lua_memory_failed = true;
-  if (exhausted(s))
-    return std::unexpected(command_resource(s));
+  // A present bridge_error was recorded before any ceiling, so it is the first terminal failure.
   if (c.bridge_error)
     return std::unexpected(*c.bridge_error);
+  if (exhausted(s))
+    return std::unexpected(command_resource(s));
   if (status || lua_gettop(l) != base + 1)
     return std::unexpected(external_protocol());
   projection_scan scanned;
@@ -3279,6 +3280,77 @@ std::size_t status_open_call(const command_status_options& o) {
   return o.request_id ? 2 : 1;
 }
 // Native argument/result owners exist only in this non-allocating-Lua frame.
+/// Reserve, before any copy, every cumulative native transfer of one prepare_stdlib(originals, separator, assembly)
+/// call. Returns false when counts, paths or sizes exceed the provenance bounds; capacity refusals throw through
+/// charge with the native_bytes diagnostic. The embedded binder and the load acceptance share the identical call.
+bool reserve_stdlib_preparation(state& s, const command_state& c) {
+  constexpr std::size_t provenance_maximum = 16 * 1048576;
+  if (c.originals.size() > 4094 || c.separator.size() > provenance_maximum || c.assembly.size() > provenance_maximum)
+    return false;
+  auto add_provenance = [&](std::size_t& total, std::size_t bytes) {
+    if (bytes > provenance_maximum - total)
+      return false;
+    total += bytes;
+    return true;
+  };
+  std::size_t payload = c.assembly.size();
+  // canonical_v1's four-field manifest: record/list/string headers, encoded
+  // keys, version integer, scheme and separator. Each original adds a string.
+  std::size_t metadata = 9 + (9 + 7) + 9 + (9 + 6) + (9 + 17) + (9 + 5) + 9 + (9 + 9) + 9;
+  if (!add_provenance(metadata, c.separator.size()))
+    return false;
+  for (const auto& file : c.originals) {
+    if (file.path.size() > 1024 || std::ranges::count(file.path, '/') >= 64 || file.bytes.size() > provenance_maximum ||
+        !add_provenance(payload, file.bytes.size()) || !add_provenance(metadata, 9 + file.path.size()))
+      return false;
+  }
+  if (metadata > provenance_maximum - payload)
+    return false;
+  // Numerical reservation failures use charge's native-byte category and
+  // terminal marker. The one-over-ceiling request itself cannot overflow.
+  static_assert(memory_max < std::numeric_limits<std::size_t>::max());
+  auto reserve = [&](std::size_t bytes, std::size_t passes) {
+    if (passes != 0 && bytes > memory_max / passes)
+      charge(s, memory_max + 1);
+    else
+      charge(s, bytes * passes);
+  };
+  // prepare_stdlib -> own -> digest_tree copies each payload into a file
+  // record and its encoded hash buffer, then separately owns the final tree.
+  // The manifest also has its initial encode and a separate separator graph
+  // string. Destroying intermediate buffers never refunds cumulative work.
+  reserve(payload, 3);
+  reserve(metadata, 4);
+  // The canonical writer appends successive fields. Its pinned geometric
+  // buffer growth uses less than four encoded lengths cumulatively; three
+  // extra lengths supplement the initial encode already paid above.
+  reserve(metadata, 3);
+  reserve(c.separator.size(), 1);
+  // Per input, cover its metadata value/path/list slot and codec traversal;
+  // sixteen additional slots cover the fixed root/map/key/scheme graph. Path
+  // strings are bounded to 1024 bytes, so 4096 covers these logical objects
+  // and their bounded vector growth; this is not an allocator/RSS guarantee.
+  reserve(c.originals.size() + 16, 4096);
+  constexpr auto file_framing = std::string_view("PLANAR-RECORD\x01").size() + 1 + 4 + 8;
+  reserve(file_framing, c.originals.size() + 2);
+  reserve(sizeof(history::tree_file) + sizeof(history::tree_file_view), c.originals.size() + 2);
+  auto reserve_tree = [&](std::string_view path) {
+    const auto components = static_cast<std::size_t>(std::ranges::count(path, '/')) + 2;
+    // One digest: node/vector/child-map objects, directory children/sort and
+    // encoded child records. Eight path-sized transfers cover folded/name,
+    // directory/validation/encoding strings and the final owned tree path.
+    reserve(components, 2048);
+    reserve(path.size() + 32, 8);
+  };
+  for (const auto& file : c.originals)
+    reserve_tree(file.path);
+  reserve_tree("__planar__/assembly.lua");
+  reserve_tree("__planar__/assembly.canonical");
+  // Hex output, append/format temporaries and the provider's owned identity
+  // are bounded small transfers (32 output bytes, no variable caller data).
+  reserve(256, 1);
+  return true;
+}
 void call_service_native(lua_State* l, int operation) {
   auto& s = context(l);
   auto& c = commands(l);
@@ -3565,11 +3637,10 @@ void call_service_native(lua_State* l, int operation) {
       if (args->fields.at("bundle")->kind != value_kind::record || args->fields.at("semantic")->kind != value_kind::record ||
           (format3 && args->fields.at("execution")->kind != value_kind::record))
         command_refuse();
-      // Registration retains identity only. Charge the owned acceptance copies
-      // cumulatively, before the codec allocates and before native completion.
-      charge(s, c.assembly.size() + 65536);
-      for (auto& f : c.originals)
-        charge(s, f.path.size() + f.bytes.size() + sizeof(history::tree_file));
+      // Registration retains identity only. The acceptance runs the binder's exact
+      // prepare_stdlib call, so reserve its full cumulative codec work first.
+      if (!reserve_stdlib_preparation(s, c))
+        command_refuse();
       auto provenance = history::prepare_stdlib(c.originals, c.separator, c.assembly);
       if (!provenance)
         command_refuse();
@@ -4559,10 +4630,11 @@ void register_profile(command_vm::implementation& owner) {
     try {
       lua_pushcfunction(l, fn);
       auto status = lua_pcall(l, 0, 0, 0);
-      if (exhausted(s) || status == LUA_ERRMEM)
-        throw command_resource(s);
+      // A present bridge_error was recorded before any ceiling, so it is the first terminal failure.
       if (c.bridge_error)
         throw *c.bridge_error;
+      if (exhausted(s) || status == LUA_ERRMEM)
+        throw command_resource(s);
       if (status || s.seal_failed)
         throw external_protocol();
     } catch (...) {
@@ -6029,70 +6101,8 @@ void bind_embedded_execution(state& s, command_state& c, command_services& servi
   if (const auto* check = std::get_if<command_check_options>(&c.options); check && check->operation == "check-recover")
     return;
   try {
-    constexpr std::size_t provenance_maximum = 16 * 1048576;
-    if (c.originals.size() > 4094 || c.separator.size() > provenance_maximum || c.assembly.size() > provenance_maximum)
+    if (!reserve_stdlib_preparation(s, c))
       throw external_resource();
-    auto add_provenance = [&](std::size_t& total, std::size_t bytes) {
-      if (bytes > provenance_maximum - total)
-        throw external_resource();
-      total += bytes;
-    };
-    std::size_t payload = c.assembly.size();
-    // canonical_v1's four-field manifest: record/list/string headers, encoded
-    // keys, version integer, scheme and separator. Each original adds a string.
-    std::size_t metadata = 9 + (9 + 7) + 9 + (9 + 6) + (9 + 17) + (9 + 5) + 9 + (9 + 9) + 9;
-    add_provenance(metadata, c.separator.size());
-    for (const auto& file : c.originals) {
-      if (file.path.size() > 1024 || std::ranges::count(file.path, '/') >= 64 || file.bytes.size() > provenance_maximum)
-        throw external_resource();
-      add_provenance(payload, file.bytes.size());
-      add_provenance(metadata, 9 + file.path.size());
-    }
-    if (metadata > provenance_maximum - payload)
-      throw external_resource();
-    // Numerical reservation failures use charge's native-byte category and
-    // terminal marker. The one-over-ceiling request itself cannot overflow.
-    static_assert(memory_max < std::numeric_limits<std::size_t>::max());
-    auto reserve = [&](std::size_t bytes, std::size_t passes) {
-      if (passes != 0 && bytes > memory_max / passes)
-        charge(s, memory_max + 1);
-      else
-        charge(s, bytes * passes);
-    };
-    // prepare_stdlib -> own -> digest_tree copies each payload into a file
-    // record and its encoded hash buffer, then separately owns the final tree.
-    // The manifest also has its initial encode and a separate separator graph
-    // string. Destroying intermediate buffers never refunds cumulative work.
-    reserve(payload, 3);
-    reserve(metadata, 4);
-    // The canonical writer appends successive fields. Its pinned geometric
-    // buffer growth uses less than four encoded lengths cumulatively; three
-    // extra lengths supplement the initial encode already paid above.
-    reserve(metadata, 3);
-    reserve(c.separator.size(), 1);
-    // Per input, cover its metadata value/path/list slot and codec traversal;
-    // sixteen additional slots cover the fixed root/map/key/scheme graph. Path
-    // strings are bounded to 1024 bytes, so 4096 covers these logical objects
-    // and their bounded vector growth; this is not an allocator/RSS guarantee.
-    reserve(c.originals.size() + 16, 4096);
-    constexpr auto file_framing = std::string_view("PLANAR-RECORD\x01").size() + 1 + 4 + 8;
-    reserve(file_framing, c.originals.size() + 2);
-    reserve(sizeof(history::tree_file) + sizeof(history::tree_file_view), c.originals.size() + 2);
-    auto reserve_tree = [&](std::string_view path) {
-      const auto components = static_cast<std::size_t>(std::ranges::count(path, '/')) + 2;
-      // One digest: node/vector/child-map objects, directory children/sort and
-      // encoded child records. Eight path-sized transfers cover folded/name,
-      // directory/validation/encoding strings and the final owned tree path.
-      reserve(components, 2048);
-      reserve(path.size() + 32, 8);
-    };
-    for (const auto& file : c.originals)
-      reserve_tree(file.path);
-    reserve_tree("__planar__/assembly.lua");
-    reserve_tree("__planar__/assembly.canonical");
-    // Hex output, append/format temporaries and the provider's owned identity
-    // are bounded small transfers (32 output bytes, no variable caller data).
-    reserve(256, 1);
     auto prepared = history::prepare_stdlib(c.originals, c.separator, c.assembly);
     if (!prepared) {
       if (prepared.error().code == history::provenance_error_code::resource_limit)
